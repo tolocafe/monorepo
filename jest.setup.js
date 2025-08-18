@@ -64,6 +64,18 @@ jest.mock('expo-router', () => ({
   router: { push: jest.fn(), replace: jest.fn(), back: jest.fn() },
 }))
 
+// Expo-related shims to avoid native module loading in test env
+jest.mock('expo', () => ({}))
+jest.mock('expo-asset', () => ({}))
+jest.mock('expo-constants', () => ({ expoVersion: 'mock' }))
+jest.mock('expo-status-bar', () => ({ StatusBar: () => null }))
+jest.mock('expo-linear-gradient', () => ({
+  LinearGradient: ({ children }: { children: React.ReactNode }) => children,
+}))
+jest.mock('expo-image', () => ({
+  Image: ({ children }: { children?: React.ReactNode }) => children ?? null,
+}))
+
 // Ensure api.menu getters exist to prevent crashes when store imports menu queries
 jest.mock('@/lib/services/api-service', () => ({
   api: {
