@@ -59,7 +59,7 @@
 		"expo-status-bar": "~2.2.3",
 		"expo-system-ui": "~5.0.10",
 		"expo-updates": "0.28.17",
-		"hono": "4.9.1",
+		"hono": "4.9.2",
 		"jose": "6.0.12",
 		"ky": "1.8.2",
 		"react": "19.0.0",
@@ -85,8 +85,8 @@
 	},
 	"devDependencies": {
 		"@babel/core": "~7.26.0",
-		"@cloudflare/vitest-pool-workers": "0.8.64",
-		"@cloudflare/workers-types": "^4.20250813.0",
+		"@cloudflare/vitest-pool-workers": "0.8.65",
+		"@cloudflare/workers-types": "^4.20250816.0",
 		"@eslint/js": "~9.33.0",
 		"@lingui/babel-plugin-lingui-macro": "5.4.1",
 		"@react-native/metro-config": "0.80.2",
@@ -110,8 +110,8 @@
 		"prettier": "~3.6.2",
 		"prettier-config-cretia": "~3.0.0",
 		"typescript": "~5.8.3",
-		"typescript-eslint": "~8.39.1",
-		"wrangler": "4.30.0"
+		"typescript-eslint": "~8.40.0",
+		"wrangler": "4.31.0"
 	},
 	"prettier": "prettier-config-cretia",
 	"private": true
