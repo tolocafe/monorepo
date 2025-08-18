@@ -61,6 +61,21 @@ export default function OrderDetail() {
 	const clearOrder = useClearOrder()
 	const { data: user } = useQuery(selfQueryOptions)
 
+	// Calculate current order total (in cents) for balance checks and display
+	const currentOrderTotalCents = order?.products.reduce((sum, item) => {
+		const productData = queryClient.getQueryData(
+			productQueryOptions(item.id).queryKey,
+		)
+		const unitPriceCents = productData
+			? Number(Object.values(productData.price)[0] || 0)
+			: 0
+		const modificationsTotalCents = (item.modifications ?? []).reduce(
+			(moduleSum, module_) => moduleSum + (module_.price || 0),
+			0,
+		)
+		return sum + (unitPriceCents + modificationsTotalCents) * item.quantity
+	}, 0) ?? 0
+
 	const { mutateAsync: createOrder } = useMutation({
 		...createOrderMutationOptions,
 		onError() {
@@ -76,8 +91,18 @@ export default function OrderDetail() {
 			comment: '',
 			serviceMode: 2,
 		},
-		onSubmit: ({ value }) =>
-			createOrder({
+		onSubmit: ({ value }) => {
+			// Guard: prevent order submission when wallet balance is insufficient
+			const walletCents = Number(user?.ewallet ?? '0')
+			if (walletCents < currentOrderTotalCents) {
+				Alert.alert(
+					t`Insufficient Balance`,
+					t`Your wallet balance is insufficient to complete this order.`,
+				)
+				return
+			}
+
+			return createOrder({
 				...value,
 				client: { id: user?.client_id as string }, // This will be set by the server
 				products:
@@ -85,7 +110,8 @@ export default function OrderDetail() {
 						count: product.quantity,
 						id: product.id,
 					})) ?? [],
-			}),
+			})
+		},
 		validators: { onChange: CreateOrderSchema.safeParse },
 	})
 
@@ -188,19 +214,7 @@ export default function OrderDetail() {
 		)
 	}
 
-	const currentOrderTotalCents = order.products.reduce((sum, item) => {
-		const productData = queryClient.getQueryData(
-			productQueryOptions(item.id).queryKey,
-		)
-		const unitPriceCents = productData
-			? Number(Object.values(productData.price)[0] || 0)
-			: 0
-		const modificationsTotalCents = (item.modifications ?? []).reduce(
-			(moduleSum, module_) => moduleSum + (module_.price || 0),
-			0,
-		)
-		return sum + (unitPriceCents + modificationsTotalCents) * item.quantity
-	}, 0)
+ 
 
 	return (
 		<>

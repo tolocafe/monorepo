@@ -15,6 +15,5 @@ export const clearAllCache = async () => {
 		console.warn('Failed to clear persisted cache:', error)
 	}
 
-	queryClient.removeQueries()
-	await queryClient.refetchQueries()
+// No-op: additional invalidation is unnecessary here as we fully clear the client
 }

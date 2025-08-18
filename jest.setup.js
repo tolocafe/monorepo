@@ -40,13 +40,11 @@ jest.mock('@lingui/core', () => ({
 
 jest.mock('@lingui/react', () => ({
 	I18nProvider: ({ children }) => children,
+	useLingui: () => ({ t: (arrOrStr) => (Array.isArray(arrOrStr) ? arrOrStr.join('') : String(arrOrStr)) }),
 }))
 
 jest.mock('@lingui/react/macro', () => ({
 	Trans: ({ children }) => children,
-	useLingui: () => ({
-		t: (template) => template.join(''),
-	}),
 }))
 
 // Mock @bottom-tabs/react-navigation
@@ -57,8 +55,21 @@ jest.mock('@bottom-tabs/react-navigation', () => ({
 	}),
 }))
 
-// Mock Zustand
-jest.mock('zustand', () => ({
-	// eslint-disable-next-line unicorn/consistent-function-scoping
-	create: jest.fn(() => () => null),
+// Mock native modules that are not available in Jest environment
+jest.mock('react-native-keyboard-controller', () => ({
+  KeyboardAwareScrollView: ({ children }) => children,
+}))
+
+jest.mock('expo-router', () => ({
+  router: { push: jest.fn(), replace: jest.fn(), back: jest.fn() },
+}))
+
+// Ensure api.menu getters exist to prevent crashes when store imports menu queries
+jest.mock('@/lib/services/api-service', () => ({
+  api: {
+    auth: { self: jest.fn() },
+    client: { update: jest.fn() },
+    menu: { getCategories: jest.fn(async () => []), getProducts: jest.fn(async () => []), getProduct: jest.fn() },
+    orders: { create: jest.fn() },
+  },
 }))

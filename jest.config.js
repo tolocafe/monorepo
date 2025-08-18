@@ -31,6 +31,10 @@ module.exports = {
 			moduleNameMapper: {
 				'^@/(.*)$': '<rootDir>/src/$1',
 				'^@common/(.*)$': '<rootDir>/common/$1',
+				'^expo-router$': '<rootDir>/__mocks__/expo-router.ts',
+				'^expo-router/head$': '<rootDir>/__mocks__/expo-router-head.tsx',
+				'^react-native-keyboard-controller$': '<rootDir>/__mocks__/react-native-keyboard-controller.tsx',
+				'^expo(.*)$': '<rootDir>/__mocks__/expo$1.ts',
 			},
 			preset: 'react-native',
 			setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
