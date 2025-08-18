@@ -21,6 +21,13 @@ export const persister = createAsyncStoragePersister({
 
 function shouldRetry(failureCount: number, error: unknown): boolean {
 	if (error instanceof HTTPError) {
+		if (
+			error.request.url.includes('orders') ||
+			error.request.url.includes('transactions')
+		) {
+			return false
+		}
+
 		const status = error.response.status
 		if (status >= 400 && status < 500) return false
 	}

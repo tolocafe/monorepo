@@ -1,4 +1,10 @@
-import type { ClientData, PosterCategory, PosterProduct } from '@/lib/api'
+import type {
+	CreateEWalletTransaction,
+	CreateOrder,
+	CreateStripeTransaction,
+} from '@common/schemas'
+
+import type { Category, ClientData, Product } from '@/lib/api'
 import type { CreateOrderResponse } from '@/lib/queries/order'
 
 import { privateClient, publicClient } from './http-client'
@@ -29,7 +35,6 @@ export const api = {
 				})
 				.json(),
 	},
-
 	client: {
 		update: (clientId: string, data: Record<string, unknown>) =>
 			privateClient
@@ -42,24 +47,41 @@ export const api = {
 	get: (endpoint: string) => privateClient.get(endpoint).json(),
 
 	menu: {
-		getCategories: () =>
-			publicClient.get<PosterCategory[]>('menu/categories').json(),
+		getCategories: () => publicClient.get<Category[]>('menu/categories').json(),
 		getProduct: (productId: string) =>
-			publicClient.get<PosterProduct>(`menu/products/${productId}`).json(),
-		getProducts: () =>
-			publicClient.get<PosterProduct[]>('menu/products').json(),
+			publicClient.get<Product>(`menu/products/${productId}`).json(),
+		getProducts: () => publicClient.get<Product[]>('menu/products').json(),
 	},
 
 	orders: {
-		create: (orderData: unknown) =>
+		create: (orderData: CreateOrder) =>
 			privateClient
 				.post<CreateOrderResponse>('orders', {
 					json: orderData,
 				})
 				.json(),
+		list: () => privateClient.get<CreateOrderResponse>('orders').json(),
 	},
 
 	// Generic methods for other endpoints
 	post: (endpoint: string, data: unknown) =>
 		privateClient.post(endpoint, { json: data }).json(),
+	transactions: {
+		createEWalletTransaction: (data: CreateEWalletTransaction) =>
+			privateClient.post('transactions/e-wallet', { json: data }).json<{
+				id: number
+			}>(),
+		createStripeTransaction: (data: CreateStripeTransaction) =>
+			privateClient.post('transactions/payment-intent', { json: data }).json<{
+				ephemeralKey: string
+				paymentIntent: { client_secret: string }
+			}>(),
+	},
+	wallet: {
+		topUp: (data: { amount: number }) =>
+			privateClient.post('wallet/top-up', { json: data }).json<{
+				ephemeralKey: string
+				paymentIntent: { client_secret: string }
+			}>(),
+	},
 }

@@ -39,8 +39,14 @@
 		"owner": "tolo-cafe",
 		"plugins": [
 			"expo-updates",
+			"expo-notifications",
+			"react-native-edge-to-edge",
 			"expo-apple-authentication",
-			"react-native-bottom-tabs",
+			["react-native-bottom-tabs", { "theme": "material3-dynamic" }],
+			[
+				"@stripe/stripe-react-native",
+				{ "merchantIdentifier": "merchant.tolo.cafe", "enableGooglePay": true }
+			],
 			[
 				"expo-secure-store",
 				{
@@ -70,8 +76,7 @@
 					"imageWidth": 200,
 					"resizeMode": "contain"
 				}
-			],
-			"react-native-edge-to-edge"
+			]
 		],
 		"runtimeVersion": {
 			"policy": "fingerprint"

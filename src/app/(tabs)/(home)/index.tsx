@@ -1,13 +1,17 @@
+import { useRef } from 'react'
+import type { ScrollView } from 'react-native'
 import {
 	ActivityIndicator,
 	FlatList,
 	Pressable,
+	RefreshControl,
 	TouchableOpacity,
 	View,
 } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
@@ -29,30 +33,35 @@ import {
 	categoriesQueryOptions,
 	productsQueryOptions,
 } from '@/lib/queries/menu'
+import { queryClient } from '@/lib/query-client'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
-import { formatPosterPrice } from '@/lib/utils/price'
+import { formatPrice } from '@/lib/utils/price'
 
-import type { PosterCategory, PosterProduct } from '@/lib/api'
+import type { Category, Product } from '@/lib/api'
 
 export default function Menu() {
 	const { t } = useLingui()
 	const addItem = useAddItemGuarded()
 	useQuery(selfQueryOptions)
 
+	const screenRef = useRef<ScrollView>(null)
+
+	useScrollToTop(screenRef)
+
 	const { data: menu, error, isFetching } = useQuery(productsQueryOptions)
 	const { data: categories } = useQuery(categoriesQueryOptions)
 
-	const handleAddToBag = (item: PosterProduct) => {
+	const handleAddToBag = (item: Product) => {
 		addItem({ id: item.product_id, quantity: 1 })
 	}
 
-	const renderMenuItem = ({ item }: { item: PosterProduct }) => (
+	const renderMenuItem = ({ item }: { item: Product }) => (
 		<MenuListItem item={item} onAddToBag={handleAddToBag} />
 	)
 
-	const renderCategorySection = (category: PosterCategory) => {
+	const renderCategorySection = (category: Category) => {
 		const categoryItems = menu.filter(
-			(item: PosterProduct) => item.menu_category_id === category.category_id,
+			(item: Product) => item.menu_category_id === category.category_id,
 		)
 
 		if (categoryItems.length === 0) return null
@@ -117,7 +126,18 @@ export default function Menu() {
 				/>
 				<meta content="/" property="og:url" />
 			</Head>
-			<ScreenContainer contentInsetAdjustmentBehavior="automatic">
+			<ScreenContainer
+				contentInsetAdjustmentBehavior="automatic"
+				ref={screenRef}
+				refreshControl={
+					<RefreshControl
+						onRefresh={() =>
+							queryClient.invalidateQueries(productsQueryOptions)
+						}
+						refreshing={isFetching}
+					/>
+				}
+			>
 				<View style={styles.categoryTitle}>
 					<H2>Menu</H2>
 				</View>
@@ -133,8 +153,8 @@ function MenuListItem({
 	item,
 	onAddToBag,
 }: {
-	item: PosterProduct
-	onAddToBag: (item: PosterProduct) => void
+	item: Product
+	onAddToBag: (item: Product) => void
 }) {
 	const scale = useSharedValue(1)
 	const animatedStyle = useAnimatedStyle(() => ({
@@ -179,7 +199,7 @@ function MenuListItem({
 						</View>
 						<Paragraph>{item.product_production_description}</Paragraph>
 						<View style={styles.menuItemFooter}>
-							<Paragraph>{formatPosterPrice(firstPrice)}</Paragraph>
+							<Paragraph>{formatPrice(firstPrice)}</Paragraph>
 							<View style={styles.menuItemActions}>
 								<TouchableOpacity
 									onPress={(event) => {

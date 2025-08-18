@@ -7,19 +7,19 @@ import type { Context } from 'hono'
 const encoder = new TextEncoder()
 const secretKey = (secret: string) => encoder.encode(secret)
 
-export async function authenticate(
-	c: Context,
-	secret: string,
-): Promise<string> {
+export async function authenticate(c: Context, secret: string) {
 	const authorizationHeader = c.req.header('Authorization')
+
 	const token =
 		extractToken(authorizationHeader) ?? getCookie(c, 'tolo_session') ?? null
+
 	if (!token) throw new HTTPException(401, { message: 'Unauthorized' })
 
 	const clientId = await verifyJwt(token, secret)
+
 	if (!clientId) throw new HTTPException(401, { message: 'Unauthorized' })
 
-	return clientId
+	return Number.parseInt(clientId, 10)
 }
 
 export function extractToken(

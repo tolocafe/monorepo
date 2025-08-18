@@ -1,13 +1,14 @@
 import { Alert, TouchableOpacity, View } from 'react-native'
 
-import { CreateOrderSchema } from '@common/schemas'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { router } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
+
+import type { Product } from '@common/api'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
@@ -21,42 +22,62 @@ import { queryClient } from '@/lib/query-client'
 import {
 	useClearOrder,
 	useCurrentOrder,
-	useRemoveItem,
 	useUpdateItem,
 } from '@/lib/stores/order-store'
-import { formatPosterPrice } from '@/lib/utils/price'
+import { formatPrice } from '@/lib/utils/price'
 
 import type { OrderProduct } from '@/lib/stores/order-store'
 
 const getProductName = (productId: string): string => {
-	const productData = queryClient.getQueryData(
+	const productData = queryClient.getQueryData<Product>(
 		productQueryOptions(productId).queryKey,
 	)
 	return productData?.product_name || `Product ID: ${productId}`
 }
 
 const getProductCategory = (productId: string): null | string => {
-	const productData = queryClient.getQueryData(
+	const productData = queryClient.getQueryData<Product>(
 		productQueryOptions(productId).queryKey,
 	)
+
 	return productData?.category_name || null
 }
 
+function getOrderTotal(products: OrderProduct[]) {
+	return products.reduce((sum, item) => {
+		const productData = queryClient.getQueryData<Product>(
+			productQueryOptions(item.id).queryKey,
+		)
+
+		const unitPriceCents = productData
+			? Number(Object.values(productData.price)[0] || 0)
+			: 0
+
+		const modificationsTotalCents = (item.modifications ?? []).reduce(
+			(moduleSum, module_) => moduleSum + (module_.price || 0),
+			0,
+		)
+
+		return sum + (unitPriceCents + modificationsTotalCents) * item.quantity
+	}, 0)
+}
+
 const getProductPrice = (productId: string): null | string => {
-	const productData = queryClient.getQueryData(
+	const productData = queryClient.getQueryData<Product>(
 		productQueryOptions(productId).queryKey,
 	)
+
 	const product = productData
+
 	if (!product) return null
 	const priceRaw = Object.values(product.price)[0] || '0'
-	return formatPosterPrice(Number(priceRaw))
+	return formatPrice(Number(priceRaw))
 }
 
 export default function OrderDetail() {
 	const { t } = useLingui()
 	const order = useCurrentOrder()
 	const updateItem = useUpdateItem()
-	const removeItem = useRemoveItem()
 
 	const clearOrder = useClearOrder()
 	const { data: user } = useQuery(selfQueryOptions)
@@ -67,34 +88,67 @@ export default function OrderDetail() {
 			Alert.alert(t`Error`, t`Failed to submit order. Please try again.`)
 		},
 		onSuccess() {
-			router.replace('/(tabs)/orders')
+			clearOrder()
+
+			router.back()
 		},
 	})
 
+	const orderTotal = getOrderTotal(order?.products ?? [])
+
 	const { Field, handleSubmit, Subscribe } = useForm({
 		defaultValues: {
+			// This will be set by the server
+			client: { id: user?.client_id as string },
 			comment: '',
+			payment: { id: '', type: 'E_WALLET' as const },
+			products:
+				order?.products.map((product) => ({
+					count: product.quantity,
+					product_id: product.id,
+				})) ?? [],
 			serviceMode: 2,
 		},
-		onSubmit: ({ value }) =>
-			createOrder({
+		async onSubmit({ value }) {
+			const hasInsufficientBalance =
+				!user || Number(user.ewallet ?? '0') < orderTotal
+
+			if (hasInsufficientBalance) {
+				Alert.alert(
+					t`Insufficient Balance`,
+					t`You don't have enough balance in your wallet. Please top up your wallet first.`,
+				)
+				return
+			}
+
+			// Check if user has sufficient balance
+			if (Number(user.ewallet ?? '0') < orderTotal) {
+				Alert.alert(
+					t`Insufficient Balance`,
+					t`You don't have enough balance in your wallet. Please top up your wallet first.`,
+					[
+						{
+							onPress: () => router.push('/more/top-up'),
+							text: t`Top Up`,
+						},
+						{
+							style: 'cancel',
+							text: t`Cancel`,
+						},
+					],
+				)
+				return
+			}
+
+			return createOrder({
 				...value,
-				client: { id: user?.client_id as string }, // This will be set by the server
-				products:
-					order?.products.map((product) => ({
-						count: product.quantity,
-						id: product.id,
-					})) ?? [],
-			}),
-		validators: { onChange: CreateOrderSchema.safeParse },
+				payment: { amount: orderTotal },
+			})
+		},
 	})
 
 	const handleQuantityChange = (productId: string, quantity: number) => {
 		updateItem(productId, quantity)
-	}
-
-	const handleRemoveItem = (productId: string) => {
-		removeItem(productId)
 	}
 
 	const handleClearOrder = () => {
@@ -119,46 +173,34 @@ export default function OrderDetail() {
 		<View key={`${item.id}-${index}`} style={styles.orderItem}>
 			<View style={styles.itemHeader}>
 				<Paragraph style={styles.itemName}>{getProductName(item.id)}</Paragraph>
-				<TouchableOpacity
-					onPress={() => handleRemoveItem(item.id)}
-					style={styles.removeButton}
-				>
-					<Ionicons color="#ff4444" name="trash-outline" size={20} />
-				</TouchableOpacity>
+				{getProductCategory(item.id) && (
+					<Paragraph style={styles.itemMeta}>
+						{getProductCategory(item.id)}
+					</Paragraph>
+				)}
 			</View>
 
 			<View style={styles.itemDetails}>
 				<View style={styles.quantityContainer}>
-					<>
-						<TouchableOpacity
-							disabled={item.quantity <= 1}
-							onPress={() => handleQuantityChange(item.id, item.quantity - 1)}
-							style={styles.quantityButton}
-						>
-							<Ionicons
-								color={item.quantity <= 1 ? '#ccc' : '#333'}
-								name="remove"
-								size={20}
-							/>
-						</TouchableOpacity>
-						<Text style={styles.quantity}>{item.quantity}</Text>
-						<TouchableOpacity
-							onPress={() => handleQuantityChange(item.id, item.quantity + 1)}
-							style={styles.quantityButton}
-						>
-							<Ionicons color="#333" name="add" size={20} />
-						</TouchableOpacity>
-					</>
+					<TouchableOpacity
+						onLongPress={() => handleQuantityChange(item.id, 0)}
+						onPress={() => handleQuantityChange(item.id, item.quantity - 1)}
+						style={styles.quantityButton}
+					>
+						<Ionicons color="#333" name="remove" size={20} />
+					</TouchableOpacity>
+					<Text align="center" style={styles.quantity}>
+						{item.quantity}
+					</Text>
+					<TouchableOpacity
+						onPress={() => handleQuantityChange(item.id, item.quantity + 1)}
+						style={styles.quantityButton}
+					>
+						<Ionicons color="#333" name="add" size={20} />
+					</TouchableOpacity>
 				</View>
 				<Paragraph>{getProductPrice(item.id) ?? t`Unavailable`}</Paragraph>
 			</View>
-
-			{getProductCategory(item.id) && (
-				<Paragraph style={styles.itemMeta}>
-					{getProductCategory(item.id)}
-				</Paragraph>
-			)}
-
 			{item.modifications && item.modifications.length > 0 && (
 				<View style={styles.modifications}>
 					{item.modifications.map((module_, moduleIndex) => (
@@ -188,98 +230,99 @@ export default function OrderDetail() {
 		)
 	}
 
-	const currentOrderTotalCents = order.products.reduce((sum, item) => {
-		const productData = queryClient.getQueryData(
-			productQueryOptions(item.id).queryKey,
-		)
-		const unitPriceCents = productData
-			? Number(Object.values(productData.price)[0] || 0)
-			: 0
-		const modificationsTotalCents = (item.modifications ?? []).reduce(
-			(moduleSum, module_) => moduleSum + (module_.price || 0),
-			0,
-		)
-		return sum + (unitPriceCents + modificationsTotalCents) * item.quantity
-	}, 0)
-
 	return (
 		<>
 			<Head>
 				<title>{t`Current Order`}</title>
 			</Head>
+			<Stack.Screen
+				options={{
+					headerRight: () => (
+						<Button onPress={handleClearOrder} variant="surface">
+							<Trans>Cancel</Trans>
+						</Button>
+					),
+				}}
+			/>
 			<ScreenContainer keyboardAware>
 				{user && (
 					<Card style={styles.walletCard}>
-						<Paragraph style={styles.walletLabel}>
+						<Paragraph>
 							<Trans>Wallet Balance</Trans>
 						</Paragraph>
 						<Paragraph style={styles.walletValue}>
-							${(Number(user.ewallet ?? '0') / 100).toFixed(2)}
+							{formatPrice(user.ewallet ?? '0')}
 						</Paragraph>
 					</Card>
 				)}
 
 				<View style={styles.itemsSection}>
 					<H2>
-						<Trans>Order Items</Trans>
+						<Trans>Items</Trans>
 					</H2>
-					{order.products.map((item, index) => renderOrderItem(item, index))}
+					<Card style={styles.itemsCard}>
+						{order.products.map((item, index) => renderOrderItem(item, index))}
+						<View style={styles.totalRow}>
+							<Paragraph weight="bold">
+								<Trans>Total</Trans>
+							</Paragraph>
+							<Paragraph style={styles.totalAmount}>
+								{formatPrice(orderTotal)}
+							</Paragraph>
+						</View>
+					</Card>
 				</View>
 
 				<View style={styles.noteSection}>
 					<H2>
-						<Trans>Customer Note</Trans>
+						<Trans>Additional</Trans>
 					</H2>
-					<Field
-						name="comment"
-						validators={{
-							onChange: ({ value }) => {
-								if (typeof value === 'string' && value.length > 2000) {
-									return t`Maximum length is 2000 characters`
-								}
-							},
-						}}
-					>
-						{(field) => (
-							<Input
-								multiline
-								numberOfLines={3}
-								onChangeText={(text) => field.handleChange(text)}
-								placeholder={t`Add any special instructions...`}
-								value={field.state.value}
-							/>
-						)}
-					</Field>
-				</View>
-
-				<View style={styles.totalSection}>
-					<View style={styles.totalRow}>
-						<Paragraph>
-							<Trans>Total</Trans>
-						</Paragraph>
-						<Paragraph style={styles.totalAmount}>
-							{formatPosterPrice(currentOrderTotalCents)}
-						</Paragraph>
-					</View>
+					<Card>
+						<Field
+							name="comment"
+							validators={{
+								onChange: ({ value }) => {
+									if (typeof value === 'string' && value.length > 2000) {
+										return t`Maximum length is 2000 characters`
+									}
+								},
+							}}
+						>
+							{(field) => (
+								<Input
+									multiline
+									numberOfLines={3}
+									onChangeText={(text) => field.handleChange(text)}
+									placeholder={t`Add any special instructions...`}
+									value={field.state.value}
+								/>
+							)}
+						</Field>
+					</Card>
 				</View>
 
 				<View style={styles.actionButtons}>
-					<Button onPress={handleClearOrder} variant="surface">
-						<Trans>Clear Order</Trans>
-					</Button>
-
 					<Subscribe
 						selector={(state) => [state.canSubmit, state.isSubmitting]}
 					>
-						{([canSubmit, isSubmitting]) => (
-							<Button disabled={!canSubmit} fullWidth onPress={handleSubmit}>
-								{isSubmitting ? (
-									<Trans>Submitting...</Trans>
-								) : (
-									<Trans>Submit Order</Trans>
-								)}
-							</Button>
-						)}
+						{([canSubmit, isSubmitting]) => {
+							const hasInsufficientBalance =
+								!user || Number(user.ewallet ?? '0') < orderTotal
+
+							return (
+								<Button
+									disabled={!canSubmit || hasInsufficientBalance}
+									fullWidth
+									onPress={handleSubmit}
+								>
+									{isSubmitting ? (
+										<Trans>Sending Order...</Trans>
+									) : (
+										<Trans>Send Order</Trans>
+									)}
+								</Button>
+							)
+						}}
 					</Subscribe>
 				</View>
 			</ScreenContainer>
@@ -315,16 +358,22 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginBottom: theme.spacing.sm,
 	},
 	itemMeta: {
-		color: theme.colors.textSecondary,
-		marginTop: theme.spacing.xs,
+		backgroundColor: theme.colors.primary,
+		borderRadius: theme.borderRadius.md,
+		color: '#fff',
+		paddingHorizontal: theme.spacing.sm,
+		paddingVertical: theme.spacing.xs,
 	},
 	itemName: {
 		flex: 1,
 		fontSize: theme.fontSizes.md,
 		fontWeight: theme.fontWeights.medium,
+	},
+	itemsCard: {
+		gap: theme.spacing.md,
+		padding: theme.layout.screenPadding,
 	},
 	itemsSection: {
 		padding: theme.layout.screenPadding,
@@ -343,18 +392,16 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.layout.screenPadding,
 	},
 	orderItem: {
+		alignItems: 'center',
 		backgroundColor: theme.colors.surface,
 		borderRadius: theme.borderRadius.md,
-		marginBottom: theme.spacing.md,
-		padding: theme.spacing.md,
-	},
-	orderStatus: {
-		color: theme.colors.primary,
+		flexDirection: 'column',
+		gap: theme.spacing.sm,
+		paddingBottom: theme.spacing.md,
 	},
 	quantity: {
 		marginHorizontal: theme.spacing.md,
-		minWidth: 30,
-		textAlign: 'center',
+		minWidth: 20,
 	},
 	quantityButton: {
 		alignItems: 'center',
@@ -368,39 +415,26 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	quantityContainer: {
 		alignItems: 'center',
+		flex: 1,
 		flexDirection: 'row',
-	},
-	removeButton: {
-		padding: theme.spacing.xs,
+		gap: theme.spacing.sm,
 	},
 	totalAmount: {
 		color: theme.colors.primary,
 	},
-
 	totalRow: {
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
-	totalSection: {
-		borderTopColor: theme.colors.border,
-		borderTopWidth: 1,
-		padding: theme.layout.screenPadding,
-	},
 	walletCard: {
 		alignItems: 'center',
 		flexDirection: 'row',
-		gap: theme.spacing.sm,
 		justifyContent: 'space-between',
 		marginHorizontal: theme.layout.screenPadding,
 		marginVertical: theme.spacing.sm,
 	},
-
-	walletLabel: {
-		color: theme.colors.textSecondary,
-	},
 	walletValue: {
 		color: theme.colors.primary,
-		fontWeight: theme.fontWeights.semibold,
 	},
 }))

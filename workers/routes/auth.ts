@@ -1,0 +1,139 @@
+import { RequestOtpSchema, VerifyOtpSchema } from '@common/schemas'
+import { Hono } from 'hono'
+import { setCookie } from 'hono/cookie'
+import { HTTPException } from 'hono/http-exception'
+
+import { authenticate, signJwt } from '../utils/jwt'
+import { generateOtp, storeOtp, verifyOtp } from '../utils/otp'
+import { api, sendSms } from '../utils/poster'
+
+import type { Bindings } from '../types'
+
+type SessionRecord = { createdAt: number; name: string; token: string }
+
+const isSessionRecord = (value: unknown): value is SessionRecord =>
+	typeof value === 'object' &&
+	value !== null &&
+	'createdAt' in value &&
+	'name' in value &&
+	'token' in value
+
+const auth = new Hono<{ Bindings: Bindings }>()
+	.post('/request-otp', async (c) => {
+		const { email, name, phone } = RequestOtpSchema.parse(await c.req.json())
+
+		const existingClient = await api.clients.getClient(
+			c.env.POSTER_TOKEN,
+			phone,
+		)
+
+		if (!existingClient) {
+			await api.clients.createClient(c.env.POSTER_TOKEN, {
+				client_groups_id_client: 1,
+				client_name: name ?? 'anon',
+				email,
+				phone,
+			})
+		}
+
+		const code = generateOtp()
+
+		await Promise.all([
+			storeOtp(c.env.KV_OTP, phone, code),
+			sendSms(
+				c.env.POSTER_TOKEN,
+				phone,
+				`[TOLO] Tu código de verificación es ${code}`,
+				// eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
+			).catch((error) => {
+				// eslint-disable-next-line no-console
+				console.log(error)
+
+				throw error
+			}),
+		])
+
+		return c.json({ success: true })
+	})
+	.post('/verify-otp', async (c) => {
+		const { code, phone, sessionName } = VerifyOtpSchema.parse(
+			await c.req.json(),
+		)
+
+		const { isTest } = await verifyOtp(c.env.KV_OTP, phone, code)
+
+		const client = await api.clients.getClient(c.env.POSTER_TOKEN, phone)
+
+		if (!client) throw new HTTPException(404, { message: 'Client not found' })
+
+		const { client_id: clientId } = client
+
+		const [token, sessionsRaw] = await Promise.all([
+			signJwt(clientId, c.env.JWT_SECRET),
+			c.env.KV_SESSIONS.get(clientId),
+		])
+
+		const parsedSessionsUnknown: unknown = sessionsRaw
+			? JSON.parse(sessionsRaw)
+			: []
+		const sessions: SessionRecord[] = Array.isArray(parsedSessionsUnknown)
+			? parsedSessionsUnknown.filter((record) => isSessionRecord(record))
+			: []
+
+		await Promise.all([
+			c.env.KV_SESSIONS.put(
+				clientId,
+				JSON.stringify([
+					...sessions,
+					{ createdAt: Date.now(), name: sessionName, token },
+				]),
+			),
+			client.client_groups_id === '0'
+				? api.clients.updateClient(c.env.POSTER_TOKEN, clientId, {
+						client_groups_id_client: 3,
+					})
+				: Promise.resolve(),
+		])
+
+		// For web: set HttpOnly cookie. For native: client uses token from body
+		const isWeb = (c.req.header('User-Agent') ?? '').includes('Mozilla')
+
+		const responseBody = { client, token }
+
+		if (isWeb) {
+			setCookie(c, 'tolo_session', token, {
+				httpOnly: true,
+				// 1 year
+				maxAge: 60 * 60 * 24 * 365,
+				path: '/api',
+				priority: 'High',
+				sameSite: isTest ? 'None' : 'Lax',
+				secure: !isTest,
+			})
+		}
+
+		return c.json(responseBody)
+	})
+	.get('/self', async (c) => {
+		const clientId = await authenticate(c, c.env.JWT_SECRET)
+
+		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
+
+		if (!client) throw new HTTPException(404, { message: 'Client not found' })
+
+		return c.json(client)
+	})
+	.get('/self/sessions', async (c) => {
+		const clientId = await authenticate(c, c.env.JWT_SECRET)
+
+		const sessionsRaw = await c.env.KV_SESSIONS.get(clientId.toString())
+
+		const parsedUnknown: unknown = sessionsRaw ? JSON.parse(sessionsRaw) : []
+		const sessions: SessionRecord[] = Array.isArray(parsedUnknown)
+			? parsedUnknown.filter((record) => isSessionRecord(record))
+			: []
+
+		return c.json(sessions)
+	})
+
+export default auth

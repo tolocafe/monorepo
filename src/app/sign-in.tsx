@@ -19,7 +19,7 @@ import {
 	verifyOtpMutationOptions,
 } from '@/lib/queries/auth'
 
-const signInSchema = z.object({
+const SignInSchema = z.object({
 	phoneNumber: z.string().trim().min(1, 'Please enter a phone number'),
 	verificationCode: z
 		.string()
@@ -82,7 +82,7 @@ export default function SignIn() {
 				}
 			}
 		},
-		validators: { onChange: signInSchema },
+		validators: { onChange: SignInSchema },
 	})
 
 	const handleGoBack = () => {

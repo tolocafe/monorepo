@@ -46,16 +46,16 @@ const lightTheme = {
 	} as const,
 	typography: {
 		body: {
-			fontSize: 16,
+			fontSize: 17,
 			fontWeight: '500',
 		},
 		button: {
-			fontSize: 14,
+			fontSize: 15,
 			fontWeight: '600',
 			letterSpacing: 0.5,
 		},
 		caption: {
-			fontSize: 14,
+			fontSize: 15,
 			fontWeight: '400',
 		},
 		h1: {

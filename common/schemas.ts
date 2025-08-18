@@ -28,8 +28,7 @@ export type VerifyOtp = z.infer<typeof VerifyOtpSchema>
 
 export const CreateOrderProductSchema = z.object({
 	comment: z.string().max(2000, 'errors.max-length').optional(),
-	count: z.number().int().positive().max(10, 'errors.max-count').default(1),
-	id: z.string().min(1, 'errors.required'),
+	count: z.number().int().positive().max(10, 'errors.max-count'),
 	modification: z
 		.array(
 			z.object({
@@ -43,15 +42,35 @@ export const CreateOrderProductSchema = z.object({
 			}),
 		)
 		.optional(),
+	product_id: z.string().min(1, 'errors.required'),
 })
 
 export const CreateOrderSchema = z.object({
 	client: z.object({
 		id: z.string().min(1, 'errors.required'),
 	}),
-	comment: z.string().max(2000, 'errors.max-length').optional(),
+	comment: z.string().max(2000, 'errors.max-length'),
+	payment: z.object({
+		amount: z.number().int().positive(),
+	}),
 	products: z.array(CreateOrderProductSchema).min(1, 'errors.min-count'),
-	serviceMode: z.number().int().positive().max(3, 'errors.invalid').default(1),
+	serviceMode: z.number().int().positive().max(3, 'errors.invalid'),
 })
 
 export type CreateOrder = z.infer<typeof CreateOrderSchema>
+
+export const CreateEWallettransactionSchema = z.object({
+	amount: z.number().int().positive(),
+})
+
+export type CreateEWalletTransaction = z.infer<
+	typeof CreateEWallettransactionSchema
+>
+
+export const CreateStripeTransactionSchema = z.object({
+	amount: z.number().int().positive(),
+})
+
+export type CreateStripeTransaction = z.infer<
+	typeof CreateStripeTransactionSchema
+>

@@ -20,12 +20,17 @@ export default function TabLayout() {
 				<meta content="true" property="expo:handoff" />
 			</Head>
 			<Tabs
+				activeIndicatorColor={Colors[colorScheme ?? 'light'].tint}
+				rippleColor={Colors[colorScheme ?? 'light'].tint}
 				screenOptions={{
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore - bottom-tabs library has incomplete type definitions
 					headerShown: false,
 					minimizeBehavior: 'automatic',
 					tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+				}}
+				tabBarStyle={{
+					backgroundColor: Colors[colorScheme ?? 'light'].background,
 				}}
 			>
 				<Tabs.Screen
@@ -36,6 +41,11 @@ export default function TabLayout() {
 						tabBarIcon: ({ focused }: { focused: boolean }) => {
 							if (Platform.OS === 'ios') {
 								return { sfSymbol: 'house' }
+							}
+
+							if (Platform.OS === 'android') {
+								// TODO:
+								return null
 							}
 
 							return (
@@ -64,6 +74,11 @@ export default function TabLayout() {
 								return { sfSymbol: 'bag' }
 							}
 
+							if (Platform.OS === 'android') {
+								// TODO:
+								return null
+							}
+
 							return (
 								<Ionicons
 									color={
@@ -88,6 +103,12 @@ export default function TabLayout() {
 							if (Platform.OS === 'ios') {
 								return { sfSymbol: 'ellipsis' }
 							}
+
+							if (Platform.OS === 'android') {
+								// TODO:
+								return null
+							}
+
 							return (
 								<Ionicons
 									color={

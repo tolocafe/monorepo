@@ -14,12 +14,12 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { ScreenContainer } from '@/components/ScreenContainer'
-import { H1, H2, H3, Label, Paragraph, Text } from '@/components/Text'
+import { H1, H2, Label, Paragraph, Text } from '@/components/Text'
 import { POSTER_BASE_URL } from '@/lib/api'
 import { useTabBarHeight } from '@/lib/navigation/tab-bar-height'
 import { productQueryOptions } from '@/lib/queries/product'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
-import { formatPosterPrice } from '@/lib/utils/price'
+import { formatPrice } from '@/lib/utils/price'
 
 const handleClose = () => {
 	router.back()
@@ -130,7 +130,7 @@ export default function MenuDetail() {
 				</Animated.View>
 
 				<View style={styles.content}>
-					<H2 style={styles.price}>{formatPosterPrice(unitPriceCents)}</H2>
+					<H2 style={styles.price}>{formatPrice(unitPriceCents)}</H2>
 
 					{product.product_production_description && (
 						<Paragraph style={styles.description}>
@@ -155,9 +155,9 @@ export default function MenuDetail() {
 
 					{product.ingredients.length > 0 && (
 						<View style={styles.ingredientsSection}>
-							<H3 style={styles.sectionTitle}>
+							<H2>
 								<Trans>Ingredients</Trans>
-							</H3>
+							</H2>
 							{product.ingredients.slice(0, 5).map((ingredient) => (
 								<Paragraph
 									key={ingredient.ingredient_id}
@@ -175,9 +175,9 @@ export default function MenuDetail() {
 					{product.group_modifications &&
 						product.group_modifications.length > 0 && (
 							<View style={styles.modificationsSection}>
-								<H3 style={styles.sectionTitle}>
+								<H2>
 									<Trans>Available modifications</Trans>
-								</H3>
+								</H2>
 								{product.group_modifications.map((group) => (
 									<View
 										key={group.dish_modification_group_id}
@@ -224,7 +224,7 @@ export default function MenuDetail() {
 																			String(modification.price),
 																			10,
 																		)
-																			? ` +${formatPosterPrice(modification.price)}`
+																			? ` +${formatPrice(modification.price)}`
 																			: ''}
 																	</Text>
 																</View>
@@ -270,7 +270,7 @@ export default function MenuDetail() {
 							{(quantity) => (
 								<Trans>
 									Add to Order -{' '}
-									{formatPosterPrice(Number(unitPriceCents) * quantity)}
+									{formatPrice(Number(unitPriceCents) * quantity)}
 								</Trans>
 							)}
 						</Subscribe>
@@ -455,9 +455,6 @@ const styles = StyleSheet.create((theme) => ({
 	quantityText: {
 		minWidth: 40,
 		textAlign: 'center',
-	},
-	sectionTitle: {
-		marginBottom: theme.spacing.md,
 	},
 	timeBadge: {
 		backgroundColor: theme.colors.primary,

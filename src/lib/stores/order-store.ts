@@ -162,7 +162,14 @@ export const useOrderStore = create<OrderStore>()(
 				if (!currentOrder) return
 
 				if (quantity <= 0) {
-					get().removeItem(productId)
+					set({
+						currentOrder: {
+							...currentOrder,
+							products: currentOrder.products.filter(
+								(item) => item.id !== productId,
+							),
+						},
+					})
 					return
 				}
 

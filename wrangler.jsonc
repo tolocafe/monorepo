@@ -20,14 +20,19 @@
 	},
 	"kv_namespaces": [
 		{
-			"binding": "OTP_CODES",
+			"binding": "KV_OTP",
 			"id": "920da48543314b4cbfc552cef5b8b421",
-			"experimental_remote": true,
 		},
 		{
 			"binding": "KV_SESSIONS",
 			"id": "58520d291d8f418f90b464ff0b3ea3df",
-			"experimental_remote": true,
+		},
+	],
+	"d1_databases": [
+		{
+			"binding": "D1_TRANSACTIONS",
+			"database_name": "tolo-transactions",
+			"database_id": "61141ce0-46a2-4f27-a1c5-c3251c754c6c",
 		},
 	],
 }

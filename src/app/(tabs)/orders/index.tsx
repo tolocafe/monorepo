@@ -1,35 +1,42 @@
-import type { ImageSourcePropType } from 'react-native'
-import { TouchableOpacity, View } from 'react-native'
+import { useRef } from 'react'
+import type { ImageSourcePropType, ScrollView } from 'react-native'
+import { RefreshControl, TouchableOpacity, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
+import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { router } from 'expo-router'
+import { Link, router } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
+import { Card } from '@/components/Card'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { selfQueryOptions } from '@/lib/queries/auth'
+import { orderQueryOptions } from '@/lib/queries/order'
 import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
 import { useCurrentOrder, useOrderStats } from '@/lib/stores/order-store'
-import { formatPosterPrice } from '@/lib/utils/price'
-
-// removed unused Order type used by deleted renderOrderItem
+import { formatPrice } from '@/lib/utils/price'
 
 const handleSignIn = () => {
 	router.push('/sign-in')
 }
 
-// removed unused handleOrderPress used by deleted renderOrderItem
-
 export default function Orders() {
-	const { data: user } = useQuery(selfQueryOptions)
-	const isAuthenticated = Boolean(user)
 	const { t } = useLingui()
+	const { data: user } = useQuery(selfQueryOptions)
+
+	const isAuthenticated = Boolean(user)
+	const screenRef = useRef<ScrollView>(null)
+
+	useScrollToTop(screenRef)
+
 	const currentOrder = useCurrentOrder()
+	const { data: orders, isPending: isOrdersPending } =
+		useQuery(orderQueryOptions)
 	const { totalItems } = useOrderStats()
 
 	const currentOrderTotalCents = (() => {
@@ -92,18 +99,19 @@ export default function Orders() {
 			<Head>
 				<title>{t`Orders`}</title>
 			</Head>
-			<ScreenContainer contentContainerStyle={styles.container}>
-				<View style={styles.header}>
-					{user?.firstname && (
-						<Paragraph style={styles.subtitle}>
-							<Trans>Welcome back, {user.firstname}!</Trans>
-						</Paragraph>
-					)}
-				</View>
-
+			<ScreenContainer
+				contentContainerStyle={styles.container}
+				ref={screenRef}
+				refreshControl={
+					<RefreshControl
+						onRefresh={() => queryClient.invalidateQueries(orderQueryOptions)}
+						refreshing={isOrdersPending}
+					/>
+				}
+			>
 				{/* Current Order in Progress */}
 				{currentOrder && (
-					<View style={styles.currentOrderSection}>
+					<>
 						<H2 style={styles.sectionTitle}>
 							<Trans>In Progress</Trans>
 						</H2>
@@ -120,29 +128,62 @@ export default function Orders() {
 								</Text>
 							</View>
 							<Paragraph style={styles.currentOrderText}>
-								{formatPosterPrice(currentOrderTotalCents)}
+								{formatPrice(currentOrderTotalCents)}
 							</Paragraph>
 							<Paragraph style={styles.tapToEdit}>
 								<Trans>Tap to view and edit</Trans>
 							</Paragraph>
 						</TouchableOpacity>
-					</View>
+					</>
 				)}
 
 				{/* Order History */}
-				<View style={styles.ordersContainer}>
-					<H2 style={styles.sectionTitle}>
-						<Trans>Order History</Trans>
-					</H2>
+
+				{orders?.length ? (
 					<>
-						<H3 style={styles.emptyState}>
+						<H2 style={styles.sectionTitle}>
+							<Trans>Order History</Trans>
+						</H2>
+						<View style={styles.ordersList}>
+							{orders.map((order) => (
+								<Link
+									href={`/orders/${order.transaction_id}`}
+									key={order.transaction_id}
+								>
+									<Card key={order.transaction_id} style={styles.orderCard}>
+										<Text>
+											<Trans>Status {order.processing_status}</Trans>
+										</Text>
+										<View style={styles.orderDetails}>
+											<Text>
+												{new Date(
+													Number(order.date_start),
+												).toLocaleDateString()}
+											</Text>
+											<Text>{formatPrice(order.sum)}</Text>
+										</View>
+									</Card>
+								</Link>
+							))}
+						</View>
+					</>
+				) : (
+					<View style={{ alignItems: 'center', flex: 1 }}>
+						<Image
+							contentFit="contain"
+							source={
+								require('@/assets/images/beverages-empty.png') as ImageSourcePropType
+							}
+							style={styles.emptyOrderImage}
+						/>
+						<H3 align="center">
 							<Trans>No orders yet</Trans>
 						</H3>
-						<Paragraph style={styles.emptyStateSubtitle}>
+						<Paragraph align="center">
 							<Trans>Your order history will appear here</Trans>
 						</Paragraph>
-					</>
-				</View>
+					</View>
+				)}
 			</ScreenContainer>
 		</>
 	)
@@ -157,38 +198,33 @@ const styles = StyleSheet.create((theme) => ({
 		borderRadius: theme.borderRadius.md,
 		padding: theme.spacing.lg,
 	},
-	currentOrderSection: {
-		marginBottom: theme.spacing.xl,
-	},
 	currentOrderText: {
 		color: theme.colors.surface,
 	},
 	currentOrderTitle: {
 		color: theme.colors.surface,
 	},
-	emptyState: {
-		textAlign: 'center',
-	},
-	emptyStateSubtitle: {
-		opacity: 0.6,
-		textAlign: 'center',
-	},
-	header: {
-		marginBottom: theme.spacing.xl,
+	emptyOrderImage: {
+		height: 250,
+		width: 250,
 	},
 	orderBadge: {
 		color: theme.colors.surface,
 		opacity: 0.9,
 	},
 	orderCard: {
-		backgroundColor: theme.colors.surface,
-		borderRadius: theme.borderRadius.md,
-		marginBottom: theme.spacing.md,
-		padding: theme.spacing.lg,
+		flexDirection: 'column',
+		justifyContent: 'space-between',
+		width: '100%',
 	},
 	orderDate: {
 		color: theme.colors.textSecondary,
 		marginTop: theme.spacing.xs,
+	},
+	orderDetails: {
+		flexDirection: 'row',
+		gap: theme.spacing.sm,
+		justifyContent: 'space-between',
 	},
 	orderHeader: {
 		alignItems: 'center',
@@ -200,14 +236,16 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.textSecondary,
 		marginBottom: theme.spacing.xs,
 	},
-	ordersContainer: {
-		alignItems: 'center',
-		flex: 1,
-		justifyContent: 'center',
-		paddingVertical: theme.spacing.xxl,
-	},
+	// ordersContainer: {
+	// 	alignItems: 'center',
+	// 	flex: 1,
+	// 	justifyContent: 'center',
+	// 	paddingVertical: theme.spacing.xxl,
+	// },
 	ordersList: {
+		gap: theme.spacing.md,
 		paddingBottom: theme.spacing.xl,
+		width: '100%',
 	},
 	orderStatus: {
 		color: theme.colors.primary,

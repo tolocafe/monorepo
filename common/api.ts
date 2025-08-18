@@ -1,6 +1,28 @@
 export const BASE_URL = process.env.EXPO_PUBLIC_API_URL as string
 export const POSTER_BASE_URL = process.env.EXPO_PUBLIC_POSTER_API_URL as string
 
+export type Category = {
+	category_color: string
+	category_hidden: string
+	category_id: string
+	category_name: string
+	category_photo: null | string
+	category_photo_origin: null | string
+	category_tag: null | string
+	fiscal: string
+	left: string
+	level: string
+	nodiscount: string
+	parent_category: string
+	right: string
+	sort_order: string
+	tax_id: string
+	visible: {
+		spot_id: number
+		visible: number
+	}[]
+}
+
 export type ClientAddress = {
 	address1: string
 	address2: string
@@ -48,33 +70,6 @@ export type ClientData = {
 	/** E.g. 527224067201 */
 	phone_number?: string
 	total_payed_sum?: string
-}
-
-export type PosterApiResponse<T> = {
-	error?: string
-	response: T
-}
-
-export type PosterCategory = {
-	category_color: string
-	category_hidden: string
-	category_id: string
-	category_name: string
-	category_photo: null | string
-	category_photo_origin: null | string
-	category_tag: null | string
-	fiscal: string
-	left: string
-	level: string
-	nodiscount: string
-	parent_category: string
-	right: string
-	sort_order: string
-	tax_id: string
-	visible: {
-		spot_id: number
-		visible: number
-	}[]
 }
 
 export type PosterIngredient = {
@@ -126,7 +121,12 @@ export type PosterModificationGroup = {
 	type: number
 }
 
-export type PosterProduct = {
+export type PosterResponse<T> = {
+	error?: string
+	response: null | T
+}
+
+export type Product = {
 	barcode: string
 	category_name: string
 	color: string

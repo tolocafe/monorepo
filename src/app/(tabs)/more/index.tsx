@@ -1,4 +1,4 @@
-import { Linking, TouchableOpacity, View } from 'react-native'
+import { Linking, RefreshControl, TouchableOpacity, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans } from '@lingui/react/macro'
@@ -16,7 +16,8 @@ import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
 import { useLanguage } from '@/lib/contexts/language-context'
 import { selfQueryOptions } from '@/lib/queries/auth'
-import { formatPosterPrice } from '@/lib/utils/price'
+import { queryClient } from '@/lib/query-client'
+import { formatPrice } from '@/lib/utils/price'
 
 const getStringOrFallback = (value: unknown, fallback: string): string =>
 	typeof value === 'string' ? value : fallback
@@ -27,7 +28,7 @@ const handleSignIn = () => {
 
 export default function More() {
 	const { changeLanguage, currentLanguage } = useLanguage()
-	const { data: user, isLoading: isLoadingUser } = useQuery(selfQueryOptions)
+	const { data: user, isPending: isUserPending } = useQuery(selfQueryOptions)
 
 	const appVersion = getStringOrFallback(nativeApplicationVersion, '0')
 
@@ -47,7 +48,15 @@ export default function More() {
 				<meta content="More - TOLO" property="og:title" />
 				<meta content="/more" property="og:url" />
 			</Head>
-			<ScreenContainer contentContainerStyle={styles.scrollContent}>
+			<ScreenContainer
+				contentContainerStyle={styles.scrollContent}
+				refreshControl={
+					<RefreshControl
+						onRefresh={() => queryClient.invalidateQueries(selfQueryOptions)}
+						refreshing={isUserPending}
+					/>
+				}
+			>
 				{/* User Information Section */}
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
@@ -65,8 +74,15 @@ export default function More() {
 							/>
 							<ListItem
 								label={<Trans>Wallet</Trans>}
-								text={formatPosterPrice(user.ewallet ?? '0')}
+								text={formatPrice(user.ewallet ?? '0')}
 							/>
+							{/* <ListItem
+								accessibilityRole="link"
+								centered
+								label={<Trans>Top Up Wallet</Trans>}
+								labelColor="primary"
+								onPress={() => router.push('/more/top-up')}
+							/> */}
 							<ListItem
 								accessibilityRole="link"
 								centered
@@ -75,7 +91,7 @@ export default function More() {
 								onPress={() => router.push('/more/profile')}
 							/>
 						</List>
-					) : isLoadingUser ? (
+					) : isUserPending ? (
 						<Card>
 							<Paragraph style={styles.userInfoText}>
 								<Trans>Loading user information...</Trans>
@@ -98,15 +114,21 @@ export default function More() {
 
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
-						<Trans>Stores</Trans>
+						<Trans>Contact</Trans>
 					</H2>
 
 					<List>
 						<ListItem
 							accessibilityRole="link"
 							chevron
-							label={<Trans>Visit Us</Trans>}
+							label={<Trans>Stores</Trans>}
 							onPress={() => router.push('/more/visit-us')}
+						/>
+						<ListItem
+							accessibilityRole="link"
+							chevron
+							label={<Trans>Website</Trans>}
+							onPress={() => Linking.openURL('https://tolo.cafe')}
 						/>
 						<View style={styles.socialIconsRow}>
 							<TouchableOpacity
@@ -345,7 +367,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.sm,
 	},
 	scrollContent: {
-		paddingBottom: theme.spacing.xl,
+		paddingVertical: theme.spacing.lg,
 	},
 	section: {
 		marginBottom: theme.spacing.lg,

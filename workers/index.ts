@@ -1,46 +1,18 @@
-import {
-	CreateOrderSchema,
-	RequestOtpSchema,
-	VerifyOtpSchema,
-} from '@common/schemas'
 import * as Sentry from '@sentry/cloudflare'
 import { Hono } from 'hono'
-import { setCookie } from 'hono/cookie'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 
+import auth from './routes/auth'
+import clients from './routes/clients'
+import menu from './routes/menu'
+import orders from './routes/orders'
+import transactions from './routes/transactions'
 import { defaultJsonHeaders } from './utils/headers'
-import { authenticate, signJwt } from './utils/jwt'
-import { getMenuCategories, getMenuProducts, getProduct } from './utils/menu'
-import { generateOtp, storeOtp, verifyOtp } from './utils/otp'
-import {
-	createPosterClient,
-	createPosterOrder,
-	getPosterClientById,
-	getPosterClientByPhone,
-	sendSms,
-	updatePosterClient,
-} from './utils/poster'
 
-const app = new Hono<{
-	Bindings: {
-		JWT_SECRET: string
-		KV_SESSIONS: KVNamespace
-		OTP_CODES: KVNamespace
-		POSTER_TOKEN: string
-		TEST_OTP_CODE: string
-		TEST_PHONE_NUMBERS: string
-	}
-}>().basePath('/api')
+import type { Bindings } from './types'
 
-type SessionRecord = { createdAt: number; name: string; token: string }
-
-const isSessionRecord = (value: unknown): value is SessionRecord =>
-	typeof value === 'object' &&
-	value !== null &&
-	'createdAt' in value &&
-	'name' in value &&
-	'token' in value
+const app = new Hono<{ Bindings: Bindings }>().basePath('/api')
 
 app.use(
 	'*',
@@ -58,210 +30,18 @@ app
 			defaultJsonHeaders,
 		),
 	)
-	.get('/menu/categories', async (context) => {
-		const categories = await getMenuCategories(context.env.POSTER_TOKEN)
-
-		return context.json(categories, 200, defaultJsonHeaders)
-	})
-	.get('/menu/products', async (context) => {
-		const products = await getMenuProducts(context.env.POSTER_TOKEN, {
-			type: 'products',
-		})
-
-		return context.json(products, 200, defaultJsonHeaders)
-	})
-	.get('/menu/products/:id', async (context) => {
-		const productId = context.req.param('id')
-
-		if (!productId) {
-			return context.json(
-				{ error: 'Product ID is required' },
-				400,
-				defaultJsonHeaders,
-			)
-		}
-
-		try {
-			const product = await getProduct(context.env.POSTER_TOKEN, productId)
-
-			return context.json(product, 200, defaultJsonHeaders)
-		} catch {
-			return context.json(
-				{ error: 'Failed to fetch product details' },
-				500,
-				defaultJsonHeaders,
-			)
-		}
-	})
-
-	.post('/auth/request-otp', async (c) => {
-		const { email, name, phone } = RequestOtpSchema.parse(await c.req.json())
-
-		const existingClient = await getPosterClientByPhone(
-			c.env.POSTER_TOKEN,
-			phone,
-		)
-
-		if (!existingClient) {
-			await createPosterClient(c.env.POSTER_TOKEN, {
-				client_groups_id_client: 1,
-				client_name: name ?? 'anon',
-				email,
-				phone,
-			})
-		}
-
-		const code = generateOtp()
-
-		await Promise.all([
-			storeOtp(c.env.OTP_CODES, phone, code),
-			sendSms(
-				c.env.POSTER_TOKEN,
-				phone,
-				`[TOLO] Tu código de verificación es ${code}`,
-				// eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
-			).catch((error) => {
-				// eslint-disable-next-line no-console
-				console.log(error)
-
-				throw error
-			}),
-		])
-
-		return c.json({ success: true })
-	})
-	.post('/auth/verify-otp', async (c) => {
-		const { code, phone, sessionName } = VerifyOtpSchema.parse(
-			await c.req.json(),
-		)
-
-		const { isTest } = await verifyOtp(c.env.OTP_CODES, phone, code)
-
-		const client = await getPosterClientByPhone(c.env.POSTER_TOKEN, phone)
-
-		if (!client) throw new HTTPException(404, { message: 'Client not found' })
-
-		const { client_id: clientId } = client
-
-		const [token, sessionsRaw] = await Promise.all([
-			signJwt(clientId, c.env.JWT_SECRET),
-			c.env.KV_SESSIONS.get(clientId),
-		])
-
-		const parsedSessionsUnknown: unknown = sessionsRaw
-			? JSON.parse(sessionsRaw)
-			: []
-		const sessions: SessionRecord[] = Array.isArray(parsedSessionsUnknown)
-			? parsedSessionsUnknown.filter((record) => isSessionRecord(record))
-			: []
-
-		await Promise.all([
-			c.env.KV_SESSIONS.put(
-				clientId,
-				JSON.stringify([
-					...sessions,
-					{ createdAt: Date.now(), name: sessionName, token },
-				]),
-			),
-			client.client_groups_id === '0'
-				? updatePosterClient(c.env.POSTER_TOKEN, clientId, {
-						client_groups_id_client: 3,
-					})
-				: Promise.resolve(),
-		])
-
-		// For web: set HttpOnly cookie. For native: client uses token from body
-		const isWeb = (c.req.header('User-Agent') ?? '').includes('Mozilla')
-
-		const responseBody = { client, token }
-
-		if (isWeb) {
-			setCookie(c, 'tolo_session', token, {
-				httpOnly: true,
-				// 30 days
-				maxAge: 60 * 60 * 24 * 30,
-				path: '/api',
-				sameSite: isTest ? 'None' : 'Lax',
-				secure: !isTest,
-			})
-		}
-
-		return c.json(responseBody)
-	})
-	.get('/auth/self', async (c) => {
-		const clientId = await authenticate(c, c.env.JWT_SECRET)
-		const client = await getPosterClientById(c.env.POSTER_TOKEN, clientId)
-		if (!client) throw new HTTPException(404, { message: 'Client not found' })
-
-		return c.json(client)
-	})
-	.get('/auth/self/sessions', async (c) => {
-		const clientId = await authenticate(c, c.env.JWT_SECRET)
-		const key = clientId
-		const sessionsRaw = await c.env.KV_SESSIONS.get(key)
-
-		const parsedUnknown: unknown = sessionsRaw ? JSON.parse(sessionsRaw) : []
-		const sessions: SessionRecord[] = Array.isArray(parsedUnknown)
-			? parsedUnknown.filter((record) => isSessionRecord(record))
-			: []
-
-		return c.json(sessions)
-	})
-
-	.put('/clients/:id', async (c) => {
-		const clientIdFromToken = await authenticate(c, c.env.JWT_SECRET)
-		const id = c.req.param('id')
-
-		if (!id || id !== clientIdFromToken)
-			throw new HTTPException(403, { message: 'Forbidden' })
-
-		const bodyUnknown = (await c.req.json()) as unknown
-		const body =
-			typeof bodyUnknown === 'object' &&
-			bodyUnknown !== null &&
-			!Array.isArray(bodyUnknown)
-				? (bodyUnknown as Record<string, unknown>)
-				: {}
-
-		const client = await updatePosterClient(c.env.POSTER_TOKEN, id, body)
-
-		return c.json(client)
-	})
-	.post('/orders', async (c) => {
-		const clientId = await authenticate(c, c.env.JWT_SECRET)
-
-		const bodyUnknown = (await c.req.json()) as unknown
-
-		if (
-			typeof bodyUnknown !== 'object' ||
-			bodyUnknown === null ||
-			Array.isArray(bodyUnknown)
-		) {
-			throw new HTTPException(400, { message: 'Invalid body' })
-		}
-
-		const validatedData = CreateOrderSchema.parse({
-			...bodyUnknown,
-			client_id: clientId,
-		})
-
-		try {
-			const order = await createPosterOrder(
-				c.env.POSTER_TOKEN,
-				validatedData,
-				clientId,
-			)
-
-			return c.json({ order, success: true }, 201, defaultJsonHeaders)
-		} catch (error) {
-			throw new HTTPException(500, {
-				message:
-					error instanceof Error ? error.message : 'Failed to create order',
-			})
-		}
-	})
+	.route('/menu', menu)
+	.route('/auth', auth)
+	.route('/clients', clients)
+	.route('/transactions', transactions)
+	.route('/orders', orders)
 
 app.onError((error, c) => {
+	if (process.env.NODE_ENV === 'development') {
+		// eslint-disable-next-line no-console
+		console.log(error)
+	}
+
 	if (error instanceof HTTPException) {
 		return error.getResponse()
 	}

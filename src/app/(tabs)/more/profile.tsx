@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { Alert, Platform, View } from 'react-native'
+import { Alert, Platform, RefreshControl, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
@@ -18,6 +18,7 @@ import {
 	updateClientMutationOptions,
 } from '@/lib/queries/auth'
 import { clearAllCache } from '@/lib/queries/cache-utils'
+import { formatPrice } from '@/lib/utils/price'
 
 import type { ClientData } from '@/lib/api'
 
@@ -97,14 +98,35 @@ export default function ProfileScreen() {
 	}
 
 	const balanceCents = Number(user?.ewallet ?? '0')
-	const balance = (balanceCents / 100).toFixed(2)
+	const balance = balanceCents.toFixed(2)
 
 	return (
 		<>
 			<Head>
 				<title>{t`Profile`}</title>
 			</Head>
-			<ScreenContainer>
+			<ScreenContainer
+				refreshControl={
+					<RefreshControl
+						onRefresh={() => queryClient.invalidateQueries(selfQueryOptions)}
+						refreshing={updateMutation.isPending}
+					/>
+				}
+			>
+				<View style={styles.section}>
+					<Label style={styles.sectionTitle}>
+						<Trans>Wallet</Trans>
+					</Label>
+					<View style={styles.card}>
+						<View style={styles.balanceRow}>
+							<Label>
+								<Trans>Balance</Trans>
+							</Label>
+							<Text style={styles.balanceValue}>{formatPrice(balance)}</Text>
+						</View>
+					</View>
+				</View>
+
 				<View style={styles.section}>
 					<Label style={styles.sectionTitle}>
 						<Trans>Personal Information</Trans>
@@ -203,20 +225,6 @@ export default function ProfileScreen() {
 						<Button onPress={handleSignOut}>
 							<Trans>Sign Out</Trans>
 						</Button>
-					</View>
-				</View>
-
-				<View style={styles.section}>
-					<Label style={styles.sectionTitle}>
-						<Trans>Wallet</Trans>
-					</Label>
-					<View style={styles.card}>
-						<View style={styles.balanceRow}>
-							<Label>
-								<Trans>Balance</Trans>
-							</Label>
-							<Text style={styles.balanceValue}>${balance}</Text>
-						</View>
 					</View>
 				</View>
 			</ScreenContainer>
