@@ -14,7 +14,6 @@ import { Stack, useNavigationContainerRef } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
-import Stripe from '@/components/Stripe'
 import { LanguageProvider } from '@/lib/contexts/language-context'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { useUpdates } from '@/lib/hooks/use-updates'
@@ -58,36 +57,31 @@ function RootLayout() {
 
 	return (
 		<KeyboardProvider>
-			<Stripe>
-				<QueryProvider>
-					<LanguageProvider>
-						<I18nProvider i18n={i18n}>
-							<ThemeProvider
-								value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-							>
-								<StatusBar style="auto" />
-								<Stack>
-									<Stack.Screen
-										name="(tabs)"
-										options={{ headerShown: false }}
-									/>
-									<Stack.Screen name="+not-found" />
-									<Stack.Screen
-										name="sign-in"
-										options={{
-											presentation: Platform.select({
-												default: 'modal',
-												web: 'transparentModal',
-											}),
-										}}
-									/>
-								</Stack>
-								<Toaster position="bottom-right" />
-							</ThemeProvider>
-						</I18nProvider>
-					</LanguageProvider>
-				</QueryProvider>
-			</Stripe>
+			<QueryProvider>
+				<LanguageProvider>
+					<I18nProvider i18n={i18n}>
+						<ThemeProvider
+							value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+						>
+							<StatusBar style="auto" />
+							<Stack>
+								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+								<Stack.Screen name="+not-found" />
+								<Stack.Screen
+									name="sign-in"
+									options={{
+										presentation: Platform.select({
+											default: 'modal',
+											web: 'transparentModal',
+										}),
+									}}
+								/>
+							</Stack>
+							<Toaster position="bottom-right" />
+						</ThemeProvider>
+					</I18nProvider>
+				</LanguageProvider>
+			</QueryProvider>
 		</KeyboardProvider>
 	)
 }

@@ -5,8 +5,8 @@ import type { CreateOrder } from '@common/schemas'
 
 const snsClient = new AWS.SNS({
 	credentials: {
-		accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
-		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+		accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 	},
 	region: 'us-east-1',
 })
