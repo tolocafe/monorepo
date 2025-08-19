@@ -1,0 +1,21 @@
+{
+	"applinks": {
+		"details": [
+			{
+				"appIDs": [
+					"6749597635.app.tolo.cafe"
+				]
+			}
+		]
+	},
+	"webcredentials": {
+		"apps": [
+			"6749597635.app.tolo.cafe"
+		]
+	},
+	"appclips": {
+		"apps": [
+			"6749597635.app.tolo.cafe"
+		]
+	}
+}
