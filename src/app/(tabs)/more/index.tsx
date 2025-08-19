@@ -130,6 +130,22 @@ export default function More() {
 							label={<Trans>Website</Trans>}
 							onPress={() => Linking.openURL('https://tolo.cafe')}
 						/>
+						<ListItem
+							accessibilityRole="link"
+							chevron
+							label={<Trans>Privacy Policy</Trans>}
+							onPress={() =>
+								Linking.openURL('https://tolo.cafe/politica-de-privacidad')
+							}
+						/>
+						<ListItem
+							accessibilityRole="link"
+							chevron
+							label={<Trans>Terms of Use</Trans>}
+							onPress={() =>
+								Linking.openURL('https://tolo.cafe/terminos-y-condiciones')
+							}
+						/>
 						<View style={styles.socialIconsRow}>
 							<TouchableOpacity
 								accessibilityRole="button"
