@@ -9,6 +9,7 @@ import {
 	ThemeProvider,
 } from '@react-navigation/native'
 import * as Sentry from '@sentry/react-native'
+import { Toaster } from 'burnt/web'
 import { Stack, useNavigationContainerRef } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
@@ -81,6 +82,7 @@ function RootLayout() {
 										}}
 									/>
 								</Stack>
+								<Toaster position="bottom-right" />
 							</ThemeProvider>
 						</I18nProvider>
 					</LanguageProvider>

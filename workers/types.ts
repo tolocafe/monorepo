@@ -1,5 +1,5 @@
-export type Bindings = {
-	D1_TRANSACTIONS: D1Database
+export type Bindings = Cloudflare.Env & {
+	D1_TOLO: D1Database
 	JWT_SECRET: string
 	KV_CMS: KVNamespace
 	KV_OTP: KVNamespace
@@ -7,5 +7,6 @@ export type Bindings = {
 	POSTER_TOKEN: string
 	TEST_OTP_CODE: string
 	TEST_PHONE_NUMBERS: string
+	WEBFLOW_API_TOKEN: string
 	WEBFLOW_MENU_COLLECTION_ID: string
 }

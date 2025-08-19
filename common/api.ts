@@ -1,5 +1,5 @@
-export const BASE_URL = process.env.EXPO_PUBLIC_API_URL as string
-export const POSTER_BASE_URL = process.env.EXPO_PUBLIC_POSTER_API_URL as string
+export const BASE_URL = process.env.EXPO_PUBLIC_API_URL
+export const POSTER_BASE_URL = process.env.EXPO_PUBLIC_POSTER_API_URL
 
 export type Category = {
 	category_color: string
@@ -152,6 +152,7 @@ export type Product = {
 	product_production_description: string
 	product_tax_id: string
 	profit: Record<string, string>
+	'small-description'?: string
 	sort_order: string
 	sources: unknown[]
 	spots: {

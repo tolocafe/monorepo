@@ -40,9 +40,9 @@
 	],
 	"d1_databases": [
 		{
-			"binding": "D1_TRANSACTIONS",
-			"database_name": "tolo-transactions",
-			"database_id": "61141ce0-46a2-4f27-a1c5-c3251c754c6c",
+			"binding": "D1_TOLO",
+			"database_name": "tolo",
+			"database_id": "a97cd459-12c3-4051-b718-7a0c9fa64cf5",
 		},
 	],
 }

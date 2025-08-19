@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Alert, TouchableOpacity, View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { PaymentSheetError, useStripe } from '@stripe/stripe-react-native'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
+import * as Burnt from 'burnt'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -29,22 +30,28 @@ export default function TopUp() {
 	const { isPending, mutateAsync: topUpWallet } = useMutation({
 		...topUpEWalletMutationOptions,
 		onError(error) {
-			Alert.alert(
-				t`Error`,
-				error instanceof Error
-					? error.message
-					: t`Failed to top up wallet. Please try again.`,
-			)
+			Burnt.toast({
+				duration: 3,
+				haptic: 'error',
+				message:
+					error instanceof Error
+						? error.message
+						: t`Failed to top up wallet. Please try again.`,
+				preset: 'error',
+				title: t`Error`,
+			})
 		},
 		async onSuccess() {
 			// Invalidate user query to refresh balance
 			await queryClient.invalidateQueries({ queryKey: ['auth', 'self'] })
-			Alert.alert(t`Success`, t`Your wallet has been topped up successfully!`, [
-				{
-					onPress: () => router.back(),
-					text: t`OK`,
-				},
-			])
+			Burnt.toast({
+				duration: 3,
+				haptic: 'success',
+				message: t`Your wallet has been topped up successfully!`,
+				preset: 'done',
+				title: t`Success`,
+			})
+			router.back()
 		},
 	})
 
@@ -77,12 +84,16 @@ export default function TopUp() {
 
 			// Payment successful - the onSuccess callback will handle the rest
 		} catch (error) {
-			Alert.alert(
-				t`Error`,
-				error instanceof Error
-					? error.message
-					: t`Failed to process payment. Please try again.`,
-			)
+			Burnt.toast({
+				duration: 3,
+				haptic: 'error',
+				message:
+					error instanceof Error
+						? error.message
+						: t`Failed to process payment. Please try again.`,
+				preset: 'error',
+				title: t`Error`,
+			})
 		}
 	}
 

@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { Alert, Platform, Pressable, View } from 'react-native'
+import { Platform, Pressable, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import * as Burnt from 'burnt'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
@@ -40,7 +41,7 @@ export default function SignIn() {
 		async onSuccess() {
 			await queryClient.invalidateQueries({ queryKey: ['self'] })
 
-			router.replace('/')
+			router.replace('/', { withAnchor: false })
 		},
 	})
 
@@ -56,8 +57,16 @@ export default function SignIn() {
 						phone: value.phoneNumber.trim(),
 					})
 					setStage('code')
+
 					// Reset code field meta/value when moving to next stage
 					resetField('verificationCode')
+					Burnt.toast({
+						duration: 2,
+						haptic: 'success',
+						message: t`We sent you a 6-digit code`,
+						preset: 'done',
+						title: t`Code sent`,
+					})
 					return
 				}
 
@@ -68,17 +77,24 @@ export default function SignIn() {
 				})
 			} catch (error) {
 				if (stage === 'phone') {
-					Alert.alert(
-						t`Error`,
-						(error as Error).message || t`Failed to send code`,
-					)
+					Burnt.toast({
+						duration: 3,
+						haptic: 'error',
+						message: (error as Error).message || t`Failed to send code`,
+						preset: 'error',
+						title: t`Error`,
+					})
 				} else {
 					// Clear OTP on error to allow re-entry
 					resetField('verificationCode')
-					Alert.alert(
-						t`Error`,
-						(error as Error).message || t`Invalid verification code`,
-					)
+
+					Burnt.toast({
+						duration: 3,
+						haptic: 'error',
+						message: (error as Error).message || t`Invalid verification code`,
+						preset: 'error',
+						title: t`Error`,
+					})
 				}
 			}
 		},

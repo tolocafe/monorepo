@@ -68,7 +68,7 @@ export default function Menu() {
 
 		return (
 			<View key={category.category_id} style={styles.categorySection}>
-				<H3 style={styles.categoryTitle}>{category.category_name}</H3>
+				<H3 style={styles.subtitle}>{category.category_name}</H3>
 				<FlatList
 					contentContainerStyle={styles.categoryItems}
 					data={categoryItems}
@@ -245,12 +245,14 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: theme.layout.screenPadding,
 	},
 	categorySection: {
+		gap: theme.spacing.sm,
 		marginBottom: theme.spacing.xl,
 	},
 	categoryTitle: {
 		color: theme.colors.text,
 		marginBottom: theme.spacing.md,
 		paddingHorizontal: theme.layout.screenPadding,
+		paddingTop: theme.layout.screenPadding,
 	},
 	errorContainer: {
 		alignItems: 'center',
@@ -313,10 +315,8 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	subtitle: {
-		color: theme.colors.textSecondary,
-		marginTop: theme.spacing.xs,
+		paddingHorizontal: theme.layout.screenPadding,
 	},
-
 	theme,
 	title: {
 		color: theme.colors.primary,

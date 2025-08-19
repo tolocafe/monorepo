@@ -2,11 +2,11 @@ import { useRef } from 'react'
 import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { RefreshControl, TouchableOpacity, View } from 'react-native'
 
-import { Trans, useLingui } from '@lingui/react/macro'
+import { Select, Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { Link, router } from 'expo-router'
+import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -111,7 +111,7 @@ export default function Orders() {
 				{/* Current Order in Progress */}
 				{currentOrder && (
 					<>
-						<H2 style={styles.sectionTitle}>
+						<H2>
 							<Trans>In Progress</Trans>
 						</H2>
 						<TouchableOpacity
@@ -140,29 +140,32 @@ export default function Orders() {
 
 				{orders?.length ? (
 					<>
-						<H2 style={styles.sectionTitle}>
-							<Trans>Order History</Trans>
+						<H2>
+							<Trans>History</Trans>
 						</H2>
 						<View style={styles.ordersList}>
 							{orders.map((order) => (
-								<Link
-									href={`/orders/${order.transaction_id}`}
-									key={order.transaction_id}
-								>
-									<Card key={order.transaction_id} style={styles.orderCard}>
+								<Card key={order.transaction_id} style={styles.orderCard}>
+									<Text weight="bold">
+										<Select
+											_Status10="Open"
+											_Status20="Preparing"
+											_Status30="Ready"
+											_Status40="En route"
+											_Status50="Delivered"
+											_Status60="Closed"
+											_Status70="Deleted"
+											other="Unknown"
+											value={`Status${order.processing_status}`}
+										/>
+									</Text>
+									<View style={styles.orderDetails}>
 										<Text>
-											<Trans>Status {order.processing_status}</Trans>
+											{new Date(Number(order.date_start)).toLocaleDateString()}
 										</Text>
-										<View style={styles.orderDetails}>
-											<Text>
-												{new Date(
-													Number(order.date_start),
-												).toLocaleDateString()}
-											</Text>
-											<Text>{formatPrice(order.sum)}</Text>
-										</View>
-									</Card>
-								</Link>
+										<Text>{formatPrice(order.sum)}</Text>
+									</View>
+								</Card>
 							))}
 						</View>
 					</>
@@ -190,6 +193,7 @@ export default function Orders() {
 
 const styles = StyleSheet.create((theme) => ({
 	container: {
+		gap: theme.spacing.md,
 		padding: theme.layout.screenPadding,
 	},
 	currentOrderCard: {
@@ -242,15 +246,11 @@ const styles = StyleSheet.create((theme) => ({
 	// 	paddingVertical: theme.spacing.xxl,
 	// },
 	ordersList: {
-		gap: theme.spacing.md,
-		paddingBottom: theme.spacing.xl,
+		gap: theme.spacing.sm,
 		width: '100%',
 	},
 	orderStatus: {
 		color: theme.colors.primary,
-	},
-	sectionTitle: {
-		marginBottom: theme.spacing.md,
 	},
 	signInContainer: {
 		alignItems: 'center',

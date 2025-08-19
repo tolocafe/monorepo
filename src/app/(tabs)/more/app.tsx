@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Alert, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
+import * as Burnt from 'burnt'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
@@ -44,17 +45,21 @@ export default function AppInfoScreen() {
 						try {
 							await clearAllCache()
 
-							Alert.alert(
-								t`Cache Cleared`,
-								t`All cached data has been cleared successfully.`,
-								[{ text: t`OK` }],
-							)
+							Burnt.toast({
+								duration: 3,
+								haptic: 'success',
+								message: t`All cached data has been cleared successfully.`,
+								preset: 'done',
+								title: t`Cache cleared`,
+							})
 						} catch {
-							Alert.alert(
-								t`Error`,
-								t`Failed to clear cache. Please try again.`,
-								[{ text: t`OK` }],
-							)
+							Burnt.toast({
+								duration: 3,
+								haptic: 'error',
+								message: t`Failed to clear cache. Please try again.`,
+								preset: 'error',
+								title: t`Error`,
+							})
 						} finally {
 							setIsClearingCache(false)
 						}

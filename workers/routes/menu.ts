@@ -5,21 +5,12 @@ import { api } from '../utils/poster'
 
 import type { Bindings } from '../types'
 
-/**
- * curl https://api.webflow.com/v2/collections/580e63fc8c9a982ac9b8b745/items/580e64008c9a982ac9b8b754/live \
-     -H "Authorization: Bearer <token>"
- */
-
 async function getCollectionItem(environment: Bindings, itemId: string) {
 	const collectionId = environment.WEBFLOW_MENU_COLLECTION_ID
 
 	const data = await fetch(
 		`https://api.webflow.com/v2/collections/${collectionId}/items/${itemId}/live`,
-		{
-			headers: {
-				Authorization: `Bearer ${environment.WEBFLOW_MENU_COLLECTION_ID}`,
-			},
-		},
+		{ headers: { Authorization: `Bearer ${environment.WEBFLOW_API_TOKEN}` } },
 	).then(
 		(response) =>
 			response.json() as Promise<{ fieldData: Record<string, string> }>,

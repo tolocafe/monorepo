@@ -1,11 +1,14 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
-import { persist } from 'zustand/middleware'
+import { MMKV } from 'react-native-mmkv'
+import { createJSONStorage, persist } from 'zustand/middleware'
 import { create } from 'zustand/react'
 import { useShallow } from 'zustand/react/shallow'
 
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { productQueryOptions } from '@/lib/queries/product'
+
+import { STORAGE_KEYS } from '../constants/storage'
 
 export type Order = {
 	apiOrderId?: string
@@ -28,6 +31,16 @@ export type OrderProduct = {
 	quantity: number
 }
 
+const zustandStore = new MMKV({
+	id: STORAGE_KEYS.ZUSTAND_STORE,
+})
+
+const zustandJsonStorage = {
+	getItem: (key: string) => zustandStore.getString(key) ?? null,
+	removeItem: (key: string) => zustandStore.delete(key),
+	setItem: (key: string, value: string) => zustandStore.set(key, value),
+}
+
 type OrderStore = {
 	addItem: (item: Pick<OrderProduct, 'id' | 'quantity'>) => void
 	clearOrder: () => void
@@ -39,8 +52,6 @@ type OrderStore = {
 	// Getters
 	getTotalItems: () => number
 	removeItem: (productId: string) => void
-	setCustomerNote: (note: string) => void
-
 	updateItem: (productId: string, quantity: number) => void
 }
 
@@ -86,7 +97,6 @@ export const useOrderStore = create<OrderStore>()(
 			clearOrder: () => {
 				set({ currentOrder: null })
 			},
-
 			createOrder: () => {
 				const nextOrder: Order = {
 					createdAt: new Date(),
@@ -143,20 +153,6 @@ export const useOrderStore = create<OrderStore>()(
 					set({ currentOrder: updatedOrder })
 				}
 			},
-
-			setCustomerNote: (note: string) => {
-				const { currentOrder } = get()
-				if (!currentOrder) return
-
-				set({
-					currentOrder: {
-						...currentOrder,
-						customerNote: note,
-						updatedAt: new Date(),
-					},
-				})
-			},
-
 			updateItem: (productId: string, quantity: number) => {
 				const { currentOrder } = get()
 				if (!currentOrder) return
@@ -192,6 +188,7 @@ export const useOrderStore = create<OrderStore>()(
 			partialize: (state) => ({
 				currentOrder: state.currentOrder,
 			}),
+			storage: createJSONStorage(() => zustandJsonStorage),
 		},
 	),
 )
@@ -207,10 +204,7 @@ export const useOrderStats = () =>
 
 export const useCurrentOrder = () =>
 	useOrderStore((state) => state.currentOrder)
-
-export const useAddItem = () => useOrderStore((state) => state.addItem)
 export const useUpdateItem = () => useOrderStore((state) => state.updateItem)
-export const useRemoveItem = () => useOrderStore((state) => state.removeItem)
 export const useClearOrder = () => useOrderStore((state) => state.clearOrder)
 
 export const useAddItemGuarded = () => {

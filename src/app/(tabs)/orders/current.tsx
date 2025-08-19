@@ -1,9 +1,11 @@
+import { useMemo } from 'react'
 import { Alert, TouchableOpacity, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation, useQueries, useQuery } from '@tanstack/react-query'
+import * as Burnt from 'burnt'
 import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
@@ -16,7 +18,10 @@ import { Input } from '@/components/Input'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
 import { selfQueryOptions } from '@/lib/queries/auth'
-import { createOrderMutationOptions } from '@/lib/queries/order'
+import {
+	createOrderMutationOptions,
+	orderQueryOptions,
+} from '@/lib/queries/order'
 import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
 import {
@@ -82,13 +87,50 @@ export default function OrderDetail() {
 	const clearOrder = useClearOrder()
 	const { data: user } = useQuery(selfQueryOptions)
 
+	// Prefetch and subscribe to only the product details that are not in cache
+	const productIds = useMemo(
+		() => [...new Set((order?.products ?? []).map((product) => product.id))],
+		[order?.products],
+	)
+
+	const missingProductIds = useMemo(
+		() =>
+			productIds.filter(
+				(productId) =>
+					!queryClient.getQueryData<Product>(
+						productQueryOptions(productId).queryKey,
+					),
+			),
+		[productIds],
+	)
+
+	useQueries({
+		queries: missingProductIds.map((productId) =>
+			productQueryOptions(productId),
+		),
+	})
+
 	const { mutateAsync: createOrder } = useMutation({
 		...createOrderMutationOptions,
 		onError() {
-			Alert.alert(t`Error`, t`Failed to submit order. Please try again.`)
+			Burnt.toast({
+				duration: 3,
+				haptic: 'error',
+				message: t`Failed to submit order. Please try again.`,
+				preset: 'error',
+				title: t`Error`,
+			})
 		},
 		onSuccess() {
+			Burnt.toast({
+				duration: 3,
+				haptic: 'success',
+				message: t`Thanks! We'll start preparing it now.`,
+				preset: 'done',
+				title: t`Order placed`,
+			})
 			clearOrder()
+			void queryClient.invalidateQueries(orderQueryOptions)
 
 			router.back()
 		},
@@ -113,16 +155,8 @@ export default function OrderDetail() {
 			const hasInsufficientBalance =
 				!user || Number(user.ewallet ?? '0') < orderTotal
 
+			// Require explicit action if funds are insufficient
 			if (hasInsufficientBalance) {
-				Alert.alert(
-					t`Insufficient Balance`,
-					t`You don't have enough balance in your wallet. Please top up your wallet first.`,
-				)
-				return
-			}
-
-			// Check if user has sufficient balance
-			if (Number(user.ewallet ?? '0') < orderTotal) {
 				Alert.alert(
 					t`Insufficient Balance`,
 					t`You don't have enough balance in your wallet. Please top up your wallet first.`,
@@ -238,40 +272,40 @@ export default function OrderDetail() {
 			<Stack.Screen
 				options={{
 					headerRight: () => (
-						<Button onPress={handleClearOrder} variant="surface">
+						<Button onPress={handleClearOrder} variant="transparent">
 							<Trans>Cancel</Trans>
 						</Button>
 					),
 				}}
 			/>
-			<ScreenContainer keyboardAware>
+
+			<ScreenContainer contentContainerStyle={styles.container} keyboardAware>
 				{user && (
 					<Card style={styles.walletCard}>
 						<Paragraph>
 							<Trans>Wallet Balance</Trans>
 						</Paragraph>
-						<Paragraph style={styles.walletValue}>
+						<Paragraph weight="bold">
 							{formatPrice(user.ewallet ?? '0')}
 						</Paragraph>
 					</Card>
 				)}
 
-				<View style={styles.itemsSection}>
-					<H2>
-						<Trans>Items</Trans>
-					</H2>
-					<Card style={styles.itemsCard}>
-						{order.products.map((item, index) => renderOrderItem(item, index))}
-						<View style={styles.totalRow}>
-							<Paragraph weight="bold">
-								<Trans>Total</Trans>
-							</Paragraph>
-							<Paragraph style={styles.totalAmount}>
-								{formatPrice(orderTotal)}
-							</Paragraph>
-						</View>
-					</Card>
-				</View>
+				<H2>
+					<Trans>Items</Trans>
+				</H2>
+
+				<Card style={styles.itemsCard}>
+					{order.products.map((item, index) => renderOrderItem(item, index))}
+					<View style={styles.totalRow}>
+						<Paragraph weight="bold">
+							<Trans>Total</Trans>
+						</Paragraph>
+						<Paragraph style={styles.totalAmount} weight="bold">
+							{formatPrice(orderTotal)}
+						</Paragraph>
+					</View>
+				</Card>
 
 				<View style={styles.noteSection}>
 					<H2>
@@ -338,6 +372,8 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	container: {
 		flex: 1,
+		gap: theme.spacing.md,
+		padding: theme.layout.screenPadding,
 	},
 	emptyContainer: {
 		alignItems: 'center',
@@ -353,30 +389,28 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		width: '100%',
 	},
 	itemHeader: {
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		width: '100%',
 	},
 	itemMeta: {
 		backgroundColor: theme.colors.primary,
 		borderRadius: theme.borderRadius.md,
 		color: '#fff',
+		fontSize: theme.fontSizes.sm,
 		paddingHorizontal: theme.spacing.sm,
 		paddingVertical: theme.spacing.xs,
 	},
 	itemName: {
 		flex: 1,
-		fontSize: theme.fontSizes.md,
 		fontWeight: theme.fontWeights.medium,
 	},
 	itemsCard: {
 		gap: theme.spacing.md,
-		padding: theme.layout.screenPadding,
-	},
-	itemsSection: {
-		padding: theme.layout.screenPadding,
 	},
 	modifications: {
 		borderTopColor: theme.colors.border,
@@ -389,7 +423,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginBottom: theme.spacing.xs,
 	},
 	noteSection: {
-		padding: theme.layout.screenPadding,
+		gap: theme.spacing.md,
 	},
 	orderItem: {
 		alignItems: 'center',
@@ -428,13 +462,7 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'space-between',
 	},
 	walletCard: {
-		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginHorizontal: theme.layout.screenPadding,
-		marginVertical: theme.spacing.sm,
-	},
-	walletValue: {
-		color: theme.colors.primary,
 	},
 }))

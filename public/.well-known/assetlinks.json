@@ -1,0 +1,15 @@
+[
+	{
+		"relation": [
+			"delegate_permission/common.handle_all_urls",
+			"delegate_permission/common.get_login_creds"
+		],
+		"target": {
+			"namespace": "android_app",
+			"package_name": "cafe.tolo.app",
+			"sha256_cert_fingerprints": [
+				"CD:64:BA:E3:DA:C7:70:A2:45:45:F4:7D:F9:E2:F3:00:96:38:8E:A8:65:A7:F8:15:D5:02:44:E5:C4:34:DD:B5"
+			]
+		}
+	}
+]

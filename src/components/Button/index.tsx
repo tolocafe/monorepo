@@ -16,7 +16,7 @@ export type ButtonProps = {
 	variant?: ButtonVariant
 }
 
-type ButtonVariant = 'primary' | 'surface'
+type ButtonVariant = 'primary' | 'surface' | 'transparent'
 
 export function Button({
 	accessibilityLabel,

@@ -35,7 +35,7 @@ const lightTheme = {
 		semibold: '600',
 	} as const,
 	layout: {
-		screenPadding: 16,
+		screenPadding: 18,
 	} as const,
 	spacing: {
 		lg: 16,
@@ -96,7 +96,7 @@ const darkTheme = {
 	} satisfies (typeof lightTheme)['colors'],
 }
 
-const breakpoints = {
+export const breakpoints = {
 	/* eslint-disable perfectionist/sort-objects */
 	xs: 0,
 	sm: 576,

@@ -146,7 +146,7 @@ export default function More() {
 							</TouchableOpacity>
 							<TouchableOpacity
 								accessibilityRole="button"
-								onPress={() => Linking.openURL('https://wa.me/14155551234')}
+								onPress={() => Linking.openURL('https://wa.me/5217229721819')}
 								style={styles.socialIcon}
 							>
 								<Ionicons

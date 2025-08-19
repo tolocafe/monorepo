@@ -49,11 +49,11 @@ const orders = new Hono<{ Bindings: Bindings }>()
 				clientId,
 			)
 
-			await context.env.D1_TRANSACTIONS.exec(
+			await context.env.D1_TOLO.exec(
 				'CREATE TABLE IF NOT EXISTS wallet_orders (transaction_id INTEGER, order_id INTEGER, client_id INTEGER, amount INTEGER)',
 			)
 
-			await context.env.D1_TRANSACTIONS.prepare(
+			await context.env.D1_TOLO.prepare(
 				'INSERT INTO wallet_orders (transaction_id, order_id, client_id, amount) VALUES (?, ?, ?, ?)',
 			)
 				.bind(transactionId, order.incoming_order_id, clientId, paymentAmount)

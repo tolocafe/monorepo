@@ -104,7 +104,6 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	paragraph: {
 		fontSize: theme.typography.body.fontSize,
-		fontWeight: theme.typography.body.fontWeight,
 		lineHeight: theme.fontSizes.xl,
 	},
 	text: {
@@ -127,7 +126,7 @@ const styles = StyleSheet.create((theme) => ({
 			},
 			weight: {
 				bold: {
-					fontWeight: '800',
+					fontWeight: '700',
 				},
 			},
 		},

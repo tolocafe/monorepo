@@ -1,9 +1,9 @@
-import { useMemo } from 'react'
 import { Alert, Platform, RefreshControl, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import * as Burnt from 'burnt'
 import Head from 'expo-router/head'
 import * as SecureStore from 'expo-secure-store'
 import { StyleSheet } from 'react-native-unistyles'
@@ -12,7 +12,7 @@ import { z } from 'zod/v4'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { ScreenContainer } from '@/components/ScreenContainer'
-import { Label, Text } from '@/components/Text'
+import { H2, Label, Text } from '@/components/Text'
 import {
 	selfQueryOptions,
 	updateClientMutationOptions,
@@ -40,46 +40,36 @@ export default function ProfileScreen() {
 		.trim()
 		.regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/u, t`Enter a valid date (YYYY-MM-DD)`)
 
-	const form = useForm({
-		defaultValues: {
-			birthday: user?.birthday || '',
-			client_name: getFullName(user?.firstname, user?.lastname),
-			email: user?.email || '',
-		},
-	})
-
-	const isDirty = useMemo(
-		() =>
-			getFullName(user?.firstname, user?.lastname) !==
-				form.state.values.client_name ||
-			(user?.email ?? '') !== form.state.values.email ||
-			(user?.birthday ?? '') !== form.state.values.birthday,
-		[
-			user?.firstname,
-			user?.lastname,
-			user?.email,
-			user?.birthday,
-			form.state.values.client_name,
-			form.state.values.email,
-			form.state.values.birthday,
-		],
-	)
-
 	const updateMutation = useMutation({
 		...updateClientMutationOptions(user?.client_id ?? ''),
 		onSuccess(updated: ClientData) {
 			queryClient.setQueryData(selfQueryOptions.queryKey, updated)
+			Burnt.toast({
+				duration: 2,
+				haptic: 'success',
+				message: t`Your profile has been updated.`,
+				preset: 'done',
+				title: t`Saved`,
+			})
 		},
 	})
 
-	const handleSave = async () => {
-		if (!user?.client_id || !isDirty) return
-		await updateMutation.mutateAsync({
-			birthday: form.state.values.birthday,
-			email: form.state.values.email,
-			name: form.state.values.client_name,
-		})
-	}
+	const { Field, handleSubmit, Subscribe } = useForm({
+		defaultValues: {
+			birthdate: user?.birthday || '',
+			client_name: getFullName(user?.firstname, user?.lastname),
+			email: user?.email || '',
+		},
+		onSubmit({ value }) {
+			if (!user?.client_id) return
+
+			return updateMutation.mutateAsync({
+				birthday: value.birthdate,
+				email: value.email,
+				name: value.client_name,
+			})
+		},
+	})
 
 	const handleSignOut = () => {
 		Alert.alert(t`Sign Out`, t`Are you sure you want to sign out?`, [
@@ -106,6 +96,7 @@ export default function ProfileScreen() {
 				<title>{t`Profile`}</title>
 			</Head>
 			<ScreenContainer
+				contentContainerStyle={styles.container}
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(selfQueryOptions)}
@@ -114,29 +105,29 @@ export default function ProfileScreen() {
 				}
 			>
 				<View style={styles.section}>
-					<Label style={styles.sectionTitle}>
+					<H2>
 						<Trans>Wallet</Trans>
-					</Label>
+					</H2>
 					<View style={styles.card}>
 						<View style={styles.balanceRow}>
 							<Label>
 								<Trans>Balance</Trans>
 							</Label>
-							<Text style={styles.balanceValue}>{formatPrice(balance)}</Text>
+							<Text weight="bold">{formatPrice(balance)}</Text>
 						</View>
 					</View>
 				</View>
 
 				<View style={styles.section}>
-					<Label style={styles.sectionTitle}>
-						<Trans>Personal Information</Trans>
-					</Label>
+					<H2>
+						<Trans>Information</Trans>
+					</H2>
 					<View style={styles.card}>
 						<View style={styles.row}>
 							<Label style={styles.label}>
 								<Trans>First name</Trans>
 							</Label>
-							<form.Field
+							<Field
 								name="client_name"
 								validators={{
 									onChange: ({ value }) => {
@@ -154,14 +145,14 @@ export default function ProfileScreen() {
 										value={field.state.value}
 									/>
 								)}
-							</form.Field>
+							</Field>
 						</View>
 
 						<View style={styles.row}>
 							<Label style={styles.label}>
 								<Trans>Email</Trans>
 							</Label>
-							<form.Field
+							<Field
 								name="email"
 								validators={{
 									onChange: ({ value }) => {
@@ -181,15 +172,15 @@ export default function ProfileScreen() {
 										value={field.state.value}
 									/>
 								)}
-							</form.Field>
+							</Field>
 						</View>
 
 						<View style={styles.row}>
 							<Label style={styles.label}>
 								<Trans>Birthdate</Trans>
 							</Label>
-							<form.Field
-								name="birthday"
+							<Field
+								name="birthdate"
 								validators={{
 									onChange: ({ value }) => {
 										const result = birthdateSchema.safeParse(value)
@@ -208,19 +199,29 @@ export default function ProfileScreen() {
 										value={field.state.value}
 									/>
 								)}
-							</form.Field>
+							</Field>
 						</View>
 
-						<Button
-							disabled={!isDirty || updateMutation.isPending}
-							onPress={handleSave}
+						<Subscribe
+							selector={({ canSubmit, isSubmitting }) => [
+								canSubmit,
+								isSubmitting,
+							]}
 						>
-							{updateMutation.isPending ? (
-								<Trans>Saving...</Trans>
-							) : (
-								<Trans>Save</Trans>
+							{([canSubmit, isSubmitting]) => (
+								<Button
+									disabled={!canSubmit || isSubmitting}
+									onPress={handleSubmit}
+								>
+									{isSubmitting ? (
+										<Trans>Saving...</Trans>
+									) : (
+										<Trans>Save</Trans>
+									)}
+								</Button>
 							)}
-						</Button>
+						</Subscribe>
+
 						<View style={styles.row} />
 						<Button onPress={handleSignOut}>
 							<Trans>Sign Out</Trans>
@@ -245,10 +246,6 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
-	balanceValue: {
-		fontSize: theme.fontSizes.xl,
-		fontWeight: theme.fontWeights.bold,
-	},
 	card: {
 		backgroundColor: theme.colors.surface,
 		borderCurve: Platform.OS === 'ios' ? 'continuous' : undefined,
@@ -257,6 +254,8 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	container: {
 		flex: 1,
+		gap: theme.spacing.md,
+		padding: theme.layout.screenPadding,
 	},
 	label: {
 		marginBottom: theme.spacing.xs,
@@ -265,7 +264,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginBottom: theme.spacing.md,
 	},
 	section: {
-		margin: theme.layout.screenPadding,
+		gap: theme.spacing.sm,
 	},
 	sectionTitle: {
 		marginBottom: theme.spacing.md,

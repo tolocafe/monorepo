@@ -96,8 +96,6 @@ export default function MenuDetail() {
 	const unitPriceCents = Object.values(product.price)[0] ?? '0'
 	const hasImage = product.photo_origin || product.photo
 
-	console.log(product)
-
 	return (
 		<>
 			<Head>
@@ -135,7 +133,7 @@ export default function MenuDetail() {
 						colors={['transparent', 'rgba(0,0,0,0.4)', 'rgba(0,0,0,0.85)']}
 						end={{ x: 0, y: 1 }}
 						start={{ x: 0, y: 0 }}
-						style={styles.titleOverlay}
+						style={titleOverlayStyle}
 					>
 						<H1 style={styles.titleOverlayText}>{product.product_name}</H1>
 					</LinearGradient>
@@ -144,9 +142,9 @@ export default function MenuDetail() {
 				<View style={styles.content}>
 					<H2 style={styles.price}>{formatPrice(unitPriceCents)}</H2>
 
-					{product.product_production_description && (
+					{product['small-description'] && (
 						<Paragraph style={styles.description}>
-							{product.product_production_description}
+							{product['small-description']}
 						</Paragraph>
 					)}
 
@@ -474,14 +472,16 @@ const styles = StyleSheet.create((theme) => ({
 	title: {
 		marginBottom: theme.spacing.sm,
 	},
-	titleOverlay: {
-		bottom: 0,
-		left: 0,
-		padding: theme.spacing.lg,
-		position: 'absolute',
-		right: 0,
-	},
+
 	titleOverlayText: {
 		color: '#FFFFFF',
 	},
 }))
+
+const titleOverlayStyle = {
+	bottom: 0,
+	left: 0,
+	padding: 10,
+	position: 'absolute',
+	right: 0,
+} as const
