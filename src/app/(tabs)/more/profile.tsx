@@ -109,7 +109,7 @@ export default function ProfileScreen() {
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(selfQueryOptions)}
-						refreshing={updateMutation.isPending}
+						refreshing={false}
 					/>
 				}
 			>

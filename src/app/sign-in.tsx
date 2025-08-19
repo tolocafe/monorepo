@@ -196,9 +196,6 @@ export default function SignIn() {
 								</Subscribe>
 
 								<View style={styles.inputContainer}>
-									<Label style={styles.label}>
-										<Trans>Verification code</Trans>
-									</Label>
 									<Field name="verificationCode">
 										{(field) => (
 											<>

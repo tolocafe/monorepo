@@ -134,12 +134,14 @@ export default function Menu() {
 						onRefresh={() =>
 							queryClient.invalidateQueries(productsQueryOptions)
 						}
-						refreshing={isFetching}
+						refreshing={false}
 					/>
 				}
 			>
 				<View style={styles.categoryTitle}>
-					<H2>Menu</H2>
+					<H2>
+						<Trans>Menu</Trans>
+					</H2>
 				</View>
 				{categories.map((category) => renderCategorySection(category))}
 			</ScreenContainer>

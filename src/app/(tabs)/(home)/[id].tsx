@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { RefreshControl, TouchableOpacity, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { Trans } from '@lingui/react/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
@@ -18,6 +18,7 @@ import { H1, H2, Label, Paragraph, Text } from '@/components/Text'
 import { POSTER_BASE_URL } from '@/lib/api'
 import { useTabBarHeight } from '@/lib/navigation/tab-bar-height'
 import { productQueryOptions } from '@/lib/queries/product'
+import { queryClient } from '@/lib/query-client'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
 import { formatPrice } from '@/lib/utils/price'
 
@@ -26,6 +27,7 @@ const handleClose = () => {
 }
 
 export default function MenuDetail() {
+	const { t } = useLingui()
 	const tabBarHeight = useTabBarHeight()
 	const { id } = useLocalSearchParams<{ id: string }>()
 
@@ -94,14 +96,24 @@ export default function MenuDetail() {
 	const unitPriceCents = Object.values(product.price)[0] ?? '0'
 	const hasImage = product.photo_origin || product.photo
 
+	console.log(product)
+
 	return (
 		<>
 			<Head>
-				<title>{product.product_name} - TOLO Good Coffee</title>
+				<title>{t`${product.product_name} - TOLO Good Coffee`}</title>
 			</Head>
 			<ScreenContainer
 				contentContainerStyle={{ paddingBottom: tabBarHeight }}
 				contentInsetAdjustmentBehavior="never"
+				refreshControl={
+					<RefreshControl
+						onRefresh={() =>
+							queryClient.invalidateQueries(productQueryOptions(id))
+						}
+						refreshing={false}
+					/>
+				}
 			>
 				<Animated.View
 					sharedTransitionTag={`menu-item-${product.product_id}`}
@@ -224,7 +236,7 @@ export default function MenuDetail() {
 																			String(modification.price),
 																			10,
 																		)
-																			? ` +${formatPrice(modification.price)}`
+																			? t` +${formatPrice(modification.price)}`
 																			: ''}
 																	</Text>
 																</View>

@@ -19,16 +19,18 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 	'token' in value
 
 const auth = new Hono<{ Bindings: Bindings }>()
-	.post('/request-otp', async (c) => {
-		const { email, name, phone } = RequestOtpSchema.parse(await c.req.json())
+	.post('/request-otp', async (context) => {
+		const { email, name, phone } = RequestOtpSchema.parse(
+			await context.req.json(),
+		)
 
 		const existingClient = await api.clients.getClient(
-			c.env.POSTER_TOKEN,
+			context.env.POSTER_TOKEN,
 			phone,
 		)
 
 		if (!existingClient) {
-			await api.clients.createClient(c.env.POSTER_TOKEN, {
+			await api.clients.createClient(context.env.POSTER_TOKEN, {
 				client_groups_id_client: 1,
 				client_name: name ?? 'anon',
 				email,
@@ -39,9 +41,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		const code = generateOtp()
 
 		await Promise.all([
-			storeOtp(c.env.KV_OTP, phone, code),
+			storeOtp(context.env.KV_OTP, phone, code),
 			sendSms(
-				c.env.POSTER_TOKEN,
+				context.env.POSTER_TOKEN,
 				phone,
 				`[TOLO] Tu código de verificación es ${code}`,
 				// eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
@@ -53,24 +55,24 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			}),
 		])
 
-		return c.json({ success: true })
+		return context.json({ success: true })
 	})
-	.post('/verify-otp', async (c) => {
+	.post('/verify-otp', async (context) => {
 		const { code, phone, sessionName } = VerifyOtpSchema.parse(
-			await c.req.json(),
+			await context.req.json(),
 		)
 
-		const { isTest } = await verifyOtp(c.env.KV_OTP, phone, code)
+		const { isTest } = await verifyOtp(context.env.KV_OTP, phone, code)
 
-		const client = await api.clients.getClient(c.env.POSTER_TOKEN, phone)
+		const client = await api.clients.getClient(context.env.POSTER_TOKEN, phone)
 
 		if (!client) throw new HTTPException(404, { message: 'Client not found' })
 
 		const { client_id: clientId } = client
 
 		const [token, sessionsRaw] = await Promise.all([
-			signJwt(clientId, c.env.JWT_SECRET),
-			c.env.KV_SESSIONS.get(clientId),
+			signJwt(clientId, context.env.JWT_SECRET),
+			context.env.KV_SESSIONS.get(clientId),
 		])
 
 		const parsedSessionsUnknown: unknown = sessionsRaw
@@ -81,7 +83,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			: []
 
 		await Promise.all([
-			c.env.KV_SESSIONS.put(
+			context.env.KV_SESSIONS.put(
 				clientId,
 				JSON.stringify([
 					...sessions,
@@ -89,19 +91,19 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				]),
 			),
 			client.client_groups_id === '0'
-				? api.clients.updateClient(c.env.POSTER_TOKEN, clientId, {
+				? api.clients.updateClient(context.env.POSTER_TOKEN, clientId, {
 						client_groups_id_client: 3,
 					})
 				: Promise.resolve(),
 		])
 
 		// For web: set HttpOnly cookie. For native: client uses token from body
-		const isWeb = (c.req.header('User-Agent') ?? '').includes('Mozilla')
+		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')
 
 		const responseBody = { client, token }
 
 		if (isWeb) {
-			setCookie(c, 'tolo_session', token, {
+			setCookie(context, 'tolo_session', token, {
 				httpOnly: true,
 				// 1 year
 				maxAge: 60 * 60 * 24 * 365,
@@ -112,7 +114,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			})
 		}
 
-		return c.json(responseBody)
+		return context.json(responseBody)
 	})
 	.get('/self', async (c) => {
 		const clientId = await authenticate(c, c.env.JWT_SECRET)

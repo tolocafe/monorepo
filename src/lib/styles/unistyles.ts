@@ -17,6 +17,7 @@ const lightTheme = {
 		surface: '#FFFFFF',
 		text: '#0C0C0C',
 		textSecondary: '#121212',
+		textTertiary: '#666666',
 	},
 	fontSizes: {
 		lg: 18,
@@ -91,6 +92,7 @@ const darkTheme = {
 		surface: '#1E1E1E',
 		text: '#FFFFFF',
 		textSecondary: '#999999',
+		textTertiary: '#666666',
 	} satisfies (typeof lightTheme)['colors'],
 }
 

@@ -16,7 +16,7 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"strictNullChecks": true,
-		"types": ["jest", "node", "@cloudflare/workers-types"]
+		"types": ["jest", "node"]
 	},
 	"extends": "expo/tsconfig.base",
 	"include": [

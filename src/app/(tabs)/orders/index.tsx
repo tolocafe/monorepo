@@ -35,8 +35,7 @@ export default function Orders() {
 	useScrollToTop(screenRef)
 
 	const currentOrder = useCurrentOrder()
-	const { data: orders, isPending: isOrdersPending } =
-		useQuery(orderQueryOptions)
+	const { data: orders } = useQuery(orderQueryOptions)
 	const { totalItems } = useOrderStats()
 
 	const currentOrderTotalCents = (() => {
@@ -105,7 +104,7 @@ export default function Orders() {
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(orderQueryOptions)}
-						refreshing={isOrdersPending}
+						refreshing={false}
 					/>
 				}
 			>

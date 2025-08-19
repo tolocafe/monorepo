@@ -53,7 +53,7 @@ export default function More() {
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(selfQueryOptions)}
-						refreshing={isUserPending}
+						refreshing={false}
 					/>
 				}
 			>
@@ -98,7 +98,7 @@ export default function More() {
 							</Paragraph>
 						</Card>
 					) : (
-						<Card>
+						<Card style={styles.signInCard}>
 							<Paragraph style={styles.userInfoText}>
 								<Trans>
 									Sign in to view your account information and access
@@ -184,8 +184,8 @@ export default function More() {
 									<Trans>Language</Trans>
 								</Label>
 								<DropdownMenu.Root>
-									<DropdownMenu.Trigger asChild>
-										<View style={styles.languageDropdownTrigger}>
+									<DropdownMenu.Trigger style={styles.languageDropdownTrigger}>
+										<View style={styles.languageDropdownTriggerContent}>
 											<Label style={styles.languageDropdownText}>
 												{currentLanguage === 'en' ? 'English' : 'Español'}
 											</Label>
@@ -243,113 +243,14 @@ function getFullName(
 }
 
 const styles = StyleSheet.create((theme) => ({
-	button: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: theme.borderRadius.md,
-		marginTop: theme.spacing.lg,
-		paddingHorizontal: theme.spacing.lg,
-		paddingVertical: theme.spacing.md,
-	},
-	buttonText: {
-		color: theme.colors.surface,
-		fontSize: theme.typography.body.fontSize,
-		fontWeight: theme.typography.body.fontWeight,
-	},
-	card: {
-		// Deprecated; using <Card> component instead. Kept for potential spacing overrides.
-	},
-	cardText: {
-		color: theme.colors.textSecondary,
-		fontSize: theme.typography.body.fontSize,
-		lineHeight: 22,
-		marginBottom: theme.spacing.xs,
-	},
-	cardTitle: {
-		fontSize: theme.typography.h3.fontSize,
-		fontWeight: theme.typography.h3.fontWeight,
-		marginBottom: theme.spacing.xs,
-	},
-	caret: {
-		color: theme.colors.textSecondary,
-		fontSize: 30,
-		marginLeft: theme.spacing.sm,
-	},
-	centerLink: {
-		alignItems: 'center',
-		paddingVertical: theme.spacing.md,
-	},
-	centerLinkText: {
-		color: theme.colors.primary,
-	},
-	clearCacheButton: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: theme.borderRadius.md,
-		marginBottom: theme.spacing.sm,
-		paddingHorizontal: theme.spacing.lg,
-		paddingVertical: theme.spacing.md,
-	},
-	clearCacheButtonDisabled: {
-		backgroundColor: theme.colors.border,
-	},
-	clearCacheDescription: {
-		color: theme.colors.textSecondary,
-		fontSize: theme.typography.caption.fontSize,
-		lineHeight: 18,
-		textAlign: 'center',
-	},
-	clearCacheText: {
-		color: theme.colors.surface,
-		fontSize: theme.typography.body.fontSize,
-		fontWeight: theme.typography.body.fontWeight,
-	},
-	clearCacheTextDisabled: {
-		color: theme.colors.textSecondary,
-	},
-	contactButton: {
-		backgroundColor: theme.colors.background,
-		borderRadius: theme.borderRadius.sm,
-		marginBottom: theme.spacing.xs,
-		paddingHorizontal: theme.spacing.sm,
-		paddingVertical: theme.spacing.md,
-	},
-	contactButtonText: {
-		color: theme.colors.primary,
-		fontSize: theme.typography.body.fontSize,
-		fontWeight: theme.typography.body.fontWeight,
-		textAlign: 'center',
-	},
-
-	dayText: {
-		fontSize: theme.typography.body.fontSize,
-	},
 	footer: {
 		alignItems: 'center',
 		paddingVertical: theme.spacing.md,
 	},
 	footerText: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.textTertiary,
 		fontSize: theme.typography.caption.fontSize,
 		textAlign: 'center',
-	},
-	hoursContainer: {
-		marginBottom: theme.spacing.sm,
-		marginTop: theme.spacing.lg,
-	},
-	hoursRow: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingVertical: theme.spacing.xs,
-	},
-	hoursText: {
-		color: theme.colors.textSecondary,
-		fontSize: theme.typography.body.fontSize,
-	},
-	hoursTitle: {
-		...theme.typography.h4,
-		color: theme.colors.text,
-		marginBottom: theme.spacing.sm,
 	},
 	languageDropdownArrow: {
 		color: theme.colors.textSecondary,
@@ -359,12 +260,13 @@ const styles = StyleSheet.create((theme) => ({
 	languageDropdownText: {
 		flex: 1,
 	},
-	languageDropdownTrigger: {
+	languageDropdownTrigger: {},
+	languageDropdownTriggerContent: {
 		alignItems: 'center',
 		flexDirection: 'row',
+		gap: theme.spacing.sm,
 		minWidth: 120,
 		paddingHorizontal: theme.spacing.md,
-		paddingVertical: theme.spacing.sm,
 	},
 	scrollContent: {
 		paddingVertical: theme.spacing.lg,
@@ -376,36 +278,14 @@ const styles = StyleSheet.create((theme) => ({
 	sectionTitle: {
 		marginBottom: theme.spacing.sm,
 	},
-	settingDivider: {
-		backgroundColor: theme.colors.border,
-		height: 1,
-		marginVertical: 0,
-	},
 	settingLabel: {},
 	settingRow: {
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
-	signInButton: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: theme.borderRadius.md,
-		paddingHorizontal: theme.spacing.lg,
-		paddingVertical: theme.spacing.md,
-	},
-	signInButtonText: {
-		color: theme.colors.surface,
-		fontSize: theme.typography.body.fontSize,
-		fontWeight: theme.typography.body.fontWeight,
-	},
-	signOutButton: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
-		borderRadius: theme.borderRadius.md,
-		marginTop: theme.spacing.sm,
-		paddingHorizontal: theme.spacing.lg,
-		paddingVertical: theme.spacing.md,
+	signInCard: {
+		gap: theme.spacing.md,
 	},
 	signOutButtonText: {
 		color: theme.colors.surface,
@@ -421,36 +301,7 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'center',
 		paddingVertical: theme.spacing.sm,
 	},
-	// User Information Styles
-	userInfo: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingVertical: theme.spacing.sm,
-	},
-	userInfoDivider: {
-		backgroundColor: theme.colors.border,
-		height: 1,
-		marginVertical: theme.spacing.xs,
-	},
-	userInfoError: {
-		alignItems: 'center',
-		paddingVertical: theme.spacing.lg,
-	},
-	userInfoLabel: {
-		flex: 1,
-	},
-	userInfoLoading: {
-		alignItems: 'center',
-		paddingVertical: theme.spacing.lg,
-	},
 	userInfoText: {
 		textAlign: 'center',
-	},
-	userInfoValue: {
-		color: theme.colors.textSecondary,
-		flex: 2,
-		fontSize: theme.typography.body.fontSize,
-		textAlign: 'right',
 	},
 }))

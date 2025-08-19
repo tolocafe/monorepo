@@ -5,6 +5,29 @@ import { api } from '../utils/poster'
 
 import type { Bindings } from '../types'
 
+/**
+ * curl https://api.webflow.com/v2/collections/580e63fc8c9a982ac9b8b745/items/580e64008c9a982ac9b8b754/live \
+     -H "Authorization: Bearer <token>"
+ */
+
+async function getCollectionItem(environment: Bindings, itemId: string) {
+	const collectionId = environment.WEBFLOW_MENU_COLLECTION_ID
+
+	const data = await fetch(
+		`https://api.webflow.com/v2/collections/${collectionId}/items/${itemId}/live`,
+		{
+			headers: {
+				Authorization: `Bearer ${environment.WEBFLOW_MENU_COLLECTION_ID}`,
+			},
+		},
+	).then(
+		(response) =>
+			response.json() as Promise<{ fieldData: Record<string, string> }>,
+	)
+
+	return data.fieldData
+}
+
 const menu = new Hono<{ Bindings: Bindings }>()
 	.get('/categories', async (context) => {
 		const categories = await api.menu.getMenuCategories(
@@ -32,12 +55,20 @@ const menu = new Hono<{ Bindings: Bindings }>()
 		}
 
 		try {
-			const product = await api.menu.getProduct(
-				context.env.POSTER_TOKEN,
-				productId,
-			)
+			const collectionItemId = await context.env.KV_CMS.get(productId)
 
-			return context.json(product, 200, defaultJsonHeaders)
+			const [collectionItem, product] = await Promise.all([
+				collectionItemId
+					? getCollectionItem(context.env, collectionItemId)
+					: Promise.resolve(null),
+				api.menu.getProduct(context.env.POSTER_TOKEN, productId),
+			])
+
+			return context.json(
+				{ ...collectionItem, ...product },
+				200,
+				defaultJsonHeaders,
+			)
 		} catch {
 			return context.json(
 				{ error: 'Failed to fetch product details' },

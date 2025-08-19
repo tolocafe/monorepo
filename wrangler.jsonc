@@ -12,6 +12,9 @@
 	},
 	"compatibility_flags": ["nodejs_compat"],
 	"placement": { "mode": "smart" },
+	"vars": {
+		"WEBFLOW_MENU_COLLECTION_ID": "68a3bdb4084807fcb0d41bb4",
+	},
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./dist",
@@ -22,10 +25,17 @@
 		{
 			"binding": "KV_OTP",
 			"id": "920da48543314b4cbfc552cef5b8b421",
+			"experimental_remote": true,
 		},
 		{
 			"binding": "KV_SESSIONS",
 			"id": "58520d291d8f418f90b464ff0b3ea3df",
+			"experimental_remote": true,
+		},
+		{
+			"binding": "KV_CMS",
+			"id": "560289852d1e4a7ea75deb24805481b1",
+			"experimental_remote": true,
 		},
 	],
 	"d1_databases": [
