@@ -12,7 +12,7 @@ export default function MoreLayout() {
 
 	return (
 		<Stack screenOptions={defaultStackScreenOptions}>
-			<Stack.Screen name="index" options={{ title: t`More` }} />
+			<Stack.Screen name="index" options={{ headerShown: false, title: t`More` }} />
 			<Stack.Screen name="app" options={{ title: t`App` }} />
 			<Stack.Screen name="visit-us" options={{ title: t`Visit Us` }} />
 			<Stack.Screen name="profile" options={{ title: t`Profile` }} />
