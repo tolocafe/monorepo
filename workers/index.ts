@@ -14,11 +14,18 @@ import type { Bindings } from './types'
 
 const app = new Hono<{ Bindings: Bindings }>().basePath('/api')
 
+const TOLO_DOMAIN = 'tolo.cafe'
+
 app.use(
 	'*',
 	cors({
 		credentials: true,
-		origin: (origin) => origin,
+		origin: (origin) =>
+			process.env.NODE_ENV === 'development'
+				? origin
+				: origin.includes(TOLO_DOMAIN)
+					? origin
+					: null,
 	}),
 )
 

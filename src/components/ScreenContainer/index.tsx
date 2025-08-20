@@ -21,7 +21,7 @@ export function ScreenContainer({
 }: Props) {
 	if (noScroll) {
 		return (
-			<View style={[styles.container, style]} {...rest}>
+			<View {...rest} style={[styles.container, style]}>
 				{children}
 			</View>
 		)
@@ -46,6 +46,7 @@ export function ScreenContainer({
 	return (
 		<ScrollView
 			contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
+			ref={ref}
 			style={[styles.container, style]}
 			{...rest}
 		>

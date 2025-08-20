@@ -186,11 +186,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: theme.spacing.sm,
 		paddingVertical: theme.spacing.sm,
 	},
-	divider: {
-		backgroundColor: theme.colors.border,
-		height: '100%',
-		width: 1,
-	},
+
 	flag: {
 		color: theme.colors.text,
 		paddingHorizontal: 0,

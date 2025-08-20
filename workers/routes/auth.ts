@@ -46,13 +46,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				context.env.POSTER_TOKEN,
 				phone,
 				`[TOLO] Tu código de verificación es ${code}`,
-				// eslint-disable-next-line @typescript-eslint/use-unknown-in-catch-callback-variable
-			).catch((error) => {
-				// eslint-disable-next-line no-console
-				console.log(error)
-
-				throw error
-			}),
+			),
 		])
 
 		return context.json({ success: true })

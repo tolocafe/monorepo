@@ -61,9 +61,6 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 			return context.json(order)
 		} catch (error) {
-			// eslint-disable-next-line no-console
-			console.log(error)
-
 			throw new HTTPException(500, {
 				message:
 					error instanceof Error ? error.message : 'Failed to create order',

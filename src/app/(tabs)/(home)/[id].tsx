@@ -15,16 +15,23 @@ import { StyleSheet } from 'react-native-unistyles'
 import { Button } from '@/components/Button'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H1, H2, Label, Paragraph, Text } from '@/components/Text'
-import { POSTER_BASE_URL } from '@/lib/api'
+import { getImageUrl } from '@/lib/image'
 import { useTabBarHeight } from '@/lib/navigation/tab-bar-height'
 import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
+import { formatCookingTime } from '@/lib/utils/cooking-time'
 import { formatPrice } from '@/lib/utils/price'
 
 const handleClose = () => {
 	router.back()
 }
+
+const linearGradientColors = [
+	'transparent',
+	'rgba(0,0,0,0.4)',
+	'rgba(0,0,0,0.85)',
+] as const
 
 export default function MenuDetail() {
 	const { t } = useLingui()
@@ -120,17 +127,27 @@ export default function MenuDetail() {
 					{hasImage ? (
 						<Image
 							contentFit="cover"
-							source={{
-								uri: `${POSTER_BASE_URL}${product.photo_origin || product.photo}`,
+							placeholder={{
+								uri: getImageUrl(product.photo_origin || product.photo, {
+									blur: 80,
+									quality: 20,
+									width: 800,
+								}),
 							}}
-							style={{ height: '100%', width: '100%' }}
+							source={{
+								uri: getImageUrl(product.photo_origin || product.photo, {
+									quality: 90,
+									width: 800,
+								}),
+							}}
+							style={{ height: '100%', objectFit: 'cover', width: '100%' }}
 							transition={200}
 						/>
 					) : (
 						<View style={{ height: '100%', width: '100%' }} />
 					)}
 					<LinearGradient
-						colors={['transparent', 'rgba(0,0,0,0.4)', 'rgba(0,0,0,0.85)']}
+						colors={linearGradientColors}
 						end={{ x: 0, y: 1 }}
 						start={{ x: 0, y: 0 }}
 						style={titleOverlayStyle}
@@ -157,7 +174,7 @@ export default function MenuDetail() {
 						{product.cooking_time && product.cooking_time !== '0' && (
 							<View style={[styles.badge, styles.timeBadge]}>
 								<Text style={styles.badgeText}>
-									<Trans>{product.cooking_time} min</Trans>
+									{formatCookingTime(product.cooking_time)}
 								</Text>
 							</View>
 						)}

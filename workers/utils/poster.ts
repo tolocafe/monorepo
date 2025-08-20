@@ -51,12 +51,6 @@ export const api = {
 		) {
 			const parsedBody = { ...body, amount: body.amount / 100 }
 
-			// eslint-disable-next-line no-console
-			console.log('ADD E-WALLET TRANSACTION')
-
-			// eslint-disable-next-line no-console
-			console.log(parsedBody)
-
 			const data = (await fetch(
 				`${BASE_URL}/clients.addEWalletTransaction?token=${token}`,
 				{
@@ -65,11 +59,6 @@ export const api = {
 					method: 'POST',
 				},
 			).then((response) => response.json())) as PosterResponse<number>
-
-			// eslint-disable-next-line no-console
-			console.log('ADD E-WALLET TRANSACTION RESPONSE')
-			// eslint-disable-next-line no-console
-			console.log(data)
 
 			if (data.response != null) return data.response
 
@@ -128,9 +117,6 @@ export const api = {
 	},
 	dash: {
 		async getTransaction(token: string, id: string) {
-			// eslint-disable-next-line no-console
-			console.log('GET TRANSACTION')
-
 			const data = (await fetch(
 				`${BASE_URL}/dash.getTransaction?token=${token}&transaction_id=${id}`,
 			).then((response) => response.json())) as PosterResponse<
@@ -143,11 +129,6 @@ export const api = {
 					sum: string
 				}[]
 			>
-
-			// eslint-disable-next-line no-console
-			console.log('GET TRANSACTION RESPONSE')
-			// eslint-disable-next-line no-console
-			console.log(data)
 
 			const transaction = data.response?.at(0)
 
@@ -177,10 +158,6 @@ export const api = {
 					transaction_id: string
 				}[]
 			>
-			// eslint-disable-next-line no-console
-			console.log('GET TRANSACTION RESPONSE')
-			// eslint-disable-next-line no-console
-			console.log(data)
 
 			const transaction = data.response?.at(0)
 
@@ -197,11 +174,6 @@ export const api = {
 			},
 			clientId: number,
 		) {
-			// eslint-disable-next-line no-console
-			console.log('CREATE ORDER')
-			// eslint-disable-next-line no-console
-			console.log(JSON.stringify({ body }, null, 2))
-
 			const finalOrderData = {
 				...body,
 				client_id: clientId,
@@ -225,11 +197,6 @@ export const api = {
 				/** Associated order ID */
 				transaction_id: number
 			}>
-
-			// eslint-disable-next-line no-console
-			console.log('CREATE ORDER RESPONSE')
-			// eslint-disable-next-line no-console
-			console.log(data)
 
 			if (data.response != null) {
 				return data.response
@@ -293,11 +260,6 @@ export const api = {
 				user_id: body.userId,
 			}
 
-			// eslint-disable-next-line no-console
-			console.log('UPDATE TRANSACTION BODY')
-			// eslint-disable-next-line no-console
-			console.log(parsedBody)
-
 			const data = (await fetch(
 				`${BASE_URL}/finance.updateTransactions?token=${token}`,
 				{
@@ -306,11 +268,6 @@ export const api = {
 					method: 'POST',
 				},
 			).then((response) => response.json())) as PosterResponse<number>
-
-			// eslint-disable-next-line no-console
-			console.log('UPDATE TRANSACTION RESPONSE')
-			// eslint-disable-next-line no-console
-			console.log(data)
 
 			if (data.response != null) return data.response
 
@@ -326,11 +283,6 @@ export async function closePosterOrder(
 		transaction_id: number
 	},
 ) {
-	// eslint-disable-next-line no-console
-	console.log('CLOSE ORDER')
-	// eslint-disable-next-line no-console
-	console.log(body)
-
 	const data = (await fetch(
 		`${BASE_URL}/transactions.closeTransaction?token=${token}`,
 		{
@@ -341,11 +293,6 @@ export async function closePosterOrder(
 	).then((response) => response.json())) as PosterResponse<number>
 
 	if (data.response != null) return data.response
-
-	// eslint-disable-next-line no-console
-	console.log('CLOSE ORDER ERROR')
-	// eslint-disable-next-line no-console
-	console.log(data)
 
 	throw new Error('Failed to close order')
 }

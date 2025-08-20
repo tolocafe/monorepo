@@ -1,7 +1,10 @@
+import { useRef } from 'react'
+import type { ScrollView } from 'react-native'
 import { Linking, RefreshControl, TouchableOpacity, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans } from '@lingui/react/macro'
+import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 import { router } from 'expo-router'
@@ -11,6 +14,7 @@ import * as DropdownMenu from 'zeego/dropdown-menu'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import HeaderGradient from '@/components/HeaderGradient'
 import { List, ListItem } from '@/components/List'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
@@ -29,6 +33,7 @@ const handleSignIn = () => {
 export default function More() {
 	const { changeLanguage, currentLanguage } = useLanguage()
 	const { data: user, isPending: isUserPending } = useQuery(selfQueryOptions)
+	const screenRef = useRef<ScrollView>(null)
 
 	const appVersion = getStringOrFallback(nativeApplicationVersion, '0')
 
@@ -38,7 +43,7 @@ export default function More() {
 		? getFullName(user.firstname, user.lastname) || (user.name ?? '')
 		: ''
 
-	// moved Clear Cache to /more/app screen
+	useScrollToTop(screenRef)
 
 	return (
 		<>
@@ -48,8 +53,10 @@ export default function More() {
 				<meta content="More - TOLO" property="og:title" />
 				<meta content="/more" property="og:url" />
 			</Head>
+			<HeaderGradient />
 			<ScreenContainer
 				contentContainerStyle={styles.scrollContent}
+				ref={screenRef}
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(selfQueryOptions)}

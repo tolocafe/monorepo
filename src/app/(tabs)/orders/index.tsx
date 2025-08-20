@@ -12,6 +12,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import HeaderGradient from '@/components/HeaderGradient'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -98,8 +99,10 @@ export default function Orders() {
 			<Head>
 				<title>{t`Orders`}</title>
 			</Head>
+			<HeaderGradient />
 			<ScreenContainer
 				contentContainerStyle={styles.container}
+				noScroll={!orders?.length}
 				ref={screenRef}
 				refreshControl={
 					<RefreshControl
@@ -170,7 +173,7 @@ export default function Orders() {
 						</View>
 					</>
 				) : (
-					<View style={{ alignItems: 'center', flex: 1 }}>
+					<View style={styles.emptyOrderContainer}>
 						<Image
 							contentFit="contain"
 							source={
@@ -207,6 +210,11 @@ const styles = StyleSheet.create((theme) => ({
 	currentOrderTitle: {
 		color: theme.colors.surface,
 	},
+	emptyOrderContainer: {
+		alignItems: 'center',
+		flex: 1,
+		justifyContent: 'center',
+	},
 	emptyOrderImage: {
 		height: 250,
 		width: 250,
@@ -239,12 +247,7 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.textSecondary,
 		marginBottom: theme.spacing.xs,
 	},
-	// ordersContainer: {
-	// 	alignItems: 'center',
-	// 	flex: 1,
-	// 	justifyContent: 'center',
-	// 	paddingVertical: theme.spacing.xxl,
-	// },
+
 	ordersList: {
 		gap: theme.spacing.sm,
 		width: '100%',

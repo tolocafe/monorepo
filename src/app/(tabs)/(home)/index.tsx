@@ -25,9 +25,10 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import HeaderGradient from '@/components/HeaderGradient'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, H4, Paragraph } from '@/components/Text'
-import { POSTER_BASE_URL } from '@/lib/api'
+import { getImageUrl } from '@/lib/image'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import {
 	categoriesQueryOptions,
@@ -126,6 +127,7 @@ export default function Menu() {
 				/>
 				<meta content="/" property="og:url" />
 			</Head>
+			<HeaderGradient />
 			<ScreenContainer
 				contentInsetAdjustmentBehavior="automatic"
 				ref={screenRef}
@@ -184,11 +186,20 @@ function MenuListItem({
 						{item.photo ? (
 							<Image
 								contentFit="cover"
-								source={{
-									uri: `${POSTER_BASE_URL}${item.photo}`,
+								placeholder={{
+									uri: getImageUrl(item.photo, {
+										blur: 50,
+										quality: 50,
+										width: 300,
+									}),
 								}}
-								// keep inline styles
-								style={{ height: '100%', width: '100%' }}
+								source={{
+									uri: getImageUrl(item.photo, {
+										quality: 90,
+										width: 300,
+									}),
+								}}
+								style={{ height: '100%', objectFit: 'cover', width: '100%' }}
 								transition={200}
 							/>
 						) : (

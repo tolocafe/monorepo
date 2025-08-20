@@ -14,21 +14,17 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. placeholder {0}: formatPrice(modification.price)
-#: src/app/(tabs)/(home)/[id].tsx:237
+#: src/app/(tabs)/(home)/[id].tsx:247
 msgid " +{0}"
 msgstr ""
 
-#: src/app/(tabs)/orders/index.tsx:155
-#~ msgid "{0, select, =10 {Open} =20 {Preparing} =30 {Ready} =40 {En route} =50 {Delivered} =60 {Closed} =70 {Deleted} other {Unknown}}"
-#~ msgstr ""
-
 #. placeholder {0}: `Status${order.processing_status}`
-#: src/app/(tabs)/orders/index.tsx:154
+#: src/app/(tabs)/orders/index.tsx:150
 msgid "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Closed} Status70 {Deleted} other {Unknown}}"
 msgstr ""
 
 #. placeholder {0}: product.product_name
-#: src/app/(tabs)/(home)/[id].tsx:102
+#: src/app/(tabs)/(home)/[id].tsx:103
 msgid "{0} - TOLO Good Coffee"
 msgstr ""
 
@@ -36,10 +32,9 @@ msgstr ""
 #~ msgid "{0} items"
 #~ msgstr ""
 
-#. placeholder {0}: product.cooking_time
 #: src/app/(tabs)/(home)/[id].tsx:160
-msgid "{0} min"
-msgstr ""
+#~ msgid "{0} min"
+#~ msgstr ""
 
 #: src/app/(tabs)/orders/index.tsx:126
 msgid "{totalItems} items"
@@ -82,8 +77,8 @@ msgid "Add any special instructions..."
 msgstr ""
 
 #: src/containers/top-up/index.tsx:191
-msgid "Add Funds"
-msgstr ""
+#~ msgid "Add Funds"
+#~ msgstr ""
 
 #: src/app/(tabs)/(menu)/index.tsx:123
 #~ msgid "Add to Bag"
@@ -94,7 +89,7 @@ msgstr ""
 #~ msgstr ""
 
 #. placeholder {0}: formatPrice(Number(unitPriceCents) * quantity)
-#: src/app/(tabs)/(home)/[id].tsx:281
+#: src/app/(tabs)/(home)/[id].tsx:291
 msgid "Add to Order - {0}"
 msgstr ""
 
@@ -115,8 +110,8 @@ msgid "Altamirano, 50130 Toluca, Edo. Méx., Mexico"
 msgstr ""
 
 #: src/containers/top-up/index.tsx:151
-msgid "Amount to add"
-msgstr ""
+#~ msgid "Amount to add"
+#~ msgstr ""
 
 #: src/app/(tabs)/more/_layout.tsx:16
 #: src/app/(tabs)/more/index.tsx:220
@@ -144,7 +139,7 @@ msgstr ""
 msgid "Are you sure you want to sign out?"
 msgstr ""
 
-#: src/app/(tabs)/(home)/[id].tsx:189
+#: src/app/(tabs)/(home)/[id].tsx:199
 msgid "Available modifications"
 msgstr ""
 
@@ -269,8 +264,8 @@ msgid "Contact"
 msgstr "Contact"
 
 #: src/containers/top-up/index.tsx:112
-msgid "Current Balance"
-msgstr ""
+#~ msgid "Current Balance"
+#~ msgstr ""
 
 #: src/app/(tabs)/orders/_layout.tsx:16
 #: src/app/(tabs)/orders/current.tsx:270
@@ -323,8 +318,6 @@ msgstr ""
 #: src/app/(tabs)/orders/current.tsx:121
 #: src/app/sign-in.tsx:85
 #: src/app/sign-in.tsx:96
-#: src/containers/top-up/index.tsx:41
-#: src/containers/top-up/index.tsx:95
 msgid "Error"
 msgstr ""
 
@@ -337,8 +330,8 @@ msgid "Failed to load menu. Please try again."
 msgstr "Failed to load menu. Please try again."
 
 #: src/containers/top-up/index.tsx:93
-msgid "Failed to process payment. Please try again."
-msgstr ""
+#~ msgid "Failed to process payment. Please try again."
+#~ msgstr ""
 
 #: src/app/sign-in.tsx:83
 msgid "Failed to send code"
@@ -349,8 +342,8 @@ msgid "Failed to submit order. Please try again."
 msgstr ""
 
 #: src/containers/top-up/index.tsx:39
-msgid "Failed to top up wallet. Please try again."
-msgstr ""
+#~ msgid "Failed to top up wallet. Please try again."
+#~ msgstr ""
 
 #: src/app/(tabs)/more/profile.tsx:128
 msgid "First name"
@@ -394,7 +387,7 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#: src/app/(tabs)/(home)/[id].tsx:169
+#: src/app/(tabs)/(home)/[id].tsx:179
 msgid "Ingredients"
 msgstr ""
 
@@ -482,10 +475,10 @@ msgstr ""
 #~ msgstr "NEW"
 
 #: src/containers/top-up/index.tsx:160
-msgid "New balance"
-msgstr ""
+#~ msgid "New balance"
+#~ msgstr ""
 
-#: src/app/(tabs)/orders/index.tsx:189
+#: src/app/(tabs)/orders/index.tsx:182
 msgid "No orders yet"
 msgstr "No orders yet"
 
@@ -576,8 +569,8 @@ msgstr "Orders"
 #~ msgstr ""
 
 #: src/containers/top-up/index.tsx:177
-msgid "Payment will be processed securely through Stripe. Your card details are never stored on our servers."
-msgstr ""
+#~ msgid "Payment will be processed securely through Stripe. Your card details are never stored on our servers."
+#~ msgstr ""
 
 #: src/app/(tabs)/more/profile.tsx:132
 #~ msgid "Personal Information"
@@ -616,10 +609,10 @@ msgstr ""
 #~ msgstr "POPULAR"
 
 #: src/containers/top-up/index.tsx:189
-msgid "Processing..."
-msgstr ""
+#~ msgid "Processing..."
+#~ msgstr ""
 
-#: src/app/(tabs)/(home)/[id].tsx:85
+#: src/app/(tabs)/(home)/[id].tsx:86
 msgid "Product not found"
 msgstr ""
 
@@ -636,7 +629,7 @@ msgstr ""
 #~ msgid "Quality First"
 #~ msgstr "Quality First"
 
-#: src/app/(tabs)/(home)/[id].tsx:255
+#: src/app/(tabs)/(home)/[id].tsx:265
 msgid "Quantity"
 msgstr ""
 
@@ -665,8 +658,8 @@ msgid "Saving..."
 msgstr ""
 
 #: src/containers/top-up/index.tsx:122
-msgid "Select Amount"
-msgstr ""
+#~ msgid "Select Amount"
+#~ msgstr ""
 
 #: src/app/sign-in.tsx:194
 msgid "Send Code"
@@ -745,8 +738,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/containers/top-up/index.tsx:52
-msgid "Success"
-msgstr ""
+#~ msgid "Success"
+#~ msgstr ""
 
 #: src/app/(tabs)/more/visit-us.tsx:66
 msgid "Sunday"
@@ -768,7 +761,7 @@ msgstr ""
 msgid "The requested order could not be found."
 msgstr ""
 
-#: src/app/(tabs)/(home)/[id].tsx:88
+#: src/app/(tabs)/(home)/[id].tsx:89
 msgid "The requested product could not be loaded."
 msgstr ""
 
@@ -818,8 +811,8 @@ msgid "Top Up"
 msgstr ""
 
 #: src/containers/top-up/index.tsx:105
-msgid "Top Up Wallet"
-msgstr ""
+#~ msgid "Top Up Wallet"
+#~ msgstr ""
 
 #: src/app/(tabs)/orders/current.tsx:302
 msgid "Total"
@@ -945,7 +938,7 @@ msgstr ""
 #~ msgid "Your order has been submitted successfully!"
 #~ msgstr ""
 
-#: src/app/(tabs)/orders/index.tsx:192
+#: src/app/(tabs)/orders/index.tsx:185
 msgid "Your order history will appear here"
 msgstr "Your order history will appear here"
 
@@ -958,8 +951,8 @@ msgid "Your profile has been updated."
 msgstr ""
 
 #: src/containers/top-up/index.tsx:50
-msgid "Your wallet has been topped up successfully!"
-msgstr ""
+#~ msgid "Your wallet has been topped up successfully!"
+#~ msgstr ""
 
 #: src/app/(tabs)/more/profile.tsx:198
 msgid "YYYY-MM-DD"
