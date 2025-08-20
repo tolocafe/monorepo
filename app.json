@@ -30,9 +30,6 @@
 			"supportsTablet": true,
 			"config": {
 				"usesNonExemptEncryption": false
-			},
-			"infoPlist": {
-				"NSUserTrackingUsageDescription": "This app uses tracking to provide personalized experiences and improve our services. Your data helps us understand how you use the app and deliver relevant content."
 			}
 		},
 		"name": "TOLO",
@@ -41,7 +38,12 @@
 		"owner": "tolo-cafe",
 		"plugins": [
 			"expo-updates",
-			"expo-tracking-transparency",
+			[
+				"expo-tracking-transparency",
+				{
+					"userTrackingPermission": "This app uses tracking to provide personalized experiences and improve our services. Your data helps us understand how you use the app and deliver relevant content."
+				}
+			],
 			"react-native-edge-to-edge",
 			["react-native-bottom-tabs", { "theme": "material3-dynamic" }],
 			[
