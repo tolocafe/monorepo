@@ -19,6 +19,7 @@ import {
 	requestOtpMutationOptions,
 	verifyOtpMutationOptions,
 } from '@/lib/queries/auth'
+import { trackingTransparencyService } from '@/lib/services/tracking-transparency-service'
 
 const SignInSchema = z.object({
 	phoneNumber: z.string().trim().min(1, 'Please enter a phone number'),
@@ -40,6 +41,19 @@ export default function SignIn() {
 		...verifyOtpMutationOptions,
 		async onSuccess() {
 			await queryClient.invalidateQueries({ queryKey: ['self'] })
+
+			// Request tracking permission after successful sign-in
+			try {
+				const shouldRequest =
+					await trackingTransparencyService.shouldRequestPermission()
+				if (shouldRequest) {
+					const result =
+						await trackingTransparencyService.requestTrackingPermission()
+				}
+			} catch (error) {
+				console.error('Failed to request tracking permission:', error)
+				// Don't block navigation if ATT request fails
+			}
 
 			router.replace('/', { withAnchor: false })
 		},
