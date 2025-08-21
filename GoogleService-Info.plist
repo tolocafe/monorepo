@@ -9,7 +9,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>app.tolo.cafe</string>
+	<string>cafe.tolo.app</string>
 	<key>PROJECT_ID</key>
 	<string>tolo-cafe</string>
 	<key>STORAGE_BUCKET</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:503502595311:ios:9eabd7195dce5d2764671a</string>
+	<string>1:503502595311:ios:bc92160aa47593ee64671a</string>
 </dict>
 </plist>

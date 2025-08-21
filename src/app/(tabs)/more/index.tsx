@@ -23,6 +23,7 @@ import {
 	LANGUAGE_NAMES,
 	useLanguage,
 } from '@/lib/contexts/language-context'
+import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { queryClient } from '@/lib/query-client'
 import { formatPrice } from '@/lib/utils/price'
@@ -34,10 +35,49 @@ const handleSignIn = () => {
 	router.push('/sign-in')
 }
 
+// Dynamic styles for Zeego dropdown components based on color scheme
+const createDropdownStyles = (isDark: boolean) => ({
+	content: {
+		backgroundColor: isDark ? '#1E1E1E' : '#FFFFFF',
+		borderColor: isDark ? '#333333' : '#E0E0E0',
+		borderRadius: 12,
+		borderWidth: 1,
+		minWidth: 160,
+		padding: 4,
+		shadowColor: '#000000',
+		shadowOffset: { height: 2, width: 0 },
+		shadowOpacity: isDark ? 0.3 : 0.1,
+		shadowRadius: 8,
+	},
+	item: {
+		borderRadius: 8,
+		minHeight: 44,
+		paddingHorizontal: 12,
+		paddingVertical: 8,
+	},
+	itemTitle: {
+		color: isDark ? '#FFFFFF' : '#0C0C0C',
+		fontFamily: 'system-ui',
+		fontSize: 17,
+		fontWeight: '500',
+	},
+	trigger: {
+		backgroundColor: 'transparent',
+		borderColor: isDark ? '#333333' : '#E0E0E0',
+		borderRadius: 8,
+		borderWidth: 0,
+		minHeight: 44,
+		paddingHorizontal: 12,
+		paddingVertical: 8,
+	},
+})
+
 export default function More() {
 	const { changeLanguage, currentLanguage } = useLanguage()
 	const { data: user, isPending: isUserPending } = useQuery(selfQueryOptions)
 	const screenRef = useRef<ScrollView>(null)
+	const colorScheme = useColorScheme()
+	const dropdownStyles = createDropdownStyles(colorScheme === 'dark')
 
 	const appVersion = getStringOrFallback(nativeApplicationVersion, '0')
 
@@ -195,7 +235,7 @@ export default function More() {
 									<Trans>Language</Trans>
 								</Label>
 								<DropdownMenu.Root>
-									<DropdownMenu.Trigger style={styles.languageDropdownTrigger}>
+									<DropdownMenu.Trigger style={dropdownStyles.trigger}>
 										<View style={styles.languageDropdownTriggerContent}>
 											<Label style={styles.languageDropdownText}>
 												{LANGUAGE_NAMES[currentLanguage]}
@@ -207,13 +247,16 @@ export default function More() {
 											/>
 										</View>
 									</DropdownMenu.Trigger>
-									<DropdownMenu.Content>
+									<DropdownMenu.Content style={dropdownStyles.content}>
 										{AVAILABLE_LANGUAGES.map((language) => (
 											<DropdownMenu.Item
 												key={language}
 												onSelect={() => changeLanguage(language)}
+												style={dropdownStyles.item}
 											>
-												<DropdownMenu.ItemTitle>
+												<DropdownMenu.ItemTitle
+													style={dropdownStyles.itemTitle}
+												>
 													{LANGUAGE_NAMES[language]}
 												</DropdownMenu.ItemTitle>
 											</DropdownMenu.Item>
@@ -269,13 +312,11 @@ const styles = StyleSheet.create((theme) => ({
 	languageDropdownText: {
 		flex: 1,
 	},
-	languageDropdownTrigger: {},
 	languageDropdownTriggerContent: {
 		alignItems: 'center',
 		flexDirection: 'row',
 		gap: theme.spacing.sm,
 		minWidth: 120,
-		paddingHorizontal: theme.spacing.md,
 	},
 	scrollContent: {
 		paddingVertical: theme.spacing.lg,
