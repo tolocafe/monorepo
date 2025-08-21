@@ -47,6 +47,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		'expo-updates',
 		'expo-notifications',
 		'react-native-edge-to-edge',
+		'@react-native-firebase/app',
 		['expo-router', { headOrigin: 'https://app.tolo.cafe' }],
 		['react-native-bottom-tabs', { theme: 'material3-dynamic' }],
 		['expo-build-properties', { ios: { useFrameworks: 'static' } }],

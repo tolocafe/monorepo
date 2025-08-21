@@ -108,12 +108,32 @@ export default function More() {
 					/>
 				}
 			>
-				{/* User Information Section */}
+				{user && (
+					<View style={styles.section}>
+						<H2 style={styles.sectionTitle}>
+							<Trans>Wallet</Trans>
+						</H2>
+
+						<List>
+							<ListItem
+								label={<Trans>Balance</Trans>}
+								text={formatPrice(user.ewallet ?? '0')}
+							/>
+							{/* <ListItem
+									accessibilityRole="link"
+									centered
+									label={<Trans>Top Up Wallet</Trans>}
+									labelColor="primary"
+									onPress={() => router.push('/more/top-up')}
+								/> */}
+						</List>
+					</View>
+				)}
+
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
 						<Trans>Account</Trans>
 					</H2>
-
 					{user ? (
 						<List>
 							{fullName ? (
@@ -123,17 +143,6 @@ export default function More() {
 								label={<Trans>Phone</Trans>}
 								text={user.phone || <Trans>Not provided</Trans>}
 							/>
-							<ListItem
-								label={<Trans>Wallet</Trans>}
-								text={formatPrice(user.ewallet ?? '0')}
-							/>
-							{/* <ListItem
-								accessibilityRole="link"
-								centered
-								label={<Trans>Top Up Wallet</Trans>}
-								labelColor="primary"
-								onPress={() => router.push('/more/top-up')}
-							/> */}
 							<ListItem
 								accessibilityRole="link"
 								centered
