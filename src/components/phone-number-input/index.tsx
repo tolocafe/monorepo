@@ -51,15 +51,13 @@ export function PhoneNumberInput({
 	}
 
 	const handleTextChange = (text: string) => {
-		// Remove all non-digits from the input
-		const digitsOnly = text.replace(/\D/g, '')
-		const [nextIntPrefix] = getPhoneParts(digitsOnly)
+		const [nextIntPrefix] = getPhoneParts(text)
 
 		if (nextIntPrefix) {
-			onChange(nextIntPrefix + digitsOnly.replace(nextIntPrefix, ''))
+			onChange(nextIntPrefix + text.replace(nextIntPrefix, ''))
 		} else {
 			// // Simply pass the cleaned E164 format - let the parent handle the rest
-			onChange((intPrefix as string) + digitsOnly)
+			onChange((intPrefix as string) + text)
 		}
 	}
 
@@ -121,10 +119,13 @@ function getPhoneParts(
 	e164Value: string,
 	defaultPrefix?: string,
 ) {
+	// Remove all characters except digits and + symbol
+	const sanitizedValue = e164Value.replace(/[^\d+]/g, '')
+	
 	const internationalPrefix = phoneCountries.find((c) =>
-		e164Value.startsWith(c.prefix),
+		sanitizedValue.startsWith(c.prefix),
 	)?.prefix
-	const nsn = e164Value.slice(internationalPrefix?.length ?? 0)
+	const nsn = sanitizedValue.slice(internationalPrefix?.length ?? 0)
 
 	return [internationalPrefix ?? defaultPrefix, nsn]
 }
