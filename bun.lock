@@ -74,6 +74,7 @@
         "@cloudflare/vitest-pool-workers": "0.8.65",
         "@eslint/js": "~9.33.0",
         "@lingui/babel-plugin-lingui-macro": "5.4.1",
+        "@lingui/metro-transformer": "^5.4.1",
         "@react-native/metro-config": "0.80.2",
         "@sentry/cli": "^2.52.0",
         "@testing-library/jest-native": "5.4.3",
@@ -721,6 +722,8 @@
     "@lingui/macro": ["@lingui/macro@5.4.1", "", { "dependencies": { "@lingui/core": "5.4.1", "@lingui/react": "5.4.1" }, "peerDependencies": { "@lingui/babel-plugin-lingui-macro": "5.4.1", "babel-plugin-macros": "2 || 3" }, "optionalPeers": ["@lingui/babel-plugin-lingui-macro", "babel-plugin-macros"] }, "sha512-tBpcZCmyppe1OjMQyka+SvexG+iIWSlecmeMoZhf4bRWEDlGTfIuAoosZhVqsiyaaaBNJqpopOxJXf/Tgm7oqQ=="],
 
     "@lingui/message-utils": ["@lingui/message-utils@5.4.1", "", { "dependencies": { "@messageformat/parser": "^5.0.0", "js-sha256": "^0.10.1" } }, "sha512-hXfL90fFBoKp5YgLaWo3HbJS/7q+WlWs7VwVbUxl4pa+YladqNZf08JoDeBUDtlEVx5a3bNUSACXHs2FZo12aw=="],
+
+    "@lingui/metro-transformer": ["@lingui/metro-transformer@5.4.1", "", { "dependencies": { "@babel/runtime": "^7.20.13", "@lingui/cli": "5.4.1", "@lingui/conf": "5.4.1", "memoize-one": "^6.0.0" }, "peerDependencies": { "@expo/metro-config": "*", "@react-native/metro-babel-transformer": "*", "expo": ">=50.0.0", "react-native": ">=0.73.0" }, "optionalPeers": ["@expo/metro-config", "@react-native/metro-babel-transformer", "expo"] }, "sha512-grbgLO1e6OCaX5Bc2cXqKux3lOQVpK8/SPoQFortJcSc1Sfw5XdLN0dCPGa4Fa+sVU7lnF8CQRMfxA+xHqMJSA=="],
 
     "@lingui/react": ["@lingui/react@5.4.1", "", { "dependencies": { "@babel/runtime": "^7.20.13", "@lingui/core": "5.4.1" }, "peerDependencies": { "@lingui/babel-plugin-lingui-macro": "5.4.1", "babel-plugin-macros": "2 || 3", "react": "^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0" }, "optionalPeers": ["@lingui/babel-plugin-lingui-macro", "babel-plugin-macros"] }, "sha512-BfWHRTyu+Je4Km9ZYCTgFuRHgQI9TJa/fMYKJBw3dNy3I09oIqnJ21qbdDimnb/Z9ztMCGQ75EIFoqAB6bdwaw=="],
 
@@ -2158,7 +2161,7 @@
 
     "math-intrinsics": ["math-intrinsics@1.1.0", "", {}, "sha512-/IXtbwEk5HTPyEwyKX6hGkYXxM9nbj64B+ilVJnC/R6B0pH5G4V3b0pVbL7DBj4tkhBAppbQUlf6F6Xl9LHu1g=="],
 
-    "memoize-one": ["memoize-one@5.2.1", "", {}, "sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q=="],
+    "memoize-one": ["memoize-one@6.0.0", "", {}, "sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw=="],
 
     "merge-stream": ["merge-stream@2.0.0", "", {}, "sha512-abv/qOcuPfk3URPfDzmZU1LKmuw8kT+0nIHvKrKgFrwifol/doWcdA4ZqsWQ8ENrFKkd67Mfpo/LovbIUsbt3w=="],
 
@@ -3456,6 +3459,8 @@
 
     "react-native/jest-environment-node": ["jest-environment-node@29.7.0", "", { "dependencies": { "@jest/environment": "^29.7.0", "@jest/fake-timers": "^29.7.0", "@jest/types": "^29.6.3", "@types/node": "*", "jest-mock": "^29.7.0", "jest-util": "^29.7.0" } }, "sha512-DOSwCRqXirTOyheM+4d5YZOrWcdu0LNZ87ewUoywbcb2XR4wKgqiG8vNeYwhjFMbEkfju7wx2GYH0P2gevGvFw=="],
 
+    "react-native/memoize-one": ["memoize-one@5.2.1", "", {}, "sha512-zYiwtZUcYyXKo/np96AGZAckk+FWWsUdJ3cHGGmld7+AhvcWmQyGCYUh1hc4Q/pkOhb65dQR/pqCyK0cOaHz4Q=="],
+
     "react-native/semver": ["semver@7.7.2", "", { "bin": { "semver": "bin/semver.js" } }, "sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA=="],
 
     "react-native-bottom-tabs/sf-symbols-typescript": ["sf-symbols-typescript@2.1.0", "", {}, "sha512-ezT7gu/SHTPIOEEoG6TF+O0m5eewl0ZDAO4AtdBi5HjsrUI6JdCG17+Q8+aKp0heM06wZKApRCn5olNbs0Wb/A=="],
@@ -3463,8 +3468,6 @@
     "react-native-reanimated/react-native-is-edge-to-edge": ["react-native-is-edge-to-edge@1.1.7", "", { "peerDependencies": { "react": "*", "react-native": "*" } }, "sha512-EH6i7E8epJGIcu7KpfXYXiV2JFIYITtq+rVS8uEb+92naMRBdxhTuS8Wn2Q7j9sqyO0B+Xbaaf9VdipIAmGW4w=="],
 
     "react-native-web/@react-native/normalize-colors": ["@react-native/normalize-colors@0.74.89", "", {}, "sha512-qoMMXddVKVhZ8PA1AbUCk83trpd6N+1nF2A6k1i6LsQObyS92fELuk8kU/lQs6M7BsMHwqyLCpQJ1uFgNvIQXg=="],
-
-    "react-native-web/memoize-one": ["memoize-one@6.0.0", "", {}, "sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw=="],
 
     "react-test-renderer/react-is": ["react-is@19.1.1", "", {}, "sha512-tr41fA15Vn8p4X9ntI+yCyeGSf1TlYaY5vlTZfQmeLBrFo3psOPX6HhTDnFNL9uj3EhP0KAQ80cugCl4b4BERA=="],
 

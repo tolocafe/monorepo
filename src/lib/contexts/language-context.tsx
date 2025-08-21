@@ -105,15 +105,11 @@ export function useLanguage() {
 async function loadLanguageMessages(language: Language): Promise<void> {
 	try {
 		if (language === 'es') {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const { messages } = await import('@/lib/locales/es/messages.js')
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+			const { messages } = await import('@/lib/locales/es/messages.po')
 			i18n.load('es', messages)
 			i18n.activate('es')
 		} else {
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			const { messages } = await import('@/lib/locales/en/messages.js')
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+			const { messages } = await import('@/lib/locales/en/messages.po')
 			i18n.load('en', messages)
 			i18n.activate('en')
 		}

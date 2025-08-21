@@ -23,7 +23,6 @@ bun run web     # Web
 
 # Translations
 bun run lingui:extract  # Extract strings
-bun run lingui:compile  # Compile
 
 # Updates
 bun run update:publish              # Publish update to all channels

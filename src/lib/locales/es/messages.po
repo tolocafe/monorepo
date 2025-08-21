@@ -21,7 +21,7 @@ msgstr " +{0}"
 #. placeholder {0}: `Status${order.processing_status}`
 #: src/app/(tabs)/orders/index.tsx:150
 msgid "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Closed} Status70 {Deleted} other {Unknown}}"
-msgstr "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Closed} Status70 {Deleted} other {Unknown}}"
+msgstr "{0, select, Status10 {Abierto} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Cerrado} Status70 {Eliminado} other {Desconocido}}"
 
 #. placeholder {0}: product.product_name
 #: src/app/(tabs)/(home)/[id].tsx:103
@@ -220,12 +220,12 @@ msgstr "Clearing Cache..."
 
 #: src/app/sign-in.tsx:121
 msgid "Close"
-msgstr "Close"
+msgstr "Cerrar"
 
 #: src/app/(tabs)/more/visit-us.tsx:61
 #: src/app/(tabs)/more/visit-us.tsx:69
 msgid "Closed"
-msgstr "Closed"
+msgstr "Cerrado"
 
 #: src/app/sign-in.tsx:68
 msgid "Code sent"
