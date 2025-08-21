@@ -95,7 +95,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		url: `https://u.expo.dev/${projectId}`,
 	},
 	userInterfaceStyle: 'automatic',
-	version: '1.1.1',
+	version: '1.1.2',
 	web: {
 		backgroundColor: '#ffffff',
 		bundler: 'metro',
