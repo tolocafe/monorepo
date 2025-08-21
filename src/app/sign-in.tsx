@@ -3,6 +3,8 @@ import { Platform, Pressable, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { firebase } from '@react-native-firebase/analytics'
+import { captureException } from '@sentry/react-native'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
@@ -46,10 +48,13 @@ export default function SignIn() {
 			requestTrackingPermissionAsync()
 				.then((granted) => {
 					if (granted) {
-						// TODO: Enable analytics
+						firebase
+							.analytics()
+							.setAnalyticsCollectionEnabled(true)
+							.catch(captureException)
 					}
 				})
-				.catch(() => null)
+				.catch(captureException)
 
 			router.replace('/', { withAnchor: false })
 		},

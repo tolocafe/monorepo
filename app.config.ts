@@ -11,6 +11,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 			foregroundImage: './src/assets/images/adaptive-icon.png',
 		},
 		edgeToEdgeEnabled: true,
+		googleServicesFile: './google-services.json',
 		package: 'cafe.tolo.app',
 	},
 	experiments: {
@@ -35,6 +36,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		config: {
 			usesNonExemptEncryption: false,
 		},
+		googleServicesFile: './GoogleService-Info.plist',
 		supportsTablet: true,
 	},
 	name: 'TOLO',
@@ -48,6 +50,13 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		['expo-router', { headOrigin: 'https://app.tolo.cafe' }],
 		['react-native-bottom-tabs', { theme: 'material3-dynamic' }],
 		['expo-build-properties', { ios: { useFrameworks: 'static' } }],
+		// [
+		// 	'@stripe/stripe-react-native',
+		// 	{
+		// 		enableGooglePay: true,
+		// 		merchantIdentifier: 'merchant.cafe.tolo.app',
+		// 	},
+		// ],
 		[
 			'expo-secure-store',
 			{
@@ -85,7 +94,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		url: `https://u.expo.dev/${projectId}`,
 	},
 	userInterfaceStyle: 'automatic',
-	version: '1.1.0',
+	version: '1.1.1',
 	web: {
 		backgroundColor: '#ffffff',
 		bundler: 'metro',

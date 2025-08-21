@@ -37,6 +37,7 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 				amount: body.amount,
 				currency: 'mxn',
 				customer: customer.id,
+				metadata: { poster_client_id: clientId },
 			}),
 		])
 

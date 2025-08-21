@@ -1,6 +1,10 @@
 import { captureEvent } from '@sentry/cloudflare'
 import { Hono } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
+
+import { stripe } from '../stripe'
+import { api } from '../utils/poster'
 
 import type { Bindings } from '../types'
 
@@ -17,6 +21,85 @@ const posterWebhookDataSchema = z.object({
 
 const webhooks = new Hono<{ Bindings: Bindings }>()
 	.get('/poster', (c) => c.json({ message: 'Ok' }, 200))
+	.post('/stripe', async (c) => {
+		const sig = c.req.header('stripe-signature')
+
+		if (!sig) {
+			throw new HTTPException(400, { message: 'Missing signature' })
+		}
+
+		let event
+
+		try {
+			const body = await c.req.text()
+			event = stripe.webhooks.constructEvent(
+				body,
+				sig,
+				c.env.STRIPE_WEBHOOK_SECRET,
+			)
+		} catch (error) {
+			throw new HTTPException(400, {
+				message: `Webhook signature verification failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+			})
+		}
+
+		// Handle the event
+		switch (event.type) {
+			case 'payment_intent.succeeded': {
+				const paymentIntent = event.data.object
+
+				// Get the customer and their Poster client ID
+				const customer = await stripe.customers.retrieve(
+					paymentIntent.customer as string,
+				)
+
+				if (customer.deleted) {
+					throw new HTTPException(400, { message: 'Customer was deleted' })
+				}
+
+				const posterClientId = customer.metadata.poster_client_id
+
+				if (!posterClientId) {
+					throw new HTTPException(400, {
+						message: 'No Poster client ID found in customer metadata',
+					})
+				}
+
+				// Create e-wallet transaction in Poster
+				const transactionId = await api.clients.addEWalletTransaction(
+					c.env.POSTER_TOKEN,
+					{
+						amount: paymentIntent.amount, // Amount is already in cents
+						client_id: Number(posterClientId),
+					},
+				)
+
+				// Store the transaction mapping in D1
+				await c.env.D1_TOLO.exec(
+					'CREATE TABLE IF NOT EXISTS stripe_payments (payment_intent_id TEXT PRIMARY KEY, client_id INTEGER, amount INTEGER, transaction_id INTEGER, created_at TIMESTAMP)',
+				)
+
+				await c.env.D1_TOLO.prepare(
+					'INSERT INTO stripe_payments (payment_intent_id, client_id, amount, transaction_id, created_at) VALUES (?, ?, ?, ?, ?)',
+				)
+					.bind(
+						paymentIntent.id,
+						Number(posterClientId),
+						paymentIntent.amount,
+						transactionId,
+						new Date().toISOString(),
+					)
+					.run()
+
+				break
+			}
+			default:
+				// Unhandled event type
+				break
+		}
+
+		return c.json({ received: true })
+	})
 	.post('/poster', async (context) => {
 		const body = (await context.req.json()) as unknown
 

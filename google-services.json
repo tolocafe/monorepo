@@ -1,0 +1,29 @@
+{
+	"project_info": {
+		"project_number": "503502595311",
+		"project_id": "tolo-cafe",
+		"storage_bucket": "tolo-cafe.firebasestorage.app"
+	},
+	"client": [
+		{
+			"client_info": {
+				"mobilesdk_app_id": "1:503502595311:android:bdad5801632831d564671a",
+				"android_client_info": {
+					"package_name": "cafe.tolo.app"
+				}
+			},
+			"oauth_client": [],
+			"api_key": [
+				{
+					"current_key": "AIzaSyAv4XxUsWjn9R7BnAscaUas6Wrk8Ql8-fM"
+				}
+			],
+			"services": {
+				"appinvite_service": {
+					"other_platform_oauth_client": []
+				}
+			}
+		}
+	],
+	"configuration_version": "1"
+}
