@@ -2,7 +2,7 @@
 const { getSentryExpoConfig } = require('@sentry/react-native/metro')
 
 const config = getSentryExpoConfig(__dirname)
-const { transformer, resolver } = config
+const { resolver, transformer } = config
 
 // Required for zustand
 config.resolver.unstable_conditionNames = ['browser', 'require', 'react-native']

@@ -7,6 +7,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
 import { Text } from '@/components/Text'
+import { filterDigitsWithLimit } from '@/lib/utils/text-input'
 
 type PhoneCountry = {
 	flag: string
@@ -51,14 +52,11 @@ export function PhoneNumberInput({
 	}
 
 	const handleTextChange = (text: string) => {
-		const [nextIntPrefix] = getPhoneParts(text)
+		// Filter to digits only and limit to 10 digits for the national subscriber number
+		const digitsOnly = filterDigitsWithLimit(text, 10)
 
-		if (nextIntPrefix) {
-			onChange(nextIntPrefix + text.replace(nextIntPrefix, ''))
-		} else {
-			// // Simply pass the cleaned E164 format - let the parent handle the rest
-			onChange((intPrefix as string) + text)
-		}
+		// Combine with the international prefix
+		onChange((intPrefix as string) + digitsOnly)
 	}
 
 	return (

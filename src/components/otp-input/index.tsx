@@ -5,6 +5,7 @@ import { Pressable, TextInput, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { Text } from '@/components/Text'
+import { filterDigitsWithLimit } from '@/lib/utils/text-input'
 
 type OtpInputProps = {
 	/** Disable input */
@@ -32,12 +33,12 @@ export function OtpInput({
 	const inputRef = useRef<TextInput>(null)
 
 	const digits = useMemo(() => {
-		const only = value.replaceAll(/\D+/gu, '').slice(0, 6)
+		const only = filterDigitsWithLimit(value, 6)
 		return only.padEnd(6, ' ')
 	}, [value])
 
 	const handleChange = (text: string) => {
-		const only = text.replaceAll(/\D+/gu, '').slice(0, 6)
+		const only = filterDigitsWithLimit(text, 6)
 		onChange(only)
 		if (only.length === 6 && onComplete) {
 			onComplete(only)
