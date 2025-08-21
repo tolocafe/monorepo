@@ -7,19 +7,21 @@ import type { Context } from 'hono'
 const encoder = new TextEncoder()
 const secretKey = (secret: string) => encoder.encode(secret)
 
-export async function authenticate(c: Context, secret: string) {
-	const authorizationHeader = c.req.header('Authorization')
+export async function authenticate(context: Context, secret: string) {
+	const authorizationHeader = context.req.header('Authorization')
 
 	const token =
-		extractToken(authorizationHeader) ?? getCookie(c, 'tolo_session') ?? null
+		extractToken(authorizationHeader) ??
+		getCookie(context, 'tolo_session') ??
+		null
 
 	if (!token) throw new HTTPException(401, { message: 'Unauthorized' })
 
-	const clientId = await verifyJwt(token, secret)
+	const [clientId, payload] = await verifyJwt(token, secret)
 
 	if (!clientId) throw new HTTPException(401, { message: 'Unauthorized' })
 
-	return Number.parseInt(clientId, 10)
+	return [Number.parseInt(clientId, 10), payload, token] as const
 }
 
 export function extractToken(
@@ -32,23 +34,21 @@ export function extractToken(
 }
 
 export async function signJwt(
-	clientId: string,
+	data: { email?: string; name?: string; phone?: string; sub: string },
 	secret: string,
 ): Promise<string> {
-	return new SignJWT({ sub: clientId })
+	return new SignJWT(data)
 		.setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
 		.setIssuedAt()
 		.sign(secretKey(secret))
 }
 
-export async function verifyJwt(
-	token: string,
-	secret: string,
-): Promise<null | string> {
+export async function verifyJwt(token: string, secret: string) {
 	try {
 		const { payload } = await jwtVerify(token, secretKey(secret))
-		return typeof payload.sub === 'string' ? payload.sub : null
+
+		return [payload.sub, payload] as const
 	} catch {
-		return null
+		return [undefined, undefined] as const
 	}
 }

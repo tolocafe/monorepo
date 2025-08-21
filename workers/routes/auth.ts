@@ -65,7 +65,15 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		const { client_id: clientId } = client
 
 		const [token, sessionsRaw] = await Promise.all([
-			signJwt(clientId, context.env.JWT_SECRET),
+			signJwt(
+				{
+					email: client.email,
+					name: client.name ?? client.firstname,
+					phone: client.phone,
+					sub: clientId,
+				},
+				context.env.JWT_SECRET,
+			),
 			context.env.KV_SESSIONS.get(clientId),
 		])
 
@@ -111,7 +119,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		return context.json(responseBody)
 	})
 	.get('/self', async (c) => {
-		const clientId = await authenticate(c, c.env.JWT_SECRET)
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
 
@@ -120,7 +128,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		return c.json(client)
 	})
 	.get('/self/sessions', async (c) => {
-		const clientId = await authenticate(c, c.env.JWT_SECRET)
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		const sessionsRaw = await c.env.KV_SESSIONS.get(clientId.toString())
 
@@ -131,23 +139,38 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		return c.json(sessions)
 	})
-	.post('/sign-out', async (c) => {
-		const clientId = await authenticate(c, c.env.JWT_SECRET)
+	.post('/sign-out', async (context) => {
+		const [clientId, , token] = await authenticate(
+			context,
+			context.env.JWT_SECRET,
+		)
+
+		const sessionsRaw = await context.env.KV_SESSIONS.get(clientId.toString())
+
+		const parsedSessionsUnknown: unknown = sessionsRaw
+			? JSON.parse(sessionsRaw)
+			: []
+		const sessions: SessionRecord[] = Array.isArray(parsedSessionsUnknown)
+			? parsedSessionsUnknown.filter((record) => isSessionRecord(record))
+			: []
 
 		// Clear all sessions for this client
-		await c.env.KV_SESSIONS.delete(clientId.toString())
+		await context.env.KV_SESSIONS.put(
+			clientId.toString(),
+			JSON.stringify(sessions.filter((session) => session.token !== token)),
+		)
 
 		// For web, clear the HttpOnly cookie
-		const isWeb = (c.req.header('User-Agent') ?? '').includes('Mozilla')
+		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')
 
 		if (isWeb) {
-			c.header(
+			context.header(
 				'Set-Cookie',
 				'tolo_session=; Path=/api; HttpOnly; Max-Age=0; SameSite=Lax',
 			)
 		}
 
-		return c.json({ success: true })
+		return context.json({ success: true })
 	})
 
 export default auth

@@ -47,3 +47,6 @@ yarn-error.*
 coverage/
 
 app-example
+
+# Sentry Config File
+.sentryclirc

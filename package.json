@@ -18,9 +18,11 @@
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
 		"typecheck": "tsc --noEmit",
-		"deploy": "wrangler deploy",
+		"deploy": "wrangler deploy --outdir dist --upload-source-maps --var SENTRY_RELEASE:$(sentry-cli releases propose-version)",
 		"update:publish": "eas update --auto",
-		"clean": "rm -rf node_modules ios dist .wrangler coverage android .expo && bun install"
+		"clean": "rm -rf node_modules ios dist .wrangler coverage android .expo && bun install",
+		"sentry:sourcemaps": "_SENTRY_RELEASE=$(sentry-cli releases propose-version) && sentry-cli releases new $_SENTRY_RELEASE --org=tolo-cafe --project=workers && sentry-cli sourcemaps upload --org=tolo-cafe --project=workers --release=$_SENTRY_RELEASE --strip-prefix 'dist/..' dist",
+		"postdeploy": "bun run sentry:sourcemaps"
 	},
 	"dependencies": {
 		"@aws-sdk/client-sns": "3.864.0",
@@ -94,6 +96,7 @@
 		"@eslint/js": "~9.33.0",
 		"@lingui/babel-plugin-lingui-macro": "5.4.1",
 		"@react-native/metro-config": "0.80.2",
+		"@sentry/cli": "^2.52.0",
 		"@testing-library/jest-native": "5.4.3",
 		"@testing-library/react-native": "13.2.2",
 		"@types/jest": "30.0.0",

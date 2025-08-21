@@ -12,7 +12,7 @@ import type { Bindings } from '../types'
 
 const transactions = new Hono<{ Bindings: Bindings }>()
 	.post('/payment-intent', async (c) => {
-		const clientId = await authenticate(c, c.env.JWT_SECRET)
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		const body = CreateStripeTransactionSchema.parse(
 			(await c.req.json()) as unknown,
@@ -44,7 +44,7 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 		return c.json({ ephemeralKey, paymentIntent })
 	})
 	.post('/e-wallet', async (c) => {
-		const clientId = await authenticate(c, c.env.JWT_SECRET)
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		const body = CreateEWallettransactionSchema.parse(
 			(await c.req.json()) as unknown,

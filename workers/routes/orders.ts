@@ -9,14 +9,14 @@ import type { Bindings } from '../types'
 
 const orders = new Hono<{ Bindings: Bindings }>()
 	.get('/', async (c) => {
-		const clientId = await authenticate(c, c.env.JWT_SECRET)
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		const orders = await api.dash.getTransactions(c.env.POSTER_TOKEN, clientId)
 
 		return c.json(orders)
 	})
 	.post('/', async (context) => {
-		const clientId = await authenticate(context, context.env.JWT_SECRET)
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
 		const body = (await context.req.json()) as unknown
 

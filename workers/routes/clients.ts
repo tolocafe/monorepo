@@ -25,11 +25,11 @@ const pushTokensSchema = z.string().max(255).min(1)
 
 const clients = new Hono<{ Bindings: Bindings }>()
 	.put('/:id', async (c) => {
-		const clientIdFromToken = await authenticate(c, c.env.JWT_SECRET)
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		const id = c.req.param('id')
 
-		if (!id || id !== clientIdFromToken.toString()) {
+		if (!id || id !== clientId.toString()) {
 			throw new HTTPException(403, { message: 'Forbidden' })
 		}
 
@@ -52,11 +52,11 @@ const clients = new Hono<{ Bindings: Bindings }>()
 		return c.json(client)
 	})
 	.put('/:id/push-tokens', async (c) => {
-		const clientIdFromToken = await authenticate(c, c.env.JWT_SECRET)
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		const id = c.req.param('id')
 
-		if (!id || id !== clientIdFromToken.toString()) {
+		if (!id || id !== clientId.toString()) {
 			throw new HTTPException(403, { message: 'Forbidden' })
 		}
 

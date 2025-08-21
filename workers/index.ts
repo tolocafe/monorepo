@@ -2,6 +2,7 @@ import * as Sentry from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
+import { authenticate } from 'workers/utils/jwt'
 
 import auth from './routes/auth'
 import clients from './routes/clients'
@@ -17,16 +18,37 @@ const app = new Hono<{ Bindings: Bindings }>().basePath('/api')
 
 const TOLO_DOMAIN = 'tolo.cafe'
 
-app.use(
-	'*',
-	cors({
-		credentials: true,
-		origin: (origin) =>
-			['localhost', TOLO_DOMAIN].some((domain) => origin.includes(domain))
-				? origin
-				: null,
-	}),
-)
+app
+	.use(
+		'*',
+		cors({
+			credentials: true,
+			origin: (origin) =>
+				['localhost', TOLO_DOMAIN].some((domain) => origin.includes(domain))
+					? origin
+					: null,
+		}),
+	)
+	.use(async (context, next) => {
+		try {
+			const [clientId, payload] = await authenticate(
+				context,
+				context.env.JWT_SECRET,
+			)
+
+			if (clientId) {
+				Sentry.setUser({
+					email: 'email' in payload ? (payload.email as string) : undefined,
+					id: clientId.toString(),
+					name: 'name' in payload ? (payload.name as string) : undefined,
+					phone: 'phone' in payload ? (payload.phone as string) : undefined,
+				})
+			}
+		} catch {
+			//
+		}
+		return next()
+	})
 
 app
 	.get('/', (context) =>
