@@ -21,6 +21,7 @@
 	"extends": "expo/tsconfig.base",
 	"include": [
 		"src/**/*.ts",
+		"app.config.ts",
 		"src/**/*.tsx",
 		"workers/**/*.ts",
 		"workers/**/*.tsx",

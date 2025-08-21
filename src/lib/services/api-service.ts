@@ -28,6 +28,8 @@ export const api = {
 					{ createdAt: number; name: string; token: string }[]
 				>('auth/self/sessions')
 				.json(),
+		signOut: () =>
+			privateClient.post<{ success: true }>('auth/sign-out').json(),
 		verifyOtp: (phone: string, code: string, sessionName: string) =>
 			publicClient
 				.post<{ client: ClientData; token: string }>('auth/verify-otp', {
@@ -39,6 +41,12 @@ export const api = {
 		update: (clientId: string, data: Record<string, unknown>) =>
 			privateClient
 				.put<ClientData>(`clients/${clientId}`, {
+					json: data,
+				})
+				.json(),
+		updatePushTokens: (clientId: string, data: string) =>
+			privateClient
+				.put<ClientData>(`clients/${clientId}/push-tokens`, {
 					json: data,
 				})
 				.json(),

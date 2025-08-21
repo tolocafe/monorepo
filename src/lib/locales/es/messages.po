@@ -381,7 +381,7 @@ msgstr "Horarios"
 
 #: src/app/(tabs)/orders/index.tsx:115
 msgid "In Progress"
-msgstr "In Progress"
+msgstr "En progreso"
 
 #: src/app/(tabs)/more/profile.tsx:123
 msgid "Information"

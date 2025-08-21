@@ -1,6 +1,12 @@
 import * as AWS from '@aws-sdk/client-sns'
 
-import type { Category, ClientData, PosterResponse, Product } from '@common/api'
+import type {
+	Category,
+	ClientData,
+	PosterResponse,
+	Product,
+	UpdateClientBody,
+} from '@common/api'
 import type { CreateOrder } from '@common/schemas'
 
 const snsClient = new AWS.SNS({
@@ -99,7 +105,7 @@ export const api = {
 		async updateClient(
 			token: string,
 			clientId: string,
-			body: Record<string, unknown>,
+			body: UpdateClientBody,
 		) {
 			const data = (await fetch(
 				`${BASE_URL}/clients.updateClient?token=${token}`,

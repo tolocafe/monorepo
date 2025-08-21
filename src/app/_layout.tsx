@@ -10,6 +10,7 @@ import {
 } from '@react-navigation/native'
 import * as Sentry from '@sentry/react-native'
 import { Toaster } from 'burnt/web'
+import * as Notifications from 'expo-notifications'
 import { Stack, useNavigationContainerRef } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
@@ -26,6 +27,16 @@ const navigationIntegration = Sentry.reactNavigationIntegration({
 export const unstable_settings = {
 	initialRouteName: '(tabs)',
 }
+
+Notifications.setNotificationHandler({
+	// eslint-disable-next-line @typescript-eslint/require-await
+	handleNotification: async () => ({
+		shouldPlaySound: true,
+		shouldSetBadge: true,
+		shouldShowBanner: true,
+		shouldShowList: true,
+	}),
+})
 
 function RootLayout() {
 	const colorScheme = useColorScheme()

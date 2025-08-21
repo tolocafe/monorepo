@@ -3,19 +3,19 @@
 		"details": [
 			{
 				"appIDs": [
-					"6749597635.app.tolo.cafe"
+					"6749597635.cafe.tolo.app"
 				]
 			}
 		]
 	},
 	"webcredentials": {
 		"apps": [
-			"6749597635.app.tolo.cafe"
+			"6749597635.cafe.tolo.app"
 		]
 	},
 	"appclips": {
 		"apps": [
-			"6749597635.app.tolo.cafe"
+			"6749597635.cafe.tolo.app"
 		]
 	}
 }

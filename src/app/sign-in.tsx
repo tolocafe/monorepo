@@ -15,6 +15,7 @@ import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
+import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import {
 	requestOtpMutationOptions,
 	verifyOtpMutationOptions,
@@ -40,6 +41,15 @@ export default function SignIn() {
 		...verifyOtpMutationOptions,
 		async onSuccess() {
 			await queryClient.invalidateQueries({ queryKey: ['self'] })
+
+			// Request tracking permission after successful sign-in
+			requestTrackingPermissionAsync()
+				.then((granted) => {
+					if (granted) {
+						// TODO: Enable analytics
+					}
+				})
+				.catch(() => null)
 
 			router.replace('/', { withAnchor: false })
 		},

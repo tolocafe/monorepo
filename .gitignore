@@ -6,6 +6,9 @@
 .wrangler/
 .vscode/
 
+/GoogleService-Info.plist
+/google-services.json
+
 # dependencies
 node_modules/
 package-lock.json

@@ -168,3 +168,17 @@ export type Product = {
 	weight_flag: string
 	workshop: string
 }
+
+export type UpdateClientBody = Partial<{
+	birthday: string
+	bonus: number
+	card_number: string
+	client_groups_id_client: number
+	client_id: number
+	client_name: string
+	client_sex: number
+	discount_per: number
+	email: string
+	phone: string
+	total_payed_sum: number
+}>

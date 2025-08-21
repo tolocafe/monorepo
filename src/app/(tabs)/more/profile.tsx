@@ -4,6 +4,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
+import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import * as SecureStore from 'expo-secure-store'
 import { StyleSheet } from 'react-native-unistyles'
@@ -13,8 +14,10 @@ import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Text } from '@/components/Text'
+import { STORAGE_KEYS } from '@/lib/constants/storage'
 import {
 	selfQueryOptions,
+	signOutMutationOptions,
 	updateClientMutationOptions,
 } from '@/lib/queries/auth'
 import { clearAllCache } from '@/lib/queries/cache-utils'
@@ -40,10 +43,11 @@ export default function ProfileScreen() {
 		.trim()
 		.regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/u, t`Enter a valid date (YYYY-MM-DD)`)
 
-	const updateMutation = useMutation({
-		...updateClientMutationOptions(user?.client_id ?? ''),
+	const { mutateAsync: updateClient } = useMutation({
+		...updateClientMutationOptions(user?.client_id as string),
 		onSuccess(updated: ClientData) {
 			queryClient.setQueryData(selfQueryOptions.queryKey, updated)
+
 			Burnt.toast({
 				duration: 2,
 				haptic: 'success',
@@ -54,6 +58,8 @@ export default function ProfileScreen() {
 		},
 	})
 
+	const { mutateAsync: signOut } = useMutation(signOutMutationOptions)
+
 	const { Field, handleSubmit, Subscribe } = useForm({
 		defaultValues: {
 			birthdate: user?.birthday || '',
@@ -63,7 +69,7 @@ export default function ProfileScreen() {
 		onSubmit({ value }) {
 			if (!user?.client_id) return
 
-			return updateMutation.mutateAsync({
+			return updateClient({
 				birthday: value.birthdate,
 				email: value.email,
 				name: value.client_name,
@@ -75,11 +81,32 @@ export default function ProfileScreen() {
 		Alert.alert(t`Sign Out`, t`Are you sure you want to sign out?`, [
 			{ style: 'cancel', text: t`Cancel` },
 			{
-				onPress: async () => {
+				async onPress() {
+					// Call backend sign-out endpoint to revoke sessions
+					await signOut().catch(() => {
+						Burnt.toast({
+							duration: 3,
+							haptic: 'error',
+							message: t`Error signing out. Please try again.`,
+							preset: 'error',
+							title: t`Error`,
+						})
+					})
+
+					// Clear credentials from local storage
 					if (Platform.OS !== 'web') {
-						await SecureStore.deleteItemAsync('auth_session')
+						await SecureStore.deleteItemAsync(STORAGE_KEYS.AUTH_SESSION)
 					}
+
+					// Clear all cached data
 					await clearAllCache()
+
+					if (router.canGoBack()) {
+						router.back()
+					} else {
+						// Navigate back to sign-in
+						router.navigate('/more', { withAnchor: false })
+					}
 				},
 				style: 'destructive',
 				text: t`Sign Out`,

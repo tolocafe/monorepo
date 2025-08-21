@@ -8,6 +8,7 @@ import clients from './routes/clients'
 import menu from './routes/menu'
 import orders from './routes/orders'
 import transactions from './routes/transactions'
+import webhooks from './routes/webhooks'
 import { defaultJsonHeaders } from './utils/headers'
 
 import type { Bindings } from './types'
@@ -21,11 +22,9 @@ app.use(
 	cors({
 		credentials: true,
 		origin: (origin) =>
-			process.env.NODE_ENV === 'development'
+			['localhost', TOLO_DOMAIN].some((domain) => origin.includes(domain))
 				? origin
-				: origin.includes(TOLO_DOMAIN)
-					? origin
-					: null,
+				: null,
 	}),
 )
 
@@ -42,12 +41,11 @@ app
 	.route('/clients', clients)
 	.route('/transactions', transactions)
 	.route('/orders', orders)
+	.route('/webhooks', webhooks)
 
 app.onError((error, c) => {
-	if (process.env.NODE_ENV === 'development') {
-		// eslint-disable-next-line no-console
-		console.log(error)
-	}
+	// eslint-disable-next-line no-console
+	console.log(error)
 
 	if (error instanceof HTTPException) {
 		return error.getResponse()

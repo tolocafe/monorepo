@@ -17,6 +17,7 @@ import { Card } from '@/components/Card'
 import { Input } from '@/components/Input'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
+import { useRegisterForPushNotifications } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import {
 	createOrderMutationOptions,
@@ -83,6 +84,7 @@ export default function OrderDetail() {
 	const { t } = useLingui()
 	const order = useCurrentOrder()
 	const updateItem = useUpdateItem()
+	const registerForPushNotifications = useRegisterForPushNotifications()
 
 	const clearOrder = useClearOrder()
 	const { data: user } = useQuery(selfQueryOptions)
@@ -129,6 +131,8 @@ export default function OrderDetail() {
 				preset: 'done',
 				title: t`Order placed`,
 			})
+
+			void registerForPushNotifications()
 			clearOrder()
 			void queryClient.invalidateQueries(orderQueryOptions)
 
@@ -368,7 +372,6 @@ const styles = StyleSheet.create((theme) => ({
 	actionButtons: {
 		flexDirection: 'row',
 		gap: theme.spacing.md,
-		padding: theme.layout.screenPadding,
 	},
 	container: {
 		flex: 1,

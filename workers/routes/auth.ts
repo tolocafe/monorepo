@@ -131,5 +131,23 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		return c.json(sessions)
 	})
+	.post('/sign-out', async (c) => {
+		const clientId = await authenticate(c, c.env.JWT_SECRET)
+
+		// Clear all sessions for this client
+		await c.env.KV_SESSIONS.delete(clientId.toString())
+
+		// For web, clear the HttpOnly cookie
+		const isWeb = (c.req.header('User-Agent') ?? '').includes('Mozilla')
+
+		if (isWeb) {
+			c.header(
+				'Set-Cookie',
+				'tolo_session=; Path=/api; HttpOnly; Max-Age=0; SameSite=Lax',
+			)
+		}
+
+		return c.json({ success: true })
+	})
 
 export default auth
