@@ -51,13 +51,15 @@ export function PhoneNumberInput({
 	}
 
 	const handleTextChange = (text: string) => {
-		const [nextIntPrefix] = getPhoneParts(text)
+		// Remove all non-digits from the input
+		const digitsOnly = text.replace(/\D/g, '')
+		const [nextIntPrefix] = getPhoneParts(digitsOnly)
 
 		if (nextIntPrefix) {
-			onChange(nextIntPrefix + text.replace(nextIntPrefix, ''))
+			onChange(nextIntPrefix + digitsOnly.replace(nextIntPrefix, ''))
 		} else {
 			// // Simply pass the cleaned E164 format - let the parent handle the rest
-			onChange((intPrefix as string) + text)
+			onChange((intPrefix as string) + digitsOnly)
 		}
 	}
 
