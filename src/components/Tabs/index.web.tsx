@@ -1,10 +1,4 @@
-import {
-	type ComponentProps,
-	forwardRef,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react'
+import { type ComponentProps, useEffect, useMemo, useState } from 'react'
 import { Pressable, Text, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -37,6 +31,74 @@ type IoniconName = ComponentProps<typeof Ionicons>['name']
 type SideTabButtonProps = TabTriggerSlotProps & {
 	icon: IoniconName
 	label: string
+}
+
+function DesktopSideTabs() {
+	const { t } = useLingui()
+
+	return (
+		<UITabs>
+			{/* Main content area */}
+			<View style={styles.contentArea}>
+				<UITabSlot />
+			</View>
+
+			{/* Left sidebar with triggers */}
+			<UITabList asChild>
+				<View style={styles.sidebar}>
+					<UITabTrigger asChild href="/" name="home">
+						<SideTabButton icon="restaurant-outline" label={t`Home`} />
+					</UITabTrigger>
+					<UITabTrigger asChild href="/orders" name="orders">
+						<SideTabButton icon="receipt-outline" label={t`Orders`} />
+					</UITabTrigger>
+					<UITabTrigger asChild href="/more" name="more">
+						<SideTabButton icon="ellipsis-horizontal" label={t`More`} />
+					</UITabTrigger>
+				</View>
+			</UITabList>
+		</UITabs>
+	)
+}
+
+function SideTabButton({
+	icon,
+	isFocused,
+	label,
+	ref,
+	...rest
+}: SideTabButtonProps) {
+	return (
+		<Pressable
+			{...rest}
+			accessibilityRole="tab"
+			accessibilityState={{ selected: Boolean(isFocused) }}
+			ref={ref}
+			style={[
+				styles.tabButton,
+				isFocused ? styles.tabButtonFocused : undefined,
+			]}
+		>
+			<Ionicons
+				color={
+					isFocused
+						? styles.tabButtonLabelFocused.color
+						: styles.tabButtonLabel.color
+				}
+				name={icon}
+				size={20}
+			/>
+			<Text
+				numberOfLines={1}
+				style={[
+					styles.tabButtonLabel,
+					isFocused ? styles.tabButtonLabelFocused : undefined,
+				]}
+			>
+				{label}
+			</Text>
+		</Pressable>
+	)
 }
 
 function throttle<T extends (...arguments_: unknown[]) => void>(
@@ -82,62 +144,6 @@ function useIsDesktop() {
 	}, [onResize])
 
 	return width >= DESKTOP_MIN_WIDTH
-}
-
-const SideTabButton = forwardRef<View, SideTabButtonProps>(
-	function SideTabButton({ icon, isFocused, label, ...rest }, ref) {
-		return (
-			<Pressable
-				{...rest}
-				accessibilityRole="tab"
-				accessibilityState={{ selected: Boolean(isFocused) }}
-				ref={ref}
-				style={[
-					styles.tabButton,
-					isFocused ? styles.tabButtonFocused : undefined,
-				]}
-			>
-				<Ionicons name={icon} size={20} />
-				<Text
-					numberOfLines={1}
-					style={[
-						styles.tabButtonLabel,
-						isFocused ? styles.tabButtonLabelFocused : undefined,
-					]}
-				>
-					{label}
-				</Text>
-			</Pressable>
-		)
-	},
-)
-
-function DesktopSideTabs() {
-	const { t } = useLingui()
-
-	return (
-		<UITabs>
-			{/* Main content area */}
-			<View style={styles.contentArea}>
-				<UITabSlot />
-			</View>
-
-			{/* Left sidebar with triggers */}
-			<UITabList asChild>
-				<View style={styles.sidebar}>
-					<UITabTrigger asChild href="/" name="home">
-						<SideTabButton icon="restaurant-outline" label={t`Home`} />
-					</UITabTrigger>
-					<UITabTrigger asChild href="/orders" name="orders">
-						<SideTabButton icon="receipt-outline" label={t`Orders`} />
-					</UITabTrigger>
-					<UITabTrigger asChild href="/more" name="more">
-						<SideTabButton icon="ellipsis-horizontal" label={t`More`} />
-					</UITabTrigger>
-				</View>
-			</UITabList>
-		</UITabs>
-	)
 }
 
 const SIDEBAR_WIDTH = 280

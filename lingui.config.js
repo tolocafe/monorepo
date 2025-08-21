@@ -9,6 +9,6 @@ module.exports = {
 		},
 	],
 	format: 'po',
-	locales: ['es', 'en'],
-	sourceLocale: 'es',
+	locales: ['es', 'en', 'fr', 'pt', 'ja'],
+	sourceLocale: 'en',
 }

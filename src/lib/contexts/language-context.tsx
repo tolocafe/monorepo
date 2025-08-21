@@ -4,8 +4,6 @@ import { i18n } from '@lingui/core'
 import * as Sentry from '@sentry/react-native'
 import { MMKV } from 'react-native-mmkv'
 
-type Language = 'en' | 'es'
-
 type LanguageContextType = {
 	changeLanguage: (language: Language) => Promise<void>
 	currentLanguage: Language
@@ -35,10 +33,7 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 				const storedLanguage = storage.getString(LANGUAGE_KEY) as
 					| Language
 					| undefined
-				const language =
-					storedLanguage === 'es' || storedLanguage === 'en'
-						? storedLanguage
-						: 'es'
+				const language = isValidLanguage(storedLanguage) ? storedLanguage : 'es'
 
 				await loadLanguageMessages(language)
 				setCurrentLanguage(language)
@@ -66,14 +61,24 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
 
 	const changeLanguage = async (language: Language) => {
 		try {
-			storage.set(LANGUAGE_KEY, language)
+			// Load the new language messages first
 			await loadLanguageMessages(language)
+			// Only update state and storage after successful load
+			storage.set(LANGUAGE_KEY, language)
 			setCurrentLanguage(language)
 		} catch (error) {
 			Sentry.captureException(error, {
 				extra: { currentLanguage, targetLanguage: language },
 				tags: { feature: 'i18n', operation: 'changeLanguage' },
 			})
+			// On error, try to reload current language to maintain consistency
+			try {
+				await loadLanguageMessages(currentLanguage)
+			} catch (fallbackError) {
+				Sentry.captureException(fallbackError, {
+					tags: { feature: 'i18n', operation: 'changeLanguageFallback' },
+				})
+			}
 		}
 	}
 
@@ -102,20 +107,72 @@ export function useLanguage() {
 /**
  * Loads and activates language messages
  */
+/**
+ * Available languages in the app
+ */
+export const AVAILABLE_LANGUAGES = ['en', 'es', 'fr', 'pt', 'ja'] as const
+
+type Language = (typeof AVAILABLE_LANGUAGES)[number]
+
+/**
+ * Language display names
+ */
+export const LANGUAGE_NAMES: Record<Language, string> = {
+	en: 'English',
+	es: 'Español',
+	fr: 'Français',
+	ja: '日本語',
+	pt: 'Português',
+} as const
+
+/**
+ * Check if a language is valid
+ */
+function isValidLanguage(language: unknown): language is Language {
+	return (
+		typeof language === 'string' &&
+		AVAILABLE_LANGUAGES.includes(language as Language)
+	)
+}
+
 async function loadLanguageMessages(language: Language): Promise<void> {
 	try {
-		if (language === 'es') {
-			const { messages } = await import('@/lib/locales/es/messages.po')
-			i18n.load('es', messages)
-			i18n.activate('es')
-		} else {
-			const { messages } = await import('@/lib/locales/en/messages.po')
-			i18n.load('en', messages)
-			i18n.activate('en')
+		switch (language) {
+			case 'es': {
+				const { messages } = await import('@/lib/locales/es/messages.po')
+				i18n.loadAndActivate({ locale: 'es', messages })
+				break
+			}
+			case 'fr': {
+				const { messages } = await import('@/lib/locales/fr/messages.po')
+				i18n.loadAndActivate({ locale: 'fr', messages })
+				break
+			}
+			case 'ja': {
+				const { messages } = await import('@/lib/locales/ja/messages.po')
+				i18n.loadAndActivate({ locale: 'ja', messages })
+				break
+			}
+			case 'pt': {
+				const { messages } = await import('@/lib/locales/pt/messages.po')
+				i18n.loadAndActivate({ locale: 'pt', messages })
+				break
+			}
+			default: {
+				// Default to English
+				const { messages } = await import('@/lib/locales/en/messages.po')
+				i18n.loadAndActivate({ locale: 'en', messages })
+				break
+			}
+		}
+
+		// Ensure activation was successful
+		if (!i18n.locale) {
+			throw new Error(`Failed to activate locale: ${language}`)
 		}
 	} catch (error) {
 		Sentry.captureException(error, {
-			extra: { language },
+			extra: { currentLocale: i18n.locale, language },
 			tags: { feature: 'i18n', operation: 'loadLanguageMessages' },
 		})
 		throw error

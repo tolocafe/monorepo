@@ -18,7 +18,11 @@ import HeaderGradient from '@/components/HeaderGradient'
 import { List, ListItem } from '@/components/List'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
-import { useLanguage } from '@/lib/contexts/language-context'
+import {
+	AVAILABLE_LANGUAGES,
+	LANGUAGE_NAMES,
+	useLanguage,
+} from '@/lib/contexts/language-context'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { queryClient } from '@/lib/query-client'
 import { formatPrice } from '@/lib/utils/price'
@@ -194,7 +198,7 @@ export default function More() {
 									<DropdownMenu.Trigger style={styles.languageDropdownTrigger}>
 										<View style={styles.languageDropdownTriggerContent}>
 											<Label style={styles.languageDropdownText}>
-												{currentLanguage === 'en' ? 'English' : 'Español'}
+												{LANGUAGE_NAMES[currentLanguage]}
 											</Label>
 											<Ionicons
 												color={styles.languageDropdownArrow.color}
@@ -204,18 +208,16 @@ export default function More() {
 										</View>
 									</DropdownMenu.Trigger>
 									<DropdownMenu.Content>
-										<DropdownMenu.Item
-											key="en"
-											onSelect={() => changeLanguage('en')}
-										>
-											<DropdownMenu.ItemTitle>English</DropdownMenu.ItemTitle>
-										</DropdownMenu.Item>
-										<DropdownMenu.Item
-											key="es"
-											onSelect={() => changeLanguage('es')}
-										>
-											<DropdownMenu.ItemTitle>Español</DropdownMenu.ItemTitle>
-										</DropdownMenu.Item>
+										{AVAILABLE_LANGUAGES.map((language) => (
+											<DropdownMenu.Item
+												key={language}
+												onSelect={() => changeLanguage(language)}
+											>
+												<DropdownMenu.ItemTitle>
+													{LANGUAGE_NAMES[language]}
+												</DropdownMenu.ItemTitle>
+											</DropdownMenu.Item>
+										))}
 									</DropdownMenu.Content>
 								</DropdownMenu.Root>
 							</View>
