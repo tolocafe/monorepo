@@ -8,17 +8,17 @@ import { api } from '../utils/poster'
 import type { Bindings } from '../types'
 
 const updateClientSchema = z.object({
-	birthday: z.string(),
-	bonus: z.number(),
-	card_number: z.string(),
-	client_groups_id_client: z.number(),
+	birthday: z.string().optional(),
+	bonus: z.number().optional(),
+	card_number: z.string().optional(),
+	client_groups_id_client: z.number().optional(),
 	client_id: z.number(),
-	client_name: z.string(),
-	client_sex: z.number(),
-	discount_per: z.number(),
-	email: z.string(),
-	phone: z.string(),
-	total_payed_sum: z.number(),
+	client_name: z.string().optional(),
+	client_sex: z.number().optional(),
+	discount_per: z.number().optional(),
+	email: z.string().optional(),
+	phone: z.string().optional(),
+	total_payed_sum: z.number().optional(),
 })
 
 const pushTokensSchema = z.string().max(255).min(1)
