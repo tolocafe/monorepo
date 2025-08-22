@@ -37,6 +37,10 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 			usesNonExemptEncryption: false,
 		},
 		googleServicesFile: './GoogleService-Info.plist',
+		infoPlist: {
+			NSCameraUsageDescription:
+				'We can use your camera to scan your credit card and add it to your account',
+		},
 		supportsTablet: true,
 	},
 	name: 'TOLO',
