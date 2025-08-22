@@ -1,13 +1,12 @@
 import { LinearGradient } from 'expo-linear-gradient'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { UnistylesRuntime } from 'react-native-unistyles'
 
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 
 export default function HeaderGradient() {
-	const { top } = useSafeAreaInsets()
 	const isDark = useColorScheme() === 'dark'
 
-	if (top === 0) {
+	if (UnistylesRuntime.insets.top === 0) {
 		return null
 	}
 
@@ -23,7 +22,7 @@ export default function HeaderGradient() {
 						]
 			}
 			style={{
-				height: top,
+				height: UnistylesRuntime.insets.top,
 				left: 0,
 				position: 'absolute',
 				right: 0,

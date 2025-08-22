@@ -29,10 +29,18 @@ function shouldRetry(failureCount: number, error: unknown): boolean {
 		}
 
 		const status = error.response.status
-		if (status >= 400 && status < 500) return false
+		if (status >= 400 && status < 500) {
+			return false
+		}
 	}
 
-	return failureCount < 3
+	const isNoTokenError =
+		typeof error === 'object' &&
+		error !== null &&
+		'message' in error &&
+		(error.message as string).includes('No auth token found')
+
+	return !isNoTokenError && failureCount < 3
 }
 
 // Create and export the query client

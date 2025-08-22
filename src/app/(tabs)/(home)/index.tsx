@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import type { ScrollView } from 'react-native'
 import {
 	ActivityIndicator,
@@ -25,10 +25,10 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import HeaderGradient from '@/components/HeaderGradient'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, H4, Paragraph } from '@/components/Text'
 import { getImageUrl } from '@/lib/image'
+import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import {
 	categoriesQueryOptions,
@@ -43,7 +43,7 @@ import type { Category, Product } from '@/lib/api'
 export default function Menu() {
 	const { t } = useLingui()
 	const addItem = useAddItemGuarded()
-	useQuery(selfQueryOptions)
+	const { data: selfData } = useQuery(selfQueryOptions)
 
 	const screenRef = useRef<ScrollView>(null)
 
@@ -59,6 +59,11 @@ export default function Menu() {
 	const renderMenuItem = ({ item }: { item: Product }) => (
 		<MenuListItem item={item} onAddToBag={handleAddToBag} />
 	)
+
+	useEffect(() => {
+		if (!selfData) return
+		void requestTrackingPermissionAsync()
+	}, [selfData])
 
 	const renderCategorySection = (category: Category) => {
 		const categoryItems = menu.filter(
@@ -127,7 +132,7 @@ export default function Menu() {
 				/>
 				<meta content="/" property="og:url" />
 			</Head>
-			<HeaderGradient />
+
 			<ScreenContainer
 				contentInsetAdjustmentBehavior="automatic"
 				ref={screenRef}
@@ -139,6 +144,8 @@ export default function Menu() {
 						refreshing={false}
 					/>
 				}
+				withTopGradient
+				withTopPadding
 			>
 				<View style={styles.categoryTitle}>
 					<H2>
@@ -263,7 +270,6 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.text,
 		marginBottom: theme.spacing.md,
 		paddingHorizontal: theme.layout.screenPadding,
-		paddingTop: theme.layout.screenPadding,
 	},
 	errorContainer: {
 		alignItems: 'center',

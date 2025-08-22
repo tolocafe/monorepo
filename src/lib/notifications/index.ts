@@ -74,11 +74,7 @@ export async function requestTrackingPermissionAsync(): Promise<boolean> {
 		const { status } =
 			await TrackingTransparency.requestTrackingPermissionsAsync()
 
-		if (status === TrackingTransparency.PermissionStatus.GRANTED) {
-			return true
-		} else {
-			return false
-		}
+		return status === TrackingTransparency.PermissionStatus.GRANTED
 	} catch {
 		return false
 	}

@@ -1,4 +1,5 @@
 import { captureEvent } from '@sentry/cloudflare'
+import { captureException } from '@sentry/react-native'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
@@ -32,12 +33,20 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 		try {
 			const body = await c.req.text()
+
 			event = stripe.webhooks.constructEvent(
 				body,
 				sig,
 				c.env.STRIPE_WEBHOOK_SECRET,
 			)
+
+			captureEvent({
+				extra: { event },
+				message: 'Stripe webhook received',
+			})
 		} catch (error) {
+			captureException(error)
+
 			throw new HTTPException(400, {
 				message: `Webhook signature verification failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
 			})
@@ -47,6 +56,11 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		switch (event.type) {
 			case 'payment_intent.succeeded': {
 				const paymentIntent = event.data.object
+
+				captureEvent({
+					extra: { paymentIntent },
+					message: 'Stripe payment intent succeeded',
+				})
 
 				// Get the customer and their Poster client ID
 				const customer = await stripe.customers.retrieve(
@@ -76,11 +90,11 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				// Store the transaction mapping in D1
 				await c.env.D1_TOLO.exec(
-					'CREATE TABLE IF NOT EXISTS stripe_payments (payment_intent_id TEXT PRIMARY KEY, client_id INTEGER, amount INTEGER, transaction_id INTEGER, created_at TIMESTAMP)',
+					'CREATE TABLE IF NOT EXISTS top_ups (payment_intent_id TEXT PRIMARY KEY, client_id INTEGER, amount INTEGER, transaction_id INTEGER, created_at TIMESTAMP)',
 				)
 
 				await c.env.D1_TOLO.prepare(
-					'INSERT INTO stripe_payments (payment_intent_id, client_id, amount, transaction_id, created_at) VALUES (?, ?, ?, ?, ?)',
+					'INSERT INTO top_ups (payment_intent_id, client_id, amount, transaction_id, created_at) VALUES (?, ?, ?, ?, ?)',
 				)
 					.bind(
 						paymentIntent.id,

@@ -12,7 +12,6 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import HeaderGradient from '@/components/HeaderGradient'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -99,7 +98,6 @@ export default function Orders() {
 			<Head>
 				<title>{t`Orders`}</title>
 			</Head>
-			<HeaderGradient />
 			<ScreenContainer
 				contentContainerStyle={styles.container}
 				noScroll={!orders?.length}
@@ -110,6 +108,8 @@ export default function Orders() {
 						refreshing={false}
 					/>
 				}
+				withTopGradient
+				withTopPadding
 			>
 				{/* Current Order in Progress */}
 				{currentOrder && (

@@ -1,60 +1,55 @@
-import type { ReactNode } from 'react'
-import { Platform, Pressable, View } from 'react-native'
-import type { GestureResponderEvent } from 'react-native'
+import type { ComponentProps, ReactNode } from 'react'
+import { Platform, Pressable } from 'react-native'
+import type { GestureResponderEvent, StyleProp, TextStyle } from 'react-native'
 
 import { StyleSheet } from 'react-native-unistyles'
 
 import { Text } from '@/components/Text'
 
-export type ButtonProps = {
+type ButtonVariant = 'primary' | 'surface' | 'transparent'
+
+type Props = ComponentProps<typeof Pressable> & {
 	accessibilityLabel?: string
 	children: ReactNode
 	disabled?: boolean
 	fullWidth?: boolean
 	onPress?: (event: GestureResponderEvent) => void
 	testID?: string
+	textStyle?: StyleProp<TextStyle>
 	variant?: ButtonVariant
 }
 
-type ButtonVariant = 'primary' | 'surface' | 'transparent'
-
 export function Button({
-	accessibilityLabel,
 	children,
 	disabled = false,
 	fullWidth = false,
-	onPress,
-	testID,
+	textStyle,
 	variant = 'primary',
-}: ButtonProps) {
-	const isPrimary = variant === 'primary'
+	...props
+}: Props) {
+	const buttonState = disabled ? 'disabled' : undefined
+	const buttonWidth = fullWidth ? 'fullWidth' : undefined
+
+	styles.useVariants({
+		state: buttonState,
+		variant,
+		width: buttonWidth,
+	})
 
 	return (
 		<Pressable
-			accessibilityLabel={accessibilityLabel}
 			accessibilityRole="button"
+			android_ripple={{ color: '#fff' }}
 			disabled={disabled}
-			onPress={onPress}
 			style={({ pressed }) => [
 				styles.button,
-				isPrimary ? styles.buttonPrimary : styles.buttonSurface,
-				disabled && styles.buttonDisabled,
 				pressed && !disabled && styles.buttonPressed,
-				fullWidth && styles.fullWidth,
 			]}
-			testID={testID}
+			{...props}
 		>
-			<View style={styles.contentWrapper}>
-				<Text
-					numberOfLines={1}
-					style={[
-						styles.text,
-						isPrimary ? styles.textOnPrimary : styles.textOnSurface,
-					]}
-				>
-					{children}
-				</Text>
-			</View>
+			<Text numberOfLines={1} style={[styles.text, textStyle]}>
+				{children}
+			</Text>
 		</Pressable>
 	)
 }
@@ -67,39 +62,51 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'center',
 		paddingHorizontal: theme.spacing.lg,
 		paddingVertical: theme.spacing.md,
-	},
-	buttonDisabled: {
-		opacity: 0.6,
+		variants: {
+			state: {
+				disabled: {
+					opacity: 0.6,
+				},
+			},
+			variant: {
+				primary: {
+					backgroundColor: theme.colors.primary,
+				},
+				surface: {
+					backgroundColor: theme.colors.surface,
+					borderColor: theme.colors.border,
+					borderWidth: 1,
+				},
+				transparent: {
+					backgroundColor: 'transparent',
+				},
+			},
+			width: {
+				fullWidth: {
+					alignSelf: 'stretch',
+					flex: 1,
+				},
+			},
+		},
 	},
 	buttonPressed: {
 		opacity: 0.85,
 	},
-	buttonPrimary: {
-		backgroundColor: theme.colors.primary,
-	},
-	buttonSurface: {
-		backgroundColor: theme.colors.surface,
-		borderColor: theme.colors.border,
-		borderWidth: 1,
-	},
-	contentWrapper: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: theme.spacing.xs,
-		justifyContent: 'center',
-	},
-	fullWidth: {
-		alignSelf: 'stretch',
-		flex: 1,
-	},
 	text: {
 		textTransform: 'uppercase',
 		...theme.typography.button,
-	},
-	textOnPrimary: {
-		color: theme.colors.surface,
-	},
-	textOnSurface: {
-		color: theme.colors.text,
+		variants: {
+			variant: {
+				primary: {
+					color: theme.colors.surface,
+				},
+				surface: {
+					color: theme.colors.text,
+				},
+				transparent: {
+					color: theme.colors.text,
+				},
+			},
+		},
 	},
 }))

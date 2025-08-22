@@ -7,7 +7,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	...config,
 	android: {
 		adaptiveIcon: {
-			backgroundColor: '#ffffff',
+			backgroundColor: '#3D6039',
 			foregroundImage: './src/assets/images/adaptive-icon.png',
 		},
 		edgeToEdgeEnabled: true,
@@ -46,18 +46,18 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	plugins: [
 		'expo-updates',
 		'expo-notifications',
-		'react-native-edge-to-edge',
 		'@react-native-firebase/app',
 		['expo-router', { headOrigin: 'https://app.tolo.cafe' }],
 		['react-native-bottom-tabs', { theme: 'material3-dynamic' }],
+		['react-native-edge-to-edge', { android: { parentTheme: 'Material3' } }],
 		['expo-build-properties', { ios: { useFrameworks: 'static' } }],
-		// [
-		// 	'@stripe/stripe-react-native',
-		// 	{
-		// 		enableGooglePay: true,
-		// 		merchantIdentifier: 'merchant.cafe.tolo.app',
-		// 	},
-		// ],
+		[
+			'@stripe/stripe-react-native',
+			{
+				enableGooglePay: true,
+				merchantIdentifier: 'merchant.cafe.tolo.app',
+			},
+		],
 		[
 			'expo-secure-store',
 			{
@@ -69,7 +69,10 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		[
 			'expo-splash-screen',
 			{
-				backgroundColor: '#ffffff',
+				backgroundColor: '#F8F8F1',
+				dark: {
+					backgroundColor: '#151718',
+				},
 				image: './src/assets/images/splash-icon.png',
 				imageWidth: 200,
 				resizeMode: 'contain',

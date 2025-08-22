@@ -75,7 +75,7 @@ export default function MenuDetail() {
 	const decrementQuantity = () =>
 		setFieldValue('quantity', (previous) => Math.max(1, previous - 1))
 
-	if (!product) {
+	if (!product || !('price' in product)) {
 		return (
 			<ScreenContainer>
 				<View style={styles.header}>
@@ -99,8 +99,7 @@ export default function MenuDetail() {
 		)
 	}
 
-	// Get the first available unit price in cents (usually for the main spot)
-	const unitPriceCents = Object.values(product.price)[0] ?? '0'
+	const unitPriceCents = Object.values(product.price).at(0) ?? '0'
 	const hasImage = product.photo_origin || product.photo
 
 	return (

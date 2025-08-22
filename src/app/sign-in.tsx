@@ -72,9 +72,8 @@ export default function SignIn() {
 						phone: value.phoneNumber.trim(),
 					})
 					setStage('code')
-
-					// Reset code field meta/value when moving to next stage
 					resetField('verificationCode')
+
 					Burnt.toast({
 						duration: 2,
 						haptic: 'success',
@@ -159,6 +158,7 @@ export default function SignIn() {
 				bounces={false}
 				contentContainerStyle={{ alignContent: 'center', padding: 10 }}
 				keyboardAware
+				withTopPadding
 			>
 				{itemName && (
 					<View style={styles.messageContainer}>

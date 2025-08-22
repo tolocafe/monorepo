@@ -20,6 +20,7 @@
         "@react-navigation/native": "^7.1.6",
         "@sentry/cloudflare": "10.5.0",
         "@sentry/react-native": "~6.14.0",
+        "@stripe/stripe-react-native": "0.51.0",
         "@tanstack/query-async-storage-persister": "5.85.3",
         "@tanstack/react-form": "1.19.2",
         "@tanstack/react-query": "5.85.3",
@@ -1040,6 +1041,8 @@
     "@smithy/util-utf8": ["@smithy/util-utf8@4.0.0", "", { "dependencies": { "@smithy/util-buffer-from": "^4.0.0", "tslib": "^2.6.2" } }, "sha512-b+zebfKCfRdgNJDknHCob3O7FpeYQN6ZG6YLExMcasDHsCXlsXCEuiPZeLnJLpwa5dvPetGlnGCiMHuLwGvFow=="],
 
     "@speed-highlight/core": ["@speed-highlight/core@1.2.7", "", {}, "sha512-0dxmVj4gxg3Jg879kvFS/msl4s9F3T9UXC1InxgOf7t5NvcPD97u/WTA5vL/IxWHMn7qSxBozqrnnE2wvl1m8g=="],
+
+    "@stripe/stripe-react-native": ["@stripe/stripe-react-native@0.51.0", "", { "peerDependencies": { "expo": ">=46.0.9", "react": "*", "react-native": "*" }, "optionalPeers": ["expo"] }, "sha512-MT4+ZUW3kZtY5hzE05N/NXXpKzQdVFz3G3a2mUWlY2osCFuXvTPEYjwDhdvtRDTD3jB43Es5kM0vXRQAb37T0g=="],
 
     "@tanstack/form-core": ["@tanstack/form-core@1.19.2", "", { "dependencies": { "@tanstack/store": "^0.7.2" } }, "sha512-g2VkZCHEQUxnPOtF+vNHQDGvmrXfMpvN1T27M+G2R/eeH2vImxEdzVzAVIR71DZ5X3QtC9rm+nR64MJrjI+yXQ=="],
 

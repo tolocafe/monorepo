@@ -107,6 +107,8 @@ export default function More() {
 						refreshing={false}
 					/>
 				}
+				withTopGradient
+				withTopPadding
 			>
 				{user && (
 					<View style={styles.section}>
@@ -119,13 +121,13 @@ export default function More() {
 								label={<Trans>Balance</Trans>}
 								text={formatPrice(user.ewallet ?? '0')}
 							/>
-							{/* <ListItem
-									accessibilityRole="link"
-									centered
-									label={<Trans>Top Up Wallet</Trans>}
-									labelColor="primary"
-									onPress={() => router.push('/more/top-up')}
-								/> */}
+							<ListItem
+								accessibilityRole="link"
+								centered
+								label={<Trans>Top Up Wallet</Trans>}
+								labelColor="primary"
+								onPress={() => router.push('/more/top-up')}
+							/>
 						</List>
 					</View>
 				)}

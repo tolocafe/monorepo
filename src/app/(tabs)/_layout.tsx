@@ -1,3 +1,4 @@
+import type { ImageSourcePropType } from 'react-native'
 import { Platform } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -21,6 +22,7 @@ export default function TabLayout() {
 			</Head>
 			<Tabs
 				activeIndicatorColor={Colors[colorScheme ?? 'light'].tint}
+				minimizeBehavior="automatic"
 				rippleColor={Colors[colorScheme ?? 'light'].tint}
 				screenOptions={{
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -30,7 +32,10 @@ export default function TabLayout() {
 					tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
 				}}
 				tabBarStyle={{
-					backgroundColor: Colors[colorScheme ?? 'light'].background,
+					backgroundColor:
+						Platform.OS === 'android'
+							? Colors[colorScheme ?? 'light'].background
+							: undefined,
 				}}
 				translucent
 			>
@@ -45,8 +50,11 @@ export default function TabLayout() {
 							}
 
 							if (Platform.OS === 'android') {
-								// TODO:
-								return null
+								return (
+									focused
+										? require('@/assets/icons/home.svg')
+										: require('@/assets/icons/home-outline.svg')
+								) as ImageSourcePropType
 							}
 
 							return (
@@ -76,8 +84,11 @@ export default function TabLayout() {
 							}
 
 							if (Platform.OS === 'android') {
-								// TODO:
-								return null
+								return (
+									focused
+										? require('@/assets/icons/receipt.svg')
+										: require('@/assets/icons/receipt-outline.svg')
+								) as ImageSourcePropType
 							}
 
 							return (
@@ -106,8 +117,7 @@ export default function TabLayout() {
 							}
 
 							if (Platform.OS === 'android') {
-								// TODO:
-								return null
+								return require('@/assets/icons/more.svg') as ImageSourcePropType
 							}
 
 							return (

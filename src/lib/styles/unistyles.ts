@@ -1,13 +1,17 @@
+import { Platform } from 'react-native'
+
 import { StyleSheet } from 'react-native-unistyles'
 
 const lightTheme = {
 	borderRadius: {
 		full: 9999,
-		lg: 16,
-		md: 12,
-		sm: 8,
-		xl: 24,
-		xs: 4,
+		/* eslint-disable perfectionist/sort-objects  */
+		xl: Platform.select({ android: 16, default: 24 }),
+		lg: Platform.select({ android: 10, default: 16 }),
+		md: Platform.select({ android: 8, default: 12 }),
+		sm: Platform.select({ android: 5, default: 8 }),
+		xs: Platform.select({ android: 2, default: 4 }),
+		/* eslint-enable perfectionist/sort-objects  */
 	} as const,
 	colors: {
 		background: '#F8F8F1',

@@ -4,7 +4,7 @@ import { Platform, View } from 'react-native'
 
 import { StyleSheet } from 'react-native-unistyles'
 
-export type CardProps = {
+type Props = {
 	accessibilityLabel?: string
 	children: ReactNode
 	padded?: boolean
@@ -18,11 +18,15 @@ export function Card({
 	padded = true,
 	style,
 	testID,
-}: CardProps) {
+}: Props) {
+	const padding = padded ? 'padded' : undefined
+
+	styles.useVariants({ padding })
+
 	return (
 		<View
 			accessibilityLabel={accessibilityLabel}
-			style={[styles.base, padded && styles.padded, style]}
+			style={[styles.base, style]}
 			testID={testID}
 		>
 			{children}
@@ -36,8 +40,12 @@ const styles = StyleSheet.create((theme) => ({
 		borderCurve: Platform.OS === 'ios' ? 'continuous' : undefined,
 		borderRadius: theme.borderRadius.lg,
 		boxShadow: '0px 0px 12px 0px rgba(0, 0, 0, 0.04)',
-	},
-	padded: {
-		padding: theme.spacing.lg,
+		variants: {
+			padding: {
+				padded: {
+					padding: theme.spacing.lg,
+				},
+			},
+		},
 	},
 }))
