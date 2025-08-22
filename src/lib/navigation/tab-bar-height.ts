@@ -1,4 +1,4 @@
-import { useBottomTabBarHeight } from 'react-native-bottom-tabs'
+import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs'
 
 export function useTabBarHeight() {
 	return useBottomTabBarHeight()

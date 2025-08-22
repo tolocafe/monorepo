@@ -118,6 +118,23 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		return context.json(responseBody)
 	})
+	.get('/sessions', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+
+		const sessionsRaw = await c.env.KV_SESSIONS.get(clientId.toString())
+
+		const parsedUnknown: unknown = sessionsRaw ? JSON.parse(sessionsRaw) : []
+
+		const fullSessions = Array.isArray(parsedUnknown)
+			? parsedUnknown.filter((record) => isSessionRecord(record))
+			: []
+
+		const sessions = fullSessions.map(({ token, ...session }) => ({
+			...session,
+		}))
+
+		return c.json(sessions, 200)
+	})
 	.get('/self', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
