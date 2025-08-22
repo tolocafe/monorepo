@@ -27,6 +27,7 @@ import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, H4, Paragraph } from '@/components/Text'
+import { enableAnalytics } from '@/lib/firebase'
 import { getImageUrl } from '@/lib/image'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -62,7 +63,22 @@ export default function Menu() {
 
 	useEffect(() => {
 		if (!selfData) return
-		void requestTrackingPermissionAsync()
+
+		async function requestEnableAnalytics() {
+			const granted = await requestTrackingPermissionAsync()
+
+			if (!granted) return
+
+			void enableAnalytics({
+				email: selfData?.email,
+				firstName: selfData?.firstname,
+				lastName: selfData?.lastname,
+				phoneNumber: selfData?.phone_number,
+				userId: selfData?.client_id,
+			})
+		}
+
+		void requestEnableAnalytics()
 	}, [selfData])
 
 	const renderCategorySection = (category: Category) => {

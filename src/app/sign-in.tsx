@@ -3,7 +3,6 @@ import { Platform, Pressable, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
-import { firebase } from '@react-native-firebase/analytics'
 import { captureException } from '@sentry/react-native'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -17,6 +16,7 @@ import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
+import { enableAnalytics } from '@/lib/firebase'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import {
 	requestOtpMutationOptions,
@@ -41,17 +41,20 @@ export default function SignIn() {
 	const requestOtpMutation = useMutation(requestOtpMutationOptions)
 	const verifyOtpMutation = useMutation({
 		...verifyOtpMutationOptions,
-		async onSuccess() {
+		async onSuccess(data) {
 			await queryClient.invalidateQueries({ queryKey: ['self'] })
 
 			// Request tracking permission after successful sign-in
 			requestTrackingPermissionAsync()
 				.then((granted) => {
 					if (granted) {
-						firebase
-							.analytics()
-							.setAnalyticsCollectionEnabled(true)
-							.catch(captureException)
+						void enableAnalytics({
+							email: data.client.email,
+							firstName: data.client.firstname,
+							lastName: data.client.lastname,
+							phoneNumber: data.client.phone_number,
+							userId: data.client.client_id,
+						})
 					}
 				})
 				.catch(captureException)

@@ -25,9 +25,7 @@ import { selfQueryOptions } from '@/lib/queries/auth'
 import { privateClient } from '@/lib/services/http-client'
 import { formatPrice } from '@/lib/utils/price'
 
-// Initialize Stripe
 void initStripe({
-	merchantIdentifier: 'merchant.cafe.tolo.app',
 	publishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
 	urlScheme: Linking.createURL(''),
 })
