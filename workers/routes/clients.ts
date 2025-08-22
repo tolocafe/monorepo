@@ -17,7 +17,6 @@ const updateClientSchema = z.object({
 	client_sex: z.number().optional(),
 	discount_per: z.number().optional(),
 	email: z.string().optional(),
-	phone: z.string().optional(),
 })
 
 const pushTokensSchema = z.string().max(255).min(1)
