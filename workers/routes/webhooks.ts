@@ -154,18 +154,53 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 		const parsedBody = posterWebhookDataSchema.parse(body)
 
+		// Capture initial webhook received event with basic info
+		captureEvent({
+			extra: { 
+				body: parsedBody,
+				headers: Object.fromEntries(context.req.raw.headers.entries()),
+				timestamp: new Date().toISOString()
+			},
+			level: 'info',
+			message: 'Poster webhook received',
+			tags: {
+				action: parsedBody.action || 'unknown',
+				object: parsedBody.object || 'unknown',
+				webhook_type: 'poster'
+			}
+		})
+
 		if (parsedBody.verify !== process.env.POSTER_APPLICATION_SECRET) {
 			if (parsedBody.action === 'test') {
+				captureEvent({
+					extra: { body: parsedBody },
+					level: 'info',
+					message: 'Poster webhook test action received',
+					tags: {
+						action: 'test',
+						webhook_type: 'poster'
+					}
+				})
 				return context.json({ message: 'Ok' }, 200)
 			}
 
+			// Capture authentication failure
+			captureEvent({
+				extra: { 
+					body: parsedBody,
+					expected_signature_exists: !!process.env.POSTER_APPLICATION_SECRET
+				},
+				level: 'warning',
+				message: 'Poster webhook authentication failed',
+				tags: {
+					action: parsedBody.action || 'unknown',
+					error_type: 'authentication_failure',
+					webhook_type: 'poster'
+				}
+			})
+
 			return context.json({ message: 'Invalid signature' }, 401)
 		}
-
-		captureEvent({
-			extra: { body: parsedBody },
-			message: 'Poster webhook received',
-		})
 
 		const { action, data } = parsedBody
 
@@ -173,19 +208,110 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		if (data) {
 			try {
 				parsedData = JSON.parse(data) as object
-			} catch {
-				//
+				
+				// Capture successful data parsing
+				captureEvent({
+					extra: { 
+						parsedData,
+						originalData: data,
+						dataType: typeof parsedData,
+						dataKeys: Object.keys(parsedData)
+					},
+					level: 'debug',
+					message: 'Poster webhook data parsed successfully',
+					tags: {
+						action: action || 'unknown',
+						has_parsed_data: 'true',
+						webhook_type: 'poster'
+					}
+				})
+			} catch (parseError) {
+				// Capture data parsing failure
+				captureEvent({
+					extra: { 
+						data,
+						parseError: parseError instanceof Error ? parseError.message : 'Unknown parse error',
+						action: action || 'unknown'
+					},
+					level: 'warning',
+					message: 'Poster webhook data parsing failed',
+					tags: {
+						action: action || 'unknown',
+						error_type: 'data_parse_failure',
+						webhook_type: 'poster'
+					}
+				})
 			}
+		} else {
+			// Capture when no data is provided
+			captureEvent({
+				extra: { body: parsedBody },
+				level: 'info',
+				message: 'Poster webhook received without data field',
+				tags: {
+					action: action || 'unknown',
+					has_data: 'false',
+					webhook_type: 'poster'
+				}
+			})
 		}
 
 		switch (action) {
 			case 'added':
 				if (parsedData && 'user_id' in parsedData) {
+					// Capture successful user addition event
+					captureEvent({
+						extra: { 
+							userId: parsedData.user_id,
+							parsedData,
+							fullWebhookBody: parsedBody
+						},
+						level: 'info',
+						message: 'Poster webhook: User added successfully',
+						tags: {
+							action: 'added',
+							object_type: 'user',
+							user_id: String(parsedData.user_id),
+							webhook_type: 'poster'
+						}
+					})
+
 					// eslint-disable-next-line no-console
 					console.log({ user_id: parsedData.user_id })
+				} else {
+					// Capture when added action lacks expected user_id
+					captureEvent({
+						extra: { 
+							parsedData: parsedData || null,
+							expectedField: 'user_id',
+							fullWebhookBody: parsedBody
+						},
+						level: 'warning',
+						message: 'Poster webhook: Added action missing user_id',
+						tags: {
+							action: 'added',
+							error_type: 'missing_user_id',
+							webhook_type: 'poster'
+						}
+					})
 				}
 				return context.json({ message: 'Ok' }, 200)
 			default:
+				// Capture unhandled actions
+				captureEvent({
+					extra: { 
+						action: action || 'undefined',
+						parsedData: parsedData || null,
+						fullWebhookBody: parsedBody
+					},
+					level: 'info',
+					message: 'Poster webhook: Unhandled action received',
+					tags: {
+						action: action || 'unknown',
+						handled: 'false',
+						webhook_type: 'poster'
+					}
+				})
 				return context.json({ message: 'Ok' }, 200)
 		}
 	})
