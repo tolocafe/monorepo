@@ -1,5 +1,4 @@
-import { captureEvent } from '@sentry/cloudflare'
-import { captureException } from '@sentry/react-native'
+import { captureEvent, captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
