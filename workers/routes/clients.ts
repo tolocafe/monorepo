@@ -12,7 +12,6 @@ const updateClientSchema = z.object({
 	bonus: z.number().optional(),
 	card_number: z.string().optional(),
 	client_groups_id_client: z.number().optional(),
-	client_id: z.number(),
 	client_name: z.string().optional(),
 	client_sex: z.number().optional(),
 	discount_per: z.number().optional(),
