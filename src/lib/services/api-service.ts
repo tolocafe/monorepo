@@ -5,6 +5,7 @@ import type {
 } from '@common/schemas'
 
 import type { Category, ClientData, Product } from '@/lib/api'
+import type { RequestOtpMutationOptions } from '@/lib/queries/auth'
 import type { CreateOrderResponse } from '@/lib/queries/order'
 
 import { privateClient, publicClient } from './http-client'
@@ -15,10 +16,10 @@ import { privateClient, publicClient } from './http-client'
  */
 export const api = {
 	auth: {
-		requestOtp: (phone: string, name?: string, email?: string) =>
+		requestOtp: (body: RequestOtpMutationOptions) =>
 			publicClient
-				.post<{ success: true }>('auth/request-otp', {
-					json: { email, name, phone },
+				.post<{ error: string } | { success: true }>('auth/request-otp', {
+					json: body,
 				})
 				.json(),
 		self: () => privateClient.get<ClientData>('auth/self').json(),

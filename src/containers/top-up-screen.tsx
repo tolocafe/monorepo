@@ -83,12 +83,29 @@ export default function TopUpScreen() {
 			// Initialize the payment sheet
 			const { error: initError } = await initPaymentSheet({
 				allowsDelayedPaymentMethods: true,
+				applePay: {
+					buttonType: PlatformPay.ButtonType.TopUp,
+					cartItems: [
+						{
+							amount: selectedAmount.toString(),
+							label: 'TOLO',
+							paymentType: PlatformPay.PaymentType.Immediate,
+						},
+					],
+					merchantCountryCode: 'MX',
+				},
 				customerEphemeralKeySecret: paymentData.ephemeralKey.secret,
 				customerId: paymentData.paymentIntent.customer,
 				defaultBillingDetails: {
 					email: user.email,
 					name: user.name || `${user.firstname} ${user.lastname}`.trim(),
 					phone: user.phone,
+				},
+				googlePay: {
+					amount: selectedAmount.toString(),
+					currencyCode: 'MXN',
+					label: 'TOLO',
+					merchantCountryCode: 'MX',
 				},
 				merchantDisplayName: 'TOLO - Buen Café',
 				paymentIntentClientSecret: paymentData.paymentIntent.client_secret,

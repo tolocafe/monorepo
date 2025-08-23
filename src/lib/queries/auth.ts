@@ -4,15 +4,15 @@ import { api } from '@/lib/services/api-service'
 
 import type { ClientData } from '@/lib/api'
 
-type RequestOtpMutationOptions = {
+export type RequestOtpMutationOptions = {
+	birthdate?: string
 	email?: string
 	name?: string
 	phone: string
 }
 
 export const requestOtpMutationOptions = mutationOptions({
-	mutationFn: ({ email, name, phone }: RequestOtpMutationOptions) =>
-		api.auth.requestOtp(phone, name, email),
+	mutationFn: (body: RequestOtpMutationOptions) => api.auth.requestOtp(body),
 })
 
 type VerifyOtpMutationOptions = {

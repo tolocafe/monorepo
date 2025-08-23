@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-base-to-string */
 import { useState } from 'react'
 import { Platform, Pressable, View } from 'react-native'
 
@@ -12,6 +13,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import { Button } from '@/components/Button'
+import Input from '@/components/Input'
 import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
@@ -24,6 +26,8 @@ import {
 } from '@/lib/queries/auth'
 
 const SignInSchema = z.object({
+	birthdate: z.string().trim(),
+	name: z.string().trim(),
 	phoneNumber: z.string().trim().min(1, 'Please enter a phone number'),
 	verificationCode: z
 		.string()
@@ -35,7 +39,8 @@ const SignInSchema = z.object({
 export default function SignIn() {
 	const { t } = useLingui()
 	const { itemName } = useLocalSearchParams<{ itemName?: string }>()
-	const [stage, setStage] = useState<'code' | 'phone'>('phone')
+	const [stage, setStage] = useState<'code' | 'phone' | 'signup'>('phone')
+	const [_requiredFields, setRequiredFields] = useState<string[]>([])
 	const queryClient = useQueryClient()
 
 	const requestOtpMutation = useMutation(requestOtpMutationOptions)
@@ -65,6 +70,8 @@ export default function SignIn() {
 
 	const { Field, handleSubmit, resetField, Subscribe } = useForm({
 		defaultValues: {
+			birthdate: '',
+			name: '',
 			phoneNumber: '',
 			verificationCode: '',
 		},
@@ -87,13 +94,66 @@ export default function SignIn() {
 					return
 				}
 
+				if (stage === 'signup') {
+					await requestOtpMutation.mutateAsync({
+						birthdate: value.birthdate.trim() || undefined,
+						name: value.name.trim() || undefined,
+						phone: value.phoneNumber.trim(),
+					})
+
+					setStage('code')
+					resetField('verificationCode')
+
+					Burnt.toast({
+						duration: 2,
+						haptic: 'success',
+						message: t`We sent you a 6-digit code`,
+						preset: 'done',
+						title: t`Code sent`,
+					})
+					return
+				}
+
 				await verifyOtpMutation.mutateAsync({
 					code: value.verificationCode.trim(),
 					phone: value.phoneNumber.trim(),
 					sessionName: Platform.OS,
 				})
-			} catch (error) {
+			} catch (error: unknown) {
 				if (stage === 'phone') {
+					// Check if it's a validation error requiring name/birthdate
+					const errorResponse = error as {
+						response?: {
+							json?: () => Promise<{
+								error?: string
+								fields?: { name: string }[]
+							}>
+						}
+					}
+
+					try {
+						const errorData = await errorResponse.response?.json?.()
+						if (
+							errorData?.error === 'Some fields are required' &&
+							errorData.fields
+						) {
+							const missingFields = errorData.fields.map((f) => f.name)
+							setRequiredFields(missingFields)
+							setStage('signup')
+							return
+						}
+					} catch {
+						// Fall through to regular error handling
+					}
+
+					Burnt.toast({
+						duration: 3,
+						haptic: 'error',
+						message: (error as Error).message || t`Failed to send code`,
+						preset: 'error',
+						title: t`Error`,
+					})
+				} else if (stage === 'signup') {
 					Burnt.toast({
 						duration: 3,
 						haptic: 'error',
@@ -119,9 +179,13 @@ export default function SignIn() {
 	})
 
 	const handleGoBack = () => {
-		setStage('phone')
-
-		resetField('verificationCode')
+		if (stage === 'signup') {
+			setStage('phone')
+			setRequiredFields([])
+		} else {
+			setStage('phone')
+			resetField('verificationCode')
+		}
 	}
 
 	return (
@@ -159,7 +223,7 @@ export default function SignIn() {
 			/>
 			<ScreenContainer
 				bounces={false}
-				contentContainerStyle={{ alignContent: 'center', padding: 10 }}
+				contentContainerStyle={styles.contentContainer}
 				keyboardAware
 				withTopPadding
 			>
@@ -171,112 +235,221 @@ export default function SignIn() {
 					</View>
 				)}
 
-				<View style={styles.content}>
-					<View style={styles.authContainer}>
-						{stage === 'phone' ? (
-							<>
-								<H2 style={styles.title}>
-									<Trans>Sign in with your phone</Trans>
-								</H2>
-								<Paragraph style={styles.subtitle}>
-									<Trans>We&apos;ll send you a verification code</Trans>
-								</Paragraph>
+				{stage === 'phone' ? (
+					<>
+						<H2>
+							<Trans>Welcome</Trans>
+						</H2>
+						<Paragraph>
+							<Trans>
+								Enter to your account or create a new one using your phone
+								number
+							</Trans>
+						</Paragraph>
 
-								<View style={styles.inputContainer}>
-									<Label style={styles.label}>
-										<Trans>Phone number</Trans>
-									</Label>
-									<Field name="phoneNumber">
-										{(field) => (
-											<PhoneNumberInput
-												onBlur={field.handleBlur}
-												onChange={field.handleChange}
-												placeholder={t`123 456 7890`}
-												value={field.state.value}
-											/>
-										)}
-									</Field>
-								</View>
+						<View style={styles.inputContainer}>
+							<Label style={styles.label}>
+								<Trans>Phone number</Trans>
+							</Label>
+							<Field name="phoneNumber">
+								{(field) => (
+									<PhoneNumberInput
+										onBlur={field.handleBlur}
+										onChange={field.handleChange}
+										placeholder={t`123 456 7890`}
+										value={field.state.value}
+									/>
+								)}
+							</Field>
+						</View>
 
-								<Subscribe selector={(state) => state}>
-									{(canSubmit) => (
-										<Button
-											disabled={
-												requestOtpMutation.isPending || !canSubmit.canSubmit
-											}
-											onPress={() => handleSubmit()}
-										>
-											{requestOtpMutation.isPending ? (
-												<Trans>Sending...</Trans>
-											) : (
-												<Trans>Send Code</Trans>
-											)}
-										</Button>
-									)}
-								</Subscribe>
-							</>
-						) : (
-							<>
-								<H2 style={styles.title}>
-									<Trans>Enter verification code</Trans>
-								</H2>
-
-								<Subscribe selector={(state) => state.values.phoneNumber}>
-									{(phone) => (
-										<Paragraph style={styles.subtitle}>
-											<Trans>We sent a code to {phone}</Trans>
-										</Paragraph>
-									)}
-								</Subscribe>
-
-								<View style={styles.inputContainer}>
-									<Field name="verificationCode">
-										{(field) => (
-											<>
-												<OtpInput
-													onBlur={field.handleBlur}
-													onChange={field.handleChange}
-													onComplete={() => handleSubmit()}
-													value={field.state.value}
-												/>
-												{field.state.meta.isTouched &&
-												field.state.meta.errors.length > 0 ? (
-													<Text style={styles.errorText}>
-														{field.state.meta.errors[0]?.message}
-													</Text>
-												) : null}
-											</>
-										)}
-									</Field>
-								</View>
-
+						<Subscribe selector={(state) => state}>
+							{(canSubmit) => (
 								<Button
-									disabled={verifyOtpMutation.isPending}
+									disabled={
+										requestOtpMutation.isPending || !canSubmit.canSubmit
+									}
 									onPress={() => handleSubmit()}
 								>
-									{verifyOtpMutation.isPending ? (
-										<Trans>Verifying...</Trans>
+									{requestOtpMutation.isPending ? (
+										<Trans>Loading...</Trans>
+									) : (
+										<Trans>Continue</Trans>
+									)}
+								</Button>
+							)}
+						</Subscribe>
+					</>
+				) : stage === 'signup' ? (
+					<>
+						<H2>
+							<Trans>Create account</Trans>
+						</H2>
+						<Subscribe selector={(state) => state.values.phoneNumber}>
+							{(phoneNumber) => (
+								<Paragraph>
+									<Trans>
+										Let&apos;s create your account with the phone number{' '}
+										<Paragraph weight="bold">{phoneNumber}</Paragraph>
+									</Trans>
+								</Paragraph>
+							)}
+						</Subscribe>
+
+						<View style={styles.inputContainer}>
+							<Label style={styles.label}>
+								<Trans>Name</Trans>
+							</Label>
+
+							<Field name="name">
+								{(field) => (
+									<>
+										<Input
+											autoCapitalize="words"
+											autoComplete="name"
+											error={
+												field.state.meta.isTouched &&
+												field.state.meta.errors.length > 0
+											}
+											onBlur={field.handleBlur}
+											onChangeText={field.handleChange}
+											placeholder={t`Enter your full name`}
+											returnKeyType="next"
+											textContentType="name"
+											value={field.state.value}
+										/>
+										{field.state.meta.isTouched &&
+										field.state.meta.errors.length > 0 ? (
+											<Text style={styles.errorText}>
+												{field.state.meta.errors[0]?.message}
+											</Text>
+										) : null}
+									</>
+								)}
+							</Field>
+						</View>
+
+						<View style={styles.inputContainer}>
+							<Label style={styles.label}>
+								<Trans>Date of birth (optional)</Trans>
+							</Label>
+							<Field name="birthdate">
+								{(field) => (
+									<>
+										<Input
+											autoComplete="birthdate-full"
+											error={
+												field.state.meta.isTouched &&
+												field.state.meta.errors.length > 0
+											}
+											keyboardType="numeric"
+											maxLength={10}
+											onBlur={field.handleBlur}
+											onChangeText={field.handleChange}
+											placeholder={t`DD/MM/YYYY`}
+											value={field.state.value}
+										/>
+										{field.state.meta.isTouched &&
+										field.state.meta.errors.length > 0 ? (
+											<Text style={styles.errorText}>
+												{String(field.state.meta.errors[0])}
+											</Text>
+										) : null}
+									</>
+								)}
+							</Field>
+						</View>
+
+						<Subscribe selector={(state) => state}>
+							{(canSubmit) => (
+								<Button
+									disabled={
+										requestOtpMutation.isPending || !canSubmit.canSubmit
+									}
+									onPress={() => handleSubmit()}
+								>
+									{requestOtpMutation.isPending ? (
+										<Trans>Loading...</Trans>
 									) : (
 										<Trans>Verify</Trans>
 									)}
 								</Button>
+							)}
+						</Subscribe>
 
-								<Pressable onPress={handleGoBack} style={styles.backButton}>
-									<View style={styles.backButtonRow}>
-										<Ionicons
-											color={styles.backButtonText.color}
-											name="arrow-back"
-											size={16}
+						<Pressable onPress={handleGoBack} style={styles.backButton}>
+							<View style={styles.backButtonRow}>
+								<Ionicons
+									color={styles.backButtonText.color}
+									name="arrow-back"
+									size={16}
+								/>
+								<Text style={styles.backButtonText}>
+									<Trans>Change phone number</Trans>
+								</Text>
+							</View>
+						</Pressable>
+					</>
+				) : (
+					<>
+						<H2>
+							<Trans>Enter verification code</Trans>
+						</H2>
+
+						<Subscribe selector={(state) => state.values.phoneNumber}>
+							{(phone) => (
+								<Paragraph>
+									<Trans>We sent a code to {phone}</Trans>
+								</Paragraph>
+							)}
+						</Subscribe>
+
+						<View style={styles.inputContainer}>
+							<Field name="verificationCode">
+								{(field) => (
+									<>
+										<OtpInput
+											onBlur={field.handleBlur}
+											onChange={field.handleChange}
+											onComplete={() => handleSubmit()}
+											value={field.state.value}
 										/>
-										<Text style={styles.backButtonText}>
-											<Trans>Change phone number</Trans>
-										</Text>
-									</View>
-								</Pressable>
-							</>
-						)}
-					</View>
-				</View>
+										{field.state.meta.isTouched &&
+										field.state.meta.errors.length > 0 ? (
+											<Text style={styles.errorText}>
+												{String(field.state.meta.errors[0])}
+											</Text>
+										) : null}
+									</>
+								)}
+							</Field>
+						</View>
+
+						<Button
+							disabled={verifyOtpMutation.isPending}
+							onPress={() => handleSubmit()}
+						>
+							{verifyOtpMutation.isPending ? (
+								<Trans>Verifying...</Trans>
+							) : (
+								<Trans>Verify</Trans>
+							)}
+						</Button>
+
+						<Pressable onPress={handleGoBack} style={styles.backButton}>
+							<View style={styles.backButtonRow}>
+								<Ionicons
+									color={styles.backButtonText.color}
+									name="arrow-back"
+									size={16}
+								/>
+								<Text style={styles.backButtonText}>
+									<Trans>Change phone number</Trans>
+								</Text>
+							</View>
+						</Pressable>
+					</>
+				)}
 			</ScreenContainer>
 		</>
 	)
@@ -306,6 +479,10 @@ const styles = StyleSheet.create((theme) => ({
 	content: {
 		flex: 1,
 		justifyContent: 'center',
+	},
+	contentContainer: {
+		gap: theme.spacing.md,
+		padding: theme.layout.screenPadding,
 	},
 	errorText: {
 		color: theme.colors.error,
@@ -344,12 +521,5 @@ const styles = StyleSheet.create((theme) => ({
 	messageContainer: {
 		marginBottom: theme.spacing.md,
 		marginTop: theme.spacing.md,
-	},
-	subtitle: {
-		color: theme.colors.textSecondary,
-		marginBottom: theme.spacing.md,
-	},
-	title: {
-		marginBottom: theme.spacing.xs,
 	},
 }))

@@ -3,10 +3,7 @@ import { Pressable, Text, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLingui } from '@lingui/react/macro'
-import {
-	type BottomTabNavigatorProps,
-	createBottomTabNavigator,
-} from '@react-navigation/bottom-tabs'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { withLayoutContext } from 'expo-router'
 import {
 	type TabTriggerSlotProps,
@@ -17,9 +14,10 @@ import {
 } from 'expo-router/ui'
 import { StyleSheet } from 'react-native-unistyles'
 
+import type { BottomTabNavigatorProps } from '@react-navigation/bottom-tabs'
+
 import { breakpoints } from '@/lib/styles/unistyles'
 
-// Create the default bottom tabs for non-desktop (mobile/tablet)
 const DefaultBottomTabs = createBottomTabNavigator()
 const ExpoDefaultBottomTabs = withLayoutContext(DefaultBottomTabs.Navigator)
 

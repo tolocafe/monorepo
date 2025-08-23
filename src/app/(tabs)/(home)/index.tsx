@@ -210,16 +210,17 @@ function MenuListItem({
 							<Image
 								contentFit="cover"
 								placeholder={{
+									cacheKey: `${item.product_id}-placeholder`,
 									uri: getImageUrl(item.photo, {
-										blur: 50,
-										quality: 50,
-										width: 300,
+										blur: 100,
+										quality: 20,
+										width: 350,
 									}),
 								}}
 								source={{
 									uri: getImageUrl(item.photo, {
-										quality: 90,
-										width: 300,
+										quality: 80,
+										width: 350,
 									}),
 								}}
 								style={{ height: '100%', objectFit: 'cover', width: '100%' }}

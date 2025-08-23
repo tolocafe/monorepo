@@ -76,7 +76,18 @@ export const api = {
 
 			throw new Error('Failed to add e-wallet transaction')
 		},
-		async createClient(token: string, body: Record<string, unknown>) {
+		async createClient(
+			token: string,
+			body: {
+				birthday?: string
+				bonus?: number
+				client_groups_id_client: number
+				client_name?: string
+				client_sex?: number
+				email?: string
+				phone: string
+			},
+		) {
 			const data = (await fetch(
 				`${BASE_URL}/clients.createClient?token=${token}`,
 				{

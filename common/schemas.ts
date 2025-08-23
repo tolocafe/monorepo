@@ -11,8 +11,9 @@ export const PhoneSchema = z
 export type Phone = z.infer<typeof PhoneSchema>
 
 export const RequestOtpSchema = z.object({
+	birthdate: z.string().max(10, 'errors.max-length').optional(),
 	email: z.email('errors.invalid-email').optional(),
-	name: z.string().min(1, 'errors.required').optional(),
+	name: z.string().max(100, 'errors.max-length').optional(),
 	phone: PhoneSchema,
 })
 

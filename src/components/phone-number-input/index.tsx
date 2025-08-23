@@ -166,6 +166,7 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		flexDirection: 'row',
 		gap: theme.spacing.xs,
+		paddingLeft: theme.spacing.xs,
 	},
 	input: {
 		color: theme.colors.text,

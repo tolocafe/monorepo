@@ -10,9 +10,10 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { router, useLocalSearchParams } from 'expo-router'
 import Head from 'expo-router/head'
 import Animated from 'react-native-reanimated'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, UnistylesRuntime } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
+import HeaderGradient from '@/components/HeaderGradient'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H1, H2, Label, Paragraph, Text } from '@/components/Text'
 import { getImageUrl } from '@/lib/image'
@@ -107,6 +108,7 @@ export default function MenuDetail() {
 			<Head>
 				<title>{t`${product.product_name} - TOLO Good Coffee`}</title>
 			</Head>
+			<HeaderGradient />
 			<ScreenContainer
 				contentContainerStyle={{ paddingBottom: tabBarHeight }}
 				contentInsetAdjustmentBehavior="never"
@@ -127,11 +129,13 @@ export default function MenuDetail() {
 						<Image
 							contentFit="cover"
 							placeholder={{
+								cacheKey: `${product.product_id}-placeholder`,
 								uri: getImageUrl(product.photo_origin || product.photo, {
-									blur: 80,
+									blur: 100,
 									quality: 20,
-									width: 800,
+									width: 350,
 								}),
+								width: UnistylesRuntime.screen.width,
 							}}
 							source={{
 								uri: getImageUrl(product.photo_origin || product.photo, {
@@ -139,7 +143,7 @@ export default function MenuDetail() {
 									width: 800,
 								}),
 							}}
-							style={{ height: '100%', objectFit: 'cover', width: '100%' }}
+							style={imageStyle}
 							transition={200}
 						/>
 					) : (
@@ -306,6 +310,12 @@ export default function MenuDetail() {
 		</>
 	)
 }
+
+const imageStyle = {
+	height: '100%',
+	objectFit: 'cover',
+	width: '100%',
+} as const
 
 const styles = StyleSheet.create((theme) => ({
 	badge: {

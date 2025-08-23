@@ -20,7 +20,7 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 
 const auth = new Hono<{ Bindings: Bindings }>()
 	.post('/request-otp', async (context) => {
-		const { email, name, phone } = RequestOtpSchema.parse(
+		const { birthdate, email, name, phone } = RequestOtpSchema.parse(
 			await context.req.json(),
 		)
 
@@ -30,9 +30,17 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		)
 
 		if (!existingClient) {
+			if (!name) {
+				return context.json(
+					{ error: 'Some fields are required', fields: [{ name: 'name' }] },
+					400,
+				)
+			}
+
 			await api.clients.createClient(context.env.POSTER_TOKEN, {
+				birthday: birthdate,
 				client_groups_id_client: 1,
-				client_name: name ?? 'anon',
+				client_name: name,
 				email,
 				phone,
 			})
