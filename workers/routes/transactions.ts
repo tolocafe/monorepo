@@ -3,20 +3,15 @@ import {
 	CreateStripeTransactionSchema,
 } from '@common/schemas'
 import { Hono } from 'hono'
-import { Stripe } from 'stripe'
 
 import { authenticate } from '../utils/jwt'
 import { api } from '../utils/poster'
+import { stripe } from '../utils/stripe'
 
 import type { Bindings } from '../types'
 
 const transactions = new Hono<{ Bindings: Bindings }>()
 	.post('/payment-intent', async (c) => {
-		const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
-			apiVersion: '2025-07-30.basil',
-			timeout: 30 * 1000,
-		})
-
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		const body = CreateStripeTransactionSchema.parse(

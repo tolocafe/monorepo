@@ -4,8 +4,8 @@ import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
 
-import { stripe } from '../stripe'
 import { api } from '../utils/poster'
+import { stripe } from '../utils/stripe'
 
 import type { Bindings } from '../types'
 
@@ -34,7 +34,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		try {
 			const body = await c.req.text()
 
-			event = stripe.webhooks.constructEvent(
+			event = await stripe.webhooks.constructEventAsync(
 				body,
 				sig,
 				c.env.STRIPE_WEBHOOK_SECRET,
