@@ -95,7 +95,7 @@
 	"devDependencies": {
 		"@babel/core": "~7.26.0",
 		"@cloudflare/vitest-pool-workers": "0.8.65",
-		"@eslint/js": "~9.33.0",
+		"@eslint/js": "~9.34.0",
 		"@lingui/babel-plugin-lingui-macro": "5.4.1",
 		"@lingui/metro-transformer": "~5.4.1",
 		"@react-native/metro-config": "0.80.2",
@@ -106,7 +106,7 @@
 		"@types/node": "24.2.1",
 		"@types/react": "~19.0.10",
 		"babel-plugin-react-compiler": "19.1.0-rc.2",
-		"eslint": "9.33.0",
+		"eslint": "9.34.0",
 		"eslint-config-expo": "~9.2.0",
 		"eslint-plugin-perfectionist": "~4.15.0",
 		"eslint-plugin-react": "~7.37.5",
