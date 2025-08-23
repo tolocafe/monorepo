@@ -26,6 +26,7 @@ import { privateClient } from '@/lib/services/http-client'
 import { formatPrice } from '@/lib/utils/price'
 
 void initStripe({
+	merchantIdentifier: 'merchant.cafe.tolo.app',
 	publishableKey: process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY || '',
 	urlScheme: Linking.createURL(''),
 })
