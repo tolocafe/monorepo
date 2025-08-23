@@ -152,6 +152,10 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 	.post('/poster', async (context) => {
 		const body = (await context.req.json()) as unknown
 
+		// Debug: Log the raw webhook payload
+		// eslint-disable-next-line no-console
+		console.log('Poster webhook payload:', JSON.stringify(body, null, 2))
+
 		const parsedBody = posterWebhookDataSchema.parse(body)
 
 		if (parsedBody.verify !== process.env.POSTER_APPLICATION_SECRET) {
