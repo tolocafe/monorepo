@@ -1,4 +1,5 @@
 import * as AWS from '@aws-sdk/client-sns'
+import { getCurrentScope } from '@sentry/cloudflare'
 
 import type {
 	Category,
@@ -27,20 +28,23 @@ export const api = {
 			token: string,
 			body: {
 				amount: number
-				client_id: string
-				transaction_id: number
+				client_id: number
+				transaction_id?: number
+				type: 1 | 2
 			},
 		) {
 			const data = (await fetch(
 				`${BASE_URL}/clients.addEWalletPayment?token=${token}`,
 				{
-					body: JSON.stringify({ ...body, amount: body.amount / 100, type: 2 }),
+					body: JSON.stringify({ ...body, amount: body.amount / 100 }),
 					headers: { 'Content-Type': 'application/json' },
 					method: 'POST',
 				},
 			).then((response) => response.json())) as PosterResponse<string>
 
 			if (data.response != null) return data.response
+
+			getCurrentScope().setExtra('Fetch Data', data)
 
 			throw new Error('Failed to add e-wallet payment')
 		},
@@ -68,6 +72,8 @@ export const api = {
 
 			if (data.response != null) return data.response
 
+			getCurrentScope().setExtra('Fetch Data', data)
+
 			throw new Error('Failed to add e-wallet transaction')
 		},
 		async createClient(token: string, body: Record<string, unknown>) {
@@ -82,14 +88,18 @@ export const api = {
 
 			if (data.response != null) return data.response
 
+			getCurrentScope().setExtra('Fetch Data', data)
+
 			throw new Error('Failed to create client')
 		},
 		async getClient(token: string, phone: string) {
-			const response = (await fetch(
+			const data = (await fetch(
 				`${BASE_URL}/clients.getClients?token=${token}&phone=${encodeURIComponent(phone)}&num=1`,
 			).then((response) => response.json())) as PosterResponse<ClientData[]>
 
-			if (response.response != null) return response.response.at(0)
+			if (data.response != null) return data.response.at(0)
+
+			getCurrentScope().setExtra('Fetch Data', data)
 
 			return null
 		},
@@ -99,6 +109,8 @@ export const api = {
 			).then((response) => response.json())) as PosterResponse<ClientData[]>
 
 			if (data.response != null) return data.response.at(0)
+
+			getCurrentScope().setExtra('Fetch Data', data)
 
 			return null
 		},
@@ -116,7 +128,9 @@ export const api = {
 				},
 			).then((response) => response.json())) as PosterResponse<number>
 
-			if (data.response) return data.response
+			if (data.response != null) return data.response
+
+			getCurrentScope().setExtra('Fetch Data', data)
 
 			throw new Error('Failed to update client')
 		},
@@ -138,9 +152,9 @@ export const api = {
 
 			const transaction = data.response?.at(0)
 
-			if (transaction) {
-				return transaction
-			}
+			if (transaction != null) return transaction
+
+			getCurrentScope().setExtra('Fetch Data', data)
 
 			throw new Error('Failed to get transaction')
 		},
@@ -151,10 +165,39 @@ export const api = {
 
 			if (data.response != null) return data.response
 
+			getCurrentScope().setExtra('Fetch Data', data)
+
 			return []
 		},
 	},
 	finance: {
+		async createTransaction(
+			token: string,
+			body: {
+				account_to: 1
+				amount_to: number
+				category: number
+				date: string
+				id: number
+				type: 1
+				user_id: number
+			},
+		) {
+			const data = (await fetch(
+				`${BASE_URL}/finance.createTransactions?token=${token}`,
+				{
+					body: JSON.stringify(body),
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			).then((response) => response.json())) as PosterResponse<number>
+
+			if (data.response != null) return data.response
+
+			getCurrentScope().setExtra('Fetch Data', data)
+
+			throw new Error('Failed to create transactions')
+		},
 		async getTransaction(token: string, id: string) {
 			const data = (await fetch(
 				`${BASE_URL}/finance.getTransaction?token=${token}&transaction_id=${id}`,
@@ -167,7 +210,9 @@ export const api = {
 
 			const transaction = data.response?.at(0)
 
-			if (transaction) return transaction
+			if (transaction != null) return transaction
+
+			getCurrentScope().setExtra('Fetch Data', data)
 
 			throw new Error('Failed to get transaction')
 		},
@@ -204,9 +249,9 @@ export const api = {
 				transaction_id: number
 			}>
 
-			if (data.response != null) {
-				return data.response
-			}
+			if (data.response != null) return data.response
+
+			getCurrentScope().setExtra('Fetch Data', data)
 
 			throw new Error(data.error || 'Failed to create order')
 		},
@@ -227,11 +272,17 @@ export const api = {
 				type: 'categories' | 'products'
 			} = defaultGetMenuProductsOptions,
 		) {
-			return fetch(`${BASE_URL}/menu.getProducts?token=${token}`)
-				.then(
-					(response) => response.json() as Promise<PosterResponse<Product[]>>,
-				)
-				.then((data) => data.response)
+			const data = await fetch(
+				`${BASE_URL}/menu.getProducts?token=${token}`,
+			).then(
+				(response) => response.json() as Promise<PosterResponse<Product[]>>,
+			)
+
+			if (data.response != null) return data.response
+
+			getCurrentScope().setExtra('Fetch Data', data)
+
+			throw new Error('Failed to get menu products')
 		},
 
 		async getProduct(token: string, id: string) {
@@ -240,6 +291,8 @@ export const api = {
 			).then((response) => response.json())) as PosterResponse<Product>
 
 			if (data.response != null) return data.response
+
+			getCurrentScope().setExtra('Fetch Data', data)
 
 			throw new Error('Failed to get product')
 		},
@@ -276,6 +329,8 @@ export const api = {
 			).then((response) => response.json())) as PosterResponse<number>
 
 			if (data.response != null) return data.response
+
+			getCurrentScope().setExtra('Fetch Data', data)
 
 			throw new Error('Failed to update transaction')
 		},

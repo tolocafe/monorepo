@@ -22,9 +22,9 @@ const posterWebhookDataSchema = z.object({
 const webhooks = new Hono<{ Bindings: Bindings }>()
 	.get('/poster', (c) => c.json({ message: 'Ok' }, 200))
 	.post('/stripe', async (c) => {
-		const sig = c.req.header('stripe-signature')
+		const signature = c.req.header('stripe-signature')
 
-		if (!sig) {
+		if (!signature) {
 			throw new HTTPException(400, { message: 'Missing signature' })
 		}
 
@@ -36,7 +36,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 			event = await stripe.webhooks.constructEventAsync(
 				body,
-				sig,
+				signature,
 				c.env.STRIPE_WEBHOOK_SECRET,
 			)
 
@@ -79,18 +79,53 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					})
 				}
 
-				// Create e-wallet transaction in Poster
-				const transactionId = await api.clients.addEWalletTransaction(
-					c.env.POSTER_TOKEN,
-					{
-						amount: paymentIntent.amount, // Amount is already in cents
-						client_id: Number(posterClientId),
-					},
-				)
-
 				// Store the transaction mapping in D1
 				await c.env.D1_TOLO.exec(
 					'CREATE TABLE IF NOT EXISTS top_ups (payment_intent_id TEXT PRIMARY KEY, client_id INTEGER, amount INTEGER, transaction_id INTEGER, created_at TIMESTAMP)',
+				)
+
+				// Verify transaction does not exist in top_ups table
+				const transaction = await c.env.D1_TOLO.prepare(
+					'SELECT * FROM top_ups WHERE payment_intent_id = ?',
+				)
+					.bind(paymentIntent.id)
+					.first()
+
+				if (transaction) {
+					captureEvent({
+						extra: { transaction },
+						message: 'Transaction was already processed',
+					})
+
+					return c.json({ received: true })
+				}
+
+				const transactionId = await api.finance.createTransaction(
+					c.env.POSTER_TOKEN,
+					{
+						account_to: 1,
+						amount_to: 0,
+						category: 14,
+						date: new Date(event.data.object.created * 1000)
+							.toISOString()
+							.replace('T', ' ')
+							.split('.')
+							.at(0) as string,
+						id: 1,
+						type: 1,
+						user_id: Number(posterClientId),
+					},
+				)
+
+				// eslint-disable-next-line unicorn/prevent-abbreviations
+				const eWalletTransactionId = await api.clients.addEWalletPayment(
+					c.env.POSTER_TOKEN,
+					{
+						amount: paymentIntent.amount,
+						client_id: Number(posterClientId),
+						transaction_id: transactionId,
+						type: 2,
+					},
 				)
 
 				await c.env.D1_TOLO.prepare(
@@ -100,7 +135,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						paymentIntent.id,
 						Number(posterClientId),
 						paymentIntent.amount,
-						transactionId,
+						eWalletTransactionId,
 						new Date().toISOString(),
 					)
 					.run()
