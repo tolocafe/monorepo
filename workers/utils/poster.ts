@@ -1,5 +1,5 @@
 import * as AWS from '@aws-sdk/client-sns'
-import { captureException, getCurrentScope } from '@sentry/cloudflare'
+import { getCurrentScope } from '@sentry/cloudflare'
 
 import type {
 	Category,
@@ -33,54 +33,20 @@ export const api = {
 				type: 1 | 2
 			},
 		) {
-			try {
-				const data = (await fetch(
-					`${BASE_URL}/clients.addEWalletPayment?token=${token}`,
-					{
-						body: JSON.stringify({ ...body, amount: body.amount / 100 }),
-						headers: { 'Content-Type': 'application/json' },
-						method: 'POST',
-					},
-				).then((response) => response.json())) as PosterResponse<string>
+			const data = (await fetch(
+				`${BASE_URL}/clients.addEWalletPayment?token=${token}`,
+				{
+					body: JSON.stringify({ ...body, amount: body.amount / 100 }),
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			).then((response) => response.json())) as PosterResponse<string>
 
-				if (data.response != null) return data.response
+			if (data.response != null) return data.response
 
-				getCurrentScope().setExtra('Fetch Data', data)
-				
-				const error = new Error('Failed to add e-wallet payment')
-				captureException(error, {
-					extra: {
-						apiEndpoint: 'clients.addEWalletPayment',
-						requestBody: body,
-						responseData: data,
-						posterError: data.error || 'No error message provided'
-					},
-					tags: {
-						api_method: 'addEWalletPayment',
-						poster_api: 'true'
-					}
-				})
+			getCurrentScope().setExtra('Fetch Data', data)
 
-				throw error
-			} catch (error) {
-				if (error instanceof Error && error.message === 'Failed to add e-wallet payment') {
-					throw error // Re-throw our custom error
-				}
-				
-				captureException(error, {
-					extra: {
-						apiEndpoint: 'clients.addEWalletPayment',
-						requestBody: body
-					},
-					tags: {
-						api_method: 'addEWalletPayment',
-						error_type: 'network_or_parse_error',
-						poster_api: 'true'
-					}
-				})
-				
-				throw new Error('Failed to add e-wallet payment')
-			}
+			throw new Error('Failed to add e-wallet payment')
 		},
 		/**
 		 * Registers a new e-wallet transaction to the client's e-wallet
@@ -111,54 +77,20 @@ export const api = {
 			throw new Error('Failed to add e-wallet transaction')
 		},
 		async createClient(token: string, body: Record<string, unknown>) {
-			try {
-				const data = (await fetch(
-					`${BASE_URL}/clients.createClient?token=${token}`,
-					{
-						body: JSON.stringify(body),
-						headers: { 'Content-Type': 'application/json' },
-						method: 'POST',
-					},
-				).then((response) => response.json())) as PosterResponse<number>
+			const data = (await fetch(
+				`${BASE_URL}/clients.createClient?token=${token}`,
+				{
+					body: JSON.stringify(body),
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			).then((response) => response.json())) as PosterResponse<number>
 
-				if (data.response != null) return data.response
+			if (data.response != null) return data.response
 
-				getCurrentScope().setExtra('Fetch Data', data)
-				
-				const error = new Error('Failed to create client')
-				captureException(error, {
-					extra: {
-						apiEndpoint: 'clients.createClient',
-						requestBody: body,
-						responseData: data,
-						posterError: data.error || 'No error message provided'
-					},
-					tags: {
-						api_method: 'createClient',
-						poster_api: 'true'
-					}
-				})
+			getCurrentScope().setExtra('Fetch Data', data)
 
-				throw error
-			} catch (error) {
-				if (error instanceof Error && error.message === 'Failed to create client') {
-					throw error // Re-throw our custom error
-				}
-				
-				captureException(error, {
-					extra: {
-						apiEndpoint: 'clients.createClient',
-						requestBody: body
-					},
-					tags: {
-						api_method: 'createClient',
-						error_type: 'network_or_parse_error',
-						poster_api: 'true'
-					}
-				})
-				
-				throw new Error('Failed to create client')
-			}
+			throw new Error('Failed to create client')
 		},
 		async getClient(token: string, phone: string) {
 			const data = (await fetch(
@@ -251,54 +183,20 @@ export const api = {
 				user_id: number
 			},
 		) {
-			try {
-				const data = (await fetch(
-					`${BASE_URL}/finance.createTransactions?token=${token}`,
-					{
-						body: JSON.stringify(body),
-						headers: { 'Content-Type': 'application/json' },
-						method: 'POST',
-					},
-				).then((response) => response.json())) as PosterResponse<number>
+			const data = (await fetch(
+				`${BASE_URL}/finance.createTransactions?token=${token}`,
+				{
+					body: JSON.stringify(body),
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			).then((response) => response.json())) as PosterResponse<number>
 
-				if (data.response != null) return data.response
+			if (data.response != null) return data.response
 
-				getCurrentScope().setExtra('Fetch Data', data)
-				
-				const error = new Error('Failed to create transactions')
-				captureException(error, {
-					extra: {
-						apiEndpoint: 'finance.createTransactions',
-						requestBody: body,
-						responseData: data,
-						posterError: data.error || 'No error message provided'
-					},
-					tags: {
-						api_method: 'createTransaction',
-						poster_api: 'true'
-					}
-				})
+			getCurrentScope().setExtra('Fetch Data', data)
 
-				throw error
-			} catch (error) {
-				if (error instanceof Error && error.message === 'Failed to create transactions') {
-					throw error // Re-throw our custom error
-				}
-				
-				captureException(error, {
-					extra: {
-						apiEndpoint: 'finance.createTransactions',
-						requestBody: body
-					},
-					tags: {
-						api_method: 'createTransaction',
-						error_type: 'network_or_parse_error',
-						poster_api: 'true'
-					}
-				})
-				
-				throw new Error('Failed to create transactions')
-			}
+			throw new Error('Failed to create transactions')
 		},
 		async getTransaction(token: string, id: string) {
 			const data = (await fetch(
@@ -334,64 +232,28 @@ export const api = {
 				spot_id: 1,
 			}
 
-			try {
-				// https://dev.joinposter.com/en/docs/v3/web/incomingOrders/createIncomingOrder?id=incomingorderscreateincomingorder-response-parameters
-				const data = (await fetch(
-					`${BASE_URL}/incomingOrders.createIncomingOrder?token=${token}`,
-					{
-						body: JSON.stringify(finalOrderData),
-						headers: { 'Content-Type': 'application/json' },
-						method: 'POST',
-					},
-				).then((response) => response.json())) as PosterResponse<{
-					/** Online order ID */
-					incoming_order_id: number
-					/** Order status: 0—new, 1—accepted, 7—canceled */
-					status: number
-					/** Associated order ID */
-					transaction_id: number
-				}>
+			// https://dev.joinposter.com/en/docs/v3/web/incomingOrders/createIncomingOrder?id=incomingorderscreateincomingorder-response-parameters
+			const data = (await fetch(
+				`${BASE_URL}/incomingOrders.createIncomingOrder?token=${token}`,
+				{
+					body: JSON.stringify(finalOrderData),
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			).then((response) => response.json())) as PosterResponse<{
+				/** Online order ID */
+				incoming_order_id: number
+				/** Order status: 0—new, 1—accepted, 7—canceled */
+				status: number
+				/** Associated order ID */
+				transaction_id: number
+			}>
 
-				if (data.response != null) return data.response
+			if (data.response != null) return data.response
 
-				getCurrentScope().setExtra('Fetch Data', data)
-				
-				const error = new Error(data.error || 'Failed to create order')
-				captureException(error, {
-					extra: {
-						apiEndpoint: 'incomingOrders.createIncomingOrder',
-						requestBody: finalOrderData,
-						responseData: data,
-						posterError: data.error || 'No error message provided',
-						clientId
-					},
-					tags: {
-						api_method: 'createIncomingOrder',
-						poster_api: 'true'
-					}
-				})
+			getCurrentScope().setExtra('Fetch Data', data)
 
-				throw error
-			} catch (error) {
-				if (error instanceof Error && (error.message.includes('Failed to create order') || error.message.includes('order'))) {
-					throw error // Re-throw our custom error
-				}
-				
-				captureException(error, {
-					extra: {
-						apiEndpoint: 'incomingOrders.createIncomingOrder',
-						requestBody: finalOrderData,
-						clientId
-					},
-					tags: {
-						api_method: 'createIncomingOrder',
-						error_type: 'network_or_parse_error',
-						poster_api: 'true'
-					}
-				})
-				
-				throw new Error('Failed to create order')
-			}
+			throw new Error(data.error || 'Failed to create order')
 		},
 	},
 	menu: {
