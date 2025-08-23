@@ -215,17 +215,18 @@ export default function ProfileScreen() {
 									},
 								}}
 							>
-								{(field) => (
-									<Input
-										autoCapitalize="none"
-										autoCorrect={false}
-										keyboardType="numbers-and-punctuation"
-										onBlur={field.handleBlur}
-										onChangeText={field.handleChange}
-										placeholder={t`YYYY-MM-DD`}
-										value={field.state.value}
-									/>
-								)}
+															{(field) => (
+								<Input
+									autoCapitalize="none"
+									autoCorrect={false}
+									keyboardType="numbers-and-punctuation"
+									maxLength={10}
+									onBlur={field.handleBlur}
+									onChangeText={field.handleChange}
+									placeholder={t`YYYY-MM-DD`}
+									value={field.state.value}
+								/>
+							)}
 							</Field>
 						</View>
 
