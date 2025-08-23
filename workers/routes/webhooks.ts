@@ -4,7 +4,7 @@ import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
 
 import { api } from '../utils/poster'
-import { stripe } from '../utils/stripe'
+import { getStripe } from '../utils/stripe'
 
 import type { Bindings } from '../types'
 
@@ -28,8 +28,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			throw new HTTPException(400, { message: 'Missing signature' })
 		}
 
-		let event
+		const stripe = getStripe()
 
+		let event
 		try {
 			const body = await c.req.text()
 

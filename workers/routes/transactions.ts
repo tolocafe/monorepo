@@ -6,7 +6,7 @@ import { Hono } from 'hono'
 
 import { authenticate } from '../utils/jwt'
 import { api } from '../utils/poster'
-import { stripe } from '../utils/stripe'
+import { getStripe } from '../utils/stripe'
 
 import type { Bindings } from '../types'
 
@@ -17,6 +17,8 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 		const body = CreateStripeTransactionSchema.parse(
 			(await c.req.json()) as unknown,
 		)
+
+		const stripe = getStripe()
 
 		let customer = await stripe.customers
 			.search({
