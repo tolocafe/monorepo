@@ -209,8 +209,34 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		console.log('PARSED DATA', parsedBody)
 
 		const expo = new Expo()
+		const messages: ExpoPushMessage[] = []
 
 		switch (object) {
+			case 'transaction': {
+				if (action === 'changed') {
+					const { client_id } = await api.finance.getTransaction(
+						context.env.POSTER_TOKEN,
+						object_id as string,
+					)
+
+					const { results: pushTokens } = await context.env.D1_TOLO.prepare(
+						'SELECT * FROM push_tokens WHERE client_id = ?',
+					)
+						.bind(client_id)
+						.all()
+
+					messages.push(
+						...pushTokens.map(
+							(destination) =>
+								({
+									body: 'We are working on your order',
+									to: destination.token as string,
+								}) satisfies ExpoPushMessage,
+						),
+					)
+				}
+				break
+			}
 			case 'incoming_order': {
 				const { client_id } = await api.incomingOrders.getIncomingOrder(
 					context.env.POSTER_TOKEN,
@@ -223,36 +249,36 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					.bind(client_id)
 					.all()
 
-				// eslint-disable-next-line no-console
-				console.log(pushTokens)
-
-				const messages = pushTokens.map(
-					(destination) =>
-						({
-							body:
-								action === 'closed'
-									? 'Your order has been delivered'
-									: 'Your order is ready',
-							to: destination.token as string,
-						}) satisfies ExpoPushMessage,
+				messages.push(
+					...pushTokens.map(
+						(destination) =>
+							({
+								body:
+									action === 'closed'
+										? 'Your order has been delivered'
+										: 'Your order is ready',
+								to: destination.token as string,
+							}) satisfies ExpoPushMessage,
+					),
 				)
 
-				const chunks = expo.chunkPushNotifications(messages)
-
-				const tickets: ExpoPushTicket[] = []
-				for (const chunk of chunks) {
-					const tickets = await expo.sendPushNotificationsAsync(chunk)
-					tickets.push(...tickets)
-				}
-
-				// eslint-disable-next-line no-console
-				console.log(tickets, parsedData)
-
-				return context.json({ message: 'Ok' }, 200)
+				break
 			}
 			default:
-				return context.json({ message: 'Ok' }, 200)
 		}
+
+		const chunks = expo.chunkPushNotifications(messages)
+
+		const tickets: ExpoPushTicket[] = []
+		for (const chunk of chunks) {
+			const ticket = await expo.sendPushNotificationsAsync(chunk)
+			tickets.push(...ticket)
+		}
+
+		// eslint-disable-next-line no-console
+		console.log(tickets, parsedData)
+
+		return context.json({ message: 'Ok' }, 200)
 	})
 
 export default webhooks

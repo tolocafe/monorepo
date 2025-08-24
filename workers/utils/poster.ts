@@ -215,7 +215,9 @@ export const api = {
 			).then((response) => response.json())) as PosterResponse<
 				{
 					amount: string
+					client_id: string
 					transaction_id: string
+					user_id: string
 				}[]
 			>
 
