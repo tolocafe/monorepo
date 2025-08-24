@@ -225,13 +225,26 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						...pushTokens.map(
 							(destination) =>
 								({
-									body: 'Enjoy your order ☕️🥐, we hope you like it!',
-									title: 'Order delivered',
+									body: 'Disfruta tu pedido ☕️🥐, esperamos que lo disfrutes!',
+									title: 'Pedido entregado',
 									to: destination.token as string,
 								}) satisfies ExpoPushMessage,
 						),
 					)
 					break
+				}
+
+				if (action === 'changed') {
+					const incomingOrder = await api.incomingOrders.getIncomingOrder(
+						context.env.POSTER_TOKEN,
+						object_id as string,
+					)
+
+					captureEvent({
+						extra: { incomingOrder },
+						level: 'debug',
+						message: 'Incoming order changed',
+					})
 				}
 
 				break
@@ -249,17 +262,36 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						.bind(client_id)
 						.all()
 
-					messages.push(
-						...pushTokens.map(
-							(destination) =>
-								({
-									body: 'We are now working on your order 🚀',
-									title: 'Order accepted',
-									to: destination.token as string,
-								}) satisfies ExpoPushMessage,
-						),
-					)
-					break
+					if (
+						(
+							parsedData as
+								| undefined
+								| { transactions_history: { value: number } }
+						)?.transactions_history.value === 4
+					) {
+						messages.push(
+							...pushTokens.map(
+								(destination) =>
+									({
+										body: '🚨 Comunícate con nosotros para resolverlo cuanto antes',
+										title: 'Pedido no aceptado',
+										to: destination.token as string,
+									}) satisfies ExpoPushMessage,
+							),
+						)
+					} else {
+						messages.push(
+							...pushTokens.map(
+								(destination) =>
+									({
+										body: '🧑🏽‍🍳 Ahora estamos trabajando en tu pedido, te avisaremos cuando esté listo',
+										title: 'Pedido aceptado',
+										to: destination.token as string,
+									}) satisfies ExpoPushMessage,
+							),
+						)
+						break
+					}
 				}
 
 				break
