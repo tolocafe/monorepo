@@ -159,14 +159,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 	.post('/poster', async (context) => {
 		const body = (await context.req.json()) as unknown
 
-		// eslint-disable-next-line no-console
-		console.log('Poster webhook payload', JSON.stringify(body, null, 2))
-
-		captureEvent({
-			extra: { body },
-			message: 'Poster webhook received',
-		})
-
 		const parsedBody = posterWebhookDataSchema.parse(body)
 		const { account, action, data, object, object_id, time } = parsedBody
 
@@ -205,9 +197,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			}
 		}
 
-		// eslint-disable-next-line no-console
-		console.log('PARSED DATA', parsedBody)
-
 		const expo = new Expo()
 		const messages: ExpoPushMessage[] = []
 
@@ -234,7 +223,15 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 								}) satisfies ExpoPushMessage,
 						),
 					)
+					break
 				}
+
+				captureEvent({
+					extra: { body },
+					message: `Poster webhook received (${object})`,
+					level: 'debug',
+				})
+
 				break
 			}
 			case 'incoming_order': {
@@ -264,7 +261,14 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				break
 			}
-			default:
+			default: {
+				captureEvent({
+					extra: { body },
+					message: `Poster webhook received (${object})`,
+					level: 'debug',
+				})
+				break
+			}
 		}
 
 		const chunks = expo.chunkPushNotifications(messages)
