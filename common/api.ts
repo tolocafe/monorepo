@@ -102,6 +102,7 @@ export type PosterModification = {
 	dish_modification_id: number
 	ingredient_id: number
 	last_modified_time: string
+	modificator_name: string
 	name: string
 	photo_large: string
 	photo_orig: string
@@ -138,14 +139,15 @@ export type Product = {
 	group_modifications?: PosterModificationGroup[]
 	hidden: string
 	ingredient_id: string
-	ingredients: PosterIngredient[]
+	ingredients?: PosterIngredient[]
 	master_id: string
 	menu_category_id: string
+	modifications?: PosterModification[]
 	nodiscount: string
 	out: number
 	photo: string
 	photo_origin: null | string
-	price: Record<string, string>
+	price?: Record<string, string>
 	product_code: string
 	product_id: string
 	product_name: string

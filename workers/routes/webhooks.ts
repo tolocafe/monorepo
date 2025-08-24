@@ -1,7 +1,12 @@
+import crypto from 'node:crypto'
+
 import { captureEvent, captureException } from '@sentry/cloudflare'
+import { Expo } from 'expo-server-sdk'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
+
+import type { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk'
 
 import { api } from '../utils/poster'
 import { getStripe } from '../utils/stripe'
@@ -11,7 +16,9 @@ import type { Bindings } from '../types'
 const posterWebhookDataSchema = z.object({
 	account: z.string().optional(),
 	account_number: z.string().optional(),
-	action: z.string().optional(),
+	action: z
+		.enum(['changed', 'closed', 'added', 'removed', 'transformed', 'test'])
+		.optional(),
 	data: z.string().optional(),
 	object: z.string().optional(),
 	object_id: z.union([z.number(), z.string()]).optional(),
@@ -152,26 +159,38 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 	.post('/poster', async (context) => {
 		const body = (await context.req.json()) as unknown
 
-		// Debug: Log the raw webhook payload
 		// eslint-disable-next-line no-console
-		console.log('Poster webhook payload:', JSON.stringify(body, null, 2))
+		console.log('Poster webhook payload', JSON.stringify(body, null, 2))
+
+		captureEvent({
+			extra: { body },
+			message: 'Poster webhook received',
+		})
 
 		const parsedBody = posterWebhookDataSchema.parse(body)
+		const { account, action, data, object, object_id } = parsedBody
 
-		if (parsedBody.verify !== process.env.POSTER_APPLICATION_SECRET) {
+		const verifyHash = crypto
+			.createHash('md5')
+			.update(
+				[
+					account,
+					object,
+					object_id,
+					action,
+					...(data ? [data] : []),
+					context.env.POSTER_TOKEN,
+				].join(';'),
+			)
+			.digest('hex')
+
+		if (parsedBody.verify !== verifyHash) {
 			if (parsedBody.action === 'test') {
 				return context.json({ message: 'Ok' }, 200)
 			}
 
 			return context.json({ message: 'Invalid signature' }, 401)
 		}
-
-		captureEvent({
-			extra: { body: parsedBody },
-			message: 'Poster webhook received',
-		})
-
-		const { action, data } = parsedBody
 
 		let parsedData
 		if (data) {
@@ -182,13 +201,48 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			}
 		}
 
-		switch (action) {
-			case 'added':
-				if (parsedData && 'user_id' in parsedData) {
-					// eslint-disable-next-line no-console
-					console.log({ user_id: parsedData.user_id })
+		// eslint-disable-next-line no-console
+		console.log('PARSED DATA', parsedBody)
+
+		const expo = new Expo()
+
+		switch (object) {
+			case 'incoming_order': {
+				const { client_id } = await api.incomingOrders.getIncomingOrder(
+					context.env.POSTER_TOKEN,
+					object_id as string,
+				)
+
+				const { results: pushTokens } = await context.env.D1_TOLO.prepare(
+					'SELECT * FROM push_tokens WHERE client_id = ?',
+				)
+					.bind(client_id)
+					.all()
+
+				// eslint-disable-next-line no-console
+				console.log(pushTokens)
+
+				const messages = pushTokens.map(
+					(destination) =>
+						({
+							body: action === 'closed' ? 'Your order has been delivered' : '',
+							to: destination.token as string,
+						}) satisfies ExpoPushMessage,
+				)
+
+				const chunks = expo.chunkPushNotifications(messages)
+
+				const tickets: ExpoPushTicket[] = []
+				for (const chunk of chunks) {
+					const tickets = await expo.sendPushNotificationsAsync(chunk)
+					tickets.push(...tickets)
 				}
+
+				// eslint-disable-next-line no-console
+				console.log(tickets, parsedData)
+
 				return context.json({ message: 'Ok' }, 200)
+			}
 			default:
 				return context.json({ message: 'Ok' }, 200)
 		}

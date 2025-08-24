@@ -266,6 +266,20 @@ export const api = {
 
 			throw new Error(data.error || 'Failed to create order')
 		},
+		async getIncomingOrder(token: string, id: string) {
+			const data = (await fetch(
+				`${BASE_URL}/incomingOrders.getIncomingOrder?token=${token}&incoming_order_id=${id}`,
+			).then((response) => response.json())) as PosterResponse<{
+				client_id: number
+				products: unknown[]
+			}>
+
+			if (data.response != null) return data.response
+
+			getCurrentScope().setExtra('Fetch Data', data)
+
+			throw new Error('Failed to get incoming order')
+		},
 	},
 	menu: {
 		async getMenuCategories(token: string) {

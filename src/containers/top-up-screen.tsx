@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Alert, View } from 'react-native'
+import { Alert, Platform, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
 import {
+	confirmPlatformPayPayment,
 	isPlatformPaySupported as getIsPlatformPaySupported,
 	initStripe,
 	PaymentSheetError,
@@ -32,6 +33,11 @@ void initStripe({
 })
 
 const TOP_UP_AMOUNTS = [10_000, 20_000, 50_000] as const
+
+const commonPlatformPayOptions = {
+	currencyCode: 'MXN',
+	merchantCountryCode: 'MX',
+}
 
 export default function TopUpScreen() {
 	const { t } = useLingui()
@@ -66,7 +72,7 @@ export default function TopUpScreen() {
 		setSelectedAmount(amount)
 	}
 
-	const handlePayment = async () => {
+	const handlePayment = async (isPlatformPay: boolean) => {
 		if (!selectedAmount) return
 
 		if (!user) {
@@ -80,40 +86,55 @@ export default function TopUpScreen() {
 			// Create payment intent
 			const paymentData = await createPayment(selectedAmount)
 
-			// Initialize the payment sheet
-			const { error: initError } = await initPaymentSheet({
-				allowsDelayedPaymentMethods: true,
-				applePay: {
-					buttonType: PlatformPay.ButtonType.TopUp,
-					cartItems: [
-						{
-							amount: selectedAmount.toString(),
-							label: 'TOLO',
-							paymentType: PlatformPay.PaymentType.Immediate,
-						},
-					],
-					merchantCountryCode: 'MX',
-				},
-				customerEphemeralKeySecret: paymentData.ephemeralKey.secret,
-				customerId: paymentData.paymentIntent.customer,
-				defaultBillingDetails: {
-					email: user.email,
-					name: user.name || `${user.firstname} ${user.lastname}`.trim(),
-					phone: user.phone,
-				},
-				googlePay: {
-					amount: selectedAmount.toString(),
-					currencyCode: 'MXN',
-					label: 'TOLO',
-					merchantCountryCode: 'MX',
-				},
-				merchantDisplayName: 'TOLO - Buen Café',
-				paymentIntentClientSecret: paymentData.paymentIntent.client_secret,
-			})
+			if (isPlatformPay) {
+				const { error: presentError } = await confirmPlatformPayPayment(
+					paymentData.paymentIntent.client_secret,
+					Platform.OS === 'ios'
+						? {
+								applePay: {
+									cartItems: [
+										{
+											amount: (selectedAmount / 100).toString(),
+											label: 'TOLO',
+											paymentType: PlatformPay.PaymentType.Immediate,
+										},
+									],
+									...commonPlatformPayOptions,
+								},
+							}
+						: {
+								googlePay: {
+									amount: selectedAmount,
+									label: 'TOLO',
+									testEnv: false,
+									...commonPlatformPayOptions,
+								},
+							},
+				)
 
-			if (initError) {
-				Alert.alert(t`Error`, initError.message)
-				return
+				if (presentError) {
+					Alert.alert(t`Error`, presentError.message)
+					return
+				}
+			} else {
+				// Initialize the payment sheet
+				const { error: initError } = await initPaymentSheet({
+					allowsDelayedPaymentMethods: true,
+					customerEphemeralKeySecret: paymentData.ephemeralKey.secret,
+					customerId: paymentData.paymentIntent.customer,
+					defaultBillingDetails: {
+						email: user.email,
+						name: user.name || `${user.firstname} ${user.lastname}`.trim(),
+						phone: user.phone,
+					},
+					merchantDisplayName: 'TOLO - Buen Café',
+					paymentIntentClientSecret: paymentData.paymentIntent.client_secret,
+				})
+
+				if (initError) {
+					Alert.alert(t`Error`, initError.message)
+					return
+				}
 			}
 
 			// Present the payment sheet
@@ -209,7 +230,7 @@ export default function TopUpScreen() {
 					<PlatformPayButton
 						appearance={PlatformPay.ButtonStyle.Automatic}
 						disabled={!selectedAmount || isLoading}
-						onPress={handlePayment}
+						onPress={() => handlePayment(true)}
 						style={{ height: 40, width: '100%' }}
 						type={PlatformPay.ButtonType.TopUp}
 					/>
@@ -218,7 +239,7 @@ export default function TopUpScreen() {
 				<Button
 					disabled={!selectedAmount || isLoading}
 					fullWidth
-					onPress={handlePayment}
+					onPress={() => handlePayment(false)}
 					variant="primary"
 				>
 					{isLoading
@@ -278,6 +299,7 @@ const styles = StyleSheet.create((theme) => ({
 	infoText: {
 		color: theme.colors.textTertiary,
 		fontSize: theme.typography.caption.fontSize,
+		padding: theme.spacing.lg,
 	},
 	payButtonContainer: {
 		marginTop: theme.spacing.md,

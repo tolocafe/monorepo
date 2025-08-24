@@ -188,7 +188,7 @@ function MenuListItem({
 		transform: [{ scale: scale.value }],
 	}))
 
-	const firstPrice = Object.values(item.price)[0]
+	const firstPrice = Object.values(item.price ?? {}).at(0) as string
 
 	return (
 		<Link asChild href={`/(tabs)/(home)/${item.product_id}`}>
@@ -217,6 +217,7 @@ function MenuListItem({
 										width: 350,
 									}),
 								}}
+								placeholderContentFit="cover"
 								source={{
 									uri: getImageUrl(item.photo, {
 										quality: 80,
@@ -239,6 +240,7 @@ function MenuListItem({
 							<Paragraph>{formatPrice(firstPrice)}</Paragraph>
 							<View style={styles.menuItemActions}>
 								<TouchableOpacity
+									disabled={!firstPrice}
 									onPress={(event) => {
 										event.stopPropagation()
 										onAddToBag(item)

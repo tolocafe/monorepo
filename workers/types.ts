@@ -1,5 +1,6 @@
 export type Bindings = Cloudflare.Env & {
 	D1_TOLO: D1Database
+	EXPO_ACCESS_TOKEN: string
 	JWT_SECRET: string
 	KV_CMS: KVNamespace
 	KV_OTP: KVNamespace

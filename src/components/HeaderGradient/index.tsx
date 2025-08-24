@@ -3,6 +3,16 @@ import { UnistylesRuntime } from 'react-native-unistyles'
 
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 
+const linearGradientStyle = {
+	height: UnistylesRuntime.insets.top,
+	left: 0,
+	position: 'absolute',
+	right: 0,
+	top: 0,
+	width: '100%',
+	zIndex: 99_999,
+} as const
+
 export default function HeaderGradient() {
 	const isDark = useColorScheme() === 'dark'
 
@@ -21,15 +31,7 @@ export default function HeaderGradient() {
 							'rgba(255,255,255,0)',
 						]
 			}
-			style={{
-				height: UnistylesRuntime.insets.top,
-				left: 0,
-				position: 'absolute',
-				right: 0,
-				top: 0,
-				width: '100%',
-				zIndex: 99_999,
-			}}
+			style={linearGradientStyle}
 		/>
 	)
 }

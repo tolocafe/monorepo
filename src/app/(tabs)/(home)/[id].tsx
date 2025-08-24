@@ -76,7 +76,7 @@ export default function MenuDetail() {
 	const decrementQuantity = () =>
 		setFieldValue('quantity', (previous) => Math.max(1, previous - 1))
 
-	if (!product || !('price' in product)) {
+	if (!product) {
 		return (
 			<ScreenContainer>
 				<View style={styles.header}>
@@ -100,7 +100,7 @@ export default function MenuDetail() {
 		)
 	}
 
-	const unitPriceCents = Object.values(product.price).at(0) ?? '0'
+	const unitPriceCents = Object.values(product.price ?? {}).at(0) ?? '0'
 	const hasImage = product.photo_origin || product.photo
 
 	return (
@@ -137,6 +137,7 @@ export default function MenuDetail() {
 								}),
 								width: UnistylesRuntime.screen.width,
 							}}
+							placeholderContentFit="cover"
 							source={{
 								uri: getImageUrl(product.photo_origin || product.photo, {
 									quality: 90,
@@ -147,7 +148,7 @@ export default function MenuDetail() {
 							transition={200}
 						/>
 					) : (
-						<View style={{ height: '100%', width: '100%' }} />
+						<View aria-hidden style={{ height: '100%', width: '100%' }} />
 					)}
 					<LinearGradient
 						colors={linearGradientColors}
@@ -169,21 +170,26 @@ export default function MenuDetail() {
 					)}
 
 					<View style={styles.badges}>
-						{product.category_name && (
+						{product.category_name ? (
 							<View style={styles.badge}>
 								<Text style={styles.badgeText}>{product.category_name}</Text>
 							</View>
-						)}
-						{product.cooking_time && product.cooking_time !== '0' && (
-							<View style={[styles.badge, styles.timeBadge]}>
+						) : null}
+						{product.cooking_time && product.cooking_time !== '0' ? (
+							<View style={styles.badge}>
 								<Text style={styles.badgeText}>
 									{formatCookingTime(product.cooking_time)}
 								</Text>
 							</View>
-						)}
+						) : null}
+						{product.out ? (
+							<View style={styles.badge}>
+								<Text style={styles.badgeText}>{product.out} ml</Text>
+							</View>
+						) : null}
 					</View>
 
-					{product.ingredients.length > 0 && (
+					{product.ingredients?.length && (
 						<View style={styles.ingredientsSection}>
 							<H2>
 								<Trans>Ingredients</Trans>
@@ -199,75 +205,96 @@ export default function MenuDetail() {
 						</View>
 					)}
 
-					{/* Debug: remove if not needed */}
-
-					{/* Modifications */}
+					{/* Group Modifications */}
 					{product.group_modifications &&
 						product.group_modifications.length > 0 && (
-							<View style={styles.modificationsSection}>
+							<>
 								<H2>
-									<Trans>Available modifications</Trans>
+									<Trans>Modifications</Trans>
 								</H2>
-								{product.group_modifications.map((group) => (
-									<View
-										key={group.dish_modification_group_id}
-										style={styles.modGroup}
-									>
-										<Label style={styles.modGroupTitle}>{group.name}</Label>
-										<Field
-											name={`modifications.${group.dish_modification_group_id}`}
+								{product.group_modifications.map((group) => {
+									if (group.name === 'Desechables') return null
+
+									return (
+										<View
+											key={group.dish_modification_group_id}
+											style={styles.modGroup}
 										>
-											{(field) => (
-												<View
-													accessibilityRole="radiogroup"
-													style={styles.modButtonGroup}
-												>
-													{group.modifications.map((modification) => {
-														const isSelected =
-															field.state.value ===
-															modification.dish_modification_id
-														return (
-															<TouchableOpacity
-																accessibilityRole="radio"
-																accessibilityState={{ selected: isSelected }}
-																key={modification.dish_modification_id}
-																onPress={() =>
-																	field.handleChange(
-																		modification.dish_modification_id,
-																	)
-																}
-																style={styles.modButton}
-															>
-																<View style={styles.modButtonRow}>
-																	{isSelected ? (
-																		<View style={styles.modCheck}>
-																			<Ionicons
-																				color={styles.modCheckIcon.color}
-																				name="checkmark"
-																				size={14}
-																			/>
-																		</View>
-																	) : null}
-																	<Text style={styles.modButtonText}>
-																		{modification.name}
-																		{Number.parseInt(
-																			String(modification.price),
-																			10,
+											<Label style={styles.modGroupTitle}>{group.name}</Label>
+											<Field
+												name={`modifications.${group.dish_modification_group_id}`}
+											>
+												{(field) => (
+													<View
+														accessibilityRole="radiogroup"
+														style={styles.modButtonGroup}
+													>
+														{group.modifications.map((modification) => {
+															const isSelected =
+																field.state.value ===
+																modification.dish_modification_id
+
+															return (
+																<TouchableOpacity
+																	accessibilityRole="radio"
+																	accessibilityState={{ selected: isSelected }}
+																	key={modification.dish_modification_id}
+																	onPress={() =>
+																		field.handleChange(
+																			modification.dish_modification_id,
 																		)
-																			? t` +${formatPrice(modification.price)}`
-																			: ''}
-																	</Text>
-																</View>
-															</TouchableOpacity>
-														)
-													})}
-												</View>
-											)}
-										</Field>
+																	}
+																	style={styles.modButton}
+																>
+																	<View style={styles.modButtonRow}>
+																		{isSelected ? (
+																			<View style={styles.modCheck}>
+																				<Ionicons
+																					color={styles.modCheckIcon.color}
+																					name="checkmark"
+																					size={14}
+																				/>
+																			</View>
+																		) : null}
+																		<Text style={styles.modButtonText}>
+																			{modification.name}
+																			{modification.price
+																				? ` +${formatPrice(modification.price * 100)}`
+																				: null}
+																		</Text>
+																	</View>
+																</TouchableOpacity>
+															)
+														})}
+													</View>
+												)}
+											</Field>
+										</View>
+									)
+								})}
+							</>
+						)}
+
+					{/* Single Modifications */}
+					{product.modifications?.length && (
+						<>
+							<H2>
+								<Trans>Modifications</Trans>
+							</H2>
+							<View style={styles.modButtonGroup}>
+								{product.modifications.map((modification) => (
+									<View
+										key={modification.dish_modification_id}
+										style={styles.modButtonRow}
+									>
+										<Paragraph style={styles.modButton}>
+											{modification.modificator_name}
+										</Paragraph>
 									</View>
 								))}
 							</View>
-						)}
+						</>
+					)}
 
 					{/* Quantity Controls */}
 					<View style={styles.quantitySection}>
@@ -295,16 +322,19 @@ export default function MenuDetail() {
 						</View>
 					</View>
 
-					<Button onPress={handleSubmit}>
-						<Subscribe selector={(state) => state.values.quantity}>
-							{(quantity) => (
+					<Subscribe selector={(state) => state.values.quantity}>
+						{(quantity) => (
+							<Button
+								disabled={!(Number(unitPriceCents) * quantity)}
+								onPress={handleSubmit}
+							>
 								<Trans>
 									Add to Order -{' '}
 									{formatPrice(Number(unitPriceCents) * quantity)}
 								</Trans>
-							)}
-						</Subscribe>
-					</Button>
+							</Button>
+						)}
+					</Subscribe>
 				</View>
 			</ScreenContainer>
 		</>
@@ -492,9 +522,7 @@ const styles = StyleSheet.create((theme) => ({
 		minWidth: 40,
 		textAlign: 'center',
 	},
-	timeBadge: {
-		backgroundColor: theme.colors.primary,
-	},
+
 	title: {
 		marginBottom: theme.spacing.sm,
 	},

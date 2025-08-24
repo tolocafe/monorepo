@@ -33,7 +33,7 @@ export default function AppInfoScreen() {
 	const handleClearCache = () => {
 		Alert.alert(
 			t`Clear Cache`,
-			t`This will clear all cached data including menu items. The app will reload fresh data from the server. Continue?`,
+			t`This will clear all cached data including menu items and orders. Your login credentials and language preference will be preserved. The app will reload fresh data from the server. Continue?`,
 			[
 				{
 					style: 'cancel',
@@ -145,7 +145,8 @@ export default function AppInfoScreen() {
 						<Paragraph style={styles.description}>
 							<Trans>
 								Clear the app cache to remove stored data and reload fresh
-								content on next use.
+								content on next use. Login credentials and language preferences
+								will be preserved.
 							</Trans>
 						</Paragraph>
 						<Button disabled={isClearingCache} onPress={handleClearCache}>

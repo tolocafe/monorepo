@@ -21,9 +21,11 @@ export default function TabLayout() {
 				<meta content="true" property="expo:handoff" />
 			</Head>
 			<Tabs
-				activeIndicatorColor={Colors[colorScheme ?? 'light'].tint}
+				activeIndicatorColor={Platform.select({
+					android: Colors[colorScheme ?? 'light'].tintTransparent,
+					default: Colors[colorScheme ?? 'light'].tint,
+				})}
 				minimizeBehavior="automatic"
-				rippleColor={Colors[colorScheme ?? 'light'].tint}
 				screenOptions={{
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 					// @ts-ignore - bottom-tabs library has incomplete type definitions
@@ -34,7 +36,7 @@ export default function TabLayout() {
 				tabBarStyle={{
 					backgroundColor:
 						Platform.OS === 'android'
-							? Colors[colorScheme ?? 'light'].background
+							? Colors[colorScheme ?? 'light'].backgroundContrast
 							: undefined,
 				}}
 				translucent
@@ -46,7 +48,7 @@ export default function TabLayout() {
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
 						tabBarIcon: ({ focused }: { focused: boolean }) => {
 							if (Platform.OS === 'ios') {
-								return { sfSymbol: 'house' }
+								return { sfSymbol: focused ? 'house.fill' : 'house' }
 							}
 
 							if (Platform.OS === 'android') {
@@ -80,7 +82,7 @@ export default function TabLayout() {
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
 						tabBarIcon({ focused }: { focused: boolean }) {
 							if (Platform.OS === 'ios') {
-								return { sfSymbol: 'bag' }
+								return { sfSymbol: focused ? 'bag.fill' : 'bag' }
 							}
 
 							if (Platform.OS === 'android') {
