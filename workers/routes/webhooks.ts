@@ -203,29 +203,30 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 		switch (object) {
 			case 'incoming_order': {
-				const { client_id } = await api.incomingOrders.getIncomingOrder(
-					context.env.POSTER_TOKEN,
-					object_id as string,
-				)
+				if (action === 'closed') {
+					const { client_id } = await api.incomingOrders.getIncomingOrder(
+						context.env.POSTER_TOKEN,
+						object_id as string,
+					)
 
-				const { results: pushTokens } = await context.env.D1_TOLO.prepare(
-					'SELECT * FROM push_tokens WHERE client_id = ?',
-				)
-					.bind(client_id)
-					.all()
+					const { results: pushTokens } = await context.env.D1_TOLO.prepare(
+						'SELECT * FROM push_tokens WHERE client_id = ?',
+					)
+						.bind(client_id)
+						.all()
 
-				messages.push(
-					...pushTokens.map(
-						(destination) =>
-							({
-								body:
-									action === 'closed'
-										? 'Your order has been delivered'
-										: 'Your order is ready',
-								to: destination.token as string,
-							}) satisfies ExpoPushMessage,
-					),
-				)
+					messages.push(
+						...pushTokens.map(
+							(destination) =>
+								({
+									body: 'Enjoy your order ☕️🥐, we hope you like it!',
+									title: 'Order delivered',
+									to: destination.token as string,
+								}) satisfies ExpoPushMessage,
+						),
+					)
+					break
+				}
 
 				break
 			}
@@ -246,7 +247,8 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						...pushTokens.map(
 							(destination) =>
 								({
-									body: 'We are working on your order',
+									body: 'We are now working on your order 🚀',
+									title: 'Order accepted',
 									to: destination.token as string,
 								}) satisfies ExpoPushMessage,
 						),
