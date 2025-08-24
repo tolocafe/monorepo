@@ -152,6 +152,7 @@ export const api = {
 				`${BASE_URL}/dash.getTransaction?token=${token}&transaction_id=${id}`,
 			).then((response) => response.json())) as PosterResponse<
 				{
+					client_id: string
 					/** The amount paid by hard cash which is equal to the payed_cash amount plus payed_card */
 					payed_sum: string
 					/** Receipt rounding amount in cents */

@@ -204,7 +204,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		switch (object) {
 			case 'transaction': {
 				if (action === 'changed') {
-					const { client_id } = await api.finance.getTransaction(
+					const { client_id } = await api.dash.getTransaction(
 						context.env.POSTER_TOKEN,
 						object_id as string,
 					)
