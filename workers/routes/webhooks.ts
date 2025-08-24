@@ -201,6 +201,12 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		const expo = new Expo()
 		const messages: ExpoPushMessage[] = []
 
+		captureEvent({
+			extra: { body, parsedData },
+			level: 'debug',
+			message: `Poster webhook received (${object})`,
+		})
+
 		switch (object) {
 			case 'incoming_order': {
 				if (action === 'closed') {
@@ -256,20 +262,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					break
 				}
 
-				captureEvent({
-					extra: { body },
-					level: 'debug',
-					message: `Poster webhook received (${object})`,
-				})
-
 				break
 			}
 			default: {
-				captureEvent({
-					extra: { body },
-					level: 'debug',
-					message: `Poster webhook received (${object})`,
-				})
 				break
 			}
 		}
