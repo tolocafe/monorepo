@@ -17,6 +17,13 @@ import { getStripe } from '../utils/stripe'
 
 import type { Bindings } from '../types'
 
+type EventData =
+	| undefined
+	| {
+			transactions_history?: { type_history: 'changedeliveryinfo' | 'comment' }
+	  }
+	| { transactions_history?: { value: number } }
+
 const posterWebhookDataSchema = z.object({
 	account: z.string().optional(),
 	account_number: z.string().optional(),
@@ -189,10 +196,10 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			return context.json({ message: 'Invalid signature' }, 401)
 		}
 
-		let parsedData
+		let parsedData: EventData
 		if (data) {
 			try {
-				parsedData = JSON.parse(data) as object
+				parsedData = JSON.parse(data) as unknown as EventData
 			} catch {
 				//
 			}
@@ -209,18 +216,17 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 		switch (object) {
 			case 'incoming_order': {
+				const { client_id } = await api.incomingOrders.getIncomingOrder(
+					context.env.POSTER_TOKEN,
+					object_id as string,
+				)
+				const { results: pushTokens } = await context.env.D1_TOLO.prepare(
+					'SELECT * FROM push_tokens WHERE client_id = ?',
+				)
+					.bind(client_id)
+					.all()
+
 				if (action === 'closed') {
-					const { client_id } = await api.incomingOrders.getIncomingOrder(
-						context.env.POSTER_TOKEN,
-						object_id as string,
-					)
-
-					const { results: pushTokens } = await context.env.D1_TOLO.prepare(
-						'SELECT * FROM push_tokens WHERE client_id = ?',
-					)
-						.bind(client_id)
-						.all()
-
 					messages.push(
 						...pushTokens.map(
 							(destination) =>
@@ -263,11 +269,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						.all()
 
 					if (
-						(
-							parsedData as
-								| undefined
-								| { transactions_history: { value: number } }
-						)?.transactions_history.value === 4
+						parsedData?.transactions_history &&
+						'value' in parsedData.transactions_history &&
+						parsedData.transactions_history.value === 4
 					) {
 						messages.push(
 							...pushTokens.map(
@@ -279,6 +283,29 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 									}) satisfies ExpoPushMessage,
 							),
 						)
+					} else if (
+						parsedData?.transactions_history &&
+						'type_history' in parsedData.transactions_history &&
+						parsedData.transactions_history.type_history === 'comment'
+					) {
+						messages.push(
+							...pushTokens.map(
+								(destination) =>
+									({
+										body: '✅ Tu pedido ya está listo, te esperamos!',
+										title: 'Pedido listo',
+										to: destination.token as string,
+									}) satisfies ExpoPushMessage,
+							),
+						)
+						break
+					} else if (
+						parsedData?.transactions_history &&
+						'type_history' in parsedData.transactions_history &&
+						parsedData.transactions_history.type_history ===
+							'changedeliveryinfo'
+					) {
+						// TODO: send eta
 					} else {
 						messages.push(
 							...pushTokens.map(
