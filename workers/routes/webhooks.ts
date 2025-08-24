@@ -1,6 +1,10 @@
 import crypto from 'node:crypto'
 
-import { captureEvent, captureException } from '@sentry/cloudflare'
+import {
+	captureEvent,
+	captureException,
+	getCurrentScope,
+} from '@sentry/cloudflare'
 import { Expo } from 'expo-server-sdk'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
@@ -182,9 +186,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				return context.json({ message: 'Ok' }, 200)
 			}
 
-			// eslint-disable-next-line no-console
-			console.log(verifyHash, parsedBody.verify)
-
 			return context.json({ message: 'Invalid signature' }, 401)
 		}
 
@@ -279,8 +280,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			tickets.push(...ticket)
 		}
 
-		// eslint-disable-next-line no-console
-		console.log(tickets, parsedData)
+		getCurrentScope().setExtras({ Tickets: tickets, ParsedData: parsedData })
 
 		return context.json({ message: 'Ok' }, 200)
 	})
