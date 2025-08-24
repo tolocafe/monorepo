@@ -40,7 +40,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			await api.clients.createClient(context.env.POSTER_TOKEN, {
 				birthday: birthdate,
 				client_groups_id_client: 1,
-				client_name: name,
+				client_name: name ?? 'Anónimo',
 				email,
 				phone,
 			})
