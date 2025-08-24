@@ -12,6 +12,7 @@ import {
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
+import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
@@ -58,7 +59,9 @@ export default function Menu() {
 	}
 
 	const renderMenuItem = ({ item }: { item: Product }) => (
-		<MenuListItem item={item} onAddToBag={handleAddToBag} />
+		<ErrorBoundary fallback={<View aria-hidden />}>
+			<MenuListItem item={item} onAddToBag={handleAddToBag} />
+		</ErrorBoundary>
 	)
 
 	useEffect(() => {
