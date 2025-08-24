@@ -30,12 +30,12 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		)
 
 		if (!existingClient) {
-			if (!name) {
-				return context.json(
-					{ error: 'Some fields are required', fields: [{ name: 'name' }] },
-					400,
-				)
-			}
+			// if (!name) {
+			// 	return context.json(
+			// 		{ error: 'Some fields are required', fields: [{ name: 'name' }] },
+			// 		400,
+			// 	)
+			// }
 
 			await api.clients.createClient(context.env.POSTER_TOKEN, {
 				birthday: birthdate,
