@@ -45,7 +45,7 @@ export default function Orders() {
 				productQueryOptions(item.id).queryKey,
 			)
 			const unitPriceCents = productData
-				? Number(Object.values(productData.price)[0] || 0)
+				? Number(Object.values(productData.price ?? {}).at(0) ?? 0)
 				: 0
 			const modificationsTotalCents = (item.modifications ?? []).reduce(
 				(moduleSum, module_) => moduleSum + (module_.price || 0),

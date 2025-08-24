@@ -56,7 +56,7 @@ function getOrderTotal(products: OrderProduct[]) {
 		)
 
 		const unitPriceCents = productData
-			? Number(Object.values(productData.price)[0] || 0)
+			? Number(Object.values(productData.price ?? {}).at(0) ?? 0)
 			: 0
 
 		const modificationsTotalCents = (item.modifications ?? []).reduce(
@@ -76,7 +76,7 @@ const getProductPrice = (productId: string): null | string => {
 	const product = productData
 
 	if (!product) return null
-	const priceRaw = Object.values(product.price)[0] || '0'
+	const priceRaw = Object.values(product.price ?? {}).at(0) ?? '0'
 	return formatPrice(Number(priceRaw))
 }
 
