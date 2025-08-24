@@ -27,9 +27,9 @@ const posterWebhookDataSchema = z.object({
 })
 
 const webhooks = new Hono<{ Bindings: Bindings }>()
-	.get('/poster', (c) => c.json({ message: 'Ok' }, 200))
-	.post('/stripe', async (c) => {
-		const signature = c.req.header('stripe-signature')
+	.get('/poster', (context) => context.json({ message: 'Ok' }, 200))
+	.post('/stripe', async (context) => {
+		const signature = context.req.header('stripe-signature')
 
 		if (!signature) {
 			throw new HTTPException(400, { message: 'Missing signature' })
@@ -39,12 +39,12 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 		let event
 		try {
-			const body = await c.req.text()
+			const body = await context.req.text()
 
 			event = await stripe.webhooks.constructEventAsync(
 				body,
 				signature,
-				c.env.STRIPE_WEBHOOK_SECRET,
+				context.env.STRIPE_WEBHOOK_SECRET,
 			)
 
 			captureEvent({
@@ -87,12 +87,12 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				}
 
 				// Store the transaction mapping in D1
-				await c.env.D1_TOLO.exec(
+				await context.env.D1_TOLO.exec(
 					'CREATE TABLE IF NOT EXISTS top_ups (payment_intent_id TEXT PRIMARY KEY, client_id INTEGER, amount INTEGER, transaction_id INTEGER, created_at TIMESTAMP)',
 				)
 
 				// Verify transaction does not exist in top_ups table
-				const transaction = await c.env.D1_TOLO.prepare(
+				const transaction = await context.env.D1_TOLO.prepare(
 					'SELECT * FROM top_ups WHERE payment_intent_id = ?',
 				)
 					.bind(paymentIntent.id)
@@ -104,11 +104,11 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						message: 'Transaction was already processed',
 					})
 
-					return c.json({ received: true })
+					return context.json({ received: true })
 				}
 
 				const transactionId = await api.finance.createTransaction(
-					c.env.POSTER_TOKEN,
+					context.env.POSTER_TOKEN,
 					{
 						account_to: 1,
 						amount_to: 0,
@@ -126,7 +126,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				// eslint-disable-next-line unicorn/prevent-abbreviations
 				const eWalletTransactionId = await api.clients.addEWalletPayment(
-					c.env.POSTER_TOKEN,
+					context.env.POSTER_TOKEN,
 					{
 						amount: paymentIntent.amount,
 						client_id: Number(posterClientId),
@@ -135,7 +135,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					},
 				)
 
-				await c.env.D1_TOLO.prepare(
+				await context.env.D1_TOLO.prepare(
 					'INSERT INTO top_ups (payment_intent_id, client_id, amount, transaction_id, created_at) VALUES (?, ?, ?, ?, ?)',
 				)
 					.bind(
@@ -154,7 +154,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				break
 		}
 
-		return c.json({ received: true })
+		return context.json({ received: true })
 	})
 	.post('/poster', async (context) => {
 		const body = (await context.req.json()) as unknown
@@ -229,7 +229,10 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				const messages = pushTokens.map(
 					(destination) =>
 						({
-							body: action === 'closed' ? 'Your order has been delivered' : '',
+							body:
+								action === 'closed'
+									? 'Your order has been delivered'
+									: 'Your order is ready',
 							to: destination.token as string,
 						}) satisfies ExpoPushMessage,
 				)
