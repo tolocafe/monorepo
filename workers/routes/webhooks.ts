@@ -202,39 +202,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		const messages: ExpoPushMessage[] = []
 
 		switch (object) {
-			case 'transaction': {
-				if (action === 'changed') {
-					const { client_id } = await api.dash.getTransaction(
-						context.env.POSTER_TOKEN,
-						object_id as string,
-					)
-
-					const { results: pushTokens } = await context.env.D1_TOLO.prepare(
-						'SELECT * FROM push_tokens WHERE client_id = ?',
-					)
-						.bind(client_id)
-						.all()
-
-					messages.push(
-						...pushTokens.map(
-							(destination) =>
-								({
-									body: 'We are working on your order',
-									to: destination.token as string,
-								}) satisfies ExpoPushMessage,
-						),
-					)
-					break
-				}
-
-				captureEvent({
-					extra: { body },
-					message: `Poster webhook received (${object})`,
-					level: 'debug',
-				})
-
-				break
-			}
 			case 'incoming_order': {
 				const { client_id } = await api.incomingOrders.getIncomingOrder(
 					context.env.POSTER_TOKEN,
@@ -262,11 +229,44 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				break
 			}
+			case 'transaction': {
+				if (action === 'changed') {
+					const { client_id } = await api.dash.getTransaction(
+						context.env.POSTER_TOKEN,
+						object_id as string,
+					)
+
+					const { results: pushTokens } = await context.env.D1_TOLO.prepare(
+						'SELECT * FROM push_tokens WHERE client_id = ?',
+					)
+						.bind(client_id)
+						.all()
+
+					messages.push(
+						...pushTokens.map(
+							(destination) =>
+								({
+									body: 'We are working on your order',
+									to: destination.token as string,
+								}) satisfies ExpoPushMessage,
+						),
+					)
+					break
+				}
+
+				captureEvent({
+					extra: { body },
+					level: 'debug',
+					message: `Poster webhook received (${object})`,
+				})
+
+				break
+			}
 			default: {
 				captureEvent({
 					extra: { body },
-					message: `Poster webhook received (${object})`,
 					level: 'debug',
+					message: `Poster webhook received (${object})`,
 				})
 				break
 			}
@@ -280,7 +280,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			tickets.push(...ticket)
 		}
 
-		getCurrentScope().setExtras({ Tickets: tickets, ParsedData: parsedData })
+		getCurrentScope().setExtras({ ParsedData: parsedData, Tickets: tickets })
 
 		return context.json({ message: 'Ok' }, 200)
 	})
