@@ -5,6 +5,7 @@ export type Bindings = Cloudflare.Env & {
 	KV_CMS: KVNamespace
 	KV_OTP: KVNamespace
 	KV_SESSIONS: KVNamespace
+	POSTER_APPLICATION_SECRET: string
 	POSTER_TOKEN: string
 	STRIPE_SECRET_KEY: string
 	STRIPE_WEBHOOK_SECRET: string

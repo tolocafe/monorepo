@@ -168,7 +168,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		})
 
 		const parsedBody = posterWebhookDataSchema.parse(body)
-		const { account, action, data, object, object_id } = parsedBody
+		const { account, action, data, object, object_id, time } = parsedBody
 
 		const verifyHash = crypto
 			.createHash('md5')
@@ -179,7 +179,8 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					object_id,
 					action,
 					...(data ? [data] : []),
-					context.env.POSTER_TOKEN,
+					time,
+					context.env.POSTER_APPLICATION_SECRET,
 				].join(';'),
 			)
 			.digest('hex')
@@ -188,6 +189,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			if (parsedBody.action === 'test') {
 				return context.json({ message: 'Ok' }, 200)
 			}
+
+			// eslint-disable-next-line no-console
+			console.log(verifyHash, parsedBody.verify)
 
 			return context.json({ message: 'Invalid signature' }, 401)
 		}
