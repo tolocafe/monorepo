@@ -190,19 +190,21 @@ export default function MenuDetail() {
 					</View>
 
 					{product.ingredients?.length && (
-						<View style={styles.ingredientsSection}>
+						<>
 							<H2>
 								<Trans>Ingredients</Trans>
 							</H2>
-							{product.ingredients.slice(0, 5).map((ingredient) => (
-								<Paragraph
-									key={ingredient.ingredient_id}
-									style={styles.ingredient}
-								>
-									• {ingredient.ingredient_name}
-								</Paragraph>
-							))}
-						</View>
+							<View style={styles.ingredientsSection}>
+								{product.ingredients.slice(0, 5).map((ingredient) => (
+									<Paragraph
+										key={ingredient.ingredient_id}
+										style={styles.ingredient}
+									>
+										• {ingredient.ingredient_name}
+									</Paragraph>
+								))}
+							</View>
+						</>
 					)}
 
 					{/* Group Modifications */}
@@ -212,66 +214,70 @@ export default function MenuDetail() {
 								<H2>
 									<Trans>Modifications</Trans>
 								</H2>
-								{product.group_modifications.map((group) => {
-									if (group.name === 'Desechables') return null
+								<View>
+									{product.group_modifications.map((group) => {
+										if (group.name === 'Desechables') return null
 
-									return (
-										<View
-											key={group.dish_modification_group_id}
-											style={styles.modGroup}
-										>
-											<Label style={styles.modGroupTitle}>{group.name}</Label>
-											<Field
-												name={`modifications.${group.dish_modification_group_id}`}
+										return (
+											<View
+												key={group.dish_modification_group_id}
+												style={styles.modGroup}
 											>
-												{(field) => (
-													<View
-														accessibilityRole="radiogroup"
-														style={styles.modButtonGroup}
-													>
-														{group.modifications.map((modification) => {
-															const isSelected =
-																field.state.value ===
-																modification.dish_modification_id
+												<Label style={styles.modGroupTitle}>{group.name}</Label>
+												<Field
+													name={`modifications.${group.dish_modification_group_id}`}
+												>
+													{(field) => (
+														<View
+															accessibilityRole="radiogroup"
+															style={styles.modButtonGroup}
+														>
+															{group.modifications.map((modification) => {
+																const isSelected =
+																	field.state.value ===
+																	modification.dish_modification_id
 
-															return (
-																<TouchableOpacity
-																	accessibilityRole="radio"
-																	accessibilityState={{ selected: isSelected }}
-																	key={modification.dish_modification_id}
-																	onPress={() =>
-																		field.handleChange(
-																			modification.dish_modification_id,
-																		)
-																	}
-																	style={styles.modButton}
-																>
-																	<View style={styles.modButtonRow}>
-																		{isSelected ? (
-																			<View style={styles.modCheck}>
-																				<Ionicons
-																					color={styles.modCheckIcon.color}
-																					name="checkmark"
-																					size={14}
-																				/>
-																			</View>
-																		) : null}
-																		<Text style={styles.modButtonText}>
-																			{modification.name}
-																			{modification.price
-																				? ` +${formatPrice(modification.price * 100)}`
-																				: null}
-																		</Text>
-																	</View>
-																</TouchableOpacity>
-															)
-														})}
-													</View>
-												)}
-											</Field>
-										</View>
-									)
-								})}
+																return (
+																	<TouchableOpacity
+																		accessibilityRole="radio"
+																		accessibilityState={{
+																			selected: isSelected,
+																		}}
+																		key={modification.dish_modification_id}
+																		onPress={() =>
+																			field.handleChange(
+																				modification.dish_modification_id,
+																			)
+																		}
+																		style={styles.modButton}
+																	>
+																		<View style={styles.modButtonRow}>
+																			{isSelected ? (
+																				<View style={styles.modCheck}>
+																					<Ionicons
+																						color={styles.modCheckIcon.color}
+																						name="checkmark"
+																						size={14}
+																					/>
+																				</View>
+																			) : null}
+																			<Text style={styles.modButtonText}>
+																				{modification.name}
+																				{modification.price
+																					? ` +${formatPrice(modification.price * 100)}`
+																					: null}
+																			</Text>
+																		</View>
+																	</TouchableOpacity>
+																)
+															})}
+														</View>
+													)}
+												</Field>
+											</View>
+										)
+									})}
+								</View>
 							</>
 						)}
 
@@ -386,6 +392,7 @@ const styles = StyleSheet.create((theme) => ({
 		fontWeight: theme.fontWeights.bold,
 	},
 	content: {
+		gap: theme.spacing.md,
 		padding: theme.layout.screenPadding,
 	},
 	description: {
@@ -409,11 +416,10 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	ingredient: {
 		color: theme.colors.textSecondary,
-		marginBottom: theme.spacing.xs,
 		paddingLeft: theme.spacing.sm,
 	},
 	ingredientsSection: {
-		marginBottom: theme.spacing.xl,
+		gap: theme.spacing.xs,
 	},
 	loadingText: {
 		color: theme.colors.textSecondary,
@@ -444,7 +450,6 @@ const styles = StyleSheet.create((theme) => ({
 	modButtonText: {
 		fontSize: theme.typography.button.fontSize,
 		fontWeight: theme.fontWeights.semibold,
-		textAlign: 'center',
 	},
 	modCheck: {
 		alignItems: 'center',

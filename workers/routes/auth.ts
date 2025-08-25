@@ -1,6 +1,6 @@
 import { RequestOtpSchema, VerifyOtpSchema } from '@common/schemas'
 import { Hono } from 'hono'
-import { setCookie } from 'hono/cookie'
+import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 
 import { authenticate, signJwt } from '../utils/jwt'
@@ -18,6 +18,17 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 	'name' in value &&
 	'token' in value
 
+const getCookieOptions = (isTest: boolean) =>
+	({
+		httpOnly: true,
+		// 1 year
+		maxAge: 60 * 60 * 24 * 365,
+		path: '/api',
+		priority: 'High',
+		sameSite: isTest ? 'None' : 'Lax',
+		secure: !isTest,
+	}) as const
+
 const auth = new Hono<{ Bindings: Bindings }>()
 	.post('/request-otp', async (context) => {
 		const { birthdate, email, name, phone } = RequestOtpSchema.parse(
@@ -30,17 +41,17 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		)
 
 		if (!existingClient) {
-			// if (!name) {
-			// 	return context.json(
-			// 		{ error: 'Some fields are required', fields: [{ name: 'name' }] },
-			// 		400,
-			// 	)
-			// }
+			if (!name) {
+				return context.json(
+					{ error: 'Some fields are required', fields: [{ name: 'name' }] },
+					400,
+				)
+			}
 
 			await api.clients.createClient(context.env.POSTER_TOKEN, {
 				birthday: birthdate,
 				client_groups_id_client: 1,
-				client_name: name ?? 'Anónimo',
+				client_name: name,
 				email,
 				phone,
 			})
@@ -113,15 +124,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		const responseBody = { client, token }
 
 		if (isWeb) {
-			setCookie(context, 'tolo_session', token, {
-				httpOnly: true,
-				// 1 year
-				maxAge: 60 * 60 * 24 * 365,
-				path: '/api',
-				priority: 'High',
-				sameSite: isTest ? 'None' : 'Lax',
-				secure: !isTest,
-			})
+			setCookie(context, 'tolo_session', token, getCookieOptions(isTest))
 		}
 
 		return context.json(responseBody)
@@ -189,10 +192,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')
 
 		if (isWeb) {
-			context.header(
-				'Set-Cookie',
-				'tolo_session=; Path=/api; HttpOnly; Max-Age=0; SameSite=Lax',
-			)
+			deleteCookie(context, 'tolo_session', getCookieOptions(false))
 		}
 
 		return context.json({ success: true })

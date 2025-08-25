@@ -77,41 +77,46 @@ export default function ProfileScreen() {
 		},
 	})
 
-	const handleSignOut = () => {
-		Alert.alert(t`Sign Out`, t`Are you sure you want to sign out?`, [
-			{ style: 'cancel', text: t`Cancel` },
-			{
-				async onPress() {
-					// Call backend sign-out endpoint to revoke sessions
-					await signOut().catch(() => {
-						Burnt.toast({
-							duration: 3,
-							haptic: 'error',
-							message: t`Error signing out. Please try again.`,
-							preset: 'error',
-							title: t`Error`,
-						})
-					})
+	const handleSignOut = async () => {
+		async function signOutPress() {
+			await signOut().catch(() => {
+				Burnt.toast({
+					duration: 3,
+					haptic: 'error',
+					message: t`Error signing out. Please try again.`,
+					preset: 'error',
+					title: t`Error`,
+				})
+			})
 
-					// Clear credentials from local storage
-					if (Platform.OS !== 'web') {
-						await SecureStore.deleteItemAsync(STORAGE_KEYS.AUTH_SESSION)
-					}
+			// Clear credentials from local storage
+			if (Platform.OS !== 'web') {
+				await SecureStore.deleteItemAsync(STORAGE_KEYS.AUTH_SESSION)
+			}
 
-					// Clear all cached data
-					await clearAllCache()
+			// Clear all cached data
+			await clearAllCache()
 
-					if (router.canGoBack()) {
-						router.back()
-					} else {
-						// Navigate back to sign-in
-						router.navigate('/more', { withAnchor: false })
-					}
+			if (router.canGoBack()) {
+				router.back()
+			} else {
+				// Navigate back to sign-in
+				router.navigate('/more', { withAnchor: false })
+			}
+		}
+
+		if (Platform.OS === 'web') {
+			await signOutPress()
+		} else {
+			Alert.alert(t`Sign Out`, t`Are you sure you want to sign out?`, [
+				{ style: 'cancel', text: t`Cancel` },
+				{
+					onPress: signOutPress,
+					style: 'destructive',
+					text: t`Sign Out`,
 				},
-				style: 'destructive',
-				text: t`Sign Out`,
-			},
-		])
+			])
+		}
 	}
 
 	const balanceCents = Number(user?.ewallet ?? '0')

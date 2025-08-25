@@ -39,7 +39,7 @@ const styles = StyleSheet.create((theme) => ({
 		backgroundColor: theme.colors.surface,
 		borderCurve: Platform.OS === 'ios' ? 'continuous' : undefined,
 		borderRadius: theme.borderRadius.lg,
-		boxShadow: '0px 0px 12px 0px rgba(0, 0, 0, 0.04)',
+		boxShadow: '0px 0px 15px 0px rgba(0, 0, 0, 0.15)',
 		variants: {
 			padding: {
 				padded: {

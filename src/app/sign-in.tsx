@@ -32,7 +32,8 @@ const SignInSchema = z.object({
 	verificationCode: z
 		.string()
 		.trim()
-		.regex(/^\d{6}$/u, 'The code must be 6 digits')
+		.min(1, 'Please enter a verification code')
+		.max(6, 'The code must be 6 digits')
 		.or(z.literal('')),
 })
 
@@ -212,7 +213,7 @@ export default function SignIn() {
 						</Pressable>
 					),
 					headerShadowVisible: false,
-					headerShown: true,
+					headerShown: Platform.OS !== 'web',
 					headerTitle: '',
 					headerTransparent: true,
 					presentation: Platform.select({
@@ -225,6 +226,7 @@ export default function SignIn() {
 				bounces={false}
 				contentContainerStyle={styles.contentContainer}
 				keyboardAware
+				style={styles.container}
 				withTopPadding
 			>
 				{itemName && (
@@ -256,21 +258,16 @@ export default function SignIn() {
 									<PhoneNumberInput
 										onBlur={field.handleBlur}
 										onChange={field.handleChange}
-										placeholder={t`123 456 7890`}
+										placeholder={t`0000000000`}
 										value={field.state.value}
 									/>
 								)}
 							</Field>
 						</View>
 
-						<Subscribe selector={(state) => state}>
+						<Subscribe selector={(state) => state.canSubmit}>
 							{(canSubmit) => (
-								<Button
-									disabled={
-										requestOtpMutation.isPending || !canSubmit.canSubmit
-									}
-									onPress={() => handleSubmit()}
-								>
+								<Button disabled={!canSubmit} onPress={() => handleSubmit()}>
 									{requestOtpMutation.isPending ? (
 										<Trans>Loading...</Trans>
 									) : (
@@ -321,7 +318,7 @@ export default function SignIn() {
 										{field.state.meta.isTouched &&
 										field.state.meta.errors.length > 0 ? (
 											<Text style={styles.errorText}>
-												{field.state.meta.errors[0]?.message}
+												{field.state.meta.errors.at(0)?.message}
 											</Text>
 										) : null}
 									</>
@@ -409,15 +406,16 @@ export default function SignIn() {
 								{(field) => (
 									<>
 										<OtpInput
+											autoFocus
 											onBlur={field.handleBlur}
 											onChange={field.handleChange}
 											onComplete={() => handleSubmit()}
 											value={field.state.value}
 										/>
-										{field.state.meta.isTouched &&
+										{field.state.meta.isBlurred &&
 										field.state.meta.errors.length > 0 ? (
 											<Text style={styles.errorText}>
-												{String(field.state.meta.errors[0])}
+												{field.state.meta.errors.at(0)?.message}
 											</Text>
 										) : null}
 									</>
@@ -456,9 +454,6 @@ export default function SignIn() {
 }
 
 const styles = StyleSheet.create((theme) => ({
-	authContainer: {
-		gap: theme.spacing.md,
-	},
 	backButton: {
 		alignItems: 'center',
 		marginTop: theme.spacing.md,
@@ -472,15 +467,21 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.primary,
 	},
 	container: {
-		backgroundColor: theme.colors.background,
-		flex: 1,
-		padding: theme.layout.screenPadding,
-	},
-	content: {
-		flex: 1,
-		justifyContent: 'center',
+		_web: {
+			alignItems: 'center',
+			backgroundColor: 'rgba(1, 1, 1, 0.1)',
+			justifyContent: 'center',
+		},
 	},
 	contentContainer: {
+		_web: {
+			backgroundColor: theme.colors.background,
+			borderRadius: theme.borderRadius.lg,
+			height: '100%',
+			maxHeight: 600,
+			maxWidth: 600,
+			width: '100%',
+		},
 		gap: theme.spacing.md,
 		padding: theme.layout.screenPadding,
 	},
@@ -498,15 +499,6 @@ const styles = StyleSheet.create((theme) => ({
 	headerIconText: {
 		color: theme.colors.text,
 		fontSize: theme.fontSizes.xxl,
-	},
-	input: {
-		backgroundColor: theme.colors.surface,
-		borderColor: theme.colors.border,
-		borderRadius: theme.borderRadius.sm,
-		borderWidth: 1,
-		color: theme.colors.text,
-		...theme.typography.input,
-		padding: theme.spacing.sm,
 	},
 	inputContainer: {
 		marginBottom: theme.spacing.md,

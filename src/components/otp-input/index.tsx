@@ -1,12 +1,19 @@
 import type { ComponentProps } from 'react'
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import type {
+	NativeSyntheticEvent,
+	TextInputFocusEventData,
+} from 'react-native'
 import { Pressable, TextInput, View } from 'react-native'
 
 import { StyleSheet } from 'react-native-unistyles'
 
 import { Text } from '@/components/Text'
 
-type OtpInputProps = {
+type Props = Omit<
+	ComponentProps<typeof TextInput>,
+	'onChange' | 'onComplete' | 'value'
+> & {
 	/** Disable input */
 	disabled?: boolean
 	/** Optional blur handler for form libs */
@@ -21,6 +28,8 @@ type OtpInputProps = {
 	value: string
 }
 
+const DIGITS = Array.from({ length: 6 }).map((_, index) => index)
+
 export function OtpInput({
 	disabled = false,
 	onBlur,
@@ -28,8 +37,10 @@ export function OtpInput({
 	onComplete,
 	testID,
 	value,
-}: OtpInputProps) {
+	...props
+}: Props) {
 	const inputRef = useRef<TextInput>(null)
+	const [focused, setFocused] = useState(false)
 
 	const digits = useMemo(() => {
 		const only = value.replaceAll(/\D+/gu, '').slice(0, 6)
@@ -44,23 +55,32 @@ export function OtpInput({
 		}
 	}
 
+	const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+		setFocused(false)
+		onBlur?.(event)
+	}
+
 	return (
 		<View style={styles.container} testID={testID}>
-			<Pressable onPress={() => inputRef.current?.focus()}>
-				{/* Display boxes */}
-				<View style={styles.boxesRow}>
-					{Array.from({ length: 6 }).map((_, index) => (
-						<View
-							key={index}
-							style={[styles.box, value.length === index && styles.boxActive]}
-						>
-							<Text style={styles.boxText}>{digits[index]}</Text>
-						</View>
-					))}
-				</View>
+			<Pressable
+				onPress={() => {
+					inputRef.current?.focus()
+				}}
+				style={styles.boxesRow}
+			>
+				{DIGITS.map((index) => (
+					<View
+						key={index}
+						style={[
+							styles.box,
+							focused && value.length === index && styles.boxActive,
+						]}
+					>
+						<Text style={styles.boxText}>{digits[index]}</Text>
+					</View>
+				))}
 			</Pressable>
 
-			{/* Transparent overlay input to allow paste/select/focus without layout shift */}
 			<TextInput
 				autoComplete="one-time-code"
 				autoCorrect={false}
@@ -69,14 +89,16 @@ export function OtpInput({
 				editable={!disabled}
 				keyboardType="number-pad"
 				maxLength={6}
-				onBlur={onBlur}
+				onBlur={handleBlur}
 				onChangeText={handleChange}
+				onFocus={() => setFocused(true)}
 				ref={inputRef}
 				selectTextOnFocus={false}
 				showSoftInputOnFocus
 				style={styles.overlayInput}
 				textContentType="oneTimeCode"
 				value={value}
+				{...props}
 			/>
 		</View>
 	)
@@ -95,12 +117,12 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	boxActive: {
 		borderColor: theme.colors.primary,
+		borderWidth: 2,
 	},
 	boxesRow: {
-		alignItems: 'center',
 		flexDirection: 'row',
-		gap: theme.spacing.sm,
-		justifyContent: 'center',
+		justifyContent: 'space-between',
+		width: '100%',
 	},
 	boxText: {
 		color: theme.colors.text,
@@ -110,13 +132,16 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	container: {
 		alignItems: 'center',
+		marginHorizontal: 'auto',
+		maxWidth: 270,
+		width: '100%',
 	},
 	overlayInput: {
 		borderWidth: 0,
 		bottom: 0,
 		left: 0,
 		margin: 0,
-		opacity: 0.01,
+		opacity: 0,
 		padding: 0,
 		position: 'absolute',
 		right: 0,

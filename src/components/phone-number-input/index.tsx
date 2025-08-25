@@ -44,21 +44,14 @@ export function PhoneNumberInput({
 	)
 	const selectedCountry = phoneCountries.find((c) => c.prefix === intPrefix)
 
-	const handleCountryChange = (dialCode: string) => {
-		// const digits = getNationalDigits(value, selectedCountry)
-		// const nextE164 = digits.length > 0 ? `${dialCode}${digits}` : ''
-		onChange(dialCode + value)
+	const handleCountryChange = (nextIntPrefix: string) => {
+		onChange(nextIntPrefix + nsn)
 	}
 
 	const handleTextChange = (text: string) => {
-		const [nextIntPrefix] = getPhoneParts(text)
+		const [nextIntPrefix, nextNsn] = getPhoneParts(text, intPrefix)
 
-		if (nextIntPrefix) {
-			onChange(nextIntPrefix + text.replace(nextIntPrefix, ''))
-		} else {
-			// // Simply pass the cleaned E164 format - let the parent handle the rest
-			onChange((intPrefix as string) + text)
-		}
+		onChange(nextIntPrefix + nextNsn)
 	}
 
 	return (
@@ -79,7 +72,7 @@ export function PhoneNumberInput({
 						</View>
 					</View>
 				</DropdownMenu.Trigger>
-				<DropdownMenu.Content>
+				<DropdownMenu.Content style={dropdownContentStyle}>
 					{phoneCountries.map((country) => {
 						const title =
 							country.id === 'US' ? t`United States (+1)` : t`Mexico (+52)`
@@ -100,8 +93,8 @@ export function PhoneNumberInput({
 				autoComplete="tel"
 				editable={!disabled}
 				keyboardType="phone-pad"
-				maxLength={10}
 				onChangeText={handleTextChange}
+				placeholderTextColor="#ddd"
 				style={styles.input}
 				textContentType="telephoneNumber"
 				value={nsn}
@@ -111,21 +104,35 @@ export function PhoneNumberInput({
 	)
 }
 
+const PHONE_NUMBER_MAX_LENGTH = 13
+
 /**
  * Return international prefix and nsn (national subscriber number)
  */
-function getPhoneParts(
-	// eslint-disable-next-line unicorn/prevent-abbreviations
-	e164Value: string,
-	defaultPrefix?: string,
-) {
-	const internationalPrefix = phoneCountries.find((c) =>
-		e164Value.startsWith(c.prefix),
-	)?.prefix
-	const nsn = e164Value.slice(internationalPrefix?.length ?? 0)
+function getPhoneParts(text: string, defaultPrefix: string) {
+	const cleanE164Value = text
+		.replaceAll(/[^\d+]/gu, '')
+		.slice(0, PHONE_NUMBER_MAX_LENGTH)
 
-	return [internationalPrefix ?? defaultPrefix, nsn]
+	const internationalPrefix =
+		phoneCountries.find((country) => cleanE164Value.startsWith(country.prefix))
+			?.prefix ?? defaultPrefix
+
+	const nsn = cleanE164Value.replace(internationalPrefix, '')
+
+	return [internationalPrefix, nsn]
 }
+
+const dropdownContentStyle = {
+	backgroundColor: '#fff',
+	borderRadius: 10,
+	display: 'flex',
+	flexDirection: 'column',
+	fontFamily: 'system-ui',
+	gap: 10,
+	maxHeight: 200,
+	padding: 10,
+} as const
 
 const styles = StyleSheet.create((theme) => ({
 	chevron: {
@@ -156,7 +163,6 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: theme.spacing.sm,
 		paddingVertical: theme.spacing.sm,
 	},
-
 	flag: {
 		color: theme.colors.text,
 		paddingHorizontal: 0,

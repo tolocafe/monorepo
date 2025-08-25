@@ -1,10 +1,12 @@
 import { type ComponentProps, useEffect, useMemo, useState } from 'react'
+import type { ImageSourcePropType } from 'react-native'
 import { Pressable, Text, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLingui } from '@lingui/react/macro'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import { withLayoutContext } from 'expo-router'
+import { Image } from 'expo-image'
+import { Link, withLayoutContext } from 'expo-router'
 import {
 	type TabTriggerSlotProps,
 	TabList as UITabList,
@@ -44,6 +46,15 @@ function DesktopSideTabs() {
 			{/* Left sidebar with triggers */}
 			<UITabList asChild>
 				<View style={styles.sidebar}>
+					<Link href="/">
+						<Image
+							contentFit="contain"
+							source={
+								require('@/assets/images/header.png') as ImageSourcePropType
+							}
+							style={{ height: 25, marginBottom: 10, width: 100 }}
+						/>
+					</Link>
 					<UITabTrigger asChild href="/" name="home">
 						<SideTabButton icon="restaurant-outline" label={t`Home`} />
 					</UITabTrigger>
@@ -160,7 +171,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.sm,
 		left: 0,
 		paddingHorizontal: theme.spacing.lg,
-		paddingVertical: theme.spacing.xl,
+		paddingVertical: theme.spacing.md,
 		position: 'absolute',
 		top: 0,
 		width: SIDEBAR_WIDTH,

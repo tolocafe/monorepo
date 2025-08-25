@@ -34,7 +34,7 @@ export function ScreenContainer({
 		return (
 			<>
 				{topAccessory}
-				<View {...rest} style={[styles.container, style]}>
+				<View {...rest} style={[styles.container, contentContainerStyle]}>
 					{children}
 				</View>
 			</>

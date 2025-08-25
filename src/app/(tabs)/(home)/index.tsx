@@ -319,7 +319,6 @@ const styles = StyleSheet.create((theme) => ({
 	loadingText: {
 		color: theme.colors.textSecondary,
 	},
-
 	menuItem: {
 		overflow: 'hidden',
 		width: 225,
