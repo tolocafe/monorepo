@@ -102,7 +102,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		url: `https://u.expo.dev/${projectId}`,
 	},
 	userInterfaceStyle: 'automatic',
-	version: '1.1.2',
+	version: '1.1.3',
 	web: {
 		backgroundColor: '#ffffff',
 		bundler: 'metro',
