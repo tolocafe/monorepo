@@ -32,7 +32,7 @@ export default function VisitUs() {
 				<View style={styles.section}>
 					<Card>
 						<Text style={styles.cardTitle}>
-							<Trans>TOLO - Buen Café</Trans>
+							<Trans>TOLO - Good Coffee</Trans>
 						</Text>
 						<Label style={styles.cardText}>
 							<Trans>Boulevard José María Pino Suárez 800</Trans>

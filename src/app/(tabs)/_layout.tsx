@@ -10,6 +10,10 @@ import { Colors } from '@/lib/constants/colors'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { useOrderStats } from '@/lib/stores/order-store'
 
+export const unstable_settings = {
+	initialRouteName: '(home)',
+}
+
 export default function TabLayout() {
 	const colorScheme = useColorScheme()
 	const { t } = useLingui()
@@ -25,6 +29,7 @@ export default function TabLayout() {
 					android: Colors[colorScheme ?? 'light'].tintTransparent,
 					default: Colors[colorScheme ?? 'light'].tint,
 				})}
+				initialRouteName="(home)"
 				minimizeBehavior="automatic"
 				screenOptions={{
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment

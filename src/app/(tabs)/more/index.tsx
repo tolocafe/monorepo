@@ -3,6 +3,7 @@ import type { ScrollView } from 'react-native'
 import { Linking, RefreshControl, TouchableOpacity, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useLingui } from '@lingui/react'
 import { Trans } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
@@ -18,15 +19,16 @@ import HeaderGradient from '@/components/HeaderGradient'
 import { List, ListItem } from '@/components/List'
 import { ScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
-import {
-	AVAILABLE_LANGUAGES,
-	LANGUAGE_NAMES,
-	useLanguage,
-} from '@/lib/contexts/language-context'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
+import { LOCALE_NAMES } from '@/lib/locales/init'
+import { loadAndActivateLocale } from '@/lib/locales/load-and-activate-locale'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { queryClient } from '@/lib/query-client'
 import { formatPrice } from '@/lib/utils/price'
+
+import type { Locale } from '@/lib/locales/init'
+
+const AVAILABLE_LANGUAGES = Object.keys(LOCALE_NAMES) as Locale[]
 
 const getStringOrFallback = (value: unknown, fallback: string): string =>
 	typeof value === 'string' ? value : fallback
@@ -73,7 +75,7 @@ const createDropdownStyles = (isDark: boolean) => ({
 })
 
 export default function More() {
-	const { changeLanguage, currentLanguage } = useLanguage()
+	const { i18n } = useLingui()
 	const { data: user, isPending: isUserPending } = useQuery(selfQueryOptions)
 	const screenRef = useRef<ScrollView>(null)
 	const colorScheme = useColorScheme()
@@ -249,7 +251,7 @@ export default function More() {
 									<DropdownMenu.Trigger style={dropdownStyles.trigger}>
 										<View style={styles.languageDropdownTriggerContent}>
 											<Label style={styles.languageDropdownText}>
-												{LANGUAGE_NAMES[currentLanguage]}
+												{LOCALE_NAMES[i18n.locale as Locale]}
 											</Label>
 											<Ionicons
 												color={styles.languageDropdownArrow.color}
@@ -259,16 +261,16 @@ export default function More() {
 										</View>
 									</DropdownMenu.Trigger>
 									<DropdownMenu.Content style={dropdownStyles.content}>
-										{AVAILABLE_LANGUAGES.map((language) => (
+										{AVAILABLE_LANGUAGES.map((locale) => (
 											<DropdownMenu.Item
-												key={language}
-												onSelect={() => changeLanguage(language)}
+												key={locale}
+												onSelect={() => loadAndActivateLocale(locale)}
 												style={dropdownStyles.item}
 											>
 												<DropdownMenu.ItemTitle
 													style={dropdownStyles.itemTitle}
 												>
-													{LANGUAGE_NAMES[language]}
+													{LOCALE_NAMES[locale]}
 												</DropdownMenu.ItemTitle>
 											</DropdownMenu.Item>
 										))}

@@ -20,6 +20,7 @@ import { getImageUrl } from '@/lib/image'
 import { useTabBarHeight } from '@/lib/navigation/tab-bar-height'
 import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
+import { api } from '@/lib/services/api-service'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
 import { formatCookingTime } from '@/lib/utils/cooking-time'
 import { formatPrice } from '@/lib/utils/price'
@@ -33,6 +34,12 @@ const linearGradientColors = [
 	'rgba(0,0,0,0.4)',
 	'rgba(0,0,0,0.85)',
 ] as const
+
+// eslint-disable-next-line unicorn/prevent-abbreviations
+export async function generateStaticParams() {
+	const products = await api.menu.getProducts()
+	return products.map((products) => ({ id: products.product_id }))
+}
 
 export default function MenuDetail() {
 	const { t } = useLingui()
@@ -48,7 +55,7 @@ export default function MenuDetail() {
 			productId: id,
 			quantity: 1,
 		},
-		onSubmit: ({ value }) => {
+		onSubmit({ value }) {
 			addItem({
 				id: value.productId,
 				quantity: value.quantity,

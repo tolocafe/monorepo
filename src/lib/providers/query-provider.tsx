@@ -30,11 +30,13 @@ onlineManager.setEventListener((setOnline) =>
 	}),
 )
 
-type QueryProviderProps = {
+const persistOptions = { persister }
+
+type Props = {
 	children: ReactNode
 }
 
-export function QueryProvider({ children }: QueryProviderProps) {
+export function QueryProvider({ children }: Props) {
 	// Initialize online status on mount
 	useEffect(() => {
 		void NetInfo.fetch().then((state) => {
@@ -45,7 +47,7 @@ export function QueryProvider({ children }: QueryProviderProps) {
 	return (
 		<PersistQueryClientProvider
 			client={queryClient}
-			persistOptions={{ persister }}
+			persistOptions={persistOptions}
 		>
 			{children}
 		</PersistQueryClientProvider>

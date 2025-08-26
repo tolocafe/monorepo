@@ -15,11 +15,11 @@ import { Stack, useNavigationContainerRef } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
-import { LanguageProvider } from '@/lib/contexts/language-context'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { useUpdates } from '@/lib/hooks/use-updates'
 import { QueryProvider } from '@/lib/providers/query-provider'
 import '@/lib/firebase/init'
+import '@/lib/locales/init'
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
 	enableTimeToInitialDisplay: true,
@@ -70,29 +70,27 @@ function RootLayout() {
 	return (
 		<KeyboardProvider>
 			<QueryProvider>
-				<LanguageProvider>
+				<ThemeProvider
+					value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
+				>
+					<StatusBar style="auto" />
 					<I18nProvider i18n={i18n}>
-						<ThemeProvider
-							value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
-						>
-							<StatusBar style="auto" />
-							<Stack>
-								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-								<Stack.Screen name="+not-found" />
-								<Stack.Screen
-									name="sign-in"
-									options={{
-										presentation: Platform.select({
-											default: 'modal',
-											web: 'transparentModal',
-										}),
-									}}
-								/>
-							</Stack>
-							<Toaster position="bottom-right" />
-						</ThemeProvider>
+						<Stack initialRouteName="(tabs)">
+							<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+							<Stack.Screen name="+not-found" />
+							<Stack.Screen
+								name="sign-in"
+								options={{
+									presentation: Platform.select({
+										default: 'modal',
+										web: 'transparentModal',
+									}),
+								}}
+							/>
+						</Stack>
+						<Toaster position="bottom-right" />
 					</I18nProvider>
-				</LanguageProvider>
+				</ThemeProvider>
 			</QueryProvider>
 		</KeyboardProvider>
 	)

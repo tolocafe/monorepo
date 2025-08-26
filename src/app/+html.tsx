@@ -55,7 +55,7 @@ export default function Root({ children }: PropsWithChildren) {
 				<meta content="summary" name="twitter:card" />
 				<meta content="TOLO - Buen Café" name="twitter:title" />
 				<meta
-					content="Tu cafetería de barrio donde cada taza cuenta una historia"
+					content="Tu café dónde cada taza cuenta una historia"
 					name="twitter:description"
 				/>
 				<meta content="/icon.png" name="twitter:image" />
