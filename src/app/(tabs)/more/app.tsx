@@ -9,6 +9,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import HeaderGradient from '@/components/HeaderGradient'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { useUpdates } from '@/lib/hooks/use-updates'
@@ -82,10 +83,11 @@ export default function AppInfoScreen() {
 				<meta content={t`App - TOLO`} property="og:title" />
 				<meta content="/more/app" property="og:url" />
 			</Head>
+			<HeaderGradient />
 			<ScreenContainer contentContainerStyle={styles.scrollContent}>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
-						<Trans>App Information</Trans>
+						<Trans>Information</Trans>
 					</H2>
 					<Card>
 						<View style={styles.row}>
@@ -99,16 +101,16 @@ export default function AppInfoScreen() {
 						<View style={styles.divider} />
 						<View style={styles.row}>
 							<Label style={styles.label}>
-								<Trans>Update Channel</Trans>
+								<Trans>Channel</Trans>
 							</Label>
 							<Text style={styles.value}>{channel}</Text>
 						</View>
 						<View style={styles.divider} />
 						<View style={styles.row}>
 							<Label style={styles.label}>
-								<Trans>Runtime Version</Trans>
+								<Trans>Runtime</Trans>
 							</Label>
-							<Text style={styles.value}>{runtimeVersion}</Text>
+							<Text style={styles.value}>{runtimeVersion.slice(0, 7)}</Text>
 						</View>
 						{Boolean(updateId) && (
 							<>

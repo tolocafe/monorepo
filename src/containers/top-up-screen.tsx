@@ -241,9 +241,7 @@ export default function TopUpScreen() {
 					onPress={() => handlePayment(false)}
 					variant="primary"
 				>
-					{isLoading
-						? t`Processing Payment...`
-						: t`Pay${selectedAmount ? ` ${formatPrice(selectedAmount)}` : ''}`}
+					{isLoading ? t`Processing Payment...` : t`Top Up With Card`}
 				</Button>
 
 				<Paragraph style={styles.infoText}>
