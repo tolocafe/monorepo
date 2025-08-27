@@ -45,6 +45,10 @@ import type { Category, Product } from '@/lib/api'
 const UniImage = withUnistyles(Image)
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
+const categoryKeyExtractor = (item: Product) => item.product_id
+
+const menuItemFallback = <View aria-hidden />
+
 export default function Menu() {
 	const { t } = useLingui()
 	const addItem = useAddItemGuarded()
@@ -62,7 +66,7 @@ export default function Menu() {
 	}
 
 	const renderMenuItem = ({ item }: { item: Product }) => (
-		<ErrorBoundary fallback={<View aria-hidden />}>
+		<ErrorBoundary fallback={menuItemFallback}>
 			<MenuListItem item={item} onAddToBag={handleAddToBag} />
 		</ErrorBoundary>
 	)
@@ -95,13 +99,13 @@ export default function Menu() {
 		if (categoryItems.length === 0) return null
 
 		return (
-			<View key={category.category_id} style={styles.categorySection}>
+			<View key={category.category_id}>
 				<H3 style={styles.subtitle}>{category.category_name}</H3>
 				<FlatList
 					contentContainerStyle={styles.categoryItems}
 					data={categoryItems}
 					horizontal
-					keyExtractor={(item) => item.product_id}
+					keyExtractor={categoryKeyExtractor}
 					renderItem={renderMenuItem}
 					showsHorizontalScrollIndicator={false}
 				/>
@@ -286,11 +290,10 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	categoryItems: {
 		gap: theme.spacing.md,
+		overflow: 'visible',
+		paddingBottom: theme.spacing.lg,
 		paddingHorizontal: theme.layout.screenPadding,
-	},
-	categorySection: {
-		gap: theme.spacing.sm,
-		marginBottom: theme.spacing.xl,
+		paddingTop: theme.spacing.md,
 	},
 	categoryTitle: {
 		color: theme.colors.text,
@@ -313,7 +316,11 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		padding: theme.spacing.lg,
 	},
-	image: { height: '100%', objectFit: 'cover', width: '100%' },
+	image: {
+		height: '100%',
+		objectFit: 'cover',
+		width: '100%',
+	},
 	loadingContainer: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.background,
@@ -325,7 +332,6 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.textSecondary,
 	},
 	menuItem: {
-		overflow: 'hidden',
 		width: 225,
 	},
 	menuItemActions: {
@@ -354,7 +360,11 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	menuItemImageContainer: {
 		backgroundColor: theme.colors.border,
+		borderCurve: 'continuous',
+		borderTopLeftRadius: theme.borderRadius.lg,
+		borderTopRightRadius: theme.borderRadius.lg,
 		height: 225,
+		overflow: 'hidden',
 		width: '100%',
 	},
 	subtitle: {

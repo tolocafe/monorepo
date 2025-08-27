@@ -55,7 +55,7 @@ export default function ScreenContainer({
 					keyboardDismissMode="interactive"
 					keyboardShouldPersistTaps="handled"
 					ref={ref}
-					style={[styles.container, style]}
+					style={[styles.scrollViewContainer, style]}
 					{...rest}
 				>
 					{children}
@@ -71,7 +71,7 @@ export default function ScreenContainer({
 				contentContainerStyle={[styles.contentContainer, contentContainerStyle]}
 				contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 				ref={ref}
-				style={[styles.container, style]}
+				style={[styles.scrollViewContainer, style]}
 				{...rest}
 			>
 				{children}
@@ -84,6 +84,13 @@ const styles = StyleSheet.create((theme) => ({
 	container: {
 		backgroundColor: theme.colors.background,
 		flex: 1,
+		variants: {
+			withTopPadding: {
+				true: {
+					paddingTop: UnistylesRuntime.insets.top,
+				},
+			},
+		},
 	},
 	contentContainer: {
 		variants: {
@@ -93,5 +100,9 @@ const styles = StyleSheet.create((theme) => ({
 				},
 			},
 		},
+	},
+	scrollViewContainer: {
+		backgroundColor: theme.colors.background,
+		flex: 1,
 	},
 }))

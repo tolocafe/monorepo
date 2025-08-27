@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import type { StyleProp, ViewStyle } from 'react-native'
-import { Platform, View } from 'react-native'
+import { View } from 'react-native'
 
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -37,9 +37,9 @@ export function Card({
 const styles = StyleSheet.create((theme) => ({
 	base: {
 		backgroundColor: theme.colors.surface,
-		borderCurve: Platform.OS === 'ios' ? 'continuous' : undefined,
+		borderCurve: 'continuous',
 		borderRadius: theme.borderRadius.lg,
-		boxShadow: '0px 0px 15px 0px rgba(0, 0, 0, 0.15)',
+		boxShadow: `0px 5px ${theme.spacing.sm}px 0px rgba(0, 0, 0, 0.1)`,
 		variants: {
 			padding: {
 				padded: {

@@ -29,7 +29,7 @@ export default function Root({ children }: PropsWithChildren) {
 
 				{/* Default SEO - can be overridden per page */}
 				<meta
-					content="TOLO - Buen Café. Tu cafetería de barrio donde cada taza cuenta una historia"
+					content="Tu cafetería dónde se sirve buen café, así nomás"
 					name="description"
 				/>
 				<meta
@@ -43,22 +43,20 @@ export default function Root({ children }: PropsWithChildren) {
 				<meta content="TOLO Coffee Shop" property="og:site_name" />
 				<meta content="TOLO - Buen Café" property="og:title" />
 				<meta
-					content="Tu cafetería de barrio donde cada taza cuenta una historia"
+					content="Tu cafetería dónde se sirve buen café, así nomás"
 					property="og:description"
 				/>
-				<meta content="/icon.png" property="og:image" />
-				<meta content="512" property="og:image:width" />
-				<meta content="512" property="og:image:height" />
-				<meta content="Logo de TOLO Coffee Shop" property="og:image:alt" />
+				<meta content="/og-image.png" property="og:image" />
+				<meta content="Logo de TOLO Buen Café" property="og:image:alt" />
 
 				{/* Twitter Card Meta Tags */}
 				<meta content="summary" name="twitter:card" />
 				<meta content="TOLO - Buen Café" name="twitter:title" />
 				<meta
-					content="Tu café dónde cada taza cuenta una historia"
+					content="Tu cafetería dónde se sirve buen café, así nomás"
 					name="twitter:description"
 				/>
-				<meta content="/icon.png" name="twitter:image" />
+				<meta content="/og-image.png" name="twitter:image" />
 
 				{/* Disable body scrolling on web for native-like experience */}
 				<ScrollViewStyleReset />

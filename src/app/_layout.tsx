@@ -20,6 +20,11 @@ import { useUpdates } from '@/lib/hooks/use-updates'
 import { QueryProvider } from '@/lib/providers/query-provider'
 import '@/lib/firebase/init'
 import '@/lib/locales/init'
+import {
+	categoriesQueryOptions,
+	productsQueryOptions,
+} from '@/lib/queries/menu'
+import { queryClient } from '@/lib/query-client'
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
 	enableTimeToInitialDisplay: true,
@@ -50,6 +55,11 @@ function RootLayout() {
 
 	// Capture update errors to Sentry instead of console logs
 	useEffect(() => {
+		void Promise.allSettled([
+			queryClient.prefetchQuery(productsQueryOptions),
+			queryClient.prefetchQuery(categoriesQueryOptions),
+		])
+
 		if (updates.error) {
 			Sentry.captureMessage('Update process completed with error', {
 				extra: {

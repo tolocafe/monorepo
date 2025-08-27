@@ -374,6 +374,7 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		gap: theme.spacing.md,
 		justifyContent: 'center',
+		paddingBottom: theme.spacing.sm,
 		paddingTop: theme.spacing.md,
 	},
 	userInfoText: {

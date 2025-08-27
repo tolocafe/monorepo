@@ -203,6 +203,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	currentOrderCard: {
 		backgroundColor: theme.colors.primary,
+		borderCurve: 'continuous',
 		borderRadius: theme.borderRadius.md,
 		padding: theme.spacing.lg,
 	},
