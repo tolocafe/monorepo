@@ -154,7 +154,6 @@ export default function Menu() {
 				/>
 				<meta content="/" property="og:url" />
 			</Head>
-
 			<ScreenContainer
 				contentInsetAdjustmentBehavior="automatic"
 				ref={screenRef}

@@ -33,8 +33,7 @@ msgid ""
 "🔒 Your payment information is encrypted and secure"
 msgstr ""
 "💳 Pagos seguros con Stripe\n"
-"🔒 Tu información de pago está encriptada y segura💳 Pagos seguros con Stripe\n"
-"🔒 Tus datos de pago están encriptados y seguros"
+"🔒 Tu información de pago está encriptada y segura"
 
 #: src/app/sign-in.tsx:261
 msgid "0000000000"

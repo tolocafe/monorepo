@@ -197,6 +197,17 @@ export default function More() {
 						<View style={styles.socialIconsRow}>
 							<TouchableOpacity
 								accessibilityRole="button"
+								onPress={() => Linking.openURL('mailto:contacto@tolo.cafe')}
+								style={styles.socialIcon}
+							>
+								<Ionicons
+									color={styles.socialIcon.color}
+									name="mail-outline"
+									size={28}
+								/>
+							</TouchableOpacity>
+							<TouchableOpacity
+								accessibilityRole="button"
 								onPress={() =>
 									Linking.openURL('https://instagram.com/tolo.cafe')
 								}
@@ -361,8 +372,9 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	socialIconsRow: {
 		flexDirection: 'row',
+		gap: theme.spacing.md,
 		justifyContent: 'center',
-		paddingVertical: theme.spacing.sm,
+		paddingTop: theme.spacing.md,
 	},
 	userInfoText: {
 		textAlign: 'center',

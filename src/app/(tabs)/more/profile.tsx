@@ -11,6 +11,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import { Button } from '@/components/Button'
+import HeaderGradient from '@/components/HeaderGradient'
 import { Input } from '@/components/Input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Text } from '@/components/Text'
@@ -127,6 +128,7 @@ export default function ProfileScreen() {
 			<Head>
 				<title>{t`Profile`}</title>
 			</Head>
+			<HeaderGradient />
 			<ScreenContainer
 				contentContainerStyle={styles.container}
 				refreshControl={

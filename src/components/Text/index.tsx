@@ -94,7 +94,6 @@ const styles = StyleSheet.create((theme) => ({
 		fontWeight: theme.typography.h3.fontWeight,
 	},
 	h4: {
-		color: theme.colors.textSecondary,
 		fontSize: theme.typography.h4.fontSize,
 		fontWeight: theme.typography.h4.fontWeight,
 	},
