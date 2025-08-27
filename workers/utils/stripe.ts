@@ -1,7 +1,7 @@
 import { Stripe } from 'stripe'
 
-export function getStripe() {
-	return new Stripe(process.env.STRIPE_SECRET_KEY, {
+export function getStripe(secretKey: string) {
+	return new Stripe(secretKey, {
 		apiVersion: '2025-07-30.basil',
 		timeout: 30 * 1000,
 	})

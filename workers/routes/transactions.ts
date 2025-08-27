@@ -18,7 +18,7 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 			(await c.req.json()) as unknown,
 		)
 
-		const stripe = getStripe()
+		const stripe = getStripe(c.env.STRIPE_SECRET_KEY)
 
 		let customer = await stripe.customers
 			.search({
@@ -26,9 +26,19 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 			})
 			.then((response) => response.data.at(0))
 
-		customer ??= await stripe.customers.create({
-			metadata: { poster_client_id: clientId },
-		})
+		if (!customer) {
+			const posterCustomer = await api.clients.getClient(
+				c.env.POSTER_TOKEN,
+				clientId.toString(),
+			)
+
+			customer = await stripe.customers.create({
+				email: posterCustomer?.email,
+				metadata: { poster_client_id: clientId },
+				name: posterCustomer?.name,
+				phone: posterCustomer?.phone,
+			})
+		}
 
 		const [ephemeralKey, paymentIntent] = await Promise.all([
 			stripe.ephemeralKeys.create(
@@ -37,6 +47,7 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 			),
 			stripe.paymentIntents.create({
 				amount: body.amount,
+				confirmation_method: 'automatic',
 				currency: 'mxn',
 				customer: customer.id,
 				metadata: { poster_client_id: clientId },

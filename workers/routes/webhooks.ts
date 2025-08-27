@@ -46,7 +46,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			throw new HTTPException(400, { message: 'Missing signature' })
 		}
 
-		const stripe = getStripe()
+		const stripe = getStripe(context.env.STRIPE_SECRET_KEY)
 
 		let event
 		try {
@@ -72,6 +72,38 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 		// Handle the event
 		switch (event.type) {
+			case 'payment_intent.created': {
+				captureEvent({
+					extra: { paymentIntent: event.data.object },
+					level: 'debug',
+					message: 'Stripe payment intent created',
+				})
+				break
+			}
+			case 'payment_intent.payment_failed': {
+				captureEvent({
+					extra: { paymentIntent: event.data.object },
+					level: 'error',
+					message: 'Stripe payment intent failed',
+				})
+				break
+			}
+			case 'payment_intent.processing': {
+				captureEvent({
+					extra: { paymentIntent: event.data.object },
+					level: 'debug',
+					message: 'Stripe payment intent processing',
+				})
+				break
+			}
+			case 'payment_intent.requires_action': {
+				captureEvent({
+					extra: { paymentIntent: event.data.object },
+					level: 'warning',
+					message: 'Stripe payment intent requires action',
+				})
+				break
+			}
 			case 'payment_intent.succeeded': {
 				const paymentIntent = event.data.object
 
@@ -118,45 +150,88 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					return context.json({ received: true })
 				}
 
-				const transactionId = await api.finance.createTransaction(
-					context.env.POSTER_TOKEN,
-					{
-						account_to: 1,
-						amount_to: 0,
-						category: 14,
-						date: new Date(event.data.object.created * 1000)
-							.toISOString()
-							.replace('T', ' ')
-							.split('.')
-							.at(0) as string,
-						id: 1,
-						type: 1,
-						user_id: Number(posterClientId),
-					},
-				)
-
-				// eslint-disable-next-line unicorn/prevent-abbreviations
-				const eWalletTransactionId = await api.clients.addEWalletPayment(
-					context.env.POSTER_TOKEN,
-					{
-						amount: paymentIntent.amount,
-						client_id: Number(posterClientId),
-						transaction_id: transactionId,
-						type: 2,
-					},
-				)
-
-				await context.env.D1_TOLO.prepare(
-					'INSERT INTO top_ups (payment_intent_id, client_id, amount, transaction_id, created_at) VALUES (?, ?, ?, ?, ?)',
-				)
-					.bind(
-						paymentIntent.id,
-						Number(posterClientId),
-						paymentIntent.amount,
-						eWalletTransactionId,
-						new Date().toISOString(),
+				try {
+					const transactionId = await api.finance.createTransaction(
+						context.env.POSTER_TOKEN,
+						{
+							account_to: 1,
+							amount_to: 0,
+							category: 14,
+							date: new Date(event.data.object.created * 1000)
+								.toISOString()
+								.replace('T', ' ')
+								.split('.')
+								.at(0) as string,
+							id: 1,
+							type: 1,
+							user_id: Number(posterClientId),
+						},
 					)
-					.run()
+
+					captureEvent({
+						extra: {
+							amount: paymentIntent.amount,
+							posterClientId,
+							transactionId,
+						},
+						message: 'Created Poster finance transaction',
+					})
+
+					// eslint-disable-next-line unicorn/prevent-abbreviations
+					const eWalletTransactionId = await api.clients.addEWalletPayment(
+						context.env.POSTER_TOKEN,
+						{
+							amount: paymentIntent.amount,
+							client_id: Number(posterClientId),
+							transaction_id: transactionId,
+							type: 2,
+						},
+					)
+
+					captureEvent({
+						extra: { eWalletTransactionId, posterClientId, transactionId },
+						message: 'Added e-wallet payment',
+					})
+
+					await context.env.D1_TOLO.prepare(
+						'INSERT INTO top_ups (payment_intent_id, client_id, amount, transaction_id, created_at) VALUES (?, ?, ?, ?, ?)',
+					)
+						.bind(
+							paymentIntent.id,
+							Number(posterClientId),
+							paymentIntent.amount,
+							eWalletTransactionId,
+							new Date().toISOString(),
+						)
+						.run()
+
+					captureEvent({
+						extra: {
+							amount: paymentIntent.amount,
+							eWalletTransactionId,
+							paymentIntentId: paymentIntent.id,
+							posterClientId,
+							processingTimeMs: Date.now() - event.data.object.created * 1000,
+						},
+						message: 'Successfully processed payment and updated wallet',
+					})
+				} catch (error) {
+					captureException(error)
+
+					captureEvent({
+						extra: {
+							amount: paymentIntent.amount,
+							error: error instanceof Error ? error.message : 'Unknown error',
+							paymentIntentId: paymentIntent.id,
+							posterClientId,
+						},
+						level: 'error',
+						message: 'Failed to process payment webhook',
+					})
+
+					// Re-throw to ensure webhook returns error status
+					throw error
+				}
 
 				break
 			}
