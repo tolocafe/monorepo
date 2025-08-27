@@ -3,6 +3,8 @@ import type { ExpoConfig } from 'expo/config'
 
 const projectId = '25e3751a-b837-480a-b9fc-ee67327f46e9'
 
+const packageVersion = require('./package.json') as { version: string }
+
 export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	...config,
 	android: {
@@ -102,7 +104,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		url: `https://u.expo.dev/${projectId}`,
 	},
 	userInterfaceStyle: 'automatic',
-	version: '1.1.3',
+	version: packageVersion.version,
 	web: {
 		backgroundColor: '#ffffff',
 		bundler: 'metro',
