@@ -8,15 +8,15 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { Image } from 'expo-image'
 import { Link, withLayoutContext } from 'expo-router'
 import {
-	type TabTriggerSlotProps,
 	TabList as UITabList,
 	Tabs as UITabs,
 	TabSlot as UITabSlot,
 	TabTrigger as UITabTrigger,
 } from 'expo-router/ui'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import type { BottomTabNavigatorProps } from '@react-navigation/bottom-tabs'
+import type { TabTriggerSlotProps } from 'expo-router/ui'
 
 import { breakpoints } from '@/lib/styles/unistyles'
 
@@ -33,6 +33,8 @@ type SideTabButtonProps = TabTriggerSlotProps & {
 	label: string
 }
 
+const UniImage = withUnistyles(Image)
+
 function DesktopSideTabs() {
 	const { t } = useLingui()
 
@@ -47,12 +49,12 @@ function DesktopSideTabs() {
 			<UITabList asChild>
 				<View style={styles.sidebar}>
 					<Link href="/">
-						<Image
+						<UniImage
 							contentFit="contain"
 							source={
 								require('@/assets/images/header.png') as ImageSourcePropType
 							}
-							style={{ height: 25, marginBottom: 10, width: 100 }}
+							style={styles.image}
 						/>
 					</Link>
 					<UITabTrigger asChild href="/" name="home">
@@ -163,6 +165,7 @@ const styles = StyleSheet.create((theme) => ({
 		flex: 1,
 		paddingLeft: SIDEBAR_WIDTH,
 	},
+	image: { height: 25, marginBottom: 10, width: 100 },
 	sidebar: {
 		backgroundColor: theme.colors.surface,
 		borderRightColor: theme.colors.border,

@@ -12,7 +12,7 @@ import { z } from 'zod/v4'
 
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
-import { ScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Text } from '@/components/Text'
 import { STORAGE_KEYS } from '@/lib/constants/storage'
 import {

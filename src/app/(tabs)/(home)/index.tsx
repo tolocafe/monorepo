@@ -22,11 +22,11 @@ import Animated, {
 	useSharedValue,
 	withSpring,
 } from 'react-native-reanimated'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import { ScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, H3, H4, Paragraph } from '@/components/Text'
 import { enableAnalytics } from '@/lib/firebase'
 import { getImageUrl } from '@/lib/image'
@@ -41,6 +41,9 @@ import { useAddItemGuarded } from '@/lib/stores/order-store'
 import { formatPrice } from '@/lib/utils/price'
 
 import type { Category, Product } from '@/lib/api'
+
+const UniImage = withUnistyles(Image)
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
 export default function Menu() {
 	const { t } = useLingui()
@@ -177,7 +180,9 @@ export default function Menu() {
 	)
 }
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+const UniIonicons = withUnistyles(Ionicons, (theme) => ({
+	color: theme.colors.background,
+}))
 
 function MenuListItem({
 	item,
@@ -210,7 +215,7 @@ function MenuListItem({
 						style={styles.menuItemImageContainer}
 					>
 						{item.photo ? (
-							<Image
+							<UniImage
 								contentFit="cover"
 								placeholder={{
 									cacheKey: `${item.product_id}-placeholder`,
@@ -227,7 +232,7 @@ function MenuListItem({
 										width: 350,
 									}),
 								}}
-								style={{ height: '100%', objectFit: 'cover', width: '100%' }}
+								style={styles.image}
 								transition={200}
 							/>
 						) : (
@@ -250,7 +255,7 @@ function MenuListItem({
 									}}
 									style={styles.addToBagButton}
 								>
-									<Ionicons color="#fff" name="add" size={24} />
+									<UniIonicons name="add" size={24} />
 								</TouchableOpacity>
 							</View>
 						</View>
@@ -309,6 +314,7 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		padding: theme.spacing.lg,
 	},
+	image: { height: '100%', objectFit: 'cover', width: '100%' },
 	loadingContainer: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.background,

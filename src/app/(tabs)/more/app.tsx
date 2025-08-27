@@ -9,7 +9,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import { ScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { useUpdates } from '@/lib/hooks/use-updates'
 import { clearAllCache } from '@/lib/queries/cache-utils'

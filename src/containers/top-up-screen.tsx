@@ -20,7 +20,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import { ScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { privateClient } from '@/lib/services/http-client'
@@ -86,6 +86,24 @@ export default function TopUpScreen() {
 			// Create payment intent
 			const paymentData = await createPayment(selectedAmount)
 
+			const { error: initError } = await initPaymentSheet({
+				allowsDelayedPaymentMethods: true,
+				customerEphemeralKeySecret: paymentData.ephemeralKey.secret,
+				customerId: paymentData.paymentIntent.customer,
+				defaultBillingDetails: {
+					email: user.email,
+					name: user.name || `${user.firstname} ${user.lastname}`.trim(),
+					phone: user.phone,
+				},
+				merchantDisplayName: 'TOLO - Buen Café',
+				paymentIntentClientSecret: paymentData.paymentIntent.client_secret,
+			})
+
+			if (initError) {
+				Alert.alert(t`Error`, initError.message)
+				return
+			}
+
 			if (isPlatformPay) {
 				const { error: presentError } = await confirmPlatformPayPayment(
 					paymentData.paymentIntent.client_secret,
@@ -117,34 +135,15 @@ export default function TopUpScreen() {
 					return
 				}
 			} else {
-				// Initialize the payment sheet
-				const { error: initError } = await initPaymentSheet({
-					allowsDelayedPaymentMethods: true,
-					customerEphemeralKeySecret: paymentData.ephemeralKey.secret,
-					customerId: paymentData.paymentIntent.customer,
-					defaultBillingDetails: {
-						email: user.email,
-						name: user.name || `${user.firstname} ${user.lastname}`.trim(),
-						phone: user.phone,
-					},
-					merchantDisplayName: 'TOLO - Buen Café',
-					paymentIntentClientSecret: paymentData.paymentIntent.client_secret,
-				})
+				// Present the payment sheet
+				const { error: presentError } = await presentPaymentSheet()
 
-				if (initError) {
-					Alert.alert(t`Error`, initError.message)
+				if (presentError) {
+					if (presentError.code !== PaymentSheetError.Canceled) {
+						Alert.alert(t`Payment Failed`, presentError.message)
+					}
 					return
 				}
-			}
-
-			// Present the payment sheet
-			const { error: presentError } = await presentPaymentSheet()
-
-			if (presentError) {
-				if (presentError.code !== PaymentSheetError.Canceled) {
-					Alert.alert(t`Payment Failed`, presentError.message)
-				}
-				return
 			}
 
 			// Payment succeeded

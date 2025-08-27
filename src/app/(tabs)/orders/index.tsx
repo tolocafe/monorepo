@@ -8,11 +8,11 @@ import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import { ScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { orderQueryOptions } from '@/lib/queries/order'
@@ -24,6 +24,8 @@ import { formatPrice } from '@/lib/utils/price'
 const handleSignIn = () => {
 	router.push('/sign-in')
 }
+
+const UniImage = withUnistyles(Image)
 
 export default function Orders() {
 	const { t } = useLingui()
@@ -71,12 +73,12 @@ export default function Orders() {
 				</Head>
 				<ScreenContainer noScroll>
 					<View style={styles.signInContainer}>
-						<Image
+						<UniImage
 							contentFit="contain"
 							source={
 								require('@/assets/images/beverages.png') as ImageSourcePropType
 							}
-							style={{ height: 250, width: 250 }}
+							style={styles.image}
 						/>
 						<H2 style={styles.signInTitle}>
 							<Trans>Sign In Required</Trans>
@@ -219,6 +221,7 @@ const styles = StyleSheet.create((theme) => ({
 		height: 250,
 		width: 250,
 	},
+	image: { height: 250, width: 250 },
 	orderBadge: {
 		color: theme.colors.surface,
 		opacity: 0.9,

@@ -1,9 +1,10 @@
 import { Platform } from 'react-native'
 
-export const defaultStackScreenOptions = Platform.select({
-	ios: {
-		headerLargeTitle: true,
-		headerTintColor: 'black',
-		headerTransparent: true,
-	},
-})
+export const defaultStackScreenOptions = (color?: string) =>
+	Platform.select({
+		ios: {
+			headerLargeTitle: true,
+			headerTintColor: color ?? 'black',
+			headerTransparent: true,
+		},
+	})

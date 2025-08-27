@@ -14,7 +14,7 @@ export type Props = ComponentProps<typeof ScrollView> & {
 	withTopPadding?: boolean
 }
 
-export function ScreenContainer({
+export default function ScreenContainer({
 	children,
 	contentContainerStyle,
 	contentInsetAdjustmentBehavior = 'automatic',
@@ -95,5 +95,3 @@ const styles = StyleSheet.create((theme) => ({
 		},
 	},
 }))
-
-export default ScreenContainer

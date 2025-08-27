@@ -10,11 +10,15 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { router, useLocalSearchParams } from 'expo-router'
 import Head from 'expo-router/head'
 import Animated from 'react-native-reanimated'
-import { StyleSheet, UnistylesRuntime } from 'react-native-unistyles'
+import {
+	StyleSheet,
+	UnistylesRuntime,
+	withUnistyles,
+} from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import HeaderGradient from '@/components/HeaderGradient'
-import { ScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H1, H2, Label, Paragraph, Text } from '@/components/Text'
 import { getImageUrl } from '@/lib/image'
 import { useTabBarHeight } from '@/lib/navigation/tab-bar-height'
@@ -34,6 +38,8 @@ const linearGradientColors = [
 	'rgba(0,0,0,0.4)',
 	'rgba(0,0,0,0.85)',
 ] as const
+
+const UniImage = withUnistyles(Image)
 
 // eslint-disable-next-line unicorn/prevent-abbreviations
 export async function generateStaticParams() {
@@ -133,7 +139,7 @@ export default function MenuDetail() {
 					style={styles.heroImageContainer}
 				>
 					{hasImage ? (
-						<Image
+						<UniImage
 							contentFit="cover"
 							placeholder={{
 								cacheKey: `${product.product_id}-placeholder`,
@@ -151,7 +157,7 @@ export default function MenuDetail() {
 									width: 800,
 								}),
 							}}
-							style={imageStyle}
+							style={styles.image}
 							transition={200}
 						/>
 					) : (
@@ -354,12 +360,6 @@ export default function MenuDetail() {
 	)
 }
 
-const imageStyle = {
-	height: '100%',
-	objectFit: 'cover',
-	width: '100%',
-} as const
-
 const styles = StyleSheet.create((theme) => ({
 	badge: {
 		backgroundColor: theme.colors.primary,
@@ -419,6 +419,11 @@ const styles = StyleSheet.create((theme) => ({
 		backgroundColor: theme.colors.border,
 		height: 300,
 		position: 'relative',
+		width: '100%',
+	},
+	image: {
+		height: '100%',
+		objectFit: 'cover',
 		width: '100%',
 	},
 	ingredient: {

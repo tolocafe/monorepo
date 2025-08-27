@@ -1,37 +1,41 @@
 import { LinearGradient } from 'expo-linear-gradient'
-import { UnistylesRuntime } from 'react-native-unistyles'
+import {
+	StyleSheet,
+	UnistylesRuntime,
+	withUnistyles,
+} from 'react-native-unistyles'
 
-import { useColorScheme } from '@/lib/hooks/use-color-scheme'
+const styles = StyleSheet.create({
+	gradient: {
+		height: UnistylesRuntime.insets.top,
+		left: 0,
+		position: 'absolute',
+		right: 0,
+		top: 0,
+		width: '100%',
+		zIndex: 99_999,
+	},
+})
 
-const linearGradientStyle = {
-	height: UnistylesRuntime.insets.top,
-	left: 0,
-	position: 'absolute',
-	right: 0,
-	top: 0,
-	width: '100%',
-	zIndex: 99_999,
-} as const
+const UniLinearGradient = withUnistyles(LinearGradient, (_theme, rt) => ({
+	colors:
+		rt.colorScheme === 'dark'
+			? ([
+					'rgba(18,18,18,0.95)',
+					'rgba(18,18,18,0.8)',
+					'rgba(18,18,18,0)',
+				] as const)
+			: ([
+					'rgba(248,248,241,0.95)',
+					'rgba(248,248,241,0.8)',
+					'rgba(248,248,241,0)',
+				] as const),
+}))
 
 export default function HeaderGradient() {
-	const isDark = useColorScheme() === 'dark'
-
 	if (UnistylesRuntime.insets.top === 0) {
 		return null
 	}
 
-	return (
-		<LinearGradient
-			colors={
-				isDark
-					? ['rgba(0,0,0,0.9)', 'rgba(0,0,0,0.7)', 'rgba(0,0,0,0)']
-					: [
-							'rgba(255,255,255,0.9)',
-							'rgba(255,255,255,0.7)',
-							'rgba(255,255,255,0)',
-						]
-			}
-			style={linearGradientStyle}
-		/>
-	)
+	return <UniLinearGradient style={styles.gradient} />
 }
