@@ -9,7 +9,7 @@ export function registerForPushNotificationsAsync() {
  * This should be called after successful sign-in to request permission for tracking
  */
 export function requestTrackingPermissionAsync() {
-	return true
+	return Promise.resolve(true)
 }
 
 export function useRegisterForPushNotifications() {
