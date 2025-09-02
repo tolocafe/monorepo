@@ -5,16 +5,18 @@ import {
 	captureException,
 	getCurrentScope,
 } from '@sentry/cloudflare'
+import { getConnInfo } from 'hono/cloudflare-workers'
 
 import type {
 	ServerAnalyticsEvent,
 	ServerEventProperties,
 } from '@common/analytics'
+import type { Context } from 'hono'
 
 import type { Bindings } from '../types'
 
 export async function trackServerEvent(
-	environment: Bindings,
+	context: Context<{ Bindings: Bindings }>,
 	{
 		eventName,
 		eventParams: eventParameters = {},
@@ -36,6 +38,8 @@ export async function trackServerEvent(
 					params: eventParameters,
 				},
 			],
+			ip_override: getConnInfo(context).remote.address,
+			user_agent: context.req.header('User-Agent'),
 			user_data: getUserData(userData),
 			user_id: userId,
 		} as const
@@ -44,8 +48,8 @@ export async function trackServerEvent(
 
 		const response = await fetch(
 			`https://www.google-analytics.com/mp/collect${new URLSearchParams({
-				api_secret: environment.GA4_API_SECRET,
-				measurement_id: environment.GA4_MEASUREMENT_ID,
+				api_secret: context.env.GA4_API_SECRET,
+				measurement_id: context.env.GA4_MEASUREMENT_ID,
 			}).toString()}`,
 			{
 				body: JSON.stringify(body),

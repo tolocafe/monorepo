@@ -211,7 +211,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						)
 						.run()
 
-					await trackServerEvent(context.env, {
+					await trackServerEvent(context, {
 						eventName: 'purchase',
 						eventParams: {
 							currency: paymentIntent.currency.toUpperCase(),
@@ -346,7 +346,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				if (!client) break
 
-				await trackServerEvent(context.env, {
+				await trackServerEvent(context, {
 					eventName: 'purchase',
 					eventParams: {
 						currency: 'MXN',

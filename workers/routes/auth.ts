@@ -63,7 +63,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				},
 			)
 
-			await trackServerEvent(context.env, {
+			await trackServerEvent(context, {
 				eventName: 'sign_up',
 				userData: {
 					emailAddress: email,
@@ -104,7 +104,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		const { client_id: clientId } = posterClient
 
-		await trackServerEvent(context.env, {
+		await trackServerEvent(context, {
 			eventName: 'login',
 			userData: {
 				emailAddress: posterClient.email,
