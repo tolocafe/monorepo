@@ -207,7 +207,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						)
 						.run()
 
-					// Track payment success
 					await trackServerEvent(context.env, {
 						eventName: 'purchase',
 						eventParams: {
