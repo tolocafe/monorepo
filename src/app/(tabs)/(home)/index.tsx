@@ -271,9 +271,12 @@ function MenuListItem({
 
 const styles = StyleSheet.create((theme) => ({
 	addToBagButton: {
+		alignItems: 'center',
 		backgroundColor: theme.colors.primary,
 		borderRadius: theme.borderRadius.full,
-		padding: theme.spacing.sm,
+		height: 40,
+		justifyContent: 'center',
+		width: 40,
 	},
 	badge: {
 		backgroundColor: theme.colors.primary,

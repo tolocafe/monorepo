@@ -47,3 +47,8 @@ export const signOutMutationOptions = mutationOptions({
 	mutationFn: () => api.auth.signOut(),
 	mutationKey: ['auth', 'sign-out'],
 })
+
+export const sessionsQueryOptions = queryOptions({
+	queryFn: () => api.auth.sessions(),
+	queryKey: ['auth', 'sessions'],
+})

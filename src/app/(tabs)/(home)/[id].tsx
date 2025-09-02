@@ -251,7 +251,7 @@ export default function MenuDetail() {
 								</H2>
 								<View>
 									{product.group_modifications.map((group) => {
-										if (group.name === 'Desechables') return null
+										if (group.name.startsWith('Desechable')) return null
 
 										return (
 											<View

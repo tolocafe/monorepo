@@ -119,7 +119,7 @@ export default function AppInfoScreen() {
 									<Label style={styles.label}>
 										<Trans>Update ID</Trans>
 									</Label>
-									<Text style={styles.value}>{updateId}</Text>
+									<Text style={styles.value}>{updateId.slice(0, 7)}</Text>
 								</View>
 							</>
 						)}

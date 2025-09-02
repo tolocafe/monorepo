@@ -13,8 +13,9 @@ import { z } from 'zod/v4'
 import { Button } from '@/components/Button'
 import HeaderGradient from '@/components/HeaderGradient'
 import { Input } from '@/components/Input'
+import { List, ListItem } from '@/components/List'
 import ScreenContainer from '@/components/ScreenContainer'
-import { H2, Label, Text } from '@/components/Text'
+import { H2, Label } from '@/components/Text'
 import { STORAGE_KEYS } from '@/lib/constants/storage'
 import {
 	selfQueryOptions,
@@ -22,7 +23,6 @@ import {
 	updateClientMutationOptions,
 } from '@/lib/queries/auth'
 import { clearAllCache } from '@/lib/queries/cache-utils'
-import { formatPrice } from '@/lib/utils/price'
 
 import type { ClientData } from '@/lib/api'
 
@@ -90,18 +90,15 @@ export default function ProfileScreen() {
 				})
 			})
 
-			// Clear credentials from local storage
 			if (Platform.OS !== 'web') {
 				await SecureStore.deleteItemAsync(STORAGE_KEYS.AUTH_SESSION)
 			}
 
-			// Clear all cached data
 			await clearAllCache()
 
 			if (router.canGoBack()) {
 				router.back()
 			} else {
-				// Navigate back to sign-in
 				router.navigate('/more', { withAnchor: false })
 			}
 		}
@@ -120,9 +117,6 @@ export default function ProfileScreen() {
 		}
 	}
 
-	const balanceCents = Number(user?.ewallet ?? '0')
-	const balance = balanceCents.toFixed(2)
-
 	return (
 		<>
 			<Head>
@@ -140,24 +134,10 @@ export default function ProfileScreen() {
 			>
 				<View style={styles.section}>
 					<H2>
-						<Trans>Wallet</Trans>
-					</H2>
-					<View style={styles.card}>
-						<View style={styles.balanceRow}>
-							<Label>
-								<Trans>Balance</Trans>
-							</Label>
-							<Text weight="bold">{formatPrice(balance)}</Text>
-						</View>
-					</View>
-				</View>
-
-				<View style={styles.section}>
-					<H2>
 						<Trans>Information</Trans>
 					</H2>
-					<View style={styles.card}>
-						<View style={styles.row}>
+					<List>
+						<ListItem>
 							<Label style={styles.label}>
 								<Trans>First name</Trans>
 							</Label>
@@ -180,9 +160,9 @@ export default function ProfileScreen() {
 									/>
 								)}
 							</Field>
-						</View>
+						</ListItem>
 
-						<View style={styles.row}>
+						<ListItem>
 							<Label style={styles.label}>
 								<Trans>Email</Trans>
 							</Label>
@@ -207,9 +187,9 @@ export default function ProfileScreen() {
 									/>
 								)}
 							</Field>
-						</View>
+						</ListItem>
 
-						<View style={styles.row}>
+						<ListItem>
 							<Label style={styles.label}>
 								<Trans>Birthdate</Trans>
 							</Label>
@@ -235,7 +215,7 @@ export default function ProfileScreen() {
 									/>
 								)}
 							</Field>
-						</View>
+						</ListItem>
 
 						<Subscribe
 							selector={({ canSubmit, isSubmitting }) => [
@@ -256,12 +236,26 @@ export default function ProfileScreen() {
 								</Button>
 							)}
 						</Subscribe>
+					</List>
+				</View>
 
-						<View style={styles.row} />
-						<Button onPress={handleSignOut}>
-							<Trans>Sign Out</Trans>
-						</Button>
-					</View>
+				<View style={styles.section}>
+					<H2>
+						<Trans>Account</Trans>
+					</H2>
+					<List>
+						<ListItem
+							accessibilityRole="link"
+							chevron
+							label={<Trans>Sessions</Trans>}
+							onPress={() => router.push('/more/sessions')}
+						/>
+						<ListItem
+							chevron
+							label={<Trans>Sign Out</Trans>}
+							onPress={handleSignOut}
+						/>
+					</List>
 				</View>
 			</ScreenContainer>
 		</>
@@ -281,27 +275,15 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
-	card: {
-		backgroundColor: theme.colors.surface,
-		borderCurve: Platform.OS === 'ios' ? 'continuous' : undefined,
-		borderRadius: theme.borderRadius.lg,
-		padding: theme.spacing.lg,
-	},
 	container: {
 		flex: 1,
-		gap: theme.spacing.md,
+		gap: theme.spacing.lg,
 		padding: theme.layout.screenPadding,
 	},
 	label: {
 		marginBottom: theme.spacing.xs,
 	},
-	row: {
-		marginBottom: theme.spacing.md,
-	},
 	section: {
 		gap: theme.spacing.sm,
-	},
-	sectionTitle: {
-		marginBottom: theme.spacing.md,
 	},
 }))
