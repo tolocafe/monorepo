@@ -1,4 +1,4 @@
-import { Alert, Platform, RefreshControl, View } from 'react-native'
+import { Alert, Linking, Platform, RefreshControl, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
@@ -249,6 +249,12 @@ export default function ProfileScreen() {
 							chevron
 							label={<Trans>Sessions</Trans>}
 							onPress={() => router.push('/more/sessions')}
+						/>
+						<ListItem
+							accessibilityRole="link"
+							chevron
+							label={<Trans>Delete</Trans>}
+							onPress={() => Linking.openURL('https://www.tolo.cafe/eliminar')}
 						/>
 						<ListItem
 							chevron

@@ -17,6 +17,8 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		package: 'cafe.tolo.app',
 	},
 	experiments: {
+		/* Enable until https://github.com/TanStack/form/issues/1501 is fixed */
+		reactCompiler: false,
 		typedRoutes: true,
 	},
 	extra: {
