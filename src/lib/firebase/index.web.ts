@@ -26,9 +26,6 @@ export async function enableAnalytics({
 	phoneNumber?: string
 	userId?: string
 }) {
-	// eslint-disable-next-line no-console
-	console.log('enableAnalytics')
-
 	try {
 		const analytics = getAnalytics()
 

@@ -21,9 +21,6 @@ export async function enableAnalytics({
 	phoneNumber?: string
 	userId?: string
 }) {
-	// eslint-disable-next-line no-console
-	console.log('enableAnalytics')
-
 	try {
 		await Promise.all([
 			firebase.analytics().setAnalyticsCollectionEnabled(true),

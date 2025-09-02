@@ -135,9 +135,6 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			? parsedSessionsUnknown.filter((record) => isSessionRecord(record))
 			: []
 
-		// eslint-disable-next-line no-console
-		console.log('posterClient', posterClient)
-
 		await Promise.all([
 			context.env.KV_SESSIONS.put(
 				clientId,
