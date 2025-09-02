@@ -19,6 +19,14 @@ export const persister = createAsyncStoragePersister({
 	storage,
 })
 
+function retryDelay(attemptIndex: number, error: unknown) {
+	if (error instanceof HTTPError && error.response.headers.get('Retry-After')) {
+		return Number.parseInt(error.response.headers.get('Retry-After') ?? '0', 10)
+	}
+
+	return Math.min(1000 * 2 ** attemptIndex, 10_000)
+}
+
 function shouldRetry(failureCount: number, error: unknown): boolean {
 	if (error instanceof HTTPError) {
 		if (
@@ -47,18 +55,18 @@ function shouldRetry(failureCount: number, error: unknown): boolean {
 export const queryClient = new QueryClient({
 	defaultOptions: {
 		mutations: {
-			networkMode: 'offlineFirst',
+			networkMode: 'online',
 			retry: shouldRetry,
-			retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30_000),
+			retryDelay,
 		},
 		queries: {
-			gcTime: 1000 * 60 * 60, // 1 hour - keep in cache for 1 hour when unused
-			networkMode: 'offlineFirst',
+			gcTime: 1000 * 60 * 60, // 1 hour
+			networkMode: 'online',
 			refetchOnReconnect: true,
 			refetchOnWindowFocus: true,
 			retry: shouldRetry,
-			retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30_000),
-			staleTime: 0, // 5 minutes - data is fresh for 5 minutes
+			retryDelay,
+			staleTime: 0,
 		},
 	},
 })
