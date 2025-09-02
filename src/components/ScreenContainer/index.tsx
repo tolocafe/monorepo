@@ -96,7 +96,10 @@ const styles = StyleSheet.create((theme) => ({
 		variants: {
 			withTopPadding: {
 				true: {
-					paddingTop: Platform.OS === 'ios' ? 0 : UnistylesRuntime.insets.top,
+					paddingTop:
+						Platform.OS === 'ios'
+							? 0
+							: Math.max(theme.spacing.sm, UnistylesRuntime.insets.top),
 				},
 			},
 		},

@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/react-native'
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto'
 import {
 	getAnalytics,
@@ -25,10 +26,14 @@ export async function enableAnalytics({
 	phoneNumber?: string
 	userId?: string
 }) {
+	// eslint-disable-next-line no-console
+	console.log('enableAnalytics')
+
 	try {
 		const analytics = getAnalytics()
 
 		setAnalyticsCollectionEnabled(analytics, true)
+
 		setConsent({
 			ad_personalization: 'granted',
 			ad_storage: 'granted',
@@ -54,8 +59,8 @@ export async function enableAnalytics({
 			sha256_last_name: lastNameHash ?? null,
 			sha256_phone_number: phoneNumberHash ?? null,
 		})
-	} catch {
-		return
+	} catch (error) {
+		captureException(error)
 	}
 }
 

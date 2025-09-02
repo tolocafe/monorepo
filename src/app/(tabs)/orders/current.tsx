@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { Alert, TouchableOpacity, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -17,6 +17,7 @@ import { Card } from '@/components/Card'
 import { Input } from '@/components/Input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
+import { trackEvent } from '@/lib/firebase'
 import { useRegisterForPushNotifications } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import {
@@ -124,6 +125,14 @@ export default function OrderDetail() {
 			})
 		},
 		onSuccess() {
+			void trackEvent('purchase', {
+				currency: 'MXN',
+				price: orderTotal.toString(),
+				quantity: order?.products
+					.reduce((sum, product) => sum + product.quantity, 0)
+					.toString(),
+			})
+
 			Burnt.toast({
 				duration: 3,
 				haptic: 'success',
@@ -142,15 +151,17 @@ export default function OrderDetail() {
 
 	const orderTotal = getOrderTotal(order?.products ?? [])
 
-	// useEffect(() => {
-	// 	void trackEvent('view_cart', {
-	// 		currency: 'MXN',
-	// 		price: orderTotal.toString(),
-	// 		quantity: order?.products
-	// 			.reduce((sum, product) => sum + product.quantity, 0)
-	// 			.toString(),
-	// 	})
-	// }, [order?.products, orderTotal])
+	useEffect(() => {
+		if (!order?.products) return
+
+		void trackEvent('view_cart', {
+			currency: 'MXN',
+			price: orderTotal.toString(),
+			quantity: order.products
+				.reduce((sum, product) => sum + product.quantity, 0)
+				.toString(),
+		})
+	}, [order?.products, orderTotal])
 
 	const { Field, handleSubmit, Subscribe } = useForm({
 		defaultValues: {
@@ -187,6 +198,14 @@ export default function OrderDetail() {
 				)
 				return
 			}
+
+			void trackEvent('begin_checkout', {
+				currency: 'MXN',
+				price: orderTotal.toString(),
+				quantity: order?.products
+					.reduce((sum, product) => sum + product.quantity, 0)
+					.toString(),
+			})
 
 			return createOrder({
 				...value,

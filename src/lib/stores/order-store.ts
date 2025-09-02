@@ -5,10 +5,10 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { create } from 'zustand/react'
 import { useShallow } from 'zustand/react/shallow'
 
+import { STORAGE_KEYS } from '@/lib/constants/storage'
+import { trackEvent } from '@/lib/firebase'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { productQueryOptions } from '@/lib/queries/product'
-
-import { STORAGE_KEYS } from '../constants/storage'
 
 export type Order = {
 	apiOrderId?: string
@@ -219,6 +219,7 @@ export const useAddItemGuarded = () => {
 				productQueryOptions(item.id).queryKey,
 			)
 			const itemName = product?.product_name
+
 			router.push(
 				itemName
 					? { params: { itemName }, pathname: '/sign-in' }
@@ -226,6 +227,11 @@ export const useAddItemGuarded = () => {
 			)
 			return
 		}
+
+		void trackEvent('add_to_cart', {
+			item_id: item.id,
+			quantity: item.quantity.toString(),
+		})
 
 		addItem(item)
 	}

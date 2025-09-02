@@ -15,8 +15,9 @@ export const unstable_settings = {
 }
 
 export default function TabLayout() {
-	const colorScheme = useColorScheme()
 	const { t } = useLingui()
+
+	const colorScheme = useColorScheme()
 	const { totalItems } = useOrderStats()
 
 	return (

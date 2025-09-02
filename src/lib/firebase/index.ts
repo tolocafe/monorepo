@@ -24,33 +24,37 @@ export async function enableAnalytics({
 	// eslint-disable-next-line no-console
 	console.log('enableAnalytics')
 
-	await Promise.allSettled([
-		firebase.analytics().setAnalyticsCollectionEnabled(true),
-		firebase.analytics().setConsent({
-			ad_personalization: true,
-			ad_storage: true,
-			ad_user_data: true,
-			analytics_storage: true,
-		}),
-	])
-
-	const [emailAddressHash, firstNameHash, lastNameHash, phoneNumberHash] =
+	try {
 		await Promise.all([
-			email ? hash256(email, 'email') : null,
-			firstName ? hash256(firstName) : null,
-			lastName ? hash256(lastName) : null,
-			phoneNumber ? hash256(phoneNumber, 'phone') : null,
+			firebase.analytics().setAnalyticsCollectionEnabled(true),
+			firebase.analytics().setConsent({
+				ad_personalization: true,
+				ad_storage: true,
+				ad_user_data: true,
+				analytics_storage: true,
+			}),
 		])
 
-	await Promise.allSettled([
-		userId ? firebase.analytics().setUserId(userId) : null,
-		firebase.analytics().setUserProperties({
-			sha256_email_address: emailAddressHash ?? null,
-			sha256_first_name: firstNameHash ?? null,
-			sha256_last_name: lastNameHash ?? null,
-			sha256_phone_number: phoneNumberHash ?? null,
-		}),
-	])
+		const [emailAddressHash, firstNameHash, lastNameHash, phoneNumberHash] =
+			await Promise.all([
+				email ? hash256(email, 'email') : null,
+				firstName ? hash256(firstName) : null,
+				lastName ? hash256(lastName) : null,
+				phoneNumber ? hash256(phoneNumber, 'phone') : null,
+			])
+
+		await Promise.all([
+			userId ? firebase.analytics().setUserId(userId) : null,
+			firebase.analytics().setUserProperties({
+				sha256_email_address: emailAddressHash ?? null,
+				sha256_first_name: firstNameHash ?? null,
+				sha256_last_name: lastNameHash ?? null,
+				sha256_phone_number: phoneNumberHash ?? null,
+			}),
+		])
+	} catch (error) {
+		captureException(error)
+	}
 }
 
 export async function trackEvent(
