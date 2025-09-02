@@ -124,7 +124,7 @@ export default function TopUpScreen() {
 								googlePay: {
 									amount: selectedAmount,
 									label: 'TOLO',
-									testEnv: true,
+									testEnv: false,
 									...commonPlatformPayOptions,
 								},
 							},
