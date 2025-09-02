@@ -375,10 +375,15 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			}
 			case 'transaction': {
 				if (action === 'changed') {
-					const { client_id } = await api.dash.getTransaction(
+					const transaction = await api.dash.getTransaction(
 						context.env.POSTER_TOKEN,
 						object_id as string,
 					)
+
+					if (!transaction)
+						throw new HTTPException(404, { message: 'Transaction not found' })
+
+					const { client_id } = transaction
 
 					const { results: pushTokens } = await context.env.D1_TOLO.prepare(
 						'SELECT * FROM push_tokens WHERE client_id = ?',

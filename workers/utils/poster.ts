@@ -22,6 +22,36 @@ const BASE_URL = 'https://joinposter.com/api'
 
 const defaultGetMenuProductsOptions = { type: 'products' } as const
 
+class PosterError extends Error {
+	constructor(message: string) {
+		super(message)
+		this.name = 'PosterError'
+	}
+}
+
+export async function posterFetch<TResponse>(
+	url: string,
+	options: RequestInit & { defaultErrorMessage?: string },
+) {
+	const currentScope = getCurrentScope()
+
+	currentScope.setExtra('Fetch URL', `${BASE_URL}${url}`)
+
+	currentScope.setExtra('Fetch Body', options.body)
+
+	const data = (await fetch(`${BASE_URL}${url}`, options).then((response) =>
+		response.json(),
+	)) as PosterResponse<TResponse>
+
+	currentScope.setExtra('Fetch Data', data)
+
+	if (data.response != null) return data.response
+
+	throw new PosterError(
+		data.error || options.defaultErrorMessage || 'Failed to fetch data',
+	)
+}
+
 export const api = {
 	clients: {
 		async addEWalletPayment(
@@ -33,20 +63,14 @@ export const api = {
 				type: 1 | 2
 			},
 		) {
-			const data = (await fetch(
-				`${BASE_URL}/clients.addEWalletPayment?token=${token}`,
-				{
-					body: JSON.stringify({ ...body, amount: body.amount / 100 }),
-					headers: { 'Content-Type': 'application/json' },
-					method: 'POST',
-				},
-			).then((response) => response.json())) as PosterResponse<string>
+			const finalBody = { ...body, amount: body.amount / 100 }
 
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to add e-wallet payment')
+			return posterFetch<string>(`/clients.addEWalletPayment?token=${token}`, {
+				body: JSON.stringify(finalBody),
+				defaultErrorMessage: 'Failed to add e-wallet payment',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+			})
 		},
 		/**
 		 * Registers a new e-wallet transaction to the client's e-wallet
@@ -61,20 +85,15 @@ export const api = {
 		) {
 			const parsedBody = { ...body, amount: body.amount / 100 }
 
-			const data = (await fetch(
-				`${BASE_URL}/clients.addEWalletTransaction?token=${token}`,
+			return posterFetch<number>(
+				`/clients.addEWalletTransaction?token=${token}`,
 				{
 					body: JSON.stringify(parsedBody),
+					defaultErrorMessage: 'Failed to add e-wallet transaction',
 					headers: { 'Content-Type': 'application/json' },
 					method: 'POST',
 				},
-			).then((response) => response.json())) as PosterResponse<number>
-
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to add e-wallet transaction')
+			)
 		},
 		async createClient(
 			token: string,
@@ -88,98 +107,74 @@ export const api = {
 				phone: string
 			},
 		) {
-			const data = (await fetch(
-				`${BASE_URL}/clients.createClient?token=${token}`,
-				{
-					body: JSON.stringify(body),
-					headers: { 'Content-Type': 'application/json' },
-					method: 'POST',
-				},
-			).then((response) => response.json())) as PosterResponse<number>
-
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to create client')
+			return posterFetch<number>(`/clients.createClient?token=${token}`, {
+				body: JSON.stringify(body),
+				defaultErrorMessage: 'Failed to create client',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+			})
 		},
 		async getClient(token: string, phone: string) {
-			const data = (await fetch(
-				`${BASE_URL}/clients.getClients?token=${token}&phone=${encodeURIComponent(phone)}&num=1`,
-			).then((response) => response.json())) as PosterResponse<ClientData[]>
-
-			if (data.response != null) return data.response.at(0)
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			return null
+			return posterFetch<ClientData[]>(
+				`/clients.getClients?token=${token}&phone=${encodeURIComponent(phone)}&num=1`,
+				{
+					defaultErrorMessage: 'Failed to get client',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'GET',
+				},
+			)
+				.then((response) => response.at(0) ?? null)
+				.catch(() => null)
 		},
 		async getClientById(token: string, id: number) {
-			const data = (await fetch(
-				`${BASE_URL}/clients.getClient?token=${token}&client_id=${id}`,
-			).then((response) => response.json())) as PosterResponse<ClientData[]>
-
-			if (data.response != null) return data.response.at(0)
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			return null
+			return posterFetch<ClientData[]>(
+				`/clients.getClient?token=${token}&client_id=${id}`,
+				{
+					defaultErrorMessage: 'Failed to get client',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'GET',
+				},
+			)
+				.then((response) => response.at(0) ?? null)
+				.catch(() => null)
 		},
 		async updateClient(
 			token: string,
 			clientId: string,
 			body: UpdateClientBody,
 		) {
-			const data = (await fetch(
-				`${BASE_URL}/clients.updateClient?token=${token}`,
-				{
-					body: JSON.stringify({ ...body, client_id: clientId }),
-					headers: { 'Content-Type': 'application/json' },
-					method: 'POST',
-				},
-			).then((response) => response.json())) as PosterResponse<number>
-
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to update client')
+			return posterFetch<number>(`/clients.updateClient?token=${token}`, {
+				body: JSON.stringify({ ...body, client_id: clientId }),
+				defaultErrorMessage: 'Failed to update client',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+			})
 		},
 	},
 	dash: {
 		async getTransaction(token: string, id: string) {
-			const data = (await fetch(
-				`${BASE_URL}/dash.getTransaction?token=${token}&transaction_id=${id}`,
-			).then((response) => response.json())) as PosterResponse<
+			return posterFetch<
 				{
 					client_id: string
-					/** The amount paid by hard cash which is equal to the payed_cash amount plus payed_card */
 					payed_sum: string
-					/** Receipt rounding amount in cents */
 					round_sum: string
-					/** Total order amount, without discounts, in cents */
 					sum: string
 				}[]
-			>
-
-			const transaction = data.response?.at(0)
-
-			if (transaction != null) return transaction
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to get transaction')
+			>(`/dash.getTransaction?token=${token}&transaction_id=${id}`, {
+				defaultErrorMessage: 'Failed to get transaction',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'GET',
+			}).then((response) => response.at(0) ?? null)
 		},
 		async getTransactions(token: string, clientId: number) {
-			const data = (await fetch(
-				`${BASE_URL}/dash.getTransactions?token=${token}&type=clients&id=${clientId}&include_x=true`,
-			).then((response) => response.json())) as PosterResponse<number[]>
-
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			return []
+			return posterFetch<number[]>(
+				`/dash.getTransactions?token=${token}&type=clients&id=${clientId}&include_x=true`,
+				{
+					defaultErrorMessage: 'Failed to get transactions',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'GET',
+				},
+			).catch(() => [])
 		},
 	},
 	finance: {
@@ -195,40 +190,26 @@ export const api = {
 				user_id: number
 			},
 		) {
-			const data = (await fetch(
-				`${BASE_URL}/finance.createTransactions?token=${token}`,
-				{
-					body: JSON.stringify(body),
-					headers: { 'Content-Type': 'application/json' },
-					method: 'POST',
-				},
-			).then((response) => response.json())) as PosterResponse<number>
-
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to create transactions')
+			return posterFetch<number>(`/finance.createTransactions?token=${token}`, {
+				body: JSON.stringify(body),
+				defaultErrorMessage: 'Failed to create transactions',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+			})
 		},
 		async getTransaction(token: string, id: string) {
-			const data = (await fetch(
-				`${BASE_URL}/finance.getTransaction?token=${token}&transaction_id=${id}`,
-			).then((response) => response.json())) as PosterResponse<
+			return posterFetch<
 				{
 					amount: string
 					client_id: string
 					transaction_id: string
 					user_id: string
 				}[]
-			>
-
-			const transaction = data.response?.at(0)
-
-			if (transaction != null) return transaction
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to get transaction')
+			>(`/finance.getTransaction?token=${token}&transaction_id=${id}`, {
+				defaultErrorMessage: 'Failed to get transaction',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'GET',
+			}).then((response) => response.at(0) ?? null)
 		},
 	},
 	incomingOrders: {
@@ -247,27 +228,19 @@ export const api = {
 			}
 
 			// https://dev.joinposter.com/en/docs/v3/web/incomingOrders/createIncomingOrder?id=incomingorderscreateincomingorder-response-parameters
-			const data = (await fetch(
-				`${BASE_URL}/incomingOrders.createIncomingOrder?token=${token}`,
-				{
-					body: JSON.stringify(finalOrderData),
-					headers: { 'Content-Type': 'application/json' },
-					method: 'POST',
-				},
-			).then((response) => response.json())) as PosterResponse<{
+			return posterFetch<{
 				/** Online order ID */
 				incoming_order_id: number
 				/** Order status: 0—new, 1—accepted, 7—canceled */
 				status: number
 				/** Associated order ID */
 				transaction_id: number
-			}>
-
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error(data.error || 'Failed to create order')
+			}>(`/incomingOrders.createIncomingOrder?token=${token}`, {
+				body: JSON.stringify(finalOrderData),
+				defaultErrorMessage: 'Failed to create order',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+			})
 		},
 		async getIncomingOrder(token: string, id: string) {
 			const data = (await fetch(
@@ -300,29 +273,22 @@ export const api = {
 				type: 'categories' | 'products'
 			} = defaultGetMenuProductsOptions,
 		) {
-			const data = await fetch(
-				`${BASE_URL}/menu.getProducts?token=${token}`,
-			).then(
-				(response) => response.json() as Promise<PosterResponse<Product[]>>,
-			)
-
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to get menu products')
+			return posterFetch<Product[]>(`/menu.getProducts?token=${token}`, {
+				defaultErrorMessage: 'Failed to get menu products',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'GET',
+			})
 		},
 
 		async getProduct(token: string, id: string) {
-			const data = (await fetch(
-				`${BASE_URL}/menu.getProduct?token=${token}&product_id=${id}`,
-			).then((response) => response.json())) as PosterResponse<Product>
-
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to get product')
+			return posterFetch<Product>(
+				`/menu.getProduct?token=${token}&product_id=${id}`,
+				{
+					defaultErrorMessage: 'Failed to get product',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'GET',
+				},
+			)
 		},
 	},
 	transactions: {
@@ -347,20 +313,12 @@ export const api = {
 				user_id: body.userId,
 			}
 
-			const data = (await fetch(
-				`${BASE_URL}/finance.updateTransactions?token=${token}`,
-				{
-					body: JSON.stringify(parsedBody),
-					headers: { 'Content-Type': 'application/json' },
-					method: 'POST',
-				},
-			).then((response) => response.json())) as PosterResponse<number>
-
-			if (data.response != null) return data.response
-
-			getCurrentScope().setExtra('Fetch Data', data)
-
-			throw new Error('Failed to update transaction')
+			return posterFetch<number>(`/finance.updateTransactions?token=${token}`, {
+				body: JSON.stringify(parsedBody),
+				defaultErrorMessage: 'Failed to update transaction',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+			})
 		},
 	},
 }
@@ -372,18 +330,12 @@ export async function closePosterOrder(
 		transaction_id: number
 	},
 ) {
-	const data = (await fetch(
-		`${BASE_URL}/transactions.closeTransaction?token=${token}`,
-		{
-			body: JSON.stringify({ ...body, spot_id: 1, spot_tablet_id: 1 }),
-			headers: { 'Content-Type': 'application/json' },
-			method: 'POST',
-		},
-	).then((response) => response.json())) as PosterResponse<number>
-
-	if (data.response != null) return data.response
-
-	throw new Error('Failed to close order')
+	return posterFetch<number>(`/transactions.closeTransaction?token=${token}`, {
+		body: JSON.stringify({ ...body, spot_id: 1, spot_tablet_id: 1 }),
+		defaultErrorMessage: 'Failed to close order',
+		headers: { 'Content-Type': 'application/json' },
+		method: 'POST',
+	})
 }
 
 export async function sendSms(_token: string, phone: string, message: string) {
