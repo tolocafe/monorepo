@@ -29,21 +29,24 @@ export async function trackServerEvent(
 ) {
 	try {
 		const body = {
-			client_id: generateGA4ClientId(),
+			client_id: generateGA4ClientId(userId),
 			events: [
 				{
 					name: eventName,
 					params: eventParameters,
-					user_data: getUserData(userData),
 				},
 			],
+			user_data: getUserData(userData),
 			user_id: userId,
 		} as const
 
 		getCurrentScope().setExtra('Analytics Body', body)
 
 		const response = await fetch(
-			`https://www.google-analytics.com/mp/collect?measurement_id=${environment.GA4_MEASUREMENT_ID}&api_secret=${environment.GA4_API_SECRET}`,
+			`https://www.google-analytics.com/mp/collect${new URLSearchParams({
+				api_secret: environment.GA4_API_SECRET,
+				measurement_id: environment.GA4_MEASUREMENT_ID,
+			}).toString()}`,
 			{
 				body: JSON.stringify(body),
 				headers: { 'Content-Type': 'application/json' },
@@ -69,10 +72,11 @@ export async function trackServerEvent(
 	}
 }
 
-function generateGA4ClientId(): string {
+function generateGA4ClientId(userId: string): string {
+	// See https://developers.google.com/analytics/devguides/collection/protocol/ga4/sending-events?client_type=js#client_id_limitations
 	const timestamp = Math.floor(Date.now() / 1000)
 	const random = Math.floor(Math.random() * 2_147_483_647)
-	return `${timestamp}.${random}`
+	return `${timestamp}.${random}.${userId}`
 }
 
 function getUserData(userData?: {
