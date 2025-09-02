@@ -35,9 +35,9 @@ export async function posterFetch<TResponse>(
 ) {
 	const currentScope = getCurrentScope()
 
-	currentScope.setExtra('Fetch URL', `${BASE_URL}${url}`)
-
-	currentScope.setExtra('Fetch Body', options.body)
+	currentScope
+		.setExtra('Fetch URL', `${BASE_URL}${url}`)
+		.setExtra('Fetch Body', options.body)
 
 	const data = (await fetch(`${BASE_URL}${url}`, options).then((response) =>
 		response.json(),

@@ -175,6 +175,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 							posterClientId,
 							transactionId,
 						},
+						level: 'debug',
 						message: 'Created Poster finance transaction',
 					})
 

@@ -1,6 +1,6 @@
 import crypto from 'node:crypto'
 
-import { captureException } from '@sentry/cloudflare'
+import { captureEvent, captureException } from '@sentry/cloudflare'
 
 import type {
 	ServerAnalyticsEvent,
@@ -46,6 +46,12 @@ export async function trackServerEvent(
 		if (!response.ok) {
 			throw new Error(`Analytics request failed: ${response.status}`)
 		}
+
+		captureEvent({
+			extra: { data: await response.json() },
+			level: 'debug',
+			message: 'Analytics request',
+		})
 	} catch (error) {
 		captureException(error)
 	}
