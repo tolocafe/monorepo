@@ -20,6 +20,7 @@ import { Button } from '@/components/Button'
 import HeaderGradient from '@/components/HeaderGradient'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H1, H2, Label, Paragraph, Text } from '@/components/Text'
+import { trackEvent } from '@/lib/firebase'
 import { getImageUrl } from '@/lib/image'
 import { useTabBarHeight } from '@/lib/navigation/tab-bar-height'
 import { productQueryOptions } from '@/lib/queries/product'
@@ -68,6 +69,12 @@ export default function MenuDetail() {
 			})
 		},
 	})
+
+	useEffect(() => {
+		void trackEvent('view_item', {
+			item_id: product?.product_id,
+		})
+	}, [product?.product_id])
 
 	// Default each group to its first modification when product loads
 	useEffect(() => {
