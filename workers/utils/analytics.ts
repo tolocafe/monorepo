@@ -67,9 +67,8 @@ export async function trackServerEvent(
 		getCurrentScope().setExtra('Analytics Response', responseText)
 
 		captureEvent({
-			extra: { data: responseText },
 			level: 'debug',
-			message: 'Analytics request',
+			message: 'Analytics successfully sent',
 		})
 	} catch (error) {
 		captureException(error)
