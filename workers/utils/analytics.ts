@@ -1,6 +1,10 @@
 import crypto from 'node:crypto'
 
-import { captureEvent, captureException } from '@sentry/cloudflare'
+import {
+	captureEvent,
+	captureException,
+	getCurrentScope,
+} from '@sentry/cloudflare'
 
 import type {
 	ServerAnalyticsEvent,
@@ -24,20 +28,24 @@ export async function trackServerEvent(
 	},
 ) {
 	try {
+		const body = {
+			client_id: generateGA4ClientId(),
+			events: [
+				{
+					name: eventName,
+					params: eventParameters,
+					user_data: getUserData(userData),
+				},
+			],
+			user_id: userId,
+		} as const
+
+		getCurrentScope().setExtra('Analytics Body', body)
+
 		const response = await fetch(
 			`https://www.google-analytics.com/mp/collect?measurement_id=${environment.GA4_MEASUREMENT_ID}&api_secret=${environment.GA4_API_SECRET}`,
 			{
-				body: JSON.stringify({
-					client_id: generateGA4ClientId(),
-					events: [
-						{
-							name: eventName,
-							params: eventParameters,
-							user_data: getUserData(userData),
-						},
-					],
-					user_id: userId,
-				}),
+				body: JSON.stringify(body),
 				headers: { 'Content-Type': 'application/json' },
 				method: 'POST',
 			},
@@ -47,8 +55,12 @@ export async function trackServerEvent(
 			throw new Error(`Analytics request failed: ${response.status}`)
 		}
 
+		const responseText = await response.text()
+
+		getCurrentScope().setExtra('Analytics Response', responseText)
+
 		captureEvent({
-			extra: { data: await response.json() },
+			extra: { data: responseText },
 			level: 'debug',
 			message: 'Analytics request',
 		})
