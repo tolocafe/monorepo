@@ -7,6 +7,10 @@ import {
 	setUserProperties,
 } from 'firebase/analytics'
 
+import { requestTrackingPermissionAsync } from '@/lib/notifications'
+
+import type { AnalyticsEvent, EventProperties } from './utils'
+
 export async function enableAnalytics({
 	email,
 	firstName,
@@ -69,4 +73,14 @@ export function hash256(value: string, type?: 'email' | 'phone') {
 	} catch {
 		return null
 	}
+}
+
+export async function trackEvent(
+	event: AnalyticsEvent,
+	properties?: EventProperties,
+) {
+	const trackingEnabled = await requestTrackingPermissionAsync()
+	if (!trackingEnabled) return
+
+	void trackEvent(event, properties)
 }

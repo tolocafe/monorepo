@@ -18,7 +18,7 @@ import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
-import { enableAnalytics } from '@/lib/firebase'
+import { enableAnalytics, trackEvent } from '@/lib/firebase'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import {
 	requestOtpMutationOptions,
@@ -50,9 +50,10 @@ export default function SignIn() {
 		async onSuccess(data) {
 			await queryClient.invalidateQueries({ queryKey: ['self'] })
 
-			// Request tracking permission after successful sign-in
 			requestTrackingPermissionAsync()
 				.then((granted) => {
+					void trackEvent('login')
+
 					if (granted) {
 						void enableAnalytics({
 							email: data.client.email,

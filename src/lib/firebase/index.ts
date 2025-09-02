@@ -1,6 +1,10 @@
 import { firebase } from '@react-native-firebase/analytics'
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto'
 
+import { requestTrackingPermissionAsync } from '@/lib/notifications'
+
+import type { AnalyticsEvent, EventProperties } from './utils'
+
 const algorithm = CryptoDigestAlgorithm.SHA256
 
 export async function enableAnalytics({
@@ -16,6 +20,9 @@ export async function enableAnalytics({
 	phoneNumber?: string
 	userId?: string
 }) {
+	// eslint-disable-next-line no-console
+	console.log('enableAnalytics')
+
 	await Promise.allSettled([
 		firebase.analytics().setAnalyticsCollectionEnabled(true),
 		firebase.analytics().setConsent({
@@ -43,6 +50,16 @@ export async function enableAnalytics({
 			sha256_phone_number: phoneNumberHash ?? null,
 		}),
 	])
+}
+
+export async function trackEvent(
+	event: AnalyticsEvent,
+	properties?: EventProperties,
+) {
+	const trackingEnabled = await requestTrackingPermissionAsync()
+	if (!trackingEnabled) return
+
+	void firebase.analytics().logEvent(event, properties)
 }
 
 function hash256(value: string, type?: 'email' | 'phone') {
