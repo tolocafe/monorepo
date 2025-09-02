@@ -3,6 +3,7 @@ import {
 	CreateStripeTransactionSchema,
 } from '@common/schemas'
 import { Hono } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 
 import { authenticate } from '../utils/jwt'
 import { api } from '../utils/poster'
@@ -20,36 +21,38 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 
 		const stripe = getStripe(c.env.STRIPE_SECRET_KEY)
 
-		let customer = await stripe.customers
+		let stripeCustomer = await stripe.customers
 			.search({
 				query: `metadata['poster_client_id']:'${clientId}'`,
 			})
 			.then((response) => response.data.at(0))
 
-		if (!customer) {
-			const posterCustomer = await api.clients.getClient(
-				c.env.POSTER_TOKEN,
-				clientId.toString(),
-			)
+		const posterCustomer = await api.clients.getClient(
+			c.env.POSTER_TOKEN,
+			clientId.toString(),
+		)
 
-			customer = await stripe.customers.create({
-				email: posterCustomer?.email,
-				metadata: { poster_client_id: clientId },
-				name: posterCustomer?.name,
-				phone: posterCustomer?.phone,
-			})
+		if (posterCustomer?.ewallet == null) {
+			throw new HTTPException(400, { message: 'Client has no e-wallet' })
 		}
+
+		stripeCustomer ??= await stripe.customers.create({
+			email: posterCustomer.email,
+			metadata: { poster_client_id: clientId },
+			name: posterCustomer.name,
+			phone: posterCustomer.phone,
+		})
 
 		const [ephemeralKey, paymentIntent] = await Promise.all([
 			stripe.ephemeralKeys.create(
-				{ customer: customer.id },
+				{ customer: stripeCustomer.id },
 				{ apiVersion: '2025-07-30.basil' },
 			),
 			stripe.paymentIntents.create({
 				amount: body.amount,
 				confirmation_method: 'automatic',
 				currency: 'mxn',
-				customer: customer.id,
+				customer: stripeCustomer.id,
 				metadata: { poster_client_id: clientId },
 			}),
 		])

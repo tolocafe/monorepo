@@ -40,13 +40,13 @@ const clients = new Hono<{ Bindings: Bindings }>()
 
 		const parsedBody = updateClientSchema.parse(body)
 
-		const client = await api.clients.updateClient(
+		const posterClient = await api.clients.updateClient(
 			c.env.POSTER_TOKEN,
 			id,
 			parsedBody,
 		)
 
-		return c.json(client)
+		return c.json(posterClient)
 	})
 	.put('/:id/push-tokens', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)

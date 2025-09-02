@@ -91,19 +91,23 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		const { isTest } = await verifyOtp(context.env.KV_OTP, phone, code)
 
-		const client = await api.clients.getClient(context.env.POSTER_TOKEN, phone)
+		const posterClient = await api.clients.getClient(
+			context.env.POSTER_TOKEN,
+			phone,
+		)
 
-		if (!client) throw new HTTPException(404, { message: 'Client not found' })
+		if (!posterClient)
+			throw new HTTPException(404, { message: 'Client not found' })
 
-		const { client_id: clientId } = client
+		const { client_id: clientId } = posterClient
 
 		await trackServerEvent(context.env, {
 			eventName: 'login',
 			userData: {
-				emailAddress: client.email,
-				firstName: client.firstname,
-				lastName: client.lastname,
-				phoneNumber: client.phone,
+				emailAddress: posterClient.email,
+				firstName: posterClient.firstname,
+				lastName: posterClient.lastname,
+				phoneNumber: posterClient.phone,
 			},
 			userId: clientId,
 		})
@@ -111,9 +115,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		const [token, sessionsRaw] = await Promise.all([
 			signJwt(
 				{
-					email: client.email,
-					name: client.name ?? client.firstname,
-					phone: client.phone,
+					email: posterClient.email,
+					name: posterClient.name ?? posterClient.firstname,
+					phone: posterClient.phone,
 					sub: clientId,
 				},
 				context.env.JWT_SECRET,
@@ -128,6 +132,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			? parsedSessionsUnknown.filter((record) => isSessionRecord(record))
 			: []
 
+		// eslint-disable-next-line no-console
+		console.log('posterClient', posterClient)
+
 		await Promise.all([
 			context.env.KV_SESSIONS.put(
 				clientId,
@@ -136,7 +143,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 					{ createdAt: Date.now(), name: sessionName, token },
 				]),
 			),
-			client.client_groups_id === '0'
+			posterClient.client_groups_id === '0'
 				? api.clients.updateClient(context.env.POSTER_TOKEN, clientId, {
 						client_groups_id_client: 3,
 					})
@@ -146,7 +153,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		// For web: set HttpOnly cookie. For native: client uses token from body
 		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')
 
-		const responseBody = { client, token }
+		const responseBody = { client: posterClient, token }
 
 		if (isWeb) {
 			setCookie(context, 'tolo_session', token, getCookieOptions(isTest))

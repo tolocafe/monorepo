@@ -302,6 +302,37 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		})
 
 		switch (object) {
+			case 'client': {
+				switch (action) {
+					case 'changed': {
+						const client = await api.clients.getClient(
+							context.env.POSTER_TOKEN,
+							object_id as string,
+						)
+
+						if (!client) break
+
+						const stripe = getStripe(context.env.STRIPE_SECRET_KEY)
+						const stripeCustomer = await stripe.customers
+							.search({
+								query: `metadata['poster_client_id']:'${object_id}'`,
+							})
+							.then((response) => response.data.at(0))
+
+						if (stripeCustomer) {
+							await stripe.customers.update(stripeCustomer.id, {
+								email: client.email,
+								name: client.name,
+								phone: client.phone,
+							})
+						}
+
+						break
+					}
+				}
+
+				break
+			}
 			case 'client_payed_sum': {
 				const client = await api.clients.getClient(
 					context.env.POSTER_TOKEN,
