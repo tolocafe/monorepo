@@ -122,9 +122,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					throw new HTTPException(400, { message: 'Customer was deleted' })
 				}
 
-				const posterClientId = customer.metadata.poster_client_id
+				const posterClientId = Number(customer.metadata.poster_client_id)
 
-				if (!posterClientId) {
+				if (!posterClientId || Number.isNaN(posterClientId)) {
 					throw new HTTPException(400, {
 						message: 'No Poster client ID found in customer metadata',
 					})
@@ -165,7 +165,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 								.at(0) as string,
 							id: 1,
 							type: 1,
-							user_id: Number(posterClientId),
+							user_id: posterClientId,
 						},
 					)
 
@@ -183,7 +183,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						context.env.POSTER_TOKEN,
 						{
 							amount: paymentIntent.amount,
-							client_id: Number(posterClientId),
+							client_id: posterClientId,
 							transaction_id: transactionId,
 							type: 2,
 						},
@@ -199,7 +199,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					)
 						.bind(
 							paymentIntent.id,
-							Number(posterClientId),
+							posterClientId,
 							paymentIntent.amount,
 							eWalletTransactionId,
 							new Date().toISOString(),
@@ -214,7 +214,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 							transaction_id: paymentIntent.id,
 							value: paymentIntent.amount / 100,
 						},
-						userId: posterClientId,
+						userId: posterClientId.toString(),
 					})
 
 					captureEvent({

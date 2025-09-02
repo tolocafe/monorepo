@@ -80,6 +80,7 @@ export default Sentry.withSentry(
 	(environment: { SENTRY_DSN: string }) => ({
 		dsn: environment.SENTRY_DSN,
 		enableLogs: true,
+		integrations: [Sentry.fetchIntegration()],
 		sendDefaultPii: true,
 		tracesSampleRate: 0.5,
 	}),
