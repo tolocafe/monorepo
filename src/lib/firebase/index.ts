@@ -1,4 +1,5 @@
 import { firebase } from '@react-native-firebase/analytics'
+import { captureException } from '@sentry/react-native'
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto'
 
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
@@ -56,10 +57,17 @@ export async function trackEvent(
 	event: AnalyticsEvent,
 	properties?: EventProperties,
 ) {
-	const trackingEnabled = await requestTrackingPermissionAsync()
-	if (!trackingEnabled) return
+	try {
+		const trackingEnabled = await requestTrackingPermissionAsync()
 
-	void firebase.analytics().logEvent(event, properties)
+		if (!trackingEnabled) {
+			return
+		}
+
+		void firebase.analytics().logEvent(event, properties)
+	} catch (error) {
+		captureException(error)
+	}
 }
 
 function hash256(value: string, type?: 'email' | 'phone') {

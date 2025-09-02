@@ -1,5 +1,10 @@
 import { useEffect } from 'react'
-import { RefreshControl, TouchableOpacity, View } from 'react-native'
+import {
+	ActivityIndicator,
+	RefreshControl,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -54,7 +59,7 @@ export default function MenuDetail() {
 	const { id } = useLocalSearchParams<{ id: string }>()
 
 	const addItem = useAddItemGuarded()
-	const { data: product } = useQuery(productQueryOptions(id))
+	const { data: product, isPending } = useQuery(productQueryOptions(id))
 
 	const { Field, handleSubmit, setFieldValue, Subscribe } = useForm({
 		defaultValues: {
@@ -71,8 +76,10 @@ export default function MenuDetail() {
 	})
 
 	useEffect(() => {
+		if (!product?.product_id) return
+
 		void trackEvent('view_item', {
-			item_id: product?.product_id,
+			item_id: product.product_id,
 		})
 	}, [product?.product_id])
 
@@ -97,6 +104,14 @@ export default function MenuDetail() {
 		setFieldValue('quantity', (previous) => Math.max(1, previous - 1))
 
 	if (!product) {
+		if (isPending) {
+			return (
+				<ScreenContainer>
+					<ActivityIndicator size="large" />
+				</ScreenContainer>
+			)
+		}
+
 		return (
 			<ScreenContainer>
 				<View style={styles.header}>

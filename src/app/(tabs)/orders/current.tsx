@@ -142,6 +142,16 @@ export default function OrderDetail() {
 
 	const orderTotal = getOrderTotal(order?.products ?? [])
 
+	// useEffect(() => {
+	// 	void trackEvent('view_cart', {
+	// 		currency: 'MXN',
+	// 		price: orderTotal.toString(),
+	// 		quantity: order?.products
+	// 			.reduce((sum, product) => sum + product.quantity, 0)
+	// 			.toString(),
+	// 	})
+	// }, [order?.products, orderTotal])
+
 	const { Field, handleSubmit, Subscribe } = useForm({
 		defaultValues: {
 			// This will be set by the server

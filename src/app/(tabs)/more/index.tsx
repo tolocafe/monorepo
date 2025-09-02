@@ -20,13 +20,13 @@ import { List, ListItem } from '@/components/List'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
-import { LOCALE_NAMES } from '@/lib/locales/init'
 import { loadAndActivateLocale } from '@/lib/locales/load-and-activate-locale'
+import { LOCALE_NAMES } from '@/lib/locales/utils'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { queryClient } from '@/lib/query-client'
 import { formatPrice } from '@/lib/utils/price'
 
-import type { Locale } from '@/lib/locales/init'
+import type { Locale } from '@/lib/locales/utils'
 
 const AVAILABLE_LANGUAGES = Object.keys(LOCALE_NAMES) as Locale[]
 

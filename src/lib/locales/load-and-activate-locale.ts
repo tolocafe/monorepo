@@ -1,5 +1,5 @@
 import { i18n } from '@lingui/core'
-import { Locale, LOCALE_KEY, languageStorage } from './init'
+import { Locale, LOCALE_KEY, languageStorage } from './utils'
 import * as Sentry from '@sentry/react-native'
 import { messages as esMessages } from '@/lib/locales/es/messages.po'
 

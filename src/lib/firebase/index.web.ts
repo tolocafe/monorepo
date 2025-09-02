@@ -1,6 +1,7 @@
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto'
 import {
 	getAnalytics,
+	logEvent,
 	setAnalyticsCollectionEnabled,
 	setConsent,
 	setUserId,
@@ -82,5 +83,6 @@ export async function trackEvent(
 	const trackingEnabled = await requestTrackingPermissionAsync()
 	if (!trackingEnabled) return
 
-	void trackEvent(event, properties)
+	const analytics = getAnalytics()
+	logEvent(analytics, event as unknown as string, properties)
 }

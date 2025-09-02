@@ -8,8 +8,9 @@ export function registerForPushNotificationsAsync() {
  * Request tracking transparency permission (iOS 14+ only)
  * This should be called after successful sign-in to request permission for tracking
  */
-export function requestTrackingPermissionAsync() {
-	return Promise.resolve(true)
+// eslint-disable-next-line @typescript-eslint/require-await
+export async function requestTrackingPermissionAsync() {
+	return true
 }
 
 export function useRegisterForPushNotifications() {
