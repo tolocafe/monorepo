@@ -1,3 +1,4 @@
+import { startSpan } from '@sentry/cloudflare'
 import { getCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 import { jwtVerify, SignJWT } from 'jose'
@@ -37,15 +38,19 @@ export async function signJwt(
 	data: { email?: string; name?: string; phone?: string; sub: string },
 	secret: string,
 ): Promise<string> {
-	return new SignJWT(data)
-		.setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-		.setIssuedAt()
-		.sign(secretKey(secret))
+	return startSpan({ name: 'jwt.sign' }, () =>
+		new SignJWT(data)
+			.setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
+			.setIssuedAt()
+			.sign(secretKey(secret)),
+	)
 }
 
 export async function verifyJwt(token: string, secret: string) {
 	try {
-		const { payload } = await jwtVerify(token, secretKey(secret))
+		const { payload } = await startSpan({ name: 'jwt.verify' }, () =>
+			jwtVerify(token, secretKey(secret)),
+		)
 
 		return [payload.sub, payload] as const
 	} catch {

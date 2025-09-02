@@ -1,4 +1,5 @@
 import { RequestOtpSchema, VerifyOtpSchema } from '@common/schemas'
+import { startSpan } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
@@ -104,17 +105,6 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		const { client_id: clientId } = posterClient
 
-		await trackServerEvent(context, {
-			eventName: 'login',
-			userData: {
-				emailAddress: posterClient.email,
-				firstName: posterClient.firstname,
-				lastName: posterClient.lastname,
-				phoneNumber: posterClient.phone,
-			},
-			userId: clientId,
-		})
-
 		const [token, sessionsRaw] = await Promise.all([
 			signJwt(
 				{
@@ -125,7 +115,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				},
 				context.env.JWT_SECRET,
 			),
-			context.env.KV_SESSIONS.get(clientId),
+			startSpan({ name: 'KV_SESSIONS.get' }, () =>
+				context.env.KV_SESSIONS.get(clientId),
+			),
 		])
 
 		const parsedSessionsUnknown: unknown = sessionsRaw
@@ -136,12 +128,24 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			: []
 
 		await Promise.all([
-			context.env.KV_SESSIONS.put(
-				clientId,
-				JSON.stringify([
-					...sessions,
-					{ createdAt: Date.now(), name: sessionName, token },
-				]),
+			trackServerEvent(context, {
+				eventName: 'login',
+				userData: {
+					emailAddress: posterClient.email,
+					firstName: posterClient.firstname,
+					lastName: posterClient.lastname,
+					phoneNumber: posterClient.phone,
+				},
+				userId: clientId,
+			}),
+			startSpan({ name: 'KV_SESSIONS.put' }, () =>
+				context.env.KV_SESSIONS.put(
+					clientId,
+					JSON.stringify([
+						...sessions,
+						{ createdAt: Date.now(), name: sessionName, token },
+					]),
+				),
 			),
 			posterClient.client_groups_id === UNVERIFIED_CLIENT_GROUP_ID
 				? api.clients.updateClient(context.env.POSTER_TOKEN, clientId, {
@@ -161,10 +165,12 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		return context.json(responseBody)
 	})
-	.get('/sessions', async (c) => {
-		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+	.get('/sessions', async (context) => {
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
-		const sessionsRaw = await c.env.KV_SESSIONS.get(clientId.toString())
+		const sessionsRaw = await startSpan({ name: 'KV_SESSIONS.get' }, () =>
+			context.env.KV_SESSIONS.get(clientId.toString()),
+		)
 
 		const parsedUnknown: unknown = sessionsRaw ? JSON.parse(sessionsRaw) : []
 
@@ -176,7 +182,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			...session,
 		}))
 
-		return c.json(sessions, 200)
+		return context.json(sessions, 200)
 	})
 	.get('/self', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
@@ -187,17 +193,19 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		return c.json(client)
 	})
-	.get('/self/sessions', async (c) => {
-		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+	.get('/self/sessions', async (context) => {
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
-		const sessionsRaw = await c.env.KV_SESSIONS.get(clientId.toString())
+		const sessionsRaw = await startSpan({ name: 'KV_SESSIONS.get' }, () =>
+			context.env.KV_SESSIONS.get(clientId.toString()),
+		)
 
 		const parsedUnknown: unknown = sessionsRaw ? JSON.parse(sessionsRaw) : []
 		const sessions: SessionRecord[] = Array.isArray(parsedUnknown)
 			? parsedUnknown.filter((record) => isSessionRecord(record))
 			: []
 
-		return c.json(sessions)
+		return context.json(sessions)
 	})
 	.post('/sign-out', async (context) => {
 		const [clientId, , token] = await authenticate(
@@ -205,7 +213,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			context.env.JWT_SECRET,
 		)
 
-		const sessionsRaw = await context.env.KV_SESSIONS.get(clientId.toString())
+		const sessionsRaw = await startSpan({ name: 'KV_SESSIONS.get' }, () =>
+			context.env.KV_SESSIONS.get(clientId.toString()),
+		)
 
 		const parsedSessionsUnknown: unknown = sessionsRaw
 			? JSON.parse(sessionsRaw)
@@ -215,9 +225,11 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			: []
 
 		// Clear all sessions for this client
-		await context.env.KV_SESSIONS.put(
-			clientId.toString(),
-			JSON.stringify(sessions.filter((session) => session.token !== token)),
+		await startSpan({ name: 'KV_SESSIONS.put' }, () =>
+			context.env.KV_SESSIONS.put(
+				clientId.toString(),
+				JSON.stringify(sessions.filter((session) => session.token !== token)),
+			),
 		)
 
 		// For web, clear the HttpOnly cookie

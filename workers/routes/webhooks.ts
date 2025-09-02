@@ -199,27 +199,28 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						message: 'Added e-wallet payment',
 					})
 
-					await context.env.D1_TOLO.prepare(
-						'INSERT INTO top_ups (payment_intent_id, client_id, amount, transaction_id, created_at) VALUES (?, ?, ?, ?, ?)',
-					)
-						.bind(
-							paymentIntent.id,
-							posterClientId,
-							paymentIntent.amount,
-							eWalletTransactionId,
-							new Date().toISOString(),
+					await Promise.all([
+						context.env.D1_TOLO.prepare(
+							'INSERT INTO top_ups (payment_intent_id, client_id, amount, transaction_id, created_at) VALUES (?, ?, ?, ?, ?)',
 						)
-						.run()
-
-					await trackServerEvent(context, {
-						eventName: 'purchase',
-						eventParams: {
-							currency: paymentIntent.currency.toUpperCase(),
-							transaction_id: paymentIntent.id,
-							value: paymentIntent.amount / 100,
-						},
-						userId: posterClientId.toString(),
-					})
+							.bind(
+								paymentIntent.id,
+								posterClientId,
+								paymentIntent.amount,
+								eWalletTransactionId,
+								new Date().toISOString(),
+							)
+							.run(),
+						trackServerEvent(context, {
+							eventName: 'purchase',
+							eventParams: {
+								currency: paymentIntent.currency.toUpperCase(),
+								transaction_id: paymentIntent.id,
+								value: paymentIntent.amount / 100,
+							},
+							userId: posterClientId.toString(),
+						}),
+					])
 
 					captureEvent({
 						extra: {
