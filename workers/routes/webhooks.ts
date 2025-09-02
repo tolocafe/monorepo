@@ -12,6 +12,7 @@ import { z } from 'zod/v4'
 
 import type { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk'
 
+import { trackServerEvent } from '../utils/analytics'
 import { api } from '../utils/poster'
 import { getStripe } from '../utils/stripe'
 
@@ -205,6 +206,17 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						)
 						.run()
 
+					// Track payment success
+					await trackServerEvent(context.env, {
+						eventName: 'purchase',
+						eventParams: {
+							currency: paymentIntent.currency.toUpperCase(),
+							transaction_id: paymentIntent.id,
+							value: paymentIntent.amount / 100,
+						},
+						userId: posterClientId,
+					})
+
 					captureEvent({
 						extra: {
 							amount: paymentIntent.amount,
@@ -271,10 +283,10 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			return context.json({ message: 'Invalid signature' }, 401)
 		}
 
-		let parsedData: EventData
+		let parsedData = null as EventData | null
 		if (data) {
 			try {
-				parsedData = JSON.parse(data) as unknown as EventData
+				parsedData = (JSON.parse(data) || null) as unknown as EventData
 			} catch {
 				//
 			}
@@ -290,42 +302,73 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		})
 
 		switch (object) {
+			case 'client_payed_sum': {
+				const client = await api.clients.getClient(
+					context.env.POSTER_TOKEN,
+					object_id as string,
+				)
+
+				if (!client) break
+
+				await trackServerEvent(context.env, {
+					eventName: 'purchase',
+					eventParams: {
+						currency: 'MXN',
+						transaction_id: object_id as string,
+						value:
+							parsedData && 'value_absolute' in parsedData
+								? (parsedData.value_absolute as number)
+								: undefined,
+					},
+					userData: {
+						emailAddress: client.email,
+						firstName: client.firstname,
+						lastName: client.lastname,
+						phoneNumber: client.phone,
+					},
+					userId: client.client_id,
+				})
+
+				break
+			}
 			case 'incoming_order': {
 				const { client_id } = await api.incomingOrders.getIncomingOrder(
 					context.env.POSTER_TOKEN,
 					object_id as string,
 				)
+
 				const { results: pushTokens } = await context.env.D1_TOLO.prepare(
 					'SELECT * FROM push_tokens WHERE client_id = ?',
 				)
 					.bind(client_id)
 					.all()
 
-				if (action === 'closed') {
-					messages.push(
-						...pushTokens.map(
-							(destination) =>
-								({
-									body: 'Disfruta tu pedido ☕️🥐, esperamos que lo disfrutes!',
-									title: 'Pedido entregado',
-									to: destination.token as string,
-								}) satisfies ExpoPushMessage,
-						),
-					)
-					break
-				}
+				switch (action) {
+					case 'closed': {
+						messages.push(
+							...pushTokens.map(
+								(destination) =>
+									({
+										body: 'Disfruta tu pedido ☕️🥐, esperamos que lo disfrutes!',
+										title: 'Pedido entregado',
+										to: destination.token as string,
+									}) satisfies ExpoPushMessage,
+							),
+						)
+						break
+					}
+					case 'changed': {
+						const incomingOrder = await api.incomingOrders.getIncomingOrder(
+							context.env.POSTER_TOKEN,
+							object_id as string,
+						)
 
-				if (action === 'changed') {
-					const incomingOrder = await api.incomingOrders.getIncomingOrder(
-						context.env.POSTER_TOKEN,
-						object_id as string,
-					)
-
-					captureEvent({
-						extra: { incomingOrder },
-						level: 'debug',
-						message: 'Incoming order changed',
-					})
+						captureEvent({
+							extra: { incomingOrder },
+							level: 'debug',
+							message: 'Incoming order changed',
+						})
+					}
 				}
 
 				break
@@ -403,15 +446,19 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			}
 		}
 
-		const chunks = expo.chunkPushNotifications(messages)
+		if (messages.length > 0) {
+			const chunks = expo.chunkPushNotifications(messages)
 
-		const tickets: ExpoPushTicket[] = []
-		for (const chunk of chunks) {
-			const ticket = await expo.sendPushNotificationsAsync(chunk)
-			tickets.push(...ticket)
+			const tickets: ExpoPushTicket[] = []
+			for (const chunk of chunks) {
+				const ticket = await expo.sendPushNotificationsAsync(chunk)
+				tickets.push(...ticket)
+			}
+
+			getCurrentScope().setExtra('Tickets', tickets)
 		}
 
-		getCurrentScope().setExtras({ ParsedData: parsedData, Tickets: tickets })
+		getCurrentScope().setExtra('ParsedData', parsedData)
 
 		return context.json({ message: 'Ok' }, 200)
 	})

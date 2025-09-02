@@ -3,6 +3,7 @@ import { Hono } from 'hono'
 import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 
+import { trackServerEvent } from '../utils/analytics'
 import { authenticate, signJwt } from '../utils/jwt'
 import { generateOtp, storeOtp, verifyOtp } from '../utils/otp'
 import { api, sendSms } from '../utils/poster'
@@ -48,12 +49,25 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				)
 			}
 
-			await api.clients.createClient(context.env.POSTER_TOKEN, {
-				birthday: birthdate,
-				client_groups_id_client: 1,
-				client_name: name,
-				email,
-				phone,
+			const nextClient = await api.clients.createClient(
+				context.env.POSTER_TOKEN,
+				{
+					birthday: birthdate,
+					client_groups_id_client: 1,
+					client_name: name,
+					email,
+					phone,
+				},
+			)
+
+			await trackServerEvent(context.env, {
+				eventName: 'sign_up',
+				userData: {
+					emailAddress: email,
+					firstName: name,
+					phoneNumber: phone,
+				},
+				userId: nextClient.toString(),
 			})
 		}
 
@@ -82,6 +96,17 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		if (!client) throw new HTTPException(404, { message: 'Client not found' })
 
 		const { client_id: clientId } = client
+
+		await trackServerEvent(context.env, {
+			eventName: 'login',
+			userData: {
+				emailAddress: client.email,
+				firstName: client.firstname,
+				lastName: client.lastname,
+				phoneNumber: client.phone,
+			},
+			userId: clientId,
+		})
 
 		const [token, sessionsRaw] = await Promise.all([
 			signJwt(

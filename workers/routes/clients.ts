@@ -80,6 +80,8 @@ const clients = new Hono<{ Bindings: Bindings }>()
 
 			throw error
 		}
+
+		return c.json({ success: true })
 	})
 
 export default clients

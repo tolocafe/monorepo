@@ -21,10 +21,10 @@
 	"extends": "expo/tsconfig.base",
 	"include": [
 		"src/**/*.ts",
-		"app.config.ts",
 		"src/**/*.tsx",
+		"common/**/*.ts",
 		"workers/**/*.ts",
-		"workers/**/*.tsx",
+		"app.config.ts",
 		".expo/types/**/*.ts",
 		"expo-env.d.ts",
 		"eslint.config.mjs",

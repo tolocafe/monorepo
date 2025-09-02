@@ -1,6 +1,8 @@
 export type Bindings = Cloudflare.Env & {
 	D1_TOLO: D1Database
 	EXPO_ACCESS_TOKEN: string
+	GA4_API_SECRET: string
+	GA4_MEASUREMENT_ID: string
 	JWT_SECRET: string
 	KV_CMS: KVNamespace
 	KV_OTP: KVNamespace
