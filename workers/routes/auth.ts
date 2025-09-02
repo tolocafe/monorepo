@@ -12,6 +12,9 @@ import type { Bindings } from '../types'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
 
+const UNVERIFIED_CLIENT_GROUP_ID = '1'
+const VERIFIED_CLIENT_GROUP_ID = 3
+
 const isSessionRecord = (value: unknown): value is SessionRecord =>
 	typeof value === 'object' &&
 	value !== null &&
@@ -143,9 +146,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 					{ createdAt: Date.now(), name: sessionName, token },
 				]),
 			),
-			posterClient.client_groups_id === '0'
+			posterClient.client_groups_id === UNVERIFIED_CLIENT_GROUP_ID
 				? api.clients.updateClient(context.env.POSTER_TOKEN, clientId, {
-						client_groups_id_client: 3,
+						client_groups_id_client: VERIFIED_CLIENT_GROUP_ID,
 					})
 				: Promise.resolve(),
 		])

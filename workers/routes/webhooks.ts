@@ -61,6 +61,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 			captureEvent({
 				extra: { event },
+				level: 'debug',
 				message: 'Stripe webhook received',
 			})
 		} catch (error) {
@@ -110,6 +111,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				captureEvent({
 					extra: { paymentIntent },
+					level: 'debug',
 					message: 'Stripe payment intent succeeded',
 				})
 
@@ -145,6 +147,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				if (transaction) {
 					captureEvent({
 						extra: { transaction },
+						level: 'warning',
 						message: 'Transaction was already processed',
 					})
 
@@ -192,6 +195,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 					captureEvent({
 						extra: { eWalletTransactionId, posterClientId, transactionId },
+						level: 'debug',
 						message: 'Added e-wallet payment',
 					})
 
@@ -225,6 +229,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 							posterClientId,
 							processingTimeMs: Date.now() - event.data.object.created * 1000,
 						},
+						level: 'debug',
 						message: 'Successfully processed payment and updated wallet',
 					})
 				} catch (error) {
