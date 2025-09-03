@@ -25,6 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Internationalization
 
 - `bun run lingui:extract` - Extract translatable strings
+- **NEVER use `lingui:compile`** - This project uses .po files directly, compilation is not needed
 
 ### Deployment
 
@@ -84,6 +85,7 @@ This is a **dual-platform codebase** with both React Native mobile app and Cloud
 - **Absolute imports**: Use `@/` instead of relative paths for src/ imports
 - **All styling via Unistyles**: Never use inline styles, always createStyleSheet
 - **All text via Lingui**: No hardcoded user-facing strings, use Trans/t macros
+- **Lingui .po files only**: Never compile translations, use .po files directly
 - **TanStack Query patterns**: Use queryOptions/mutationOptions, avoid custom query hooks
 - **TypeScript strict**: No `any` types, proper interfaces required
 - **File naming**: kebab-case files, PascalCase component exports
