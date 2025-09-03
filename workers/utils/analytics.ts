@@ -47,7 +47,7 @@ export async function trackServerEvent(
 		getCurrentScope().setExtra('Analytics Body', body)
 
 		const response = await fetch(
-			`https://www.google-analytics.com/mp/collect${new URLSearchParams({
+			`https://www.google-analytics.com/mp/collect?${new URLSearchParams({
 				api_secret: context.env.GA4_API_SECRET,
 				measurement_id: context.env.GA4_MEASUREMENT_ID,
 			}).toString()}`,
