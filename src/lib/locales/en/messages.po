@@ -44,6 +44,7 @@ msgid "9:00 AM – 5:00 PM"
 msgstr "9:00 AM – 5:00 PM"
 
 #: src/app/(tabs)/more/index.tsx:139
+#: src/app/(tabs)/more/profile.tsx:244
 msgid "Account"
 msgstr "Account"
 
@@ -98,16 +99,15 @@ msgstr "Apple Maps"
 msgid "Are you sure you want to clear this order? This action cannot be undone."
 msgstr "Are you sure you want to clear this order? This action cannot be undone."
 
-#: src/app/(tabs)/more/profile.tsx:112
+#: src/app/(tabs)/more/profile.tsx:109
 msgid "Are you sure you want to sign out?"
 msgstr "Are you sure you want to sign out?"
 
 #: src/app/(tabs)/more/index.tsx:123
-#: src/app/(tabs)/more/profile.tsx:148
 msgid "Balance"
 msgstr "Balance"
 
-#: src/app/(tabs)/more/profile.tsx:214
+#: src/app/(tabs)/more/profile.tsx:194
 msgid "Birthdate"
 msgstr "Birthdate"
 
@@ -120,7 +120,7 @@ msgid "Cache cleared"
 msgstr "Cache cleared"
 
 #: src/app/(tabs)/more/app.tsx:41
-#: src/app/(tabs)/more/profile.tsx:113
+#: src/app/(tabs)/more/profile.tsx:110
 #: src/app/(tabs)/orders/current.tsx:195
 #: src/app/(tabs)/orders/current.tsx:226
 #: src/app/(tabs)/orders/current.tsx:309
@@ -206,6 +206,10 @@ msgstr "Date of birth (optional)"
 msgid "DD/MM/YYYY"
 msgstr "DD/MM/YYYY"
 
+#: src/app/(tabs)/more/profile.tsx:256
+msgid "Delete"
+msgstr "Delete"
+
 #: src/app/(tabs)/(home)/index.tsx:156
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides."
 msgstr "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides."
@@ -218,7 +222,7 @@ msgstr "Discover our homemade coffee menu with espresso, lattes, cappuccinos and
 msgid "Edit Profile"
 msgstr "Edit Profile"
 
-#: src/app/(tabs)/more/profile.tsx:187
+#: src/app/(tabs)/more/profile.tsx:167
 msgid "Email"
 msgstr "Email"
 
@@ -238,7 +242,7 @@ msgstr "Enter to your account or create a new one using your phone number"
 msgid "Enter verification code"
 msgstr "Enter verification code"
 
-#: src/app/(tabs)/more/profile.tsx:178
+#: src/app/(tabs)/more/profile.tsx:158
 msgid "Enter your first name"
 msgstr "Enter your first name"
 
@@ -284,7 +288,7 @@ msgstr "Failed to send code"
 msgid "Failed to submit order. Please try again."
 msgstr "Failed to submit order. Please try again."
 
-#: src/app/(tabs)/more/profile.tsx:162
+#: src/app/(tabs)/more/profile.tsx:142
 msgid "First name"
 msgstr "First name"
 
@@ -311,7 +315,7 @@ msgid "In Progress"
 msgstr "In Progress"
 
 #: src/app/(tabs)/more/app.tsx:90
-#: src/app/(tabs)/more/profile.tsx:157
+#: src/app/(tabs)/more/profile.tsx:137
 msgid "Information"
 msgstr "Information"
 
@@ -361,8 +365,8 @@ msgid "Maintenance"
 msgstr "Maintenance"
 
 #: src/app/(tabs)/more/profile.tsx:265
-msgid "Manage Sessions"
-msgstr "Manage Sessions"
+#~ msgid "Manage Sessions"
+#~ msgstr "Manage Sessions"
 
 #: src/app/(tabs)/orders/current.tsx:353
 msgid "Maximum length is 2000 characters"
@@ -401,7 +405,7 @@ msgstr "More"
 msgid "Name"
 msgstr ""
 
-#: src/app/(tabs)/more/profile.tsx:205
+#: src/app/(tabs)/more/profile.tsx:185
 msgid "name@example.com"
 msgstr ""
 
@@ -486,7 +490,7 @@ msgid "Product not found"
 msgstr ""
 
 #: src/app/(tabs)/more/_layout.tsx:23
-#: src/app/(tabs)/more/profile.tsx:129
+#: src/app/(tabs)/more/profile.tsx:123
 msgid "Profile"
 msgstr ""
 
@@ -510,7 +514,7 @@ msgstr "Runtime"
 msgid "Saturday"
 msgstr "Saturday"
 
-#: src/app/(tabs)/more/profile.tsx:254
+#: src/app/(tabs)/more/profile.tsx:234
 msgid "Save"
 msgstr ""
 
@@ -518,7 +522,7 @@ msgstr ""
 msgid "Saved"
 msgstr ""
 
-#: src/app/(tabs)/more/profile.tsx:252
+#: src/app/(tabs)/more/profile.tsx:232
 msgid "Saving..."
 msgstr ""
 
@@ -535,7 +539,8 @@ msgid "Sending Order..."
 msgstr ""
 
 #: src/app/(tabs)/more/_layout.tsx:24
-#: src/app/(tabs)/more/sessions.tsx:38
+#: src/app/(tabs)/more/profile.tsx:250
+#: src/app/(tabs)/more/sessions.tsx:36
 msgid "Sessions"
 msgstr "Sessions"
 
@@ -560,9 +565,9 @@ msgstr ""
 msgid "Sign in to view your account information and access personalized features."
 msgstr ""
 
-#: src/app/(tabs)/more/profile.tsx:112
-#: src/app/(tabs)/more/profile.tsx:117
-#: src/app/(tabs)/more/profile.tsx:268
+#: src/app/(tabs)/more/profile.tsx:109
+#: src/app/(tabs)/more/profile.tsx:114
+#: src/app/(tabs)/more/profile.tsx:261
 msgid "Sign Out"
 msgstr ""
 
@@ -687,7 +692,6 @@ msgid "Visit Us - TOLO Good Coffee"
 msgstr ""
 
 #: src/app/(tabs)/more/index.tsx:118
-#: src/app/(tabs)/more/profile.tsx:143
 msgid "Wallet"
 msgstr ""
 
@@ -729,6 +733,6 @@ msgstr ""
 msgid "Your wallet has been topped up successfully!"
 msgstr "Your wallet has been topped up successfully!"
 
-#: src/app/(tabs)/more/profile.tsx:233
+#: src/app/(tabs)/more/profile.tsx:213
 msgid "YYYY-MM-DD"
 msgstr ""

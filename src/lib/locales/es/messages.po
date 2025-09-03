@@ -37,19 +37,20 @@ msgstr ""
 
 #: src/app/sign-in.tsx:262
 msgid "0000000000"
-msgstr ""
+msgstr "0000000000"
 
 #: src/app/(tabs)/more/visit-us.tsx:53
 msgid "9:00 AM – 5:00 PM"
 msgstr "9:00 AM – 5:00 PM"
 
 #: src/app/(tabs)/more/index.tsx:139
+#: src/app/(tabs)/more/profile.tsx:244
 msgid "Account"
 msgstr "Cuenta"
 
 #: src/app/(tabs)/more/sessions.tsx:52
 msgid "Active Sessions"
-msgstr ""
+msgstr "Sesiones Activas"
 
 #: src/app/(tabs)/orders/current.tsx:363
 msgid "Add any special instructions..."
@@ -98,16 +99,15 @@ msgstr "Apple Maps"
 msgid "Are you sure you want to clear this order? This action cannot be undone."
 msgstr "¿Estás seguro de que quieres borrar este pedido? Esta acción no se puede deshacer."
 
-#: src/app/(tabs)/more/profile.tsx:112
+#: src/app/(tabs)/more/profile.tsx:109
 msgid "Are you sure you want to sign out?"
 msgstr "¿Estás seguro de que quieres cerrar sesión?"
 
 #: src/app/(tabs)/more/index.tsx:123
-#: src/app/(tabs)/more/profile.tsx:148
 msgid "Balance"
 msgstr "Saldo"
 
-#: src/app/(tabs)/more/profile.tsx:214
+#: src/app/(tabs)/more/profile.tsx:194
 msgid "Birthdate"
 msgstr "Fecha de Nacimiento"
 
@@ -120,7 +120,7 @@ msgid "Cache cleared"
 msgstr "Caché borrado"
 
 #: src/app/(tabs)/more/app.tsx:41
-#: src/app/(tabs)/more/profile.tsx:113
+#: src/app/(tabs)/more/profile.tsx:110
 #: src/app/(tabs)/orders/current.tsx:195
 #: src/app/(tabs)/orders/current.tsx:226
 #: src/app/(tabs)/orders/current.tsx:309
@@ -134,7 +134,7 @@ msgstr "Cambiar número de teléfono"
 
 #: src/app/(tabs)/more/app.tsx:104
 msgid "Channel"
-msgstr ""
+msgstr "Canal"
 
 #: src/app/(tabs)/orders/current.tsx:233
 msgid "Clear"
@@ -206,6 +206,10 @@ msgstr "Fecha de nacimiento (opcional)"
 msgid "DD/MM/YYYY"
 msgstr "DD/MM/AAAA"
 
+#: src/app/(tabs)/more/profile.tsx:256
+msgid "Delete"
+msgstr "Eliminar"
+
 #: src/app/(tabs)/(home)/index.tsx:156
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides."
 msgstr "Descubre nuestro menú de café casero con espresso, lattes, cappuccinos y deliciosos acompañamientos."
@@ -218,7 +222,7 @@ msgstr "Descubre nuestro menú de café casero con espresso, lattes, cappuccinos
 msgid "Edit Profile"
 msgstr "Editar Perfil"
 
-#: src/app/(tabs)/more/profile.tsx:187
+#: src/app/(tabs)/more/profile.tsx:167
 msgid "Email"
 msgstr "Email"
 
@@ -238,7 +242,7 @@ msgstr "Entra a tu cuenta o crea una nueva usando tu número de teléfono"
 msgid "Enter verification code"
 msgstr "Introduce código de verificación"
 
-#: src/app/(tabs)/more/profile.tsx:178
+#: src/app/(tabs)/more/profile.tsx:158
 msgid "Enter your first name"
 msgstr "Ingresa tu nombre"
 
@@ -284,7 +288,7 @@ msgstr "Error al enviar código"
 msgid "Failed to submit order. Please try again."
 msgstr "Error al enviar pedido. Por favor, inténtalo de nuevo."
 
-#: src/app/(tabs)/more/profile.tsx:162
+#: src/app/(tabs)/more/profile.tsx:142
 msgid "First name"
 msgstr "Nombre(s)"
 
@@ -311,7 +315,7 @@ msgid "In Progress"
 msgstr "En progreso"
 
 #: src/app/(tabs)/more/app.tsx:90
-#: src/app/(tabs)/more/profile.tsx:157
+#: src/app/(tabs)/more/profile.tsx:137
 msgid "Information"
 msgstr "Información"
 
@@ -345,7 +349,7 @@ msgstr "Cargando menú..."
 
 #: src/app/(tabs)/more/sessions.tsx:64
 msgid "Loading sessions..."
-msgstr ""
+msgstr "Cargando sesiones..."
 
 #: src/app/(tabs)/more/index.tsx:161
 msgid "Loading user information..."
@@ -361,8 +365,8 @@ msgid "Maintenance"
 msgstr "Mantenimiento"
 
 #: src/app/(tabs)/more/profile.tsx:265
-msgid "Manage Sessions"
-msgstr ""
+#~ msgid "Manage Sessions"
+#~ msgstr ""
 
 #: src/app/(tabs)/orders/current.tsx:353
 msgid "Maximum length is 2000 characters"
@@ -401,13 +405,13 @@ msgstr "Más"
 msgid "Name"
 msgstr "Nombre"
 
-#: src/app/(tabs)/more/profile.tsx:205
+#: src/app/(tabs)/more/profile.tsx:185
 msgid "name@example.com"
 msgstr "name@example.com"
 
 #: src/app/(tabs)/more/sessions.tsx:85
 msgid "No active sessions found."
-msgstr ""
+msgstr "No se encontraron sesiones activas."
 
 #: src/app/(tabs)/orders/index.tsx:187
 msgid "No orders yet"
@@ -486,7 +490,7 @@ msgid "Product not found"
 msgstr "Producto no encontrado"
 
 #: src/app/(tabs)/more/_layout.tsx:23
-#: src/app/(tabs)/more/profile.tsx:129
+#: src/app/(tabs)/more/profile.tsx:123
 msgid "Profile"
 msgstr "Perfil"
 
@@ -500,7 +504,7 @@ msgstr "Reintentar"
 
 #: src/app/(tabs)/more/app.tsx:111
 msgid "Runtime"
-msgstr ""
+msgstr "Runtime"
 
 #: src/app/(tabs)/more/app.tsx:109
 #~ msgid "Runtime Version"
@@ -510,7 +514,7 @@ msgstr ""
 msgid "Saturday"
 msgstr "Sábado"
 
-#: src/app/(tabs)/more/profile.tsx:254
+#: src/app/(tabs)/more/profile.tsx:234
 msgid "Save"
 msgstr "Guardar"
 
@@ -518,7 +522,7 @@ msgstr "Guardar"
 msgid "Saved"
 msgstr "Guardado"
 
-#: src/app/(tabs)/more/profile.tsx:252
+#: src/app/(tabs)/more/profile.tsx:232
 msgid "Saving..."
 msgstr "Guardando..."
 
@@ -535,9 +539,10 @@ msgid "Sending Order..."
 msgstr "Enviando Pedido..."
 
 #: src/app/(tabs)/more/_layout.tsx:24
-#: src/app/(tabs)/more/sessions.tsx:38
+#: src/app/(tabs)/more/profile.tsx:250
+#: src/app/(tabs)/more/sessions.tsx:36
 msgid "Sessions"
-msgstr ""
+msgstr "Sesiones"
 
 #: src/app/(tabs)/more/index.tsx:252
 msgid "Settings"
@@ -560,9 +565,9 @@ msgstr "Inicia sesión para agregar “{itemName}” a tu carrito"
 msgid "Sign in to view your account information and access personalized features."
 msgstr "Entra para ver información de tu cuenta y funciones personalizadas."
 
-#: src/app/(tabs)/more/profile.tsx:112
-#: src/app/(tabs)/more/profile.tsx:117
-#: src/app/(tabs)/more/profile.tsx:268
+#: src/app/(tabs)/more/profile.tsx:109
+#: src/app/(tabs)/more/profile.tsx:114
+#: src/app/(tabs)/more/profile.tsx:261
 msgid "Sign Out"
 msgstr "Salir"
 
@@ -592,7 +597,7 @@ msgstr "No se pudo cargar el producto solicitado."
 
 #: src/app/(tabs)/more/sessions.tsx:55
 msgid "These are the devices and browsers currently signed in to your account."
-msgstr ""
+msgstr "Estos son los dispositivos y navegadores que actualmente tienen sesión iniciada en tu cuenta."
 
 #: src/app/(tabs)/more/app.tsx:37
 msgid "This will clear all cached data including menu items and orders. Your login credentials and language preference will be preserved. The app will reload fresh data from the server. Continue?"
@@ -687,7 +692,6 @@ msgid "Visit Us - TOLO Good Coffee"
 msgstr "Visítanos - TOLO Buen Café"
 
 #: src/app/(tabs)/more/index.tsx:118
-#: src/app/(tabs)/more/profile.tsx:143
 msgid "Wallet"
 msgstr "Wallet"
 
@@ -729,6 +733,6 @@ msgstr "Tu perfil ha sido actualizado."
 msgid "Your wallet has been topped up successfully!"
 msgstr "¡Tu Wallet se ha recargado exitosamente!"
 
-#: src/app/(tabs)/more/profile.tsx:233
+#: src/app/(tabs)/more/profile.tsx:213
 msgid "YYYY-MM-DD"
 msgstr "YYYY-MM-DD"
