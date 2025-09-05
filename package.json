@@ -21,7 +21,12 @@
 		"update:publish": "eas update --auto",
 		"clean": "rm -rf node_modules ios dist .wrangler coverage android .expo && bun install",
 		"sentry:sourcemaps": "_SENTRY_RELEASE=$(sentry-cli releases propose-version) && sentry-cli releases new $_SENTRY_RELEASE --org=tolo-cafe --project=workers && sentry-cli sourcemaps upload --org=tolo-cafe --project=workers --release=$_SENTRY_RELEASE --strip-prefix 'dist/..' dist",
-		"postdeploy": "bun run sentry:sourcemaps"
+		"postdeploy": "bun run sentry:sourcemaps",
+		"e2e:test": "maestro test .maestro/",
+		"e2e:test:android": "eas workflow:run .eas/workflows/e2e-test-android.yml",
+		"e2e:test:ios": "eas workflow:run .eas/workflows/e2e-test-ios.yml",
+		"e2e:build:android": "eas build --platform android --profile e2e-test",
+		"e2e:build:ios": "eas build --platform ios --profile e2e-test"
 	},
 	"dependencies": {
 		"@aws-sdk/client-sns": "3.879.0",

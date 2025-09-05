@@ -1,0 +1,7 @@
+appId: cafe.tolo.app
+---
+- launchApp
+- assertVisible: 'TOLO'
+- assertVisible: 'Menu'
+- assertVisible: 'Store'
+- assertVisible: 'Contact'

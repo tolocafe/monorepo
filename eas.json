@@ -19,6 +19,16 @@
 			"autoIncrement": true,
 			"channel": "production",
 			"extends": "common"
+		},
+		"e2e-test": {
+			"withoutCredentials": true,
+			"extends": "common",
+			"ios": {
+				"simulator": true
+			},
+			"android": {
+				"buildType": "apk"
+			}
 		}
 	},
 	"cli": {

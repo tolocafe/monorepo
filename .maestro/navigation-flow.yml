@@ -1,0 +1,20 @@
+appId: cafe.tolo.app
+---
+# Test app launch and basic navigation
+- launchApp
+- assertVisible: 'TOLO'
+
+# Test Home tab is active by default
+- assertVisible: 'Home'
+
+# Test Orders tab navigation
+- tapOn: 'Orders'
+- assertVisible: 'Orders'
+
+# Test More tab navigation
+- tapOn: 'More'
+- assertVisible: 'More'
+
+# Return to Home tab
+- tapOn: 'Home'
+- assertVisible: 'Home'

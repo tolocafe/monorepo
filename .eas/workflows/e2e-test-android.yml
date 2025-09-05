@@ -1,0 +1,22 @@
+name: e2e-test-android
+
+on:
+  pull_request:
+    branches: ['*']
+  workflow_dispatch: {}
+
+jobs:
+  build_android_for_e2e:
+    name: Build Android APK for E2E tests
+    type: build
+    params:
+      platform: android
+      profile: e2e-test
+
+  maestro_test:
+    name: Run Maestro E2E tests
+    needs: [build_android_for_e2e]
+    type: maestro
+    params:
+      build_id: ${{ needs.build_android_for_e2e.outputs.build_id }}
+      flow_path: ['.maestro/app-launch.yml', '.maestro/navigation-flow.yml']
