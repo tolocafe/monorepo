@@ -58,7 +58,7 @@ export const api = {
 			token: string,
 			body: {
 				amount: number
-				client_id: number
+				client_id: string
 				transaction_id?: number
 				type: 1 | 2
 			},
@@ -183,6 +183,7 @@ export const api = {
 			token: string,
 			body: {
 				account_to: 1
+				/** Amount in cents */
 				amount_to: number
 				/** Category ID */
 				category: number
@@ -196,7 +197,7 @@ export const api = {
 			},
 		) {
 			return posterFetch<number>(`/finance.createTransactions?token=${token}`, {
-				body: JSON.stringify(body),
+				body: JSON.stringify({ ...body, amount_to: body.amount_to / 100 }),
 				defaultErrorMessage: 'Failed to create transactions',
 				headers: { 'Content-Type': 'application/json' },
 				method: 'POST',

@@ -110,12 +110,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			case 'payment_intent.succeeded': {
 				const paymentIntent = event.data.object
 
-				captureEvent({
-					extra: { paymentIntent },
-					level: 'debug',
-					message: 'Stripe payment intent succeeded',
-				})
-
 				// Get the customer and their Poster client ID
 				const customer = await stripe.customers.retrieve(
 					paymentIntent.customer as string,
@@ -137,7 +131,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				await context.env.D1_TOLO.exec(
 					'CREATE TABLE IF NOT EXISTS top_ups (payment_intent_id TEXT PRIMARY KEY, client_id INTEGER, amount INTEGER, transaction_id INTEGER, created_at TIMESTAMP)',
 				)
-
 				// Verify transaction does not exist in top_ups table
 				const transaction = await context.env.D1_TOLO.prepare(
 					'SELECT * FROM top_ups WHERE payment_intent_id = ?',
@@ -189,7 +182,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						context.env.POSTER_TOKEN,
 						{
 							amount: paymentIntent.amount,
-							client_id: posterClientId,
+							client_id: posterClientId.toString(),
 							transaction_id: transactionId,
 							type: 2,
 						},
