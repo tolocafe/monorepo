@@ -34,7 +34,7 @@ const posterWebhookDataSchema = z.object({
 		.optional(),
 	data: z.string().optional(),
 	object: z.string().optional(),
-	object_id: z.union([z.number(), z.string()]).optional(),
+	object_id: z.union([z.string(), z.number()]).optional(),
 	time: z.string().optional(),
 	verify: z.string(),
 })
