@@ -11,6 +11,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import { Button } from '@/components/Button'
+import DateInput from '@/components/date-input'
 import HeaderGradient from '@/components/HeaderGradient'
 import { Input } from '@/components/Input'
 import { List, ListItem } from '@/components/List'
@@ -42,7 +43,7 @@ export default function ProfileScreen() {
 	const birthdateSchema = z
 		.string()
 		.trim()
-		.regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/u, t`Enter a valid date (YYYY-MM-DD)`)
+		.regex(/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/u, t`Enter a valid date (DD/MM/YYYY)`)
 
 	const { mutateAsync: updateClient } = useMutation({
 		...updateClientMutationOptions(user?.client_id as string),
@@ -203,14 +204,14 @@ export default function ProfileScreen() {
 								}}
 							>
 								{(field) => (
-									<Input
+									<DateInput
 										autoCapitalize="none"
 										autoCorrect={false}
-										keyboardType="numbers-and-punctuation"
-										maxLength={10}
 										onBlur={field.handleBlur}
-										onChangeText={field.handleChange}
-										placeholder={t`YYYY-MM-DD`}
+										onChangeText={(_, storageValue) =>
+											field.handleChange(storageValue)
+										}
+										placeholder={t`DD/MM/YYYY`}
 										value={field.state.value}
 									/>
 								)}

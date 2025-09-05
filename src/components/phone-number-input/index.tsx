@@ -55,16 +55,25 @@ export function PhoneNumberInput({
 	}
 
 	return (
-		<View style={styles.container} testID={testID}>
+		<View
+			style={[styles.container, disabled && styles.containerDisabled]}
+			testID={testID}
+		>
 			<DropdownMenu.Root>
-				<DropdownMenu.Trigger asChild>
+				<DropdownMenu.Trigger asChild disabled={disabled}>
 					<View style={styles.countryTrigger}>
 						<View style={styles.flagAndCode}>
-							<Text style={styles.flag}>{selectedCountry?.flag}</Text>
-							<Text style={styles.code}>{selectedCountry?.prefix}</Text>
+							<Text style={[styles.flag, disabled && styles.textDisabled]}>
+								{selectedCountry?.flag}
+							</Text>
+							<Text style={[styles.code, disabled && styles.textDisabled]}>
+								{selectedCountry?.prefix}
+							</Text>
 							<View style={styles.chevronWrapper}>
 								<Ionicons
-									color={styles.chevron.color}
+									color={
+										disabled ? styles.textDisabled.color : styles.chevron.color
+									}
 									name="chevron-down"
 									size={14}
 								/>
@@ -94,8 +103,8 @@ export function PhoneNumberInput({
 				editable={!disabled}
 				keyboardType="phone-pad"
 				onChangeText={handleTextChange}
-				placeholderTextColor="#ddd"
-				style={styles.input}
+				placeholderTextColor={disabled ? styles.textDisabled.color : '#ddd'}
+				style={[styles.input, disabled && styles.inputDisabled]}
 				textContentType="telephoneNumber"
 				value={nsn}
 				{...props}
@@ -157,6 +166,10 @@ const styles = StyleSheet.create((theme) => ({
 		borderWidth: 1,
 		flexDirection: 'row',
 	},
+	containerDisabled: {
+		backgroundColor: theme.colors.background,
+		borderColor: theme.colors.textTertiary,
+	},
 	countryTrigger: {
 		alignItems: 'center',
 		flexDirection: 'row',
@@ -180,6 +193,12 @@ const styles = StyleSheet.create((theme) => ({
 		flex: 1,
 		paddingHorizontal: theme.spacing.sm,
 		paddingVertical: theme.spacing.sm,
+	},
+	inputDisabled: {
+		color: theme.colors.textSecondary,
+	},
+	textDisabled: {
+		color: theme.colors.textSecondary,
 	},
 }))
 
