@@ -35,7 +35,7 @@ msgstr ""
 "💳 Secure payments powered by Stripe\n"
 "🔒 Your payment information is encrypted and secure"
 
-#: src/app/sign-in.tsx:262
+#: src/app/sign-in.tsx:263
 msgid "0000000000"
 msgstr "0000000000"
 
@@ -44,7 +44,7 @@ msgid "9:00 AM – 5:00 PM"
 msgstr "9:00 AM – 5:00 PM"
 
 #: src/app/(tabs)/more/index.tsx:139
-#: src/app/(tabs)/more/profile.tsx:244
+#: src/app/(tabs)/more/profile.tsx:243
 msgid "Account"
 msgstr "Account"
 
@@ -99,7 +99,7 @@ msgstr "Apple Maps"
 msgid "Are you sure you want to clear this order? This action cannot be undone."
 msgstr "Are you sure you want to clear this order? This action cannot be undone."
 
-#: src/app/(tabs)/more/profile.tsx:109
+#: src/app/(tabs)/more/profile.tsx:110
 msgid "Are you sure you want to sign out?"
 msgstr "Are you sure you want to sign out?"
 
@@ -107,7 +107,7 @@ msgstr "Are you sure you want to sign out?"
 msgid "Balance"
 msgstr "Balance"
 
-#: src/app/(tabs)/more/profile.tsx:194
+#: src/app/(tabs)/more/profile.tsx:195
 msgid "Birthdate"
 msgstr "Birthdate"
 
@@ -120,15 +120,15 @@ msgid "Cache cleared"
 msgstr "Cache cleared"
 
 #: src/app/(tabs)/more/app.tsx:41
-#: src/app/(tabs)/more/profile.tsx:110
+#: src/app/(tabs)/more/profile.tsx:111
 #: src/app/(tabs)/orders/current.tsx:195
 #: src/app/(tabs)/orders/current.tsx:226
 #: src/app/(tabs)/orders/current.tsx:309
 msgid "Cancel"
 msgstr "Cancel"
 
-#: src/app/sign-in.tsx:386
-#: src/app/sign-in.tsx:446
+#: src/app/sign-in.tsx:385
+#: src/app/sign-in.tsx:445
 msgid "Change phone number"
 msgstr "Change phone number"
 
@@ -158,7 +158,7 @@ msgstr "Clear the app cache to remove stored data and reload fresh content on ne
 msgid "Clearing Cache..."
 msgstr "Clearing Cache..."
 
-#: src/app/sign-in.tsx:204
+#: src/app/sign-in.tsx:205
 msgid "Close"
 msgstr "Close"
 
@@ -167,8 +167,8 @@ msgstr "Close"
 msgid "Closed"
 msgstr "Closed"
 
-#: src/app/sign-in.tsx:94
-#: src/app/sign-in.tsx:114
+#: src/app/sign-in.tsx:95
+#: src/app/sign-in.tsx:115
 msgid "Code sent"
 msgstr "Code sent"
 
@@ -180,11 +180,11 @@ msgstr "Come visit TOLO. Find our hours, address and quick links to your preferr
 msgid "Contact"
 msgstr "Contact"
 
-#: src/app/sign-in.tsx:275
+#: src/app/sign-in.tsx:276
 msgid "Continue"
 msgstr "Continue"
 
-#: src/app/sign-in.tsx:284
+#: src/app/sign-in.tsx:285
 msgid "Create account"
 msgstr "Create account"
 
@@ -198,15 +198,16 @@ msgstr "Current Balance"
 msgid "Current Order"
 msgstr "Current Order"
 
-#: src/app/sign-in.tsx:332
+#: src/app/sign-in.tsx:333
 msgid "Date of birth (optional)"
 msgstr "Date of birth (optional)"
 
-#: src/app/sign-in.tsx:347
+#: src/app/(tabs)/more/profile.tsx:212
+#: src/app/sign-in.tsx:346
 msgid "DD/MM/YYYY"
 msgstr "DD/MM/YYYY"
 
-#: src/app/(tabs)/more/profile.tsx:256
+#: src/app/(tabs)/more/profile.tsx:255
 msgid "Delete"
 msgstr "Delete"
 
@@ -222,40 +223,44 @@ msgstr "Discover our homemade coffee menu with espresso, lattes, cappuccinos and
 msgid "Edit Profile"
 msgstr "Edit Profile"
 
-#: src/app/(tabs)/more/profile.tsx:167
+#: src/app/(tabs)/more/profile.tsx:168
 msgid "Email"
 msgstr "Email"
 
-#: src/app/(tabs)/more/profile.tsx:45
-msgid "Enter a valid date (YYYY-MM-DD)"
-msgstr "Enter a valid date (YYYY-MM-DD)"
+#: src/app/(tabs)/more/profile.tsx:46
+msgid "Enter a valid date (DD/MM/YYYY)"
+msgstr "Enter a valid date (DD/MM/YYYY)"
 
-#: src/app/(tabs)/more/profile.tsx:40
+#: src/app/(tabs)/more/profile.tsx:45
+#~ msgid "Enter a valid date (YYYY-MM-DD)"
+#~ msgstr "Enter a valid date (YYYY-MM-DD)"
+
+#: src/app/(tabs)/more/profile.tsx:41
 msgid "Enter a valid email"
 msgstr "Enter a valid email"
 
-#: src/app/sign-in.tsx:247
+#: src/app/sign-in.tsx:248
 msgid "Enter to your account or create a new one using your phone number"
 msgstr "Enter to your account or create a new one using your phone number"
 
-#: src/app/sign-in.tsx:394
+#: src/app/sign-in.tsx:393
 msgid "Enter verification code"
 msgstr "Enter verification code"
 
-#: src/app/(tabs)/more/profile.tsx:158
+#: src/app/(tabs)/more/profile.tsx:159
 msgid "Enter your first name"
 msgstr "Enter your first name"
 
-#: src/app/sign-in.tsx:314
+#: src/app/sign-in.tsx:315
 msgid "Enter your full name"
 msgstr "Enter your full name"
 
 #: src/app/(tabs)/more/app.tsx:62
-#: src/app/(tabs)/more/profile.tsx:89
+#: src/app/(tabs)/more/profile.tsx:90
 #: src/app/(tabs)/orders/current.tsx:124
-#: src/app/sign-in.tsx:156
-#: src/app/sign-in.tsx:164
-#: src/app/sign-in.tsx:175
+#: src/app/sign-in.tsx:157
+#: src/app/sign-in.tsx:165
+#: src/app/sign-in.tsx:176
 #: src/containers/top-up-screen.tsx:79
 #: src/containers/top-up-screen.tsx:103
 #: src/containers/top-up-screen.tsx:134
@@ -263,7 +268,7 @@ msgstr "Enter your full name"
 msgid "Error"
 msgstr "Error"
 
-#: src/app/(tabs)/more/profile.tsx:87
+#: src/app/(tabs)/more/profile.tsx:88
 msgid "Error signing out. Please try again."
 msgstr "Error signing out. Please try again."
 
@@ -279,8 +284,8 @@ msgstr "Failed to load menu. Please try again."
 msgid "Failed to process payment. Please try again."
 msgstr "Failed to process payment. Please try again."
 
-#: src/app/sign-in.tsx:154
-#: src/app/sign-in.tsx:162
+#: src/app/sign-in.tsx:155
+#: src/app/sign-in.tsx:163
 msgid "Failed to send code"
 msgstr "Failed to send code"
 
@@ -288,7 +293,7 @@ msgstr "Failed to send code"
 msgid "Failed to submit order. Please try again."
 msgstr "Failed to submit order. Please try again."
 
-#: src/app/(tabs)/more/profile.tsx:142
+#: src/app/(tabs)/more/profile.tsx:143
 msgid "First name"
 msgstr "First name"
 
@@ -315,7 +320,7 @@ msgid "In Progress"
 msgstr "In Progress"
 
 #: src/app/(tabs)/more/app.tsx:90
-#: src/app/(tabs)/more/profile.tsx:137
+#: src/app/(tabs)/more/profile.tsx:138
 msgid "Information"
 msgstr "Information"
 
@@ -327,7 +332,7 @@ msgstr "Ingredients"
 msgid "Insufficient Balance"
 msgstr "Insufficient Balance"
 
-#: src/app/sign-in.tsx:173
+#: src/app/sign-in.tsx:174
 msgid "Invalid verification code"
 msgstr "Invalid verification code"
 
@@ -339,7 +344,7 @@ msgstr "Items"
 msgid "Language"
 msgstr "Language"
 
-#: src/app/sign-in.tsx:289
+#: src/app/sign-in.tsx:290
 msgid "Let's create your account with the phone number <0>{phoneNumber}</0>"
 msgstr "Let's create your account with the phone number <0>{phoneNumber}</0>"
 
@@ -355,8 +360,8 @@ msgstr "Loading sessions..."
 msgid "Loading user information..."
 msgstr "Loading user information..."
 
-#: src/app/sign-in.tsx:273
-#: src/app/sign-in.tsx:370
+#: src/app/sign-in.tsx:274
+#: src/app/sign-in.tsx:369
 msgid "Loading..."
 msgstr "Loading..."
 
@@ -401,11 +406,11 @@ msgid "More"
 msgstr "More"
 
 #: src/app/(tabs)/more/index.tsx:144
-#: src/app/sign-in.tsx:299
+#: src/app/sign-in.tsx:300
 msgid "Name"
 msgstr ""
 
-#: src/app/(tabs)/more/profile.tsx:185
+#: src/app/(tabs)/more/profile.tsx:186
 msgid "name@example.com"
 msgstr ""
 
@@ -465,11 +470,11 @@ msgstr "Payment Successful"
 msgid "Phone"
 msgstr "Phone"
 
-#: src/app/sign-in.tsx:255
+#: src/app/sign-in.tsx:256
 msgid "Phone number"
 msgstr ""
 
-#: src/app/(tabs)/more/profile.tsx:38
+#: src/app/(tabs)/more/profile.tsx:39
 msgid "Please enter your name"
 msgstr ""
 
@@ -490,7 +495,7 @@ msgid "Product not found"
 msgstr ""
 
 #: src/app/(tabs)/more/_layout.tsx:23
-#: src/app/(tabs)/more/profile.tsx:123
+#: src/app/(tabs)/more/profile.tsx:124
 msgid "Profile"
 msgstr ""
 
@@ -514,15 +519,15 @@ msgstr "Runtime"
 msgid "Saturday"
 msgstr "Saturday"
 
-#: src/app/(tabs)/more/profile.tsx:234
+#: src/app/(tabs)/more/profile.tsx:233
 msgid "Save"
 msgstr ""
 
-#: src/app/(tabs)/more/profile.tsx:57
+#: src/app/(tabs)/more/profile.tsx:58
 msgid "Saved"
 msgstr ""
 
-#: src/app/(tabs)/more/profile.tsx:232
+#: src/app/(tabs)/more/profile.tsx:231
 msgid "Saving..."
 msgstr ""
 
@@ -539,7 +544,7 @@ msgid "Sending Order..."
 msgstr ""
 
 #: src/app/(tabs)/more/_layout.tsx:24
-#: src/app/(tabs)/more/profile.tsx:250
+#: src/app/(tabs)/more/profile.tsx:249
 #: src/app/(tabs)/more/sessions.tsx:36
 msgid "Sessions"
 msgstr "Sessions"
@@ -557,7 +562,7 @@ msgstr "Sign In"
 msgid "Sign In Required"
 msgstr "Sign In Required"
 
-#: src/app/sign-in.tsx:236
+#: src/app/sign-in.tsx:237
 msgid "Sign in to add “{itemName}” to your bag"
 msgstr ""
 
@@ -565,9 +570,9 @@ msgstr ""
 msgid "Sign in to view your account information and access personalized features."
 msgstr ""
 
-#: src/app/(tabs)/more/profile.tsx:109
-#: src/app/(tabs)/more/profile.tsx:114
-#: src/app/(tabs)/more/profile.tsx:261
+#: src/app/(tabs)/more/profile.tsx:110
+#: src/app/(tabs)/more/profile.tsx:115
+#: src/app/(tabs)/more/profile.tsx:260
 msgid "Sign Out"
 msgstr ""
 
@@ -657,12 +662,12 @@ msgstr ""
 msgid "Update ID"
 msgstr ""
 
-#: src/app/sign-in.tsx:372
-#: src/app/sign-in.tsx:434
+#: src/app/sign-in.tsx:371
+#: src/app/sign-in.tsx:433
 msgid "Verify"
 msgstr ""
 
-#: src/app/sign-in.tsx:432
+#: src/app/sign-in.tsx:431
 msgid "Verifying..."
 msgstr ""
 
@@ -700,12 +705,12 @@ msgstr ""
 msgid "Wallet Balance"
 msgstr ""
 
-#: src/app/sign-in.tsx:400
+#: src/app/sign-in.tsx:399
 msgid "We sent a code to {phone}"
 msgstr ""
 
-#: src/app/sign-in.tsx:92
-#: src/app/sign-in.tsx:112
+#: src/app/sign-in.tsx:93
+#: src/app/sign-in.tsx:113
 msgid "We sent you a 6-digit code"
 msgstr ""
 
@@ -713,7 +718,7 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
-#: src/app/sign-in.tsx:244
+#: src/app/sign-in.tsx:245
 msgid "Welcome"
 msgstr ""
 
@@ -725,7 +730,7 @@ msgstr ""
 msgid "Your order history will appear here"
 msgstr "Your order history will appear here"
 
-#: src/app/(tabs)/more/profile.tsx:55
+#: src/app/(tabs)/more/profile.tsx:56
 msgid "Your profile has been updated."
 msgstr ""
 
@@ -734,5 +739,5 @@ msgid "Your wallet has been topped up successfully!"
 msgstr "Your wallet has been topped up successfully!"
 
 #: src/app/(tabs)/more/profile.tsx:213
-msgid "YYYY-MM-DD"
-msgstr ""
+#~ msgid "YYYY-MM-DD"
+#~ msgstr ""

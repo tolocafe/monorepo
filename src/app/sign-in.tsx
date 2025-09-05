@@ -13,6 +13,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import { Button } from '@/components/Button'
+import DateInput from '@/components/date-input'
 import Input from '@/components/Input'
 import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
@@ -334,16 +335,16 @@ export default function SignIn() {
 							<Field name="birthdate">
 								{(field) => (
 									<>
-										<Input
+										<DateInput
 											autoComplete="birthdate-full"
 											error={
 												field.state.meta.isTouched &&
 												field.state.meta.errors.length > 0
 											}
-											keyboardType="numeric"
-											maxLength={10}
 											onBlur={field.handleBlur}
-											onChangeText={field.handleChange}
+											onChangeText={(_, storageValue) =>
+												field.handleChange(storageValue)
+											}
 											placeholder={t`DD/MM/YYYY`}
 											value={field.state.value}
 										/>
