@@ -82,7 +82,7 @@ export default function ScreenContainer({
 
 const styles = StyleSheet.create((theme) => ({
 	container: {
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.crema.background,
 		flex: 1,
 		variants: {
 			withTopPadding: {
@@ -105,7 +105,7 @@ const styles = StyleSheet.create((theme) => ({
 		},
 	},
 	scrollViewContainer: {
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.crema.background,
 		flex: 1,
 	},
 }))

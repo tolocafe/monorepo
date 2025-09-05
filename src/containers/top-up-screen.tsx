@@ -271,11 +271,11 @@ const styles = StyleSheet.create((theme) => ({
 		marginBottom: theme.spacing.md,
 	},
 	balanceAmount: {
-		color: theme.colors.primary,
+		color: theme.colors.verde.solid,
 		fontSize: theme.typography.h3.fontSize,
 	},
 	balanceCard: {
-		backgroundColor: theme.colors.surface,
+		backgroundColor: theme.colors.gray.background,
 	},
 	balanceRow: {
 		alignItems: 'center',
@@ -287,14 +287,14 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.layout.screenPadding,
 	},
 	description: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		marginBottom: theme.spacing.md,
 	},
 	infoCard: {
-		backgroundColor: theme.colors.surface,
+		backgroundColor: theme.colors.gray.background,
 	},
 	infoText: {
-		color: theme.colors.textTertiary,
+		color: theme.colors.gray.interactive,
 		fontSize: theme.typography.caption.fontSize,
 		padding: theme.spacing.lg,
 	},

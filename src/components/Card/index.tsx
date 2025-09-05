@@ -36,7 +36,7 @@ export function Card({
 
 const styles = StyleSheet.create((theme) => ({
 	base: {
-		backgroundColor: theme.colors.surface,
+		backgroundColor: theme.colors.gray.background,
 		borderCurve: 'continuous',
 		borderRadius: theme.borderRadius.lg,
 		boxShadow: `0px 5px ${theme.spacing.sm}px 0px rgba(0, 0, 0, 0.1)`,

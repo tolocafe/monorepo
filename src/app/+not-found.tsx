@@ -33,7 +33,7 @@ export default function NotFoundScreen() {
 const styles = StyleSheet.create((theme) => ({
 	container: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.gray.background,
 		flex: 1,
 		justifyContent: 'center',
 		padding: theme.layout.screenPadding,
@@ -43,11 +43,11 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.md,
 	},
 	linkText: {
-		color: theme.colors.primary,
+		color: theme.colors.verde.solid,
 		fontSize: theme.fontSizes.md,
 	},
 	title: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		fontSize: theme.fontSizes.xl,
 		fontWeight: theme.fontWeights.bold,
 	},

@@ -67,16 +67,15 @@ export default function SessionsScreen() {
 					) : sessions && sessions.length > 0 ? (
 						<List>
 							{sessions.map((session, index) => (
-								<ListItem
-									key={`${session.createdAt}-${index}`}
-									label={session.name}
-									text={
+								<ListItem key={`${session.createdAt}-${index}`}>
+									<ListItem.Label>{session.name}</ListItem.Label>
+									<ListItem.Text>
 										<>
 											{formatSessionDate(session.createdAt)} •{' '}
 											{formatSessionTime(session.createdAt)}
 										</>
-									}
-								/>
+									</ListItem.Text>
+								</ListItem>
 							))}
 						</List>
 					) : (
@@ -99,12 +98,12 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.layout.screenPadding,
 	},
 	description: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		marginBottom: theme.spacing.md,
 	},
 	emptyContainer: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.surface,
+		backgroundColor: theme.colors.gray.background,
 		borderRadius: theme.borderRadius.lg,
 		justifyContent: 'center',
 		minHeight: 120,
@@ -112,7 +111,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	loadingContainer: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.surface,
+		backgroundColor: theme.colors.gray.background,
 		borderRadius: theme.borderRadius.lg,
 		justifyContent: 'center',
 		minHeight: 120,

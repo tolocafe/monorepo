@@ -13,7 +13,7 @@ export default function MoreLayout() {
 	const { theme } = useUnistyles()
 
 	return (
-		<Stack screenOptions={defaultStackScreenOptions(theme.colors.text)}>
+		<Stack screenOptions={defaultStackScreenOptions(theme.colors.gray.text)}>
 			<Stack.Screen
 				name="index"
 				options={{ headerShown: false, title: t`More` }}

@@ -161,14 +161,14 @@ const SIDEBAR_WIDTH = 280
 
 const styles = StyleSheet.create((theme) => ({
 	contentArea: {
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.gray.background,
 		flex: 1,
 		paddingLeft: SIDEBAR_WIDTH,
 	},
 	image: { height: 25, marginBottom: 10, width: 100 },
 	sidebar: {
-		backgroundColor: theme.colors.surface,
-		borderRightColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.background,
+		borderRightColor: theme.colors.gray.border,
 		borderRightWidth: 1,
 		bottom: 0,
 		gap: theme.spacing.sm,
@@ -188,15 +188,15 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.md,
 	},
 	tabButtonFocused: {
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.gray.background,
 	},
 	tabButtonLabel: {
-		color: theme.colors.textTertiary,
+		color: theme.colors.gray.interactive,
 		fontSize: theme.fontSizes.md,
 		fontWeight: theme.fontWeights.medium,
 	},
 	tabButtonLabelFocused: {
-		color: theme.colors.primary,
+		color: theme.colors.verde.solid,
 	},
 }))
 

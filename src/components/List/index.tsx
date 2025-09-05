@@ -8,20 +8,37 @@ import { StyleSheet } from 'react-native-unistyles'
 import { Card } from '@/components/Card'
 import { Label, Text } from '@/components/Text'
 
+export type ListItemAccessoryProps = {
+	children: ReactNode
+	style?: object
+}
+
+export type ListItemIconProps = {
+	children: ReactNode
+	style?: object
+}
+
+export type ListItemLabelProps = {
+	children: ReactNode
+	color?: 'primary' | 'secondary'
+	style?: object
+}
+
 export type ListItemProps = {
 	accessibilityRole?: 'button' | 'link'
-	accessory?: ReactNode
 	centered?: boolean
 	chevron?: boolean
 	children?: ReactNode
 	disabled?: boolean
-	icon?: ReactNode
-	label?: ReactNode
-	labelColor?: 'default' | 'primary' | 'secondary'
 	onPress?: () => void
 	style?: object
 	testID?: string
-	text?: ReactNode
+}
+
+export type ListItemTextProps = {
+	children: ReactNode
+	color?: 'primary' | 'secondary'
+	style?: object
 }
 
 export type ListProps = {
@@ -55,125 +72,169 @@ export function List({ children, style, testID }: ListProps) {
 
 export function ListItem({
 	accessibilityRole,
-	accessory,
 	centered = false,
 	chevron = false,
 	children,
 	disabled = false,
-	icon,
-	label,
-	labelColor = 'default',
 	onPress,
 	style,
 	testID,
-	text,
 }: ListItemProps) {
 	const Container = TouchableOpacity
-	const showChevron = chevron && !accessory
+
+	// Extract child components
+	const childrenArray = Children.toArray(children)
+	const iconChild = childrenArray.find(
+		(child) => isValidElement(child) && child.type === ListItemIcon,
+	)
+	const labelChild = childrenArray.find(
+		(child) => isValidElement(child) && child.type === ListItemLabel,
+	)
+	const textChild = childrenArray.find(
+		(child) => isValidElement(child) && child.type === ListItemText,
+	)
+	const accessoryChild = childrenArray.find(
+		(child) => isValidElement(child) && child.type === ListItemAccessory,
+	)
+	const otherChildren = childrenArray.filter(
+		(child) =>
+			!isValidElement(child) ||
+			(child.type !== ListItemIcon &&
+				child.type !== ListItemLabel &&
+				child.type !== ListItemText &&
+				child.type !== ListItemAccessory),
+	)
+
+	const showChevron = chevron && !accessoryChild
+
+	styles.useVariants({ centered })
 
 	return (
 		<Container
 			accessibilityRole={accessibilityRole}
 			disabled={disabled || !onPress}
 			onPress={onPress}
-			style={[styles.itemRow, centered && styles.itemRowCentered, style]}
+			style={[styles.itemRow, style]}
 			testID={testID}
 		>
-			{icon ? <View style={styles.leftIconContainer}>{icon}</View> : null}
+			{iconChild}
 
-			{/* Custom content mode */}
-			{children ? (
-				<View style={styles.customContentContainer}>{children}</View>
-			) : (
-				<>
-					{/* Main content */}
-					{centered ? (
-						<Label
-							style={[
-								styles.label,
-								styles.centeredLabel,
-								labelColorStyles[labelColor],
-							]}
-						>
-							{label}
-						</Label>
-					) : (
-						<>
-							<Label style={[styles.label, labelColorStyles[labelColor]]}>
-								{label}
-							</Label>
-							<Text style={styles.valueText}>{text}</Text>
-						</>
-					)}
+			{/* Main content area */}
+			<View style={styles.contentContainer}>
+				{labelChild}
+				{textChild}
+				{otherChildren}
+			</View>
 
-					{/* Accessory (custom) or chevron */}
-					{accessory ? (
-						<View style={styles.accessoryContainer}>{accessory}</View>
-					) : showChevron ? (
-						<Ionicons
-							color={styles.caret.color}
-							name="chevron-forward"
-							size={20}
-						/>
-					) : null}
-				</>
-			)}
+			{/* Accessory or chevron */}
+			{accessoryChild ||
+				(showChevron && (
+					<Ionicons
+						color={styles.caret.color}
+						name="chevron-forward"
+						size={20}
+					/>
+				))}
 		</Container>
 	)
 }
+
+function ListItemAccessory({ children, style }: ListItemAccessoryProps) {
+	return <View style={[styles.accessoryContainer, style]}>{children}</View>
+}
+
+function ListItemIcon({ children, style }: ListItemIconProps) {
+	return <View style={[styles.leftIconContainer, style]}>{children}</View>
+}
+
+function ListItemLabel({ children, color, style }: ListItemLabelProps) {
+	styles.useVariants({ labelColor: color })
+
+	return <Label style={[styles.label, style]}>{children}</Label>
+}
+
+function ListItemText({ children, color, style }: ListItemTextProps) {
+	styles.useVariants({ textColor: color })
+
+	return <Text style={[styles.text, style]}>{children}</Text>
+}
+
+// Attach compound components
+ListItem.Label = ListItemLabel
+ListItem.Text = ListItemText
+ListItem.Icon = ListItemIcon
+ListItem.Accessory = ListItemAccessory
 
 const styles = StyleSheet.create((theme) => ({
 	accessoryContainer: {
 		marginLeft: theme.spacing.sm,
 	},
 	caret: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.gray.text,
 		fontSize: 30,
 		marginLeft: theme.spacing.sm,
 	},
-	centeredLabel: {
-		textAlign: 'center',
-		width: '100%',
-	},
-	customContentContainer: {
+	contentContainer: {
+		alignItems: 'center',
 		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		variants: {
+			centered: {
+				true: {
+					justifyContent: 'center',
+				},
+			},
+		},
 	},
 	divider: {
-		backgroundColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.text,
 		height: 1,
 		marginVertical: 0,
+		opacity: 0.1,
 	},
 	itemRow: {
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		paddingVertical: theme.spacing.md,
-	},
-	itemRowCentered: {
-		justifyContent: 'center',
+		variants: {
+			centered: {
+				true: {
+					justifyContent: 'center',
+				},
+			},
+		},
 	},
 	label: {
-		color: theme.colors.text,
 		flex: 1,
+		fontWeight: '600',
+		variants: {
+			labelColor: {
+				primary: {
+					color: theme.colors.verde.solid,
+				},
+				secondary: {
+					color: theme.colors.crema.solid,
+				},
+			},
+		},
 	},
 	leftIconContainer: {
 		marginRight: theme.spacing.sm,
 	},
-	valueText: {
-		color: theme.colors.textSecondary,
+	text: {
 		flex: 2,
 		textAlign: 'right',
-	},
-}))
-
-const labelColorStyles = StyleSheet.create((theme) => ({
-	default: {
-		color: theme.colors.text,
-	},
-	primary: {
-		color: theme.colors.primary,
-	},
-	secondary: {
-		color: theme.colors.textSecondary,
+		variants: {
+			textColor: {
+				primary: {
+					color: theme.colors.verde.solid,
+				},
+				secondary: {
+					color: theme.colors.crema.solid,
+				},
+			},
+		},
 	},
 }))

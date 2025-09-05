@@ -70,11 +70,11 @@ const styles = StyleSheet.create((theme) => ({
 			},
 			variant: {
 				primary: {
-					backgroundColor: theme.colors.primary,
+					backgroundColor: theme.colors.verde.solid,
 				},
 				surface: {
-					backgroundColor: theme.colors.surface,
-					borderColor: theme.colors.border,
+					backgroundColor: theme.colors.gray.background,
+					borderColor: theme.colors.gray.border,
 					borderWidth: 1,
 				},
 				transparent: {
@@ -98,13 +98,13 @@ const styles = StyleSheet.create((theme) => ({
 		variants: {
 			variant: {
 				primary: {
-					color: theme.colors.surface,
+					color: theme.colors.gray.background,
 				},
 				surface: {
-					color: theme.colors.text,
+					color: theme.colors.gray.text,
 				},
 				transparent: {
-					color: theme.colors.text,
+					color: theme.colors.gray.text,
 				},
 			},
 		},

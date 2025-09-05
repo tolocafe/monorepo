@@ -4,10 +4,18 @@ import { TextInput as RNTextInput } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 export type InputProps = ComponentProps<typeof RNTextInput> & {
+	borderless?: boolean
 	error?: boolean
 }
 
-export function Input({ error = false, style, ...rest }: InputProps) {
+export function Input({
+	borderless,
+	error = false,
+	style,
+	...rest
+}: InputProps) {
+	styles.useVariants({ borderless })
+
 	return (
 		<RNTextInput
 			placeholderTextColor={styles.placeholder.color}
@@ -24,17 +32,30 @@ export function Input({ error = false, style, ...rest }: InputProps) {
 
 const styles = StyleSheet.create((theme) => ({
 	base: {
-		backgroundColor: theme.colors.surface,
-		borderColor: theme.colors.border,
+		_web: {
+			_placeholder: {
+				color: theme.colors.gray.interactive,
+			},
+		},
+		backgroundColor: theme.colors.gray.background,
+		borderColor: theme.colors.gray.border,
 		borderRadius: theme.borderRadius.md,
 		borderWidth: 1,
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		fontSize: theme.fontSizes.md,
 		paddingHorizontal: theme.spacing.md,
 		paddingVertical: theme.spacing.sm,
+		variants: {
+			borderless: {
+				true: {
+					borderRadius: theme.borderRadius.sm,
+					borderWidth: 0,
+				},
+			},
+		},
 	},
 	error: {
-		borderColor: theme.colors.error,
+		borderColor: theme.colors.rojo.solid,
 	},
 	multiline: {
 		minHeight: 80,
@@ -42,7 +63,7 @@ const styles = StyleSheet.create((theme) => ({
 		textAlignVertical: 'top',
 	},
 	placeholder: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 	},
 }))
 

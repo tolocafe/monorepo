@@ -202,16 +202,16 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.layout.screenPadding,
 	},
 	currentOrderCard: {
-		backgroundColor: theme.colors.primary,
+		backgroundColor: theme.colors.verde.solid,
 		borderCurve: 'continuous',
 		borderRadius: theme.borderRadius.md,
 		padding: theme.spacing.lg,
 	},
 	currentOrderText: {
-		color: theme.colors.surface,
+		color: theme.colors.gray.background,
 	},
 	currentOrderTitle: {
-		color: theme.colors.surface,
+		color: theme.colors.gray.background,
 	},
 	emptyOrderContainer: {
 		alignItems: 'center',
@@ -224,7 +224,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	image: { height: 250, width: 250 },
 	orderBadge: {
-		color: theme.colors.surface,
+		color: theme.colors.gray.background,
 		opacity: 0.9,
 	},
 	orderCard: {
@@ -233,7 +233,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	orderDate: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		marginTop: theme.spacing.xs,
 	},
 	orderDetails: {
@@ -248,7 +248,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginBottom: theme.spacing.sm,
 	},
 	orderItems: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		marginBottom: theme.spacing.xs,
 	},
 
@@ -257,7 +257,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	orderStatus: {
-		color: theme.colors.primary,
+		color: theme.colors.verde.solid,
 	},
 	signInContainer: {
 		alignItems: 'center',
@@ -268,17 +268,17 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.xxl,
 	},
 	signInSubtitle: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		textAlign: 'center',
 	},
 	signInTitle: {
 		textAlign: 'center',
 	},
 	subtitle: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 	},
 	tapToEdit: {
-		color: theme.colors.surface,
+		color: theme.colors.gray.background,
 		marginTop: theme.spacing.xs,
 		opacity: 0.8,
 	},

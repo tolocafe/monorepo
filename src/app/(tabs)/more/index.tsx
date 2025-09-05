@@ -81,6 +81,8 @@ export default function More() {
 	const colorScheme = useColorScheme()
 	const dropdownStyles = createDropdownStyles(colorScheme === 'dark')
 
+	const groupName = getGroupName(user?.client_groups_name)
+
 	const appVersion = getStringOrFallback(nativeApplicationVersion, '0')
 
 	const buildVersion = getStringOrFallback(nativeBuildVersion, '0')
@@ -90,6 +92,8 @@ export default function More() {
 		: ''
 
 	useScrollToTop(screenRef)
+
+	styles.useVariants({ groupName })
 
 	return (
 		<>
@@ -118,18 +122,24 @@ export default function More() {
 							<Trans>Wallet</Trans>
 						</H2>
 
-						<List>
-							<ListItem
-								label={<Trans>Balance</Trans>}
-								text={formatPrice(user.ewallet ?? '0')}
-							/>
+						<List style={styles.walletList}>
+							<ListItem>
+								<ListItem.Label>
+									<Trans>Balance</Trans>
+								</ListItem.Label>
+								<ListItem.Text>
+									{formatPrice(user.ewallet ?? '0')}
+								</ListItem.Text>
+							</ListItem>
 							<ListItem
 								accessibilityRole="link"
 								centered
-								label={<Trans>Top Up Wallet</Trans>}
-								labelColor="primary"
 								onPress={() => router.push('/more/top-up')}
-							/>
+							>
+								<ListItem.Label style={styles.topUpWalletLabel}>
+									<Trans>Top Up Wallet</Trans>
+								</ListItem.Label>
+							</ListItem>
 						</List>
 					</View>
 				)}
@@ -141,19 +151,30 @@ export default function More() {
 					{user ? (
 						<List>
 							{fullName ? (
-								<ListItem label={<Trans>Name</Trans>} text={fullName} />
+								<ListItem>
+									<ListItem.Label>
+										<Trans>Name</Trans>
+									</ListItem.Label>
+									<ListItem.Text>{fullName}</ListItem.Text>
+								</ListItem>
 							) : null}
-							<ListItem
-								label={<Trans>Phone</Trans>}
-								text={user.phone || <Trans>Not provided</Trans>}
-							/>
+							<ListItem>
+								<ListItem.Label>
+									<Trans>Phone</Trans>
+								</ListItem.Label>
+								<ListItem.Text>
+									{user.phone || <Trans>Not provided</Trans>}
+								</ListItem.Text>
+							</ListItem>
 							<ListItem
 								accessibilityRole="link"
 								centered
-								label={<Trans>Edit Profile</Trans>}
-								labelColor="primary"
 								onPress={() => router.push('/more/profile')}
-							/>
+							>
+								<ListItem.Label color="primary">
+									<Trans>Edit Profile</Trans>
+								</ListItem.Label>
+							</ListItem>
 						</List>
 					) : isUserPending ? (
 						<Card>
@@ -185,15 +206,21 @@ export default function More() {
 						<ListItem
 							accessibilityRole="link"
 							chevron
-							label={<Trans>Stores</Trans>}
 							onPress={() => router.push('/more/visit-us')}
-						/>
+						>
+							<ListItem.Label>
+								<Trans>Stores</Trans>
+							</ListItem.Label>
+						</ListItem>
 						<ListItem
 							accessibilityRole="link"
 							chevron
-							label={<Trans>Website</Trans>}
 							onPress={() => Linking.openURL('https://tolo.cafe')}
-						/>
+						>
+							<ListItem.Label>
+								<Trans>Website</Trans>
+							</ListItem.Label>
+						</ListItem>
 						<View style={styles.socialIconsRow}>
 							<TouchableOpacity
 								accessibilityRole="button"
@@ -254,48 +281,48 @@ export default function More() {
 
 					<List>
 						<ListItem>
-							<View style={styles.settingRow}>
-								<Label style={styles.settingLabel}>
-									<Trans>Language</Trans>
-								</Label>
-								<DropdownMenu.Root>
-									<DropdownMenu.Trigger style={dropdownStyles.trigger}>
-										<View style={styles.languageDropdownTriggerContent}>
-											<Label style={styles.languageDropdownText}>
-												{LOCALE_NAMES[i18n.locale as Locale]}
-											</Label>
-											<Ionicons
-												color={styles.languageDropdownArrow.color}
-												name="chevron-down"
-												size={16}
-											/>
-										</View>
-									</DropdownMenu.Trigger>
-									<DropdownMenu.Content style={dropdownStyles.content}>
-										{AVAILABLE_LANGUAGES.map((locale) => (
-											<DropdownMenu.Item
-												key={locale}
-												onSelect={() => loadAndActivateLocale(locale)}
-												style={dropdownStyles.item}
-											>
-												<DropdownMenu.ItemTitle
-													style={dropdownStyles.itemTitle}
-												>
-													{LOCALE_NAMES[locale]}
-												</DropdownMenu.ItemTitle>
-											</DropdownMenu.Item>
-										))}
-									</DropdownMenu.Content>
-								</DropdownMenu.Root>
-							</View>
+							<ListItem.Label style={styles.settingLabel}>
+								<Trans>Language</Trans>
+							</ListItem.Label>
+
+							<DropdownMenu.Root>
+								<DropdownMenu.Trigger style={dropdownStyles.trigger}>
+									<View style={styles.languageDropdownTriggerContent}>
+										<Label style={styles.languageDropdownText}>
+											{LOCALE_NAMES[i18n.locale as Locale]}
+										</Label>
+										<Ionicons
+											color={styles.languageDropdownArrow.color}
+											name="chevron-down"
+											size={16}
+										/>
+									</View>
+								</DropdownMenu.Trigger>
+								<DropdownMenu.Content style={dropdownStyles.content}>
+									{AVAILABLE_LANGUAGES.map((locale) => (
+										<DropdownMenu.Item
+											key={locale}
+											onSelect={() => loadAndActivateLocale(locale)}
+											style={dropdownStyles.item}
+										>
+											<DropdownMenu.ItemTitle style={dropdownStyles.itemTitle}>
+												{LOCALE_NAMES[locale]}
+											</DropdownMenu.ItemTitle>
+										</DropdownMenu.Item>
+									))}
+								</DropdownMenu.Content>
+							</DropdownMenu.Root>
 						</ListItem>
 
 						<ListItem
 							accessibilityRole="link"
 							chevron
-							label={<Trans>App</Trans>}
 							onPress={() => router.push('/more/app')}
-						/>
+						>
+							<ListItem.Label>
+								<Trans>App</Trans>
+							</ListItem.Label>
+						</ListItem>
 					</List>
 				</View>
 
@@ -318,18 +345,29 @@ function getFullName(
 	return `${firstname ?? ''}${lastname ? ` ${lastname}` : ''}`.trim()
 }
 
+function getGroupName(groupName: string | undefined) {
+	if (/^clientes?$/i.test(groupName ?? '')) return 'CUSTOMER' as const
+	if (/^amigos y familiares$/i.test(groupName ?? ''))
+		return 'FRIEND_AND_FAMILY' as const
+	if (/^súper clientes?$/i.test(groupName ?? ''))
+		return 'SUPER_CUSTOMER' as const
+	if (/^vecinos?$/i.test(groupName ?? '')) return 'NEIGHBOR' as const
+
+	return
+}
+
 const styles = StyleSheet.create((theme) => ({
 	footer: {
 		alignItems: 'center',
 		paddingVertical: theme.spacing.md,
 	},
 	footerText: {
-		color: theme.colors.textTertiary,
+		color: theme.colors.gray.text,
 		fontSize: theme.typography.caption.fontSize,
 		textAlign: 'center',
 	},
 	languageDropdownArrow: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.gray.text,
 		fontSize: 12,
 		marginLeft: theme.spacing.sm,
 	},
@@ -362,12 +400,12 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.md,
 	},
 	signOutButtonText: {
-		color: theme.colors.surface,
+		color: theme.colors.gray.text,
 		fontSize: theme.typography.body.fontSize,
 		fontWeight: theme.typography.body.fontWeight,
 	},
 	socialIcon: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		marginHorizontal: theme.spacing.md,
 	},
 	socialIconsRow: {
@@ -377,7 +415,29 @@ const styles = StyleSheet.create((theme) => ({
 		paddingBottom: theme.spacing.sm,
 		paddingTop: theme.spacing.md,
 	},
+	topUpWalletLabel: {
+		textAlign: 'center',
+	},
 	userInfoText: {
 		textAlign: 'center',
+	},
+	walletList: {
+		backgroundColor: theme.colors.gray.background,
+		variants: {
+			groupName: {
+				CUSTOMER: {
+					backgroundColor: theme.colors.gray.interactive,
+				},
+				FRIEND_AND_FAMILY: {
+					backgroundColor: theme.colors.rojo.interactive,
+				},
+				NEIGHBOR: {
+					backgroundColor: theme.colors.amarillo.interactive,
+				},
+				SUPER_CUSTOMER: {
+					backgroundColor: theme.colors.verde.interactive,
+				},
+			},
+		},
 	},
 }))

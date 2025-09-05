@@ -4,10 +4,9 @@ import { Platform } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLingui } from '@lingui/react/macro'
 import Head from 'expo-router/head'
+import { useUnistyles } from 'react-native-unistyles'
 
 import Tabs from '@/components/Tabs'
-import { Colors } from '@/lib/constants/colors'
-import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { useOrderStats } from '@/lib/stores/order-store'
 
 export const unstable_settings = {
@@ -17,8 +16,9 @@ export const unstable_settings = {
 export default function TabLayout() {
 	const { t } = useLingui()
 
-	const colorScheme = useColorScheme()
 	const { totalItems } = useOrderStats()
+
+	const { theme } = useUnistyles()
 
 	return (
 		<>
@@ -27,8 +27,8 @@ export default function TabLayout() {
 			</Head>
 			<Tabs
 				activeIndicatorColor={Platform.select({
-					android: Colors[colorScheme ?? 'light'].tintTransparent,
-					default: Colors[colorScheme ?? 'light'].tint,
+					android: theme.colors.verde.interactive,
+					default: theme.colors.verde.solid,
 				})}
 				initialRouteName="(home)"
 				minimizeBehavior="automatic"
@@ -37,12 +37,12 @@ export default function TabLayout() {
 					// @ts-ignore - bottom-tabs library has incomplete type definitions
 					headerShown: false,
 					minimizeBehavior: 'automatic',
-					tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
+					tabBarActiveTintColor: theme.colors.verde.solid,
 				}}
 				tabBarStyle={{
 					backgroundColor:
 						Platform.OS === 'android'
-							? Colors[colorScheme ?? 'light'].backgroundContrast
+							? theme.colors.gray.background
 							: undefined,
 				}}
 				translucent
@@ -69,8 +69,8 @@ export default function TabLayout() {
 								<Ionicons
 									color={
 										focused
-											? Colors[colorScheme ?? 'light'].tint
-											: Colors[colorScheme ?? 'light'].tabIconDefault
+											? theme.colors.verde.solid
+											: theme.colors.gray.background
 									}
 									name={focused ? 'restaurant' : 'restaurant-outline'}
 									size={24}
@@ -103,8 +103,8 @@ export default function TabLayout() {
 								<Ionicons
 									color={
 										focused
-											? Colors[colorScheme ?? 'light'].tint
-											: Colors[colorScheme ?? 'light'].tabIconDefault
+											? theme.colors.verde.solid
+											: theme.colors.gray.border
 									}
 									name={focused ? 'receipt' : 'receipt-outline'}
 									size={24}
@@ -132,8 +132,8 @@ export default function TabLayout() {
 								<Ionicons
 									color={
 										focused
-											? Colors[colorScheme ?? 'light'].tint
-											: Colors[colorScheme ?? 'light'].tabIconDefault
+											? theme.colors.verde.solid
+											: theme.colors.gray.border
 									}
 									name="ellipsis-horizontal"
 									size={24}

@@ -118,7 +118,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginTop: theme.spacing.md,
 	},
 	cardText: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		marginBottom: theme.spacing.xs,
 	},
 	cardTitle: {
@@ -135,7 +135,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.xs,
 	},
 	hoursText: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 	},
 	hoursTitle: {
 		...theme.typography.h4,

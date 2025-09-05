@@ -170,16 +170,16 @@ const styles = StyleSheet.create((theme) => ({
 		flex: 1,
 	},
 	description: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		marginBottom: theme.spacing.sm,
 	},
 	divider: {
-		backgroundColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.border,
 		height: 1,
 		marginVertical: 0,
 	},
 	label: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		flex: 1,
 	},
 	row: {
@@ -196,11 +196,11 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: theme.layout.screenPadding,
 	},
 	sectionTitle: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		marginBottom: theme.spacing.sm,
 	},
 	value: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		flex: 2,
 		fontSize: theme.typography.body.fontSize,
 		textAlign: 'right',

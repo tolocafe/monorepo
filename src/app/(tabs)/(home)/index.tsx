@@ -184,7 +184,7 @@ export default function Menu() {
 }
 
 const UniIonicons = withUnistyles(Ionicons, (theme) => ({
-	color: theme.colors.background,
+	color: theme.colors.gray.background,
 }))
 
 function MenuListItem({
@@ -199,7 +199,10 @@ function MenuListItem({
 		transform: [{ scale: scale.value }],
 	}))
 
-	const firstPrice = Object.values(item.price ?? {}).at(0) as string
+	const firstPrice =
+		'modifications' in item
+			? (item.modifications?.at(0)?.spots.at(0)?.price as string)
+			: (Object.values(item.price ?? {}).at(0) as string)
 
 	return (
 		<Link asChild href={`/(tabs)/(home)/${item.product_id}`}>
@@ -248,7 +251,13 @@ function MenuListItem({
 						</View>
 						<Paragraph>{item.product_production_description}</Paragraph>
 						<View style={styles.menuItemFooter}>
-							<Paragraph>{formatPrice(firstPrice)}</Paragraph>
+							<Paragraph>
+								{'modifications' in item ? (
+									<Trans>From {formatPrice(firstPrice)}</Trans>
+								) : (
+									formatPrice(firstPrice)
+								)}
+							</Paragraph>
 							<View style={styles.menuItemActions}>
 								<TouchableOpacity
 									disabled={!firstPrice}
@@ -272,14 +281,14 @@ function MenuListItem({
 const styles = StyleSheet.create((theme) => ({
 	addToBagButton: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
+		backgroundColor: theme.colors.verde.solid,
 		borderRadius: theme.borderRadius.full,
 		height: 40,
 		justifyContent: 'center',
 		width: 40,
 	},
 	badge: {
-		backgroundColor: theme.colors.primary,
+		backgroundColor: theme.colors.verde.solid,
 		borderRadius: theme.borderRadius.sm,
 		paddingHorizontal: theme.spacing.sm,
 		paddingVertical: 2,
@@ -289,7 +298,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.xs,
 	},
 	badgeText: {
-		color: theme.colors.surface,
+		color: theme.colors.gray.background,
 	},
 	categoryItems: {
 		gap: theme.spacing.md,
@@ -299,20 +308,20 @@ const styles = StyleSheet.create((theme) => ({
 		paddingTop: theme.spacing.md,
 	},
 	categoryTitle: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		marginBottom: theme.spacing.md,
 		paddingHorizontal: theme.layout.screenPadding,
 	},
 	errorContainer: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.gray.background,
 		flex: 1,
 		gap: theme.spacing.lg,
 		justifyContent: 'center',
 		padding: theme.spacing.xl,
 	},
 	errorText: {
-		color: theme.colors.error,
+		color: theme.colors.rojo.solid,
 		textAlign: 'center',
 	},
 	header: {
@@ -326,13 +335,13 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	loadingContainer: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.background,
+		backgroundColor: theme.colors.gray.background,
 		flex: 1,
 		gap: theme.spacing.md,
 		justifyContent: 'center',
 	},
 	loadingText: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 	},
 	menuItem: {
 		width: 225,
@@ -362,7 +371,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	menuItemImageContainer: {
-		backgroundColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.border,
 		borderCurve: 'continuous',
 		borderTopLeftRadius: theme.borderRadius.lg,
 		borderTopRightRadius: theme.borderRadius.lg,
@@ -375,6 +384,6 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	theme,
 	title: {
-		color: theme.colors.primary,
+		color: theme.colors.verde.solid,
 	},
 }))

@@ -1,6 +1,7 @@
 import crypto from 'node:crypto'
 
 import {
+	addBreadcrumb,
 	captureEvent,
 	captureException,
 	getCurrentScope,
@@ -173,8 +174,8 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						},
 					)
 
-					captureEvent({
-						extra: {
+					addBreadcrumb({
+						data: {
 							amount: paymentIntent.amount,
 							posterClientId,
 							transactionId,
@@ -194,8 +195,8 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						},
 					)
 
-					captureEvent({
-						extra: { eWalletTransactionId, posterClientId, transactionId },
+					addBreadcrumb({
+						data: { eWalletTransactionId, posterClientId, transactionId },
 						level: 'debug',
 						message: 'Added e-wallet payment',
 					})
@@ -346,7 +347,14 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					object_id as string,
 				)
 
-				if (!client) break
+				if (!client) {
+					captureEvent({
+						extra: { client },
+						level: 'warning',
+						message: 'Client not found',
+					})
+					break
+				}
 
 				await trackServerEvent(context, {
 					eventName: 'purchase',

@@ -1,11 +1,12 @@
 import type { ComponentProps } from 'react'
-import { TextInput, View } from 'react-native'
+import { View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLingui } from '@lingui/react/macro'
 import { StyleSheet } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
+import Input from '@/components/Input'
 import { Text } from '@/components/Text'
 
 type PhoneCountry = {
@@ -14,7 +15,7 @@ type PhoneCountry = {
 	prefix: string // +1, +52, +34
 }
 
-type Props = Omit<ComponentProps<typeof TextInput>, 'onChange'> & {
+type Props = Omit<ComponentProps<typeof Input>, 'onChange'> & {
 	/** Disable input interactions */
 	disabled?: boolean
 	/** Called with updated E.164 value */
@@ -89,12 +90,12 @@ export function PhoneNumberInput({
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 
-			<TextInput
+			<Input
 				autoComplete="tel"
+				borderless
 				editable={!disabled}
 				keyboardType="phone-pad"
 				onChangeText={handleTextChange}
-				placeholderTextColor="#ddd"
 				style={styles.input}
 				textContentType="telephoneNumber"
 				value={nsn}
@@ -136,7 +137,7 @@ const dropdownContentStyle = {
 
 const styles = StyleSheet.create((theme) => ({
 	chevron: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		fontSize: 12,
 		paddingHorizontal: 0,
 		paddingVertical: 0,
@@ -145,14 +146,14 @@ const styles = StyleSheet.create((theme) => ({
 		marginLeft: theme.spacing.xs,
 	},
 	code: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		paddingHorizontal: 0,
 		paddingVertical: 0,
 	},
 	container: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.surface,
-		borderColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.background,
+		borderColor: theme.colors.gray.border,
 		borderRadius: theme.borderRadius.sm,
 		borderWidth: 1,
 		flexDirection: 'row',
@@ -164,7 +165,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.sm,
 	},
 	flag: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		paddingHorizontal: 0,
 		paddingVertical: 0,
 	},
@@ -175,8 +176,8 @@ const styles = StyleSheet.create((theme) => ({
 		paddingLeft: theme.spacing.xs,
 	},
 	input: {
-		color: theme.colors.text,
 		...theme.typography.input,
+		color: theme.colors.gray.text,
 		flex: 1,
 		paddingHorizontal: theme.spacing.sm,
 		paddingVertical: theme.spacing.sm,

@@ -414,7 +414,7 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.spacing.xl,
 	},
 	emptyText: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		textAlign: 'center',
 	},
 	itemDetails: {
@@ -430,7 +430,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	itemMeta: {
-		backgroundColor: theme.colors.primary,
+		backgroundColor: theme.colors.verde.solid,
 		borderRadius: theme.borderRadius.md,
 		color: '#fff',
 		fontSize: theme.fontSizes.sm,
@@ -445,13 +445,13 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.md,
 	},
 	modifications: {
-		borderTopColor: theme.colors.border,
+		borderTopColor: theme.colors.gray.border,
 		borderTopWidth: 1,
 		marginTop: theme.spacing.sm,
 		paddingTop: theme.spacing.sm,
 	},
 	modificationText: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		marginBottom: theme.spacing.xs,
 	},
 	noteSection: {
@@ -459,7 +459,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	orderItem: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.surface,
+		backgroundColor: theme.colors.gray.background,
 		borderRadius: theme.borderRadius.md,
 		flexDirection: 'column',
 		gap: theme.spacing.sm,
@@ -471,8 +471,8 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	quantityButton: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.surface,
-		borderColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.background,
+		borderColor: theme.colors.gray.border,
 		borderRadius: 16,
 		borderWidth: 1,
 		height: 32,
@@ -486,7 +486,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.sm,
 	},
 	totalAmount: {
-		color: theme.colors.primary,
+		color: theme.colors.verde.solid,
 	},
 	totalRow: {
 		alignItems: 'center',

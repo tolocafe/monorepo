@@ -247,20 +247,26 @@ export default function ProfileScreen() {
 						<ListItem
 							accessibilityRole="link"
 							chevron
-							label={<Trans>Sessions</Trans>}
 							onPress={() => router.push('/more/sessions')}
-						/>
+						>
+							<ListItem.Label>
+								<Trans>Sessions</Trans>
+							</ListItem.Label>
+						</ListItem>
 						<ListItem
 							accessibilityRole="link"
 							chevron
-							label={<Trans>Delete</Trans>}
 							onPress={() => Linking.openURL('https://www.tolo.cafe/eliminar')}
-						/>
-						<ListItem
-							chevron
-							label={<Trans>Sign Out</Trans>}
-							onPress={handleSignOut}
-						/>
+						>
+							<ListItem.Label>
+								<Trans>Delete</Trans>
+							</ListItem.Label>
+						</ListItem>
+						<ListItem chevron onPress={handleSignOut}>
+							<ListItem.Label>
+								<Trans>Sign Out</Trans>
+							</ListItem.Label>
+						</ListItem>
 					</List>
 				</View>
 			</ScreenContainer>

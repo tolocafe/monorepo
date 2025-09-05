@@ -107,8 +107,8 @@ export function OtpInput({
 const styles = StyleSheet.create((theme) => ({
 	box: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.surface,
-		borderColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.background,
+		borderColor: theme.colors.gray.border,
 		borderRadius: theme.borderRadius.sm,
 		borderWidth: 1,
 		height: 48,
@@ -116,7 +116,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: 40,
 	},
 	boxActive: {
-		borderColor: theme.colors.primary,
+		borderColor: theme.colors.verde.solid,
 		borderWidth: 2,
 	},
 	boxesRow: {
@@ -125,7 +125,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	boxText: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		textAlign: 'center',
 		width: '100%',
 		...theme.typography.input,

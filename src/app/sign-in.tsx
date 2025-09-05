@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-base-to-string */
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Platform, Pressable, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -180,15 +180,34 @@ export default function SignIn() {
 		validators: { onChange: SignInSchema },
 	})
 
-	const handleGoBack = () => {
+	const handleGoBack = useCallback(() => {
 		if (stage === 'signup') {
 			setStage('phone')
 			setRequiredFields([])
-		} else {
+		} else if (stage === 'code') {
 			setStage('phone')
 			resetField('verificationCode')
+		} else {
+			router.back()
 		}
-	}
+	}, [stage, setRequiredFields, resetField])
+
+	// Handle Esc key press on web to go back
+	useEffect(() => {
+		if (Platform.OS !== 'web') return
+
+		const handleKeyDown = (event: KeyboardEvent) => {
+			if (event.key === 'Escape') {
+				handleGoBack()
+			}
+		}
+
+		globalThis.addEventListener('keydown', handleKeyDown)
+
+		return () => {
+			globalThis.removeEventListener('keydown', handleKeyDown)
+		}
+	}, [handleGoBack])
 
 	return (
 		<>
@@ -465,7 +484,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.xs,
 	},
 	backButtonText: {
-		color: theme.colors.primary,
+		color: theme.colors.verde.solid,
 	},
 	container: {
 		_web: {
@@ -476,7 +495,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	contentContainer: {
 		_web: {
-			backgroundColor: theme.colors.background,
+			backgroundColor: theme.colors.gray.background,
 			borderRadius: theme.borderRadius.lg,
 			height: '100%',
 			maxHeight: 600,
@@ -487,7 +506,7 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.layout.screenPadding,
 	},
 	errorText: {
-		color: theme.colors.error,
+		color: theme.colors.rojo.solid,
 		marginTop: theme.spacing.xs,
 	},
 	headerIconPressable: {
@@ -498,18 +517,18 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.spacing.sm,
 	},
 	headerIconText: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		fontSize: theme.fontSizes.xxl,
 	},
 	inputContainer: {
 		marginBottom: theme.spacing.md,
 	},
 	label: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		marginBottom: theme.spacing.xs,
 	},
 	message: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 	},
 	messageContainer: {
 		marginBottom: theme.spacing.md,

@@ -251,7 +251,13 @@ export default function MenuDetail() {
 								</H2>
 								<View>
 									{product.group_modifications.map((group) => {
-										if (group.name.startsWith('Desechable')) return null
+										if (group.name.startsWith('Desechable'))
+											return (
+												<View
+													aria-hidden
+													key={group.dish_modification_group_id}
+												/>
+											)
 
 										return (
 											<View
@@ -384,7 +390,7 @@ export default function MenuDetail() {
 
 const styles = StyleSheet.create((theme) => ({
 	badge: {
-		backgroundColor: theme.colors.primary,
+		backgroundColor: theme.colors.verde.solid,
 		borderRadius: theme.borderRadius.sm,
 		paddingHorizontal: theme.spacing.md,
 		paddingVertical: theme.spacing.xs,
@@ -395,13 +401,13 @@ const styles = StyleSheet.create((theme) => ({
 		marginBottom: theme.spacing.xl,
 	},
 	badgeText: {
-		color: theme.colors.surface,
+		color: theme.colors.gray.background,
 		fontSize: theme.fontSizes.sm,
 		fontWeight: theme.fontWeights.semibold,
 	},
 	closeButton: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.surface,
+		backgroundColor: theme.colors.gray.background,
 		borderRadius: theme.borderRadius.full,
 		elevation: 5,
 		height: theme.spacing.xl,
@@ -416,7 +422,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: theme.spacing.xl,
 	},
 	closeButtonText: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		fontSize: theme.fontSizes.lg,
 		fontWeight: theme.fontWeights.bold,
 	},
@@ -438,7 +444,7 @@ const styles = StyleSheet.create((theme) => ({
 		zIndex: 1,
 	},
 	heroImageContainer: {
-		backgroundColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.border,
 		height: 300,
 		position: 'relative',
 		width: '100%',
@@ -449,19 +455,19 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	ingredient: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 		paddingLeft: theme.spacing.sm,
 	},
 	ingredientsSection: {
 		gap: theme.spacing.xs,
 	},
 	loadingText: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 	},
 	modButton: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.surface,
-		borderColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.border,
+		borderColor: theme.colors.gray.interactive,
 		borderRadius: theme.borderRadius.full,
 		borderWidth: 1,
 		justifyContent: 'center',
@@ -487,7 +493,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	modCheck: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.primary,
+		backgroundColor: theme.colors.verde.solid,
 		borderRadius: theme.borderRadius.full,
 		height: 20,
 		justifyContent: 'center',
@@ -515,30 +521,30 @@ const styles = StyleSheet.create((theme) => ({
 		paddingRight: theme.spacing.md,
 	},
 	modItemPrice: {
-		color: theme.colors.textSecondary,
+		color: theme.colors.crema.solid,
 	},
 	modItemRow: {
 		alignItems: 'center',
-		borderBottomColor: theme.colors.border,
+		borderBottomColor: theme.colors.gray.border,
 		borderBottomWidth: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		paddingVertical: theme.spacing.xs,
 	},
 	placeholderImage: {
-		backgroundColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.border,
 	},
 	popularBadge: {
-		backgroundColor: theme.colors.primary,
+		backgroundColor: theme.colors.verde.solid,
 	},
 	price: {
-		color: theme.colors.primary,
+		color: theme.colors.verde.solid,
 		marginBottom: theme.spacing.lg,
 	},
 	quantityButton: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.surface,
-		borderColor: theme.colors.border,
+		backgroundColor: theme.colors.gray.background,
+		borderColor: theme.colors.gray.border,
 		borderRadius: 20,
 		borderWidth: 1,
 		height: 40,

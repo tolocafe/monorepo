@@ -103,12 +103,16 @@ export type PosterModification = {
 	ingredient_id: number
 	last_modified_time: string
 	modificator_name: string
+	modificator_selfprice: string
 	name: string
 	photo_large: string
 	photo_orig: string
 	photo_small: string
 	price: number
 	sort_order: number
+	spots: {
+		price: string
+	}[]
 	type: number
 }
 

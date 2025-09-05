@@ -106,7 +106,7 @@ const styles = StyleSheet.create((theme) => ({
 		lineHeight: theme.fontSizes.xl,
 	},
 	text: {
-		color: theme.colors.text,
+		color: theme.colors.gray.text,
 		fontSize: theme.typography.body.fontSize,
 		variants: {
 			align: {
