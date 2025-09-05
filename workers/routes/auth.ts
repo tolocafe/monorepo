@@ -4,6 +4,8 @@ import { Hono } from 'hono'
 import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 
+import type { CookieOptions } from 'hono/utils/cookie'
+
 import { trackServerEvent } from '../utils/analytics'
 import { authenticate, signJwt } from '../utils/jwt'
 import { generateOtp, storeOtp, verifyOtp } from '../utils/otp'
@@ -23,8 +25,9 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 	'name' in value &&
 	'token' in value
 
-const getCookieOptions = (isTest: boolean) =>
+const getCookieOptions = (isTest: boolean, host?: string) =>
 	({
+		domain: host,
 		httpOnly: true,
 		// 1 year
 		maxAge: 60 * 60 * 24 * 365,
@@ -32,7 +35,7 @@ const getCookieOptions = (isTest: boolean) =>
 		priority: 'High',
 		sameSite: isTest ? 'None' : 'Lax',
 		secure: !isTest,
-	}) as const
+	}) satisfies CookieOptions
 
 const auth = new Hono<{ Bindings: Bindings }>()
 	.post('/request-otp', async (context) => {
@@ -160,7 +163,12 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		const responseBody = { client: posterClient, token }
 
 		if (isWeb) {
-			setCookie(context, 'tolo_session', token, getCookieOptions(isTest))
+			setCookie(
+				context,
+				'tolo_session',
+				token,
+				getCookieOptions(isTest, context.req.header('Host')),
+			)
 		}
 
 		return context.json(responseBody)
@@ -236,7 +244,11 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')
 
 		if (isWeb) {
-			deleteCookie(context, 'tolo_session', getCookieOptions(false))
+			deleteCookie(
+				context,
+				'tolo_session',
+				getCookieOptions(false, context.req.header('Host')),
+			)
 		}
 
 		return context.json({ success: true })

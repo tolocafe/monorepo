@@ -159,8 +159,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						context.env.POSTER_TOKEN,
 						{
 							account_to: 1,
-							amount_to: 0,
-							category: 14,
+							amount_to: paymentIntent.amount,
+							category: 14, // E-wallet top-ups
+							comment: `Stripe: ${paymentIntent.id}`,
 							date: new Date(event.data.object.created * 1000)
 								.toISOString()
 								.replace('T', ' ')

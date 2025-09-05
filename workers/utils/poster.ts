@@ -178,14 +178,19 @@ export const api = {
 		},
 	},
 	finance: {
+		/** @returns The created transaction ID */
 		async createTransaction(
 			token: string,
 			body: {
 				account_to: 1
 				amount_to: number
+				/** Category ID */
 				category: number
+				comment?: string
 				date: string
+				/** Group ID */
 				id: number
+				/** Transaction type: 0 — expenditure, 1 — income, 2 — transfer */
 				type: 1
 				user_id: number
 			},
