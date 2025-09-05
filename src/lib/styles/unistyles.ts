@@ -163,11 +163,11 @@ const darkTheme = {
 		},
 		// Error - Rojo (Red)
 		rojo: {
-			background: '#1F1315',
-			border: '#2A1418',
-			interactive: '#5C2B2F',
+			background: '#201312',
+			border: '#8C3434',
+			interactive: '#500F13',
 			solid: '#E5484D',
-			text: '#FFFFFF',
+			text: '#FFD2CE',
 		},
 		// Primary accent - Verde (Green)
 		verde: {
