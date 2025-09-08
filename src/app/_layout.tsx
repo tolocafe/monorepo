@@ -15,11 +15,12 @@ import { Stack, useNavigationContainerRef } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
+import { FacebookPixel } from '@/lib/analytics/facebook-pixel'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { useUpdates } from '@/lib/hooks/use-updates'
-import { QueryProvider } from '@/lib/providers/query-provider'
-import '@/lib/firebase/init'
+import '@/lib/analytics/firebase/init'
 import '@/lib/locales/init'
+import { QueryProvider } from '@/lib/providers/query-provider'
 import {
 	categoriesQueryOptions,
 	productsQueryOptions,
@@ -84,6 +85,7 @@ function RootLayout() {
 					value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
 				>
 					<StatusBar style="auto" />
+					<FacebookPixel />
 					<I18nProvider i18n={i18n}>
 						<Stack initialRouteName="(tabs)">
 							<Stack.Screen name="(tabs)" options={{ headerShown: false }} />

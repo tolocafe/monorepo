@@ -17,7 +17,7 @@ import { Card } from '@/components/Card'
 import { Input } from '@/components/Input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
-import { trackEvent } from '@/lib/firebase'
+import { trackEvent } from '@/lib/analytics/firebase'
 import { useRegisterForPushNotifications } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import {
