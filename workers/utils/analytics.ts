@@ -111,13 +111,12 @@ function getUserData(
 		  },
 ) {
 	return {
-		address: [
-			{
-				postal_code: userData?.address?.postalCode,
-				sha256_first_name: nameSha256Schema.safeParse(userData?.firstName),
-				sha256_last_name: nameSha256Schema.safeParse(userData?.lastName),
-			},
-		],
+		address: {
+			postal_code: userData?.address?.postalCode,
+			sha256_first_name: nameSha256Schema.safeParse(userData?.firstName),
+			sha256_last_name: nameSha256Schema.safeParse(userData?.lastName),
+		},
+
 		sha256_email_address: emailSha256Schema.safeParse(userData?.emailAddress),
 		sha256_phone_number: phoneSha256Schema.safeParse(userData?.phoneNumber),
 	}
