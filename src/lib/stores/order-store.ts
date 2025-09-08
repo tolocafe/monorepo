@@ -5,8 +5,8 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { create } from 'zustand/react'
 import { useShallow } from 'zustand/react/shallow'
 
-import { STORAGE_KEYS } from '@/lib/constants/storage'
 import { trackEvent } from '@/lib/analytics/firebase'
+import { STORAGE_KEYS } from '@/lib/constants/storage'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { productQueryOptions } from '@/lib/queries/product'
 
