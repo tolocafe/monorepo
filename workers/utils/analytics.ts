@@ -6,6 +6,7 @@ import {
 	getCurrentScope,
 } from '@sentry/cloudflare'
 import { getConnInfo } from 'hono/cloudflare-workers'
+import z from 'zod/v4'
 
 import type {
 	ServerAnalyticsEvent,
@@ -82,21 +83,39 @@ function generateGA4ClientId(userId: string): string {
 	return `${timestamp}.${random}.${userId}`
 }
 
-function getUserData(userData?: {
-	emailAddress?: string
-	firstName?: string
-	lastName?: string
-	phoneNumber?: string
-}) {
+const nameSha256Schema = z
+	.string()
+	.trim()
+	.toLowerCase()
+	.transform(hash256)
+	.optional()
+const emailSha256Schema = z
+	.string()
+	.trim()
+	.toLowerCase()
+	.transform(hash256)
+	.optional()
+const phoneSha256Schema = z.string().trim().transform(hash256).optional()
+
+function getUserData(
+	userData:
+		| undefined
+		| {
+				address?: {
+					postalCode?: string
+				}
+				emailAddress?: string
+				firstName?: string
+				lastName?: string
+				phoneNumber?: string
+		  },
+) {
 	return {
-		email_address: userData?.emailAddress
-			? hash256(userData.emailAddress)
-			: undefined,
-		first_name: userData?.firstName ? hash256(userData.firstName) : undefined,
-		last_name: userData?.lastName ? hash256(userData.lastName) : undefined,
-		phone_number: userData?.phoneNumber
-			? hash256(userData.phoneNumber)
-			: undefined,
+		address: [{ postal_code: userData?.address?.postalCode }],
+		sha256_email_address: emailSha256Schema.safeParse(userData?.emailAddress),
+		sha256_first_name: nameSha256Schema.safeParse(userData?.firstName),
+		sha256_last_name: nameSha256Schema.safeParse(userData?.lastName),
+		sha256_phone_number: phoneSha256Schema.safeParse(userData?.phoneNumber),
 	}
 }
 

@@ -182,7 +182,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						context.env.POSTER_TOKEN,
 						{
 							amount: paymentIntent.amount,
-							client_id: posterClientId.toString(),
+							client_id: posterClientId,
 							transaction_id: transactionId,
 							type: 2,
 						},

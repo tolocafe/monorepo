@@ -58,7 +58,7 @@ export const api = {
 			token: string,
 			body: {
 				amount: number
-				client_id: string
+				client_id: number
 				transaction_id?: number
 				type: 1 | 2
 			},
