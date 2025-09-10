@@ -1,14 +1,14 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { router } from 'expo-router'
-import { MMKV } from 'react-native-mmkv'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { create } from 'zustand/react'
 import { useShallow } from 'zustand/react/shallow'
 
 import { trackEvent } from '@/lib/analytics/firebase'
-import { STORAGE_KEYS } from '@/lib/constants/storage'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { productQueryOptions } from '@/lib/queries/product'
+
+import { zustandStore } from '.'
 
 export type Order = {
 	apiOrderId?: string
@@ -30,10 +30,6 @@ export type OrderProduct = {
 	}[]
 	quantity: number
 }
-
-const zustandStore = new MMKV({
-	id: STORAGE_KEYS.ZUSTAND_STORE,
-})
 
 const zustandJsonStorage = {
 	getItem: (key: string) => zustandStore.getString(key) ?? null,

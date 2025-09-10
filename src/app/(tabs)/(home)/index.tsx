@@ -44,6 +44,9 @@ import type { Category, Product } from '@/lib/api'
 
 const UniImage = withUnistyles(Image)
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
+const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
+	color: theme.colors.gray.solid,
+}))
 
 const categoryKeyExtractor = (item: Product) => item.product_id
 
@@ -117,7 +120,7 @@ export default function Menu() {
 		if (isFetching) {
 			return (
 				<View style={styles.loadingContainer}>
-					<ActivityIndicator size="large" />
+					<UniActivityIndicator size="large" />
 					<Paragraph style={styles.loadingText}>
 						<Trans>Loading menu...</Trans>
 					</Paragraph>
@@ -335,7 +338,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	loadingContainer: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.gray.background,
+		backgroundColor: theme.colors.crema.background,
 		flex: 1,
 		gap: theme.spacing.md,
 		justifyContent: 'center',

@@ -1,6 +1,7 @@
 .cursor/mcp.json
 /ios
 /android
+/certs
 .wrangler/
 .vscode/
 

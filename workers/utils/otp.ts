@@ -28,8 +28,9 @@ export async function verifyOtp(kv: KVNamespace, phone: string, code: string) {
 		testPhoneNumbers.includes(phone) &&
 		TEST_OTP_CODE &&
 		code === TEST_OTP_CODE
-	)
+	) {
 		return { isTest: true }
+	}
 
 	const stored = await kv.get(phone)
 

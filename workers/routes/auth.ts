@@ -103,8 +103,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			phone,
 		)
 
-		if (!posterClient)
-			throw new HTTPException(404, { message: 'Client not found' })
+		if (!posterClient) {
+			throw new HTTPException(403, { message: 'Forbidden' })
+		}
 
 		const { client_id: clientId } = posterClient
 

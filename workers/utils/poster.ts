@@ -128,7 +128,7 @@ export const api = {
 		},
 		async getClientById(token: string, id: number) {
 			return posterFetch<ClientData[]>(
-				`/clients.getClient?token=${token}&client_id=${id}`,
+				`/clients.getClient?${new URLSearchParams({ client_id: id.toString(), token })}`,
 				{
 					defaultErrorMessage: 'Failed to get client',
 					headers: { 'Content-Type': 'application/json' },

@@ -2,7 +2,11 @@ import type { ComponentProps, RefObject } from 'react'
 import { Platform, ScrollView, View } from 'react-native'
 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
-import { StyleSheet, UnistylesRuntime } from 'react-native-unistyles'
+import {
+	StyleSheet,
+	UnistylesRuntime,
+	withUnistyles,
+} from 'react-native-unistyles'
 
 import HeaderGradient from '@/components/HeaderGradient'
 
@@ -13,6 +17,8 @@ export type Props = ComponentProps<typeof ScrollView> & {
 	withTopGradient?: boolean
 	withTopPadding?: boolean
 }
+
+const UniKeyboardAwareScrollView = withUnistyles(KeyboardAwareScrollView)
 
 export default function ScreenContainer({
 	children,
@@ -45,7 +51,7 @@ export default function ScreenContainer({
 		return (
 			<>
 				{topAccessory}
-				<KeyboardAwareScrollView
+				<UniKeyboardAwareScrollView
 					automaticallyAdjustsScrollIndicatorInsets
 					contentContainerStyle={[
 						styles.contentContainer,
@@ -59,7 +65,7 @@ export default function ScreenContainer({
 					{...rest}
 				>
 					{children}
-				</KeyboardAwareScrollView>
+				</UniKeyboardAwareScrollView>
 			</>
 		)
 	}

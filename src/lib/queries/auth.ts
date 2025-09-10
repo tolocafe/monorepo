@@ -1,8 +1,13 @@
+import { Platform } from 'react-native'
+
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
+import { deleteItemAsync } from 'expo-secure-store'
 
 import { api } from '@/lib/services/api-service'
 
 import type { ClientData } from '@/lib/api'
+
+import { STORAGE_KEYS } from '../constants/storage'
 
 export type RequestOtpMutationOptions = {
 	birthdate?: string
@@ -44,7 +49,22 @@ export const updateClientPushTokensMutationOptions = (clientId: string) =>
 	})
 
 export const signOutMutationOptions = mutationOptions({
-	mutationFn: () => api.auth.signOut(),
+	async mutationFn() {
+		await api.auth.signOut()
+
+		if (Platform.OS !== 'web') {
+			await deleteItemAsync(STORAGE_KEYS.AUTH_SESSION)
+
+			try {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				const RCTNetworking = require('RCTNetworking')
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+				void RCTNetworking.clearCookies(() => null)
+			} catch {
+				//
+			}
+		}
+	},
 	mutationKey: ['auth', 'sign-out'],
 })
 

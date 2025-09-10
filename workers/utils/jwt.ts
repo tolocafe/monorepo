@@ -9,18 +9,17 @@ const encoder = new TextEncoder()
 const secretKey = (secret: string) => encoder.encode(secret)
 
 export async function authenticate(context: Context, secret: string) {
-	const authorizationHeader = context.req.header('Authorization')
-
 	const token =
-		extractToken(authorizationHeader) ??
-		getCookie(context, 'tolo_session') ??
+		context.req.query('authenticationToken') ||
+		extractToken(context.req.header('Authorization')) ||
+		getCookie(context, 'tolo_session') ||
 		null
 
 	if (!token) throw new HTTPException(401, { message: 'Unauthorized' })
 
 	const [clientId, payload] = await verifyJwt(token, secret)
 
-	if (!clientId) throw new HTTPException(401, { message: 'Unauthorized' })
+	if (!clientId) throw new HTTPException(403, { message: 'Unauthorized' })
 
 	return [Number.parseInt(clientId, 10), payload, token] as const
 }
@@ -37,13 +36,20 @@ export function extractToken(
 export async function signJwt(
 	data: { email?: string; name?: string; phone?: string; sub: string },
 	secret: string,
+	options?: { skipIssuedAt?: boolean },
 ): Promise<string> {
-	return startSpan({ name: 'jwt.sign' }, () =>
-		new SignJWT(data)
-			.setProtectedHeader({ alg: 'HS256', typ: 'JWT' })
-			.setIssuedAt()
-			.sign(secretKey(secret)),
-	)
+	return startSpan({ name: 'jwt.sign' }, () => {
+		const jwt = new SignJWT(data).setProtectedHeader({
+			alg: 'HS256',
+			typ: 'JWT',
+		})
+
+		if (!options?.skipIssuedAt) {
+			jwt.setIssuedAt()
+		}
+
+		return jwt.sign(secretKey(secret))
+	})
 }
 
 export async function verifyJwt(token: string, secret: string) {

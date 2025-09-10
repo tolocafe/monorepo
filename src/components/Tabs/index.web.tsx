@@ -191,7 +191,7 @@ const styles = StyleSheet.create((theme) => ({
 		backgroundColor: theme.colors.gray.background,
 	},
 	tabButtonLabel: {
-		color: theme.colors.gray.interactive,
+		color: theme.colors.gray.solid,
 		fontSize: theme.fontSizes.md,
 		fontWeight: theme.fontWeights.medium,
 	},

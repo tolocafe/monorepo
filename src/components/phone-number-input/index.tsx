@@ -100,6 +100,7 @@ export function PhoneNumberInput({
 				textContentType="telephoneNumber"
 				value={nsn}
 				{...props}
+				maxLength={PHONE_NUMBER_MAX_LENGTH - 3}
 			/>
 		</View>
 	)

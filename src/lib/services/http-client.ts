@@ -13,7 +13,7 @@ const isWeb = Platform.OS === 'web'
  * - Web: returns null (auth handled via HttpOnly cookie)
  * - Native: reads token from SecureStore
  */
-async function getAuthToken(): Promise<null | string> {
+export async function getAuthToken(): Promise<null | string> {
 	if (isWeb) return null
 	try {
 		const token = await SecureStore.getItemAsync(STORAGE_KEYS.AUTH_SESSION)

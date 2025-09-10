@@ -68,9 +68,7 @@ export default function TabLayout() {
 							return (
 								<Ionicons
 									color={
-										focused
-											? theme.colors.verde.solid
-											: theme.colors.gray.background
+										focused ? theme.colors.verde.solid : theme.colors.gray.solid
 									}
 									name={focused ? 'restaurant' : 'restaurant-outline'}
 									size={24}
@@ -102,9 +100,7 @@ export default function TabLayout() {
 							return (
 								<Ionicons
 									color={
-										focused
-											? theme.colors.verde.solid
-											: theme.colors.gray.border
+										focused ? theme.colors.verde.solid : theme.colors.gray.solid
 									}
 									name={focused ? 'receipt' : 'receipt-outline'}
 									size={24}
@@ -131,9 +127,7 @@ export default function TabLayout() {
 							return (
 								<Ionicons
 									color={
-										focused
-											? theme.colors.verde.solid
-											: theme.colors.gray.border
+										focused ? theme.colors.verde.solid : theme.colors.gray.solid
 									}
 									name="ellipsis-horizontal"
 									size={24}

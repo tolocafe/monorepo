@@ -3,7 +3,7 @@ import { QueryClient } from '@tanstack/react-query'
 import { HTTPError } from 'ky'
 import { MMKV } from 'react-native-mmkv'
 
-const queryStore = new MMKV({
+export const queryStore = new MMKV({
 	id: 'query-store',
 })
 

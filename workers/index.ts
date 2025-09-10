@@ -1,16 +1,18 @@
 import * as Sentry from '@sentry/cloudflare'
+import { captureEvent } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
-import { authenticate } from 'workers/utils/jwt'
 
 import auth from './routes/auth'
 import clients from './routes/clients'
 import menu from './routes/menu'
 import orders from './routes/orders'
+import passes from './routes/passes'
 import transactions from './routes/transactions'
 import webhooks from './routes/webhooks'
 import { defaultJsonHeaders } from './utils/headers'
+import { authenticate } from './utils/jwt'
 
 import type { Bindings } from './types'
 
@@ -64,6 +66,20 @@ app
 	.route('/transactions', transactions)
 	.route('/orders', orders)
 	.route('/webhooks', webhooks)
+	.route('/passes', passes)
+	.all('*', (context) => {
+		captureEvent({
+			extra: {
+				method: context.req.method,
+				path: context.req.path,
+			},
+			level: 'error',
+			message: 'Hit non existing route',
+			request: context.req,
+		})
+
+		return context.json({ message: 'Forbidden' }, 403)
+	})
 
 app.onError((error, c) => {
 	// eslint-disable-next-line no-console

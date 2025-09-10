@@ -1,11 +1,18 @@
 import { useRef } from 'react'
 import type { ScrollView } from 'react-native'
-import { Linking, RefreshControl, TouchableOpacity, View } from 'react-native'
+import {
+	Alert,
+	Linking,
+	RefreshControl,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLingui } from '@lingui/react'
 import { Trans } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
+import { captureException } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 import { router } from 'expo-router'
@@ -19,11 +26,13 @@ import HeaderGradient from '@/components/HeaderGradient'
 import { List, ListItem } from '@/components/List'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
+import WalletButton, { addPass } from '@/components/WalletButton'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { loadAndActivateLocale } from '@/lib/locales/load-and-activate-locale'
 import { LOCALE_NAMES } from '@/lib/locales/utils'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { queryClient } from '@/lib/query-client'
+import { getAuthToken } from '@/lib/services/http-client'
 import { formatPrice } from '@/lib/utils/price'
 
 import type { Locale } from '@/lib/locales/utils'
@@ -95,6 +104,22 @@ export default function More() {
 
 	styles.useVariants({ groupName })
 
+	async function handleAddPass() {
+		if (!user) return
+
+		try {
+			const token = await getAuthToken()
+
+			const url = `https://app.tolo.cafe/api/passes/${user.client_id}?authenticationToken=${token}`
+
+			await addPass(url)
+		} catch (error) {
+			captureException(error)
+
+			Alert.alert(error instanceof Error ? error.message : 'Failed to add pass')
+		}
+	}
+
 	return (
 		<>
 			<Head>
@@ -131,6 +156,7 @@ export default function More() {
 									{formatPrice(user.ewallet ?? '0')}
 								</ListItem.Text>
 							</ListItem>
+
 							<ListItem
 								accessibilityRole="link"
 								centered
@@ -140,6 +166,10 @@ export default function More() {
 									<Trans>Top Up Wallet</Trans>
 								</ListItem.Label>
 							</ListItem>
+							<WalletButton
+								onPress={handleAddPass}
+								style={styles.walletButton}
+							/>
 						</List>
 					</View>
 				)}
@@ -177,7 +207,7 @@ export default function More() {
 							</ListItem>
 						</List>
 					) : isUserPending ? (
-						<Card>
+						<Card style={styles.pendingCard}>
 							<Paragraph style={styles.userInfoText}>
 								<Trans>Loading user information...</Trans>
 							</Paragraph>
@@ -380,6 +410,9 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.sm,
 		minWidth: 120,
 	},
+	pendingCard: {
+		paddingVertical: theme.spacing.lg,
+	},
 	scrollContent: {
 		paddingVertical: theme.spacing.lg,
 	},
@@ -420,6 +453,9 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	userInfoText: {
 		textAlign: 'center',
+	},
+	walletButton: {
+		width: '100%',
 	},
 	walletList: {
 		backgroundColor: theme.colors.gray.background,

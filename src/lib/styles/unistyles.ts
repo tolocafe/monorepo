@@ -35,7 +35,7 @@ const lightTheme = {
 			background: '#ffffff',
 			border: '#F4F4F4',
 			interactive: '#E3E3E3',
-			solid: '#8B8D98',
+			solid: '#666666',
 			text: '#111111',
 		},
 		// Secondary accent - Naranja (Orange)

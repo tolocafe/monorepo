@@ -6,7 +6,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
-import * as SecureStore from 'expo-secure-store'
 import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
@@ -16,7 +15,6 @@ import { Input } from '@/components/Input'
 import { List, ListItem } from '@/components/List'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label } from '@/components/Text'
-import { STORAGE_KEYS } from '@/lib/constants/storage'
 import {
 	selfQueryOptions,
 	signOutMutationOptions,
@@ -79,6 +77,7 @@ export default function ProfileScreen() {
 	})
 
 	const handleSignOut = async () => {
+		// eslint-disable-next-line unicorn/consistent-function-scoping
 		async function signOutPress() {
 			await signOut().catch(() => {
 				Burnt.toast({
@@ -89,10 +88,6 @@ export default function ProfileScreen() {
 					title: t`Error`,
 				})
 			})
-
-			if (Platform.OS !== 'web') {
-				await SecureStore.deleteItemAsync(STORAGE_KEYS.AUTH_SESSION)
-			}
 
 			await clearAllCache()
 
@@ -196,9 +191,11 @@ export default function ProfileScreen() {
 							<Field
 								name="birthdate"
 								validators={{
-									onChange: ({ value }) => {
+									onChange({ value }) {
 										const result = birthdateSchema.safeParse(value)
-										if (!result.success) return result.error.issues[0]?.message
+										if (!result.success) {
+											return result.error.issues[0]?.message
+										}
 									},
 								}}
 							>
@@ -210,7 +207,7 @@ export default function ProfileScreen() {
 										maxLength={10}
 										onBlur={field.handleBlur}
 										onChangeText={field.handleChange}
-										placeholder={t`YYYY-MM-DD`}
+										placeholder={t`DD/MM/YYYY`}
 										value={field.state.value}
 									/>
 								)}
