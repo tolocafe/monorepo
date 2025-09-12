@@ -5,7 +5,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
-import HeaderGradient from '@/components/HeaderGradient'
 import { List, ListItem } from '@/components/List'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Paragraph } from '@/components/Text'
@@ -35,7 +34,6 @@ export default function SessionsScreen() {
 			<Head>
 				<title>{t`Sessions`}</title>
 			</Head>
-			<HeaderGradient />
 			<ScreenContainer
 				contentContainerStyle={styles.container}
 				refreshControl={
@@ -46,6 +44,7 @@ export default function SessionsScreen() {
 						refreshing={isPending}
 					/>
 				}
+				withTopGradient
 			>
 				<View style={styles.section}>
 					<H2>

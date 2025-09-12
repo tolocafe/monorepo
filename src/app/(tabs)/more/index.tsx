@@ -22,7 +22,6 @@ import * as DropdownMenu from 'zeego/dropdown-menu'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import HeaderGradient from '@/components/HeaderGradient'
 import { List, ListItem } from '@/components/List'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
@@ -128,7 +127,6 @@ export default function More() {
 				<meta content="More - TOLO" property="og:title" />
 				<meta content="/more" property="og:url" />
 			</Head>
-			<HeaderGradient />
 			<ScreenContainer
 				contentContainerStyle={styles.scrollContent}
 				ref={screenRef}

@@ -10,7 +10,6 @@ import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import { Button } from '@/components/Button'
-import HeaderGradient from '@/components/HeaderGradient'
 import { Input } from '@/components/Input'
 import { List, ListItem } from '@/components/List'
 import ScreenContainer from '@/components/ScreenContainer'
@@ -117,15 +116,15 @@ export default function ProfileScreen() {
 			<Head>
 				<title>{t`Profile`}</title>
 			</Head>
-			<HeaderGradient />
 			<ScreenContainer
-				contentContainerStyle={styles.container}
+				contentContainerStyle={styles.contentContainer}
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(selfQueryOptions)}
 						refreshing={false}
 					/>
 				}
+				withTopGradient
 			>
 				<View style={styles.section}>
 					<H2>
@@ -284,8 +283,7 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
-	container: {
-		flex: 1,
+	contentContainer: {
 		gap: theme.spacing.lg,
 		padding: theme.layout.screenPadding,
 	},

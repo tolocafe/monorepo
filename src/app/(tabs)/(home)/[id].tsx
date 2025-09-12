@@ -22,7 +22,6 @@ import {
 } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
-import HeaderGradient from '@/components/HeaderGradient'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H1, H2, H3, Label, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics/firebase'
@@ -150,7 +149,6 @@ export default function MenuDetail() {
 			<Head>
 				<title>{t`${product.product_name} - TOLO Good Coffee`}</title>
 			</Head>
-			<HeaderGradient />
 			<ScreenContainer
 				contentContainerStyle={{ paddingBottom: tabBarHeight }}
 				contentInsetAdjustmentBehavior="never"
@@ -162,6 +160,7 @@ export default function MenuDetail() {
 						refreshing={false}
 					/>
 				}
+				withTopGradient
 			>
 				<Animated.View
 					sharedTransitionTag={`menu-item-${product.product_id}`}
