@@ -38,7 +38,7 @@ import {
 } from '@/lib/queries/menu'
 import { queryClient } from '@/lib/query-client'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
-import { formatPrice } from '@/lib/utils/price'
+import { getProductBaseCost } from '@/lib/utils/price'
 
 import type { Category, Product } from '@/lib/api'
 
@@ -202,10 +202,7 @@ function MenuListItem({
 		transform: [{ scale: scale.value }],
 	}))
 
-	const firstPrice =
-		'modifications' in item
-			? (item.modifications?.at(0)?.spots.at(0)?.price as string)
-			: (Object.values(item.price ?? {}).at(0) as string)
+	const cost = getProductBaseCost(item, true)
 
 	return (
 		<Link asChild href={`/(tabs)/(home)/${item.product_id}`}>
@@ -255,15 +252,11 @@ function MenuListItem({
 						<Paragraph>{item.product_production_description}</Paragraph>
 						<View style={styles.menuItemFooter}>
 							<Paragraph>
-								{'modifications' in item ? (
-									<Trans>From {formatPrice(firstPrice)}</Trans>
-								) : (
-									formatPrice(firstPrice)
-								)}
+								{'modifications' in item ? <Trans>From {cost}</Trans> : cost}
 							</Paragraph>
 							<View style={styles.menuItemActions}>
 								<TouchableOpacity
-									disabled={!firstPrice}
+									disabled={!cost}
 									onPress={(event) => {
 										event.stopPropagation()
 										onAddToBag(item)

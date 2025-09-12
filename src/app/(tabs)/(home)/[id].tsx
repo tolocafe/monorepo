@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import {
 	ActivityIndicator,
 	RefreshControl,
@@ -24,7 +24,7 @@ import {
 import { Button } from '@/components/Button'
 import HeaderGradient from '@/components/HeaderGradient'
 import ScreenContainer from '@/components/ScreenContainer'
-import { H1, H2, Label, Paragraph, Text } from '@/components/Text'
+import { H1, H2, H3, Label, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics/firebase'
 import { getImageUrl } from '@/lib/image'
 import { useTabBarHeight } from '@/lib/navigation/tab-bar-height'
@@ -33,7 +33,11 @@ import { queryClient } from '@/lib/query-client'
 import { api } from '@/lib/services/api-service'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
 import { formatCookingTime } from '@/lib/utils/cooking-time'
-import { formatPrice } from '@/lib/utils/price'
+import {
+	formatPrice,
+	getProductBaseCost,
+	getProductTotalCost,
+} from '@/lib/utils/price'
 
 const handleClose = () => {
 	router.back()
@@ -70,20 +74,19 @@ export default function MenuDetail() {
 		onSubmit({ value }) {
 			addItem({
 				id: value.productId,
+				modifications: value.modifications,
 				quantity: value.quantity,
 			})
 		},
 	})
 
+	/** Track view item event */
 	useEffect(() => {
 		if (!product?.product_id) return
-
-		void trackEvent('view_item', {
-			item_id: product.product_id,
-		})
+		void trackEvent('view_item', { item_id: product.product_id })
 	}, [product?.product_id])
 
-	// Default each group to its first modification when product loads
+	/** Default each group to its first modification when product loads */
 	useEffect(() => {
 		const groups = product?.group_modifications
 		if (!groups?.length) return
@@ -98,10 +101,15 @@ export default function MenuDetail() {
 		}
 	}, [product?.group_modifications, setFieldValue])
 
-	const incrementQuantity = () =>
-		setFieldValue('quantity', (previous) => previous + 1)
-	const decrementQuantity = () =>
-		setFieldValue('quantity', (previous) => Math.max(1, previous - 1))
+	const incrementQuantity = useCallback(
+		() => setFieldValue('quantity', (previous) => previous + 1),
+		[setFieldValue],
+	)
+
+	const decrementQuantity = useCallback(
+		() => setFieldValue('quantity', (previous) => Math.max(1, previous - 1)),
+		[setFieldValue],
+	)
 
 	if (!product) {
 		if (isPending) {
@@ -124,7 +132,7 @@ export default function MenuDetail() {
 					</TouchableOpacity>
 				</View>
 				<View style={styles.content}>
-					<H1 style={styles.title}>
+					<H1>
 						<Trans>Product not found</Trans>
 					</H1>
 					<Paragraph style={styles.description}>
@@ -135,7 +143,6 @@ export default function MenuDetail() {
 		)
 	}
 
-	const unitPriceCents = Object.values(product.price ?? {}).at(0) ?? '0'
 	const hasImage = product.photo_origin || product.photo
 
 	return (
@@ -196,14 +203,12 @@ export default function MenuDetail() {
 				</Animated.View>
 
 				<View style={styles.content}>
-					<H2 style={styles.price}>{formatPrice(unitPriceCents)}</H2>
-
+					<H2 style={styles.price}>{getProductBaseCost(product)}</H2>
 					{product['small-description'] && (
 						<Paragraph style={styles.description}>
 							{product['small-description']}
 						</Paragraph>
 					)}
-
 					<View style={styles.badges}>
 						{product.category_name ? (
 							<View style={styles.badge}>
@@ -225,12 +230,12 @@ export default function MenuDetail() {
 					</View>
 
 					{product.ingredients?.length && (
-						<>
+						<View>
 							<H2>
 								<Trans>Ingredients</Trans>
 							</H2>
 							<View style={styles.ingredientsSection}>
-								{product.ingredients.slice(0, 5).map((ingredient) => (
+								{product.ingredients.map((ingredient) => (
 									<Paragraph
 										key={ingredient.ingredient_id}
 										style={styles.ingredient}
@@ -239,13 +244,13 @@ export default function MenuDetail() {
 									</Paragraph>
 								))}
 							</View>
-						</>
+						</View>
 					)}
 
 					{/* Group Modifications */}
 					{product.group_modifications &&
 						product.group_modifications.length > 0 && (
-							<>
+							<View>
 								<H2>
 									<Trans>Modifications</Trans>
 								</H2>
@@ -264,18 +269,18 @@ export default function MenuDetail() {
 												key={group.dish_modification_group_id}
 												style={styles.modGroup}
 											>
-												<Label style={styles.modGroupTitle}>{group.name}</Label>
+												<H3 style={styles.modGroupTitle}>{group.name}</H3>
 												<Field
 													name={`modifications.${group.dish_modification_group_id}`}
 												>
-													{(field) => (
+													{({ handleChange, state }) => (
 														<View
 															accessibilityRole="radiogroup"
 															style={styles.modButtonGroup}
 														>
 															{group.modifications.map((modification) => {
 																const isSelected =
-																	field.state.value ===
+																	state.value ===
 																	modification.dish_modification_id
 
 																return (
@@ -286,7 +291,7 @@ export default function MenuDetail() {
 																		}}
 																		key={modification.dish_modification_id}
 																		onPress={() =>
-																			field.handleChange(
+																			handleChange(
 																				modification.dish_modification_id,
 																			)
 																		}
@@ -298,16 +303,26 @@ export default function MenuDetail() {
 																					<Ionicons
 																						color={styles.modCheckIcon.color}
 																						name="checkmark"
-																						size={14}
+																						size={16}
 																					/>
 																				</View>
 																			) : null}
 																			<Text style={styles.modButtonText}>
 																				{modification.name}
-																				{modification.price
-																					? ` +${formatPrice(modification.price * 100)}`
-																					: null}
 																			</Text>
+																			{modification.price ? (
+																				<Text
+																					style={[
+																						styles.modButtonText,
+																						styles.modItemPrice,
+																					]}
+																				>
+																					+
+																					{formatPrice(
+																						modification.price * 100,
+																					)}
+																				</Text>
+																			) : null}
 																		</View>
 																	</TouchableOpacity>
 																)
@@ -319,7 +334,7 @@ export default function MenuDetail() {
 										)
 									})}
 								</View>
-							</>
+							</View>
 						)}
 
 					{/* Single Modifications */}
@@ -369,18 +384,24 @@ export default function MenuDetail() {
 						</View>
 					</View>
 
-					<Subscribe selector={(state) => state.values.quantity}>
-						{(quantity) => (
-							<Button
-								disabled={!(Number(unitPriceCents) * quantity)}
-								onPress={handleSubmit}
-							>
-								<Trans>
-									Add to Order -{' '}
-									{formatPrice(Number(unitPriceCents) * quantity)}
-								</Trans>
-							</Button>
-						)}
+					<Subscribe
+						selector={({ values }) =>
+							[values.quantity, values.modifications] as const
+						}
+					>
+						{([quantity, modifications]) => {
+							const totalCost = getProductTotalCost({
+								modifications,
+								product,
+								quantity,
+							})
+
+							return (
+								<Button disabled={!totalCost} onPress={handleSubmit}>
+									<Trans>Add to Order - {formatPrice(totalCost)}</Trans>
+								</Button>
+							)
+						}}
 					</Subscribe>
 				</View>
 			</ScreenContainer>
@@ -427,7 +448,7 @@ const styles = StyleSheet.create((theme) => ({
 		fontWeight: theme.fontWeights.bold,
 	},
 	content: {
-		gap: theme.spacing.md,
+		gap: theme.spacing.lg,
 		padding: theme.layout.screenPadding,
 	},
 	description: {
@@ -455,7 +476,6 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	ingredient: {
-		color: theme.colors.crema.solid,
 		paddingLeft: theme.spacing.sm,
 	},
 	ingredientsSection: {
@@ -466,8 +486,8 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	modButton: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.gray.border,
-		borderColor: theme.colors.gray.interactive,
+		backgroundColor: theme.colors.gray.background,
+		borderColor: theme.colors.gray.border,
 		borderRadius: theme.borderRadius.full,
 		borderWidth: 1,
 		justifyContent: 'center',
@@ -521,7 +541,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingRight: theme.spacing.md,
 	},
 	modItemPrice: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.verde.solid,
 	},
 	modItemRow: {
 		alignItems: 'center',
@@ -567,11 +587,6 @@ const styles = StyleSheet.create((theme) => ({
 		minWidth: 40,
 		textAlign: 'center',
 	},
-
-	title: {
-		marginBottom: theme.spacing.sm,
-	},
-
 	titleOverlayText: {
 		color: '#FFFFFF',
 	},

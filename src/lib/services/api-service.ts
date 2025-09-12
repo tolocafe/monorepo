@@ -65,9 +65,7 @@ export const api = {
 	orders: {
 		create: (orderData: CreateOrder) =>
 			privateClient
-				.post<CreateOrderResponse>('orders', {
-					json: orderData,
-				})
+				.post<CreateOrderResponse>('orders', { json: orderData })
 				.json(),
 		list: () => privateClient.get<CreateOrderResponse>('orders').json(),
 	},

@@ -8,29 +8,6 @@ import type {
 
 import { api } from '@/lib/services/api-service'
 
-import type { Order } from '@/lib/stores/order-store'
-
-export type CreateOrderRequest = {
-	client_address?: string
-	client_name?: string
-	comment?: string
-	payment: {
-		sum: number
-		type: 'card' | 'cash' | 'online'
-	}
-	phone?: string
-	products: {
-		count: number
-		modifications?: {
-			count: number
-			modification_id: string
-		}[]
-		price?: number
-		product_id: string
-	}[]
-	service_mode?: '1' | '2' | '3' // 1 = table service, 2 = takeaway, 3 = delivery
-}
-
 export type CreateOrderResponse = {
 	date_start: string
 	order_id: string
@@ -66,26 +43,6 @@ export type FormattedCreateOrderResponse = Omit<
 	'order'
 > & {
 	order: CreateOrderResponse & { sumFormatted: string }
-}
-
-export function convertOrderToApiFormat(order: Order): CreateOrderRequest {
-	return {
-		comment: order.customerNote,
-		payment: {
-			sum: 0, // Server will calculate the total
-			type: 'cash',
-		},
-		products: order.products.map((item) => ({
-			count: item.quantity,
-			// Price will be calculated by the server based on product_id
-			modifications: item.modifications?.map((module_) => ({
-				count: 1,
-				modification_id: module_.id,
-			})),
-			product_id: item.id,
-		})),
-		service_mode: '2', // takeaway by default
-	}
 }
 
 export function formatCreateOrderResponse(response: CreateOrderResponse) {

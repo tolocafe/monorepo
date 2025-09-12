@@ -52,8 +52,10 @@ export async function signJwt(
 	})
 }
 
-export async function verifyJwt(token: string, secret: string) {
+export async function verifyJwt(token: string | undefined, secret: string) {
 	try {
+		if (!token) throw new Error('No token provided')
+
 		const { payload } = await startSpan({ name: 'jwt.verify' }, () =>
 			jwtVerify(token, secretKey(secret)),
 		)

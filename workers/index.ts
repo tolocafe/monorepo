@@ -70,12 +70,19 @@ app
 	.all('*', (context) => {
 		captureEvent({
 			extra: {
+				json: context.req.text(),
 				method: context.req.method,
 				path: context.req.path,
+				query: context.req.query(),
 			},
 			level: 'error',
 			message: 'Hit non existing route',
-			request: context.req,
+			request: {
+				headers: context.req.header(),
+				method: context.req.method,
+				query_string: context.req.query(),
+				url: context.req.url,
+			},
 		})
 
 		return context.json({ message: 'Forbidden' }, 403)
@@ -98,7 +105,7 @@ export default Sentry.withSentry(
 		enableLogs: true,
 		integrations: [
 			Sentry.fetchIntegration(),
-			Sentry.extraErrorDataIntegration({ depth: 6 }),
+			Sentry.extraErrorDataIntegration({ depth: 8 }),
 		],
 		sendDefaultPii: true,
 		tracesSampleRate: 0.5,

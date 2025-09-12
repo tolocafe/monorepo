@@ -152,9 +152,11 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				),
 			),
 			posterClient.client_groups_id === UNVERIFIED_CLIENT_GROUP_ID
-				? api.clients.updateClient(context.env.POSTER_TOKEN, clientId, {
-						client_groups_id_client: VERIFIED_CLIENT_GROUP_ID,
-					})
+				? api.clients.updateClient(
+						context.env.POSTER_TOKEN,
+						Number.parseInt(clientId, 10),
+						{ client_groups_id_client: VERIFIED_CLIENT_GROUP_ID },
+					)
 				: Promise.resolve(),
 		])
 

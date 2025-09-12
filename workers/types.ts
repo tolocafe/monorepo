@@ -1,4 +1,10 @@
 export type Bindings = Cloudflare.Env & {
+	/** APNs for PassKit push notifications */
+	APNS_KEY_ID: string
+	/** APNs for PassKit push notifications */
+	APNS_PRIVATE_KEY: string
+	/** APNs for PassKit push notifications */
+	APNS_TEAM_ID: string
 	ASSETS: Fetcher
 	D1_TOLO: D1Database
 	EXPO_ACCESS_TOKEN: string

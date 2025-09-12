@@ -7,7 +7,7 @@ import Head from 'expo-router/head'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Tabs from '@/components/Tabs'
-import { useOrderStats } from '@/lib/stores/order-store'
+import { useCurrentOrderItemsCount } from '@/lib/stores/order-store'
 
 export const unstable_settings = {
 	initialRouteName: '(home)',
@@ -16,7 +16,7 @@ export const unstable_settings = {
 export default function TabLayout() {
 	const { t } = useLingui()
 
-	const { totalItems } = useOrderStats()
+	const itemsCount = useCurrentOrderItemsCount()
 
 	const { theme } = useUnistyles()
 
@@ -81,7 +81,7 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name="orders"
 					options={{
-						tabBarBadge: totalItems > 0 ? totalItems.toString() : undefined,
+						tabBarBadge: itemsCount > 0 ? itemsCount.toString() : undefined,
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
 						tabBarIcon({ focused }: { focused: boolean }) {

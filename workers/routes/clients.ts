@@ -42,7 +42,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 
 		const posterClient = await api.clients.updateClient(
 			c.env.POSTER_TOKEN,
-			id,
+			Number.parseInt(id, 10),
 			parsedBody,
 		)
 

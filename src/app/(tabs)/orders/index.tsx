@@ -10,6 +10,8 @@ import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
+import type { Product } from '@common/api'
+
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import ScreenContainer from '@/components/ScreenContainer'
@@ -18,8 +20,11 @@ import { selfQueryOptions } from '@/lib/queries/auth'
 import { orderQueryOptions } from '@/lib/queries/order'
 import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
-import { useCurrentOrder, useOrderStats } from '@/lib/stores/order-store'
-import { formatPrice } from '@/lib/utils/price'
+import {
+	useCurrentOrder,
+	useCurrentOrderItemsCount,
+} from '@/lib/stores/order-store'
+import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
 
 const handleSignIn = () => {
 	router.push('/sign-in')
@@ -38,22 +43,24 @@ export default function Orders() {
 
 	const currentOrder = useCurrentOrder()
 	const { data: orders } = useQuery(orderQueryOptions)
-	const { totalItems } = useOrderStats()
+	const itemsCount = useCurrentOrderItemsCount()
 
 	const currentOrderTotalCents = (() => {
 		if (!currentOrder) return 0
+
 		return currentOrder.products.reduce((sum, item) => {
 			const productData = queryClient.getQueryData(
 				productQueryOptions(item.id).queryKey,
+			) as Product
+
+			return (
+				sum +
+				getProductTotalCost({
+					modifications: item.modifications ?? {},
+					product: productData,
+					quantity: item.quantity,
+				})
 			)
-			const unitPriceCents = productData
-				? Number(Object.values(productData.price ?? {}).at(0) ?? 0)
-				: 0
-			const modificationsTotalCents = (item.modifications ?? []).reduce(
-				(moduleSum, module_) => moduleSum + (module_.price || 0),
-				0,
-			)
-			return sum + (unitPriceCents + modificationsTotalCents) * item.quantity
 		}, 0)
 	})()
 
@@ -128,7 +135,7 @@ export default function Orders() {
 									<Trans>Current Order</Trans>
 								</H3>
 								<Text style={styles.orderBadge}>
-									<Trans>{totalItems} items</Trans>
+									<Trans>{itemsCount} items</Trans>
 								</Text>
 							</View>
 							<Paragraph style={styles.currentOrderText}>
@@ -142,7 +149,6 @@ export default function Orders() {
 				)}
 
 				{/* Order History */}
-
 				{orders?.length ? (
 					<>
 						<H2>

@@ -1,4 +1,4 @@
-import { firebase } from '@react-native-firebase/analytics'
+import analytics from '@react-native-firebase/analytics'
 import { captureException } from '@sentry/react-native'
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto'
 
@@ -23,8 +23,8 @@ export async function enableAnalytics({
 }) {
 	try {
 		await Promise.all([
-			firebase.analytics().setAnalyticsCollectionEnabled(true),
-			firebase.analytics().setConsent({
+			analytics().setAnalyticsCollectionEnabled(true),
+			analytics().setConsent({
 				ad_personalization: true,
 				ad_storage: true,
 				ad_user_data: true,
@@ -41,8 +41,8 @@ export async function enableAnalytics({
 			])
 
 		await Promise.all([
-			userId ? firebase.analytics().setUserId(userId) : null,
-			firebase.analytics().setUserProperties({
+			userId ? analytics().setUserId(userId) : null,
+			analytics().setUserProperties({
 				sha256_email_address: emailAddressHash ?? null,
 				sha256_first_name: firstNameHash ?? null,
 				sha256_last_name: lastNameHash ?? null,
@@ -65,7 +65,7 @@ export async function trackEvent(
 			return
 		}
 
-		void firebase.analytics().logEvent(event, properties)
+		void analytics().logEvent(event, properties)
 	} catch (error) {
 		captureException(error)
 	}

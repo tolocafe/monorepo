@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { router } from 'expo-router'
 import { createJSONStorage, persist } from 'zustand/middleware'
 import { create } from 'zustand/react'
@@ -6,28 +6,24 @@ import { useShallow } from 'zustand/react/shallow'
 
 import { trackEvent } from '@/lib/analytics/firebase'
 import { selfQueryOptions } from '@/lib/queries/auth'
-import { productQueryOptions } from '@/lib/queries/product'
 
 import { zustandStore } from '.'
 
+export type Modifications = Record<string, number>
+
 export type Order = {
 	apiOrderId?: string
-	createdAt: Date
+	createdAt?: Date
 	customerNote?: string
 	id: string
 	products: OrderProduct[]
 	status: 'cancelled' | 'completed' | 'confirmed' | 'draft' | 'submitted'
-	totalAmount: number
-	updatedAt: Date
 }
 
 export type OrderProduct = {
 	id: string
-	modifications?: {
-		id: string
-		name: string
-		price: number
-	}[]
+	/** Modification Group ID -> Modification ID */
+	modifications?: Modifications
 	quantity: number
 }
 
@@ -38,31 +34,37 @@ const zustandJsonStorage = {
 }
 
 type OrderStore = {
-	addItem: (item: Pick<OrderProduct, 'id' | 'quantity'>) => void
+	addItem: (
+		item: Pick<OrderProduct, 'id' | 'modifications' | 'quantity'>,
+	) => void
 	clearOrder: () => void
-
-	// Actions
 	createOrder: () => void
 	currentOrder: null | Order
-	getTotalAmount: () => number
-	// Getters
 	getTotalItems: () => number
 	removeItem: (productId: string) => void
-	updateItem: (productId: string, quantity: number) => void
+	updateItem: (
+		productId: string,
+		modifications: Modifications | undefined,
+		quantity: number,
+	) => void
 }
 
 export const useOrderStore = create<OrderStore>()(
 	persist(
 		(set, get) => ({
-			addItem: (item: Pick<OrderProduct, 'id' | 'quantity'>) => {
+			addItem(item) {
 				const { currentOrder } = get()
+
 				if (!currentOrder) {
 					get().createOrder()
 					return get().addItem(item)
 				}
 
 				const existingItemIndex = currentOrder.products.findIndex(
-					(existingItem) => existingItem.id === item.id,
+					(existingItem) =>
+						existingItem.id === item.id &&
+						JSON.stringify(existingItem.modifications) ===
+							JSON.stringify(item.modifications),
 				)
 
 				let updatedItems: OrderProduct[]
@@ -82,38 +84,23 @@ export const useOrderStore = create<OrderStore>()(
 				}
 
 				set({
-					currentOrder: {
-						...currentOrder,
-						products: updatedItems,
-						totalAmount: 0, // Will be calculated when needed
-						updatedAt: new Date(),
-					},
+					currentOrder: { ...currentOrder, products: updatedItems },
 				})
 			},
-			clearOrder: () => {
+			clearOrder() {
 				set({ currentOrder: null })
 			},
-			createOrder: () => {
+			createOrder() {
 				const nextOrder: Order = {
 					createdAt: new Date(),
 					id: `order-${Date.now()}`,
 					products: [],
 					status: 'draft',
-					totalAmount: 0,
-					updatedAt: new Date(),
 				}
 				set({ currentOrder: nextOrder })
 			},
-
 			currentOrder: null,
-
-			getTotalAmount: () => {
-				const { currentOrder } = get()
-				return currentOrder?.totalAmount || 0
-			},
-
-			// Getters
-			getTotalItems: () => {
+			getTotalItems() {
 				const { currentOrder } = get()
 				if (!currentOrder) return 0
 				return currentOrder.products.reduce(
@@ -121,13 +108,7 @@ export const useOrderStore = create<OrderStore>()(
 					0,
 				)
 			},
-
-			hasItems: () => {
-				const { currentOrder } = get()
-				return Boolean(currentOrder && currentOrder.products.length > 0)
-			},
-
-			removeItem: (productId: string) => {
+			removeItem(productId) {
 				const { currentOrder } = get()
 				if (!currentOrder) return
 
@@ -135,12 +116,7 @@ export const useOrderStore = create<OrderStore>()(
 					(item) => item.id !== productId,
 				)
 
-				const updatedOrder = {
-					...currentOrder,
-					items: updatedItems,
-					totalAmount: 0, // Will be calculated when needed
-					updatedAt: new Date(),
-				}
+				const updatedOrder = { ...currentOrder, items: updatedItems }
 
 				// If no items left, clear the order
 				if (updatedItems.length === 0) {
@@ -149,7 +125,7 @@ export const useOrderStore = create<OrderStore>()(
 					set({ currentOrder: updatedOrder })
 				}
 			},
-			updateItem: (productId: string, quantity: number) => {
+			updateItem(productId, modifications, quantity) {
 				const { currentOrder } = get()
 				if (!currentOrder) return
 
@@ -158,7 +134,10 @@ export const useOrderStore = create<OrderStore>()(
 						currentOrder: {
 							...currentOrder,
 							products: currentOrder.products.filter(
-								(item) => item.id !== productId,
+								(item) =>
+									item.id !== productId ||
+									JSON.stringify(item.modifications) !==
+										JSON.stringify(modifications),
 							),
 						},
 					})
@@ -166,61 +145,39 @@ export const useOrderStore = create<OrderStore>()(
 				}
 
 				const updatedItems = currentOrder.products.map((item) =>
-					item.id === productId ? { ...item, quantity } : item,
+					item.id === productId &&
+					JSON.stringify(item.modifications) === JSON.stringify(modifications)
+						? { ...item, quantity }
+						: item,
 				)
 
-				set({
-					currentOrder: {
-						...currentOrder,
-						products: updatedItems,
-						totalAmount: 0, // Will be calculated when needed
-						updatedAt: new Date(),
-					},
-				})
+				set({ currentOrder: { ...currentOrder, products: updatedItems } })
 			},
 		}),
 		{
 			name: 'tolo-order-storage',
-			partialize: (state) => ({
-				currentOrder: state.currentOrder,
-			}),
+			partialize: (state) => ({ currentOrder: state.currentOrder }),
 			storage: createJSONStorage(() => zustandJsonStorage),
 		},
 	),
 )
 
-// For computed values that might have same content but different references
-export const useOrderStats = () =>
-	useOrderStore(
-		useShallow((state) => ({
-			totalAmount: state.getTotalAmount(),
-			totalItems: state.getTotalItems(),
-		})),
-	)
-
+export const useCurrentOrderItemsCount = () =>
+	useOrderStore(useShallow((state) => state.getTotalItems()))
 export const useCurrentOrder = () =>
-	useOrderStore((state) => state.currentOrder)
+	useOrderStore(useShallow((state) => state.currentOrder))
 export const useUpdateItem = () => useOrderStore((state) => state.updateItem)
 export const useClearOrder = () => useOrderStore((state) => state.clearOrder)
 
 export const useAddItemGuarded = () => {
 	const addItem = useOrderStore((state) => state.addItem)
 	const { data: user } = useQuery(selfQueryOptions)
-	const queryClient = useQueryClient()
 
-	return (item: Pick<OrderProduct, 'id' | 'quantity'>) => {
+	return (item: Pick<OrderProduct, 'id' | 'modifications' | 'quantity'>) => {
 		const isAuthenticated = Boolean(user)
-		if (!isAuthenticated) {
-			const product = queryClient.getQueryData(
-				productQueryOptions(item.id).queryKey,
-			)
-			const itemName = product?.product_name
 
-			router.push(
-				itemName
-					? { params: { itemName }, pathname: '/sign-in' }
-					: { pathname: '/sign-in' },
-			)
+		if (!isAuthenticated) {
+			router.push('/sign-in')
 			return
 		}
 

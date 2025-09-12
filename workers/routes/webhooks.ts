@@ -9,13 +9,15 @@ import {
 import { Expo } from 'expo-server-sdk'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
+import { trackServerEvent } from 'workers/utils/analytics'
+import { sendBatchAPNsNotifications } from 'workers/utils/apns'
+import getPass from 'workers/utils/generate-pass'
+import { api } from 'workers/utils/poster'
+import { getStripe } from 'workers/utils/stripe'
 import { z } from 'zod/v4'
 
 import type { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk'
-
-import { trackServerEvent } from '../utils/analytics'
-import { api } from '../utils/poster'
-import { getStripe } from '../utils/stripe'
+import type { Context } from 'hono'
 
 import type { Bindings } from '../types'
 
@@ -39,8 +41,454 @@ const posterWebhookDataSchema = z.object({
 	verify: z.string(),
 })
 
+/** Helper function to create required D1 tables */
+async function ensurePassTables(database: D1Database) {
+	// D1 requires sequential execution of CREATE TABLE statements
+	await database.exec(`
+		CREATE TABLE IF NOT EXISTS pass_auth_tokens (
+			client_id INTEGER PRIMARY KEY,
+			auth_token TEXT UNIQUE NOT NULL,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)
+	`)
+	await database.exec(`
+		CREATE TABLE IF NOT EXISTS pass_registrations (
+			device_library_id TEXT,
+			pass_type_identifier TEXT,
+			serial_number TEXT,
+			client_id INTEGER,
+			push_token TEXT,
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+			PRIMARY KEY (device_library_id, serial_number)
+		)
+	`)
+	await database.exec(`
+		CREATE TABLE IF NOT EXISTS pass_updates (
+			serial_number TEXT PRIMARY KEY,
+			pass_type_identifier TEXT,
+			client_id INTEGER,
+			last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		)
+	`)
+}
+
+// Helper function to extract client ID from pass serial number
+function extractClientIdFromPassId(passId: string): null | number {
+	const regex = /^TOLO-(\d+)$/
+	const match = regex.exec(passId)
+	if (!match) return null
+	return Number.parseInt(match[1], 10)
+}
+
+function getApplePassAuthToken(context: Context) {
+	return context.req.header('Authorization')?.replace('ApplePass ', '')
+}
+
+// Function to send Apple Push Notifications for pass updates
+async function sendPassUpdateNotification(
+	context: Context<{ Bindings: Bindings }>,
+	clientId: number,
+) {
+	try {
+		const serialNumber = `TOLO-${clientId.toString().padStart(8, '0')}`
+
+		// Ensure tables exist
+		await ensurePassTables(context.env.D1_TOLO)
+
+		// Get all devices registered for this pass
+		const { results: registrations } = await context.env.D1_TOLO.prepare(
+			'SELECT push_token FROM pass_registrations WHERE serial_number = ?',
+		)
+			.bind(serialNumber)
+			.all<{ push_token: string }>()
+
+		if (registrations.length === 0) {
+			captureEvent({
+				extra: { clientId, serialNumber },
+				level: 'debug',
+				message: 'No devices registered for pass update',
+			})
+			return // No devices registered for this pass
+		}
+
+		// Update the pass update timestamp
+		await context.env.D1_TOLO.prepare(
+			'INSERT OR REPLACE INTO pass_updates (serial_number, pass_type_identifier, client_id, last_updated) VALUES (?, ?, ?, ?)',
+		)
+			.bind(
+				serialNumber,
+				'pass.cafe.tolo.app',
+				clientId,
+				new Date().toISOString(),
+			)
+			.run()
+
+		// Send push notifications to all registered devices via APNs
+		const pushTokens = registrations.map((r) => r.push_token)
+
+		captureEvent({
+			extra: {
+				clientId,
+				deviceCount: registrations.length,
+				pushTokens,
+				serialNumber,
+			},
+			level: 'info',
+			message: 'Pass update notification triggered - wallet balance updated',
+		})
+
+		// Send actual APNs push notifications
+		const apnsResult = await sendBatchAPNsNotifications(pushTokens, context.env)
+
+		// Log results
+		captureEvent({
+			extra: {
+				clientId,
+				deviceCount: registrations.length,
+				failed: apnsResult.failed,
+				results: apnsResult.results,
+				serialNumber,
+				successful: apnsResult.successful,
+			},
+			level: apnsResult.failed > 0 ? 'warning' : 'info',
+			message: `APNs notifications sent: ${apnsResult.successful} successful, ${apnsResult.failed} failed`,
+		})
+
+		// Handle failed notifications (e.g., invalid tokens)
+		if (apnsResult.failed > 0) {
+			const invalidTokens = apnsResult.results
+				.filter(
+					(result) =>
+						!result.success && result.error?.includes('BadDeviceToken'),
+				)
+				.map((result) => result.token)
+
+			if (invalidTokens.length > 0) {
+				// Remove invalid tokens from database
+				for (const invalidToken of invalidTokens) {
+					await context.env.D1_TOLO.prepare(
+						'DELETE FROM pass_registrations WHERE push_token = ?',
+					)
+						.bind(invalidToken)
+						.run()
+				}
+
+				captureEvent({
+					extra: { clientId, invalidTokens, serialNumber },
+					level: 'info',
+					message: 'Removed invalid device tokens from database',
+				})
+			}
+		}
+
+		addBreadcrumb({
+			data: {
+				clientId,
+				deviceCount: registrations.length,
+				serialNumber,
+				successfulNotifications: apnsResult.successful,
+			},
+			level: 'info',
+			message: 'Pass update notifications completed',
+		})
+	} catch (error) {
+		captureException(error)
+		captureEvent({
+			extra: {
+				clientId,
+				error: error instanceof Error ? error.message : 'Unknown',
+				serialNumber: `TOLO-${clientId.toString().padStart(8, '0')}`,
+			},
+			level: 'error',
+			message: 'Failed to send pass update notification',
+		})
+	}
+}
+
 const webhooks = new Hono<{ Bindings: Bindings }>()
 	.get('/poster', (context) => context.json({ message: 'Ok' }, 200))
+	.post('/passes/v1/log', (context) => {
+		captureEvent({
+			extra: { log: context.req.text() },
+			level: 'debug',
+			message: 'Passes log webhook received',
+		})
+
+		return context.json({ message: 'Ok' }, 200)
+	})
+	.delete(
+		'/passes/v1/devices/:deviceLibraryId/registrations/:passTypeIdentifier/:passId',
+		async (context) => {
+			const { deviceLibraryId, passId } = context.req.param()
+			const authToken = getApplePassAuthToken(context)
+
+			if (!authToken) {
+				return context.json({}, 401)
+			}
+
+			const clientId = extractClientIdFromPassId(passId)
+			if (!clientId) {
+				return context.json({}, 401)
+			}
+
+			try {
+				// Ensure tables exist
+				await ensurePassTables(context.env.D1_TOLO)
+
+				// Validate auth token
+				const authResult = await context.env.D1_TOLO.prepare(
+					'SELECT * FROM pass_auth_tokens WHERE client_id = ? AND auth_token = ?',
+				)
+					.bind(clientId, authToken)
+					.first()
+
+				if (!authResult) {
+					return context.json({}, 401)
+				}
+
+				// Delete registration
+				await context.env.D1_TOLO.prepare(
+					'DELETE FROM pass_registrations WHERE device_library_id = ? AND serial_number = ?',
+				)
+					.bind(deviceLibraryId, passId)
+					.run()
+
+				captureEvent({
+					extra: { clientId, deviceLibraryId, passId },
+					level: 'debug',
+					message: 'Pass registration deleted',
+				})
+
+				return context.json({}, 200)
+			} catch (error) {
+				captureException(error)
+				return context.json({}, 500)
+			}
+		},
+	)
+	.post(
+		'/passes/v1/devices/:deviceLibraryId/registrations/:passTypeIdentifier/:passId',
+		async (context) => {
+			const { deviceLibraryId, passId, passTypeIdentifier } =
+				context.req.param()
+			const authToken = getApplePassAuthToken(context)
+
+			if (!authToken) {
+				return context.json({}, 401)
+			}
+
+			const clientId = extractClientIdFromPassId(passId)
+			if (!clientId) {
+				return context.json({}, 401)
+			}
+
+			try {
+				// Ensure tables exist
+				await ensurePassTables(context.env.D1_TOLO)
+
+				// Validate auth token
+				const authResult = await context.env.D1_TOLO.prepare(
+					'SELECT * FROM pass_auth_tokens WHERE client_id = ? AND auth_token = ?',
+				)
+					.bind(clientId, authToken)
+					.first()
+
+				if (!authResult) {
+					return context.json({}, 401)
+				}
+
+				const { pushToken } = await context.req.json<{ pushToken: string }>()
+
+				// Check if already registered
+				const existing = await context.env.D1_TOLO.prepare(
+					'SELECT * FROM pass_registrations WHERE device_library_id = ? AND serial_number = ?',
+				)
+					.bind(deviceLibraryId, passId)
+					.first()
+
+				if (existing) {
+					// Update push token if changed
+					await context.env.D1_TOLO.prepare(
+						'UPDATE pass_registrations SET push_token = ? WHERE device_library_id = ? AND serial_number = ?',
+					)
+						.bind(pushToken, deviceLibraryId, passId)
+						.run()
+
+					captureEvent({
+						extra: { clientId, deviceLibraryId, passId, pushToken },
+						level: 'debug',
+						message: 'Pass registration updated',
+					})
+
+					return context.json({}, 200)
+				}
+
+				// New registration
+				await context.env.D1_TOLO.prepare(
+					'INSERT INTO pass_registrations (device_library_id, pass_type_identifier, serial_number, client_id, push_token, created_at) VALUES (?, ?, ?, ?, ?, ?)',
+				)
+					.bind(
+						deviceLibraryId,
+						passTypeIdentifier,
+						passId,
+						clientId,
+						pushToken,
+						new Date().toISOString(),
+					)
+					.run()
+
+				captureEvent({
+					extra: {
+						clientId,
+						deviceLibraryId,
+						passId,
+						passTypeIdentifier,
+						pushToken,
+					},
+					level: 'debug',
+					message: 'Pass registration created',
+				})
+
+				return context.json({}, 201)
+			} catch (error) {
+				captureException(error)
+				return context.json({}, 500)
+			}
+		},
+	)
+	// Get serial numbers of updated passes
+	.get(
+		'/passes/v1/devices/:deviceLibraryId/registrations/:passTypeIdentifier',
+		async (context) => {
+			const { deviceLibraryId, passTypeIdentifier } = context.req.param()
+			const passesUpdatedSince = context.req.query('passesUpdatedSince')
+
+			try {
+				// Ensure tables exist
+				await ensurePassTables(context.env.D1_TOLO)
+
+				let query = `
+					SELECT pr.serial_number, COALESCE(pu.last_updated, pr.created_at) as last_updated
+					FROM pass_registrations pr
+					LEFT JOIN pass_updates pu ON pr.serial_number = pu.serial_number
+					WHERE pr.device_library_id = ? AND pr.pass_type_identifier = ?
+				`
+				const parameters: string[] = [deviceLibraryId, passTypeIdentifier]
+
+				if (passesUpdatedSince) {
+					const sinceDate = new Date(
+						Number.parseInt(passesUpdatedSince) * 1000,
+					).toISOString()
+					query += ' AND COALESCE(pu.last_updated, pr.created_at) > ?'
+					parameters.push(sinceDate)
+				}
+
+				const { results } = await context.env.D1_TOLO.prepare(query)
+					.bind(...parameters)
+					.all<{ serial_number: string }>()
+
+				if (results.length === 0) {
+					return new Response(null, { status: 204 }) // No content
+				}
+
+				const serialNumbers = results.map((r) => r.serial_number)
+				const lastUpdated = Math.floor(Date.now() / 1000).toString()
+
+				captureEvent({
+					extra: {
+						deviceLibraryId,
+						lastUpdated,
+						passTypeIdentifier,
+						serialNumbers,
+					},
+					level: 'debug',
+					message: 'Pass serial numbers requested',
+				})
+
+				return context.json({
+					lastUpdated,
+					serialNumbers,
+				})
+			} catch (error) {
+				captureException(error)
+				return context.json({}, 500)
+			}
+		},
+	)
+	// Get latest version of a specific pass
+	.get(
+		'/passes/v1/passes/:passTypeIdentifier/:serialNumber',
+		async (context) => {
+			const { passTypeIdentifier, serialNumber } = context.req.param()
+			const authToken = getApplePassAuthToken(context)
+
+			if (!authToken) {
+				return context.json({}, 401)
+			}
+
+			const clientId = extractClientIdFromPassId(serialNumber)
+			if (!clientId) {
+				return context.json({}, 401)
+			}
+
+			try {
+				// Ensure tables exist
+				await ensurePassTables(context.env.D1_TOLO)
+
+				// Validate auth token
+				const authResult = await context.env.D1_TOLO.prepare(
+					'SELECT auth_token FROM pass_auth_tokens WHERE client_id = ?',
+				)
+					.bind(clientId)
+					.first()
+
+				if (!authResult || authResult.auth_token !== authToken) {
+					return context.json({}, 401)
+				}
+
+				// Get client data
+				const client = await api.clients.getClientById(
+					context.env.POSTER_TOKEN,
+					clientId,
+				)
+
+				if (!client) {
+					return context.json({}, 404)
+				}
+
+				// Generate updated pass with the SAME auth token from database
+				const pass = await getPass(context, authResult.auth_token, client)
+
+				// Update the last_updated timestamp
+				await context.env.D1_TOLO.prepare(
+					'INSERT OR REPLACE INTO pass_updates (serial_number, pass_type_identifier, client_id, last_updated) VALUES (?, ?, ?, ?)',
+				)
+					.bind(
+						serialNumber,
+						passTypeIdentifier,
+						clientId,
+						new Date().toISOString(),
+					)
+					.run()
+
+				captureEvent({
+					extra: { clientId, passTypeIdentifier, serialNumber },
+					level: 'debug',
+					message: 'Pass delivered to device',
+				})
+
+				return new Response(pass.getAsBuffer(), {
+					headers: {
+						'Content-Type': 'application/vnd.apple.pkpass',
+						'Last-Modified': new Date().toUTCString(),
+					},
+				})
+			} catch (error) {
+				captureException(error)
+				return context.json({}, 500)
+			}
+		},
+	)
 	.post('/stripe', async (context) => {
 		const signature = context.req.header('stripe-signature')
 
@@ -228,6 +676,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						level: 'debug',
 						message: 'Successfully processed payment and updated wallet',
 					})
+
+					// Send pass update notification to notify devices that wallet balance changed
+					await sendPassUpdateNotification(context, posterClientId)
 				} catch (error) {
 					captureException(error)
 

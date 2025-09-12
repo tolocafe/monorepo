@@ -54,15 +54,6 @@ export const signOutMutationOptions = mutationOptions({
 
 		if (Platform.OS !== 'web') {
 			await deleteItemAsync(STORAGE_KEYS.AUTH_SESSION)
-
-			try {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				const RCTNetworking = require('RCTNetworking')
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-				void RCTNetworking.clearCookies(() => null)
-			} catch {
-				//
-			}
 		}
 	},
 	mutationKey: ['auth', 'sign-out'],

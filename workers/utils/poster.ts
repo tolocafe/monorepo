@@ -35,15 +35,17 @@ export async function posterFetch<TResponse>(
 ) {
 	const currentScope = getCurrentScope()
 
-	currentScope
-		.setExtra('Fetch URL', `${BASE_URL}${url}`)
-		.setExtra('Fetch Body', options.body)
+	currentScope.setContext('Fetch Request', {
+		Body: options.body,
+		Method: options.method,
+		URL: `${BASE_URL}${url}`,
+	})
 
 	const data = (await fetch(`${BASE_URL}${url}`, options).then((response) =>
 		response.json(),
 	)) as PosterResponse<TResponse>
 
-	currentScope.setExtra('Fetch Data', data)
+	currentScope.setContext('Fetch Response', { Data: data })
 
 	if (data.response != null) return data.response
 
@@ -83,7 +85,10 @@ export const api = {
 				client_id: number
 			},
 		) {
-			const parsedBody = { ...body, amount: body.amount / 100 }
+			const parsedBody = {
+				amount: body.amount / 100,
+				client_id: body.client_id,
+			}
 
 			return posterFetch<number>(
 				`/clients.addEWalletTransaction?token=${token}`,
@@ -140,7 +145,7 @@ export const api = {
 		},
 		async updateClient(
 			token: string,
-			clientId: string,
+			clientId: number,
 			body: UpdateClientBody,
 		) {
 			return posterFetch<number>(`/clients.updateClient?token=${token}`, {
@@ -168,7 +173,7 @@ export const api = {
 		},
 		async getTransactions(token: string, clientId: number) {
 			return posterFetch<number[]>(
-				`/dash.getTransactions?token=${token}&type=clients&id=${clientId}&include_x=true`,
+				`/dash.getTransactions?token=${token}&type=clients&id=${clientId}`,
 				{
 					defaultErrorMessage: 'Failed to get transactions',
 					headers: { 'Content-Type': 'application/json' },
@@ -221,7 +226,10 @@ export const api = {
 	incomingOrders: {
 		async createIncomingOrder(
 			token: string,
-			body: Omit<CreateOrder, 'payment'> & {
+			{
+				serviceMode,
+				...body
+			}: Omit<CreateOrder, 'payment'> & {
 				payment: { sum: string; type: 1 }
 			},
 			clientId: number,
@@ -229,7 +237,7 @@ export const api = {
 			const finalOrderData = {
 				...body,
 				client_id: clientId,
-				service_mode: 2,
+				service_mode: serviceMode,
 				spot_id: 1,
 			}
 

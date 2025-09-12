@@ -88,6 +88,7 @@ const lightTheme = {
 		xl: 24,
 		xs: 4,
 		xxl: 32,
+		xxs: 2,
 	} as const,
 	typography: {
 		body: {
@@ -113,7 +114,7 @@ const lightTheme = {
 		},
 		h3: {
 			fontSize: 20,
-			fontWeight: '800',
+			fontWeight: '700',
 		},
 		h4: {
 			fontSize: 18,
