@@ -1,31 +1,63 @@
-import type { ComponentProps } from 'react'
+import { type ComponentProps, useCallback } from 'react'
 import { TextInput as RNTextInput } from 'react-native'
 
-import { StyleSheet } from 'react-native-unistyles'
+import { MaskedTextInput } from 'react-native-mask-text'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 export type InputProps = ComponentProps<typeof RNTextInput> & {
 	borderless?: boolean
 	error?: boolean
+	mask?: string
 }
+
+const UniMaskedTextInput = withUnistyles(MaskedTextInput, (theme) => ({
+	placeholderTextColor: theme.colors.gray.interactive,
+	style: {
+		backgroundColor: theme.colors.gray.background,
+		borderColor: theme.colors.gray.border,
+		borderRadius: theme.borderRadius.md,
+		borderWidth: 1,
+		color: theme.colors.gray.text,
+		fontSize: theme.fontSizes.md,
+		paddingHorizontal: theme.spacing.md,
+		paddingVertical: theme.spacing.sm,
+	},
+}))
 
 export function Input({
 	borderless,
 	error = false,
+	mask,
 	style,
 	...rest
 }: InputProps) {
-	styles.useVariants({ borderless })
+	styles.useVariants({
+		borderless,
+		hasError: error,
+		isMultiline: rest.multiline,
+	})
+
+	const handleMaskTextChange = useCallback((_text: string, rawText: string) => {
+		rest.onChangeText?.(rawText)
+		// eslint-disable-next-line react-compiler/react-compiler
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	if (mask) {
+		return (
+			<UniMaskedTextInput
+				mask={mask}
+				{...rest}
+				onChangeText={handleMaskTextChange}
+			/>
+		)
+	}
 
 	return (
 		<RNTextInput
 			placeholderTextColor={styles.placeholder.color}
 			{...rest}
-			style={[
-				styles.base,
-				error && styles.error,
-				rest.multiline && styles.multiline,
-				style,
-			]}
+			style={[styles.base, style]}
 		/>
 	)
 }
@@ -52,15 +84,19 @@ const styles = StyleSheet.create((theme) => ({
 					borderWidth: 0,
 				},
 			},
+			hasError: {
+				true: {
+					borderColor: theme.colors.rojo.solid,
+				},
+			},
+			isMultiline: {
+				true: {
+					minHeight: 80,
+					paddingVertical: theme.spacing.md,
+					textAlignVertical: 'top',
+				},
+			},
 		},
-	},
-	error: {
-		borderColor: theme.colors.rojo.solid,
-	},
-	multiline: {
-		minHeight: 80,
-		paddingVertical: theme.spacing.md,
-		textAlignVertical: 'top',
 	},
 	placeholder: {
 		color: theme.colors.crema.solid,

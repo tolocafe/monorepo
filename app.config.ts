@@ -55,6 +55,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		'expo-updates',
 		'expo-notifications',
 		'@react-native-firebase/app',
+		'./plugins/withAppBuildGradlePlugin',
 		['expo-router', { headOrigin: 'https://app.tolo.cafe' }],
 		['react-native-bottom-tabs', { theme: 'material3-dynamic' }],
 		['react-native-edge-to-edge', { android: { parentTheme: 'Material3' } }],

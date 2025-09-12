@@ -360,6 +360,7 @@ export default function SignIn() {
 												field.state.meta.errors.length > 0
 											}
 											keyboardType="numeric"
+											mask="99/99/99999"
 											maxLength={10}
 											onBlur={field.handleBlur}
 											onChangeText={field.handleChange}

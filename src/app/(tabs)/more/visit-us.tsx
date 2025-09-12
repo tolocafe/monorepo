@@ -35,12 +35,10 @@ export default function VisitUs() {
 							<Trans>TOLO - Good Coffee</Trans>
 						</Text>
 						<Label style={styles.cardText}>
-							<Trans>Boulevard José María Pino Suárez 800</Trans>
+							<Trans>
+								Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico
+							</Trans>
 						</Label>
-						<Label style={styles.cardText}>
-							<Trans>Altamirano, 50130 Toluca, Edo. Méx., Mexico</Trans>
-						</Label>
-
 						<View style={styles.hoursContainer}>
 							<H3 style={styles.hoursTitle}>
 								<Trans>Hours</Trans>
@@ -50,7 +48,7 @@ export default function VisitUs() {
 									<Trans>Monday – Friday</Trans>
 								</Label>
 								<Label style={styles.hoursText}>
-									<Trans>9:00 AM – 5:00 PM</Trans>
+									<Trans>7:30 AM – 7:30 PM</Trans>
 								</Label>
 							</View>
 							<View style={styles.hoursRow}>
@@ -58,7 +56,7 @@ export default function VisitUs() {
 									<Trans>Saturday</Trans>
 								</Label>
 								<Label style={styles.hoursText}>
-									<Trans>Closed</Trans>
+									<Trans>9:00 AM – 4:00 PM</Trans>
 								</Label>
 							</View>
 							<View style={styles.hoursRow}>

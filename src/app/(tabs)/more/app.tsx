@@ -9,7 +9,6 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import HeaderGradient from '@/components/HeaderGradient'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { useUpdates } from '@/lib/hooks/use-updates'
@@ -83,7 +82,6 @@ export default function AppInfoScreen() {
 				<meta content={t`App - TOLO`} property="og:title" />
 				<meta content="/more/app" property="og:url" />
 			</Head>
-			<HeaderGradient />
 			<ScreenContainer contentContainerStyle={styles.scrollContent}>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
