@@ -1,4 +1,5 @@
 import type { ComponentProps } from 'react'
+import { Platform } from 'react-native'
 
 import {
 	addPass as RNAddPass,
@@ -15,5 +16,7 @@ export function addPass(url: string) {
 const UniWalletView = withUnistyles(RNWalletView)
 
 export default function WalletButton(props: Props) {
+	if (Platform.OS === 'macos') return null
+
 	return <UniWalletView {...props} />
 }
