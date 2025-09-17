@@ -12,7 +12,7 @@ import { HTTPException } from 'hono/http-exception'
 import { trackServerEvent } from 'workers/utils/analytics'
 import { sendBatchAPNsNotifications } from 'workers/utils/apns'
 import getPass from 'workers/utils/generate-pass'
-import { api } from 'workers/utils/poster'
+import { api, sendSms } from 'workers/utils/poster'
 import { getStripe } from 'workers/utils/stripe'
 import { z } from 'zod/v4'
 
@@ -818,6 +818,21 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					},
 					userId: client.client_id,
 				})
+
+				// Send review prompt
+
+				const transactions = await api.dash.getTransactions(
+					context.env.POSTER_TOKEN,
+					Number.parseInt(client.client_id, 10),
+				)
+
+				if (transactions.length === 1) {
+					await sendSms(
+						context.env.POSTER_TOKEN,
+						client.phone,
+						'[TOLO] Nos regalas un minuto? Deja tu reseña sobre nosotros en https://tolo.cafe/escribe-una-resena',
+					)
+				}
 
 				break
 			}
