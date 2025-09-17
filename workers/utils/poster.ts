@@ -143,6 +143,22 @@ export const api = {
 				.then((response) => response.at(0) ?? null)
 				.catch(() => null)
 		},
+		async getClients(
+			token: string,
+			{
+				num: number_ = 100,
+				offset = 0,
+			}: { num?: number; offset?: number } = {},
+		) {
+			return posterFetch<ClientData[]>(
+				`/clients.getClients?${new URLSearchParams({ num: number_.toString(), offset: offset.toString(), token })}`,
+				{
+					defaultErrorMessage: 'Failed to get clients',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'GET',
+				},
+			)
+		},
 		async updateClient(
 			token: string,
 			clientId: number,
