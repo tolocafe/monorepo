@@ -25,13 +25,13 @@ export function formatPrice(value: number | string): string {
 }
 
 export function getProductBaseCost<TFormat extends false | true | undefined>(
-	product: Product,
+	product: null | Product,
 	format: TFormat = true as TFormat,
 ): TFormat extends false ? number : string {
 	const cost = Number(
-		'modifications' in product
+		typeof product === 'object' && product && 'modifications' in product
 			? (product.modifications?.at(0)?.spots.at(0)?.price as string)
-			: (Object.values(product.price ?? {}).at(0) as string),
+			: (Object.values(product?.price ?? {}).at(0) as string),
 	)
 
 	if (!format) {
