@@ -5,6 +5,7 @@ import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 
 import auth from './routes/auth'
+import broadcast from './routes/broadcast'
 import clients from './routes/clients'
 import menu from './routes/menu'
 import orders from './routes/orders'
@@ -67,6 +68,7 @@ app
 	.route('/orders', orders)
 	.route('/webhooks', webhooks)
 	.route('/passes', passes)
+	.route('/broadcast', broadcast)
 	.all('*', (context) => {
 		captureEvent({
 			extra: {
