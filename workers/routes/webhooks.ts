@@ -477,7 +477,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					message: 'Pass delivered to device',
 				})
 
-				return new Response(pass.getAsBuffer(), {
+				return new Response(pass.getAsBuffer() as unknown as BodyInit, {
 					headers: {
 						'Content-Type': 'application/vnd.apple.pkpass',
 						'Last-Modified': new Date().toUTCString(),

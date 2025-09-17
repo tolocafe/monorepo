@@ -129,7 +129,14 @@ export default async function getPass(
 	pass.setLocations({
 		latitude: 19.279_918,
 		longitude: -99.648_828,
-		relevantText: 'Toluca',
+		relevantText: 'Pino Suárez, Toluca',
+	})
+
+	pass.setBeacons({
+		major: 1,
+		minor: 1,
+		proximityUUID: 'FDA50693A4E24FB1AFCFC6EB07647825',
+		relevantText: 'Carrito de Café',
 	})
 
 	return pass
