@@ -830,7 +830,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					await sendSms(
 						context.env.POSTER_TOKEN,
 						client.phone,
-						'[TOLO] Nos regalas un minuto? Deja tu reseña sobre nosotros en https://tolo.cafe/escribe-una-resena',
+						'[TOLO] Nos regalas un minuto? Deja tu reseña sobre nosotros en https://l.tolo.cafe/resena',
 					)
 				}
 
