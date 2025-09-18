@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react'
+import type { ReactElement, ReactNode } from 'react'
 import { Children, isValidElement } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 
@@ -49,11 +49,12 @@ export type ListProps = {
 
 export function List({ children, style, testID }: ListProps) {
 	const items = Children.toArray(children).filter(
-		(child) => typeof child !== 'boolean',
-	)
+		(child) => typeof child !== 'boolean' && isValidElement(child),
+	) as ReactElement[]
+
 	return (
 		<Card style={style} testID={testID}>
-			{items.map((child, index) => {
+			{items.map((child, index, items) => {
 				const key =
 					isValidElement(child) && child.key != null ? child.key : index
 
@@ -207,7 +208,6 @@ const styles = StyleSheet.create((theme) => ({
 		},
 	},
 	label: {
-		flex: 1,
 		fontWeight: '600',
 		variants: {
 			labelColor: {

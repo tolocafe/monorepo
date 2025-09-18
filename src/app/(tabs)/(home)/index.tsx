@@ -234,8 +234,8 @@ function MenuListItem({
 								placeholderContentFit="cover"
 								source={{
 									uri: getImageUrl(item.photo, {
-										quality: 80,
-										width: 350,
+										quality: 85,
+										width: 400,
 									}),
 								}}
 								style={styles.image}

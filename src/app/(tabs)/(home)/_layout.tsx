@@ -23,6 +23,7 @@ export default function HomeLayout() {
 				options={{
 					headerTintColor: 'white',
 					headerTransparent: true,
+					presentation: 'modal',
 					title: '',
 				}}
 			/>

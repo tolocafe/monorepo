@@ -3,5 +3,5 @@ export function addPass() {
 }
 
 export default function WalletButton() {
-	return null
+	return false
 }

@@ -3,6 +3,7 @@ import type { ScrollView } from 'react-native'
 import {
 	Alert,
 	Linking,
+	Platform,
 	RefreshControl,
 	TouchableOpacity,
 	View,
@@ -164,10 +165,12 @@ export default function More() {
 									<Trans>Top Up Wallet</Trans>
 								</ListItem.Label>
 							</ListItem>
-							<WalletButton
-								onPress={handleAddPass}
-								style={styles.walletButton}
-							/>
+							{Platform.OS === 'ios' && (
+								<WalletButton
+									onPress={handleAddPass}
+									style={styles.walletButton}
+								/>
+							)}
 						</List>
 					</View>
 				)}

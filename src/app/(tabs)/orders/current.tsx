@@ -308,7 +308,6 @@ export default function OrderDetail() {
 					),
 				}}
 			/>
-
 			<ScreenContainer contentContainerStyle={styles.container} keyboardAware>
 				{user && (
 					<Card style={styles.walletCard}>
