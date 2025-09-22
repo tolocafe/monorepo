@@ -19,17 +19,13 @@ msgid "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status4
 msgstr "{0, select, Status10 {開始} Status20 {準備中} Status30 {準備完了} Status40 {配送中} Status50 {配送完了} Status60 {閉店} Status70 {削除済み} other {不明}}"
 
 #. placeholder {0}: product.product_name
-#: src/app/(tabs)/(home)/[id].tsx:151
+#: src/app/(tabs)/(home)/[id].tsx:191
 msgid "{0} - TOLO Good Coffee"
 msgstr "{0} - TOLOグッドコーヒー"
 
 #: src/app/(tabs)/orders/index.tsx:138
 msgid "{itemsCount} items"
 msgstr ""
-
-#: src/app/(tabs)/orders/index.tsx:131
-#~ msgid "{totalItems} items"
-#~ msgstr "{totalItems}個の商品"
 
 #: src/containers/top-up-screen.tsx:248
 msgid ""
@@ -51,20 +47,16 @@ msgstr ""
 msgid "9:00 AM – 4:00 PM"
 msgstr ""
 
-#: src/app/(tabs)/more/visit-us.tsx:53
-#~ msgid "9:00 AM – 5:00 PM"
-#~ msgstr "午前9:00 – 午後5:00"
-
 #: src/app/(tabs)/more/index.tsx:179
-#: src/app/(tabs)/more/profile.tsx:241
+#: src/app/(tabs)/more/profile.tsx:240
 msgid "Account"
 msgstr "アカウント"
 
-#: src/app/(tabs)/more/sessions.tsx:52
+#: src/app/(tabs)/more/sessions.tsx:51
 msgid "Active Sessions"
 msgstr "アクティブセッション"
 
-#: src/app/(tabs)/orders/current.tsx:362
+#: src/app/(tabs)/orders/current.tsx:361
 msgid "Add any special instructions..."
 msgstr "特別な指示を追加..."
 
@@ -73,21 +65,17 @@ msgid "Add funds to your TOLO wallet for quick and easy payments."
 msgstr "TOLO Walletに資金を追加して、簡単で迅速なお支払いを。"
 
 #. placeholder {0}: formatPrice(totalCost)
-#: src/app/(tabs)/(home)/[id].tsx:401
+#: src/app/(tabs)/(home)/[id].tsx:464
 msgid "Add to Order - {0}"
 msgstr "注文に追加 - {0}"
 
-#: src/app/(tabs)/orders/current.tsx:344
+#: src/app/(tabs)/orders/current.tsx:343
 msgid "Additional"
 msgstr "追加"
 
 #: src/app/(tabs)/more/app.tsx:51
 msgid "All cached data has been cleared successfully."
 msgstr "すべてのキャッシュデータが正常にクリアされました。"
-
-#: src/app/(tabs)/more/visit-us.tsx:41
-#~ msgid "Altamirano, 50130 Toluca, Edo. Méx., Mexico"
-#~ msgstr "Altamirano, 50130 Toluca, Edo. Méx., メキシコ"
 
 #: src/app/(tabs)/more/_layout.tsx:21
 #: src/app/(tabs)/more/index.tsx:353
@@ -99,10 +87,6 @@ msgstr "App"
 msgid "App - TOLO"
 msgstr "App - TOLO"
 
-#: src/app/(tabs)/more/app.tsx:88
-#~ msgid "App Information"
-#~ msgstr "App情報"
-
 #: src/app/(tabs)/more/visit-us.tsx:77
 msgid "Apple Maps"
 msgstr "Apple Maps"
@@ -111,21 +95,17 @@ msgstr "Apple Maps"
 msgid "Are you sure you want to clear this order? This action cannot be undone."
 msgstr "この注文をクリアしてもよろしいですか？この操作は元に戻すことができません。"
 
-#: src/app/(tabs)/more/profile.tsx:104
+#: src/app/(tabs)/more/profile.tsx:103
 msgid "Are you sure you want to sign out?"
 msgstr "サインアウトしてもよろしいですか？"
 
-#: src/app/(tabs)/more/index.tsx:153
+#: src/app/(tabs)/more/index.tsx:152
 msgid "Balance"
 msgstr "残高"
 
-#: src/app/(tabs)/more/profile.tsx:189
+#: src/app/(tabs)/more/profile.tsx:188
 msgid "Birthdate"
 msgstr "生年月日"
-
-#: src/app/(tabs)/more/visit-us.tsx:38
-#~ msgid "Boulevard José María Pino Suárez 800"
-#~ msgstr "Boulevard José María Pino Suárez 800"
 
 #: src/app/(tabs)/more/visit-us.tsx:38
 msgid "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
@@ -136,7 +116,7 @@ msgid "Cache cleared"
 msgstr "キャッシュをクリアしました"
 
 #: src/app/(tabs)/more/app.tsx:40
-#: src/app/(tabs)/more/profile.tsx:105
+#: src/app/(tabs)/more/profile.tsx:104
 #: src/app/(tabs)/orders/current.tsx:163
 #: src/app/(tabs)/orders/current.tsx:209
 #: src/app/(tabs)/orders/current.tsx:306
@@ -217,12 +197,12 @@ msgstr "現在の注文"
 msgid "Date of birth (optional)"
 msgstr "生年月日（任意）"
 
-#: src/app/(tabs)/more/profile.tsx:210
+#: src/app/(tabs)/more/profile.tsx:209
 #: src/app/sign-in.tsx:367
 msgid "DD/MM/YYYY"
 msgstr "DD/MM/YYYY"
 
-#: src/app/(tabs)/more/profile.tsx:259
+#: src/app/(tabs)/more/profile.tsx:258
 msgid "Delete"
 msgstr "削除"
 
@@ -238,15 +218,15 @@ msgstr "エスプレッソ、ラテ、カプチーノ、おいしいサイドメ
 msgid "Edit Profile"
 msgstr "プロフィールを編集"
 
-#: src/app/(tabs)/more/profile.tsx:162
+#: src/app/(tabs)/more/profile.tsx:161
 msgid "Email"
 msgstr "Email"
 
-#: src/app/(tabs)/more/profile.tsx:43
+#: src/app/(tabs)/more/profile.tsx:42
 msgid "Enter a valid date (YYYY-MM-DD)"
 msgstr "有効な日付を入力してください (YYYY-MM-DD)"
 
-#: src/app/(tabs)/more/profile.tsx:38
+#: src/app/(tabs)/more/profile.tsx:37
 msgid "Enter a valid email"
 msgstr "有効なEmailを入力してください"
 
@@ -258,7 +238,7 @@ msgstr "電話番号でアカウントにログインするか、新しいアカ
 msgid "Enter verification code"
 msgstr "認証コードを入力"
 
-#: src/app/(tabs)/more/profile.tsx:153
+#: src/app/(tabs)/more/profile.tsx:152
 msgid "Enter your first name"
 msgstr "お名前を入力してください"
 
@@ -267,7 +247,7 @@ msgid "Enter your full name"
 msgstr "フルネームを入力してください"
 
 #: src/app/(tabs)/more/app.tsx:61
-#: src/app/(tabs)/more/profile.tsx:88
+#: src/app/(tabs)/more/profile.tsx:87
 #: src/app/(tabs)/orders/current.tsx:88
 #: src/app/sign-in.tsx:156
 #: src/app/sign-in.tsx:164
@@ -279,7 +259,7 @@ msgstr "フルネームを入力してください"
 msgid "Error"
 msgstr "エラー"
 
-#: src/app/(tabs)/more/profile.tsx:86
+#: src/app/(tabs)/more/profile.tsx:85
 msgid "Error signing out. Please try again."
 msgstr "サインアウトエラー。もう一度お試しください。"
 
@@ -304,13 +284,9 @@ msgstr "コードの送信に失敗しました"
 msgid "Failed to submit order. Please try again."
 msgstr "注文の送信に失敗しました。もう一度お試しください。"
 
-#: src/app/(tabs)/more/profile.tsx:137
+#: src/app/(tabs)/more/profile.tsx:136
 msgid "First name"
 msgstr "名前"
-
-#: src/app/(tabs)/(home)/index.tsx:256
-#~ msgid "From {0}"
-#~ msgstr ""
 
 #: src/app/(tabs)/(home)/index.tsx:255
 msgid "From {cost}"
@@ -339,13 +315,9 @@ msgid "In Progress"
 msgstr "進行中"
 
 #: src/app/(tabs)/more/app.tsx:88
-#: src/app/(tabs)/more/profile.tsx:132
+#: src/app/(tabs)/more/profile.tsx:131
 msgid "Information"
 msgstr "情報"
-
-#: src/app/(tabs)/(home)/[id].tsx:235
-msgid "Ingredients"
-msgstr "原材料"
 
 #: src/app/(tabs)/orders/current.tsx:154
 msgid "Insufficient Balance"
@@ -355,7 +327,7 @@ msgstr "残高不足"
 msgid "Invalid verification code"
 msgstr "無効な認証コード"
 
-#: src/app/(tabs)/orders/current.tsx:325
+#: src/app/(tabs)/orders/current.tsx:324
 msgid "Items"
 msgstr "商品"
 
@@ -371,7 +343,7 @@ msgstr "電話番号<0>{phoneNumber}</0>でアカウントを作成しましょ�
 msgid "Loading menu..."
 msgstr "メニューを読み込み中..."
 
-#: src/app/(tabs)/more/sessions.tsx:64
+#: src/app/(tabs)/more/sessions.tsx:63
 msgid "Loading sessions..."
 msgstr "セッションを読み込み中..."
 
@@ -388,11 +360,7 @@ msgstr "読み込み中..."
 msgid "Maintenance"
 msgstr "メンテナンス"
 
-#: src/app/(tabs)/more/profile.tsx:265
-#~ msgid "Manage Sessions"
-#~ msgstr ""
-
-#: src/app/(tabs)/orders/current.tsx:352
+#: src/app/(tabs)/orders/current.tsx:351
 msgid "Maximum length is 2000 characters"
 msgstr "最大2000文字です"
 
@@ -409,8 +377,8 @@ msgstr "メニュー - TOLOグッドコーヒー"
 msgid "Mexico (+52)"
 msgstr "メキシコ (+52)"
 
-#: src/app/(tabs)/(home)/[id].tsx:255
-#: src/app/(tabs)/(home)/[id].tsx:344
+#: src/app/(tabs)/(home)/[id].tsx:318
+#: src/app/(tabs)/(home)/[id].tsx:407
 msgid "Modifications"
 msgstr "カスタマイズ"
 
@@ -429,11 +397,11 @@ msgstr "その他"
 msgid "Name"
 msgstr "名前"
 
-#: src/app/(tabs)/more/profile.tsx:180
+#: src/app/(tabs)/more/profile.tsx:179
 msgid "name@example.com"
 msgstr "name@example.com"
 
-#: src/app/(tabs)/more/sessions.tsx:84
+#: src/app/(tabs)/more/sessions.tsx:83
 msgid "No active sessions found."
 msgstr "アクティブなセッションが見つかりませんでした。"
 
@@ -473,10 +441,6 @@ msgstr "注文しました"
 msgid "Orders"
 msgstr "注文"
 
-#: src/containers/top-up-screen.tsx:247
-#~ msgid "Pay{0}"
-#~ msgstr "支払い{0}"
-
 #: src/containers/top-up-screen.tsx:143
 msgid "Payment Failed"
 msgstr "決済失敗"
@@ -493,7 +457,7 @@ msgstr "電話"
 msgid "Phone number"
 msgstr "電話番号"
 
-#: src/app/(tabs)/more/profile.tsx:36
+#: src/app/(tabs)/more/profile.tsx:35
 msgid "Please enter your name"
 msgstr "お名前を入力してください"
 
@@ -509,18 +473,22 @@ msgstr "注文履歴を表示するにはサインインしてください"
 msgid "Processing Payment..."
 msgstr "決済処理中..."
 
-#: src/app/(tabs)/(home)/[id].tsx:136
+#: src/app/(tabs)/(home)/[id].tsx:176
 msgid "Product not found"
 msgstr "商品が見つかりません"
 
 #: src/app/(tabs)/more/_layout.tsx:23
-#: src/app/(tabs)/more/profile.tsx:118
+#: src/app/(tabs)/more/profile.tsx:117
 msgid "Profile"
 msgstr "プロフィール"
 
-#: src/app/(tabs)/(home)/[id].tsx:364
+#: src/app/(tabs)/(home)/[id].tsx:427
 msgid "Quantity"
 msgstr "数量"
+
+#: src/app/(tabs)/(home)/[id].tsx:302
+msgid "Recipe"
+msgstr ""
 
 #: src/app/(tabs)/(home)/index.tsx:138
 msgid "Retry"
@@ -530,23 +498,19 @@ msgstr "再試行"
 msgid "Runtime"
 msgstr "ランタイム"
 
-#: src/app/(tabs)/more/app.tsx:109
-#~ msgid "Runtime Version"
-#~ msgstr "ランタイムバージョン"
-
 #: src/app/(tabs)/more/visit-us.tsx:56
 msgid "Saturday"
 msgstr "土曜日"
 
-#: src/app/(tabs)/more/profile.tsx:231
+#: src/app/(tabs)/more/profile.tsx:230
 msgid "Save"
 msgstr "保存"
 
-#: src/app/(tabs)/more/profile.tsx:55
+#: src/app/(tabs)/more/profile.tsx:54
 msgid "Saved"
 msgstr "保存しました"
 
-#: src/app/(tabs)/more/profile.tsx:229
+#: src/app/(tabs)/more/profile.tsx:228
 msgid "Saving..."
 msgstr "保存中..."
 
@@ -554,17 +518,17 @@ msgstr "保存中..."
 msgid "Select Amount"
 msgstr "金額を選択"
 
-#: src/app/(tabs)/orders/current.tsx:387
+#: src/app/(tabs)/orders/current.tsx:386
 msgid "Send Order"
 msgstr "注文する"
 
-#: src/app/(tabs)/orders/current.tsx:385
+#: src/app/(tabs)/orders/current.tsx:384
 msgid "Sending Order..."
 msgstr "注文送信中..."
 
 #: src/app/(tabs)/more/_layout.tsx:24
-#: src/app/(tabs)/more/profile.tsx:250
-#: src/app/(tabs)/more/sessions.tsx:36
+#: src/app/(tabs)/more/profile.tsx:249
+#: src/app/(tabs)/more/sessions.tsx:35
 msgid "Sessions"
 msgstr "セッション"
 
@@ -589,9 +553,9 @@ msgstr "「{itemName}」をカートに追加するにはサインインして�
 msgid "Sign in to view your account information and access personalized features."
 msgstr "アカウント情報を表示し、パーソナライズ機能にアクセスするにはサインインしてください。"
 
-#: src/app/(tabs)/more/profile.tsx:104
-#: src/app/(tabs)/more/profile.tsx:109
-#: src/app/(tabs)/more/profile.tsx:264
+#: src/app/(tabs)/more/profile.tsx:103
+#: src/app/(tabs)/more/profile.tsx:108
+#: src/app/(tabs)/more/profile.tsx:263
 msgid "Sign Out"
 msgstr "サインアウト"
 
@@ -615,11 +579,11 @@ msgstr "ありがとうございます！すぐに準備を開始いたします
 msgid "The requested order could not be found."
 msgstr "リクエストされた注文が見つかりませんでした。"
 
-#: src/app/(tabs)/(home)/[id].tsx:139
+#: src/app/(tabs)/(home)/[id].tsx:179
 msgid "The requested product could not be loaded."
 msgstr "リクエストされた商品を読み込めませんでした。"
 
-#: src/app/(tabs)/more/sessions.tsx:55
+#: src/app/(tabs)/more/sessions.tsx:54
 msgid "These are the devices and browsers currently signed in to your account."
 msgstr "これらは現在あなたのアカウントにサインインしているデバイスとブラウザです。"
 
@@ -645,7 +609,7 @@ msgstr "チャージ"
 msgid "Top Up - TOLO"
 msgstr "チャージ - TOLO"
 
-#: src/app/(tabs)/more/index.tsx:166
+#: src/app/(tabs)/more/index.tsx:164
 msgid "Top Up Wallet"
 msgstr "Walletをチャージ"
 
@@ -653,7 +617,7 @@ msgstr "Walletをチャージ"
 msgid "Top Up With Card"
 msgstr "カードでチャージ"
 
-#: src/app/(tabs)/orders/current.tsx:334
+#: src/app/(tabs)/orders/current.tsx:333
 msgid "Total"
 msgstr "合計"
 
@@ -661,17 +625,9 @@ msgstr "合計"
 msgid "TripAdvisor"
 msgstr "TripAdvisor"
 
-#: src/app/(tabs)/orders/current.tsx:269
-#~ msgid "Unavailable"
-#~ msgstr "利用不可"
-
 #: src/components/phone-number-input/index.tsx:79
 msgid "United States (+1)"
 msgstr "アメリカ (+1)"
-
-#: src/app/(tabs)/more/app.tsx:102
-#~ msgid "Update Channel"
-#~ msgstr "アップデートチャンネル"
 
 #: src/app/(tabs)/more/app.tsx:129
 msgid "Update Created At"
@@ -715,11 +671,11 @@ msgstr "店舗情報"
 msgid "Visit Us - TOLO Good Coffee"
 msgstr "店舗情報 - TOLOグッドコーヒー"
 
-#: src/app/(tabs)/more/index.tsx:147
+#: src/app/(tabs)/more/index.tsx:146
 msgid "Wallet"
 msgstr "Wallet"
 
-#: src/app/(tabs)/orders/current.tsx:316
+#: src/app/(tabs)/orders/current.tsx:315
 #: src/containers/top-up-screen.tsx:200
 msgid "Wallet Balance"
 msgstr "Wallet残高"
@@ -749,14 +705,10 @@ msgstr "Walletの残高が不足です。まずWalletをチャージしてくだ
 msgid "Your order history will appear here"
 msgstr "ご注文履歴がここに表示されます"
 
-#: src/app/(tabs)/more/profile.tsx:53
+#: src/app/(tabs)/more/profile.tsx:52
 msgid "Your profile has been updated."
 msgstr "プロフィールが更新されました。"
 
 #: src/containers/top-up-screen.tsx:153
 msgid "Your wallet has been topped up successfully!"
 msgstr "Walletのチャージが成功しました！"
-
-#: src/app/(tabs)/more/profile.tsx:213
-#~ msgid "YYYY-MM-DD"
-#~ msgstr "YYYY-MM-DD"
