@@ -155,7 +155,6 @@ export default function More() {
 									{formatPrice(user.ewallet ?? '0')}
 								</ListItem.Text>
 							</ListItem>
-
 							<ListItem
 								accessibilityRole="link"
 								centered

@@ -138,6 +138,7 @@ export type Product = {
 	cooking_time: string
 	cost: string
 	cost_netto: string
+	description?: string
 	different_spots_prices: string
 	fiscal: string
 	group_modifications?: PosterModificationGroup[]
@@ -158,6 +159,7 @@ export type Product = {
 	product_production_description: string
 	product_tax_id: string
 	profit: Record<string, string>
+	recipe?: string
 	'small-description'?: string
 	sort_order: string
 	sources: unknown[]

@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import {
 	ActivityIndicator,
 	Platform,
@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useAutoheight } from '@formidable-webview/webshell'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useQuery } from '@tanstack/react-query'
@@ -27,9 +28,11 @@ import { Button } from '@/components/Button'
 import HeaderGradient from '@/components/HeaderGradient'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H1, H2, H3, Label, Paragraph, Text } from '@/components/Text'
+import WebContent from '@/components/WebContent'
 import { trackEvent } from '@/lib/analytics/firebase'
 import { getImageUrl } from '@/lib/image'
 import { useTabBarHeight } from '@/lib/navigation/tab-bar-height'
+import { selfQueryOptions } from '@/lib/queries/auth'
 import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
 import { api } from '@/lib/services/api-service'
@@ -53,16 +56,34 @@ const linearGradientColors = [
 
 const UniImage = withUnistyles(Image)
 
+const config = {
+	initialHeight: 50,
+	webshellProps: {
+		contentMode: 'mobile' as const,
+		disableScrollViewPanResponder: true,
+		javaScriptEnabled: false,
+		scalesPageToFit: true,
+		showsVerticalScrollIndicator: false,
+		style: {
+			backgroundColor: 'transparent',
+		},
+		webshellDebug: false,
+	},
+} satisfies Parameters<typeof useAutoheight>[0]
+
 // eslint-disable-next-line unicorn/prevent-abbreviations
 export async function generateStaticParams() {
 	const products = await api.menu.getProducts()
 	return products.map((products) => ({ id: products.product_id }))
 }
 
+const RECIPE_GROUPS = new Set([8, 9])
+
 export default function MenuDetail() {
 	const { t } = useLingui()
 	const tabBarHeight = useTabBarHeight()
 	const { id } = useLocalSearchParams<{ id: string }>()
+	const { data: selfData } = useQuery(selfQueryOptions)
 
 	const addItem = useAddItemGuarded()
 	const { data: product, isPending } = useQuery(productQueryOptions(id))
@@ -102,6 +123,23 @@ export default function MenuDetail() {
 			}
 		}
 	}, [product?.group_modifications, setFieldValue])
+
+	const { autoheightWebshellProps } = useAutoheight(config)
+
+	const htmlDescriptionSource = useMemo(
+		() =>
+			product?.description
+				? { html: getFormattedHTMLContent(product.description) }
+				: undefined,
+		[product?.description],
+	)
+	const htmlRecipeSource = useMemo(
+		() =>
+			product?.recipe
+				? { html: getFormattedHTMLContent(product.recipe) }
+				: undefined,
+		[product?.recipe],
+	)
 
 	const incrementQuantity = useCallback(
 		() => setFieldValue('quantity', (previous) => previous + 1),
@@ -225,11 +263,18 @@ export default function MenuDetail() {
 
 				<View style={styles.content}>
 					<H2 style={styles.price}>{getProductBaseCost(product)}</H2>
-					{product['small-description'] && (
+
+					{htmlDescriptionSource ? (
+						<WebContent
+							{...autoheightWebshellProps}
+							source={htmlDescriptionSource}
+						/>
+					) : product['small-description'] ? (
 						<Paragraph style={styles.description}>
 							{product['small-description']}
 						</Paragraph>
-					)}
+					) : null}
+
 					<View style={styles.badges}>
 						{product.category_name ? (
 							<View style={styles.badge}>
@@ -250,23 +295,20 @@ export default function MenuDetail() {
 						) : null}
 					</View>
 
-					{product.ingredients?.length && (
+					{htmlRecipeSource &&
+					RECIPE_GROUPS.has(Number(selfData?.client_groups_id)) ? (
 						<View>
 							<H2>
-								<Trans>Ingredients</Trans>
+								<Trans>Recipe</Trans>
 							</H2>
-							<View style={styles.ingredientsSection}>
-								{product.ingredients.map((ingredient) => (
-									<Paragraph
-										key={ingredient.ingredient_id}
-										style={styles.ingredient}
-									>
-										• {ingredient.ingredient_name}
-									</Paragraph>
-								))}
+							<View style={styles.recipeSection}>
+								<WebContent
+									{...autoheightWebshellProps}
+									source={htmlRecipeSource}
+								/>
 							</View>
 						</View>
-					)}
+					) : null}
 
 					{/* Group Modifications */}
 					{product.group_modifications &&
@@ -428,6 +470,36 @@ export default function MenuDetail() {
 			</ScreenContainer>
 		</>
 	)
+}
+
+function getFormattedHTMLContent(description: string) {
+	return `
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			font-size: 16px;
+			line-height: 1.4;
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+			color: var(--colors-gray-text);
+		}
+		p {
+			margin: 0;
+		}
+		ul, ol {
+			padding-left: 1em;
+		}
+		h1,h2,h3,h4,h5,h6 {
+			margin-bottom: 0.5em;
+		}
+		li::marker {
+			display: block;
+			background-color: red;
+			width: 1em;
+			height: 1em;
+		}
+	</style>
+	${description}`
 }
 
 const styles = StyleSheet.create((theme) => ({
@@ -607,6 +679,11 @@ const styles = StyleSheet.create((theme) => ({
 	quantityText: {
 		minWidth: 40,
 		textAlign: 'center',
+	},
+	recipeSection: {
+		backgroundColor: theme.colors.gray.background,
+		borderRadius: theme.borderRadius.lg,
+		padding: theme.spacing.lg,
 	},
 	titleOverlayText: {
 		color: '#FFFFFF',
