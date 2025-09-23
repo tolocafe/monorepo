@@ -79,6 +79,11 @@ export async function generateStaticParams() {
 
 const RECIPE_GROUPS = new Set([8, 9])
 
+const gradient = {
+	end: { x: 0, y: 1 },
+	start: { x: 0, y: 0 },
+}
+
 export default function MenuDetail() {
 	const { t } = useLingui()
 	const tabBarHeight = useTabBarHeight()
@@ -175,7 +180,7 @@ export default function MenuDetail() {
 					<H1>
 						<Trans>Product not found</Trans>
 					</H1>
-					<Paragraph style={styles.description}>
+					<Paragraph>
 						<Trans>The requested product could not be loaded.</Trans>
 					</Paragraph>
 				</View>
@@ -249,12 +254,12 @@ export default function MenuDetail() {
 							transition={200}
 						/>
 					) : (
-						<View aria-hidden style={{ height: '100%', width: '100%' }} />
+						<View aria-hidden style={styles.imageFallback} />
 					)}
 					<LinearGradient
 						colors={linearGradientColors}
-						end={{ x: 0, y: 1 }}
-						start={{ x: 0, y: 0 }}
+						end={gradient.end}
+						start={gradient.start}
 						style={titleOverlayStyle}
 					>
 						<H1 style={styles.titleOverlayText}>{product.product_name}</H1>
@@ -268,11 +273,10 @@ export default function MenuDetail() {
 						<WebContent
 							{...autoheightWebshellProps}
 							source={htmlDescriptionSource}
+							style={{ backgroundColor: 'red' }}
 						/>
 					) : product['small-description'] ? (
-						<Paragraph style={styles.description}>
-							{product['small-description']}
-						</Paragraph>
+						<Paragraph>{product['small-description']}</Paragraph>
 					) : null}
 
 					<View style={styles.badges}>
@@ -544,9 +548,6 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.lg,
 		padding: theme.layout.screenPadding,
 	},
-	description: {
-		marginBottom: theme.spacing.lg,
-	},
 	header: {
 		alignItems: 'center',
 		flexDirection: 'row',
@@ -568,6 +569,7 @@ const styles = StyleSheet.create((theme) => ({
 		objectFit: 'cover',
 		width: '100%',
 	},
+	imageFallback: { height: '100%', width: '100%' },
 	ingredient: {
 		paddingLeft: theme.spacing.sm,
 	},
@@ -652,7 +654,6 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	price: {
 		color: theme.colors.verde.solid,
-		marginBottom: theme.spacing.lg,
 	},
 	quantityButton: {
 		alignItems: 'center',
