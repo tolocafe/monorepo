@@ -124,7 +124,7 @@ export default function ProfileScreen() {
 						refreshing={false}
 					/>
 				}
-				withTopGradient
+				withTopGradient={Platform.OS === 'ios'}
 			>
 				<View style={styles.section}>
 					<H2>

@@ -82,7 +82,7 @@ export default function AppInfoScreen() {
 				<meta content={t`App - TOLO`} property="og:title" />
 				<meta content="/more/app" property="og:url" />
 			</Head>
-			<ScreenContainer contentContainerStyle={styles.scrollContent}>
+			<ScreenContainer contentContainerStyle={styles.contentContainer}>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
 						<Trans>Information</Trans>
@@ -167,6 +167,9 @@ const styles = StyleSheet.create((theme) => ({
 	container: {
 		flex: 1,
 	},
+	contentContainer: {
+		padding: theme.layout.screenPadding,
+	},
 	description: {
 		color: theme.colors.crema.solid,
 		marginBottom: theme.spacing.sm,
@@ -186,12 +189,9 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'space-between',
 		paddingVertical: theme.spacing.sm,
 	},
-	scrollContent: {
-		paddingBottom: theme.spacing.xl,
-	},
 	section: {
+		gap: theme.spacing.sm,
 		marginBottom: theme.spacing.lg,
-		paddingHorizontal: theme.layout.screenPadding,
 	},
 	sectionTitle: {
 		color: theme.colors.gray.text,

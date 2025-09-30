@@ -52,6 +52,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	orientation: 'portrait',
 	owner: 'tolo-cafe',
 	plugins: [
+		'expo-font',
 		'expo-updates',
 		'expo-notifications',
 		'@react-native-firebase/app',
@@ -59,7 +60,15 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		['expo-router', { headOrigin: 'https://app.tolo.cafe' }],
 		['react-native-bottom-tabs', { theme: 'material3-dynamic' }],
 		['react-native-edge-to-edge', { android: { parentTheme: 'Material3' } }],
-		['expo-build-properties', { ios: { useFrameworks: 'static' } }],
+		[
+			'expo-build-properties',
+			{
+				ios: {
+					forceStaticLinking: ['RNFBApp', 'RNFBMessaging'],
+					useFrameworks: 'static',
+				},
+			},
+		],
 		[
 			'@stripe/stripe-react-native',
 			{

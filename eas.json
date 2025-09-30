@@ -1,8 +1,8 @@
 {
 	"build": {
 		"common": {
-			"bun": "1.2.21",
-			"node": "22.18.0"
+			"bun": "1.2.23",
+			"node": "22.20.0"
 		},
 		"development": {
 			"channel": "development",
@@ -23,7 +23,7 @@
 	},
 	"cli": {
 		"appVersionSource": "remote",
-		"version": ">= 16.17.0"
+		"version": ">= 16.19.3"
 	},
 	"submit": {
 		"production": {
