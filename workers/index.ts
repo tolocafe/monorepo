@@ -10,6 +10,7 @@ import clients from './routes/clients'
 import menu from './routes/menu'
 import orders from './routes/orders'
 import passes from './routes/passes'
+import receipts from './routes/receipts'
 import transactions from './routes/transactions'
 import webhooks from './routes/webhooks'
 import { defaultJsonHeaders } from './utils/headers'
@@ -66,6 +67,7 @@ app
 	.route('/clients', clients)
 	.route('/transactions', transactions)
 	.route('/orders', orders)
+	.route('/receipts', receipts)
 	.route('/webhooks', webhooks)
 	.route('/passes', passes)
 	.route('/broadcast', broadcast)

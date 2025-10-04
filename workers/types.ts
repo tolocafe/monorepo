@@ -7,6 +7,7 @@ export type Bindings = Cloudflare.Env & {
 	APNS_TEAM_ID: string
 	ASSETS: Fetcher
 	BROADCAST_SECRET: string
+	BROWSER: any
 	D1_TOLO: D1Database
 	EXPO_ACCESS_TOKEN: string
 	GA4_API_SECRET: string

@@ -6,7 +6,10 @@ import type {
 
 import type { Category, ClientData, Product } from '@/lib/api'
 import type { RequestOtpMutationOptions } from '@/lib/queries/auth'
-import type { CreateOrderResponse } from '@/lib/queries/order'
+import type {
+	CreateOrderResponse,
+	OrderDetailResponse,
+} from '@/lib/queries/order'
 
 import { privateClient, publicClient } from './http-client'
 
@@ -68,6 +71,10 @@ export const api = {
 				.post<CreateOrderResponse>('orders', { json: orderData })
 				.json(),
 		list: () => privateClient.get<CreateOrderResponse>('orders').json(),
+		get: (orderId: string) =>
+			privateClient.get<OrderDetailResponse>(`orders/${orderId}`).json(),
+		downloadReceipt: (orderId: string) =>
+			privateClient.get(`receipts/${orderId}`, { timeout: 30000 }).blob(),
 	},
 
 	// Generic methods for other endpoints

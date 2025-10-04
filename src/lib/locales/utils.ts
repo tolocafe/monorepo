@@ -10,6 +10,7 @@ export const LOCALE_NAMES = {
 	fr: 'Français',
 	ja: '日本語',
 	pt: 'Protégées',
+	de: 'Deutsch',
 } as const
 
 export type Locale = keyof typeof LOCALE_NAMES

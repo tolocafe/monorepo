@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { Fragment, useEffect, useMemo, useRef } from 'react'
 import type { ScrollView } from 'react-native'
 import {
 	ActivityIndicator,
@@ -63,6 +63,18 @@ export default function Menu() {
 
 	const { data: menu, error, isFetching } = useQuery(productsQueryOptions)
 	const { data: categories } = useQuery(categoriesQueryOptions)
+	const categoriesWithItems = useMemo(
+		() =>
+			categories
+				.map((category) => {
+					const categoryItems = menu.filter(
+						(item: Product) => item.menu_category_id === category.category_id,
+					)
+					return { ...category, items: categoryItems }
+				})
+				.filter((category) => category.items.length > 0),
+		[categories, menu],
+	)
 
 	const handleAddToBag = (item: Product) => {
 		addItem({ id: item.product_id, quantity: 1 })
@@ -94,27 +106,22 @@ export default function Menu() {
 		void requestEnableAnalytics()
 	}, [selfData])
 
-	const renderCategorySection = (category: Category) => {
-		const categoryItems = menu.filter(
-			(item: Product) => item.menu_category_id === category.category_id,
-		)
-
-		if (categoryItems.length === 0) return null
-
-		return (
-			<View key={category.category_id}>
-				<H3 style={styles.subtitle}>{category.category_name}</H3>
-				<FlatList
-					contentContainerStyle={styles.categoryItems}
-					data={categoryItems}
-					horizontal
-					keyExtractor={categoryKeyExtractor}
-					renderItem={renderMenuItem}
-					showsHorizontalScrollIndicator={false}
-				/>
-			</View>
-		)
-	}
+	const renderCategorySection = (
+		category: Category & { items: Product[] },
+		_index: number,
+	) => (
+		<Fragment key={category.category_id}>
+			<H3 style={styles.subtitle}>{category.category_name}</H3>
+			<FlatList
+				contentContainerStyle={styles.categoryItems}
+				data={category.items}
+				horizontal
+				keyExtractor={categoryKeyExtractor}
+				renderItem={renderMenuItem}
+				showsHorizontalScrollIndicator={false}
+			/>
+		</Fragment>
+	)
 
 	if (menu.length === 0) {
 		if (isFetching) {
@@ -180,7 +187,9 @@ export default function Menu() {
 						<Trans>Menu</Trans>
 					</H2>
 				</View>
-				{categories.map((category) => renderCategorySection(category))}
+				{categoriesWithItems.map((category, index) =>
+					renderCategorySection(category, index),
+				)}
 			</ScreenContainer>
 		</>
 	)
@@ -216,10 +225,7 @@ function MenuListItem({
 				style={animatedStyle}
 			>
 				<Card padded={false} style={styles.menuItem}>
-					<Animated.View
-						sharedTransitionTag={`menu-item-${item.product_id}`}
-						style={styles.menuItemImageContainer}
-					>
+					<View style={styles.menuItemImageContainer}>
 						{item.photo ? (
 							<UniImage
 								contentFit="cover"
@@ -244,12 +250,12 @@ function MenuListItem({
 						) : (
 							<View style={styles.menuItemImage} />
 						)}
-					</Animated.View>
+					</View>
 					<View style={styles.menuItemContent}>
-						<View style={styles.menuItemHeader}>
-							<H4>{item.product_name}</H4>
-						</View>
-						<Paragraph>{item.product_production_description}</Paragraph>
+						<H4>{item.product_name}</H4>
+						{item.product_production_description ? (
+							<Paragraph>{item.product_production_description}</Paragraph>
+						) : null}
 						<View style={styles.menuItemFooter}>
 							<Paragraph>
 								{'modifications' in item ? <Trans>From {cost}</Trans> : cost}
@@ -263,7 +269,7 @@ function MenuListItem({
 									}}
 									style={styles.addToBagButton}
 								>
-									<UniIonicons name="add" size={24} />
+									<UniIonicons name="add" size={26} />
 								</TouchableOpacity>
 							</View>
 						</View>
@@ -279,9 +285,9 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		backgroundColor: theme.colors.verde.solid,
 		borderRadius: theme.borderRadius.full,
-		height: 40,
+		height: 36,
 		justifyContent: 'center',
-		width: 40,
+		width: 36,
 	},
 	badge: {
 		backgroundColor: theme.colors.verde.solid,
@@ -340,7 +346,8 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.crema.solid,
 	},
 	menuItem: {
-		width: 225,
+		flex: 1,
+		width: 190,
 	},
 	menuItemActions: {
 		alignItems: 'center',
@@ -348,22 +355,18 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.sm,
 	},
 	menuItemContent: {
+		flex: 1,
+		gap: theme.spacing.xs,
+		justifyContent: 'space-between',
 		padding: theme.spacing.md,
 	},
 	menuItemFooter: {
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginTop: theme.spacing.md,
-	},
-	menuItemHeader: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: theme.spacing.sm,
-		marginBottom: theme.spacing.xs,
 	},
 	menuItemImage: {
-		height: 225,
+		height: '100%',
 		width: '100%',
 	},
 	menuItemImageContainer: {
@@ -371,7 +374,7 @@ const styles = StyleSheet.create((theme) => ({
 		borderCurve: 'continuous',
 		borderTopLeftRadius: theme.borderRadius.lg,
 		borderTopRightRadius: theme.borderRadius.lg,
-		height: 225,
+		height: 190,
 		overflow: 'hidden',
 		width: '100%',
 	},

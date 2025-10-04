@@ -46,4 +46,7 @@
 			"database_id": "a97cd459-12c3-4051-b718-7a0c9fa64cf5",
 		},
 	],
+	"browser": {
+		"binding": "BROWSER",
+	},
 }

@@ -55,6 +55,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		'expo-font',
 		'expo-updates',
 		'expo-notifications',
+		'expo-color-space-plugin',
 		'@react-native-firebase/app',
 		'./plugins/withAppBuildGradlePlugin',
 		['expo-router', { headOrigin: 'https://app.tolo.cafe' }],

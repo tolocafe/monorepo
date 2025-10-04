@@ -106,18 +106,18 @@ const lightTheme = {
 		},
 		h1: {
 			fontSize: 32,
-			fontWeight: '800',
+			fontWeight: '900',
 		},
 		h2: {
 			fontSize: 24,
-			fontWeight: '700',
+			fontWeight: '800',
 		},
 		h3: {
-			fontSize: 20,
+			fontSize: 21,
 			fontWeight: '700',
 		},
 		h4: {
-			fontSize: 18,
+			fontSize: 19,
 			fontWeight: '600',
 		},
 		input: {

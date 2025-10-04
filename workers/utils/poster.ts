@@ -173,19 +173,33 @@ export const api = {
 		},
 	},
 	dash: {
-		async getTransaction(token: string, id: string) {
+		async getTransaction(
+			token: string,
+			id: string,
+			options?: { include_products: 'true' },
+		) {
 			return posterFetch<
 				{
 					client_id: string
 					payed_sum: string
+					tax_sum: string
 					round_sum: string
+					products?: {
+						product_id: string
+						product_price: string
+						num: string
+					}[]
 					sum: string
+					tip_sum: string
 				}[]
-			>(`/dash.getTransaction?token=${token}&transaction_id=${id}`, {
-				defaultErrorMessage: 'Failed to get transaction',
-				headers: { 'Content-Type': 'application/json' },
-				method: 'GET',
-			}).then((response) => response.at(0) ?? null)
+			>(
+				`/dash.getTransaction?token=${token}&transaction_id=${id}&${new URLSearchParams(options)}`,
+				{
+					defaultErrorMessage: 'Failed to get transaction',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'GET',
+				},
+			).then((response) => response.at(0) ?? null)
 		},
 		async getTransactions(token: string, clientId: number) {
 			return posterFetch<number[]>(

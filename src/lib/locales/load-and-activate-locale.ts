@@ -26,6 +26,11 @@ export async function loadAndActivateLocale(locale: Locale): Promise<void> {
 				i18n.loadAndActivate({ locale, messages })
 				break
 			}
+			case 'de': {
+				const { messages } = await import('@/lib/locales/de/messages.po')
+				i18n.loadAndActivate({ locale, messages })
+				break
+			}
 			default:
 				i18n.loadAndActivate({ locale: 'es', messages: esMessages })
 				break

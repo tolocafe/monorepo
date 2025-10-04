@@ -9,6 +9,7 @@ import { Image } from 'expo-image'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
+import { Feather } from '@expo/vector-icons'
 
 import type { Product } from '@common/api'
 
@@ -68,6 +69,10 @@ export default function Orders() {
 		if (currentOrder) {
 			router.push(`/(tabs)/orders/current`)
 		}
+	}
+
+	const handleOrderPress = (orderId: string) => {
+		router.push(`/(tabs)/orders/${orderId}`)
 	}
 
 	// removed renderOrderItem as current order should not appear in history
@@ -138,9 +143,12 @@ export default function Orders() {
 									<Trans>{itemsCount} items</Trans>
 								</Text>
 							</View>
-							<Paragraph style={styles.currentOrderText}>
-								{formatPrice(currentOrderTotalCents)}
-							</Paragraph>
+							<View style={styles.currentOrderBottom}>
+								<Paragraph style={styles.currentOrderText}>
+									{formatPrice(currentOrderTotalCents)}
+								</Paragraph>
+								<Feather name="chevron-right" size={18} color="#ffffff" />
+							</View>
 							<Paragraph style={styles.tapToEdit}>
 								<Trans>Tap to view and edit</Trans>
 							</Paragraph>
@@ -156,27 +164,37 @@ export default function Orders() {
 						</H2>
 						<View style={styles.ordersList}>
 							{orders.map((order) => (
-								<Card key={order.transaction_id} style={styles.orderCard}>
-									<Text weight="bold">
-										<Select
-											_Status10="Open"
-											_Status20="Preparing"
-											_Status30="Ready"
-											_Status40="En route"
-											_Status50="Delivered"
-											_Status60="Closed"
-											_Status70="Deleted"
-											other="Unknown"
-											value={`Status${order.processing_status}`}
-										/>
-									</Text>
-									<View style={styles.orderDetails}>
-										<Text>
-											{new Date(Number(order.date_start)).toLocaleDateString()}
-										</Text>
-										<Text>{formatPrice(order.sum)}</Text>
-									</View>
-								</Card>
+								<TouchableOpacity
+									key={order.transaction_id}
+									onPress={() => handleOrderPress(order.transaction_id)}
+								>
+									<Card style={styles.orderCard}>
+										<View>
+											<Text weight="bold">
+												<Select
+													_Status10="Open"
+													_Status20="Preparing"
+													_Status30="Ready"
+													_Status40="En route"
+													_Status50="Delivered"
+													_Status60="Closed"
+													_Status70="Deleted"
+													other="Unknown"
+													value={`Status${order.processing_status}`}
+												/>
+											</Text>
+											<Text>
+												{new Date(
+													Number(order.date_start),
+												).toLocaleDateString()}
+											</Text>
+										</View>
+										<View style={styles.orderDetails}>
+											<Text>{formatPrice(order.sum)}</Text>
+											<Feather name="chevron-right" size={24} color="#666666" />
+										</View>
+									</Card>
+								</TouchableOpacity>
 							))}
 						</View>
 					</>
@@ -213,6 +231,13 @@ const styles = StyleSheet.create((theme) => ({
 		borderRadius: theme.borderRadius.md,
 		padding: theme.spacing.lg,
 	},
+	currentOrderBottom: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		gap: theme.spacing.xs,
+		justifyContent: 'center',
+		backgroundColor: 'red',
+	},
 	currentOrderText: {
 		color: theme.colors.gray.background,
 	},
@@ -228,13 +253,16 @@ const styles = StyleSheet.create((theme) => ({
 		height: 250,
 		width: 250,
 	},
-	image: { height: 250, width: 250 },
+	image: {
+		height: 250,
+		width: 250,
+	},
 	orderBadge: {
 		color: theme.colors.gray.background,
 		opacity: 0.9,
 	},
 	orderCard: {
-		flexDirection: 'column',
+		flexDirection: 'row',
 		justifyContent: 'space-between',
 		width: '100%',
 	},
@@ -246,6 +274,13 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		gap: theme.spacing.sm,
 		justifyContent: 'space-between',
+		alignItems: 'center',
+	},
+	orderRightSection: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		gap: theme.spacing.xs,
+		justifyContent: 'center',
 	},
 	orderHeader: {
 		alignItems: 'center',

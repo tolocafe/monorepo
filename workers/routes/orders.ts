@@ -17,6 +17,36 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 		return c.json(orders)
 	})
+	.get('/:id', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+		const orderId = c.req.param('id')
+
+		try {
+			const order = await api.dash.getTransaction(c.env.POSTER_TOKEN, orderId, {
+				include_products: 'true',
+			})
+
+			if (!order) {
+				throw new HTTPException(404, { message: 'Order not found' })
+			}
+
+			// Verify the order belongs to the authenticated client
+			if (order.client_id !== clientId.toString()) {
+				throw new HTTPException(403, { message: 'Access denied' })
+			}
+
+			return c.json(order)
+		} catch (error) {
+			if (error instanceof HTTPException) {
+				throw error
+			}
+
+			captureException(error)
+			throw new HTTPException(500, {
+				message: 'Failed to fetch order details',
+			})
+		}
+	})
 	.post('/', async (context) => {
 		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
