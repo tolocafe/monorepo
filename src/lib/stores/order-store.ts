@@ -178,7 +178,7 @@ export const useAddItemGuarded = () => {
 
 		if (!isAuthenticated) {
 			router.push('/sign-in')
-			return
+			return false
 		}
 
 		void trackEvent('add_to_cart', {
@@ -187,5 +187,7 @@ export const useAddItemGuarded = () => {
 		})
 
 		addItem(item)
+
+		return true
 	}
 }

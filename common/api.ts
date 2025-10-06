@@ -189,3 +189,13 @@ export type UpdateClientBody = Partial<{
 	phone: string
 	total_payed_sum: number
 }>
+
+export type Coffee = {
+	altitude?: number
+	name: string
+	origin: string
+	process: string
+	region: string
+	slug: string
+	varietal: string
+}

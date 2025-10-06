@@ -4,20 +4,7 @@ import { defaultJsonHeaders } from '../utils/headers'
 import { api } from '../utils/poster'
 
 import type { Bindings } from '../types'
-
-async function getCollectionItem(environment: Bindings, itemId: string) {
-	const collectionId = environment.WEBFLOW_MENU_COLLECTION_ID
-
-	const data = await fetch(
-		`https://api.webflow.com/v2/collections/${collectionId}/items/${itemId}/live`,
-		{ headers: { Authorization: `Bearer ${environment.WEBFLOW_API_TOKEN}` } },
-	).then(
-		(response) =>
-			response.json() as Promise<{ fieldData: Record<string, string> }>,
-	)
-
-	return data.fieldData
-}
+import webflow from 'workers/utils/webflow'
 
 const menu = new Hono<{ Bindings: Bindings }>()
 	.get('/categories', async (context) => {
@@ -27,6 +14,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 
 		return context.json(categories, 200, defaultJsonHeaders)
 	})
+
 	.get('/products', async (context) => {
 		const products = await api.menu.getMenuProducts(context.env.POSTER_TOKEN, {
 			type: 'products',
@@ -50,7 +38,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 
 			const [collectionItem, product] = await Promise.all([
 				collectionItemId
-					? getCollectionItem(context.env, collectionItemId)
+					? webflow.collections.getProduct(context.env, collectionItemId)
 					: Promise.resolve(null),
 				api.menu.getProduct(context.env.POSTER_TOKEN, productId),
 			])

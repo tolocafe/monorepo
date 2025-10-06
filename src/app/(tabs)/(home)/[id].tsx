@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect } from 'react'
 import {
 	ActivityIndicator,
 	Platform,
@@ -17,17 +17,25 @@ import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 import Head from 'expo-router/head'
-import Animated from 'react-native-reanimated'
+import Animated, {
+	cancelAnimation,
+	useAnimatedStyle,
+	useSharedValue,
+	withSequence,
+	withSpring,
+} from 'react-native-reanimated'
 import {
 	StyleSheet,
 	UnistylesRuntime,
+	useUnistyles,
 	withUnistyles,
 } from 'react-native-unistyles'
+import * as Haptics from 'expo-haptics'
 
 import { Button } from '@/components/Button'
 import HeaderGradient from '@/components/HeaderGradient'
 import ScreenContainer from '@/components/ScreenContainer'
-import { H1, H2, H3, Label, Paragraph, Text } from '@/components/Text'
+import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
 import WebContent from '@/components/WebContent'
 import { trackEvent } from '@/lib/analytics/firebase'
 import { getImageUrl } from '@/lib/image'
@@ -84,6 +92,41 @@ const gradient = {
 	start: { x: 0, y: 0 },
 }
 
+function AnimatedPrice({ children }: { children: string }) {
+	const priceScale = useSharedValue(1)
+
+	useEffect(() => {
+		priceScale.set(
+			withSequence(
+				withSpring(1.2, {
+					stiffness: 900,
+					mass: 1,
+				}),
+				withSpring(1, {
+					stiffness: 900,
+					mass: 1,
+				}),
+			),
+		)
+
+		return () => {
+			cancelAnimation(priceScale)
+		}
+	}, [children])
+
+	const animatedPriceStyle = useAnimatedStyle(() => ({
+		transform: [{ scale: priceScale.value }],
+	}))
+
+	return (
+		<Animated.View style={animatedPriceStyle}>
+			<Button.Text style={[styles.whiteText, { paddingHorizontal: 5 }]}>
+				{children}
+			</Button.Text>
+		</Animated.View>
+	)
+}
+
 export default function MenuDetail() {
 	const { t } = useLingui()
 	const tabBarHeight = useTabBarHeight()
@@ -100,11 +143,19 @@ export default function MenuDetail() {
 			quantity: 1,
 		},
 		onSubmit({ value }) {
-			addItem({
+			if (Platform.OS !== 'web') {
+				Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+			}
+
+			const success = addItem({
 				id: value.productId,
 				modifications: value.modifications,
 				quantity: value.quantity,
 			})
+
+			if (success) {
+				router.back()
+			}
 		},
 	})
 
@@ -131,20 +182,8 @@ export default function MenuDetail() {
 
 	const { autoheightWebshellProps } = useAutoheight(config)
 
-	const htmlDescriptionSource = useMemo(
-		() =>
-			product?.description
-				? { html: getFormattedHTMLContent(product.description) }
-				: undefined,
-		[product?.description],
-	)
-	const htmlRecipeSource = useMemo(
-		() =>
-			product?.recipe
-				? { html: getFormattedHTMLContent(product.recipe) }
-				: undefined,
-		[product?.recipe],
-	)
+	const htmlDescriptionSource = useGetFormattedHTMLContent(product?.description)
+	const htmlRecipeSource = useGetFormattedHTMLContent(product?.recipe)
 
 	const incrementQuantity = useCallback(
 		() => setFieldValue('quantity', (previous) => previous + 1),
@@ -190,6 +229,18 @@ export default function MenuDetail() {
 
 	const hasImage = product.photo_origin || product.photo
 
+	const groupModifications = product.group_modifications
+		?.filter(
+			(group) =>
+				group.modifications.length > 0 && !group.name.startsWith('Desechable'),
+		)
+		.map((group) => ({
+			...group,
+			name: group.name
+				.replace(/^Leche .*/, 'Leche')
+				.replace(/^Temperatura .*/, 'Temperatura'),
+		}))
+
 	return (
 		<>
 			<Head>
@@ -216,7 +267,7 @@ export default function MenuDetail() {
 			/>
 			{Platform.select({ default: <HeaderGradient />, ios: undefined })}
 			<ScreenContainer
-				contentContainerStyle={{ paddingBottom: tabBarHeight }}
+				contentContainerStyle={{ paddingBottom: Math.max(tabBarHeight, 40) }}
 				contentInsetAdjustmentBehavior="never"
 				refreshControl={
 					<RefreshControl
@@ -227,10 +278,7 @@ export default function MenuDetail() {
 					/>
 				}
 			>
-				<Animated.View
-					sharedTransitionTag={`menu-item-${product.product_id}`}
-					style={styles.heroImageContainer}
-				>
+				<View style={styles.heroImageContainer}>
 					{hasImage ? (
 						<UniImage
 							contentFit="cover"
@@ -264,44 +312,45 @@ export default function MenuDetail() {
 					>
 						<H1 style={styles.titleOverlayText}>{product.product_name}</H1>
 					</LinearGradient>
-				</Animated.View>
+				</View>
 
 				<View style={styles.content}>
-					<H2 style={styles.price}>{getProductBaseCost(product)}</H2>
+					<View style={styles.productInfo}>
+						<H2 style={styles.price}>{getProductBaseCost(product)}</H2>
 
-					{htmlDescriptionSource ? (
-						<WebContent
-							{...autoheightWebshellProps}
-							source={htmlDescriptionSource}
-							style={{ backgroundColor: 'red' }}
-						/>
-					) : product['small-description'] ? (
-						<Paragraph>{product['small-description']}</Paragraph>
-					) : null}
+						{htmlDescriptionSource ? (
+							<WebContent
+								{...autoheightWebshellProps}
+								source={htmlDescriptionSource}
+							/>
+						) : product['small-description'] ? (
+							<Paragraph>{product['small-description']}</Paragraph>
+						) : null}
 
-					<View style={styles.badges}>
-						{product.category_name ? (
-							<View style={styles.badge}>
-								<Text style={styles.badgeText}>{product.category_name}</Text>
-							</View>
-						) : null}
-						{product.cooking_time && product.cooking_time !== '0' ? (
-							<View style={styles.badge}>
-								<Text style={styles.badgeText}>
-									{formatCookingTime(product.cooking_time)}
-								</Text>
-							</View>
-						) : null}
-						{product.out ? (
-							<View style={styles.badge}>
-								<Text style={styles.badgeText}>{product.out} ml</Text>
-							</View>
-						) : null}
+						<View style={styles.badges}>
+							{product.category_name ? (
+								<View style={styles.badge}>
+									<Text style={styles.badgeText}>{product.category_name}</Text>
+								</View>
+							) : null}
+							{product.cooking_time && product.cooking_time !== '0' ? (
+								<View style={styles.badge}>
+									<Text style={styles.badgeText}>
+										{formatCookingTime(product.cooking_time)}
+									</Text>
+								</View>
+							) : null}
+							{product.out ? (
+								<View style={styles.badge}>
+									<Text style={styles.badgeText}>{product.out} ml</Text>
+								</View>
+							) : null}
+						</View>
 					</View>
 
 					{htmlRecipeSource &&
 					RECIPE_GROUPS.has(Number(selfData?.client_groups_id)) ? (
-						<View>
+						<View style={styles.section}>
 							<H2>
 								<Trans>Recipe</Trans>
 							</H2>
@@ -315,94 +364,82 @@ export default function MenuDetail() {
 					) : null}
 
 					{/* Group Modifications */}
-					{product.group_modifications &&
-						product.group_modifications.length > 0 && (
+					{groupModifications && groupModifications.length > 0 && (
+						<View style={styles.section}>
+							<H2>
+								<Trans>Modifications</Trans>
+							</H2>
 							<View>
-								<H2>
-									<Trans>Modifications</Trans>
-								</H2>
-								<View>
-									{product.group_modifications.map((group) => {
-										if (group.name.startsWith('Desechable'))
-											return (
-												<View
-													aria-hidden
-													key={group.dish_modification_group_id}
-												/>
-											)
-
-										return (
-											<View
-												key={group.dish_modification_group_id}
-												style={styles.modGroup}
+								{groupModifications.map((group) => {
+									return (
+										<View
+											key={group.dish_modification_group_id}
+											style={styles.modGroup}
+										>
+											<H3 style={styles.modGroupTitle}>{group.name}</H3>
+											<Field
+												name={`modifications.${group.dish_modification_group_id}`}
 											>
-												<H3 style={styles.modGroupTitle}>{group.name}</H3>
-												<Field
-													name={`modifications.${group.dish_modification_group_id}`}
-												>
-													{({ handleChange, state }) => (
-														<View
-															accessibilityRole="radiogroup"
-															style={styles.modButtonGroup}
-														>
-															{group.modifications.map((modification) => {
-																const isSelected =
-																	state.value ===
-																	modification.dish_modification_id
+												{({ handleChange, state }) => (
+													<View
+														accessibilityRole="radiogroup"
+														style={styles.modButtonGroup}
+													>
+														{group.modifications.map((modification) => {
+															const isSelected =
+																state.value ===
+																modification.dish_modification_id
 
-																return (
-																	<TouchableOpacity
-																		accessibilityRole="radio"
-																		accessibilityState={{
-																			selected: isSelected,
-																		}}
-																		key={modification.dish_modification_id}
-																		onPress={() =>
-																			handleChange(
-																				modification.dish_modification_id,
-																			)
-																		}
-																		style={styles.modButton}
-																	>
-																		<View style={styles.modButtonRow}>
-																			{isSelected ? (
-																				<View style={styles.modCheck}>
-																					<Ionicons
-																						color={styles.modCheckIcon.color}
-																						name="checkmark"
-																						size={16}
-																					/>
-																				</View>
-																			) : null}
-																			<Text style={styles.modButtonText}>
-																				{modification.name}
+															return (
+																<TouchableOpacity
+																	accessibilityRole="radio"
+																	accessibilityState={{
+																		selected: isSelected,
+																	}}
+																	key={modification.dish_modification_id}
+																	onPress={() =>
+																		handleChange(
+																			modification.dish_modification_id,
+																		)
+																	}
+																	style={styles.modButton}
+																>
+																	<View style={styles.modButtonRow}>
+																		{isSelected ? (
+																			<View style={styles.modCheck}>
+																				<Ionicons
+																					color={styles.modCheckIcon.color}
+																					name="checkmark"
+																					size={16}
+																				/>
+																			</View>
+																		) : null}
+																		<Text style={styles.modButtonText}>
+																			{modification.name}
+																		</Text>
+																		{modification.price ? (
+																			<Text
+																				style={[
+																					styles.modButtonText,
+																					styles.modItemPrice,
+																				]}
+																			>
+																				+{formatPrice(modification.price * 100)}
 																			</Text>
-																			{modification.price ? (
-																				<Text
-																					style={[
-																						styles.modButtonText,
-																						styles.modItemPrice,
-																					]}
-																				>
-																					+
-																					{formatPrice(
-																						modification.price * 100,
-																					)}
-																				</Text>
-																			) : null}
-																		</View>
-																	</TouchableOpacity>
-																)
-															})}
-														</View>
-													)}
-												</Field>
-											</View>
-										)
-									})}
-								</View>
+																		) : null}
+																	</View>
+																</TouchableOpacity>
+															)
+														})}
+													</View>
+												)}
+											</Field>
+										</View>
+									)
+								})}
 							</View>
-						)}
+						</View>
+					)}
 
 					{/* Single Modifications */}
 					{product.modifications?.length && (
@@ -424,94 +461,144 @@ export default function MenuDetail() {
 							</View>
 						</>
 					)}
-
-					{/* Quantity Controls */}
-					<View style={styles.quantitySection}>
-						<Label style={styles.quantityLabel}>
-							<Trans>Quantity</Trans>
-						</Label>
-						<View style={styles.quantityControls}>
-							<TouchableOpacity
-								onPress={decrementQuantity}
-								style={styles.quantityButton}
-							>
-								<Ionicons color="#333" name="remove" size={20} />
-							</TouchableOpacity>
-							<Subscribe selector={(state) => state.values.quantity}>
-								{(quantity) => (
-									<Label style={styles.quantityText}>{quantity}</Label>
-								)}
-							</Subscribe>
-							<TouchableOpacity
-								onPress={incrementQuantity}
-								style={styles.quantityButton}
-							>
-								<Ionicons color="#333" name="add" size={20} />
-							</TouchableOpacity>
-						</View>
-					</View>
-
-					<Subscribe
-						selector={({ values }) =>
-							[values.quantity, values.modifications] as const
-						}
-					>
-						{([quantity, modifications]) => {
-							const totalCost = getProductTotalCost({
-								modifications,
-								product,
-								quantity,
-							})
-
-							return (
-								<Button disabled={!totalCost} onPress={handleSubmit}>
-									<Trans>Add to Order - {formatPrice(totalCost)}</Trans>
-								</Button>
-							)
-						}}
-					</Subscribe>
 				</View>
 			</ScreenContainer>
+			<Subscribe
+				selector={({ values }) =>
+					[values.quantity, values.modifications] as const
+				}
+			>
+				{([quantity, modifications]) => {
+					const totalCost = getProductTotalCost({
+						modifications,
+						product,
+						quantity,
+					})
+
+					return (
+						<View style={styles.bottomButton}>
+							<Button
+								style={styles.addButton}
+								disabled={!totalCost}
+								onPress={handleSubmit}
+								asChild
+							>
+								<View style={styles.buttonContent}>
+									<Button.Text style={styles.whiteText}>
+										<Trans>Add to Order</Trans>
+									</Button.Text>
+									{quantity > 1 && (
+										<Button.Text style={[styles.quantityText]}>
+											{quantity}
+										</Button.Text>
+									)}
+								</View>
+								<AnimatedPrice>{formatPrice(totalCost)}</AnimatedPrice>
+							</Button>
+							<View style={styles.quantityButtons}>
+								{quantity > 1 && (
+									<TouchableOpacity
+										onPress={decrementQuantity}
+										style={styles.quantityButtonMinus}
+									>
+										<Text style={styles.whiteText}>
+											<Ionicons name="remove" size={24} />
+										</Text>
+									</TouchableOpacity>
+								)}
+								<TouchableOpacity
+									onPress={incrementQuantity}
+									style={[
+										styles.quantityButton,
+										quantity === 1 && styles.quantityButtonSingle,
+									]}
+								>
+									<Text style={styles.whiteText}>
+										<Ionicons name="add" size={24} />
+									</Text>
+								</TouchableOpacity>
+							</View>
+						</View>
+					)
+				}}
+			</Subscribe>
 		</>
 	)
 }
 
-function getFormattedHTMLContent(description: string) {
-	return `
-	<style>
-		* {
-			margin: 0;
-			padding: 0;
-			font-size: 16px;
-			line-height: 1.4;
-			font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-			color: var(--colors-gray-text);
-		}
-		p {
-			margin: 0;
-		}
-		ul, ol {
-			padding-left: 1em;
-		}
-		h1,h2,h3,h4,h5,h6 {
-			margin-bottom: 0.5em;
-		}
-		li::marker {
-			display: block;
-			background-color: red;
-			width: 1em;
-			height: 1em;
-		}
-	</style>
-	${description}`
+function useGetFormattedHTMLContent(description: string | undefined) {
+	const { theme } = useUnistyles()
+
+	if (!description) return undefined
+
+	return {
+		html: `
+			<style>
+				* {
+					margin: 0;
+					padding: 0;
+					font-size: 16px;
+					line-height: 1.4;
+					font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+					color: var(--colors-gray-text);
+				}
+				html {
+					color: ${theme.colors.gray.text};
+				}
+				p {
+					margin: 0;
+				}
+				ul, ol {
+					padding-left: 1em;
+				}
+				h1,h2,h3,h4,h5,h6 {
+					margin-bottom: 0.5em;
+				}
+				li::marker {
+					display: block;
+					width: 1em;
+					height: 1em;
+				}
+			</style>
+			<body>
+				${description}
+			</body>
+		`,
+	}
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, runtime) => ({
+	addButton: {
+		height: 50,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		flex: 1,
+	},
+	productInfo: {
+		gap: theme.spacing.md,
+	},
 	badge: {
 		backgroundColor: theme.colors.verde.solid,
 		borderRadius: theme.borderRadius.sm,
 		paddingHorizontal: theme.spacing.md,
 		paddingVertical: theme.spacing.xs,
+	},
+	quantityButtons: {
+		flexDirection: 'row',
+	},
+	buttonContent: {
+		flexDirection: 'row',
+		alignItems: 'center',
+		gap: theme.spacing.sm,
+	},
+	bottomButton: {
+		position: 'absolute',
+		bottom: Math.max(runtime.insets.bottom, theme.layout.screenPadding),
+		left: theme.layout.screenPadding,
+		right: theme.layout.screenPadding,
+		flexDirection: 'row',
+		gap: theme.spacing.sm,
+		alignItems: 'center',
 	},
 	badges: {
 		flexDirection: 'row',
@@ -519,7 +606,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginBottom: theme.spacing.xl,
 	},
 	badgeText: {
-		color: theme.colors.gray.background,
+		color: '#FFFFFF',
 		fontSize: theme.fontSizes.sm,
 		fontWeight: theme.fontWeights.semibold,
 	},
@@ -544,8 +631,11 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: theme.fontSizes.lg,
 		fontWeight: theme.fontWeights.bold,
 	},
+	whiteText: {
+		color: '#FFFFFF',
+	},
 	content: {
-		gap: theme.spacing.lg,
+		gap: theme.spacing.xxl,
 		padding: theme.layout.screenPadding,
 	},
 	header: {
@@ -628,8 +718,8 @@ const styles = StyleSheet.create((theme) => ({
 	modGroupTitle: {
 		marginBottom: theme.spacing.xs,
 	},
-	modificationsSection: {
-		marginBottom: theme.spacing.xl,
+	section: {
+		gap: theme.spacing.sm,
 	},
 	modItemName: {
 		flexShrink: 1,
@@ -657,13 +747,25 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	quantityButton: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.gray.background,
-		borderColor: theme.colors.gray.border,
-		borderRadius: 20,
-		borderWidth: 1,
-		height: 40,
+		backgroundColor: theme.colors.verde.solid,
+		borderTopRightRadius: theme.borderRadius.full,
+		borderBottomRightRadius: theme.borderRadius.full,
+		height: 50,
 		justifyContent: 'center',
-		width: 40,
+		width: 50,
+	},
+	quantityButtonSingle: {
+		borderTopLeftRadius: theme.borderRadius.full,
+		borderBottomLeftRadius: theme.borderRadius.full,
+	},
+	quantityButtonMinus: {
+		alignItems: 'center',
+		backgroundColor: theme.colors.verde.solid,
+		borderTopLeftRadius: theme.borderRadius.full,
+		borderBottomLeftRadius: theme.borderRadius.full,
+		height: 50,
+		justifyContent: 'center',
+		width: 50,
 	},
 	quantityControls: {
 		alignItems: 'center',
@@ -678,8 +780,10 @@ const styles = StyleSheet.create((theme) => ({
 		marginBottom: theme.spacing.lg,
 	},
 	quantityText: {
-		minWidth: 40,
-		textAlign: 'center',
+		backgroundColor: theme.colors.verde.interactive,
+		paddingVertical: theme.spacing.xs,
+		paddingHorizontal: theme.spacing.md,
+		borderRadius: theme.borderRadius.full,
 	},
 	recipeSection: {
 		backgroundColor: theme.colors.gray.background,

@@ -1,9 +1,6 @@
 import type { ComponentProps } from 'react'
 import { useMemo, useRef, useState } from 'react'
-import type {
-	NativeSyntheticEvent,
-	TextInputFocusEventData,
-} from 'react-native'
+import type { BlurEvent } from 'react-native'
 import { Pressable, TextInput, View } from 'react-native'
 
 import { StyleSheet } from 'react-native-unistyles'
@@ -55,7 +52,7 @@ export function OtpInput({
 		}
 	}
 
-	const handleBlur = (event: NativeSyntheticEvent<TextInputFocusEventData>) => {
+	const handleBlur = (event: BlurEvent) => {
 		setFocused(false)
 		onBlur?.(event)
 	}

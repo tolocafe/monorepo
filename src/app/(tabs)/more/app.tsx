@@ -13,6 +13,7 @@ import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { useUpdates } from '@/lib/hooks/use-updates'
 import { clearAllCache } from '@/lib/queries/cache-utils'
+import { router } from 'expo-router'
 
 const getStringOrFallback = (value: unknown, fallback: string): string =>
 	typeof value === 'string' ? value : fallback
@@ -52,6 +53,8 @@ export default function AppInfoScreen() {
 								preset: 'done',
 								title: t`Cache cleared`,
 							})
+
+							router.back()
 						} catch {
 							Burnt.toast({
 								duration: 3,

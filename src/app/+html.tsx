@@ -58,6 +58,12 @@ export default function Root({ children }: PropsWithChildren) {
 				/>
 				<meta content="/og-image.png" name="twitter:image" />
 
+				<style>{`
+				body {
+					color-scheme: light dark;
+				}
+				`}</style>
+
 				{/* Disable body scrolling on web for native-like experience */}
 				<ScrollViewStyleReset />
 			</head>

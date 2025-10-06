@@ -32,6 +32,7 @@ export type Bindings = Cloudflare.Env & {
 	TEST_PHONE_NUMBERS: string
 	WEBFLOW_API_TOKEN: string
 	WEBFLOW_MENU_COLLECTION_ID: string
+	WEBFLOW_COFFEES_COLLECTION_ID: string
 	/** Passkit */
 	WWDR: string
 }

@@ -4,7 +4,7 @@ import type {
 	CreateStripeTransaction,
 } from '@common/schemas'
 
-import type { Category, ClientData, Product } from '@/lib/api'
+import type { Category, ClientData, Coffee, Product } from '@/lib/api'
 import type { RequestOtpMutationOptions } from '@/lib/queries/auth'
 import type {
 	CreateOrderResponse,
@@ -57,6 +57,12 @@ export const api = {
 	},
 
 	get: (endpoint: string) => privateClient.get(endpoint).json(),
+
+	coffees: {
+		getCoffee: (slug: string) =>
+			publicClient.get<Coffee>(`coffees/${slug}`).json(),
+		getCoffees: () => publicClient.get<Coffee[]>('coffees').json(),
+	},
 
 	menu: {
 		getCategories: () => publicClient.get<Category[]>('menu/categories').json(),

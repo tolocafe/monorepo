@@ -136,22 +136,17 @@ export default function Orders() {
 							style={styles.currentOrderCard}
 						>
 							<View style={styles.orderHeader}>
-								<H3 style={styles.currentOrderTitle}>
+								<H3>
 									<Trans>Current Order</Trans>
 								</H3>
-								<Text style={styles.orderBadge}>
+								<Text>
 									<Trans>{itemsCount} items</Trans>
 								</Text>
+								<Text>{formatPrice(currentOrderTotalCents)}</Text>
 							</View>
-							<View style={styles.currentOrderBottom}>
-								<Paragraph style={styles.currentOrderText}>
-									{formatPrice(currentOrderTotalCents)}
-								</Paragraph>
-								<Feather name="chevron-right" size={18} color="#ffffff" />
-							</View>
-							<Paragraph style={styles.tapToEdit}>
-								<Trans>Tap to view and edit</Trans>
-							</Paragraph>
+							<Text>
+								<Feather name="chevron-right" size={24} />
+							</Text>
 						</TouchableOpacity>
 					</>
 				)}
@@ -230,20 +225,10 @@ const styles = StyleSheet.create((theme) => ({
 		borderCurve: 'continuous',
 		borderRadius: theme.borderRadius.md,
 		padding: theme.spacing.lg,
-	},
-	currentOrderBottom: {
-		alignItems: 'center',
 		flexDirection: 'row',
-		gap: theme.spacing.xs,
-		justifyContent: 'center',
-		backgroundColor: 'red',
+		alignItems: 'center',
 	},
-	currentOrderText: {
-		color: theme.colors.gray.background,
-	},
-	currentOrderTitle: {
-		color: theme.colors.gray.background,
-	},
+
 	emptyOrderContainer: {
 		alignItems: 'center',
 		flex: 1,
@@ -256,10 +241,6 @@ const styles = StyleSheet.create((theme) => ({
 	image: {
 		height: 250,
 		width: 250,
-	},
-	orderBadge: {
-		color: theme.colors.gray.background,
-		opacity: 0.9,
 	},
 	orderCard: {
 		flexDirection: 'row',
@@ -283,10 +264,7 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'center',
 	},
 	orderHeader: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginBottom: theme.spacing.sm,
+		flex: 1,
 	},
 	orderItems: {
 		color: theme.colors.crema.solid,

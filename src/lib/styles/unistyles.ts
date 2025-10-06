@@ -65,6 +65,7 @@ const lightTheme = {
 	},
 	fontSizes: {
 		lg: 18,
+		/** body, p, text input  */
 		md: 16,
 		sm: 14,
 		xl: 20,
@@ -97,7 +98,7 @@ const lightTheme = {
 		},
 		button: {
 			fontSize: 15,
-			fontWeight: '600',
+			fontWeight: '700',
 			letterSpacing: 0.5,
 		},
 		caption: {
@@ -143,7 +144,7 @@ const darkTheme = {
 			background: '#191915',
 			border: '#494840',
 			interactive: '#2A2A23',
-			solid: '#F8F8F1',
+			solid: '#989891',
 			text: '#EEEEE7',
 		},
 		// Text and backgrounds - Gray

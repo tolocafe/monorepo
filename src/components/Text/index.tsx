@@ -104,6 +104,7 @@ const styles = StyleSheet.create((theme) => ({
 	paragraph: {
 		fontSize: theme.typography.body.fontSize,
 		lineHeight: theme.fontSizes.xl,
+		marginBottom: theme.spacing.sm,
 	},
 	text: {
 		color: theme.colors.gray.text,

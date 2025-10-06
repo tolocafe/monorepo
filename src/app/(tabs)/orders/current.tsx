@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo } from 'react'
-import { Alert, Pressable, View } from 'react-native'
+import { Alert, Platform, Pressable, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -9,6 +9,7 @@ import * as Burnt from 'burnt'
 import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
+import * as StoreReview from 'expo-store-review'
 
 import type { Product } from '@common/api'
 import type { CreateOrder } from '@common/schemas'
@@ -108,6 +109,10 @@ export default function OrderDetail() {
 			void registerForPushNotifications()
 			clearOrder()
 			void queryClient.invalidateQueries(orderQueryOptions)
+
+			if (Platform.OS !== 'web') {
+				StoreReview.requestReview().catch(() => null)
+			}
 
 			router.back()
 		},
@@ -234,7 +239,9 @@ export default function OrderDetail() {
 						onPress={() => handleQuantityChange(product, product.quantity - 1)}
 						style={styles.quantityButton}
 					>
-						<Ionicons color="#333" name="remove" size={20} />
+						<Text>
+							<Ionicons name="remove" size={20} />
+						</Text>
 					</Pressable>
 					<Text align="center" style={styles.quantity}>
 						{product.quantity}
@@ -243,7 +250,9 @@ export default function OrderDetail() {
 						onPress={() => handleQuantityChange(product, product.quantity + 1)}
 						style={styles.quantityButton}
 					>
-						<Ionicons color="#333" name="add" size={20} />
+						<Text>
+							<Ionicons name="add" size={20} />
+						</Text>
 					</Pressable>
 				</View>
 				<Paragraph>

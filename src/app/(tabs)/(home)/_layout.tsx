@@ -27,6 +27,14 @@ export default function HomeLayout() {
 					title: '',
 				}}
 			/>
+			<Stack.Screen
+				name="coffees/[id]"
+				options={{
+					animation: 'fade',
+					headerShown: false,
+					presentation: 'transparentModal',
+				}}
+			/>
 		</Stack>
 	)
 }

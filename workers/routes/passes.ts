@@ -69,7 +69,7 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 
 			const pass = await getPass(context, passAuthToken, client)
 
-			return new Response(pass.getAsBuffer(), {
+			return new Response(pass.getAsBuffer() as unknown as BodyInit, {
 				headers: {
 					'Content-disposition': `attachment; filename=tolo-pass.pkpass`,
 					'Content-type': pass.mimeType,

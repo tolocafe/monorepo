@@ -16,14 +16,23 @@ type Props = ComponentProps<typeof Pressable> & {
 	onPress?: (event: GestureResponderEvent) => void
 	testID?: string
 	textStyle?: StyleProp<TextStyle>
+	asChild?: boolean
 	variant?: ButtonVariant
 }
 
-export function Button({
+function ButtonText({ children, style }: ComponentProps<typeof Text>) {
+	return <Text style={[styles.text, style]}>{children}</Text>
+}
+
+const androidRipple = { color: '#fff' }
+
+function Button({
 	children,
 	disabled = false,
 	fullWidth = false,
 	textStyle,
+	style,
+	asChild = false,
 	variant = 'primary',
 	...props
 }: Props) {
@@ -39,20 +48,27 @@ export function Button({
 	return (
 		<Pressable
 			accessibilityRole="button"
-			android_ripple={{ color: '#fff' }}
+			android_ripple={androidRipple}
 			disabled={disabled}
-			style={({ pressed }) => [
+			style={(state) => [
 				styles.button,
-				pressed && !disabled && styles.buttonPressed,
+				state.pressed && !disabled && styles.buttonPressed,
+				typeof style === 'function' ? style(state) : style,
 			]}
 			{...props}
 		>
-			<Text numberOfLines={1} style={[styles.text, textStyle]}>
-				{children}
-			</Text>
+			{asChild ? (
+				children
+			) : (
+				<ButtonText numberOfLines={1}>{children}</ButtonText>
+			)}
 		</Pressable>
 	)
 }
+
+Button.Text = ButtonText
+
+export { Button }
 
 const styles = StyleSheet.create((theme) => ({
 	button: {

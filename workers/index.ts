@@ -9,6 +9,7 @@ import broadcast from './routes/broadcast'
 import clients from './routes/clients'
 import menu from './routes/menu'
 import orders from './routes/orders'
+import coffees from './routes/coffees'
 import passes from './routes/passes'
 import receipts from './routes/receipts'
 import transactions from './routes/transactions'
@@ -69,6 +70,7 @@ app
 	.route('/orders', orders)
 	.route('/receipts', receipts)
 	.route('/webhooks', webhooks)
+	.route('/coffees', coffees)
 	.route('/passes', passes)
 	.route('/broadcast', broadcast)
 	.all('*', (context) => {
