@@ -1,9 +1,10 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Dimensions, Pressable, TouchableOpacity, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useQuery } from '@tanstack/react-query'
-import { router, Stack, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams } from 'expo-router'
+import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import Animated, {
 	useAnimatedStyle,
@@ -16,21 +17,31 @@ import {
 	GestureDetector,
 	GestureHandlerRootView,
 } from 'react-native-gesture-handler'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, UnistylesRuntime } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
-import { H1, H4, Text } from '@/components/Text'
+import { H1, Text } from '@/components/Text'
 import { coffeeQueryOptions, coffeesQueryOptions } from '@/lib/queries/coffees'
+import type { Coffee } from '@/lib/api'
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
-const STORY_DURATION = 5000 // 5 seconds per story
+const { height: SCREEN_HEIGHT } = Dimensions.get('window')
+const STORY_DURATION = 10_000
+const PAGES_PER_COFFEE = 3
+const WHITE_COLOR = '#FFFFFF'
+const WHITE_ALPHA_30 = 'rgba(255, 255, 255, 0.3)'
+const WHITE_ALPHA_80 = 'rgba(255, 255, 255, 0.8)'
 
-const gradients = [
-	['#8B4513', '#D2691E', '#CD853F'], // Brown/Tan
-	['#4A2511', '#6F4E37', '#A0522D'], // Dark Brown
-	['#654321', '#8B6914', '#DAA520'], // Coffee Brown to Gold
-	['#3E2723', '#5D4037', '#795548'], // Dark Coffee
-	['#3C1A1A', '#6D3838', '#A05656'], // Reddish Brown
+const SPRING_CONFIG = {
+	damping: 200,
+	stiffness: 1000,
+} as const
+
+const GRADIENTS = [
+	['#A0522D', '#D2691E', '#F4A460'], // Burnt Sienna to Sandy Brown (Caramel)
+	['#8B2500', '#B8410B', '#D2691E'], // Dark Cherry to Burnt Orange (Cherry)
+	['#6B4423', '#8B6914', '#DAA520'], // Coffee to Goldenrod (Honey/Golden)
+	['#B8610B', '#D87020', '#F4A460'], // Burnt Orange to Peach (Peach/Apricot)
+	['#704214', '#A0522D', '#CD853F'], // Rich Brown to Peru (Chocolate/Walnut)
 ] as const
 
 export default function CoffeeStories() {
@@ -38,100 +49,161 @@ export default function CoffeeStories() {
 	const { data: coffees = [] } = useQuery(coffeesQueryOptions)
 	const { data: currentCoffee } = useQuery(coffeeQueryOptions(id))
 
-	const [currentStoryIndex, setCurrentStoryIndex] = useState(0)
-	const timerRef = useRef<NodeJS.Timeout | undefined>(undefined)
+	const [currentPageIndex, setCurrentPageIndex] = useState(0)
+	const [previousCoffeeIndex, setPreviousCoffeeIndex] = useState(0)
 
-	// Use either all coffees or just the current coffee
-	const stories =
+	const coffeeStories =
 		coffees.length > 0 ? coffees : currentCoffee ? [currentCoffee] : []
+	const totalPages = coffeeStories.length * PAGES_PER_COFFEE
+	const totalPagesRef = useRef(totalPages)
 
 	const progress = useSharedValue(0)
 	const scale = useSharedValue(1)
+	const slideX = useSharedValue(0)
+	const dismissAlpha = useSharedValue(0)
+	const mountScale = useSharedValue(0)
+
+	// Mount animation
+	useEffect(() => {
+		mountScale.value = withSpring(1, SPRING_CONFIG)
+		dismissAlpha.value = withSpring(0.8, SPRING_CONFIG)
+	}, [mountScale, dismissAlpha])
+
+	// Update ref when totalPages changes
+	useEffect(() => {
+		totalPagesRef.current = totalPages
+	}, [totalPages])
+
+	const handleCloseRef = useRef<(() => void) | null>(null)
+
+	const goToNextPage = useCallback(() => {
+		setCurrentPageIndex((prev) => {
+			if (prev < totalPagesRef.current - 1) {
+				return prev + 1
+			}
+			if (handleCloseRef.current) {
+				handleCloseRef.current()
+			}
+			return prev
+		})
+	}, [])
 
 	const startTimer = useCallback(() => {
-		progress.set(0)
-		progress.set(
-			withTiming(1, { duration: STORY_DURATION }, (finished) => {
-				if (finished) {
-					scheduleOnRN(goToNextStory)
-				}
-			}),
-		)
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [currentStoryIndex, stories.length])
+		progress.value = 0
+		progress.value = withTiming(1, { duration: STORY_DURATION }, (finished) => {
+			if (finished) {
+				scheduleOnRN(goToNextPage)
+			}
+		})
+	}, [goToNextPage])
 
-	const goToNextStory = useCallback(() => {
-		if (currentStoryIndex < stories.length - 1) {
-			setCurrentStoryIndex((prev) => prev + 1)
-		} else {
-			router.back()
-		}
-	}, [currentStoryIndex, stories.length])
+	const goToPreviousPage = useCallback(() => {
+		setCurrentPageIndex((prev) => (prev > 0 ? prev - 1 : prev))
+	}, [])
 
-	const goToPreviousStory = useCallback(() => {
-		if (currentStoryIndex > 0) {
-			setCurrentStoryIndex((prev) => prev - 1)
-		}
-	}, [currentStoryIndex])
+	const currentCoffeeIndex = useMemo(
+		() => Math.floor(currentPageIndex / PAGES_PER_COFFEE),
+		[currentPageIndex],
+	)
 
 	useEffect(() => {
 		startTimer()
-		return () => {
-			if (timerRef.current) {
-				clearTimeout(timerRef.current)
-			}
+	}, [currentPageIndex, startTimer])
+
+	// Animate slide when coffee index changes
+	useEffect(() => {
+		if (currentCoffeeIndex !== previousCoffeeIndex) {
+			const direction = currentCoffeeIndex > previousCoffeeIndex ? 1 : -1
+			const screenWidth = UnistylesRuntime.screen.width
+
+			// Start from off-screen and slide in with spring
+			slideX.value = direction * screenWidth
+			slideX.value = withSpring(0, SPRING_CONFIG)
+
+			// Update state immediately
+			setPreviousCoffeeIndex(currentCoffeeIndex)
 		}
-	}, [currentStoryIndex, startTimer])
+	}, [currentCoffeeIndex, previousCoffeeIndex, slideX])
 
 	const handleLeftTap = useCallback(() => {
-		progress.set(0)
-		goToPreviousStory()
-	}, [goToPreviousStory, progress])
+		progress.value = 0
+		goToPreviousPage()
+	}, [goToPreviousPage])
 
 	const handleRightTap = useCallback(() => {
-		progress.set(0)
-		goToNextStory()
-	}, [goToNextStory, progress])
+		progress.value = 0
+		goToNextPage()
+	}, [goToNextPage])
 
 	const handleClose = useCallback(() => {
-		router.back()
-	}, [])
+		mountScale.value = withSpring(0, SPRING_CONFIG, (finished) => {
+			if (finished) {
+				scheduleOnRN(router.back)
+			}
+		})
+		dismissAlpha.value = withSpring(0, SPRING_CONFIG)
+	}, [mountScale, dismissAlpha])
+
+	// Update ref for goToNextPage
+	useEffect(() => {
+		handleCloseRef.current = handleClose
+	}, [handleClose])
 
 	const panGesture = Gesture.Pan()
 		.onUpdate((event) => {
-			scale.set(1 - Math.abs(event.translationY) / SCREEN_HEIGHT / 2)
+			const absTranslation = Math.abs(event.translationY)
+			scale.value = 1 - absTranslation / SCREEN_HEIGHT / 2
+			// Fade out background as user pulls down
+			dismissAlpha.value = Math.max(0, 0.8 - absTranslation / 250)
 		})
 		.onEnd((event) => {
 			if (Math.abs(event.translationY) > 100) {
 				scheduleOnRN(handleClose)
 			} else {
-				scale.set(withSpring(1))
+				scale.value = withSpring(1, SPRING_CONFIG)
+				dismissAlpha.value = withSpring(0.8, SPRING_CONFIG)
 			}
 		})
 
-	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.get() }],
+	const animatedContainerStyle = useAnimatedStyle(() => ({
+		backgroundColor: `rgba(0, 0, 0, ${dismissAlpha.value})`,
 	}))
 
-	if (stories.length === 0) {
+	const animatedStyle = useAnimatedStyle(() => ({
+		transform: [
+			{ scale: scale.value * mountScale.value },
+			{ translateX: slideX.value },
+		],
+		opacity: mountScale.value,
+	}))
+
+	if (coffeeStories.length === 0) {
 		return null
 	}
 
-	const currentStory = stories[currentStoryIndex]
-	const gradientColors = gradients[currentStoryIndex % gradients.length]
+	const currentPageInCoffee = currentPageIndex % PAGES_PER_COFFEE
+	const currentCoffeeStory = coffeeStories[currentCoffeeIndex]
+	const gradientColors = GRADIENTS[currentCoffeeIndex % GRADIENTS.length]
+
+	// Determine which image to show based on current page
+	const currentImage =
+		currentPageInCoffee === 0
+			? currentCoffeeStory['region-image']
+			: currentPageInCoffee === 1
+				? currentCoffeeStory['varietal-image']
+				: null
 
 	return (
 		<GestureHandlerRootView>
-			<Stack.Screen
-				options={{
-					animation: 'fade',
-					headerShown: false,
-					presentation: 'transparentModal',
-				}}
-			/>
-			<View style={styles.container}>
+			<Animated.View style={[styles.container, animatedContainerStyle]}>
 				<GestureDetector gesture={panGesture}>
-					<Animated.View style={[styles.storyContainer, animatedStyle]}>
+					<Animated.View
+						style={[
+							styles.storyContainer,
+							animatedStyle,
+							{ backgroundColor: gradientColors[0] },
+						]}
+					>
 						{/* Background Gradient */}
 						<LinearGradient
 							colors={gradientColors}
@@ -140,100 +212,61 @@ export default function CoffeeStories() {
 							style={styles.gradient}
 						/>
 
-						{/* Progress Bars */}
-						<View style={styles.progressContainer}>
-							{stories.map((_, index) => (
-								<View key={index} style={styles.progressBarContainer}>
-									<ProgressBar
-										active={index === currentStoryIndex}
-										completed={index < currentStoryIndex}
-										progress={progress}
-									/>
-								</View>
-							))}
-						</View>
-
-						{/* Header */}
-						<View style={styles.header}>
-							<View style={styles.headerContent}>
-								<H4 style={styles.whiteText}>Coffee Stories</H4>
-							</View>
-							<TouchableOpacity
-								onPress={handleClose}
-								style={styles.closeButton}
-							>
-								<Ionicons color="#FFFFFF" name="close" size={28} />
-							</TouchableOpacity>
-						</View>
-
 						{/* Story Content */}
-						<View style={styles.contentCenter}>
-							<View style={styles.coffeeCard}>
-								<H1 align="center" style={styles.whiteText}>
-									{currentStory.name}
-								</H1>
-
-								<View style={styles.coffeeDetails}>
-									<View style={styles.detailRow}>
-										<View style={styles.detailBadge}>
-											<Ionicons color="#FFFFFF" name="location" size={16} />
-											<Text style={styles.detailLabel}>Origin</Text>
-										</View>
-										<Text align="right" weight="bold" style={styles.whiteText}>
-											{currentStory.origin}
-										</Text>
+						<View style={styles.contentWrapper}>
+							{/* Progress Bars */}
+							<View style={styles.progressContainer}>
+								{Array.from({ length: PAGES_PER_COFFEE }).map((_, index) => (
+									<View key={index} style={styles.progressBarContainer}>
+										<ProgressBar
+											active={index === currentPageInCoffee}
+											completed={index < currentPageInCoffee}
+											progress={progress}
+										/>
 									</View>
+								))}
+							</View>
+							<View style={styles.header}>
+								<H1 style={styles.headerText}>{currentCoffeeStory.name}</H1>
+								<TouchableOpacity
+									onPress={handleClose}
+									style={styles.closeButton}
+								>
+									<Ionicons color={WHITE_COLOR} name="close" size={36} />
+								</TouchableOpacity>
+							</View>
+							{/* Header */}
 
-									<View style={styles.detailRow}>
-										<View style={styles.detailBadge}>
-											<Ionicons color="#FFFFFF" name="map" size={16} />
-											<Text style={styles.detailLabel}>Region</Text>
+							{/* Main Content Area */}
+							<View style={styles.contentCenter}>
+								<View aria-hidden />
+
+								{currentPageInCoffee === 2 ? (
+									<TastingNotes coffee={currentCoffeeStory} />
+								) : currentImage ? (
+									<>
+										<Image
+											contentFit="cover"
+											source={{ uri: currentImage.url }}
+											style={styles.coffeeImage}
+										/>
+										<View style={styles.coffeeDetails}>
+											{currentPageInCoffee === 0 ? (
+												<RegionPage coffee={currentCoffeeStory} />
+											) : (
+												<VarietalPage coffee={currentCoffeeStory} />
+											)}
 										</View>
-										<Text align="right" weight="bold" style={styles.whiteText}>
-											{currentStory.region}
-										</Text>
+									</>
+								) : (
+									<View style={styles.coffeeDetailsCentered}>
+										{currentPageInCoffee === 0 ? (
+											<RegionPage coffee={currentCoffeeStory} />
+										) : (
+											<VarietalPage coffee={currentCoffeeStory} />
+										)}
 									</View>
-
-									<View style={styles.detailRow}>
-										<View style={styles.detailBadge}>
-											<Ionicons color="#FFFFFF" name="leaf" size={16} />
-											<Text style={styles.detailLabel}>Varietal</Text>
-										</View>
-										<Text align="right" weight="bold" style={styles.whiteText}>
-											{currentStory.varietal}
-										</Text>
-									</View>
-
-									<View style={styles.detailRow}>
-										<View style={styles.detailBadge}>
-											<Ionicons color="#FFFFFF" name="flask" size={16} />
-											<Text style={styles.detailLabel}>Process</Text>
-										</View>
-										<Text align="right" weight="bold" style={styles.whiteText}>
-											{currentStory.process}
-										</Text>
-									</View>
-
-									{currentStory.altitude ? (
-										<View style={styles.detailRow}>
-											<View style={styles.detailBadge}>
-												<Ionicons
-													color="#FFFFFF"
-													name="trending-up"
-													size={16}
-												/>
-												<Text style={styles.detailLabel}>Altitude</Text>
-											</View>
-											<Text
-												align="right"
-												weight="bold"
-												style={styles.whiteText}
-											>
-												{currentStory.altitude}m
-											</Text>
-										</View>
-									) : null}
-								</View>
+								)}
 							</View>
 						</View>
 
@@ -244,8 +277,74 @@ export default function CoffeeStories() {
 						</View>
 					</Animated.View>
 				</GestureDetector>
-			</View>
+			</Animated.View>
 		</GestureHandlerRootView>
+	)
+}
+
+type DetailRowProps = {
+	icon: keyof typeof Ionicons.glyphMap
+	label: string
+	value: string
+}
+
+function DetailRow({ icon, label, value }: DetailRowProps) {
+	return (
+		<View style={styles.detailRow}>
+			<View style={styles.detailBadge}>
+				<Ionicons color={WHITE_COLOR} name={icon} size={16} />
+				<Text style={styles.detailLabel}>{label}</Text>
+			</View>
+			<Text align="right" weight="bold" style={styles.headerText}>
+				{value}
+			</Text>
+		</View>
+	)
+}
+
+function RegionPage({ coffee }: { coffee: Coffee }) {
+	return (
+		<>
+			<DetailRow icon="location" label="Origin" value={coffee.origin} />
+			{coffee.altitude && (
+				<DetailRow
+					icon="trending-up"
+					label="Altitude"
+					value={`${coffee.altitude}m`}
+				/>
+			)}
+			<DetailRow icon="map" label="Region" value={coffee.region} />
+		</>
+	)
+}
+
+function VarietalPage({ coffee }: { coffee: Coffee }) {
+	return (
+		<>
+			<DetailRow icon="leaf" label="Varietal" value={coffee.varietal} />
+			<DetailRow icon="flask" label="Process" value={coffee.process} />
+		</>
+	)
+}
+
+function TastingNotes({ coffee }: { coffee: Coffee }) {
+	const tastingNotes = coffee['tasting-notes']
+		?.split(',')
+		.map((note) => note.trim())
+		.filter(Boolean)
+
+	if (!tastingNotes?.length) return null
+
+	return (
+		<View style={styles.tastingNotesContainer}>
+			{tastingNotes.map((note, index) => (
+				<View key={`${note}-${index}`} style={styles.tastingNoteCircle}>
+					<Text align="center" style={styles.tastingNoteText}>
+						{note}
+					</Text>
+				</View>
+			))}
+		</View>
 	)
 }
 
@@ -271,33 +370,51 @@ function ProgressBar({
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, runtime) => ({
 	closeButton: {
 		padding: theme.spacing.xs,
 	},
-	coffeeCard: {
-		backgroundColor: 'rgba(255, 255, 255, 0.1)',
-		backdropFilter: 'blur(10px)',
-		borderColor: 'rgba(255, 255, 255, 0.2)',
-		borderRadius: theme.borderRadius.xl,
-		borderWidth: 1,
-		gap: theme.spacing.xl,
-		padding: theme.spacing.xl,
-	},
 	coffeeDetails: {
 		gap: theme.spacing.md,
+		paddingHorizontal: theme.layout.screenPadding,
+		width: '100%',
+	},
+	coffeeImage: {
+		borderRadius: theme.borderRadius.xl,
+		height: runtime.screen.width * 0.8,
+		width: runtime.screen.width * 0.8,
 	},
 	container: {
 		alignItems: 'center',
-		backgroundColor: 'rgba(0, 0, 0, 0.95)',
 		flex: 1,
 		justifyContent: 'center',
+		paddingHorizontal: theme.spacing.md,
+		paddingTop: runtime.insets.top,
+		paddingBottom: runtime.insets.bottom,
+		_web: {
+			padding: 0,
+		},
 	},
 	contentCenter: {
 		alignItems: 'center',
 		flex: 1,
-		justifyContent: 'center',
+		gap: theme.spacing.xl,
+		justifyContent: 'space-between',
+	},
+	contentWrapper: {
+		flex: 1,
+		zIndex: 2,
+		justifyContent: 'space-between',
+		paddingTop: theme.layout.screenPadding,
+		width: '100%',
+		paddingBottom: theme.spacing.xl,
+	},
+	coffeeDetailsCentered: {
+		gap: theme.spacing.md,
 		paddingHorizontal: theme.layout.screenPadding,
+		flex: 1,
+		justifyContent: 'center',
+		width: '100%',
 	},
 	detailBadge: {
 		alignItems: 'center',
@@ -306,8 +423,7 @@ const styles = StyleSheet.create((theme) => ({
 		minWidth: 100,
 	},
 	detailLabel: {
-		color: 'rgba(255, 255, 255, 0.8)',
-		fontSize: theme.fontSizes.sm,
+		color: WHITE_ALPHA_80,
 	},
 	detailRow: {
 		alignItems: 'center',
@@ -321,11 +437,7 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		left: theme.layout.screenPadding,
-		position: 'absolute',
-		right: theme.layout.screenPadding,
-		top: 60,
-		zIndex: 2,
+		paddingHorizontal: theme.layout.screenPadding,
 	},
 	headerContent: {
 		alignItems: 'center',
@@ -333,35 +445,32 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.sm,
 	},
 	progressBar: {
-		backgroundColor: 'rgba(255, 255, 255, 0.3)',
-		borderRadius: 2,
+		backgroundColor: WHITE_ALPHA_30,
+		borderRadius: 20,
 		flex: 1,
-		height: 3,
 		overflow: 'hidden',
 	},
 	progressBarContainer: {
 		flex: 1,
 	},
 	progressBarFill: {
-		backgroundColor: '#FFFFFF',
+		backgroundColor: WHITE_COLOR,
 		height: '100%',
 	},
 	progressContainer: {
 		flexDirection: 'row',
 		gap: 4,
-		left: theme.layout.screenPadding,
-		position: 'absolute',
-		right: theme.layout.screenPadding,
-		top: 50,
+		width: '100%',
+		paddingHorizontal: theme.layout.screenPadding,
 		zIndex: 2,
+		height: 2,
 	},
 	storyContainer: {
-		backgroundColor: '#000000',
-		borderRadius: theme.borderRadius.xl,
-		height: SCREEN_HEIGHT * 0.9,
+		borderRadius: theme.borderRadius.lg,
+		height: '100%',
 		overflow: 'hidden',
 		position: 'relative',
-		width: SCREEN_WIDTH * 0.95,
+		width: '100%',
 	},
 	tapAreaLeft: {
 		flex: 1,
@@ -374,8 +483,38 @@ const styles = StyleSheet.create((theme) => ({
 	tapAreas: {
 		...StyleSheet.absoluteFillObject,
 		flexDirection: 'row',
+		zIndex: 3,
+		transform: [{ translateY: 80 }],
 	},
-	whiteText: {
-		color: '#FFFFFF',
+	headerText: {
+		color: WHITE_COLOR,
+		fontSize: theme.fontSizes.md,
+	},
+	tastingNoteCircle: {
+		alignItems: 'center',
+		backgroundColor: 'rgba(255, 255, 255, 0.15)',
+		borderColor: WHITE_ALPHA_30,
+		borderRadius: theme.borderRadius.full,
+		borderWidth: 2,
+		height: 120,
+		justifyContent: 'center',
+		marginBottom: theme.spacing.sm,
+		marginHorizontal: -theme.spacing.xs,
+		width: 120,
+	},
+	tastingNotesContainer: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		flexWrap: 'wrap',
+		justifyContent: 'center',
+		alignContent: 'center',
+		paddingHorizontal: theme.layout.screenPadding,
+		width: '100%',
+		height: '100%',
+	},
+	tastingNoteText: {
+		color: WHITE_COLOR,
+		fontSize: theme.fontSizes.md,
+		fontWeight: theme.fontWeights.semibold,
 	},
 }))

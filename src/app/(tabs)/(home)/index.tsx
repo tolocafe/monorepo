@@ -52,7 +52,12 @@ const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
 
 const categoryKeyExtractor = (item: Product) => item.product_id
 
+const ITEM_SIZE = 180
+
 const menuItemFallback = <View aria-hidden />
+
+// Define category order - categories not in this list will appear at the end in alphabetical order
+const CATEGORY_ORDER = ['De Temporada', 'Café', 'Matcha', 'Té y Tisanas']
 
 export default function Menu() {
 	const { t } = useLingui()
@@ -74,6 +79,24 @@ export default function Menu() {
 						(item: Product) => item.menu_category_id === category.category_id,
 					)
 					return { ...category, items: categoryItems }
+				})
+				.sort((a, b) => {
+					const indexA = CATEGORY_ORDER.indexOf(a.category_name)
+					const indexB = CATEGORY_ORDER.indexOf(b.category_name)
+
+					// If both categories are in the order list, sort by their index
+					if (indexA !== -1 && indexB !== -1) {
+						return indexA - indexB
+					}
+
+					// If only A is in the order list, it comes first
+					if (indexA !== -1) return -1
+
+					// If only B is in the order list, it comes first
+					if (indexB !== -1) return 1
+
+					// If neither is in the order list, sort alphabetically
+					return a.category_name.localeCompare(b.category_name)
 				})
 				.filter((category) => category.items.length > 0),
 		[categories, menu],
@@ -189,7 +212,7 @@ export default function Menu() {
 				{coffees.length > 0 && (
 					<View style={styles.storiesSection}>
 						<H2 style={styles.storiesTitle}>
-							<Trans>Coffees</Trans>
+							<Trans>Our Beans</Trans>
 						</H2>
 						<FlatList
 							contentContainerStyle={styles.storiesContainer}
@@ -210,6 +233,12 @@ export default function Menu() {
 				{categoriesWithItems.map((category, index) =>
 					renderCategorySection(category, index),
 				)}
+				<Paragraph style={styles.disclaimer} align="center">
+					<Trans>
+						Prices are subject to change without notice.{'\n'}Calories and
+						volume are approximate and may vary between preparations.
+					</Trans>
+				</Paragraph>
 			</ScreenContainer>
 		</>
 	)
@@ -274,12 +303,12 @@ function MenuListItem({
 					<View style={styles.menuItemContent}>
 						<H4 numberOfLines={2}>{item.product_name}</H4>
 						{item.product_production_description ? (
-							<Paragraph>{item.product_production_description}</Paragraph>
+							<Text>{item.product_production_description}</Text>
 						) : null}
 						<View style={styles.menuItemFooter}>
-							<Paragraph>
+							<Text>
 								{'modifications' in item ? <Trans>From {cost}</Trans> : cost}
-							</Paragraph>
+							</Text>
 							<View style={styles.menuItemActions}>
 								<TouchableOpacity
 									disabled={!cost}
@@ -358,8 +387,13 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'center',
 		width: 36,
 	},
+	disclaimer: {
+		padding: theme.layout.screenPadding,
+		fontSize: theme.fontSizes.sm,
+		color: theme.colors.gray.solid,
+	},
 	categoryItems: {
-		gap: theme.spacing.md,
+		gap: theme.spacing.sm,
 		overflow: 'visible',
 		paddingBottom: theme.spacing.lg,
 		paddingHorizontal: theme.layout.screenPadding,
@@ -399,7 +433,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	menuItem: {
 		flex: 1,
-		width: 190,
+		width: ITEM_SIZE,
 	},
 	menuItemActions: {
 		alignItems: 'center',
@@ -410,7 +444,8 @@ const styles = StyleSheet.create((theme) => ({
 		flex: 1,
 		gap: theme.spacing.xs,
 		justifyContent: 'space-between',
-		padding: theme.spacing.md,
+		padding: 10,
+		paddingVertical: theme.spacing.sm,
 	},
 	menuItemFooter: {
 		alignItems: 'center',
@@ -426,7 +461,7 @@ const styles = StyleSheet.create((theme) => ({
 		borderCurve: 'continuous',
 		borderTopLeftRadius: theme.borderRadius.lg,
 		borderTopRightRadius: theme.borderRadius.lg,
-		height: 190,
+		height: ITEM_SIZE,
 		overflow: 'hidden',
 		width: '100%',
 	},
@@ -439,7 +474,6 @@ const styles = StyleSheet.create((theme) => ({
 		borderBottomColor: theme.colors.gray.border,
 		borderBottomWidth: 1,
 		paddingBottom: theme.spacing.lg,
-		display: 'none',
 	},
 	storiesTitle: {
 		paddingHorizontal: theme.layout.screenPadding,

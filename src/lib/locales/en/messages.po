@@ -19,7 +19,7 @@ msgid "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status4
 msgstr "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Closed} Status70 {Deleted} other {Unknown}}"
 
 #. placeholder {0}: product.product_name
-#: src/app/(tabs)/(home)/[id].tsx:248
+#: src/app/(tabs)/(home)/[id].tsx:247
 msgid "{0} - TOLO Good Coffee"
 msgstr "{0} - TOLO Good Coffee"
 
@@ -76,7 +76,7 @@ msgstr "Add any special instructions..."
 msgid "Add funds to your TOLO wallet for quick and easy payments."
 msgstr "Add funds to your TOLO wallet for quick and easy payments."
 
-#: src/app/(tabs)/(home)/[id].tsx:556
+#: src/app/(tabs)/(home)/[id].tsx:548
 msgid "Add to Order"
 msgstr "Add to Order"
 
@@ -126,7 +126,7 @@ msgstr "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
 msgid "Cache cleared"
 msgstr "Cache cleared"
 
-#: src/app/(tabs)/(home)/[id].tsx:357
+#: src/app/(tabs)/(home)/[id].tsx:351
 msgid "Caffeine"
 msgstr "Caffeine"
 
@@ -182,10 +182,6 @@ msgstr "Closed"
 msgid "Code sent"
 msgstr "Code sent"
 
-#: src/app/(tabs)/(home)/index.tsx:192
-msgid "Coffees"
-msgstr "Coffees"
-
 #: src/app/(tabs)/more/visit-us.tsx:25
 msgid "Come visit TOLO. Find our hours, address and quick links to your preferred maps app."
 msgstr "Come visit TOLO. Find our hours, address and quick links to your preferred maps app."
@@ -229,11 +225,11 @@ msgstr "Delete"
 msgid "Discount"
 msgstr "Discount"
 
-#: src/app/(tabs)/(home)/index.tsx:169
+#: src/app/(tabs)/(home)/index.tsx:192
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides."
 msgstr "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides."
 
-#: src/app/(tabs)/(home)/index.tsx:160
+#: src/app/(tabs)/(home)/index.tsx:183
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides. TOLO - where good coffee meets you."
 msgstr "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides. TOLO - where good coffee meets you."
 
@@ -303,7 +299,7 @@ msgstr "Failed to clear cache. Please try again."
 msgid "Failed to download receipt. Please try again."
 msgstr "Failed to download receipt. Please try again."
 
-#: src/app/(tabs)/(home)/index.tsx:145
+#: src/app/(tabs)/(home)/index.tsx:168
 msgid "Failed to load menu. Please try again."
 msgstr "Failed to load menu. Please try again."
 
@@ -324,7 +320,7 @@ msgstr "Failed to submit order. Please try again."
 msgid "First name"
 msgstr "First name"
 
-#: src/app/(tabs)/(home)/index.tsx:281
+#: src/app/(tabs)/(home)/index.tsx:310
 msgid "From {cost}"
 msgstr "From {cost}"
 
@@ -363,7 +359,7 @@ msgstr "Information"
 msgid "Insufficient Balance"
 msgstr "Insufficient Balance"
 
-#: src/app/(tabs)/(home)/[id].tsx:354
+#: src/app/(tabs)/(home)/[id].tsx:346
 msgid "Intensity"
 msgstr "Intensity"
 
@@ -384,7 +380,7 @@ msgstr "Language"
 msgid "Let's create your account with the phone number <0>{phoneNumber}</0>"
 msgstr "Let's create your account with the phone number <0>{phoneNumber}</0>"
 
-#: src/app/(tabs)/(home)/index.tsx:135
+#: src/app/(tabs)/(home)/index.tsx:158
 msgid "Loading menu..."
 msgstr "Loading menu..."
 
@@ -417,12 +413,12 @@ msgstr "Maintenance"
 msgid "Maximum length is 2000 characters"
 msgstr "Maximum length is 2000 characters"
 
-#: src/app/(tabs)/(home)/index.tsx:207
+#: src/app/(tabs)/(home)/index.tsx:230
 msgid "Menu"
 msgstr "Menu"
 
-#: src/app/(tabs)/(home)/index.tsx:158
-#: src/app/(tabs)/(home)/index.tsx:167
+#: src/app/(tabs)/(home)/index.tsx:181
+#: src/app/(tabs)/(home)/index.tsx:190
 msgid "Menu - TOLO Good Coffee"
 msgstr "Menu - TOLO Good Coffee"
 
@@ -430,8 +426,8 @@ msgstr "Menu - TOLO Good Coffee"
 msgid "Mexico (+52)"
 msgstr "Mexico (+52)"
 
-#: src/app/(tabs)/(home)/[id].tsx:381
-#: src/app/(tabs)/(home)/[id].tsx:456
+#: src/app/(tabs)/(home)/[id].tsx:373
+#: src/app/(tabs)/(home)/[id].tsx:448
 msgid "Modifications"
 msgstr "Modifications"
 
@@ -504,6 +500,10 @@ msgstr ""
 msgid "Orders"
 msgstr "Orders"
 
+#: src/app/(tabs)/(home)/index.tsx:215
+msgid "Our Beans"
+msgstr "Our Beans"
+
 #: src/containers/top-up-screen.tsx:143
 msgid "Payment Failed"
 msgstr "Payment Failed"
@@ -532,6 +532,14 @@ msgstr "Please sign in to top up your wallet"
 msgid "Please sign in to view your order history"
 msgstr ""
 
+#: src/app/(tabs)/(home)/index.tsx:237
+msgid ""
+"Prices are subject to change without notice.\n"
+"Calories and volume are approximate and may vary between preparations."
+msgstr ""
+"Prices are subject to change without notice.\n"
+"Calories and volume are approximate and may vary between preparations."
+
 #: src/containers/top-up-screen.tsx:244
 msgid "Processing Payment..."
 msgstr "Processing Payment..."
@@ -541,7 +549,7 @@ msgstr "Processing Payment..."
 msgid "Product #{0}"
 msgstr "Product #{0}"
 
-#: src/app/(tabs)/(home)/[id].tsx:221
+#: src/app/(tabs)/(home)/[id].tsx:220
 msgid "Product not found"
 msgstr ""
 
@@ -555,11 +563,11 @@ msgstr ""
 msgid "Qty: {0}"
 msgstr "Qty: {0}"
 
-#: src/app/(tabs)/(home)/[id].tsx:366
+#: src/app/(tabs)/(home)/[id].tsx:358
 msgid "Recipe"
 msgstr "Recipe"
 
-#: src/app/(tabs)/(home)/index.tsx:148
+#: src/app/(tabs)/(home)/index.tsx:171
 msgid "Retry"
 msgstr "Retry"
 
@@ -660,7 +668,7 @@ msgstr "The order you're looking for doesn't exist."
 msgid "The requested order could not be found."
 msgstr "El pedido solicitado no se pudo encontrar."
 
-#: src/app/(tabs)/(home)/[id].tsx:224
+#: src/app/(tabs)/(home)/[id].tsx:223
 msgid "The requested product could not be loaded."
 msgstr "El producto solicitado no se pudo cargar."
 
@@ -680,7 +688,7 @@ msgstr "Tip"
 msgid "TOLO - Good Coffee"
 msgstr ""
 
-#: src/app/(tabs)/(home)/index.tsx:164
+#: src/app/(tabs)/(home)/index.tsx:187
 msgid "TOLO menu, good coffee, espresso, latte, cappuccino, coffee shop menu"
 msgstr ""
 

@@ -198,6 +198,12 @@ export type UpdateClientBody = Partial<{
 	total_payed_sum: number
 }>
 
+export type WebflowImage = {
+	alt?: string
+	url: string
+	fileId: string
+}
+
 export type Coffee = {
 	altitude?: number
 	name: string
@@ -206,4 +212,10 @@ export type Coffee = {
 	region: string
 	slug: string
 	varietal: string
+	/* comma separated list of tasting notes */
+	'tasting-notes'?: string
+	/* Region or producer image */
+	'region-image'?: WebflowImage
+	/* Varietal or process image */
+	'varietal-image'?: WebflowImage
 }
