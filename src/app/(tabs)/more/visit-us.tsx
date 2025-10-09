@@ -44,7 +44,7 @@ export default function VisitUs() {
 								<Trans>Hours</Trans>
 							</H3>
 							<View style={styles.hoursRow}>
-								<Label style={styles.dayText}>
+								<Label>
 									<Trans>Monday – Friday</Trans>
 								</Label>
 								<Label style={styles.hoursText}>
@@ -52,7 +52,7 @@ export default function VisitUs() {
 								</Label>
 							</View>
 							<View style={styles.hoursRow}>
-								<Label style={styles.dayText}>
+								<Label>
 									<Trans>Saturday</Trans>
 								</Label>
 								<Label style={styles.hoursText}>
@@ -60,7 +60,7 @@ export default function VisitUs() {
 								</Label>
 							</View>
 							<View style={styles.hoursRow}>
-								<Label style={styles.dayText}>
+								<Label>
 									<Trans>Sunday</Trans>
 								</Label>
 								<Label style={styles.hoursText}>
@@ -122,7 +122,6 @@ const styles = StyleSheet.create((theme) => ({
 	cardTitle: {
 		marginBottom: theme.spacing.xs,
 	},
-	dayText: {},
 	hoursContainer: {
 		marginBottom: theme.spacing.sm,
 		marginTop: theme.spacing.lg,
@@ -142,8 +141,5 @@ const styles = StyleSheet.create((theme) => ({
 	section: {
 		marginBottom: theme.spacing.lg,
 		padding: theme.layout.screenPadding,
-	},
-	sectionTitle: {
-		marginBottom: theme.spacing.sm,
 	},
 }))

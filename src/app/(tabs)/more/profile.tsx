@@ -280,11 +280,6 @@ function getFullName(
 }
 
 const styles = StyleSheet.create((theme) => ({
-	balanceRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-	},
 	contentContainer: {
 		gap: theme.spacing.lg,
 		padding: theme.layout.screenPadding,

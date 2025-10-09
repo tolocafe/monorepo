@@ -495,10 +495,6 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.xs,
 		marginBottom: theme.spacing.sm,
 	},
-	modificationText: {
-		color: theme.colors.crema.solid,
-		marginBottom: theme.spacing.xs,
-	},
 	noteSection: {
 		gap: theme.spacing.md,
 	},

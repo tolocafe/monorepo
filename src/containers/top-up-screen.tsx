@@ -286,19 +286,9 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.lg,
 		padding: theme.layout.screenPadding,
 	},
-	description: {
-		color: theme.colors.crema.solid,
-		marginBottom: theme.spacing.md,
-	},
-	infoCard: {
-		backgroundColor: theme.colors.gray.background,
-	},
 	infoText: {
 		color: theme.colors.gray.solid,
 		fontSize: theme.typography.caption.fontSize,
 		padding: theme.spacing.lg,
-	},
-	payButtonContainer: {
-		marginTop: theme.spacing.md,
 	},
 }))

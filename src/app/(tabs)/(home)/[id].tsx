@@ -393,9 +393,7 @@ export default function MenuDetail() {
 															return (
 																<TouchableOpacity
 																	accessibilityRole="radio"
-																	accessibilityState={{
-																		selected: isSelected,
-																	}}
+																	accessibilityState={{ selected: isSelected }}
 																	key={modification.dish_modification_id}
 																	onPress={() =>
 																		handleChange(
@@ -441,24 +439,60 @@ export default function MenuDetail() {
 						</View>
 					)}
 
-					{/* Single Modifications */}
 					{product.modifications?.length && (
 						<>
 							<H2>
 								<Trans>Modifications</Trans>
 							</H2>
-							<View style={styles.modButtonGroup}>
-								{product.modifications.map((modification) => (
-									<View
-										key={modification.dish_modification_id}
-										style={styles.modButtonRow}
-									>
-										<Paragraph style={styles.modButton}>
-											{modification.modificator_name}
-										</Paragraph>
+							<Field name="modifications">
+								{({ handleChange, state }) => (
+									<View style={styles.modButtonGroup}>
+										{product.modifications?.map((modification) => {
+											const isSelected =
+												state.value[modification.modificator_name] ===
+												modification.dish_modification_id
+
+											return (
+												<TouchableOpacity
+													key={modification.dish_modification_id}
+													onPress={() =>
+														handleChange({
+															[modification.modificator_name]:
+																modification.dish_modification_id,
+														})
+													}
+													style={styles.modButton}
+												>
+													<View style={styles.modButtonRow}>
+														{isSelected ? (
+															<View style={styles.modCheck}>
+																<Ionicons
+																	color={styles.modCheckIcon.color}
+																	name="checkmark"
+																	size={16}
+																/>
+															</View>
+														) : null}
+														<Text style={styles.modButtonText}>
+															{modification.modificator_name}
+														</Text>
+														{modification.price ? (
+															<Text
+																style={[
+																	styles.modButtonText,
+																	styles.modItemPrice,
+																]}
+															>
+																+{formatPrice(modification.price * 100)}
+															</Text>
+														) : null}
+													</View>
+												</TouchableOpacity>
+											)
+										})}
 									</View>
-								))}
-							</View>
+								)}
+							</Field>
 						</>
 					)}
 				</View>
@@ -660,15 +694,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		width: '100%',
 	},
 	imageFallback: { height: '100%', width: '100%' },
-	ingredient: {
-		paddingLeft: theme.spacing.sm,
-	},
-	ingredientsSection: {
-		gap: theme.spacing.xs,
-	},
-	loadingText: {
-		color: theme.colors.crema.solid,
-	},
 	modButton: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.gray.background,
@@ -707,10 +732,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	modCheckIcon: {
 		color: '#FFFFFF',
 	},
-	modCheckPlaceholder: {
-		height: 20,
-		width: 20,
-	},
 	modGroup: {
 		gap: theme.spacing.xs,
 		marginBottom: theme.spacing.lg,
@@ -721,26 +742,8 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	section: {
 		gap: theme.spacing.sm,
 	},
-	modItemName: {
-		flexShrink: 1,
-		paddingRight: theme.spacing.md,
-	},
 	modItemPrice: {
 		color: theme.colors.verde.solid,
-	},
-	modItemRow: {
-		alignItems: 'center',
-		borderBottomColor: theme.colors.gray.border,
-		borderBottomWidth: 1,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		paddingVertical: theme.spacing.xs,
-	},
-	placeholderImage: {
-		backgroundColor: theme.colors.gray.border,
-	},
-	popularBadge: {
-		backgroundColor: theme.colors.verde.solid,
 	},
 	price: {
 		color: theme.colors.verde.solid,
@@ -766,18 +769,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		height: 50,
 		justifyContent: 'center',
 		width: 50,
-	},
-	quantityControls: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: theme.spacing.lg,
-		justifyContent: 'center',
-	},
-	quantityLabel: {
-		marginBottom: theme.spacing.sm,
-	},
-	quantitySection: {
-		marginBottom: theme.spacing.lg,
 	},
 	quantityText: {
 		backgroundColor: theme.colors.verde.interactive,

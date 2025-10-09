@@ -20,7 +20,13 @@ type Props = ComponentProps<typeof Pressable> & {
 	variant?: ButtonVariant
 }
 
-function ButtonText({ children, style }: ComponentProps<typeof Text>) {
+function ButtonText({
+	children,
+	style,
+	variant,
+}: ComponentProps<typeof Text> & { variant: ButtonVariant }) {
+	styles.useVariants({ variant })
+
 	return <Text style={[styles.text, style]}>{children}</Text>
 }
 
@@ -60,7 +66,9 @@ function Button({
 			{asChild ? (
 				children
 			) : (
-				<ButtonText numberOfLines={1}>{children}</ButtonText>
+				<ButtonText variant={variant} numberOfLines={1}>
+					{children}
+				</ButtonText>
 			)}
 		</Pressable>
 	)
@@ -109,8 +117,8 @@ const styles = StyleSheet.create((theme) => ({
 		opacity: 0.85,
 	},
 	text: {
-		textTransform: 'uppercase',
 		...theme.typography.button,
+		textTransform: 'uppercase',
 		variants: {
 			variant: {
 				primary: {

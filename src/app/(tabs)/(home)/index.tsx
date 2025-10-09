@@ -272,7 +272,7 @@ function MenuListItem({
 						)}
 					</View>
 					<View style={styles.menuItemContent}>
-						<H4>{item.product_name}</H4>
+						<H4 numberOfLines={2}>{item.product_name}</H4>
 						{item.product_production_description ? (
 							<Paragraph>{item.product_production_description}</Paragraph>
 						) : null}
@@ -358,19 +358,6 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'center',
 		width: 36,
 	},
-	badge: {
-		backgroundColor: theme.colors.verde.solid,
-		borderRadius: theme.borderRadius.sm,
-		paddingHorizontal: theme.spacing.sm,
-		paddingVertical: 2,
-	},
-	badges: {
-		flexDirection: 'row',
-		gap: theme.spacing.xs,
-	},
-	badgeText: {
-		color: theme.colors.gray.background,
-	},
 	categoryItems: {
 		gap: theme.spacing.md,
 		overflow: 'visible',
@@ -394,10 +381,6 @@ const styles = StyleSheet.create((theme) => ({
 	errorText: {
 		color: theme.colors.rojo.solid,
 		textAlign: 'center',
-	},
-	header: {
-		alignItems: 'center',
-		padding: theme.spacing.lg,
 	},
 	image: {
 		height: '100%',
@@ -466,21 +449,12 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.xs,
 		width: 80,
 	},
-	storyBubbleImage: {
-		height: '100%',
-		width: '100%',
-	},
 	storyBubbleImageContainer: {
 		backgroundColor: theme.colors.gray.background,
 		borderRadius: theme.borderRadius.full,
 		height: 64,
 		overflow: 'hidden',
 		width: 64,
-	},
-	storyBubblePlaceholder: {
-		backgroundColor: theme.colors.gray.border,
-		height: '100%',
-		width: '100%',
 	},
 	storyBubbleRing: {
 		alignItems: 'center',
@@ -507,9 +481,5 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	subtitle: {
 		paddingHorizontal: theme.layout.screenPadding,
-	},
-	theme,
-	title: {
-		color: theme.colors.verde.solid,
 	},
 }))

@@ -167,9 +167,6 @@ export default function AppInfoScreen() {
 }
 
 const styles = StyleSheet.create((theme) => ({
-	container: {
-		flex: 1,
-	},
 	contentContainer: {
 		padding: theme.layout.screenPadding,
 	},

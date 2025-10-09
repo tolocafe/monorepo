@@ -136,15 +136,19 @@ export default function Orders() {
 							style={styles.currentOrderCard}
 						>
 							<View style={styles.orderHeader}>
-								<H3>
+								<H3 style={styles.currentOrderText}>
 									<Trans>Current Order</Trans>
 								</H3>
-								<Text>
-									<Trans>{itemsCount} items</Trans>
-								</Text>
-								<Text>{formatPrice(currentOrderTotalCents)}</Text>
+								<View style={styles.currentOrderBottomText}>
+									<Text style={styles.currentOrderText}>
+										<Trans>{itemsCount} items</Trans>
+									</Text>
+									<Text style={styles.currentOrderText}>
+										{formatPrice(currentOrderTotalCents)}
+									</Text>
+								</View>
 							</View>
-							<Text>
+							<Text style={styles.currentOrderText}>
 								<Feather name="chevron-right" size={24} />
 							</Text>
 						</TouchableOpacity>
@@ -216,6 +220,13 @@ export default function Orders() {
 }
 
 const styles = StyleSheet.create((theme) => ({
+	currentOrderBottomText: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	currentOrderText: {
+		color: 'white',
+	},
 	container: {
 		gap: theme.spacing.md,
 		padding: theme.layout.screenPadding,
@@ -227,8 +238,8 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.spacing.lg,
 		flexDirection: 'row',
 		alignItems: 'center',
+		gap: theme.spacing.sm,
 	},
-
 	emptyOrderContainer: {
 		alignItems: 'center',
 		flex: 1,
@@ -247,36 +258,19 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'space-between',
 		width: '100%',
 	},
-	orderDate: {
-		color: theme.colors.crema.solid,
-		marginTop: theme.spacing.xs,
-	},
 	orderDetails: {
 		flexDirection: 'row',
 		gap: theme.spacing.sm,
 		justifyContent: 'space-between',
 		alignItems: 'center',
 	},
-	orderRightSection: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: theme.spacing.xs,
-		justifyContent: 'center',
-	},
 	orderHeader: {
 		flex: 1,
+		gap: theme.spacing.xs,
 	},
-	orderItems: {
-		color: theme.colors.crema.solid,
-		marginBottom: theme.spacing.xs,
-	},
-
 	ordersList: {
 		gap: theme.spacing.sm,
 		width: '100%',
-	},
-	orderStatus: {
-		color: theme.colors.verde.solid,
 	},
 	signInContainer: {
 		alignItems: 'center',
@@ -292,13 +286,5 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	signInTitle: {
 		textAlign: 'center',
-	},
-	subtitle: {
-		color: theme.colors.crema.solid,
-	},
-	tapToEdit: {
-		color: theme.colors.gray.background,
-		marginTop: theme.spacing.xs,
-		opacity: 0.8,
 	},
 }))

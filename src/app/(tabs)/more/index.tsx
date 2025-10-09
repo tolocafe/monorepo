@@ -311,7 +311,7 @@ export default function More() {
 
 					<List>
 						<ListItem>
-							<ListItem.Label style={styles.settingLabel}>
+							<ListItem.Label>
 								<Trans>Language</Trans>
 							</ListItem.Label>
 
@@ -423,19 +423,8 @@ const styles = StyleSheet.create((theme) => ({
 	sectionTitle: {
 		marginBottom: theme.spacing.sm,
 	},
-	settingLabel: {},
-	settingRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-	},
 	signInCard: {
 		gap: theme.spacing.md,
-	},
-	signOutButtonText: {
-		color: theme.colors.gray.text,
-		fontSize: theme.typography.body.fontSize,
-		fontWeight: theme.typography.body.fontWeight,
 	},
 	socialIcon: {
 		color: theme.colors.gray.text,
