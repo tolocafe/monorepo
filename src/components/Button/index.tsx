@@ -24,7 +24,7 @@ function ButtonText({
 	children,
 	style,
 	variant,
-}: ComponentProps<typeof Text> & { variant: ButtonVariant }) {
+}: ComponentProps<typeof Text> & { variant?: ButtonVariant }) {
 	styles.useVariants({ variant })
 
 	return <Text style={[styles.text, style]}>{children}</Text>

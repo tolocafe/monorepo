@@ -268,7 +268,7 @@ function MenuListItem({
 								transition={200}
 							/>
 						) : (
-							<View style={styles.menuItemImage} />
+							<View style={styles.menuItemImage} aria-hidden />
 						)}
 					</View>
 					<View style={styles.menuItemContent}>

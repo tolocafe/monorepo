@@ -43,7 +43,7 @@ const styles = StyleSheet.create((theme) => ({
 		variants: {
 			padding: {
 				padded: {
-					padding: theme.spacing.lg,
+					padding: theme.spacing.md,
 					paddingVertical: theme.spacing.sm,
 				},
 			},

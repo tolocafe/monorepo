@@ -31,6 +31,7 @@ export default function TabLayout() {
 					default: theme.colors.verde.solid,
 				})}
 				initialRouteName="(home)"
+				tabBarInactiveTintColor={theme.colors.gray.text}
 				minimizeBehavior="automatic"
 				screenOptions={{
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -52,7 +53,7 @@ export default function TabLayout() {
 					options={{
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
-						tabBarIcon: ({ focused }: { focused: boolean }) => {
+						tabBarIcon({ focused }: { focused: boolean }) {
 							if (Platform.OS === 'ios') {
 								return { sfSymbol: focused ? 'house.fill' : 'house' }
 							}
@@ -68,7 +69,7 @@ export default function TabLayout() {
 							return (
 								<Ionicons
 									color={
-										focused ? theme.colors.verde.solid : theme.colors.gray.solid
+										focused ? theme.colors.verde.solid : theme.colors.gray.text
 									}
 									name={focused ? 'restaurant' : 'restaurant-outline'}
 									size={24}
@@ -115,7 +116,7 @@ export default function TabLayout() {
 					options={{
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
-						tabBarIcon: ({ focused }: { focused: boolean }) => {
+						tabBarIcon({ focused }: { focused: boolean }) {
 							if (Platform.OS === 'ios') {
 								return { sfSymbol: 'ellipsis' }
 							}

@@ -161,6 +161,14 @@ export type Product = {
 	profit: Record<string, string>
 	recipe?: string
 	'small-description'?: string
+	/* Strength level of the beverage, 0 - 5  */
+	intensity?: number
+	/* Caffeine level of the beverage, 0 - 5  */
+	caffeine?: number
+	/* Calories in kcal  */
+	calories?: number
+	/* Volume in milliliters  */
+	volume?: number
 	sort_order: string
 	sources: unknown[]
 	spots: {

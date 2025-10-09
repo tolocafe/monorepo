@@ -77,7 +77,8 @@ const createDropdownStyles = (isDark: boolean) => ({
 		borderColor: isDark ? '#333333' : '#E0E0E0',
 		borderRadius: 8,
 		borderWidth: 0,
-		minHeight: 44,
+		marginVertical: -8,
+		marginRight: -10,
 		paddingHorizontal: 12,
 		paddingVertical: 8,
 	},
@@ -314,7 +315,6 @@ export default function More() {
 							<ListItem.Label>
 								<Trans>Language</Trans>
 							</ListItem.Label>
-
 							<DropdownMenu.Root>
 								<DropdownMenu.Trigger style={dropdownStyles.trigger}>
 									<View style={styles.languageDropdownTriggerContent}>

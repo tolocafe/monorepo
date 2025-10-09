@@ -34,6 +34,7 @@ import * as Haptics from 'expo-haptics'
 
 import { Button } from '@/components/Button'
 import HeaderGradient from '@/components/HeaderGradient'
+import { LevelIndicator } from '@/components/LevelIndicator'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
 import WebContent from '@/components/WebContent'
@@ -45,7 +46,6 @@ import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
 import { api } from '@/lib/services/api-service'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
-import { formatCookingTime } from '@/lib/utils/cooking-time'
 import {
 	formatPrice,
 	getProductBaseCost,
@@ -328,24 +328,27 @@ export default function MenuDetail() {
 						) : null}
 
 						<View style={styles.badges}>
-							{product.category_name ? (
+							{product.volume ? (
 								<View style={styles.badge}>
-									<Text style={styles.badgeText}>{product.category_name}</Text>
+									<Text style={styles.badgeText}>{product.volume} ml</Text>
 								</View>
 							) : null}
-							{product.cooking_time && product.cooking_time !== '0' ? (
+							{product.calories ? (
 								<View style={styles.badge}>
-									<Text style={styles.badgeText}>
-										{formatCookingTime(product.cooking_time)}
-									</Text>
-								</View>
-							) : null}
-							{product.out ? (
-								<View style={styles.badge}>
-									<Text style={styles.badgeText}>{product.out} ml</Text>
+									<Text style={styles.badgeText}>{product.calories} Cal</Text>
 								</View>
 							) : null}
 						</View>
+
+						{(product.intensity || product.caffeine) && (
+							<View style={styles.levels}>
+								<LevelIndicator
+									label={t`Intensity`}
+									level={product.intensity}
+								/>
+							</View>
+						)}
+						<LevelIndicator label={t`Caffeine`} level={product.caffeine} />
 					</View>
 
 					{htmlRecipeSource &&
@@ -511,6 +514,29 @@ export default function MenuDetail() {
 
 					return (
 						<View style={styles.bottomButton}>
+							<View style={styles.quantityButtons}>
+								{quantity > 1 && (
+									<TouchableOpacity
+										onPress={decrementQuantity}
+										style={styles.quantityButtonMinus}
+									>
+										<Text style={styles.whiteText}>
+											<Ionicons name="remove" size={26} />
+										</Text>
+									</TouchableOpacity>
+								)}
+								<TouchableOpacity
+									onPress={incrementQuantity}
+									style={[
+										styles.quantityButton,
+										quantity === 1 && styles.quantityButtonSingle,
+									]}
+								>
+									<Text style={styles.whiteText}>
+										<Ionicons name="add" size={26} />
+									</Text>
+								</TouchableOpacity>
+							</View>
 							<Button
 								style={styles.addButton}
 								disabled={!totalCost}
@@ -529,29 +555,6 @@ export default function MenuDetail() {
 								</View>
 								<AnimatedPrice>{formatPrice(totalCost)}</AnimatedPrice>
 							</Button>
-							<View style={styles.quantityButtons}>
-								{quantity > 1 && (
-									<TouchableOpacity
-										onPress={decrementQuantity}
-										style={styles.quantityButtonMinus}
-									>
-										<Text style={styles.whiteText}>
-											<Ionicons name="remove" size={24} />
-										</Text>
-									</TouchableOpacity>
-								)}
-								<TouchableOpacity
-									onPress={incrementQuantity}
-									style={[
-										styles.quantityButton,
-										quantity === 1 && styles.quantityButtonSingle,
-									]}
-								>
-									<Text style={styles.whiteText}>
-										<Ionicons name="add" size={24} />
-									</Text>
-								</TouchableOpacity>
-							</View>
 						</View>
 					)
 				}}
@@ -612,7 +615,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		gap: theme.spacing.md,
 	},
 	badge: {
-		backgroundColor: theme.colors.verde.solid,
+		backgroundColor: theme.colors.gray.solid,
 		borderRadius: theme.borderRadius.sm,
 		paddingHorizontal: theme.spacing.md,
 		paddingVertical: theme.spacing.xs,
@@ -694,6 +697,9 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		width: '100%',
 	},
 	imageFallback: { height: '100%', width: '100%' },
+	levels: {
+		gap: theme.spacing.md,
+	},
 	modButton: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.gray.background,
@@ -703,7 +709,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		justifyContent: 'center',
 		minHeight: 44,
 		minWidth: 64,
-		paddingHorizontal: theme.spacing.lg,
+		paddingHorizontal: theme.spacing.md,
 		paddingVertical: theme.spacing.sm,
 	},
 	modButtonGroup: {
@@ -743,7 +749,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		gap: theme.spacing.sm,
 	},
 	modItemPrice: {
-		color: theme.colors.verde.solid,
+		color: theme.colors.verde.text,
 	},
 	price: {
 		color: theme.colors.verde.solid,

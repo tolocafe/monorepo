@@ -44,7 +44,7 @@ const lightTheme = {
 			border: '#FFEDE5',
 			interactive: '#FFD0A5',
 			solid: '#F76B15',
-			text: '#FFFFFF',
+			text: '#893C0C',
 		},
 		// Error - Rojo (Red)
 		rojo: {
