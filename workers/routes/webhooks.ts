@@ -44,32 +44,40 @@ const posterWebhookDataSchema = z.object({
 /** Helper function to create required D1 tables */
 async function ensurePassTables(database: D1Database) {
 	// D1 requires sequential execution of CREATE TABLE statements
-	await database.exec(`
-		CREATE TABLE IF NOT EXISTS pass_auth_tokens (
-			client_id INTEGER PRIMARY KEY,
-			auth_token TEXT UNIQUE NOT NULL,
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+	await database
+		.prepare(
+			`CREATE TABLE IF NOT EXISTS pass_auth_tokens (
+				client_id INTEGER PRIMARY KEY,
+				auth_token TEXT UNIQUE NOT NULL,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			)`,
 		)
-	`)
-	await database.exec(`
-		CREATE TABLE IF NOT EXISTS pass_registrations (
-			device_library_id TEXT,
-			pass_type_identifier TEXT,
-			serial_number TEXT,
-			client_id INTEGER,
-			push_token TEXT,
-			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-			PRIMARY KEY (device_library_id, serial_number)
+		.run()
+
+	await database
+		.prepare(
+			`CREATE TABLE IF NOT EXISTS pass_registrations (
+				device_library_id TEXT,
+				pass_type_identifier TEXT,
+				serial_number TEXT,
+				client_id INTEGER,
+				push_token TEXT,
+				created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+				PRIMARY KEY (device_library_id, serial_number)
+			)`,
 		)
-	`)
-	await database.exec(`
-		CREATE TABLE IF NOT EXISTS pass_updates (
-			serial_number TEXT PRIMARY KEY,
-			pass_type_identifier TEXT,
-			client_id INTEGER,
-			last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		.run()
+
+	await database
+		.prepare(
+			`CREATE TABLE IF NOT EXISTS pass_updates (
+				serial_number TEXT PRIMARY KEY,
+				pass_type_identifier TEXT,
+				client_id INTEGER,
+				last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+			)`,
 		)
-	`)
+		.run()
 }
 
 // Helper function to extract client ID from pass serial number
