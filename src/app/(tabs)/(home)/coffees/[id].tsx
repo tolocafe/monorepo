@@ -29,7 +29,6 @@ const STORY_DURATION = 10_000
 const PAGES_PER_COFFEE = 3
 const WHITE_COLOR = '#FFFFFF'
 const WHITE_ALPHA_30 = 'rgba(255, 255, 255, 0.3)'
-const WHITE_ALPHA_80 = 'rgba(255, 255, 255, 0.8)'
 
 const SPRING_CONFIG = {
 	damping: 200,
@@ -293,7 +292,7 @@ function DetailRow({ icon, label, value }: DetailRowProps) {
 		<View style={styles.detailRow}>
 			<View style={styles.detailBadge}>
 				<Ionicons color={WHITE_COLOR} name={icon} size={16} />
-				<Text style={styles.detailLabel}>{label}</Text>
+				<Text>{label}</Text>
 			</View>
 			<Text align="right" weight="bold" style={styles.headerText}>
 				{value}
@@ -421,9 +420,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		flexDirection: 'row',
 		gap: theme.spacing.xs,
 		minWidth: 100,
-	},
-	detailLabel: {
-		color: WHITE_ALPHA_80,
 	},
 	detailRow: {
 		alignItems: 'center',
