@@ -58,6 +58,8 @@ export default function Root({ children }: PropsWithChildren) {
 				/>
 				<meta content="/og-image.png" name="twitter:image" />
 
+				<meta name="apple-itunes-app" content="app-id=6749597635" />
+
 				<style>{`
 				body {
 					color-scheme: light dark;
