@@ -133,7 +133,7 @@ async function generateAPNsJWT(environment: Bindings): Promise<string> {
 		// Import the private key for ES256 signing
 		const privateKey = await crypto.subtle.importKey(
 			'pkcs8',
-			privateKeyBytes,
+			privateKeyBytes as BufferSource,
 			{
 				name: 'ECDSA',
 				namedCurve: 'P-256',
