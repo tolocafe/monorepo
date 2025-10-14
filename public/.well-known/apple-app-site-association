@@ -3,19 +3,30 @@
 		"details": [
 			{
 				"appIDs": [
-					"6749597635.cafe.tolo.app"
+					"AUR7UR6M72.cafe.tolo.app"
+				],
+				"components": [
+					{
+						"/": "*",
+						"comment": "Matches all routes"
+					}
 				]
 			}
 		]
 	},
+	"activitycontinuation": {
+		"apps": [
+			"AUR7UR6M72.cafe.tolo.app"
+		]
+	},
 	"webcredentials": {
 		"apps": [
-			"6749597635.cafe.tolo.app"
+			"AUR7UR6M72.cafe.tolo.app"
 		]
 	},
 	"appclips": {
 		"apps": [
-			"6749597635.cafe.tolo.app"
+			"AUR7UR6M72.cafe.tolo.app.clip"
 		]
 	}
 }
