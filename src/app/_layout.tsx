@@ -21,10 +21,13 @@ import { useUpdates } from '@/lib/hooks/use-updates'
 import '@/lib/analytics/firebase/init'
 import '@/lib/locales/init'
 import { QueryProvider } from '@/lib/providers/query-provider'
+import { selfQueryOptions } from '@/lib/queries/auth'
+import { coffeesQueryOptions } from '@/lib/queries/coffees'
 import {
 	categoriesQueryOptions,
 	productsQueryOptions,
 } from '@/lib/queries/menu'
+import { orderQueryOptions } from '@/lib/queries/order'
 import { queryClient } from '@/lib/query-client'
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
@@ -54,9 +57,12 @@ function RootLayout() {
 		navigationIntegration.registerNavigationContainer(ref)
 	}, [ref])
 
-	// Capture update errors to Sentry instead of console logs
+	// Prefetch critical data at app mount
 	useEffect(() => {
 		void Promise.allSettled([
+			queryClient.prefetchQuery(selfQueryOptions),
+			queryClient.prefetchQuery(orderQueryOptions),
+			queryClient.prefetchQuery(coffeesQueryOptions),
 			queryClient.prefetchQuery(productsQueryOptions),
 			queryClient.prefetchQuery(categoriesQueryOptions),
 		])

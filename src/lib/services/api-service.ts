@@ -56,13 +56,13 @@ export const api = {
 				.json(),
 	},
 
-	get: (endpoint: string) => privateClient.get(endpoint).json(),
-
 	coffees: {
 		getCoffee: (slug: string) =>
 			publicClient.get<Coffee>(`coffees/${slug}`).json(),
 		getCoffees: () => publicClient.get<Coffee[]>('coffees').json(),
 	},
+
+	get: (endpoint: string) => privateClient.get(endpoint).json(),
 
 	menu: {
 		getCategories: () => publicClient.get<Category[]>('menu/categories').json(),
@@ -76,11 +76,11 @@ export const api = {
 			privateClient
 				.post<CreateOrderResponse>('orders', { json: orderData })
 				.json(),
-		list: () => privateClient.get<CreateOrderResponse>('orders').json(),
+		downloadReceipt: (orderId: string) =>
+			privateClient.get(`receipts/${orderId}`, { timeout: 30_000 }).blob(),
 		get: (orderId: string) =>
 			privateClient.get<OrderDetailResponse>(`orders/${orderId}`).json(),
-		downloadReceipt: (orderId: string) =>
-			privateClient.get(`receipts/${orderId}`, { timeout: 30000 }).blob(),
+		list: () => privateClient.get<CreateOrderResponse>('orders').json(),
 	},
 
 	// Generic methods for other endpoints

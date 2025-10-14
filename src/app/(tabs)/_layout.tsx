@@ -31,7 +31,6 @@ export default function TabLayout() {
 					default: theme.colors.verde.solid,
 				})}
 				initialRouteName="(home)"
-				tabBarInactiveTintColor={theme.colors.gray.text}
 				minimizeBehavior="automatic"
 				screenOptions={{
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -40,6 +39,7 @@ export default function TabLayout() {
 					minimizeBehavior: 'automatic',
 					tabBarActiveTintColor: theme.colors.verde.solid,
 				}}
+				tabBarInactiveTintColor={theme.colors.gray.text}
 				tabBarStyle={{
 					backgroundColor:
 						Platform.OS === 'android'
@@ -69,7 +69,7 @@ export default function TabLayout() {
 							return (
 								<Ionicons
 									color={
-										focused ? theme.colors.verde.solid : theme.colors.gray.text
+										focused ? theme.colors.verde.solid : theme.colors.gray.solid
 									}
 									name={focused ? 'restaurant' : 'restaurant-outline'}
 									size={24}

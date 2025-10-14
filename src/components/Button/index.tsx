@@ -10,13 +10,13 @@ type ButtonVariant = 'primary' | 'surface' | 'transparent'
 
 type Props = ComponentProps<typeof Pressable> & {
 	accessibilityLabel?: string
+	asChild?: boolean
 	children: ReactNode
 	disabled?: boolean
 	fullWidth?: boolean
 	onPress?: (event: GestureResponderEvent) => void
 	testID?: string
 	textStyle?: StyleProp<TextStyle>
-	asChild?: boolean
 	variant?: ButtonVariant
 }
 
@@ -33,12 +33,12 @@ function ButtonText({
 const androidRipple = { color: '#fff' }
 
 function Button({
+	asChild = false,
 	children,
 	disabled = false,
 	fullWidth = false,
-	textStyle,
 	style,
-	asChild = false,
+	textStyle,
 	variant = 'primary',
 	...props
 }: Props) {
@@ -66,7 +66,7 @@ function Button({
 			{asChild ? (
 				children
 			) : (
-				<ButtonText variant={variant} numberOfLines={1}>
+				<ButtonText numberOfLines={1} variant={variant}>
 					{children}
 				</ButtonText>
 			)}

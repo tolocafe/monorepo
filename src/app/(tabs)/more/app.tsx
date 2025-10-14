@@ -4,6 +4,7 @@ import { Alert, View } from 'react-native'
 import { Trans, useLingui } from '@lingui/react/macro'
 import * as Burnt from 'burnt'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
+import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -13,7 +14,6 @@ import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { useUpdates } from '@/lib/hooks/use-updates'
 import { clearAllCache } from '@/lib/queries/cache-utils'
-import { router } from 'expo-router'
 
 const getStringOrFallback = (value: unknown, fallback: string): string =>
 	typeof value === 'string' ? value : fallback

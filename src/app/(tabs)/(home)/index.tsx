@@ -15,9 +15,9 @@ import { useScrollToTop } from '@react-navigation/native'
 import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
+import { LinearGradient } from 'expo-linear-gradient'
 import { Link } from 'expo-router'
 import Head from 'expo-router/head'
-import { LinearGradient } from 'expo-linear-gradient'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -80,6 +80,7 @@ export default function Menu() {
 					)
 					return { ...category, items: categoryItems }
 				})
+				// eslint-disable-next-line unicorn/no-array-sort
 				.sort((a, b) => {
 					const indexA = CATEGORY_ORDER.indexOf(a.category_name)
 					const indexB = CATEGORY_ORDER.indexOf(b.category_name)
@@ -233,7 +234,7 @@ export default function Menu() {
 				{categoriesWithItems.map((category, index) =>
 					renderCategorySection(category, index),
 				)}
-				<Paragraph style={styles.disclaimer} align="center">
+				<Paragraph align="center" style={styles.disclaimer}>
 					<Trans>
 						Prices are subject to change without notice.{'\n'}Calories and
 						volume are approximate and may vary between preparations.
@@ -248,87 +249,6 @@ const UniIonicons = withUnistyles(Ionicons, (theme) => ({
 	color: theme.colors.gray.background,
 }))
 
-function MenuListItem({
-	item,
-	onAddToBag,
-}: {
-	item: Product
-	onAddToBag: (item: Product) => void
-}) {
-	const scale = useSharedValue(1)
-	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
-	}))
-
-	const cost = getProductBaseCost(item, true)
-
-	return (
-		<Link asChild href={`/(tabs)/(home)/${item.product_id}`}>
-			<AnimatedPressable
-				onPressIn={() => {
-					scale.value = withSpring(0.96)
-				}}
-				onPressOut={() => {
-					scale.value = withSpring(1)
-				}}
-				style={animatedStyle}
-			>
-				<Card padded={false} style={styles.menuItem}>
-					<View style={styles.menuItemImageContainer}>
-						{item.photo ? (
-							<UniImage
-								contentFit="cover"
-								placeholder={{
-									cacheKey: `${item.product_id}-placeholder`,
-									uri: getImageUrl(item.photo, {
-										blur: 100,
-										quality: 20,
-										width: 350,
-									}),
-								}}
-								placeholderContentFit="cover"
-								source={{
-									uri: getImageUrl(item.photo, {
-										quality: 85,
-										width: 400,
-									}),
-								}}
-								style={styles.image}
-								transition={200}
-							/>
-						) : (
-							<View style={styles.menuItemImage} aria-hidden />
-						)}
-					</View>
-					<View style={styles.menuItemContent}>
-						<H4 numberOfLines={2}>{item.product_name}</H4>
-						{item.product_production_description ? (
-							<Text>{item.product_production_description}</Text>
-						) : null}
-						<View style={styles.menuItemFooter}>
-							<Text>
-								{'modifications' in item ? <Trans>From {cost}</Trans> : cost}
-							</Text>
-							<View style={styles.menuItemActions}>
-								<TouchableOpacity
-									disabled={!cost}
-									onPress={(event) => {
-										event.stopPropagation()
-										onAddToBag(item)
-									}}
-									style={styles.addToBagButton}
-								>
-									<UniIonicons name="add" size={26} />
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-				</Card>
-			</AnimatedPressable>
-		</Link>
-	)
-}
-
 function CoffeeStoryBubble({ coffee }: { coffee: Coffee }) {
 	const scale = useSharedValue(1)
 	const animatedStyle = useAnimatedStyle(() => ({
@@ -337,7 +257,11 @@ function CoffeeStoryBubble({ coffee }: { coffee: Coffee }) {
 
 	// Get a gradient color based on coffee name hash
 	const gradientIndex =
-		coffee.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 5
+		coffee.name
+			// eslint-disable-next-line unicorn/prefer-spread
+			.split('')
+			// eslint-disable-next-line unicorn/prefer-code-point
+			.reduce((accumulator, char) => accumulator + char.charCodeAt(0), 0) % 5
 	const gradientColors = (
 		[
 			['#8B4513', '#D2691E'], // Brown/Tan
@@ -378,6 +302,89 @@ function CoffeeStoryBubble({ coffee }: { coffee: Coffee }) {
 	)
 }
 
+function MenuListItem({
+	item,
+	onAddToBag,
+}: {
+	item: Product
+	onAddToBag: (item: Product) => void
+}) {
+	const scale = useSharedValue(1)
+	const animatedStyle = useAnimatedStyle(() => ({
+		transform: [{ scale: scale.value }],
+	}))
+
+	const cost = getProductBaseCost(item, true)
+
+	return (
+		<Link asChild href={`/(tabs)/(home)/${item.product_id}`}>
+			<AnimatedPressable
+				onPressIn={() => {
+					// eslint-disable-next-line react-hooks/immutability
+					scale.value = withSpring(0.96)
+				}}
+				onPressOut={() => {
+					// eslint-disable-next-line react-hooks/immutability
+					scale.value = withSpring(1)
+				}}
+				style={animatedStyle}
+			>
+				<Card padded={false} style={styles.menuItem}>
+					<View style={styles.menuItemImageContainer}>
+						{item.photo ? (
+							<UniImage
+								contentFit="cover"
+								placeholder={{
+									cacheKey: `${item.product_id}-placeholder`,
+									uri: getImageUrl(item.photo, {
+										blur: 100,
+										quality: 20,
+										width: 350,
+									}),
+								}}
+								placeholderContentFit="cover"
+								source={{
+									uri: getImageUrl(item.photo, {
+										quality: 85,
+										width: 400,
+									}),
+								}}
+								style={styles.image}
+								transition={200}
+							/>
+						) : (
+							<View aria-hidden style={styles.menuItemImage} />
+						)}
+					</View>
+					<View style={styles.menuItemContent}>
+						<H4 numberOfLines={2}>{item.product_name}</H4>
+						{item.product_production_description ? (
+							<Text>{item.product_production_description}</Text>
+						) : null}
+						<View style={styles.menuItemFooter}>
+							<Text>
+								{'modifications' in item ? <Trans>From {cost}</Trans> : cost}
+							</Text>
+							<View style={styles.menuItemActions}>
+								<TouchableOpacity
+									disabled={!cost}
+									onPress={(event) => {
+										event.stopPropagation()
+										onAddToBag(item)
+									}}
+									style={styles.addToBagButton}
+								>
+									<UniIonicons name="add" size={26} />
+								</TouchableOpacity>
+							</View>
+						</View>
+					</View>
+				</Card>
+			</AnimatedPressable>
+		</Link>
+	)
+}
+
 const styles = StyleSheet.create((theme) => ({
 	addToBagButton: {
 		alignItems: 'center',
@@ -386,11 +393,6 @@ const styles = StyleSheet.create((theme) => ({
 		height: 36,
 		justifyContent: 'center',
 		width: 36,
-	},
-	disclaimer: {
-		padding: theme.layout.screenPadding,
-		fontSize: theme.fontSizes.sm,
-		color: theme.colors.gray.solid,
 	},
 	categoryItems: {
 		gap: theme.spacing.sm,
@@ -403,6 +405,11 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.gray.text,
 		marginBottom: theme.spacing.md,
 		paddingHorizontal: theme.layout.screenPadding,
+	},
+	disclaimer: {
+		color: theme.colors.gray.solid,
+		fontSize: theme.fontSizes.sm,
+		padding: theme.layout.screenPadding,
 	},
 	errorContainer: {
 		alignItems: 'center',
@@ -483,6 +490,17 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.xs,
 		width: 80,
 	},
+	storyBubbleContent: {
+		alignItems: 'center',
+		height: '100%',
+		justifyContent: 'center',
+		width: '100%',
+	},
+	storyBubbleGradient: {
+		height: '100%',
+		position: 'absolute',
+		width: '100%',
+	},
 	storyBubbleImageContainer: {
 		backgroundColor: theme.colors.gray.background,
 		borderRadius: theme.borderRadius.full,
@@ -497,17 +515,6 @@ const styles = StyleSheet.create((theme) => ({
 		borderWidth: 3,
 		justifyContent: 'center',
 		padding: 3,
-	},
-	storyBubbleContent: {
-		alignItems: 'center',
-		height: '100%',
-		justifyContent: 'center',
-		width: '100%',
-	},
-	storyBubbleGradient: {
-		height: '100%',
-		position: 'absolute',
-		width: '100%',
 	},
 	storyBubbleText: {
 		fontSize: theme.fontSizes.sm,

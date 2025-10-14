@@ -182,14 +182,14 @@ export const api = {
 				{
 					client_id: string
 					payed_sum: string
-					tax_sum: string
-					round_sum: string
 					products?: {
+						num: string
 						product_id: string
 						product_price: string
-						num: string
 					}[]
+					round_sum: string
 					sum: string
+					tax_sum: string
 					tip_sum: string
 				}[]
 			>(

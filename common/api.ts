@@ -72,6 +72,22 @@ export type ClientData = {
 	total_payed_sum?: string
 }
 
+export type Coffee = {
+	altitude?: number
+	name: string
+	origin: string
+	process: string
+	region: string
+	/* Region or producer image */
+	'region-image'?: WebflowImage
+	slug: string
+	/* comma separated list of tasting notes */
+	'tasting-notes'?: string
+	varietal: string
+	/* Varietal or process image */
+	'varietal-image'?: WebflowImage
+}
+
 export type PosterIngredient = {
 	ingredient_id: string
 	ingredient_name: string
@@ -133,6 +149,10 @@ export type PosterResponse<T> = {
 
 export type Product = {
 	barcode: string
+	/* Caffeine level of the beverage, 0 - 5  */
+	caffeine?: number
+	/* Calories in kcal  */
+	calories?: number
 	category_name: string
 	color: string
 	cooking_time: string
@@ -145,6 +165,8 @@ export type Product = {
 	hidden: string
 	ingredient_id: string
 	ingredients?: PosterIngredient[]
+	/* Strength level of the beverage, 0 - 5  */
+	intensity?: number
 	master_id: string
 	menu_category_id: string
 	modifications?: PosterModification[]
@@ -161,14 +183,6 @@ export type Product = {
 	profit: Record<string, string>
 	recipe?: string
 	'small-description'?: string
-	/* Strength level of the beverage, 0 - 5  */
-	intensity?: number
-	/* Caffeine level of the beverage, 0 - 5  */
-	caffeine?: number
-	/* Calories in kcal  */
-	calories?: number
-	/* Volume in milliliters  */
-	volume?: number
 	sort_order: string
 	sources: unknown[]
 	spots: {
@@ -181,6 +195,8 @@ export type Product = {
 	tax_id: string
 	type: string
 	unit: string
+	/* Volume in milliliters  */
+	volume?: number
 	weight_flag: string
 	workshop: string
 }
@@ -200,22 +216,6 @@ export type UpdateClientBody = Partial<{
 
 export type WebflowImage = {
 	alt?: string
-	url: string
 	fileId: string
-}
-
-export type Coffee = {
-	altitude?: number
-	name: string
-	origin: string
-	process: string
-	region: string
-	slug: string
-	varietal: string
-	/* comma separated list of tasting notes */
-	'tasting-notes'?: string
-	/* Region or producer image */
-	'region-image'?: WebflowImage
-	/* Varietal or process image */
-	'varietal-image'?: WebflowImage
+	url: string
 }

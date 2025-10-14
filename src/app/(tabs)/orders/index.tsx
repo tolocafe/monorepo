@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { RefreshControl, TouchableOpacity, View } from 'react-native'
 
+import { Feather } from '@expo/vector-icons'
 import { Select, Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
@@ -9,7 +10,6 @@ import { Image } from 'expo-image'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
-import { Feather } from '@expo/vector-icons'
 
 import type { Product } from '@common/api'
 
@@ -29,6 +29,10 @@ import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
 
 const handleSignIn = () => {
 	router.push('/sign-in')
+}
+
+const handleOrderPress = (orderId: string) => {
+	router.push(`/(tabs)/orders/${orderId}`)
 }
 
 const UniImage = withUnistyles(Image)
@@ -69,10 +73,6 @@ export default function Orders() {
 		if (currentOrder) {
 			router.push(`/(tabs)/orders/current`)
 		}
-	}
-
-	const handleOrderPress = (orderId: string) => {
-		router.push(`/(tabs)/orders/${orderId}`)
 	}
 
 	// removed renderOrderItem as current order should not appear in history
@@ -190,7 +190,7 @@ export default function Orders() {
 										</View>
 										<View style={styles.orderDetails}>
 											<Text>{formatPrice(order.sum)}</Text>
-											<Feather name="chevron-right" size={24} color="#666666" />
+											<Feather color="#666666" name="chevron-right" size={24} />
 										</View>
 									</Card>
 								</TouchableOpacity>
@@ -220,25 +220,25 @@ export default function Orders() {
 }
 
 const styles = StyleSheet.create((theme) => ({
-	currentOrderBottomText: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-	},
-	currentOrderText: {
-		color: 'white',
-	},
 	container: {
 		gap: theme.spacing.md,
 		padding: theme.layout.screenPadding,
 	},
+	currentOrderBottomText: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
 	currentOrderCard: {
+		alignItems: 'center',
 		backgroundColor: theme.colors.verde.solid,
 		borderCurve: 'continuous',
 		borderRadius: theme.borderRadius.md,
-		padding: theme.spacing.lg,
 		flexDirection: 'row',
-		alignItems: 'center',
 		gap: theme.spacing.sm,
+		padding: theme.spacing.lg,
+	},
+	currentOrderText: {
+		color: 'white',
 	},
 	emptyOrderContainer: {
 		alignItems: 'center',
@@ -259,10 +259,10 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	orderDetails: {
+		alignItems: 'center',
 		flexDirection: 'row',
 		gap: theme.spacing.sm,
 		justifyContent: 'space-between',
-		alignItems: 'center',
 	},
 	orderHeader: {
 		flex: 1,

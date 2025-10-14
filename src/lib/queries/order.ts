@@ -22,20 +22,20 @@ export type CreateOrderResponse = {
 
 export type OrderDetailResponse = {
 	client_id: string
-	payed_sum: string
-	tax_sum: string
-	round_sum: string
+	date_start: string
 	/** Percentage */
 	discount?: string
+	payed_sum: string
+	processing_status: number
 	products?: {
+		num: string
 		product_id: string
 		product_price: string
-		num: string
 	}[]
+	round_sum: string
 	sum: string
+	tax_sum: string
 	tip_sum: string
-	date_start: string
-	processing_status: number
 }
 
 export const createOrderMutationOptions = mutationOptions({
@@ -67,18 +67,18 @@ export const orderDetailQueryOptions = (orderId: string) =>
 			if (order) {
 				return {
 					client_id: '',
-					payed_sum: order.sum.toString(),
-					tax_sum: '0',
-					round_sum: '0',
-					products: [],
-					sum: order.sum.toString(),
-					tip_sum: '0',
 					date_start: order.date_start,
+					payed_sum: order.sum.toString(),
 					processing_status: Number(order.processing_status),
+					products: [],
+					round_sum: '0',
+					sum: order.sum.toString(),
+					tax_sum: '0',
+					tip_sum: '0',
 				} as OrderDetailResponse
 			}
 
-			return undefined
+			return
 		},
 		queryFn: () => api.orders.get(orderId),
 		queryKey: ['orders', orderId],

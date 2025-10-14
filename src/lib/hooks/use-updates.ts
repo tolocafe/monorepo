@@ -96,6 +96,7 @@ export function useUpdates() {
 
 	// Check for updates on mount
 	useEffect(() => {
+		// eslint-disable-next-line react-hooks/set-state-in-effect
 		void checkForUpdates()
 	}, [])
 

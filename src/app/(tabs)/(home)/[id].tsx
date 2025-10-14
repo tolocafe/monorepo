@@ -13,6 +13,7 @@ import { useAutoheight } from '@formidable-webview/webshell'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useQuery } from '@tanstack/react-query'
+import * as Haptics from 'expo-haptics'
 import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
@@ -30,7 +31,6 @@ import {
 	useUnistyles,
 	withUnistyles,
 } from 'react-native-unistyles'
-import * as Haptics from 'expo-haptics'
 
 import { Button } from '@/components/Button'
 import HeaderGradient from '@/components/HeaderGradient'
@@ -92,41 +92,6 @@ const gradient = {
 	start: { x: 0, y: 0 },
 }
 
-function AnimatedPrice({ children }: { children: string }) {
-	const priceScale = useSharedValue(1)
-
-	useEffect(() => {
-		priceScale.set(
-			withSequence(
-				withSpring(1.2, {
-					stiffness: 900,
-					mass: 1,
-				}),
-				withSpring(1, {
-					stiffness: 900,
-					mass: 1,
-				}),
-			),
-		)
-
-		return () => {
-			cancelAnimation(priceScale)
-		}
-	}, [children])
-
-	const animatedPriceStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: priceScale.value }],
-	}))
-
-	return (
-		<Animated.View style={animatedPriceStyle}>
-			<Button.Text style={[styles.whiteText, { paddingHorizontal: 5 }]}>
-				{children}
-			</Button.Text>
-		</Animated.View>
-	)
-}
-
 export default function MenuDetail() {
 	const { t } = useLingui()
 	const tabBarHeight = useTabBarHeight()
@@ -144,7 +109,7 @@ export default function MenuDetail() {
 		},
 		onSubmit({ value }) {
 			if (Platform.OS !== 'web') {
-				Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+				void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 			}
 
 			const success = addItem({
@@ -373,71 +338,68 @@ export default function MenuDetail() {
 								<Trans>Modifications</Trans>
 							</H2>
 							<View>
-								{groupModifications.map((group) => {
-									return (
-										<View
-											key={group.dish_modification_group_id}
-											style={styles.modGroup}
+								{groupModifications.map((group) => (
+									<View
+										key={group.dish_modification_group_id}
+										style={styles.modGroup}
+									>
+										<H3 style={styles.modGroupTitle}>{group.name}</H3>
+										<Field
+											name={`modifications.${group.dish_modification_group_id}`}
 										>
-											<H3 style={styles.modGroupTitle}>{group.name}</H3>
-											<Field
-												name={`modifications.${group.dish_modification_group_id}`}
-											>
-												{({ handleChange, state }) => (
-													<View
-														accessibilityRole="radiogroup"
-														style={styles.modButtonGroup}
-													>
-														{group.modifications.map((modification) => {
-															const isSelected =
-																state.value ===
-																modification.dish_modification_id
+											{({ handleChange, state }) => (
+												<View
+													accessibilityRole="radiogroup"
+													style={styles.modButtonGroup}
+												>
+													{group.modifications.map((modification) => {
+														const isSelected =
+															state.value === modification.dish_modification_id
 
-															return (
-																<TouchableOpacity
-																	accessibilityRole="radio"
-																	accessibilityState={{ selected: isSelected }}
-																	key={modification.dish_modification_id}
-																	onPress={() =>
-																		handleChange(
-																			modification.dish_modification_id,
-																		)
-																	}
-																	style={styles.modButton}
-																>
-																	<View style={styles.modButtonRow}>
-																		{isSelected ? (
-																			<View style={styles.modCheck}>
-																				<Ionicons
-																					color={styles.modCheckIcon.color}
-																					name="checkmark"
-																					size={16}
-																				/>
-																			</View>
-																		) : null}
-																		<Text style={styles.modButtonText}>
-																			{modification.name}
+														return (
+															<TouchableOpacity
+																accessibilityRole="radio"
+																accessibilityState={{ selected: isSelected }}
+																key={modification.dish_modification_id}
+																onPress={() =>
+																	handleChange(
+																		modification.dish_modification_id,
+																	)
+																}
+																style={styles.modButton}
+															>
+																<View style={styles.modButtonRow}>
+																	{isSelected ? (
+																		<View style={styles.modCheck}>
+																			<Ionicons
+																				color={styles.modCheckIcon.color}
+																				name="checkmark"
+																				size={16}
+																			/>
+																		</View>
+																	) : null}
+																	<Text style={styles.modButtonText}>
+																		{modification.name}
+																	</Text>
+																	{modification.price ? (
+																		<Text
+																			style={[
+																				styles.modButtonText,
+																				styles.modItemPrice,
+																			]}
+																		>
+																			+{formatPrice(modification.price * 100)}
 																		</Text>
-																		{modification.price ? (
-																			<Text
-																				style={[
-																					styles.modButtonText,
-																					styles.modItemPrice,
-																				]}
-																			>
-																				+{formatPrice(modification.price * 100)}
-																			</Text>
-																		) : null}
-																	</View>
-																</TouchableOpacity>
-															)
-														})}
-													</View>
-												)}
-											</Field>
-										</View>
-									)
-								})}
+																	) : null}
+																</View>
+															</TouchableOpacity>
+														)
+													})}
+												</View>
+											)}
+										</Field>
+									</View>
+								))}
 							</View>
 						</View>
 					)}
@@ -538,10 +500,10 @@ export default function MenuDetail() {
 								</TouchableOpacity>
 							</View>
 							<Button
-								style={styles.addButton}
+								asChild
 								disabled={!totalCost}
 								onPress={handleSubmit}
-								asChild
+								style={styles.addButton}
 							>
 								<View style={styles.buttonContent}>
 									<Button.Text style={styles.whiteText}>
@@ -563,10 +525,45 @@ export default function MenuDetail() {
 	)
 }
 
+function AnimatedPrice({ children }: { children: string }) {
+	const priceScale = useSharedValue(1)
+
+	useEffect(() => {
+		priceScale.set(
+			withSequence(
+				withSpring(1.2, {
+					mass: 1,
+					stiffness: 900,
+				}),
+				withSpring(1, {
+					mass: 1,
+					stiffness: 900,
+				}),
+			),
+		)
+
+		return () => {
+			cancelAnimation(priceScale)
+		}
+	}, [children, priceScale])
+
+	const animatedPriceStyle = useAnimatedStyle(() => ({
+		transform: [{ scale: priceScale.value }],
+	}))
+
+	return (
+		<Animated.View style={animatedPriceStyle}>
+			<Button.Text style={[styles.whiteText, { paddingHorizontal: 5 }]}>
+				{children}
+			</Button.Text>
+		</Animated.View>
+	)
+}
+
 function useGetFormattedHTMLContent(description: string | undefined) {
 	const { theme } = useUnistyles()
 
-	if (!description) return undefined
+	if (!description) return
 
 	return {
 		html: `
@@ -606,36 +603,16 @@ function useGetFormattedHTMLContent(description: string | undefined) {
 
 const styles = StyleSheet.create((theme, runtime) => ({
 	addButton: {
-		height: 50,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
 		flex: 1,
-	},
-	productInfo: {
-		gap: theme.spacing.md,
+		flexDirection: 'row',
+		height: 50,
+		justifyContent: 'space-between',
 	},
 	badge: {
 		backgroundColor: theme.colors.gray.solid,
 		borderRadius: theme.borderRadius.sm,
 		paddingHorizontal: theme.spacing.md,
 		paddingVertical: theme.spacing.xs,
-	},
-	quantityButtons: {
-		flexDirection: 'row',
-	},
-	buttonContent: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		gap: theme.spacing.sm,
-	},
-	bottomButton: {
-		position: 'absolute',
-		bottom: Math.max(runtime.insets.bottom, theme.layout.screenPadding),
-		left: theme.layout.screenPadding,
-		right: theme.layout.screenPadding,
-		flexDirection: 'row',
-		gap: theme.spacing.sm,
-		alignItems: 'center',
 	},
 	badges: {
 		flexDirection: 'row',
@@ -646,6 +623,20 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		color: '#FFFFFF',
 		fontSize: theme.fontSizes.sm,
 		fontWeight: theme.fontWeights.semibold,
+	},
+	bottomButton: {
+		alignItems: 'center',
+		bottom: Math.max(runtime.insets.bottom, theme.layout.screenPadding),
+		flexDirection: 'row',
+		gap: theme.spacing.sm,
+		left: theme.layout.screenPadding,
+		position: 'absolute',
+		right: theme.layout.screenPadding,
+	},
+	buttonContent: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		gap: theme.spacing.sm,
 	},
 	closeButton: {
 		alignItems: 'center',
@@ -667,9 +658,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		color: theme.colors.gray.text,
 		fontSize: theme.fontSizes.lg,
 		fontWeight: theme.fontWeights.bold,
-	},
-	whiteText: {
-		color: '#FFFFFF',
 	},
 	content: {
 		gap: theme.spacing.xxl,
@@ -745,49 +733,58 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	modGroupTitle: {
 		marginBottom: theme.spacing.xs,
 	},
-	section: {
-		gap: theme.spacing.sm,
-	},
 	modItemPrice: {
 		color: theme.colors.verde.text,
 	},
 	price: {
 		color: theme.colors.verde.solid,
 	},
+	productInfo: {
+		gap: theme.spacing.md,
+	},
 	quantityButton: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.verde.solid,
-		borderTopRightRadius: theme.borderRadius.full,
 		borderBottomRightRadius: theme.borderRadius.full,
+		borderTopRightRadius: theme.borderRadius.full,
 		height: 50,
 		justifyContent: 'center',
 		width: 50,
-	},
-	quantityButtonSingle: {
-		borderTopLeftRadius: theme.borderRadius.full,
-		borderBottomLeftRadius: theme.borderRadius.full,
 	},
 	quantityButtonMinus: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.verde.solid,
-		borderTopLeftRadius: theme.borderRadius.full,
 		borderBottomLeftRadius: theme.borderRadius.full,
+		borderTopLeftRadius: theme.borderRadius.full,
 		height: 50,
 		justifyContent: 'center',
 		width: 50,
 	},
+	quantityButtons: {
+		flexDirection: 'row',
+	},
+	quantityButtonSingle: {
+		borderBottomLeftRadius: theme.borderRadius.full,
+		borderTopLeftRadius: theme.borderRadius.full,
+	},
 	quantityText: {
 		backgroundColor: theme.colors.verde.interactive,
-		paddingVertical: theme.spacing.xs,
-		paddingHorizontal: theme.spacing.md,
 		borderRadius: theme.borderRadius.full,
+		paddingHorizontal: theme.spacing.md,
+		paddingVertical: theme.spacing.xs,
 	},
 	recipeSection: {
 		backgroundColor: theme.colors.gray.background,
 		borderRadius: theme.borderRadius.lg,
 		padding: theme.spacing.lg,
 	},
+	section: {
+		gap: theme.spacing.sm,
+	},
 	titleOverlayText: {
+		color: '#FFFFFF',
+	},
+	whiteText: {
 		color: '#FFFFFF',
 	},
 }))

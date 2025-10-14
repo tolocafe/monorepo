@@ -8,8 +8,8 @@ import { useMutation, useQueries, useQuery } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
-import { StyleSheet } from 'react-native-unistyles'
 import * as StoreReview from 'expo-store-review'
+import { StyleSheet } from 'react-native-unistyles'
 
 import type { Product } from '@common/api'
 import type { CreateOrder } from '@common/schemas'
@@ -118,6 +118,7 @@ export default function OrderDetail() {
 		},
 	})
 
+	// eslint-disable-next-line react-hooks/preserve-manual-memoization
 	const orderTotal = useMemo(
 		() => getOrderTotal(order?.products ?? []),
 		[order?.products],

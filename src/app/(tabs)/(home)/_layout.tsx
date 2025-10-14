@@ -30,9 +30,9 @@ export default function HomeLayout() {
 			<Stack.Screen
 				name="coffees/[id]"
 				options={{
+					animation: 'none',
 					headerShown: false,
 					presentation: 'transparentModal',
-					animation: 'none',
 				}}
 			/>
 		</Stack>

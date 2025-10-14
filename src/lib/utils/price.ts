@@ -61,7 +61,7 @@ export function getProductTotalCost({
 
 	const modificationsPrice = Object.entries(modifications).reduce(
 		(sum, [modificationGroupId, modificationId]) => {
-			const modificationGroup = productData?.group_modifications?.find(
+			const modificationGroup = productData.group_modifications?.find(
 				(modification) =>
 					modification.dish_modification_group_id.toString() ===
 					modificationGroupId,

@@ -14,7 +14,7 @@ export default [
 	reactPlugin.configs.flat.recommended,
 	reactPlugin.configs.flat['jsx-runtime'],
 	reactCompiler.configs.recommended,
-	reactHooks.configs['recommended-latest'],
+	...reactHooks.configs['recommended-latest'],
 	eslintPluginUnicorn.configs.all,
 	perfectionist.configs['recommended-natural'],
 	{
@@ -188,7 +188,6 @@ export default [
 			'unicorn/switch-case-braces': 'off',
 			'unicorn/template-indent': 'off',
 			yoda: 'error',
-			...reactHooks.configs.recommended.rules,
 		},
 		settings: {
 			componentWrapperFunctions: ['observer'],
@@ -196,7 +195,7 @@ export default [
 		},
 	},
 	{
-		files: ['**/*.js', '**/*.jsx'],
+		files: ['**/*.js', '**/*.jsx', '**/*.mjs'],
 		...tseslint.configs.disableTypeChecked,
 	},
 ]

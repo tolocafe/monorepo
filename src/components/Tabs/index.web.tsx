@@ -79,16 +79,17 @@ function SideTabButton({
 	ref,
 	...rest
 }: SideTabButtonProps) {
+	styles.useVariants({
+		isFocused,
+	})
+
 	return (
 		<Pressable
 			{...rest}
 			accessibilityRole="tab"
 			accessibilityState={{ selected: Boolean(isFocused) }}
 			ref={ref}
-			style={[
-				styles.tabButton,
-				isFocused ? styles.tabButtonFocused : undefined,
-			]}
+			style={styles.tabButton}
 		>
 			<Ionicons
 				color={
@@ -180,15 +181,24 @@ const styles = StyleSheet.create((theme) => ({
 		width: SIDEBAR_WIDTH,
 	},
 	tabButton: {
+		_web: {
+			_hover: {
+				backgroundColor: theme.colors.gray.border,
+			},
+		},
 		alignItems: 'center',
 		borderRadius: theme.borderRadius.md,
 		flexDirection: 'row',
 		gap: theme.spacing.md,
 		paddingHorizontal: theme.spacing.md,
 		paddingVertical: theme.spacing.md,
-	},
-	tabButtonFocused: {
-		backgroundColor: theme.colors.gray.background,
+		variants: {
+			isFocused: {
+				true: {
+					backgroundColor: theme.colors.gray.border,
+				},
+			},
+		},
 	},
 	tabButtonLabel: {
 		color: theme.colors.gray.solid,

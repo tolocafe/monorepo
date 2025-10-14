@@ -7,12 +7,12 @@ import {
 	View,
 } from 'react-native'
 
+import { Feather } from '@expo/vector-icons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { router, useLocalSearchParams } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
-import { Feather } from '@expo/vector-icons'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
@@ -29,8 +29,8 @@ export default function OrderDetail() {
 
 	const {
 		data: order,
-		isLoading,
 		error,
+		isLoading,
 	} = useQuery(orderDetailQueryOptions(id))
 
 	const handleDownloadReceipt = async () => {
@@ -39,7 +39,7 @@ export default function OrderDetail() {
 		try {
 			setIsDownloading(true)
 			await downloadReceipt(id)
-		} catch (error) {
+		} catch {
 			Alert.alert(t`Error`, t`Failed to download receipt. Please try again.`, [
 				{ text: t`OK` },
 			])
@@ -77,7 +77,7 @@ export default function OrderDetail() {
 							<Trans>Order Not Found</Trans>
 						</H2>
 						<Paragraph>
-							<Trans>The order you're looking for doesn't exist.</Trans>
+							<Trans>{`The order you're looking for doesn't exist.`}</Trans>
 						</Paragraph>
 						<Button onPress={() => router.back()}>
 							<Trans>Go Back</Trans>
@@ -205,8 +205,8 @@ export default function OrderDetail() {
 				</Card>
 
 				<TouchableOpacity
-					onPress={handleDownloadReceipt}
 					disabled={isDownloading}
+					onPress={handleDownloadReceipt}
 					style={[
 						styles.downloadButton,
 						isDownloading && styles.downloadButtonDisabled,
@@ -214,9 +214,9 @@ export default function OrderDetail() {
 				>
 					<View style={styles.downloadButtonContent}>
 						{isDownloading ? (
-							<ActivityIndicator size="small" color="#ffffff" />
+							<ActivityIndicator color="#ffffff" size="small" />
 						) : (
-							<Feather name="download" size={20} color="#ffffff" />
+							<Feather color="#ffffff" name="download" size={20} />
 						)}
 						<Text style={styles.downloadButtonText}>
 							{isDownloading ? (
@@ -236,6 +236,10 @@ const styles = StyleSheet.create((theme) => ({
 	container: {
 		gap: theme.spacing.md,
 		padding: theme.layout.screenPadding,
+	},
+	discountText: {
+		color: theme.colors.verde.solid,
+		fontWeight: '600',
 	},
 	downloadButton: {
 		backgroundColor: theme.colors.verde.solid,
@@ -262,6 +266,26 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.md,
 		justifyContent: 'center',
 		paddingHorizontal: theme.spacing.lg,
+	},
+	itemInfo: {
+		flex: 1,
+	},
+	itemQuantity: {
+		color: theme.colors.crema.solid,
+		fontSize: 12,
+		marginTop: theme.spacing.xs,
+	},
+	itemRow: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	itemsCard: {
+		width: '100%',
+	},
+	itemsList: {
+		gap: theme.spacing.sm,
+		marginTop: theme.spacing.sm,
 	},
 	loadingContainer: {
 		alignItems: 'center',
@@ -293,30 +317,6 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		marginTop: theme.spacing.sm,
-	},
-	discountText: {
-		color: theme.colors.verde.solid,
-		fontWeight: '600',
-	},
-	itemsCard: {
-		width: '100%',
-	},
-	itemsList: {
-		gap: theme.spacing.sm,
-		marginTop: theme.spacing.sm,
-	},
-	itemInfo: {
-		flex: 1,
-	},
-	itemQuantity: {
-		color: theme.colors.crema.solid,
-		fontSize: 12,
-		marginTop: theme.spacing.xs,
-	},
-	itemRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'space-between',
 	},
 	totalRow: {
 		borderTopColor: theme.colors.gray.border,

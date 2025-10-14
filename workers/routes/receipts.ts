@@ -1,8 +1,8 @@
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
-import { authenticate } from '../utils/jwt'
 
 import { generateReceiptPDF } from '../utils/generate-receipt'
+import { authenticate } from '../utils/jwt'
 import { api } from '../utils/poster'
 
 import type { Bindings } from '../types'
@@ -58,27 +58,27 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 
 				return {
 					name: productName,
-					quantity: Number.parseInt(item.num),
 					price: Number.parseInt(item.product_price),
-					total: total,
+					quantity: Number.parseInt(item.num),
+					total,
 				}
 			})
 
 			const pdfBuffer = await generateReceiptPDF(
 				{
-					title: 'Recibo de Compra',
-					orderId: orderId,
-					date: new Date().toISOString(),
 					clientName: client
 						? `${client.firstname} ${client.lastname}`.trim()
 						: undefined,
-					products: products ?? [],
-					subtotal,
-					tip: Number.parseInt(order.tip_sum),
-					tax: Number.parseInt(order.tax_sum),
-					total: Number.parseInt(order.payed_sum),
+					date: new Date().toISOString(),
 					discount:
 						Number.parseInt(order.sum) - Number.parseInt(order.payed_sum),
+					orderId,
+					products: products ?? [],
+					subtotal,
+					tax: Number.parseInt(order.tax_sum),
+					tip: Number.parseInt(order.tip_sum),
+					title: 'Recibo de Compra',
+					total: Number.parseInt(order.payed_sum),
 				},
 				context.env.BROWSER,
 			)
@@ -90,6 +90,7 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 				},
 			})
 		} catch (error) {
+			// eslint-disable-next-line no-console
 			console.error('Error generating PDF:', error)
 
 			// Handle HTTP exceptions (like 403 Access denied)

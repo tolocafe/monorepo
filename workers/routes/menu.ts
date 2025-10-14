@@ -1,10 +1,10 @@
 import { Hono } from 'hono'
+import webflow from 'workers/utils/webflow'
 
 import { defaultJsonHeaders } from '../utils/headers'
 import { api } from '../utils/poster'
 
 import type { Bindings } from '../types'
-import webflow from 'workers/utils/webflow'
 
 const menu = new Hono<{ Bindings: Bindings }>()
 	.get('/categories', async (context) => {

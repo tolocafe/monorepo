@@ -1,36 +1,38 @@
 import puppeteer from '@cloudflare/puppeteer'
 
+import type { BrowserWorker } from '@cloudflare/puppeteer'
+
 type ReceiptData = {
-	title: string
-	orderId: string
-	date: string
 	clientName?: string
-	products: Array<{
-		name: string
-		quantity: number
-		price: number
-		total: number
-		modifications?: string[]
-	}>
-	subtotal: number
+	date: string
 	discount?: number
-	tip?: number
+	orderId: string
+	products: {
+		modifications?: string[]
+		name: string
+		price: number
+		quantity: number
+		total: number
+	}[]
+	subtotal: number
 	tax?: number
+	tip?: number
+	title: string
 	total: number
 }
 
-const generateReceiptHTML = (data: ReceiptData) => {
-	const formatCurrency = (amount: number) => `$${(amount / 100).toFixed(2)}`
-	const formatDate = (date: string) =>
-		new Date(date).toLocaleDateString('es-MX', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit',
-		})
+const formatCurrency = (amount: number) => `$${(amount / 100).toFixed(2)}`
 
-	return `
+const formatDate = (date: string) =>
+	new Date(date).toLocaleDateString('es-MX', {
+		day: 'numeric',
+		hour: '2-digit',
+		minute: '2-digit',
+		month: 'long',
+		year: 'numeric',
+	})
+
+const generateReceiptHTML = (data: ReceiptData) => `
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -332,11 +334,10 @@ const generateReceiptHTML = (data: ReceiptData) => {
 </body>
 </html>
 `
-}
 
 export async function generateReceiptPDF(
 	data: ReceiptData,
-	browser: any,
+	browser: BrowserWorker,
 ): Promise<Buffer> {
 	try {
 		// Launch browser
@@ -352,13 +353,13 @@ export async function generateReceiptPDF(
 		// Generate PDF
 		const pdf = await page.pdf({
 			format: 'A4',
-			printBackground: true,
 			margin: {
-				top: '20px',
-				right: '20px',
 				bottom: '20px',
 				left: '20px',
+				right: '20px',
+				top: '20px',
 			},
+			printBackground: true,
 		})
 
 		// Close browser
@@ -366,6 +367,7 @@ export async function generateReceiptPDF(
 
 		return Buffer.from(pdf)
 	} catch (error) {
+		// eslint-disable-next-line no-console
 		console.error('Error generating PDF:', error)
 		throw new Error('Failed to generate PDF')
 	}

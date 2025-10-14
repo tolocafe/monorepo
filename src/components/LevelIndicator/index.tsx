@@ -12,12 +12,6 @@ type LevelIndicatorProps = {
 	level?: number
 }
 
-function Dot({ filled }: { filled: boolean }) {
-	styles.useVariants({ filled })
-
-	return <View style={styles.dot} />
-}
-
 export function LevelIndicator({ label, level }: LevelIndicatorProps) {
 	if (level === undefined || level === 0) {
 		return null
@@ -27,12 +21,18 @@ export function LevelIndicator({ label, level }: LevelIndicatorProps) {
 		<View style={styles.container}>
 			<View style={styles.dots}>
 				{Array.from({ length: MAX_DOTS }, (_, index) => (
-					<Dot key={index} filled={index < level} />
+					<Dot filled={index < level} key={index} />
 				))}
 			</View>
 			<Text style={styles.label}>{label}</Text>
 		</View>
 	)
+}
+
+function Dot({ filled }: { filled: boolean }) {
+	styles.useVariants({ filled })
+
+	return <View style={styles.dot} />
 }
 
 const styles = StyleSheet.create((theme) => ({
@@ -41,19 +41,19 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	dot: {
 		backgroundColor: 'transparent',
+		borderColor: theme.colors.gray.solid,
 		borderRadius: theme.borderRadius.full,
 		borderWidth: 1,
-		borderColor: theme.colors.gray.solid,
 		height: DOT_SIZE,
-		width: DOT_SIZE,
 		variants: {
 			filled: {
 				true: {
-					borderColor: theme.colors.naranja.solid,
 					backgroundColor: theme.colors.naranja.solid,
+					borderColor: theme.colors.naranja.solid,
 				},
 			},
 		},
+		width: DOT_SIZE,
 	},
 	dots: {
 		flexDirection: 'row',

@@ -3,25 +3,26 @@ import { Dimensions, Pressable, TouchableOpacity, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useQuery } from '@tanstack/react-query'
-import { router, useLocalSearchParams } from 'expo-router'
 import { Image } from 'expo-image'
 import { LinearGradient } from 'expo-linear-gradient'
+import { router, useLocalSearchParams } from 'expo-router'
+import {
+	Gesture,
+	GestureDetector,
+	GestureHandlerRootView,
+} from 'react-native-gesture-handler'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
 	withTiming,
 } from 'react-native-reanimated'
-import {
-	Gesture,
-	GestureDetector,
-	GestureHandlerRootView,
-} from 'react-native-gesture-handler'
 import { StyleSheet, UnistylesRuntime } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
 import { H1, Text } from '@/components/Text'
 import { coffeeQueryOptions, coffeesQueryOptions } from '@/lib/queries/coffees'
+
 import type { Coffee } from '@/lib/api'
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window')
@@ -43,18 +44,27 @@ const GRADIENTS = [
 	['#704214', '#A0522D', '#CD853F'], // Rich Brown to Peru (Chocolate/Walnut)
 ] as const
 
+type DetailRowProps = {
+	icon: keyof typeof Ionicons.glyphMap
+	label: string
+	value: string
+}
+
 export default function CoffeeStories() {
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const { data: coffees = [] } = useQuery(coffeesQueryOptions)
 	const { data: currentCoffee } = useQuery(coffeeQueryOptions(id))
 
+	const coffeeStories = useMemo(
+		() => (coffees.length > 0 ? coffees : currentCoffee ? [currentCoffee] : []),
+		[coffees, currentCoffee],
+	)
+
 	const [currentPageIndex, setCurrentPageIndex] = useState(0)
 	const [previousCoffeeIndex, setPreviousCoffeeIndex] = useState(0)
+	const initializedRef = useRef(false)
 
-	const coffeeStories =
-		coffees.length > 0 ? coffees : currentCoffee ? [currentCoffee] : []
 	const totalPages = coffeeStories.length * PAGES_PER_COFFEE
-	const totalPagesRef = useRef(totalPages)
 
 	const progress = useSharedValue(0)
 	const scale = useSharedValue(1)
@@ -66,26 +76,38 @@ export default function CoffeeStories() {
 	useEffect(() => {
 		mountScale.value = withSpring(1, SPRING_CONFIG)
 		dismissAlpha.value = withSpring(0.8, SPRING_CONFIG)
-	}, [mountScale, dismissAlpha])
+	}, [dismissAlpha, mountScale])
 
-	// Update ref when totalPages changes
+	// Set initial page when coffee data loads (only once)
 	useEffect(() => {
-		totalPagesRef.current = totalPages
-	}, [totalPages])
+		if (initializedRef.current || coffeeStories.length === 0) return
 
-	const handleCloseRef = useRef<(() => void) | null>(null)
+		const coffeeIndex = coffeeStories.findIndex((coffee) => coffee.slug === id)
+		if (coffeeIndex !== -1) {
+			setCurrentPageIndex(coffeeIndex * PAGES_PER_COFFEE)
+			setPreviousCoffeeIndex(coffeeIndex)
+			initializedRef.current = true
+		}
+	}, [coffeeStories, id])
+
+	const handleClose = useCallback(() => {
+		mountScale.value = withSpring(0, SPRING_CONFIG, (finished) => {
+			if (finished) {
+				scheduleOnRN(router.back)
+			}
+		})
+		dismissAlpha.value = withSpring(0, SPRING_CONFIG)
+	}, [dismissAlpha, mountScale])
 
 	const goToNextPage = useCallback(() => {
-		setCurrentPageIndex((prev) => {
-			if (prev < totalPagesRef.current - 1) {
-				return prev + 1
+		setCurrentPageIndex((previous) => {
+			if (previous < totalPages - 1) {
+				return previous + 1
 			}
-			if (handleCloseRef.current) {
-				handleCloseRef.current()
-			}
-			return prev
+			handleClose()
+			return previous
 		})
-	}, [])
+	}, [totalPages, handleClose])
 
 	const startTimer = useCallback(() => {
 		progress.value = 0
@@ -94,10 +116,10 @@ export default function CoffeeStories() {
 				scheduleOnRN(goToNextPage)
 			}
 		})
-	}, [goToNextPage])
+	}, [goToNextPage, progress])
 
 	const goToPreviousPage = useCallback(() => {
-		setCurrentPageIndex((prev) => (prev > 0 ? prev - 1 : prev))
+		setCurrentPageIndex((previous) => (previous > 0 ? previous - 1 : previous))
 	}, [])
 
 	const currentCoffeeIndex = useMemo(
@@ -127,26 +149,12 @@ export default function CoffeeStories() {
 	const handleLeftTap = useCallback(() => {
 		progress.value = 0
 		goToPreviousPage()
-	}, [goToPreviousPage])
+	}, [goToPreviousPage, progress])
 
 	const handleRightTap = useCallback(() => {
 		progress.value = 0
 		goToNextPage()
-	}, [goToNextPage])
-
-	const handleClose = useCallback(() => {
-		mountScale.value = withSpring(0, SPRING_CONFIG, (finished) => {
-			if (finished) {
-				scheduleOnRN(router.back)
-			}
-		})
-		dismissAlpha.value = withSpring(0, SPRING_CONFIG)
-	}, [mountScale, dismissAlpha])
-
-	// Update ref for goToNextPage
-	useEffect(() => {
-		handleCloseRef.current = handleClose
-	}, [handleClose])
+	}, [goToNextPage, progress])
 
 	const panGesture = Gesture.Pan()
 		.onUpdate((event) => {
@@ -169,11 +177,11 @@ export default function CoffeeStories() {
 	}))
 
 	const animatedStyle = useAnimatedStyle(() => ({
+		opacity: mountScale.value,
 		transform: [
 			{ scale: scale.value * mountScale.value },
 			{ translateX: slideX.value },
 		],
-		opacity: mountScale.value,
 	}))
 
 	if (coffeeStories.length === 0) {
@@ -281,12 +289,6 @@ export default function CoffeeStories() {
 	)
 }
 
-type DetailRowProps = {
-	icon: keyof typeof Ionicons.glyphMap
-	label: string
-	value: string
-}
-
 function DetailRow({ icon, label, value }: DetailRowProps) {
 	return (
 		<View style={styles.detailRow}>
@@ -294,55 +296,9 @@ function DetailRow({ icon, label, value }: DetailRowProps) {
 				<Ionicons color={WHITE_COLOR} name={icon} size={16} />
 				<Text>{label}</Text>
 			</View>
-			<Text align="right" weight="bold" style={styles.headerText}>
+			<Text align="right" style={styles.headerText} weight="bold">
 				{value}
 			</Text>
-		</View>
-	)
-}
-
-function RegionPage({ coffee }: { coffee: Coffee }) {
-	return (
-		<>
-			<DetailRow icon="location" label="Origin" value={coffee.origin} />
-			{coffee.altitude && (
-				<DetailRow
-					icon="trending-up"
-					label="Altitude"
-					value={`${coffee.altitude}m`}
-				/>
-			)}
-			<DetailRow icon="map" label="Region" value={coffee.region} />
-		</>
-	)
-}
-
-function VarietalPage({ coffee }: { coffee: Coffee }) {
-	return (
-		<>
-			<DetailRow icon="leaf" label="Varietal" value={coffee.varietal} />
-			<DetailRow icon="flask" label="Process" value={coffee.process} />
-		</>
-	)
-}
-
-function TastingNotes({ coffee }: { coffee: Coffee }) {
-	const tastingNotes = coffee['tasting-notes']
-		?.split(',')
-		.map((note) => note.trim())
-		.filter(Boolean)
-
-	if (!tastingNotes?.length) return null
-
-	return (
-		<View style={styles.tastingNotesContainer}>
-			{tastingNotes.map((note, index) => (
-				<View key={`${note}-${index}`} style={styles.tastingNoteCircle}>
-					<Text align="center" style={styles.tastingNoteText}>
-						{note}
-					</Text>
-				</View>
-			))}
 		</View>
 	)
 }
@@ -369,6 +325,52 @@ function ProgressBar({
 	)
 }
 
+function RegionPage({ coffee }: { coffee: Coffee }) {
+	return (
+		<>
+			<DetailRow icon="location" label="Origin" value={coffee.origin} />
+			{coffee.altitude && (
+				<DetailRow
+					icon="trending-up"
+					label="Altitude"
+					value={`${coffee.altitude}m`}
+				/>
+			)}
+			<DetailRow icon="map" label="Region" value={coffee.region} />
+		</>
+	)
+}
+
+function TastingNotes({ coffee }: { coffee: Coffee }) {
+	const tastingNotes = coffee['tasting-notes']
+		?.split(',')
+		.map((note) => note.trim())
+		.filter(Boolean)
+
+	if (!tastingNotes?.length) return null
+
+	return (
+		<View style={styles.tastingNotesContainer}>
+			{tastingNotes.map((note, index) => (
+				<View key={`${note}-${index}`} style={styles.tastingNoteCircle}>
+					<Text align="center" style={styles.tastingNoteText}>
+						{note}
+					</Text>
+				</View>
+			))}
+		</View>
+	)
+}
+
+function VarietalPage({ coffee }: { coffee: Coffee }) {
+	return (
+		<>
+			<DetailRow icon="leaf" label="Varietal" value={coffee.varietal} />
+			<DetailRow icon="flask" label="Process" value={coffee.process} />
+		</>
+	)
+}
+
 const styles = StyleSheet.create((theme, runtime) => ({
 	closeButton: {
 		padding: theme.spacing.xs,
@@ -378,21 +380,28 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		paddingHorizontal: theme.layout.screenPadding,
 		width: '100%',
 	},
+	coffeeDetailsCentered: {
+		flex: 1,
+		gap: theme.spacing.md,
+		justifyContent: 'center',
+		paddingHorizontal: theme.layout.screenPadding,
+		width: '100%',
+	},
 	coffeeImage: {
 		borderRadius: theme.borderRadius.xl,
 		height: runtime.screen.width * 0.8,
 		width: runtime.screen.width * 0.8,
 	},
 	container: {
-		alignItems: 'center',
-		flex: 1,
-		justifyContent: 'center',
-		paddingHorizontal: theme.spacing.md,
-		paddingTop: runtime.insets.top,
-		paddingBottom: runtime.insets.bottom,
 		_web: {
 			padding: 0,
 		},
+		alignItems: 'center',
+		flex: 1,
+		justifyContent: 'center',
+		paddingBottom: runtime.insets.bottom,
+		paddingHorizontal: theme.spacing.md,
+		paddingTop: runtime.insets.top,
 	},
 	contentCenter: {
 		alignItems: 'center',
@@ -402,18 +411,11 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	},
 	contentWrapper: {
 		flex: 1,
-		zIndex: 2,
 		justifyContent: 'space-between',
+		paddingBottom: theme.spacing.xl,
 		paddingTop: theme.layout.screenPadding,
 		width: '100%',
-		paddingBottom: theme.spacing.xl,
-	},
-	coffeeDetailsCentered: {
-		gap: theme.spacing.md,
-		paddingHorizontal: theme.layout.screenPadding,
-		flex: 1,
-		justifyContent: 'center',
-		width: '100%',
+		zIndex: 2,
 	},
 	detailBadge: {
 		alignItems: 'center',
@@ -440,6 +442,10 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		flexDirection: 'row',
 		gap: theme.spacing.sm,
 	},
+	headerText: {
+		color: WHITE_COLOR,
+		fontSize: theme.fontSizes.md,
+	},
 	progressBar: {
 		backgroundColor: WHITE_ALPHA_30,
 		borderRadius: 20,
@@ -456,10 +462,10 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	progressContainer: {
 		flexDirection: 'row',
 		gap: 4,
-		width: '100%',
-		paddingHorizontal: theme.layout.screenPadding,
-		zIndex: 2,
 		height: 2,
+		paddingHorizontal: theme.layout.screenPadding,
+		width: '100%',
+		zIndex: 2,
 	},
 	storyContainer: {
 		borderRadius: theme.borderRadius.lg,
@@ -479,12 +485,8 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	tapAreas: {
 		...StyleSheet.absoluteFillObject,
 		flexDirection: 'row',
-		zIndex: 3,
 		transform: [{ translateY: 80 }],
-	},
-	headerText: {
-		color: WHITE_COLOR,
-		fontSize: theme.fontSizes.md,
+		zIndex: 3,
 	},
 	tastingNoteCircle: {
 		alignItems: 'center',
@@ -499,14 +501,14 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		width: 120,
 	},
 	tastingNotesContainer: {
+		alignContent: 'center',
 		alignItems: 'center',
 		flexDirection: 'row',
 		flexWrap: 'wrap',
+		height: '100%',
 		justifyContent: 'center',
-		alignContent: 'center',
 		paddingHorizontal: theme.layout.screenPadding,
 		width: '100%',
-		height: '100%',
 	},
 	tastingNoteText: {
 		color: WHITE_COLOR,

@@ -1,3 +1,5 @@
+import type { BrowserWorker } from '@cloudflare/puppeteer'
+
 export type Bindings = Cloudflare.Env & {
 	/** APNs for PassKit push notifications */
 	APNS_KEY_ID: string
@@ -7,7 +9,7 @@ export type Bindings = Cloudflare.Env & {
 	APNS_TEAM_ID: string
 	ASSETS: Fetcher
 	BROADCAST_SECRET: string
-	BROWSER: any
+	BROWSER: BrowserWorker
 	D1_TOLO: D1Database
 	EXPO_ACCESS_TOKEN: string
 	GA4_API_SECRET: string
@@ -31,8 +33,8 @@ export type Bindings = Cloudflare.Env & {
 	TEST_OTP_CODE: string
 	TEST_PHONE_NUMBERS: string
 	WEBFLOW_API_TOKEN: string
-	WEBFLOW_MENU_COLLECTION_ID: string
 	WEBFLOW_COFFEES_COLLECTION_ID: string
+	WEBFLOW_MENU_COLLECTION_ID: string
 	/** Passkit */
 	WWDR: string
 }
