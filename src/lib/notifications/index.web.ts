@@ -13,6 +13,10 @@ export async function requestTrackingPermissionAsync() {
 	return true
 }
 
+export async function resetBadgeCount() {
+	// No-op on web
+}
+
 export function useRegisterForPushNotifications() {
 	return useCallback(() => null, [])
 }

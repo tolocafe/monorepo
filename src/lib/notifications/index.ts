@@ -80,6 +80,14 @@ export async function requestTrackingPermissionAsync(): Promise<boolean> {
 	}
 }
 
+export async function resetBadgeCount() {
+	try {
+		await Notifications.setBadgeCountAsync(0)
+	} catch {
+		// Silently fail if badge count reset is not supported
+	}
+}
+
 export function useRegisterForPushNotifications() {
 	const { data: user } = useQuery(selfQueryOptions)
 	const { mutate } = useMutation(

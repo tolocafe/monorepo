@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { RefreshControl, TouchableOpacity, View } from 'react-native'
 
@@ -7,7 +7,7 @@ import { Select, Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { router } from 'expo-router'
+import { router, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
@@ -17,6 +17,7 @@ import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
+import { resetBadgeCount } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { orderQueryOptions } from '@/lib/queries/order'
 import { productQueryOptions } from '@/lib/queries/product'
@@ -49,6 +50,12 @@ export default function Orders() {
 	const currentOrder = useCurrentOrder()
 	const { data: orders } = useQuery(orderQueryOptions)
 	const itemsCount = useCurrentOrderItemsCount()
+
+	useFocusEffect(
+		useCallback(() => {
+			void resetBadgeCount()
+		}, []),
+	)
 
 	const currentOrderTotalCents = (() => {
 		if (!currentOrder) return 0
