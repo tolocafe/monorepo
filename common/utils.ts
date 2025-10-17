@@ -1,4 +1,4 @@
-import type { PosterModification, Product } from './api'
+import type { PosterModification, Product } from '~/common/api'
 
 export function getProductBaseCost(product: Product) {
 	const cost = Number(

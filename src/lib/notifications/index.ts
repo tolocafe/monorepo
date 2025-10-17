@@ -11,6 +11,7 @@ import {
 	selfQueryOptions,
 	updateClientPushTokensMutationOptions,
 } from '@/lib/queries/auth'
+import ExpoSharedStorage from '~/modules/expo-shared-storage'
 
 export async function registerForPushNotificationsAsync() {
 	if (Platform.OS === 'android') {
@@ -18,6 +19,10 @@ export async function registerForPushNotificationsAsync() {
 			importance: Notifications.AndroidImportance.DEFAULT,
 			name: 'default',
 		})
+	}
+
+	if (ExpoSharedStorage.isAppClip) {
+		return null
 	}
 
 	if (Device.isDevice) {
@@ -66,6 +71,10 @@ export async function registerForPushNotificationsAsync() {
  */
 export async function requestTrackingPermissionAsync(): Promise<boolean> {
 	try {
+		if (ExpoSharedStorage.isAppClip) {
+			return true
+		}
+
 		// Check if tracking transparency is available (iOS 14+ only)
 		if (!TrackingTransparency.isAvailable()) {
 			return true // Consider as granted for non-iOS platforms
@@ -95,7 +104,9 @@ export function useRegisterForPushNotifications() {
 	)
 
 	return useCallback(async () => {
-		if (!user?.client_id) return
+		if (!user?.client_id) {
+			return
+		}
 
 		const token = await registerForPushNotificationsAsync()
 

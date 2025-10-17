@@ -65,7 +65,9 @@ export default function ProfileScreen() {
 			email: user?.email || '',
 		},
 		onSubmit({ value }) {
-			if (!user?.client_id) return
+			if (!user?.client_id) {
+				return
+			}
 
 			return updateClient({
 				birthday: value.birthdate,
@@ -138,9 +140,11 @@ export default function ProfileScreen() {
 							<Field
 								name="client_name"
 								validators={{
-									onChange: ({ value }) => {
+									onChange({ value }) {
 										const result = nameSchema.safeParse(value)
-										if (!result.success) return result.error.issues[0]?.message
+										if (!result.success) {
+											return result.error.issues[0]?.message
+										}
 									},
 								}}
 							>
@@ -165,7 +169,9 @@ export default function ProfileScreen() {
 								validators={{
 									onChange: ({ value }) => {
 										const result = emailSchema.safeParse(value)
-										if (!result.success) return result.error.issues[0]?.message
+										if (!result.success) {
+											return result.error.issues[0]?.message
+										}
 									},
 								}}
 							>

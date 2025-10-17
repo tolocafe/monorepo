@@ -1,6 +1,6 @@
 import { HTTPException } from 'hono/http-exception'
 
-import { testPhoneNumbers } from './constants'
+import { testPhoneNumbers } from '~/workers/utils/constants'
 
 const DEFAULT_OTP_TTL = 300
 
@@ -18,7 +18,9 @@ export async function storeOtp(
 	code: string,
 	ttl = DEFAULT_OTP_TTL,
 ) {
-	if (testPhoneNumbers.includes(phone)) return
+	if (testPhoneNumbers.includes(phone)) {
+		return
+	}
 
 	await kv.put(phone, code, { expirationTtl: ttl })
 }

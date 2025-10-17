@@ -11,8 +11,6 @@ import { router, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import type { Product } from '@common/api'
-
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import ScreenContainer from '@/components/ScreenContainer'
@@ -27,6 +25,8 @@ import {
 	useCurrentOrderItemsCount,
 } from '@/lib/stores/order-store'
 import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
+
+import type { Product } from '~/common/api'
 
 const handleSignIn = () => {
 	router.push('/sign-in')
@@ -58,7 +58,9 @@ export default function Orders() {
 	)
 
 	const currentOrderTotalCents = (() => {
-		if (!currentOrder) return 0
+		if (!currentOrder) {
+			return 0
+		}
 
 		return currentOrder.products.reduce((sum, item) => {
 			const productData = queryClient.getQueryData(

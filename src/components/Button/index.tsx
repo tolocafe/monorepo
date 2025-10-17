@@ -12,7 +12,7 @@ type Props = ComponentProps<typeof Pressable> & {
 	accessibilityLabel?: string
 	asChild?: boolean
 	children: ReactNode
-	disabled?: boolean
+	disabled?: boolean | undefined
 	fullWidth?: boolean
 	onPress?: (event: GestureResponderEvent) => void
 	testID?: string

@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'
 
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
-import { deleteItemAsync } from 'expo-secure-store'
+import * as SecureStore from 'expo-secure-store'
 
 import { api } from '@/lib/services/api-service'
 
@@ -53,7 +53,7 @@ export const signOutMutationOptions = mutationOptions({
 		await api.auth.signOut()
 
 		if (Platform.OS !== 'web') {
-			await deleteItemAsync(STORAGE_KEYS.AUTH_SESSION)
+			await SecureStore.deleteItemAsync(STORAGE_KEYS.AUTH_SESSION)
 		}
 	},
 	mutationKey: ['auth', 'sign-out'],

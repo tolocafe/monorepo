@@ -2,11 +2,12 @@ import { randomUUID } from 'node:crypto'
 
 import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
-import getPass from 'workers/utils/generate-pass'
-import { authenticate } from 'workers/utils/jwt'
-import { api } from 'workers/utils/poster'
 
-import type { Bindings } from 'workers/types'
+import getPass from '~/workers/utils/generate-pass'
+import { authenticate } from '~/workers/utils/jwt'
+import { api } from '~/workers/utils/poster'
+
+import type { Bindings } from '~/workers/types'
 
 const pass = new Hono<{ Bindings: Bindings }>().get(
 	'/:clientId',

@@ -106,7 +106,9 @@ export default function More() {
 	styles.useVariants({ groupName })
 
 	async function handleAddPass() {
-		if (!user) return
+		if (!user) {
+			return
+		}
 
 		try {
 			const token = await getAuthToken()
@@ -376,14 +378,18 @@ function getFullName(
 }
 
 function getGroupName(groupName: string | undefined) {
-	if (/^clientes?$/i.test(groupName ?? '')) return 'CUSTOMER' as const
-	if (/^amigos y familiares$/i.test(groupName ?? ''))
+	if (/^clientes?$/i.test(groupName ?? '')) {
+		return 'CUSTOMER' as const
+	}
+	if (/^amigos y familiares$/i.test(groupName ?? '')) {
 		return 'FRIEND_AND_FAMILY' as const
-	if (/^súper clientes?$/i.test(groupName ?? ''))
+	}
+	if (/^súper clientes?$/i.test(groupName ?? '')) {
 		return 'SUPER_CUSTOMER' as const
-	if (/^vecinos?$/i.test(groupName ?? '')) return 'NEIGHBOR' as const
-
-	return
+	}
+	if (/^vecinos?$/i.test(groupName ?? '')) {
+		return 'NEIGHBOR' as const
+	}
 }
 
 const styles = StyleSheet.create((theme) => ({

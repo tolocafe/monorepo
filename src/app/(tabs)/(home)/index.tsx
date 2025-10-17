@@ -41,6 +41,7 @@ import {
 import { queryClient } from '@/lib/query-client'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
 import { getProductBaseCost } from '@/lib/utils/price'
+import ExpoSharedStorage from '~/modules/expo-shared-storage'
 
 import type { Category, Coffee, Product } from '@/lib/api'
 
@@ -91,10 +92,14 @@ export default function Menu() {
 					}
 
 					// If only A is in the order list, it comes first
-					if (indexA !== -1) return -1
+					if (indexA !== -1) {
+						return -1
+					}
 
 					// If only B is in the order list, it comes first
-					if (indexB !== -1) return 1
+					if (indexB !== -1) {
+						return 1
+					}
 
 					// If neither is in the order list, sort alphabetically
 					return a.category_name.localeCompare(b.category_name)
@@ -114,12 +119,16 @@ export default function Menu() {
 	)
 
 	useEffect(() => {
-		if (!selfData) return
+		if (!selfData) {
+			return
+		}
 
 		async function requestEnableAnalytics() {
 			const granted = await requestTrackingPermissionAsync()
 
-			if (!granted) return
+			if (!granted) {
+				return
+			}
 
 			void enableAnalytics({
 				email: selfData?.email,
@@ -286,7 +295,10 @@ function CoffeeStoryBubble({ coffee }: { coffee: Coffee }) {
 								colors={gradientColors}
 								end={{ x: 1, y: 1 }}
 								start={{ x: 0, y: 0 }}
-								style={styles.storyBubbleGradient}
+								style={[
+									{ backgroundColor: gradientColors[1] },
+									styles.storyBubbleGradient,
+								]}
 							/>
 							<View style={styles.storyBubbleContent}>
 								<Ionicons color="#FFFFFF" name="cafe" size={32} />
@@ -365,18 +377,20 @@ function MenuListItem({
 							<Text>
 								{'modifications' in item ? <Trans>From {cost}</Trans> : cost}
 							</Text>
-							<View style={styles.menuItemActions}>
-								<TouchableOpacity
-									disabled={!cost}
-									onPress={(event) => {
-										event.stopPropagation()
-										onAddToBag(item)
-									}}
-									style={styles.addToBagButton}
-								>
-									<UniIonicons name="add" size={26} />
-								</TouchableOpacity>
-							</View>
+							{ExpoSharedStorage.isAppClip ? null : (
+								<View style={styles.menuItemActions}>
+									<TouchableOpacity
+										disabled={!cost}
+										onPress={(event) => {
+											event.stopPropagation()
+											onAddToBag(item)
+										}}
+										style={styles.addToBagButton}
+									>
+										<UniIonicons name="add" size={26} />
+									</TouchableOpacity>
+								</View>
+							)}
 						</View>
 					</View>
 				</Card>

@@ -44,7 +44,7 @@ app
 
 			if (clientId) {
 				Sentry.setUser({
-					email: 'email' in payload ? (payload.email as string) : undefined,
+					email: 'email' in payload ? (payload.email as string) : '',
 					id: clientId.toString(),
 					name: 'name' in payload ? (payload.name as string) : undefined,
 					phone: 'phone' in payload ? (payload.phone as string) : undefined,

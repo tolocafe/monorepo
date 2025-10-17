@@ -73,7 +73,9 @@ export default function TopUpScreen() {
 	}
 
 	const handlePayment = async (isPlatformPay: boolean) => {
-		if (!selectedAmount) return
+		if (!selectedAmount) {
+			return
+		}
 
 		if (!user) {
 			Alert.alert(t`Error`, t`Please sign in to top up your wallet`)

@@ -80,7 +80,9 @@ export default function CoffeeStories() {
 
 	// Set initial page when coffee data loads (only once)
 	useEffect(() => {
-		if (initializedRef.current || coffeeStories.length === 0) return
+		if (initializedRef.current || coffeeStories.length === 0) {
+			return
+		}
 
 		const coffeeIndex = coffeeStories.findIndex((coffee) => coffee.slug === id)
 		if (coffeeIndex !== -1) {
@@ -216,7 +218,7 @@ export default function CoffeeStories() {
 							colors={gradientColors}
 							end={{ x: 0.5, y: 1 }}
 							start={{ x: 0, y: 0 }}
-							style={styles.gradient}
+							style={[{ backgroundColor: gradientColors[1] }, styles.gradient]}
 						/>
 
 						{/* Story Content */}
@@ -313,8 +315,12 @@ function ProgressBar({
 	progress: ReturnType<typeof useSharedValue<number>>
 }) {
 	const animatedStyle = useAnimatedStyle(() => {
-		if (completed) return { width: '100%' }
-		if (!active) return { width: '0%' }
+		if (completed) {
+			return { width: '100%' }
+		}
+		if (!active) {
+			return { width: '0%' }
+		}
 		return { width: `${progress.value * 100}%` }
 	})
 
@@ -347,7 +353,9 @@ function TastingNotes({ coffee }: { coffee: Coffee }) {
 		.map((note) => note.trim())
 		.filter(Boolean)
 
-	if (!tastingNotes?.length) return null
+	if (!tastingNotes?.length) {
+		return null
+	}
 
 	return (
 		<View style={styles.tastingNotesContainer}>

@@ -14,7 +14,9 @@ const isWeb = Platform.OS === 'web'
  * - Native: reads token from SecureStore
  */
 export async function getAuthToken(): Promise<null | string> {
-	if (isWeb) return null
+	if (isWeb) {
+		return null
+	}
 	try {
 		const token = await SecureStore.getItemAsync(STORAGE_KEYS.AUTH_SESSION)
 		return token ?? null
@@ -33,7 +35,9 @@ export const publicClient = ky.create({
 		afterResponse: [
 			async (request, _options, response) => {
 				// On native, persist the token after verifying OTP
-				if (isWeb) return response
+				if (isWeb) {
+					return response
+				}
 
 				try {
 					if (request.url.includes('/auth/verify-otp')) {
@@ -70,10 +74,14 @@ export const privateClient = ky.create({
 		beforeRequest: [
 			async (request) => {
 				// Web uses HttpOnly cookie; native uses Authorization header
-				if (isWeb) return request
+				if (isWeb) {
+					return request
+				}
 
 				const token = await getAuthToken()
-				if (!token) throw new Error('No auth token found')
+				if (!token) {
+					throw new Error('No auth token found')
+				}
 				request.headers.set('Authorization', `Bearer ${token}`)
 
 				return request

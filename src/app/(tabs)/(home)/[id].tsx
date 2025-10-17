@@ -51,6 +51,7 @@ import {
 	getProductBaseCost,
 	getProductTotalCost,
 } from '@/lib/utils/price'
+import ExpoSharedStorage from '~/modules/expo-shared-storage'
 
 const handleClose = () => {
 	router.back()
@@ -70,7 +71,7 @@ const config = {
 		contentMode: 'mobile' as const,
 		disableScrollViewPanResponder: true,
 		javaScriptEnabled: false,
-		scalesPageToFit: true,
+		scalesPageToFit: false,
 		showsVerticalScrollIndicator: false,
 		style: {
 			backgroundColor: 'transparent',
@@ -128,17 +129,24 @@ export default function MenuDetail() {
 
 	/** Track view item event */
 	useEffect(() => {
-		if (!product?.product_id) return
+		if (!product?.product_id) {
+			return
+		}
 		void trackEvent('view_item', { item_id: product.product_id })
 	}, [product?.product_id])
 
 	/** Default each group to its first modification when product loads */
 	useEffect(() => {
 		const groups = product?.group_modifications
-		if (!groups?.length) return
+		if (!groups?.length) {
+			return
+		}
 
 		for (const group of groups) {
-			if (group.modifications.length > 0) {
+			if (
+				group.modifications.length > 0 &&
+				group.modifications[0]?.dish_modification_id
+			) {
 				setFieldValue(
 					`modifications.${group.dish_modification_group_id}`,
 					group.modifications[0].dish_modification_id,
@@ -356,12 +364,14 @@ export default function MenuDetail() {
 												>
 													{group.modifications.map((modification) => {
 														const isSelected =
+															!ExpoSharedStorage.isAppClip &&
 															state.value === modification.dish_modification_id
 
 														return (
 															<TouchableOpacity
 																accessibilityRole="radio"
 																accessibilityState={{ selected: isSelected }}
+																disabled={ExpoSharedStorage.isAppClip}
 																key={modification.dish_modification_id}
 																onPress={() =>
 																	handleChange(
@@ -464,65 +474,67 @@ export default function MenuDetail() {
 					)}
 				</View>
 			</ScreenContainer>
-			<Subscribe
-				selector={({ values }) =>
-					[values.quantity, values.modifications] as const
-				}
-			>
-				{([quantity, modifications]) => {
-					const totalCost = getProductTotalCost({
-						modifications,
-						product,
-						quantity,
-					})
+			{ExpoSharedStorage.isAppClip ? null : (
+				<Subscribe
+					selector={({ values }) =>
+						[values.quantity, values.modifications] as const
+					}
+				>
+					{([quantity, modifications]) => {
+						const totalCost = getProductTotalCost({
+							modifications,
+							product,
+							quantity,
+						})
 
-					return (
-						<View style={styles.bottomButton}>
-							<View style={styles.quantityButtons}>
-								{quantity > 1 && (
+						return (
+							<View style={styles.bottomButton}>
+								<View style={styles.quantityButtons}>
+									{quantity > 1 && (
+										<TouchableOpacity
+											onPress={decrementQuantity}
+											style={styles.quantityButtonMinus}
+										>
+											<Text style={styles.whiteText}>
+												<Ionicons name="remove" size={26} />
+											</Text>
+										</TouchableOpacity>
+									)}
 									<TouchableOpacity
-										onPress={decrementQuantity}
-										style={styles.quantityButtonMinus}
+										onPress={incrementQuantity}
+										style={[
+											styles.quantityButton,
+											quantity === 1 && styles.quantityButtonSingle,
+										]}
 									>
 										<Text style={styles.whiteText}>
-											<Ionicons name="remove" size={26} />
+											<Ionicons name="add" size={26} />
 										</Text>
 									</TouchableOpacity>
-								)}
-								<TouchableOpacity
-									onPress={incrementQuantity}
-									style={[
-										styles.quantityButton,
-										quantity === 1 && styles.quantityButtonSingle,
-									]}
-								>
-									<Text style={styles.whiteText}>
-										<Ionicons name="add" size={26} />
-									</Text>
-								</TouchableOpacity>
-							</View>
-							<Button
-								asChild
-								disabled={!totalCost}
-								onPress={handleSubmit}
-								style={styles.addButton}
-							>
-								<View style={styles.buttonContent}>
-									<Button.Text style={styles.whiteText}>
-										<Trans>Add to Order</Trans>
-									</Button.Text>
-									{quantity > 1 && (
-										<Button.Text style={[styles.quantityText]}>
-											{quantity}
-										</Button.Text>
-									)}
 								</View>
-								<AnimatedPrice>{formatPrice(totalCost)}</AnimatedPrice>
-							</Button>
-						</View>
-					)
-				}}
-			</Subscribe>
+								<Button
+									asChild
+									disabled={!totalCost}
+									onPress={handleSubmit}
+									style={styles.addButton}
+								>
+									<View style={styles.buttonContent}>
+										<Button.Text style={styles.whiteText}>
+											<Trans>Add to Order</Trans>
+										</Button.Text>
+										{quantity > 1 && (
+											<Button.Text style={[styles.quantityText]}>
+												{quantity}
+											</Button.Text>
+										)}
+									</View>
+									<AnimatedPrice>{formatPrice(totalCost)}</AnimatedPrice>
+								</Button>
+							</View>
+						)
+					}}
+				</Subscribe>
+			)}
 		</>
 	)
 }
@@ -565,7 +577,9 @@ function AnimatedPrice({ children }: { children: string }) {
 function useGetFormattedHTMLContent(description: string | undefined) {
 	const { theme } = useUnistyles()
 
-	if (!description) return
+	if (!description) {
+		return
+	}
 
 	return {
 		html: `

@@ -8,13 +8,13 @@ import {
 import { getConnInfo } from 'hono/cloudflare-workers'
 import z from 'zod/v4'
 
+import type { Context } from 'hono'
+
 import type {
 	ServerAnalyticsEvent,
 	ServerEventProperties,
-} from '@common/analytics'
-import type { Context } from 'hono'
-
-import type { Bindings } from '../types'
+} from '~/common/analytics'
+import type { Bindings } from '~/workers/types'
 
 export async function trackServerEvent(
 	context: Context<{ Bindings: Bindings }>,
@@ -104,7 +104,7 @@ function getUserData(
 				address?: {
 					postalCode?: string
 				}
-				emailAddress?: string
+				emailAddress?: string | undefined
 				firstName?: string
 				lastName?: string
 				phoneNumber?: string

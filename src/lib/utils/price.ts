@@ -1,4 +1,4 @@
-import type { Product } from '@common/api'
+import type { Product } from '~/common/api'
 
 import { productQueryOptions } from '../queries/product'
 import { queryClient } from '../query-client'
@@ -17,7 +17,9 @@ const formatter = new Intl.NumberFormat('en-US', {
  */
 export function formatPrice(value: number | string): string {
 	const cents = typeof value === 'string' ? Number.parseFloat(value) : value
-	if (!Number.isFinite(cents)) return '$0'
+	if (!Number.isFinite(cents)) {
+		return '$0'
+	}
 
 	const dollars = cents / 100
 

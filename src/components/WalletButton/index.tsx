@@ -16,7 +16,9 @@ export function addPass(url: string) {
 const UniWalletView = withUnistyles(RNWalletView)
 
 export default function WalletButton(props: Props) {
-	if (Platform.OS === 'macos') return null
+	if (Platform.OS === 'macos') {
+		return null
+	}
 
 	return <UniWalletView {...props} />
 }

@@ -15,11 +15,15 @@ export async function authenticate(context: Context, secret: string) {
 		getCookie(context, 'tolo_session') ||
 		null
 
-	if (!token) throw new HTTPException(401, { message: 'Unauthorized' })
+	if (!token) {
+		throw new HTTPException(401, { message: 'Unauthorized' })
+	}
 
 	const [clientId, payload] = await verifyJwt(token, secret)
 
-	if (!clientId) throw new HTTPException(403, { message: 'Unauthorized' })
+	if (!clientId) {
+		throw new HTTPException(403, { message: 'Unauthorized' })
+	}
 
 	return [Number.parseInt(clientId, 10), payload, token] as const
 }
@@ -27,7 +31,9 @@ export async function authenticate(context: Context, secret: string) {
 export function extractToken(
 	authorizationHeader?: null | string,
 ): null | string {
-	if (!authorizationHeader) return null
+	if (!authorizationHeader) {
+		return null
+	}
 	return authorizationHeader.startsWith('Bearer ')
 		? authorizationHeader.slice(7)
 		: null
@@ -54,7 +60,9 @@ export async function signJwt(
 
 export async function verifyJwt(token: string | undefined, secret: string) {
 	try {
-		if (!token) throw new Error('No token provided')
+		if (!token) {
+			throw new Error('No token provided')
+		}
 
 		const { payload } = await startSpan({ name: 'jwt.verify' }, () =>
 			jwtVerify(token, secretKey(secret)),

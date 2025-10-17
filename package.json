@@ -1,7 +1,7 @@
 {
 	"name": "@tolo/app",
 	"main": "src/index.ts",
-	"version": "1.1.12",
+	"version": "1.2.0",
 	"packageManager": "bun@1.2.23",
 	"scripts": {
 		"start": "expo start",
@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-sns": "3.914.0",
+		"@bacons/apple-targets": "3.0.5",
 		"@bottom-tabs/react-navigation": "1.0.2",
 		"@expo/vector-icons": "^15.0.2",
 		"@formidable-webview/webshell": "2.6.0",

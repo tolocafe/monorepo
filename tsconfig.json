@@ -2,15 +2,24 @@
 	"compilerOptions": {
 		"allowSyntheticDefaultImports": true,
 		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
 		"alwaysStrict": true,
+		"exactOptionalPropertyTypes": false,
+		"forceConsistentCasingInFileNames": true,
 		"incremental": true,
+		"noFallthroughCasesInSwitch": true,
 		"noImplicitAny": true,
+		"noImplicitOverride": true,
+		"noUncheckedIndexedAccess": false,
+		"noUncheckedSideEffectImports": true,
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
-			"@common/*": ["./common/*"]
+			"~/workers/*": ["./workers/*"],
+			"~/modules/*": ["./modules/*"],
+			"~/common/*": ["./common/*"]
 		},
 		"removeComments": true,
 		"skipLibCheck": true,
@@ -25,6 +34,7 @@
 		"app.config.ts",
 		"expo-env.d.ts",
 		"src/**/*.d.ts",
+		"modules/**/*.ts",
 		"common/**/*.ts",
 		"workers/**/*.ts",
 		"prisma.config.ts",

@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import type { ImageSourcePropType } from 'react-native'
 import { Platform } from 'react-native'
 
@@ -8,10 +9,13 @@ import { useUnistyles } from 'react-native-unistyles'
 
 import Tabs from '@/components/Tabs'
 import { useCurrentOrderItemsCount } from '@/lib/stores/order-store'
+import ExpoSharedStorage from '~/modules/expo-shared-storage'
 
 export const unstable_settings = {
 	initialRouteName: '(home)',
 }
+
+const hiddenTabBar = () => null
 
 export default function TabLayout() {
 	const { t } = useLingui()
@@ -19,6 +23,11 @@ export default function TabLayout() {
 	const itemsCount = useCurrentOrderItemsCount()
 
 	const { theme } = useUnistyles()
+
+	const tabBar = useMemo(
+		() => (ExpoSharedStorage.isAppClip ? hiddenTabBar : undefined),
+		[],
+	)
 
 	return (
 		<>
@@ -38,7 +47,9 @@ export default function TabLayout() {
 					headerShown: false,
 					minimizeBehavior: 'automatic',
 					tabBarActiveTintColor: theme.colors.verde.solid,
+					tabBarItemHidden: true,
 				}}
+				tabBar={tabBar}
 				tabBarInactiveTintColor={theme.colors.gray.text}
 				tabBarStyle={{
 					backgroundColor:

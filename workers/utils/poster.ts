@@ -8,8 +8,8 @@ import type {
 	PosterResponse,
 	Product,
 	UpdateClientBody,
-} from '@common/api'
-import type { CreateOrder } from '@common/schemas'
+} from '~/common/api'
+import type { CreateOrder } from '~/common/schemas'
 
 const snsClient = new AWS.SNS({
 	credentials: {
@@ -127,7 +127,7 @@ export const api = {
 		createClient(
 			token: string,
 			body: {
-				birthday?: string
+				birthday?: string | undefined
 				bonus?: number
 				client_groups_id_client: number
 				client_name?: string
@@ -337,7 +337,9 @@ export const api = {
 				products: unknown[]
 			}>
 
-			if (data.response != null) return data.response
+			if (data.response != null) {
+				return data.response
+			}
 
 			getCurrentScope().setExtra('Fetch Data', data)
 
@@ -350,7 +352,9 @@ export const api = {
 				`${BASE_URL}/menu.getCategories?${getSearchParameters({ token })}`,
 			).then((response) => response.json())) as PosterResponse<Category[]>
 
-			if (data.response != null) return data.response
+			if (data.response != null) {
+				return data.response
+			}
 
 			throw new Error('Failed to get menu categories')
 		},

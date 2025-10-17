@@ -102,7 +102,9 @@ export const useOrderStore = create<OrderStore>()(
 			currentOrder: null,
 			getTotalItems() {
 				const { currentOrder } = get()
-				if (!currentOrder) return 0
+				if (!currentOrder) {
+					return 0
+				}
 				return currentOrder.products.reduce(
 					(total, item) => total + item.quantity,
 					0,
@@ -110,7 +112,9 @@ export const useOrderStore = create<OrderStore>()(
 			},
 			removeItem(productId) {
 				const { currentOrder } = get()
-				if (!currentOrder) return
+				if (!currentOrder) {
+					return
+				}
 
 				const updatedItems = currentOrder.products.filter(
 					(item) => item.id !== productId,
@@ -127,7 +131,9 @@ export const useOrderStore = create<OrderStore>()(
 			},
 			updateItem(productId, modifications, quantity) {
 				const { currentOrder } = get()
-				if (!currentOrder) return
+				if (!currentOrder) {
+					return
+				}
 
 				if (quantity <= 0) {
 					set({

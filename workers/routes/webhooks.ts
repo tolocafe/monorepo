@@ -9,17 +9,18 @@ import {
 import { Expo } from 'expo-server-sdk'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
-import { trackServerEvent } from 'workers/utils/analytics'
-import { sendBatchAPNsNotifications } from 'workers/utils/apns'
-import getPass from 'workers/utils/generate-pass'
-import { api, sendSms } from 'workers/utils/poster'
-import { getStripe } from 'workers/utils/stripe'
 import { z } from 'zod/v4'
 
 import type { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk'
 import type { Context } from 'hono'
 
-import type { Bindings } from '../types'
+import { trackServerEvent } from '~/workers/utils/analytics'
+import { sendBatchAPNsNotifications } from '~/workers/utils/apns'
+import getPass from '~/workers/utils/generate-pass'
+import { api, sendSms } from '~/workers/utils/poster'
+import { getStripe } from '~/workers/utils/stripe'
+
+import type { Bindings } from '~/workers/types'
 
 type EventData =
 	| undefined
@@ -84,7 +85,11 @@ async function ensurePassTables(database: D1Database) {
 function extractClientIdFromPassId(passId: string): null | number {
 	const regex = /^TOLO-(\d+)$/
 	const match = regex.exec(passId)
-	if (!match) return null
+
+	if (!match?.[1]) {
+		return null
+	}
+
 	return Number.parseInt(match[1], 10)
 }
 
@@ -770,7 +775,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 							object_id as string,
 						)
 
-						if (!client) break
+						if (!client) {
+							break
+						}
 
 						const stripe = getStripe(context.env.STRIPE_SECRET_KEY)
 						const stripeCustomer = await stripe.customers
@@ -781,8 +788,8 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 						if (stripeCustomer) {
 							await stripe.customers.update(stripeCustomer.id, {
-								email: client.email,
-								name: client.name,
+								email: client.email ?? '',
+								name: client.name ?? '',
 								phone: client.phone,
 							})
 						}
@@ -816,10 +823,10 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						value:
 							parsedData && 'value_absolute' in parsedData
 								? (parsedData.value_absolute as number)
-								: undefined,
+								: 0,
 					},
 					userData: {
-						emailAddress: client.email,
+						emailAddress: client.email ?? '',
 						firstName: client.firstname,
 						lastName: client.lastname,
 						phoneNumber: client.phone,
@@ -893,8 +900,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						object_id as string,
 					)
 
-					if (!transaction)
+					if (!transaction) {
 						throw new HTTPException(404, { message: 'Transaction not found' })
+					}
 
 					const { client_id } = transaction
 

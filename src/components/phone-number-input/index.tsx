@@ -122,7 +122,7 @@ function getPhoneParts(text: string, defaultPrefix: string) {
 
 	const nsn = cleanE164Value.replace(internationalPrefix, '')
 
-	return [internationalPrefix, nsn]
+	return [internationalPrefix, nsn] as const
 }
 
 const dropdownContentStyle = {

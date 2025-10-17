@@ -62,6 +62,10 @@ async function blobToBase64(blob: Blob): Promise<string> {
 			const result = reader.result as string
 			// Remove data URL prefix
 			const base64 = result.split(',')[1]
+			if (!base64) {
+				reject(new Error('Failed to convert blob to base64'))
+				return
+			}
 			resolve(base64)
 		})
 		// eslint-disable-next-line unicorn/prefer-add-event-listener

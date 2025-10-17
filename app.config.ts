@@ -31,6 +31,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	},
 	icon: './src/assets/images/icon.png',
 	ios: {
+		appleTeamId: 'AUR7UR6M72',
 		associatedDomains: [
 			'applinks:app.tolo.cafe',
 			'activitycontinuation:app.tolo.cafe',
@@ -39,6 +40,9 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		bundleIdentifier: 'cafe.tolo.app',
 		config: {
 			usesNonExemptEncryption: false,
+		},
+		entitlements: {
+			'com.apple.security.application-groups': ['group.cafe.tolo.app'],
 		},
 		googleServicesFile: './GoogleService-Info.plist',
 		infoPlist: {
@@ -55,9 +59,11 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		'expo-font',
 		'expo-updates',
 		'expo-notifications',
+		'@bacons/apple-targets',
 		'expo-color-space-plugin',
 		'@react-native-firebase/app',
 		'./plugins/withAppBuildGradlePlugin',
+		'./plugins/with-app-groups',
 		['expo-router', { headOrigin: 'https://app.tolo.cafe' }],
 		['react-native-bottom-tabs', { theme: 'material3-dynamic' }],
 		['react-native-edge-to-edge', { android: { parentTheme: 'Material3' } }],

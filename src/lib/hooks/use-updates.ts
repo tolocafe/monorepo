@@ -1,13 +1,26 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import * as Sentry from '@sentry/react-native'
-import * as Updates from 'expo-updates'
+
+import ExpoSharedStorage from '~/modules/expo-shared-storage'
 
 export type UpdateState = {
 	error: null | string
 	isChecking: boolean
 	isDownloading: boolean
+	isEnabled: boolean | null
 	isUpdateAvailable: boolean
+}
+
+type UpdatesModule = {
+	channel: string
+	checkForUpdateAsync: () => Promise<{ isAvailable: boolean }>
+	createdAt: Date | null
+	fetchUpdateAsync: () => Promise<unknown>
+	isEnabled: boolean
+	reloadAsync: () => Promise<void>
+	runtimeVersion: string
+	updateId: string
 }
 
 export function useUpdates() {
@@ -15,11 +28,14 @@ export function useUpdates() {
 		error: null,
 		isChecking: false,
 		isDownloading: false,
+		isEnabled: null,
 		isUpdateAvailable: false,
 	})
 
-	const checkForUpdates = async () => {
-		if (!Updates.isEnabled || __DEV__) {
+	const checkForUpdates = useCallback(async () => {
+		const Updates = await getUpdatesModule()
+
+		if (!Updates || !Updates.isEnabled || __DEV__) {
 			return
 		}
 
@@ -65,9 +81,15 @@ export function useUpdates() {
 				isDownloading: false,
 			}))
 		}
-	}
+	}, [])
 
-	const reloadApp = async () => {
+	const reloadApp = useCallback(async () => {
+		const Updates = await getUpdatesModule()
+
+		if (!Updates) {
+			return
+		}
+
 		try {
 			await Updates.reloadAsync()
 		} catch (error) {
@@ -92,21 +114,46 @@ export function useUpdates() {
 				error: errorMessage,
 			}))
 		}
-	}
+	}, [])
 
 	// Check for updates on mount
 	useEffect(() => {
+		if (ExpoSharedStorage.isAppClip) {
+			return
+		}
+
+		// Async call doesn't actually cause cascading renders
 		// eslint-disable-next-line react-hooks/set-state-in-effect
 		void checkForUpdates()
-	}, [])
+	}, [checkForUpdates])
+
+	if (ExpoSharedStorage.isAppClip) {
+		return {
+			...state,
+			channel: 'app-clip',
+			checkForUpdates,
+			createdAt: null,
+			reloadApp,
+			runtimeVersion: '0.0.0',
+			updateId: '0.0.0',
+		}
+	}
 
 	return {
 		...state,
-		channel: Updates.channel,
+		channel: null,
 		checkForUpdates,
-		createdAt: Updates.createdAt,
+		createdAt: null,
 		reloadApp,
-		runtimeVersion: Updates.runtimeVersion,
-		updateId: Updates.updateId,
+		runtimeVersion: null,
+		updateId: null,
 	}
+}
+
+async function getUpdatesModule() {
+	if (ExpoSharedStorage.isAppClip) {
+		return null
+	}
+
+	return import('expo-updates') as Promise<null | UpdatesModule>
 }

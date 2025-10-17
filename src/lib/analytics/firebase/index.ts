@@ -3,6 +3,7 @@ import { captureException } from '@sentry/react-native'
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto'
 
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
+import ExpoSharedStorage from '~/modules/expo-shared-storage'
 
 import type { AnalyticsEvent, EventProperties } from './utils'
 
@@ -21,6 +22,10 @@ export async function enableAnalytics({
 	phoneNumber?: string
 	userId?: string
 }) {
+	if (ExpoSharedStorage.isAppClip) {
+		return
+	}
+
 	try {
 		await Promise.all([
 			analytics().setAnalyticsCollectionEnabled(true),
@@ -58,6 +63,10 @@ export async function trackEvent(
 	event: AnalyticsEvent,
 	properties?: EventProperties,
 ) {
+	if (ExpoSharedStorage.isAppClip) {
+		return
+	}
+
 	try {
 		const trackingEnabled = await requestTrackingPermissionAsync()
 

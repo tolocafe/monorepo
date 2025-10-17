@@ -3,7 +3,7 @@
 const { withAppBuildGradle } = require('expo/config-plugins')
 
 module.exports = function withAppBuildGradlePlugin(appConfig) {
-	return withAppBuildGradle(appConfig, function (decoratedAppConfig) {
+	return withAppBuildGradle(appConfig, (decoratedAppConfig) => {
 		// HACK
 		// Workaround for https://github.com/facebook/react-native/issues/42024
 		// Remove when React Native resolves this issue

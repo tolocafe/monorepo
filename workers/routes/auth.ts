@@ -1,4 +1,3 @@
-import { RequestOtpSchema, VerifyOtpSchema } from '@common/schemas'
 import { startSpan } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { deleteCookie, setCookie } from 'hono/cookie'
@@ -6,12 +5,13 @@ import { HTTPException } from 'hono/http-exception'
 
 import type { CookieOptions } from 'hono/utils/cookie'
 
-import { trackServerEvent } from '../utils/analytics'
-import { authenticate, signJwt } from '../utils/jwt'
-import { generateOtp, storeOtp, verifyOtp } from '../utils/otp'
-import { api, sendSms } from '../utils/poster'
+import { RequestOtpSchema, VerifyOtpSchema } from '~/common/schemas'
+import { trackServerEvent } from '~/workers/utils/analytics'
+import { authenticate, signJwt } from '~/workers/utils/jwt'
+import { generateOtp, storeOtp, verifyOtp } from '~/workers/utils/otp'
+import { api, sendSms } from '~/workers/utils/poster'
 
-import type { Bindings } from '../types'
+import type { Bindings } from '~/workers/types'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
 
@@ -200,7 +200,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
 
-		if (!client) throw new HTTPException(404, { message: 'Client not found' })
+		if (!client) {
+			throw new HTTPException(404, { message: 'Client not found' })
+		}
 
 		return c.json(client)
 	})

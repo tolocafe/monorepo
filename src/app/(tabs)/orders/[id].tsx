@@ -34,7 +34,9 @@ export default function OrderDetail() {
 	} = useQuery(orderDetailQueryOptions(id))
 
 	const handleDownloadReceipt = async () => {
-		if (!id) return
+		if (!id) {
+			return
+		}
 
 		try {
 			setIsDownloading(true)

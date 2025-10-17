@@ -18,9 +18,10 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { FacebookPixel } from '@/lib/analytics/facebook-pixel'
 import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
+import { useUpdates } from '@/lib/hooks/use-updates'
+import { useWidgetSync } from '@/lib/hooks/use-widget-sync'
 import '@/lib/analytics/firebase/init'
 import '@/lib/locales/init'
-import { useUpdates } from '@/lib/hooks/use-updates'
 import { QueryProvider } from '@/lib/providers/query-provider'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { coffeesQueryOptions } from '@/lib/queries/coffees'
@@ -100,6 +101,7 @@ function RootLayout() {
 				>
 					<StatusBar style="auto" />
 					<FacebookPixel />
+					<Widget />
 					<I18nProvider i18n={i18n}>
 						<Stack initialRouteName="(tabs)">
 							<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -120,6 +122,13 @@ function RootLayout() {
 			</QueryProvider>
 		</KeyboardProvider>
 	)
+}
+
+function Widget() {
+	// Sync data to widget
+	useWidgetSync()
+
+	return null
 }
 
 export default Sentry.wrap(RootLayout)

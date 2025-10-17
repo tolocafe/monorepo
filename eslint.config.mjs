@@ -4,10 +4,11 @@ import reactPlugin from 'eslint-plugin-react'
 import reactCompiler from 'eslint-plugin-react-compiler'
 import reactHooks from 'eslint-plugin-react-hooks'
 import eslintPluginUnicorn from 'eslint-plugin-unicorn'
+import { defineConfig } from 'eslint/config'
 import globals from 'globals'
 import tseslint from 'typescript-eslint'
 
-export default [
+export default defineConfig([
 	pluginJs.configs.recommended,
 	...tseslint.configs.strictTypeChecked,
 	...tseslint.configs.stylisticTypeChecked,
@@ -37,7 +38,6 @@ export default [
 			globals: {
 				...globals.builtin,
 				...globals.browser,
-				...globals.serviceworker,
 			},
 			parserOptions: {
 				ecmaFeatures: {
@@ -55,12 +55,16 @@ export default [
 				'warn',
 				{ fixStyle: 'separate-type-imports', prefer: 'type-imports' },
 			],
+			'@typescript-eslint/method-signature-style': ['error', 'property'],
 			'@typescript-eslint/no-confusing-void-expression': 'off',
 			'@typescript-eslint/no-misused-promises': [
 				'error',
 				{ checksVoidReturn: false },
 			],
 			'@typescript-eslint/no-require-imports': 'off',
+			'@typescript-eslint/no-unnecessary-boolean-literal-compare': 'error',
+			'@typescript-eslint/no-unnecessary-qualifier': 'error',
+			'@typescript-eslint/no-unnecessary-type-arguments': 'error',
 			'@typescript-eslint/no-unused-vars': [
 				'error',
 				{
@@ -74,6 +78,9 @@ export default [
 				},
 			],
 			'@typescript-eslint/non-nullable-type-assertion-style': 'off',
+			'@typescript-eslint/prefer-for-of': 'error',
+			'@typescript-eslint/prefer-function-type': 'error',
+			'@typescript-eslint/prefer-includes': 'error',
 			'@typescript-eslint/prefer-nullish-coalescing': [
 				'error',
 				{
@@ -84,15 +91,34 @@ export default [
 					},
 				},
 			],
+			'@typescript-eslint/prefer-optional-chain': 'error',
+			'@typescript-eslint/prefer-reduce-type-parameter': 'error',
+			'@typescript-eslint/prefer-string-starts-ends-with': 'error',
 			'@typescript-eslint/restrict-template-expressions': [
 				'error',
 				{ allowNumber: true },
 			],
+			'@typescript-eslint/switch-exhaustiveness-check': 'off',
 			'@typescript-eslint/unbound-method': 'off',
+
+			// Core JavaScript rules for better code quality
 			'arrow-body-style': ['warn', 'as-needed'],
+			curly: ['error', 'all'],
+			'default-case-last': 'error',
+			'default-param-last': 'error',
+			'dot-notation': 'error',
+			eqeqeq: ['error', 'always', { null: 'ignore' }],
 			'func-style': ['warn', 'declaration', { allowArrowFunctions: true }],
+			'grouped-accessor-pairs': ['error', 'getBeforeSet'],
+			'logical-assignment-operators': [
+				'error',
+				'always',
+				{ enforceForIfStatements: true },
+			],
 			'max-params': ['error', 5],
 			'no-console': 'warn',
+			'no-else-return': ['error', { allowElseIf: false }],
+			'no-extra-boolean-cast': ['error', { enforceForInnerExpressions: true }],
 			'no-implicit-coercion': 'error',
 			'no-inner-declarations': 'error',
 			'no-invalid-this': 'error',
@@ -106,8 +132,12 @@ export default [
 			'no-unneeded-ternary': 'error',
 			'no-useless-assignment': 'error',
 			'no-useless-computed-key': 'off',
+			'no-useless-concat': 'error',
 			'no-useless-rename': 'error',
+			'no-useless-return': 'error',
+			'no-var': 'error',
 			'object-shorthand': 'error',
+			'operator-assignment': ['error', 'always'],
 			'perfectionist/sort-imports': [
 				'warn',
 				{
@@ -145,13 +175,28 @@ export default [
 						'unknown',
 					],
 					ignoreCase: true,
-					internalPattern: ['^@/.+'],
+					internalPattern: ['^@/.+', '^~/..+'],
 					maxLineLength: undefined,
 					newlinesBetween: 'always',
 					order: 'asc',
 					type: 'natural',
 				},
 			],
+			'prefer-arrow-callback': ['error', { allowNamedFunctions: true }],
+			'prefer-const': ['error', { destructuring: 'all' }],
+			'prefer-destructuring': [
+				'error',
+				{
+					AssignmentExpression: { array: false, object: false },
+					VariableDeclarator: { array: false, object: true },
+				},
+				{ enforceForRenamedProperties: false },
+			],
+			'prefer-exponentiation-operator': 'error',
+			'prefer-object-spread': 'error',
+			'prefer-rest-params': 'error',
+			'prefer-spread': 'error',
+			'prefer-template': 'error',
 			'react-hooks/exhaustive-deps': [
 				'error',
 				{
@@ -198,4 +243,12 @@ export default [
 		files: ['**/*.js', '**/*.jsx', '**/*.mjs'],
 		...tseslint.configs.disableTypeChecked,
 	},
-]
+	{
+		files: ['workers/**/*.ts'],
+		languageOptions: {
+			globals: {
+				...globals.serviceworker,
+			},
+		},
+	},
+])

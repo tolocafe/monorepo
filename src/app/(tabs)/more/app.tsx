@@ -29,7 +29,7 @@ export default function AppInfoScreen() {
 	const channel = updates.channel ?? (__DEV__ ? 'development' : 'N/A')
 	const runtimeVersion = updates.runtimeVersion ?? 'N/A'
 	const updateId = updates.updateId ?? 'N/A'
-	const createdAt = updates.createdAt
+	const { createdAt } = updates
 
 	const handleClearCache = () => {
 		Alert.alert(

@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/cloudflare'
 import { SignJWT } from 'jose'
 
-import type { Bindings } from '../types'
+import type { Bindings } from '~/workers/types'
 
 const APNS_PRODUCTION_URL = 'https://api.push.apple.com'
 
@@ -63,7 +63,7 @@ export async function sendBatchAPNsNotifications(
 	environment: Bindings,
 ): Promise<{
 	failed: number
-	results: { error?: string; success: boolean; token: string }[]
+	results: { error?: string | undefined; success: boolean; token: string }[]
 	successful: number
 }> {
 	const results = await Promise.allSettled(
@@ -81,7 +81,7 @@ export async function sendBatchAPNsNotifications(
 	let successful = 0
 	let failed = 0
 	const processedResults: {
-		error?: string
+		error?: string | undefined
 		success: boolean
 		token: string
 	}[] = []

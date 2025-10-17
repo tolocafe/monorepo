@@ -194,7 +194,9 @@ export default function SignIn() {
 
 	// Handle Esc key press on web to go back
 	useEffect(() => {
-		if (Platform.OS !== 'web') return
+		if (Platform.OS !== 'web') {
+			return
+		}
 
 		const handleKeyDown = (event: KeyboardEvent) => {
 			if (event.key === 'Escape') {

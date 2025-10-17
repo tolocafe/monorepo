@@ -46,7 +46,9 @@ export function FacebookPixel() {
 		) {
 			// @ts-expect-error valid check
 			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			if (windowArg.fbq) return
+			if (windowArg.fbq) {
+				return
+			}
 
 			// @ts-nocheck
 			n = windowArg.fbq = function () {
@@ -57,7 +59,7 @@ export function FacebookPixel() {
 					: // eslint-disable-next-line prefer-rest-params
 						n?.queue?.push(arguments)
 			}
-			if (!windowArg._fbq) windowArg._fbq = n
+			windowArg._fbq ||= n
 			n.push = n as (...arguments_: unknown[]) => void
 			n.loaded = !0
 			n.version = '2.0'

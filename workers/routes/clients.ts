@@ -2,10 +2,10 @@ import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
 
-import { authenticate } from '../utils/jwt'
-import { api } from '../utils/poster'
+import { authenticate } from '~/workers/utils/jwt'
+import { api } from '~/workers/utils/poster'
 
-import type { Bindings } from '../types'
+import type { Bindings } from '~/workers/types'
 
 const updateClientSchema = z.object({
 	birthday: z.string().optional(),

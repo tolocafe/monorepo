@@ -83,7 +83,9 @@ export async function trackEvent(
 	properties?: EventProperties,
 ) {
 	const trackingEnabled = await requestTrackingPermissionAsync()
-	if (!trackingEnabled) return
+	if (!trackingEnabled) {
+		return
+	}
 
 	const analytics = getAnalytics()
 	logEvent(analytics, event as unknown as string, properties)
