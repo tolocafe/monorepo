@@ -14,6 +14,7 @@ import passes from './routes/passes'
 import receipts from './routes/receipts'
 import transactions from './routes/transactions'
 import webhooks from './routes/webhooks'
+import scheduledHandler from './scheduled'
 import { defaultJsonHeaders } from './utils/headers'
 import { authenticate } from './utils/jwt'
 
@@ -105,8 +106,8 @@ app.onError((error, c) => {
 	return c.json({ error: 'Internal Server Error' }, 500)
 })
 
-export default Sentry.withSentry(
-	(environment: { SENTRY_DSN: string }) => ({
+const appWithSentry = Sentry.withSentry<Bindings>(
+	(environment) => ({
 		dsn: environment.SENTRY_DSN,
 		enableLogs: true,
 		integrations: [
@@ -118,3 +119,7 @@ export default Sentry.withSentry(
 	}),
 	app,
 )
+
+appWithSentry.scheduled = scheduledHandler
+
+export default appWithSentry

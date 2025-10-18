@@ -29,7 +29,7 @@ class PosterError extends Error {
 	}
 }
 
-export async function posterFetch<TResponse>(
+export async function posterFetch<TResponse = unknown>(
 	url: string,
 	options: RequestInit & { defaultErrorMessage?: string },
 ) {
@@ -41,17 +41,40 @@ export async function posterFetch<TResponse>(
 		URL: `${BASE_URL}${url}`,
 	})
 
-	const data = (await fetch(`${BASE_URL}${url}`, options).then((response) =>
-		response.json(),
+	const data = (await fetch(`${BASE_URL}${url}`, options).then(
+		(response) => response.json() as unknown,
 	)) as PosterResponse<TResponse>
 
 	currentScope.setContext('Fetch Response', { Data: data })
 
-	if (data.response != null) return data.response
+	if (data.response != null) {
+		return data.response
+	}
 
 	throw new PosterError(
 		data.error || options.defaultErrorMessage || 'Failed to fetch data',
 	)
+}
+
+function getCleanedParameters(
+	parameters?: Record<string, boolean | number | string | undefined>,
+) {
+	const filteredParameters = Object.entries(parameters ?? {}).filter(
+		([_, value]) => value != null,
+	)
+
+	const stringParameters = filteredParameters.map(([key, value]) => [
+		key,
+		(value as boolean | number | string).toString(),
+	])
+
+	return Object.fromEntries(stringParameters) as Record<string, string>
+}
+
+function getSearchParameters(
+	parameters?: Record<string, boolean | number | string | undefined>,
+) {
+	return new URLSearchParams(getCleanedParameters(parameters))
 }
 
 export const api = {
@@ -164,12 +187,15 @@ export const api = {
 			clientId: number,
 			body: UpdateClientBody,
 		) {
-			return posterFetch<number>(`/clients.updateClient?token=${token}`, {
-				body: JSON.stringify({ ...body, client_id: clientId }),
-				defaultErrorMessage: 'Failed to update client',
-				headers: { 'Content-Type': 'application/json' },
-				method: 'POST',
-			})
+			return posterFetch<number>(
+				`/clients.updateClient?${new URLSearchParams({ token })}`,
+				{
+					body: JSON.stringify({ ...body, client_id: clientId }),
+					defaultErrorMessage: 'Failed to update client',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			)
 		},
 	},
 	dash: {
@@ -193,7 +219,11 @@ export const api = {
 					tip_sum: string
 				}[]
 			>(
-				`/dash.getTransaction?token=${token}&transaction_id=${id}&${new URLSearchParams(options)}`,
+				`/dash.getTransaction?${new URLSearchParams({
+					token,
+					transaction_id: id,
+					...options,
+				})}`,
 				{
 					defaultErrorMessage: 'Failed to get transaction',
 					headers: { 'Content-Type': 'application/json' },
@@ -203,13 +233,13 @@ export const api = {
 		},
 		async getTransactions(token: string, clientId: number) {
 			return posterFetch<number[]>(
-				`/dash.getTransactions?token=${token}&type=clients&id=${clientId}`,
+				`/dash.getTransactions?${new URLSearchParams({ id: clientId.toString(), token, type: 'client' })}`,
 				{
 					defaultErrorMessage: 'Failed to get transactions',
 					headers: { 'Content-Type': 'application/json' },
 					method: 'GET',
 				},
-			).catch(() => [])
+			).catch(() => [] as number[])
 		},
 	},
 	finance: {
@@ -231,12 +261,15 @@ export const api = {
 				user_id: number
 			},
 		) {
-			return posterFetch<number>(`/finance.createTransactions?token=${token}`, {
-				body: JSON.stringify({ ...body, amount_to: body.amount_to / 100 }),
-				defaultErrorMessage: 'Failed to create transactions',
-				headers: { 'Content-Type': 'application/json' },
-				method: 'POST',
-			})
+			return posterFetch<number>(
+				`/finance.createTransactions?${new URLSearchParams({ token })}`,
+				{
+					body: JSON.stringify({ ...body, amount_to: body.amount_to / 100 }),
+					defaultErrorMessage: 'Failed to create transactions',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			)
 		},
 		async getTransaction(token: string, id: string) {
 			return posterFetch<
@@ -246,11 +279,14 @@ export const api = {
 					transaction_id: string
 					user_id: string
 				}[]
-			>(`/finance.getTransaction?token=${token}&transaction_id=${id}`, {
-				defaultErrorMessage: 'Failed to get transaction',
-				headers: { 'Content-Type': 'application/json' },
-				method: 'GET',
-			}).then((response) => response.at(0) ?? null)
+			>(
+				`/finance.getTransaction?${new URLSearchParams({ token, transaction_id: id })}`,
+				{
+					defaultErrorMessage: 'Failed to get transaction',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'GET',
+				},
+			).then((response) => response.at(0) ?? null)
 		},
 	},
 	incomingOrders: {
@@ -279,16 +315,19 @@ export const api = {
 				status: number
 				/** Associated order ID */
 				transaction_id: number
-			}>(`/incomingOrders.createIncomingOrder?token=${token}`, {
-				body: JSON.stringify(finalOrderData),
-				defaultErrorMessage: 'Failed to create order',
-				headers: { 'Content-Type': 'application/json' },
-				method: 'POST',
-			})
+			}>(
+				`/incomingOrders.createIncomingOrder?${getSearchParameters({ token })}`,
+				{
+					body: JSON.stringify(finalOrderData),
+					defaultErrorMessage: 'Failed to create order',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			)
 		},
 		async getIncomingOrder(token: string, id: string) {
 			const data = (await fetch(
-				`${BASE_URL}/incomingOrders.getIncomingOrder?token=${token}&incoming_order_id=${id}`,
+				`${BASE_URL}/incomingOrders.getIncomingOrder?${getSearchParameters({ incoming_order_id: id, token })}`,
 			).then((response) => response.json())) as PosterResponse<{
 				client_id: number
 				products: unknown[]
@@ -304,7 +343,7 @@ export const api = {
 	menu: {
 		async getMenuCategories(token: string) {
 			const data = (await fetch(
-				`${BASE_URL}/menu.getCategories?token=${token}`,
+				`${BASE_URL}/menu.getCategories?${getSearchParameters({ token })}`,
 			).then((response) => response.json())) as PosterResponse<Category[]>
 
 			if (data.response != null) return data.response
@@ -317,16 +356,19 @@ export const api = {
 				type: 'categories' | 'products'
 			} = defaultGetMenuProductsOptions,
 		) {
-			return posterFetch<Product[]>(`/menu.getProducts?token=${token}`, {
-				defaultErrorMessage: 'Failed to get menu products',
-				headers: { 'Content-Type': 'application/json' },
-				method: 'GET',
-			})
+			return posterFetch<Product[]>(
+				`/menu.getProducts?${getSearchParameters({ token })}`,
+				{
+					defaultErrorMessage: 'Failed to get menu products',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'GET',
+				},
+			)
 		},
 
 		async getProduct(token: string, id: string) {
 			return posterFetch<Product>(
-				`/menu.getProduct?token=${token}&product_id=${id}`,
+				`/menu.getProduct?${getSearchParameters({ product_id: id, token })}`,
 				{
 					defaultErrorMessage: 'Failed to get product',
 					headers: { 'Content-Type': 'application/json' },
@@ -336,6 +378,21 @@ export const api = {
 		},
 	},
 	transactions: {
+		async getTransactions(
+			token: string,
+			options?: {
+				date_from?: string
+				date_to?: string
+				page?: number
+				/** Max is 1000 */
+				per_page?: number
+			},
+		) {
+			return posterFetch<number[]>(
+				`/transactions.getTransactions?${getSearchParameters({ token, ...options })}`,
+				{ defaultErrorMessage: 'Failed to get transactions' },
+			)
+		},
 		async updateTransaction(
 			token: string,
 			body: {
@@ -357,12 +414,15 @@ export const api = {
 				user_id: body.userId,
 			}
 
-			return posterFetch<number>(`/finance.updateTransactions?token=${token}`, {
-				body: JSON.stringify(parsedBody),
-				defaultErrorMessage: 'Failed to update transaction',
-				headers: { 'Content-Type': 'application/json' },
-				method: 'POST',
-			})
+			return posterFetch<number>(
+				`/finance.updateTransactions?${new URLSearchParams({ token })}`,
+				{
+					body: JSON.stringify(parsedBody),
+					defaultErrorMessage: 'Failed to update transaction',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			)
 		},
 	},
 }
@@ -374,12 +434,15 @@ export async function closePosterOrder(
 		transaction_id: number
 	},
 ) {
-	return posterFetch<number>(`/transactions.closeTransaction?token=${token}`, {
-		body: JSON.stringify({ ...body, spot_id: 1, spot_tablet_id: 1 }),
-		defaultErrorMessage: 'Failed to close order',
-		headers: { 'Content-Type': 'application/json' },
-		method: 'POST',
-	})
+	return posterFetch<number>(
+		`/transactions.closeTransaction?${new URLSearchParams({ token })}`,
+		{
+			body: JSON.stringify({ ...body, spot_id: 1, spot_tablet_id: 1 }),
+			defaultErrorMessage: 'Failed to close order',
+			headers: { 'Content-Type': 'application/json' },
+			method: 'POST',
+		},
+	)
 }
 
 export async function sendSms(_token: string, phone: string, message: string) {

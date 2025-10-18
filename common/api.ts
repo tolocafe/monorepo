@@ -142,9 +142,9 @@ export type PosterModificationGroup = {
 	type: number
 }
 
-export type PosterResponse<T> = {
+export type PosterResponse<ResponseShape> = {
 	error?: string
-	response: null | T
+	response: null | ResponseShape
 }
 
 export type Product = {
