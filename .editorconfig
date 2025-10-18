@@ -11,5 +11,5 @@ insert_final_newline = true
 [*.yml]
 indent_style = space
 
-[*.swift]
+[*.swift, *.plist]
 indent_style = space

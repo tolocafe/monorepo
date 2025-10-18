@@ -1,4 +1,4 @@
-# TOLO Points Widget
+# TOLO Widget
 
 Home screen widget that displays user visit counts (points), wallet balance, and name.
 

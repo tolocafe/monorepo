@@ -23,6 +23,16 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	},
 	extra: {
 		eas: {
+			build: {
+				experimental: {
+					ios: {
+						appExtensions: [
+							{ targetName: 'clip', version: '1.1.1' },
+							{ targetName: 'widget', version: '1.1.1' },
+						],
+					},
+				},
+			},
 			projectId,
 		},
 		router: {

@@ -1,10 +1,11 @@
 /* eslint-disable unicorn/no-anonymous-default-export, no-undef */
 /** @type {import('@bacons/apple-targets/app.plugin').ConfigFunction} */
-module.exports = (_config) => ({
-	displayName: 'TOLO Menu',
+module.exports = (config) => ({
+	displayName: 'TOLO Clip',
 	entitlements: {
+		'com.apple.developer.associated-domains': ['appclips:app.tolo.cafe'],
 		'com.apple.security.application-groups': ['group.cafe.tolo.app'],
 	},
-	icon: 'https://github.com/expo.png',
 	type: 'clip',
+	version: config.version,
 })

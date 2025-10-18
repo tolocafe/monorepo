@@ -1,7 +1,9 @@
-/* eslint-disable no-undef */
-module.exports = {
+/* eslint-disable unicorn/no-anonymous-default-export, no-undef */
+/** @type {import('@bacons/apple-targets/app.plugin').ConfigFunction} */
+module.exports = (config) => ({
 	deploymentTarget: '18.0',
+	displayName: 'TOLO Widget',
 	frameworks: ['WidgetKit', 'SwiftUI'],
-	name: 'widget',
 	type: 'widget',
-}
+	version: config.version,
+})
