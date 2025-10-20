@@ -4,8 +4,10 @@ import { getCurrentScope } from '@sentry/cloudflare'
 import type {
 	Category,
 	ClientData,
+	PageInfo,
 	PosterResponse,
 	Product,
+	Transaction,
 	UpdateClientBody,
 } from '@common/api'
 import type { CreateOrder } from '@common/schemas'
@@ -384,11 +386,15 @@ export const api = {
 				date_from?: string
 				date_to?: string
 				page?: number
-				/** Max is 1000 */
 				per_page?: number
+				/** Max is 1000 */
 			},
 		) {
-			return posterFetch<number[]>(
+			return posterFetch<{
+				count: number
+				data: Transaction[]
+				page: PageInfo
+			}>(
 				`/transactions.getTransactions?${getSearchParameters({ token, ...options })}`,
 				{ defaultErrorMessage: 'Failed to get transactions' },
 			)

@@ -21,15 +21,16 @@
 	"extends": "expo/tsconfig.base",
 	"include": [
 		"src/**/*.ts",
-		"src/**/*.d.ts",
 		"src/**/*.tsx",
+		"app.config.ts",
+		"expo-env.d.ts",
+		"src/**/*.d.ts",
 		"common/**/*.ts",
 		"workers/**/*.ts",
-		"app.config.ts",
-		".expo/types/**/*.ts",
-		"expo-env.d.ts",
+		"prisma.config.ts",
 		"eslint.config.mjs",
 		"vitest.config.mts",
+		".expo/types/**/*.ts",
 		"worker-configuration.d.ts"
 	]
 }

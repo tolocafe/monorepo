@@ -21,6 +21,7 @@ export type Bindings = Cloudflare.Env & {
 	KV_SESSIONS: KVNamespace
 	POSTER_APPLICATION_SECRET: string
 	POSTER_TOKEN: string
+	SENTRY_DSN: string
 	/** Passkit */
 	SIGNER_CERT: string
 	/** Passkit */

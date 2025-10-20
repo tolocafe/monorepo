@@ -88,6 +88,12 @@ export type Coffee = {
 	'varietal-image'?: WebflowImage
 }
 
+export type PageInfo = {
+	count: number
+	page: number
+	per_page: number
+}
+
 export type PosterIngredient = {
 	ingredient_id: string
 	ingredient_name: string
@@ -199,6 +205,39 @@ export type Product = {
 	volume?: number
 	weight_flag: string
 	workshop: string
+}
+
+export type Transaction = {
+	bonus: number
+	client_id: number
+	/** Order closing date in the “Y-m-d H:i:s” format */
+	date_close: string
+	discount: number
+	/** Type of payment: 0—closed without payment, 1—payment by cash, 2—payment by bank transfer, 3—mixed payment */
+	pay_type: number
+	payed_bonus: string
+	payed_card: string
+	payed_cash: string
+	payed_cert: string
+	/** The total amount paid, from payed_cash and payed_card */
+	payed_sum: string
+	payed_third_party: string
+	print_fiscal: number
+	products: {
+		num: string
+		product_id: string
+		product_sum: string
+	}[]
+	/** Reason for closing the bill without payment: 1—the customer has left, 2—on the house, 3—a waiter’s error */
+	reason: number
+	round_sum: string
+	/** Location ID */
+	spot_id: number
+	sum: string
+	/** Table ID */
+	table_id: number
+	tip_sum: string
+	transaction_id: number
 }
 
 export type UpdateClientBody = Partial<{
