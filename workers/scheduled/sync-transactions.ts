@@ -79,12 +79,29 @@ export default async function syncTransactions(
 				WHERE date_created >= ?1`,
 			)
 			.bind(formatApiDate(last30DaysAgo))
-			.all<TransactionData>()
+			.all<
+				Omit<TransactionData, 'products'> & {
+					products: string
+				}
+			>()
 
 		// Create a map for quick lookups and change detection
+		// Parse products JSON string into object for proper comparison
 		const existingMap = new Map<string, TransactionData>()
 		for (const tx of existingTransactions.results) {
-			existingMap.set(tx.transaction_id, tx)
+			let parsedProducts: TransactionData['products']
+			try {
+				parsedProducts = tx.products
+					? (JSON.parse(tx.products) as TransactionData['products'])
+					: undefined
+			} catch {
+				parsedProducts = undefined
+			}
+
+			existingMap.set(tx.transaction_id, {
+				...tx,
+				products: parsedProducts,
+			})
 		}
 
 		// Track transaction IDs from Poster
