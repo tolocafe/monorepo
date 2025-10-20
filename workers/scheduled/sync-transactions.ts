@@ -10,7 +10,7 @@ export type SyncResult = {
 }
 
 type TransactionData = {
-	client_id: string
+	client_id: null | string
 	date_close: string
 	date_created: string
 	pay_type: number
@@ -127,8 +127,10 @@ export default async function syncTransactions(
 					const existingTransaction = existingMap.get(transactionId)
 
 					// Prepare data for database
+					// Convert client_id of 0 to null (indicates no customer associated)
+					const clientId = transaction.client_id.toString()
 					const transactionData = {
-						client_id: transaction.client_id.toString(),
+						client_id: clientId === '0' ? null : clientId,
 						date_close: transaction.date_close,
 						date_created:
 							existingTransaction?.date_created || new Date().toISOString(),

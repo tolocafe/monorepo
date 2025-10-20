@@ -6,7 +6,7 @@ export default async function ensureTables(database: D1Database) {
 		.prepare(
 			`CREATE TABLE IF NOT EXISTS transactions (
 				transaction_id TEXT PRIMARY KEY NOT NULL,
-				client_id TEXT NOT NULL,
+				client_id TEXT,
 				payed_sum TEXT NOT NULL,
 				products TEXT,
 				date_created TEXT NOT NULL,

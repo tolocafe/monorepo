@@ -93,6 +93,11 @@ export default async function processCustomerLifecycleEvents(
 
 		// Process newly created transactions
 		for (const transaction of syncResult.created) {
+			// Skip transactions without a customer (client_id is null)
+			if (!transaction.client_id) {
+				continue
+			}
+
 			// Check if this is a new customer or a revival
 			const customerHistory = await getCustomerHistory(
 				transaction.client_id,
@@ -200,6 +205,11 @@ export default async function processCustomerLifecycleEvents(
 
 		// Process updated transactions
 		for (const transaction of syncResult.updated) {
+			// Skip transactions without a customer (client_id is null)
+			if (!transaction.client_id) {
+				continue
+			}
+
 			// Find the previous version to compare
 			const previousVersion = await database
 				.prepare(
