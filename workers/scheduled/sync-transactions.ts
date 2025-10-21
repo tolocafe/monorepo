@@ -54,6 +54,7 @@ export default async function syncTransactions(
 		const transactions = await api.dash.getTransactions(token, {
 			date_from: formatApiDate(last30DaysAgo),
 			date_to: formatApiDate(today),
+			include_products: 'true',
 		})
 
 		Sentry.setContext('Transactions Fetch', {

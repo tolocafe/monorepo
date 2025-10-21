@@ -80,7 +80,7 @@ function getSearchParameters(
 
 export const api = {
 	clients: {
-		async addEWalletPayment(
+		addEWalletPayment(
 			token: string,
 			body: {
 				amount: number
@@ -101,7 +101,7 @@ export const api = {
 		/**
 		 * Registers a new e-wallet transaction to the client's e-wallet
 		 */
-		async addEWalletTransaction(
+		addEWalletTransaction(
 			token: string,
 			body: {
 				/** Amount in cents */
@@ -124,7 +124,7 @@ export const api = {
 				},
 			)
 		},
-		async createClient(
+		createClient(
 			token: string,
 			body: {
 				birthday?: string
@@ -143,7 +143,7 @@ export const api = {
 				method: 'POST',
 			})
 		},
-		async getClient(token: string, phone: string) {
+		getClient(token: string, phone: string) {
 			return posterFetch<ClientData[]>(
 				`/clients.getClients?token=${token}&phone=${encodeURIComponent(phone)}&num=1`,
 				{
@@ -155,7 +155,7 @@ export const api = {
 				.then((response) => response.at(0) ?? null)
 				.catch(() => null)
 		},
-		async getClientById(token: string, id: number) {
+		getClientById(token: string, id: number) {
 			return posterFetch<ClientData[]>(
 				`/clients.getClient?${new URLSearchParams({ client_id: id.toString(), token })}`,
 				{
@@ -167,7 +167,7 @@ export const api = {
 				.then((response) => response.at(0) ?? null)
 				.catch(() => null)
 		},
-		async getClients(
+		getClients(
 			token: string,
 			{
 				num: number_ = 100,
@@ -183,11 +183,7 @@ export const api = {
 				},
 			)
 		},
-		async updateClient(
-			token: string,
-			clientId: number,
-			body: UpdateClientBody,
-		) {
+		updateClient(token: string, clientId: number, body: UpdateClientBody) {
 			return posterFetch<number>(
 				`/clients.updateClient?${new URLSearchParams({ token })}`,
 				{
@@ -200,10 +196,10 @@ export const api = {
 		},
 	},
 	dash: {
-		async getTransaction(
+		getTransaction(
 			token: string,
 			id: string,
-			options?: { include_products: 'true' },
+			options?: { include_history?: 'true'; include_products?: 'true' },
 		) {
 			return posterFetch<
 				{
@@ -232,12 +228,14 @@ export const api = {
 				},
 			).then((response) => response.at(0) ?? null)
 		},
-		async getTransactions(
+		getTransactions(
 			token: string,
 			options?: {
 				date_from?: string
 				date_to?: string
 				id?: string
+				include_history?: 'true'
+				include_products?: 'true'
 				status?: 'close' | 'open'
 				type?: 'clients' | 'spots' | 'waiters'
 			},
@@ -250,7 +248,7 @@ export const api = {
 	},
 	finance: {
 		/** @returns The created transaction ID */
-		async createTransaction(
+		createTransaction(
 			token: string,
 			body: {
 				account_to: 1
@@ -277,7 +275,7 @@ export const api = {
 				},
 			)
 		},
-		async getTransaction(token: string, id: string) {
+		getTransaction(token: string, id: string) {
 			return posterFetch<
 				{
 					amount: string
@@ -296,7 +294,7 @@ export const api = {
 		},
 	},
 	incomingOrders: {
-		async createIncomingOrder(
+		createIncomingOrder(
 			token: string,
 			{
 				serviceMode,
