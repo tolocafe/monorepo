@@ -239,7 +239,7 @@ export const api = {
 				date_to?: string
 				id?: string
 				status?: 'close' | 'open'
-				type?: 'client' | 'spots' | 'waiter'
+				type?: 'clients' | 'spots' | 'waiters'
 			},
 		) {
 			return posterFetch<DashTransaction[]>(

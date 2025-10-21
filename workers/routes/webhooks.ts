@@ -831,7 +831,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				const transactions = await api.dash.getTransactions(
 					context.env.POSTER_TOKEN,
-					{ id: client.client_id, type: 'client' },
+					{ id: client.client_id, type: 'clients' },
 				)
 
 				if (transactions.length === 1) {

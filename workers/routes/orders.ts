@@ -15,7 +15,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 		const orders = await api.dash.getTransactions(c.env.POSTER_TOKEN, {
 			id: clientId.toString(),
-			type: 'client',
+			type: 'clients',
 		})
 
 		return c.json(orders)
