@@ -154,7 +154,7 @@ export type DashTransaction = {
 	 * Array of products in the transaction
 	 * Each product contains quantity, ID, and total sum
 	 */
-	products: {
+	products?: {
 		/** Quantity of the product */
 		num: string
 		/** Product ID */

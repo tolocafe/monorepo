@@ -125,7 +125,9 @@ export default async function syncTransactions(
 					const transactionData = {
 						client_id:
 							clientId === '0' || !clientId ? null : Number.parseInt(clientId),
-						date_close: transaction.date_close || null,
+						date_close:
+							new Date(Number.parseInt(transaction.date_close)).toISOString() ||
+							null,
 						// Use date_create from API response, fallback to existing or current time
 						date_created:
 							existingTransaction?.date_created ||
@@ -139,7 +141,7 @@ export default async function syncTransactions(
 							transaction.processing_status,
 							10,
 						),
-						products: transaction.products,
+						products: transaction.products ?? [],
 						status: Number.parseInt(transaction.status),
 						table_id: transaction.table_id
 							? Number.parseInt(transaction.table_id)
@@ -162,6 +164,11 @@ export default async function syncTransactions(
 								JSON.stringify(transactionData.products) ||
 							existingTransaction.date_close !== transactionData.date_close)
 
+					// eslint-disable-next-line no-console
+					console.log('Prepearing to upsert transaction')
+					// eslint-disable-next-line no-console
+					console.log(JSON.stringify(transactionData, null, 2))
+
 					// Upsert transaction into D1
 					await database
 						.prepare(
@@ -176,6 +183,7 @@ export default async function syncTransactions(
 							processing_status = excluded.processing_status,
 							pay_type = excluded.pay_type,
 							products = excluded.products,
+							date_created = excluded.date_created,
 							date_close = excluded.date_close,
 							date_updated = CURRENT_TIMESTAMP,
 							synced_at = CURRENT_TIMESTAMP

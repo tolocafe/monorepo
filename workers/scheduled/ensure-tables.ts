@@ -8,7 +8,7 @@ export default async function ensureTables(database: D1Database) {
 				transaction_id INTEGER PRIMARY KEY NOT NULL,
 				client_id INTEGER,
 				table_id INTEGER,
-				payed_sum REAL NOT NULL,
+				payed_sum INTEGER,
 				status INTEGER NOT NULL,
 				processing_status INTEGER NOT NULL,
 				pay_type INTEGER,
