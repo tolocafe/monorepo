@@ -110,8 +110,16 @@ export default function Root({ children }: PropsWithChildren) {
 						__html: JSON.stringify({
 							'@context': 'https://schema.org',
 							'@id': 'https://app.tolo.cafe',
-							'@type': 'LocalBusiness',
+							'@type': ['LocalBusiness', 'CafeOrCoffeeShop'],
 							description: 'Tu cafetería dónde se sirve buen café, así nomás',
+							hasMenu: {
+								'@type': 'Menu',
+								hasMenuSection: {
+									'@type': 'MenuSection',
+									name: 'Menu',
+									url: 'https://app.tolo.cafe/',
+								},
+							},
 							image: 'https://app.tolo.cafe/og-image.png',
 							logo: 'https://app.tolo.cafe/icon.png',
 							name: 'TOLO - Buen Café',

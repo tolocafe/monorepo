@@ -18,13 +18,14 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import type { BottomTabNavigatorProps } from '@react-navigation/bottom-tabs'
 import type { TabTriggerSlotProps } from 'expo-router/ui'
 
+import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { breakpoints } from '@/lib/styles/unistyles'
 
 const DefaultBottomTabs = createBottomTabNavigator()
-const ExpoDefaultBottomTabs = withLayoutContext(DefaultBottomTabs.Navigator)
+const ExpoDefaultBottomTabs = DefaultBottomTabs.Navigator
 
 const DESKTOP_MIN_WIDTH = breakpoints.lg
-const getWindowWidth = () => globalThis.window.innerWidth
+const getWindowWidth = () => (isStaticWeb ? 0 : globalThis.window.innerWidth)
 
 type IoniconName = ComponentProps<typeof Ionicons>['name']
 
@@ -35,7 +36,7 @@ type SideTabButtonProps = TabTriggerSlotProps & {
 
 const UniImage = withUnistyles(Image)
 
-function DesktopSideTabs() {
+function DesktopSideTabs(_config: Omit<BottomTabNavigatorProps, 'id'>) {
 	const { t } = useLingui()
 
 	return (
@@ -151,6 +152,9 @@ function useIsDesktop() {
 	)
 
 	useEffect(() => {
+		// eslint-disable-next-line unicorn/no-typeof-undefined
+		if (typeof globalThis.window === 'undefined') return
+
 		globalThis.window.addEventListener('resize', onResize)
 		return () => globalThis.window.removeEventListener('resize', onResize)
 	}, [onResize])
@@ -210,19 +214,14 @@ const styles = StyleSheet.create((theme) => ({
 	},
 }))
 
-type ExpoTabsType = typeof ExpoDefaultBottomTabs
-
-type ResponsiveTabsWithScreen = typeof ResponsiveTabs & {
-	Screen: ExpoTabsType['Screen']
-}
-
 function ResponsiveTabs(config: Omit<BottomTabNavigatorProps, 'id'>) {
 	const isDesktop = useIsDesktop()
-	if (isDesktop) return <DesktopSideTabs />
+
+	if (isDesktop) {
+		return <DesktopSideTabs {...config} />
+	}
+
 	return <ExpoDefaultBottomTabs {...config} />
 }
 
-const Tabs = ResponsiveTabs as unknown as ResponsiveTabsWithScreen
-Tabs.Screen = ExpoDefaultBottomTabs.Screen
-
-export default Tabs
+export default withLayoutContext(ResponsiveTabs)

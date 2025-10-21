@@ -16,10 +16,11 @@ import { StatusBar } from 'expo-status-bar'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { FacebookPixel } from '@/lib/analytics/facebook-pixel'
+import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
-import { useUpdates } from '@/lib/hooks/use-updates'
 import '@/lib/analytics/firebase/init'
 import '@/lib/locales/init'
+import { useUpdates } from '@/lib/hooks/use-updates'
 import { QueryProvider } from '@/lib/providers/query-provider'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { coffeesQueryOptions } from '@/lib/queries/coffees'
@@ -54,11 +55,18 @@ function RootLayout() {
 	const updates = useUpdates()
 
 	useEffect(() => {
+		if (isStaticWeb) {
+			return
+		}
 		navigationIntegration.registerNavigationContainer(ref)
 	}, [ref])
 
 	// Prefetch critical data at app mount
 	useEffect(() => {
+		if (isStaticWeb) {
+			return
+		}
+
 		void Promise.allSettled([
 			queryClient.prefetchQuery(selfQueryOptions),
 			queryClient.prefetchQuery(orderQueryOptions),
