@@ -88,6 +88,129 @@ export type Coffee = {
 	'varietal-image'?: WebflowImage
 }
 
+/**
+ * Transaction data from Poster API v3 dash.getTransactions
+ *
+ * Returns comprehensive transaction data including order details, payment information,
+ * products, client data, and transaction status for tracking the complete order lifecycle.
+ *
+ * @see https://dev.joinposter.com/en/docs/v3/web/dash/getTransactions
+ */
+export type DashTransaction = {
+	/** Bonus points used in the transaction */
+	bonus: number
+	/** Client's first name */
+	client_firstname?: string
+	/** Client ID who made the transaction (0 if no client assigned) */
+	client_id: string
+	/** Client's last name */
+	client_lastname?: string
+	/** Comment/note for the transaction */
+	comment?: string
+	/** Order closing date in the "Y-m-d H:i:s" format (empty string if not closed) */
+	date_close: string
+	/** Order creation date and time in "Y-m-d H:i:s" format (e.g., "2023-12-25 14:30:00") */
+	date_create: string
+	/** Date when order was started/opened in "Y-m-d H:i:s" format */
+	date_start: string
+	/** Discount amount applied to the transaction */
+	discount: number
+	/** Guest count for the order */
+	guests_count?: number
+	/**
+	 * Type of payment method used
+	 * - 0: Closed without payment
+	 * - 1: Payment by cash
+	 * - 2: Payment by bank transfer
+	 * - 3: Mixed payment (combination of methods)
+	 */
+	pay_type: string
+	/** Amount paid using bonus points (in currency units as string) */
+	payed_bonus: string
+	/** Amount paid by card (in currency units as string) */
+	payed_card: string
+	/** Amount paid by cash (in currency units as string) */
+	payed_cash: string
+	/** Amount paid using certificates/vouchers (in currency units as string) */
+	payed_cert: string
+	/** Total amount paid, sum of payed_cash and payed_card (in currency units as string) */
+	payed_sum: string
+	/** Amount paid through third-party payment systems (in currency units as string) */
+	payed_third_party: string
+	/** Whether a fiscal receipt was printed: 0—no, 1—yes */
+	print_fiscal: string
+	/**
+	 * Processing status of the transaction
+	 * - 10: Open
+	 * - 20: Preparing
+	 * - 30: Ready
+	 * - 40: En route
+	 * - 50: Delivered
+	 * - 60: Closed
+	 * - 70: Deleted
+	 */
+	processing_status: string
+	/**
+	 * Array of products in the transaction
+	 * Each product contains quantity, ID, and total sum
+	 */
+	products: {
+		/** Quantity of the product */
+		num: string
+		/** Product ID */
+		product_id: string
+		/** Product name */
+		product_name?: string
+		/** Total price for this product (quantity × unit price) */
+		product_sum: string
+	}[]
+	/**
+	 * Reason for closing the bill without payment (only applicable when pay_type = 0)
+	 * - 1: The customer has left
+	 * - 2: On the house (complimentary)
+	 * - 3: A waiter's error
+	 */
+	reason: string
+	/** Amount after rounding (in currency units as string) */
+	round_sum: string
+	/**
+	 * Service mode for the order
+	 * - 1: At the table
+	 * - 2: Takeaway
+	 * - 3: Delivery
+	 */
+	service_mode?: string
+	/** Location/spot ID where the transaction occurred */
+	spot_id: string
+	/**
+	 * Transaction status
+	 * - 0: Deleted
+	 * - 1: In progress/Open
+	 * - 2: Closed
+	 */
+	status: string
+	/** Total transaction amount before payment (in currency units as string) */
+	sum: string
+	/** Table ID where the transaction occurred */
+	table_id: string
+	/** Table name */
+	table_name?: string
+	/** Tip amount (in currency units as string) */
+	tip_sum: string
+	/** Transaction comment/notes */
+	transaction_comment?: string
+	/** Unique transaction ID */
+	transaction_id: string
+	/**
+	 * Transaction type
+	 * - 0: Sale
+	 * - 1: Return
+	 */
+	type?: number
+	/** User ID who created/handled the transaction */
+	user_id?: number
+}
+
 export type PageInfo = {
 	count: number
 	page: number
@@ -205,39 +328,6 @@ export type Product = {
 	volume?: number
 	weight_flag: string
 	workshop: string
-}
-
-export type Transaction = {
-	bonus: number
-	client_id: number
-	/** Order closing date in the “Y-m-d H:i:s” format */
-	date_close: string
-	discount: number
-	/** Type of payment: 0—closed without payment, 1—payment by cash, 2—payment by bank transfer, 3—mixed payment */
-	pay_type: number
-	payed_bonus: string
-	payed_card: string
-	payed_cash: string
-	payed_cert: string
-	/** The total amount paid, from payed_cash and payed_card */
-	payed_sum: string
-	payed_third_party: string
-	print_fiscal: number
-	products: {
-		num: string
-		product_id: string
-		product_sum: string
-	}[]
-	/** Reason for closing the bill without payment: 1—the customer has left, 2—on the house, 3—a waiter’s error */
-	reason: number
-	round_sum: string
-	/** Location ID */
-	spot_id: number
-	sum: string
-	/** Table ID */
-	table_id: number
-	tip_sum: string
-	transaction_id: number
 }
 
 export type UpdateClientBody = Partial<{

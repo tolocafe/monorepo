@@ -3,25 +3,26 @@ import { api } from 'workers/utils/poster'
 
 export type SyncResult = {
 	created: TransactionData[]
-	deleted: string[]
 	errors: number
 	synced: number
 	updated: TransactionData[]
 }
 
 type TransactionData = {
-	client_id: null | string
-	date_close: string
+	client_id: null | number
+	date_close: null | string
 	date_created: string
-	pay_type: number
-	payed_sum: string
+	pay_type: null | number
+	payed_sum: number
+	processing_status: number
 	products?: {
 		num: string
 		product_id: string
 		product_sum: string
 	}[]
-	table_id: number
-	transaction_id: string
+	status: number
+	table_id: null | number
+	transaction_id: number
 }
 
 /**
@@ -34,8 +35,6 @@ export default async function syncTransactions(
 	const startTime = Date.now()
 
 	try {
-		const startTime = Date.now()
-
 		Sentry.addBreadcrumb({
 			category: 'sync',
 			level: 'info',
@@ -50,31 +49,31 @@ export default async function syncTransactions(
 		const today = new Date()
 		const last30DaysAgo = new Date(today.getTime() - 1000 * 60 * 60 * 24 * 30)
 
-		// Fetch transaction IDs from Poster
-		const transactions = await api.transactions.getTransactions(token, {
+		// Fetch all transactions from Poster using v3 dash.getTransactions endpoint
+		// Including both open and closed to track order lifecycle (in progress, completed, etc.)
+		const transactions = await api.dash.getTransactions(token, {
 			date_from: formatApiDate(last30DaysAgo),
 			date_to: formatApiDate(today),
-			per_page: 1000,
 		})
 
 		Sentry.setContext('Transactions Fetch', {
-			count: transactions.count,
+			count: transactions.length,
 		})
 
 		Sentry.addBreadcrumb({
 			category: 'sync',
-			data: { count: transactions.count },
+			data: { count: transactions.length },
 			level: 'info',
-			message: `Found ${transactions.count} transactions to sync`,
+			message: `Found ${transactions.length} transactions to sync`,
 		})
 
 		// eslint-disable-next-line no-console
-		console.log(`Found ${transactions.count} transactions to sync`)
+		console.log(`Found ${transactions.length} transactions to sync`)
 
 		// Fetch existing transactions from D1 for the same date range
 		const existingTransactions = await database
 			.prepare(
-				`SELECT transaction_id, client_id, payed_sum, products, date_created, date_close, table_id, pay_type
+				`SELECT transaction_id, client_id, table_id, payed_sum, status, processing_status, pay_type, products, date_created, date_close
 				FROM transactions
 				WHERE date_created >= ?1`,
 			)
@@ -87,7 +86,7 @@ export default async function syncTransactions(
 
 		// Create a map for quick lookups and change detection
 		// Parse products JSON string into object for proper comparison
-		const existingMap = new Map<string, TransactionData>()
+		const existingMap = new Map<number, TransactionData>()
 		for (const tx of existingTransactions.results) {
 			let parsedProducts: TransactionData['products']
 			try {
@@ -104,15 +103,9 @@ export default async function syncTransactions(
 			})
 		}
 
-		// Track transaction IDs from Poster
-		const posterTransactionIds = new Set(
-			transactions.data.map((t) => t.transaction_id.toString()),
-		)
-
 		// Track changes
 		const created: TransactionData[] = []
 		const updated: TransactionData[] = []
-		const deleted: string[] = []
 
 		let synced = 0
 		let errors = 0
@@ -120,24 +113,37 @@ export default async function syncTransactions(
 
 		// Process transactions in batches to avoid overwhelming the API
 		await batchProcess(
-			transactions.data,
+			transactions,
 			async (transaction) => {
 				try {
-					const transactionId = transaction.transaction_id.toString()
+					const transactionId = Number.parseInt(transaction.transaction_id)
 					const existingTransaction = existingMap.get(transactionId)
 
 					// Prepare data for database
 					// Convert client_id of 0 to null (indicates no customer associated)
-					const clientId = transaction.client_id.toString()
+					const clientId = transaction.client_id
 					const transactionData = {
-						client_id: clientId === '0' ? null : clientId,
-						date_close: transaction.date_close,
+						client_id:
+							clientId === '0' || !clientId ? null : Number.parseInt(clientId),
+						date_close: transaction.date_close || null,
+						// Use date_create from API response, fallback to existing or current time
 						date_created:
-							existingTransaction?.date_created || new Date().toISOString(),
-						pay_type: transaction.pay_type,
-						payed_sum: transaction.payed_sum,
+							existingTransaction?.date_created ||
+							transaction.date_create ||
+							new Date().toISOString(),
+						pay_type: transaction.pay_type
+							? Number.parseInt(transaction.pay_type)
+							: null,
+						payed_sum: Number.parseInt(transaction.payed_sum) / 100,
+						processing_status: Number.parseInt(
+							transaction.processing_status,
+							10,
+						),
 						products: transaction.products,
-						table_id: transaction.table_id,
+						status: Number.parseInt(transaction.status),
+						table_id: transaction.table_id
+							? Number.parseInt(transaction.table_id)
+							: null,
 						transaction_id: transactionId,
 					} satisfies TransactionData
 
@@ -146,26 +152,31 @@ export default async function syncTransactions(
 					const isUpdated =
 						existingTransaction &&
 						(existingTransaction.client_id !== transactionData.client_id ||
-							existingTransaction.payed_sum !== transactionData.payed_sum ||
-							existingTransaction.date_close !== transactionData.date_close ||
 							existingTransaction.table_id !== transactionData.table_id ||
+							existingTransaction.payed_sum !== transactionData.payed_sum ||
+							existingTransaction.status !== transactionData.status ||
+							existingTransaction.processing_status !==
+								transactionData.processing_status ||
 							existingTransaction.pay_type !== transactionData.pay_type ||
 							JSON.stringify(existingTransaction.products) !==
-								JSON.stringify(transactionData.products))
+								JSON.stringify(transactionData.products) ||
+							existingTransaction.date_close !== transactionData.date_close)
 
 					// Upsert transaction into D1
 					await database
 						.prepare(
 							`
-						INSERT INTO transactions (transaction_id, client_id, payed_sum, products, date_created, date_close, table_id, pay_type, date_updated, synced_at)
-						VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+						INSERT INTO transactions (transaction_id, client_id, table_id, payed_sum, status, processing_status, pay_type, products, date_created, date_close, date_updated, synced_at)
+						VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
 						ON CONFLICT(transaction_id) DO UPDATE SET
 							client_id = excluded.client_id,
+							table_id = excluded.table_id,
 							payed_sum = excluded.payed_sum,
+							status = excluded.status,
+							processing_status = excluded.processing_status,
+							pay_type = excluded.pay_type,
 							products = excluded.products,
 							date_close = excluded.date_close,
-							table_id = excluded.table_id,
-							pay_type = excluded.pay_type,
 							date_updated = CURRENT_TIMESTAMP,
 							synced_at = CURRENT_TIMESTAMP
 					`,
@@ -173,12 +184,14 @@ export default async function syncTransactions(
 						.bind(
 							transactionData.transaction_id,
 							transactionData.client_id,
+							transactionData.table_id,
 							transactionData.payed_sum,
+							transactionData.status,
+							transactionData.processing_status,
+							transactionData.pay_type,
 							JSON.stringify(transactionData.products),
 							transactionData.date_created,
 							transactionData.date_close,
-							transactionData.table_id,
-							transactionData.pay_type,
 						)
 						.run()
 
@@ -203,7 +216,7 @@ export default async function syncTransactions(
 						})
 					}
 				} catch (error) {
-					failedTransactions.push(transaction.transaction_id)
+					failedTransactions.push(Number.parseInt(transaction.transaction_id))
 					errors++
 
 					Sentry.addBreadcrumb({
@@ -238,23 +251,6 @@ export default async function syncTransactions(
 			10, // Process 10 transactions concurrently
 		)
 
-		// Find deleted transactions (in D1 but not in Poster response)
-		for (const existingTx of existingTransactions.results) {
-			if (!posterTransactionIds.has(existingTx.transaction_id)) {
-				deleted.push(existingTx.transaction_id)
-			}
-		}
-
-		// Delete transactions that are no longer in Poster
-		if (deleted.length > 0) {
-			await database
-				.prepare(
-					`DELETE FROM transactions WHERE transaction_id IN (${deleted.map(() => '?').join(',')})`,
-				)
-				.bind(...deleted)
-				.run()
-		}
-
 		if (failedTransactions.length > 0) {
 			Sentry.setContext('Failed Transactions', {
 				count: failedTransactions.length,
@@ -266,7 +262,6 @@ export default async function syncTransactions(
 
 		Sentry.setContext('Sync Results', {
 			created: created.length,
-			deleted: deleted.length,
 			duration_ms: duration,
 			errors,
 			synced,
@@ -284,7 +279,6 @@ export default async function syncTransactions(
 			category: 'sync',
 			data: {
 				created: created.length,
-				deleted: deleted.length,
 				duration_ms: duration,
 				errors,
 				synced,
@@ -296,12 +290,11 @@ export default async function syncTransactions(
 
 		// eslint-disable-next-line no-console
 		console.log(
-			`Sync completed: ${synced} synced (${created.length} new, ${updated.length} updated, ${deleted.length} deleted), ${errors} errors in ${duration}ms`,
+			`Sync completed: ${synced} synced (${created.length} new, ${updated.length} updated), ${errors} errors in ${duration}ms`,
 		)
 
 		return {
 			created,
-			deleted,
 			errors,
 			synced,
 			updated,

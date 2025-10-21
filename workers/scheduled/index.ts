@@ -23,7 +23,6 @@ async function syncData(
 			category: 'sync',
 			data: {
 				created: result.created.length,
-				deleted: result.deleted.length,
 				errors: result.errors,
 				synced: result.synced,
 				updated: result.updated.length,

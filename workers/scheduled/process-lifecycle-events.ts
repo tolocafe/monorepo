@@ -36,7 +36,7 @@ export type MilestoneOrderEvent = BaseLifecycleEvent & {
 export type PaymentCompletionEvent = BaseLifecycleEvent & {
 	data: {
 		date_close: string
-		payed_sum: string
+		payed_sum: number
 	}
 	type: 'payment_completion'
 }
@@ -66,8 +66,8 @@ export type WaiterChangeEvent = BaseLifecycleEvent & {
 }
 
 type BaseLifecycleEvent = {
-	customer_id: string
-	transaction_id: string
+	customer_id: number
+	transaction_id: number
 	type: LifecycleEventType
 }
 
@@ -109,7 +109,7 @@ export default async function processCustomerLifecycleEvents(
 				events.push({
 					customer_id: transaction.client_id,
 					data: {
-						payed_sum: transaction.payed_sum,
+						payed_sum: transaction.payed_sum.toString(),
 						transaction_date: transaction.date_created,
 					},
 					transaction_id: transaction.transaction_id,
@@ -307,7 +307,7 @@ export default async function processCustomerLifecycleEvents(
  * Find products that customer hasn't purchased before
  */
 async function findDiscoveredProducts(
-	clientId: string,
+	clientId: number,
 	currentProductIds: string[],
 	database: D1Database,
 ): Promise<string[]> {
@@ -357,7 +357,7 @@ async function findDiscoveredProducts(
  * Get customer transaction history
  */
 async function getCustomerHistory(
-	clientId: string,
+	clientId: number,
 	database: D1Database,
 ): Promise<{
 	days_since_last_order: number

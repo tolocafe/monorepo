@@ -4,10 +4,9 @@ import { getCurrentScope } from '@sentry/cloudflare'
 import type {
 	Category,
 	ClientData,
-	PageInfo,
+	DashTransaction,
 	PosterResponse,
 	Product,
-	Transaction,
 	UpdateClientBody,
 } from '@common/api'
 import type { CreateOrder } from '@common/schemas'
@@ -233,15 +232,20 @@ export const api = {
 				},
 			).then((response) => response.at(0) ?? null)
 		},
-		async getTransactions(token: string, clientId: number) {
-			return posterFetch<number[]>(
-				`/dash.getTransactions?${new URLSearchParams({ id: clientId.toString(), token, type: 'client' })}`,
-				{
-					defaultErrorMessage: 'Failed to get transactions',
-					headers: { 'Content-Type': 'application/json' },
-					method: 'GET',
-				},
-			).catch(() => [] as number[])
+		async getTransactions(
+			token: string,
+			options?: {
+				date_from?: string
+				date_to?: string
+				id?: string
+				status?: 'close' | 'open'
+				type?: 'client' | 'spots' | 'waiter'
+			},
+		) {
+			return posterFetch<DashTransaction[]>(
+				`/dash.getTransactions?${getSearchParameters({ token, ...options })}`,
+				{ defaultErrorMessage: 'Failed to get transactions' },
+			)
 		},
 	},
 	finance: {
@@ -380,25 +384,6 @@ export const api = {
 		},
 	},
 	transactions: {
-		async getTransactions(
-			token: string,
-			options?: {
-				date_from?: string
-				date_to?: string
-				page?: number
-				per_page?: number
-				/** Max is 1000 */
-			},
-		) {
-			return posterFetch<{
-				count: number
-				data: Transaction[]
-				page: PageInfo
-			}>(
-				`/transactions.getTransactions?${getSearchParameters({ token, ...options })}`,
-				{ defaultErrorMessage: 'Failed to get transactions' },
-			)
-		},
 		async updateTransaction(
 			token: string,
 			body: {

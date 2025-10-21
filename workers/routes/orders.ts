@@ -13,7 +13,10 @@ const orders = new Hono<{ Bindings: Bindings }>()
 	.get('/', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
-		const orders = await api.dash.getTransactions(c.env.POSTER_TOKEN, clientId)
+		const orders = await api.dash.getTransactions(c.env.POSTER_TOKEN, {
+			id: clientId.toString(),
+			type: 'client',
+		})
 
 		return c.json(orders)
 	})

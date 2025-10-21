@@ -5,14 +5,16 @@ export default async function ensureTables(database: D1Database) {
 	await database
 		.prepare(
 			`CREATE TABLE IF NOT EXISTS transactions (
-				transaction_id TEXT PRIMARY KEY NOT NULL,
-				client_id TEXT,
-				payed_sum TEXT NOT NULL,
+				transaction_id INTEGER PRIMARY KEY NOT NULL,
+				client_id INTEGER,
+				table_id INTEGER,
+				payed_sum REAL NOT NULL,
+				status INTEGER NOT NULL,
+				processing_status INTEGER NOT NULL,
+				pay_type INTEGER,
 				products TEXT,
 				date_created TEXT NOT NULL,
 				date_close TEXT,
-				table_id INTEGER,
-				pay_type INTEGER,
 				date_updated TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
 				synced_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
 			)`,
