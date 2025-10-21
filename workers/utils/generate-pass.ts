@@ -52,7 +52,7 @@ export default async function getPass(
 
 	const transactions = await api.dash.getTransactions(
 		context.env.POSTER_TOKEN,
-		{ id: client.client_id, type: 'client' },
+		{ id: client.client_id, type: 'clients' },
 	)
 
 	pass.headerFields.push(
