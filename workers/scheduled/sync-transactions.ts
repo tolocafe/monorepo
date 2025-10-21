@@ -164,11 +164,6 @@ export default async function syncTransactions(
 								JSON.stringify(transactionData.products) ||
 							existingTransaction.date_close !== transactionData.date_close)
 
-					// eslint-disable-next-line no-console
-					console.log('Prepearing to upsert transaction')
-					// eslint-disable-next-line no-console
-					console.log(JSON.stringify(transactionData, null, 2))
-
 					// Upsert transaction into D1
 					await database
 						.prepare(
