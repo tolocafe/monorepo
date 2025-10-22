@@ -292,17 +292,7 @@ export default async function syncTransactions(
 			message: 'Sync completed successfully',
 		})
 
-		// eslint-disable-next-line no-console
-		console.log(
-			`Sync completed: ${synced} synced (${created.length} new, ${updated.length} updated), ${errors} errors in ${duration}ms`,
-		)
-
-		return {
-			created,
-			errors,
-			synced,
-			updated,
-		}
+		return { created, errors, synced, updated }
 	} catch (error) {
 		const duration = Date.now() - startTime
 

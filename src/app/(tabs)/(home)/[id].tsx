@@ -424,6 +424,7 @@ export default function MenuDetail() {
 													key={modification.dish_modification_id}
 													onPress={() =>
 														handleChange({
+															...state.value,
 															[modification.modificator_name]:
 																modification.dish_modification_id,
 														})

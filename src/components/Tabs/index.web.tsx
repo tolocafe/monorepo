@@ -36,7 +36,7 @@ type SideTabButtonProps = TabTriggerSlotProps & {
 
 const UniImage = withUnistyles(Image)
 
-function DesktopSideTabs(_config: Omit<BottomTabNavigatorProps, 'id'>) {
+function DesktopSideTabs(_props: Omit<BottomTabNavigatorProps, 'id'>) {
 	const { t } = useLingui()
 
 	return (

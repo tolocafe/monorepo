@@ -14,7 +14,7 @@ export default [
 	reactPlugin.configs.flat.recommended,
 	reactPlugin.configs.flat['jsx-runtime'],
 	reactCompiler.configs.recommended,
-	...reactHooks.configs['recommended-latest'],
+	reactHooks.configs.flat.recommended,
 	eslintPluginUnicorn.configs.all,
 	perfectionist.configs['recommended-natural'],
 	{

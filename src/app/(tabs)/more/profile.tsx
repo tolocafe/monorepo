@@ -224,13 +224,11 @@ export default function ProfileScreen() {
 									disabled={!canSubmit || isSubmitting}
 									onPress={handleSubmit}
 								>
-									<Button.Text>
-										{isSubmitting ? (
-											<Trans>Saving...</Trans>
-										) : (
-											<Trans>Save</Trans>
-										)}
-									</Button.Text>
+									{isSubmitting ? (
+										<Trans>Saving...</Trans>
+									) : (
+										<Trans>Save</Trans>
+									)}
 								</Button>
 							)}
 						</Subscribe>

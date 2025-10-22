@@ -106,6 +106,9 @@ app.onError((error, c) => {
 	return c.json({ error: 'Internal Server Error' }, 500)
 })
 
+// @ts-expect-error - scheduled handler is not typed
+app.scheduled = scheduledHandler
+
 const appWithSentry = Sentry.withSentry<Bindings>(
 	(environment) => ({
 		dsn: environment.SENTRY_DSN,
@@ -119,7 +122,5 @@ const appWithSentry = Sentry.withSentry<Bindings>(
 	}),
 	app,
 )
-
-appWithSentry.scheduled = scheduledHandler
 
 export default appWithSentry

@@ -450,7 +450,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					.bind(clientId)
 					.first()
 
-				if (!authResult || authResult.auth_token !== authToken) {
+				if (authResult?.auth_token !== authToken) {
 					return context.json({}, 401)
 				}
 
