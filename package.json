@@ -24,7 +24,7 @@
 		"postdeploy": "bun run sentry:sourcemaps"
 	},
 	"dependencies": {
-		"@aws-sdk/client-sns": "3.893.0",
+		"@aws-sdk/client-sns": "3.887.0",
 		"@bottom-tabs/react-navigation": "1.0.2",
 		"@expo/vector-icons": "^15.0.2",
 		"@formidable-webview/webshell": "2.6.0",
