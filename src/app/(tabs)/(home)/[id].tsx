@@ -82,6 +82,8 @@ const config = {
 // eslint-disable-next-line unicorn/prevent-abbreviations
 export async function generateStaticParams() {
 	const products = await api.menu.getProducts()
+
+	// Hopefully at some point we can add the title to the static params
 	return products.map((products) => ({ id: products.product_id }))
 }
 
@@ -163,7 +165,7 @@ export default function MenuDetail() {
 	if (!product) {
 		if (isPending) {
 			return (
-				<ScreenContainer>
+				<ScreenContainer data-testid="loading">
 					<ActivityIndicator size="large" />
 				</ScreenContainer>
 			)

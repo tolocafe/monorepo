@@ -23,10 +23,25 @@ jest.mock('@sentry/react-native', () => ({
 }))
 
 // Mock react-native-unistyles
+// Unistyles requires native modules that aren't available in Jest test environment
 jest.mock('react-native-unistyles', () => ({
 	StyleSheet: {
 		configure: jest.fn(),
-		create: jest.fn(() => ({})),
+		create: jest.fn((styles) => {
+			// Return a mock stylesheet with useVariants method
+			const mockStyles = Object.keys(styles).reduce(
+				(accumulator, key) => {
+					accumulator[key] = styles[key]
+					return accumulator
+				},
+				{ useVariants: jest.fn() },
+			)
+			return mockStyles
+		}),
+	},
+	UnistylesRegistry: {
+		addConfig: jest.fn(),
+		addThemes: jest.fn(),
 	},
 }))
 

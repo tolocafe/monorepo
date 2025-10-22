@@ -32,5 +32,6 @@
 		"vitest.config.mts",
 		".expo/types/**/*.ts",
 		"worker-configuration.d.ts"
-	]
+	],
+	"files": ["src/index.ts", "workers/index.ts"]
 }
