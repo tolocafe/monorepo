@@ -4,7 +4,13 @@ import type {
 	CreateStripeTransaction,
 } from '@common/schemas'
 
-import type { Category, ClientData, Coffee, Product } from '@/lib/api'
+import type {
+	Category,
+	ClientData,
+	Coffee,
+	Product,
+	TableBill,
+} from '@/lib/api'
 import type { RequestOtpMutationOptions } from '@/lib/queries/auth'
 import type {
 	CreateOrderResponse,
@@ -86,6 +92,36 @@ export const api = {
 	// Generic methods for other endpoints
 	post: (endpoint: string, data: unknown) =>
 		privateClient.post(endpoint, { json: data }).json(),
+
+	tables: {
+		createPaymentIntent: (locationId: string, tableId: string) =>
+			publicClient
+				.post<{
+					paymentIntent: { client_secret: string }
+				}>(`tables/${locationId}/${tableId}/payment-intent`)
+				.json(),
+		get: (locationId: string, tableId: string) =>
+			publicClient.get<TableBill>(`tables/${locationId}/${tableId}`).json(),
+		pay: async (
+			locationId: string,
+			tableId: string,
+			data: { paymentIntentId: string; phone?: string },
+		) => {
+			// Try to get auth token for authenticated requests
+			const token = await import('./http-client').then((m) => m.getAuthToken())
+
+			return publicClient
+				.post<{ success: true; transactionId: string }>(
+					`tables/${locationId}/${tableId}/pay`,
+					{
+						headers: token ? { Authorization: `Bearer ${token}` } : {},
+						json: data,
+					},
+				)
+				.json()
+		},
+	},
+
 	transactions: {
 		createEWalletTransaction: (data: CreateEWalletTransaction) =>
 			privateClient.post('transactions/e-wallet', { json: data }).json<{

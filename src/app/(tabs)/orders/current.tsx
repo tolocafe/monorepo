@@ -4,7 +4,7 @@ import { Alert, Platform, Pressable, View } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
-import { useMutation, useQueries, useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
@@ -20,6 +20,7 @@ import { Input } from '@/components/Input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics/firebase'
+import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { useRegisterForPushNotifications } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import {
@@ -39,13 +40,6 @@ import type { OrderProduct } from '@/lib/stores/order-store'
 
 const IGNORED_MODIFICATION_GROUP_ID = '4'
 
-const getProductName = (productId: string): string => {
-	const productData = queryClient.getQueryData<Product>(
-		productQueryOptions(productId).queryKey,
-	)
-	return productData?.product_name || `Product ID: ${productId}`
-}
-
 export default function OrderDetail() {
 	const { t } = useLingui()
 	const order = useCurrentOrder()
@@ -55,28 +49,12 @@ export default function OrderDetail() {
 	const clearOrder = useClearOrder()
 	const { data: user } = useQuery(selfQueryOptions)
 
-	// Prefetch and subscribe to only the product details that are not in cache
+	// Fetch missing product details
 	const productIds = useMemo(
 		() => [...new Set((order?.products ?? []).map((product) => product.id))],
 		[order?.products],
 	)
-
-	const missingProductIds = useMemo(
-		() =>
-			productIds.filter(
-				(productId) =>
-					!queryClient.getQueryData<Product>(
-						productQueryOptions(productId).queryKey,
-					),
-			),
-		[productIds],
-	)
-
-	useQueries({
-		queries: missingProductIds.map((productId) =>
-			productQueryOptions(productId),
-		),
-	})
+	const { getProductName } = useProductDetails(productIds)
 
 	const { mutateAsync: createOrder } = useMutation({
 		...createOrderMutationOptions,

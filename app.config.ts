@@ -62,6 +62,15 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		['react-native-bottom-tabs', { theme: 'material3-dynamic' }],
 		['react-native-edge-to-edge', { android: { parentTheme: 'Material3' } }],
 		[
+			'expo-localization',
+			{
+				supportedLocales: {
+					android: ['es', 'en', 'fr', 'pt', 'ja', 'de'],
+					ios: ['es', 'en', 'fr', 'pt', 'ja', 'de'],
+				},
+			},
+		],
+		[
 			'expo-build-properties',
 			{
 				ios: {

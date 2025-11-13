@@ -330,6 +330,23 @@ export type Product = {
 	workshop: string
 }
 
+export type TableBill = {
+	items: {
+		name: string
+		/** Unit price in cents */
+		price: number
+		productId: string
+		quantity: number
+	}[]
+	locationId: string
+	subtotal: number
+	tableId: string
+	tableName: string
+	tax: number
+	total: number
+	transactionId: string
+}
+
 export type UpdateClientBody = Partial<{
 	birthday: string
 	bonus: number

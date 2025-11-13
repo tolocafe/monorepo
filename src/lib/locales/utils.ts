@@ -14,3 +14,5 @@ export const LOCALE_NAMES = {
 } as const
 
 export type Locale = keyof typeof LOCALE_NAMES
+
+export const AVAILABLE_LOCALES = Object.keys(LOCALE_NAMES) as Locale[]

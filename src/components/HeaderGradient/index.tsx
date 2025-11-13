@@ -1,9 +1,10 @@
-import { LinearGradient } from 'expo-linear-gradient'
 import {
 	StyleSheet,
 	UnistylesRuntime,
 	withUnistyles,
 } from 'react-native-unistyles'
+
+import { LinearGradient } from '@/components/LinearGradient'
 
 const styles = StyleSheet.create({
 	gradient: {

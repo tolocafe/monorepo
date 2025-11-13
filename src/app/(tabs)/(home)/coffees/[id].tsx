@@ -4,7 +4,6 @@ import { Dimensions, Pressable, TouchableOpacity, View } from 'react-native'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { LinearGradient } from 'expo-linear-gradient'
 import { router, useLocalSearchParams } from 'expo-router'
 import {
 	Gesture,
@@ -20,6 +19,7 @@ import Animated, {
 import { StyleSheet, UnistylesRuntime } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
+import { LinearGradient } from '@/components/LinearGradient'
 import { H1, Text } from '@/components/Text'
 import { coffeeQueryOptions, coffeesQueryOptions } from '@/lib/queries/coffees'
 

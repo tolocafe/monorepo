@@ -231,12 +231,23 @@ export const api = {
 		getTransactions(
 			token: string,
 			options?: {
+				/** An optional parameter, the sampling start date in the Ymd format, inclusive. The default date is a month ago. */
 				date_from?: string
+				/** An optional parameter, the sampling end date in the Ymd format, inclusive. The default date is the current date. */
 				date_to?: string
+				/** The ID of the entity to receive reports to; if not specified, transactions for all reports types will be displayed. When using, be sure to specify the type. */
 				id?: string
+				/** The status of including a transaction history in response, true—to include, false—not to */
 				include_history?: 'true'
+				/** The status of including products in transactions in response: true—to include, false—not to */
 				include_products?: 'true'
-				status?: 'close' | 'open'
+				/** Types of orders to receive: 1 — dine-in, 2 — takeout, 3 — delivery */
+				service_mode?: '1' | '2' | '3'
+				/** Transaction status: 0—all transactions, 1—only the open ones, 2—only the closed ones, 3—the removed ones */
+				status?: '0' | '1' | '2' | '3'
+				/** An optional parameter; Designed to filter results by table id */
+				table_id?: string
+				/** Reports type: waiters—by waiter, spots—by location, clients—by customer. When using, be sure to specify id. */
 				type?: 'clients' | 'spots' | 'waiters'
 			},
 		) {
@@ -382,6 +393,41 @@ export const api = {
 		},
 	},
 	transactions: {
+		/**
+		 * Close a transaction (mark as paid)
+		 */
+		async closeTransaction(
+			token: string,
+			body: {
+				/** Optional client ID to assign to transaction */
+				clientId?: number
+				/** Amount paid via third party (Stripe) */
+				payed_third_party: number
+				/** Stripe payment intent ID for reference */
+				paymentIntentId: string
+				/** Transaction ID to close */
+				transaction_id: number
+			},
+		) {
+			const parsedBody = {
+				...(body.clientId ? { client_id: body.clientId } : {}),
+				comment: `Stripe Payment: ${body.paymentIntentId}`,
+				payed_third_party: body.payed_third_party,
+				spot_id: 1,
+				spot_tablet_id: 1,
+				transaction_id: body.transaction_id,
+			}
+
+			return posterFetch<number>(
+				`/transactions.closeTransaction?${getSearchParameters({ token })}`,
+				{
+					body: JSON.stringify(parsedBody),
+					defaultErrorMessage: 'Failed to close transaction',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			)
+		},
 		async updateTransaction(
 			token: string,
 			body: {

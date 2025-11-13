@@ -20,6 +20,12 @@ type TransactionData = {
 		product_id: string
 		product_sum: string
 	}[]
+	/**
+	 * Transaction status
+	 * - 0: Deleted
+	 * - 1: In progress/Open
+	 * - 2: Closed
+	 */
 	status: number
 	table_id: null | number
 	transaction_id: number

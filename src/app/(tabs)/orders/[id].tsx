@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
 	ActivityIndicator,
 	Alert,
@@ -18,6 +18,7 @@ import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
+import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { orderDetailQueryOptions } from '@/lib/queries/order'
 import { downloadReceipt } from '@/lib/utils/download-receipt'
 import { formatPrice } from '@/lib/utils/price'
@@ -32,6 +33,13 @@ export default function OrderDetail() {
 		error,
 		isLoading,
 	} = useQuery(orderDetailQueryOptions(id))
+
+	// Fetch missing product details
+	const productIds = useMemo(
+		() => [...new Set((order?.products ?? []).map((p) => p.product_id))],
+		[order?.products],
+	)
+	const { getProductName } = useProductDetails(productIds)
 
 	const handleDownloadReceipt = async () => {
 		if (!id) return
@@ -143,7 +151,7 @@ export default function OrderDetail() {
 								<View key={index} style={styles.itemRow}>
 									<View style={styles.itemInfo}>
 										<Text weight="bold">
-											<Trans>Product #{product.product_id}</Trans>
+											{getProductName(product.product_id)}
 										</Text>
 										<Text style={styles.itemQuantity}>
 											<Trans>Qty: {Math.round(Number(product.num))}</Trans>

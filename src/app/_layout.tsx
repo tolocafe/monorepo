@@ -113,6 +113,19 @@ function RootLayout() {
 									}),
 								}}
 							/>
+							<Stack.Screen
+								name="tables/[table_id]"
+								options={{
+									headerShown: false,
+									presentation: 'modal',
+								}}
+							/>
+							<Stack.Screen
+								name="tables/[location_id]/[table_id]"
+								options={{
+									presentation: 'modal',
+								}}
+							/>
 						</Stack>
 						<Toaster position="bottom-right" />
 					</I18nProvider>

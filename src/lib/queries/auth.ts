@@ -34,6 +34,7 @@ export const verifyOtpMutationOptions = mutationOptions({
 export const selfQueryOptions = queryOptions({
 	queryFn: () => api.auth.self(),
 	queryKey: ['self'],
+	retry: false,
 })
 
 export const updateClientMutationOptions = (clientId: string) =>

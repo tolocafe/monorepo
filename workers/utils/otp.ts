@@ -6,7 +6,7 @@ const DEFAULT_OTP_TTL = 300
 
 const TEST_OTP_CODE = process.env.TEST_OTP_CODE as string | undefined
 
-export function generateOtp(length = 6): string {
+export function generateOtp(length = 6) {
 	return [...crypto.getRandomValues(new Uint32Array(length))]
 		.map((v) => (v % 10).toString())
 		.join('')
