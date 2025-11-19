@@ -1,7 +1,9 @@
 import { Hono } from 'hono'
-import { api } from 'workers/utils/poster'
 
-import type { Bindings } from 'workers/types'
+import { defaultJsonHeaders } from '../utils/headers'
+import { api } from '../utils/poster'
+
+import type { Bindings } from '../types'
 
 function formatAmount(amount: number | string | undefined) {
 	if (!amount) return '$0 MXN'
@@ -104,11 +106,15 @@ Be concise and to the point without unnecessary introduction. Your hints should 
 			console.error(error)
 		}
 
-		return context.json({
-			client: sanitizedClient,
-			summary,
-			transactions: populatedTransactions,
-		})
+		return context.json(
+			{
+				client: sanitizedClient,
+				summary,
+				transactions: populatedTransactions,
+			},
+			200,
+			defaultJsonHeaders,
+		)
 	},
 )
 
