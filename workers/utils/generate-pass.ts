@@ -26,6 +26,7 @@ const imagesToAdd = (visitCount: number) => {
 		{ name: 'icon@3x.png', path: '/pass/icon@3x.png' },
 		{ name: 'logo.png', path: '/pass/logo.png' },
 		{ name: 'logo@2x.png', path: '/pass/logo@2x.png' },
+		{ name: 'logo@3x.png', path: '/pass/logo@3x.png' },
 		{ name: 'strip.png', path: `/pass/strip-${stripIndex}.png` },
 		{ name: 'strip@2x.png', path: `/pass/strip-${stripIndex}@2x.png` },
 	]
