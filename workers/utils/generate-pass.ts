@@ -17,6 +17,16 @@ const currencyFormatter = new Intl.NumberFormat('es-MX', {
 	style: 'currency',
 })
 
+const imagesToAdd = (visitCount: number) => [
+	{ name: 'icon.png', path: '/pass/icon.png' },
+	{ name: 'icon@2x.png', path: '/pass/icon@2x.png' },
+	{ name: 'icon@3x.png', path: '/pass/icon@3x.png' },
+	{ name: 'logo.png', path: '/pass/logo.png' },
+	{ name: 'logo@2x.png', path: '/pass/logo@2x.png' },
+	{ name: 'strip.png', path: `/pass/strip-${visitCount}.png` },
+	{ name: 'strip@2x.png', path: `/pass/strip-${visitCount}@2x.png` },
+]
+
 export default async function getPass(
 	context: Context<{ Bindings: Bindings }>,
 	passAuthToken: string, // This should be the pass-specific auth token, not JWT
@@ -50,10 +60,10 @@ export default async function getPass(
 
 	pass.type = 'storeCard'
 
-	const transactions = await api.dash.getTransactions(
-		context.env.POSTER_TOKEN,
-		{ id: client.client_id, type: 'clients' },
-	)
+	const visitsCount = await api.dash.getTransactions(context.env.POSTER_TOKEN, {
+		id: client.client_id,
+		type: 'clients',
+	})
 
 	pass.headerFields.push(
 		{
@@ -65,8 +75,8 @@ export default async function getPass(
 		},
 		{
 			key: 'visits',
-			label: 'Puntos',
-			value: transactions.length,
+			label: 'Visitas',
+			value: visitsCount.length,
 		},
 	)
 
@@ -105,19 +115,7 @@ export default async function getPass(
 		message: barcodeMessage,
 	})
 
-	const imagesToAdd = [
-		{ name: 'icon.png', path: '/pass/icon.png' },
-		{ name: 'icon@2x.png', path: '/pass/icon@2x.png' },
-		{ name: 'icon@3x.png', path: '/pass/icon@2x.png' },
-		{ name: 'logo.png', path: '/pass/logo.png' },
-		{ name: 'logo@2x.png', path: '/pass/logo@2x.png' },
-		{ name: 'logo@3x.png', path: '/pass/logo@3x.png' },
-		{ name: 'strip.png', path: '/pass/strip.png' },
-		{ name: 'strip@2x.png', path: '/pass/strip@2x.png' },
-		{ name: 'strip@3x.png', path: '/pass/strip@3x.png' },
-	]
-
-	for (const { name, path } of imagesToAdd) {
+	for (const { name, path } of imagesToAdd(visitsCount.length)) {
 		try {
 			const imageBuffer = await getAssetImage(context.env.ASSETS, path)
 			pass.addBuffer(name, imageBuffer)
