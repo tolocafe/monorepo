@@ -17,15 +17,19 @@ const currencyFormatter = new Intl.NumberFormat('es-MX', {
 	style: 'currency',
 })
 
-const imagesToAdd = (visitCount: number) => [
-	{ name: 'icon.png', path: '/pass/icon.png' },
-	{ name: 'icon@2x.png', path: '/pass/icon@2x.png' },
-	{ name: 'icon@3x.png', path: '/pass/icon@3x.png' },
-	{ name: 'logo.png', path: '/pass/logo.png' },
-	{ name: 'logo@2x.png', path: '/pass/logo@2x.png' },
-	{ name: 'strip.png', path: `/pass/strip-${visitCount}.png` },
-	{ name: 'strip@2x.png', path: `/pass/strip-${visitCount}@2x.png` },
-]
+const imagesToAdd = (visitCount: number) => {
+	const stripIndex = visitCount % 11
+
+	return [
+		{ name: 'icon.png', path: '/pass/icon.png' },
+		{ name: 'icon@2x.png', path: '/pass/icon@2x.png' },
+		{ name: 'icon@3x.png', path: '/pass/icon@3x.png' },
+		{ name: 'logo.png', path: '/pass/logo.png' },
+		{ name: 'logo@2x.png', path: '/pass/logo@2x.png' },
+		{ name: 'strip.png', path: `/pass/strip-${stripIndex}.png` },
+		{ name: 'strip@2x.png', path: `/pass/strip-${stripIndex}@2x.png` },
+	]
+}
 
 export default async function getPass(
 	context: Context<{ Bindings: Bindings }>,
