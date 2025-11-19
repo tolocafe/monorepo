@@ -1,4 +1,11 @@
-import analytics from '@react-native-firebase/analytics'
+import {
+	getAnalytics,
+	logEvent,
+	setAnalyticsCollectionEnabled,
+	setConsent,
+	setUserId,
+	setUserProperties,
+} from '@react-native-firebase/analytics'
 import { captureException } from '@sentry/react-native'
 import { CryptoDigestAlgorithm, digestStringAsync } from 'expo-crypto'
 
@@ -21,10 +28,12 @@ export async function enableAnalytics({
 	phoneNumber?: string
 	userId?: string
 }) {
+	const analytics = getAnalytics()
+
 	try {
 		await Promise.all([
-			analytics().setAnalyticsCollectionEnabled(true),
-			analytics().setConsent({
+			setAnalyticsCollectionEnabled(analytics, true),
+			setConsent(analytics, {
 				ad_personalization: true,
 				ad_storage: true,
 				ad_user_data: true,
@@ -41,8 +50,8 @@ export async function enableAnalytics({
 			])
 
 		await Promise.all([
-			userId ? analytics().setUserId(userId) : null,
-			analytics().setUserProperties({
+			userId ? setUserId(analytics, userId) : null,
+			setUserProperties(analytics, {
 				sha256_email_address: emailAddressHash ?? null,
 				sha256_first_name: firstNameHash ?? null,
 				sha256_last_name: lastNameHash ?? null,
@@ -58,6 +67,8 @@ export async function trackEvent(
 	event: AnalyticsEvent,
 	properties?: EventProperties,
 ) {
+	const analytics = getAnalytics()
+
 	try {
 		const trackingEnabled = await requestTrackingPermissionAsync()
 
@@ -65,7 +76,8 @@ export async function trackEvent(
 			return
 		}
 
-		void analytics().logEvent(event, properties)
+		// @ts-expect-error - event is a valid AnalyticsEvent
+		void logEvent(analytics, event, properties)
 	} catch (error) {
 		captureException(error)
 	}

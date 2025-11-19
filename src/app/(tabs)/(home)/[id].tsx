@@ -70,7 +70,7 @@ const config = {
 		contentMode: 'mobile' as const,
 		disableScrollViewPanResponder: true,
 		javaScriptEnabled: false,
-		scalesPageToFit: true,
+		scalesPageToFit: false,
 		showsVerticalScrollIndicator: false,
 		style: {
 			backgroundColor: 'transparent',

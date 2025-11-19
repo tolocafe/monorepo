@@ -143,9 +143,9 @@ export default function Orders() {
 							style={styles.currentOrderCard}
 						>
 							<View style={styles.orderHeader}>
-								<H3 style={styles.currentOrderText}>
+								<Text style={styles.currentOrderText} weight="bold">
 									<Trans>Current Order</Trans>
-								</H3>
+								</Text>
 								<View style={styles.currentOrderBottomText}>
 									<Text style={styles.currentOrderText}>
 										<Trans>{itemsCount} items</Trans>
