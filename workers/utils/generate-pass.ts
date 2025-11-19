@@ -32,7 +32,7 @@ export default async function getPass(
 	const serialNumber = `TOLO-${client.client_id.padStart(8, '0')}`
 
 	const pass = new PKPass({}, certificates, {
-		appLaunchURL: 'tolo://more/top-up',
+		appLaunchURL: 'https://app.tolo.cafe/more/top-up',
 		associatedStoreIdentifiers: [STORE_IDENTIFIER],
 		authenticationToken: passAuthToken, // Use pass-specific token
 		backgroundColor: '#3D6039',
