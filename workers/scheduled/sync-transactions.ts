@@ -1,5 +1,8 @@
 import * as Sentry from '@sentry/cloudflare'
+import { notifyPassUpdate } from 'workers/utils/apns'
 import { api } from 'workers/utils/poster'
+
+import type { Bindings } from '../types'
 
 export type SyncResult = {
 	created: TransactionData[]
@@ -37,6 +40,7 @@ type TransactionData = {
 export default async function syncTransactions(
 	token: string,
 	database: D1Database,
+	environment: Bindings,
 ) {
 	const startTime = Date.now()
 
@@ -208,6 +212,47 @@ export default async function syncTransactions(
 					// Track the change type
 					if (isNew) {
 						created.push(transactionData)
+
+						// Notify Apple Wallet Pass of new transaction (affects wallet balance)
+						if (transactionData.client_id) {
+							try {
+								const passUpdateResult = await notifyPassUpdate(
+									transactionData.client_id,
+									database,
+									environment,
+								)
+
+								if (passUpdateResult.deviceCount > 0) {
+									Sentry.addBreadcrumb({
+										category: 'pass-update',
+										data: {
+											clientId: transactionData.client_id,
+											deviceCount: passUpdateResult.deviceCount,
+											failed: passUpdateResult.failed,
+											successful: passUpdateResult.successful,
+											transactionId: transactionData.transaction_id,
+										},
+										level: 'info',
+										message:
+											'Pass update notification sent for new transaction',
+									})
+								}
+							} catch (error) {
+								// Don't fail transaction sync if pass notification fails
+								Sentry.captureException(error, {
+									contexts: {
+										passUpdate: {
+											clientId: transactionData.client_id,
+											transactionId: transactionData.transaction_id,
+										},
+									},
+									level: 'warning',
+									tags: {
+										operation: 'pass_notification',
+									},
+								})
+							}
+						}
 					} else if (isUpdated) {
 						updated.push(transactionData)
 					}

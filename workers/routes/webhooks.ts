@@ -10,7 +10,7 @@ import { Expo } from 'expo-server-sdk'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { trackServerEvent } from 'workers/utils/analytics'
-import { sendBatchAPNsNotifications } from 'workers/utils/apns'
+import { notifyPassUpdate } from 'workers/utils/apns'
 import getPass from 'workers/utils/generate-pass'
 import { api, sendSms } from 'workers/utils/poster'
 import { getStripe } from 'workers/utils/stripe'
@@ -103,98 +103,40 @@ async function sendPassUpdateNotification(
 		// Ensure tables exist
 		await ensurePassTables(context.env.D1_TOLO)
 
-		// Get all devices registered for this pass
-		const { results: registrations } = await context.env.D1_TOLO.prepare(
-			'SELECT push_token FROM pass_registrations WHERE serial_number = ?',
+		// Send pass update notification using reusable utility
+		const result = await notifyPassUpdate(
+			clientId,
+			context.env.D1_TOLO,
+			context.env,
 		)
-			.bind(serialNumber)
-			.all<{ push_token: string }>()
 
-		if (registrations.length === 0) {
+		if (result.deviceCount === 0) {
 			captureEvent({
 				extra: { clientId, serialNumber },
 				level: 'debug',
 				message: 'No devices registered for pass update',
 			})
-			return // No devices registered for this pass
+			return
 		}
-
-		// Update the pass update timestamp
-		await context.env.D1_TOLO.prepare(
-			'INSERT OR REPLACE INTO pass_updates (serial_number, pass_type_identifier, client_id, last_updated) VALUES (?, ?, ?, ?)',
-		)
-			.bind(
-				serialNumber,
-				'pass.cafe.tolo.app',
-				clientId,
-				new Date().toISOString(),
-			)
-			.run()
-
-		// Send push notifications to all registered devices via APNs
-		const pushTokens = registrations.map((r) => r.push_token)
 
 		captureEvent({
 			extra: {
 				clientId,
-				deviceCount: registrations.length,
-				pushTokens,
+				deviceCount: result.deviceCount,
+				failed: result.failed,
 				serialNumber,
+				successful: result.successful,
 			},
-			level: 'info',
-			message: 'Pass update notification triggered - wallet balance updated',
+			level: result.failed > 0 ? 'warning' : 'info',
+			message: `Pass update notifications sent: ${result.successful} successful, ${result.failed} failed`,
 		})
-
-		// Send actual APNs push notifications
-		const apnsResult = await sendBatchAPNsNotifications(pushTokens, context.env)
-
-		// Log results
-		captureEvent({
-			extra: {
-				clientId,
-				deviceCount: registrations.length,
-				failed: apnsResult.failed,
-				results: apnsResult.results,
-				serialNumber,
-				successful: apnsResult.successful,
-			},
-			level: apnsResult.failed > 0 ? 'warning' : 'info',
-			message: `APNs notifications sent: ${apnsResult.successful} successful, ${apnsResult.failed} failed`,
-		})
-
-		// Handle failed notifications (e.g., invalid tokens)
-		if (apnsResult.failed > 0) {
-			const invalidTokens = apnsResult.results
-				.filter(
-					(result) =>
-						!result.success && result.error?.includes('BadDeviceToken'),
-				)
-				.map((result) => result.token)
-
-			if (invalidTokens.length > 0) {
-				// Remove invalid tokens from database
-				for (const invalidToken of invalidTokens) {
-					await context.env.D1_TOLO.prepare(
-						'DELETE FROM pass_registrations WHERE push_token = ?',
-					)
-						.bind(invalidToken)
-						.run()
-				}
-
-				captureEvent({
-					extra: { clientId, invalidTokens, serialNumber },
-					level: 'info',
-					message: 'Removed invalid device tokens from database',
-				})
-			}
-		}
 
 		addBreadcrumb({
 			data: {
 				clientId,
-				deviceCount: registrations.length,
+				deviceCount: result.deviceCount,
 				serialNumber,
-				successfulNotifications: apnsResult.successful,
+				successfulNotifications: result.successful,
 			},
 			level: 'info',
 			message: 'Pass update notifications completed',
@@ -714,6 +656,9 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 		return context.json({ received: true })
 	})
+	/**
+	 * Poster is very unreliable and we should not rely on it. Prefer `scheduled/sync-transactions.ts` for syncing transactions.
+	 */
 	.post('/poster', async (context) => {
 		const body = (await context.req.json()) as unknown
 

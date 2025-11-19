@@ -9,6 +9,79 @@ const APNS_PRODUCTION_URL = 'https://api.push.apple.com'
 const getAPNsURL = () => APNS_PRODUCTION_URL
 
 /**
+ * Send Apple Wallet Pass update notifications for a client
+ * This triggers devices to fetch the updated pass from the server
+ * Call this whenever the client's wallet balance or transaction data changes
+ */
+export async function notifyPassUpdate(
+	clientId: number,
+	database: D1Database,
+	environment: Bindings,
+): Promise<{ deviceCount: number; failed: number; successful: number }> {
+	try {
+		const serialNumber = `TOLO-${clientId.toString().padStart(8, '0')}`
+
+		// Get all devices registered for this pass
+		const { results: registrations } = await database
+			.prepare(
+				'SELECT push_token FROM pass_registrations WHERE serial_number = ?',
+			)
+			.bind(serialNumber)
+			.all<{ push_token: string }>()
+
+		if (registrations.length === 0) {
+			return { deviceCount: 0, failed: 0, successful: 0 }
+		}
+
+		// Update the pass update timestamp
+		await database
+			.prepare(
+				'INSERT OR REPLACE INTO pass_updates (serial_number, pass_type_identifier, client_id, last_updated) VALUES (?, ?, ?, ?)',
+			)
+			.bind(
+				serialNumber,
+				'pass.cafe.tolo.app',
+				clientId,
+				new Date().toISOString(),
+			)
+			.run()
+
+		// Send push notifications to all registered devices via APNs
+		const pushTokens = registrations.map((r) => r.push_token)
+		const apnsResult = await sendBatchAPNsNotifications(pushTokens, environment)
+
+		// Handle failed notifications (remove invalid tokens)
+		if (apnsResult.failed > 0) {
+			const invalidTokens = apnsResult.results
+				.filter(
+					(result) =>
+						!result.success && result.error?.includes('BadDeviceToken'),
+				)
+				.map((result) => result.token)
+
+			if (invalidTokens.length > 0) {
+				// Remove invalid tokens from database
+				for (const invalidToken of invalidTokens) {
+					await database
+						.prepare('DELETE FROM pass_registrations WHERE push_token = ?')
+						.bind(invalidToken)
+						.run()
+				}
+			}
+		}
+
+		return {
+			deviceCount: registrations.length,
+			failed: apnsResult.failed,
+			successful: apnsResult.successful,
+		}
+	} catch (error) {
+		captureException(error)
+		throw error
+	}
+}
+
+/**
  * Send push notification to APNs for PassKit updates
  * PassKit notifications must have empty payload
  */

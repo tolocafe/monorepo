@@ -17,6 +17,7 @@ async function syncData(
 		const result = await syncTransactions(
 			environment.POSTER_TOKEN,
 			environment.D1_TOLO,
+			environment,
 		)
 
 		if (result) {

@@ -18,4 +18,3 @@ export default function TableBillRedirect() {
 
 	return <Redirect href={`/tables/1/${table_id}`} />
 }
-

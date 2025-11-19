@@ -14,7 +14,7 @@
 		"test:coverage": "jest --coverage --watchAll=false",
 		"lint": "eslint --max-warnings=0 .",
 		"lingui:extract": "lingui extract",
-		"codegen": "wrangler types",
+		"codegen": "wrangler types && prettier --write ./worker-configuration.d.ts",
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
 		"typecheck": "tsc --noEmit",
