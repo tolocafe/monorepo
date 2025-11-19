@@ -1,7 +1,7 @@
-import { MMKV } from 'react-native-mmkv'
+import { createMMKV } from 'react-native-mmkv'
 
 import { STORAGE_KEYS } from '../constants/storage'
 
-export const zustandStore = new MMKV({
-	id: STORAGE_KEYS.ZUSTAND_STORE,
+export const zustandStore = createMMKV({
+	id: STORAGE_KEYS.ZUSTAND,
 })

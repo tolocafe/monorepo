@@ -3,5 +3,7 @@
  */
 export const STORAGE_KEYS = {
 	AUTH_SESSION: 'auth_session',
-	ZUSTAND_STORE: 'zustand_store',
+	QUERY: 'query_store',
+	SETTINGS: 'settings_store',
+	ZUSTAND: 'zustand_store',
 } as const

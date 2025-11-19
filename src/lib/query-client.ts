@@ -1,15 +1,17 @@
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
 import { QueryClient } from '@tanstack/react-query'
 import { HTTPError } from 'ky'
-import { MMKV } from 'react-native-mmkv'
+import { createMMKV } from 'react-native-mmkv'
 
-export const queryStore = new MMKV({
-	id: 'query-store',
+import { STORAGE_KEYS } from '@/lib/constants/storage'
+
+export const queryStore = createMMKV({
+	id: STORAGE_KEYS.QUERY,
 })
 
 export const storage = {
 	getItem: (key: string) => queryStore.getString(key) ?? null,
-	removeItem: (key: string) => queryStore.delete(key),
+	removeItem: (key: string) => void queryStore.remove(key),
 	setItem: (key: string, value: string) => queryStore.set(key, value),
 }
 

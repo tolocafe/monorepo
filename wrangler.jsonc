@@ -39,6 +39,9 @@
 			"id": "560289852d1e4a7ea75deb24805481b1",
 		},
 	],
+	"ai": {
+		"binding": "AI",
+	},
 	"d1_databases": [
 		{
 			"binding": "D1_TOLO",

@@ -1,6 +1,7 @@
 import type { BrowserWorker } from '@cloudflare/puppeteer'
 
 export type Bindings = Cloudflare.Env & {
+	AI: Ai
 	/** APNs for PassKit push notifications */
 	APNS_KEY_ID: string
 	/** APNs for PassKit push notifications */
@@ -19,6 +20,7 @@ export type Bindings = Cloudflare.Env & {
 	KV_CMS: KVNamespace
 	KV_OTP: KVNamespace
 	KV_SESSIONS: KVNamespace
+	POSTER_ACCOUNT_NUMBER: string
 	POSTER_APPLICATION_SECRET: string
 	POSTER_TOKEN: string
 	SENTRY_DSN: string
@@ -29,8 +31,8 @@ export type Bindings = Cloudflare.Env & {
 	/** Passkit */
 	SIGNER_PASSPHRASE: string
 	STRIPE_SECRET_KEY: string
-	STRIPE_WEBHOOK_SECRET: string
 
+	STRIPE_WEBHOOK_SECRET: string
 	TEST_OTP_CODE: string
 	TEST_PHONE_NUMBERS: string
 	WEBFLOW_API_TOKEN: string

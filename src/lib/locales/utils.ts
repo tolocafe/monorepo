@@ -1,6 +1,9 @@
-import { MMKV } from 'react-native-mmkv'
+import { createMMKV } from 'react-native-mmkv'
+import { STORAGE_KEYS } from '@/lib/constants/storage'
 
-export const languageStorage = new MMKV()
+export const languageStorage = createMMKV({
+	id: STORAGE_KEYS.SETTINGS,
+})
 
 export const LOCALE_KEY = 'tolo_language'
 

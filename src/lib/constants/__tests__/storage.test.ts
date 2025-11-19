@@ -9,7 +9,7 @@ describe('storage', () => {
 		})
 
 		it('should have ZUSTAND_STORE key', () => {
-			expect(STORAGE_KEYS.ZUSTAND_STORE).toBe('zustand_store')
+			expect(STORAGE_KEYS.ZUSTAND).toBe('zustand_store')
 		})
 
 		it('should have all required storage keys', () => {
