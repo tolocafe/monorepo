@@ -168,7 +168,7 @@ export default function TableBillScreen() {
 			}
 
 			// Mark transaction as paid in Poster
-			await api.tables.pay(table_id, {
+			await api.tables.pay('1', table_id, {
 				paymentIntentId: response.paymentIntent.client_secret,
 				phone: !user && phoneNumber ? phoneNumber : undefined,
 			})

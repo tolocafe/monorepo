@@ -29,7 +29,7 @@ export type OrderProduct = {
 
 const zustandJsonStorage = {
 	getItem: (key: string) => zustandStore.getString(key) ?? null,
-	removeItem: (key: string) => zustandStore.delete(key),
+	removeItem: (key: string) => zustandStore.remove(key),
 	setItem: (key: string, value: string) => zustandStore.set(key, value),
 }
 
