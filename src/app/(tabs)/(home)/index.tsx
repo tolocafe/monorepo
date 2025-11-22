@@ -318,7 +318,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	storiesContainer: {
-		gap: theme.spacing.md,
+		gap: theme.spacing.sm,
 		paddingHorizontal: theme.layout.screenPadding,
 		paddingVertical: theme.spacing.md,
 	},

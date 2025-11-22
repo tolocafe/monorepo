@@ -1,6 +1,7 @@
+import type { ImageSourcePropType } from 'react-native'
 import { Pressable, View } from 'react-native'
 
-import Ionicons from '@expo/vector-icons/Ionicons'
+import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import Animated, {
 	useAnimatedStyle,
@@ -66,7 +67,12 @@ export default function CoffeeStoryBubble({ coffee }: Props) {
 								style={styles.storyBubbleGradient}
 							/>
 							<View style={styles.storyBubbleContent}>
-								<Ionicons color="#FFFFFF" name="cafe" size={32} />
+								<Image
+									source={
+										require('@/assets/images/coffee-bean.png') as ImageSourcePropType
+									}
+									style={{ height: 30, width: 30 }}
+								/>
 							</View>
 						</View>
 					</View>

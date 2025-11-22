@@ -9,6 +9,11 @@
 					{
 						"/": "*",
 						"comment": "Matches all routes"
+					},
+					{
+						"/api/*": "*",
+						"exclude": true,
+						"comment": "Matches all API routes"
 					}
 				]
 			}
