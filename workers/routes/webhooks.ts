@@ -585,6 +585,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						{
 							amount: paymentIntent.amount,
 							client_id: posterClientId,
+							spot_id: 1,
 							// transaction_id: transactionId,
 							type: 2,
 						},

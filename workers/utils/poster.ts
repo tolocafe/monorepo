@@ -85,6 +85,7 @@ export const api = {
 			body: {
 				amount: number
 				client_id: number
+				spot_id?: number
 				transaction_id?: number
 				type: 1 | 2
 			},

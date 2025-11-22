@@ -3,7 +3,7 @@ import { SignJWT } from 'jose'
 
 import type { Bindings } from '../types'
 
-const APNS_PRODUCTION_URL = 'https://api.push.apple.com'
+const APNS_PRODUCTION_URL = 'https://api.push.apple.com' as const
 
 // Use production APNs for production environment
 const getAPNsURL = () => APNS_PRODUCTION_URL
@@ -207,10 +207,7 @@ async function generateAPNsJWT(environment: Bindings): Promise<string> {
 		const privateKey = await crypto.subtle.importKey(
 			'pkcs8',
 			privateKeyBytes as BufferSource,
-			{
-				name: 'ECDSA',
-				namedCurve: 'P-256',
-			},
+			{ name: 'ECDSA', namedCurve: 'P-256' },
 			false,
 			['sign'],
 		)
