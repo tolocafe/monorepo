@@ -111,7 +111,7 @@ export default function More() {
 		try {
 			const token = await getAuthToken()
 
-			const url = `https://app.tolo.cafe/api/passes/${user.client_id}?authenticationToken=${token}&platform=${Platform.OS}&v=6`
+			const url = `https://app.tolo.cafe/api/passes/${user.client_id}?authenticationToken=${token}&platform=${Platform.OS}`
 
 			if (Platform.OS === 'android') {
 				const data = (await fetch(url).then((response) => response.json())) as {

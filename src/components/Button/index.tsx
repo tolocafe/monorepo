@@ -94,14 +94,29 @@ const styles = StyleSheet.create((theme) => ({
 			},
 			variant: {
 				primary: {
+					_web: {
+						_hover: {
+							backgroundColor: theme.colors.verde.text,
+						},
+					},
 					backgroundColor: theme.colors.verde.solid,
 				},
 				surface: {
+					_web: {
+						_hover: {
+							backgroundColor: theme.colors.gray.border,
+						},
+					},
 					backgroundColor: theme.colors.gray.background,
 					borderColor: theme.colors.gray.border,
 					borderWidth: 1,
 				},
 				transparent: {
+					_web: {
+						_hover: {
+							backgroundColor: 'rgba(0,0,0,0.1)',
+						},
+					},
 					backgroundColor: 'transparent',
 				},
 			},

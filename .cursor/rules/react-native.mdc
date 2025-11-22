@@ -44,11 +44,21 @@ alwaysApply: false
 - **Import third-party APIs directly**: Import only what you need from each package
 - **No default React import**: Modern React Native handles JSX transformation automatically
 
+## React Compiler
+
+- **React Compiler Enabled**: This project uses the React Compiler for automatic optimization
+- **Automatic Memoization**: Components and values are automatically memoized by the compiler
+- **Reduced Manual Optimization**: Less need for manual React.memo, useMemo, and useCallback
+- **Rules of React**: Follow React's rules strictly - the compiler enforces them at build time
+- **Pure Components**: Ensure components are pure and side-effect-free for optimal compilation
+- **Hook Dependencies**: The compiler tracks dependencies automatically, but still use proper arrays
+- **Build-Time Optimization**: Performance optimizations happen at compile time, not runtime
+
 ## Performance Optimization
 
 - Minimize useState and useEffect; prefer context and reducers for state management
-- Use React.memo() for expensive components
-- Implement useMemo and useCallback hooks appropriately
+- React Compiler handles most memoization automatically, but React.memo() can still be useful for expensive components
+- Use useMemo and useCallback sparingly - the compiler optimizes most cases automatically
 - Avoid unnecessary re-renders with proper dependency arrays
 - Use FlatList for long lists with proper optimization props
 - Implement code splitting with React.lazy and Suspense

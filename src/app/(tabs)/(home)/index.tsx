@@ -1,36 +1,20 @@
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 import type { ScrollView } from 'react-native'
-import {
-	ActivityIndicator,
-	FlatList,
-	Pressable,
-	RefreshControl,
-	TouchableOpacity,
-	View,
-} from 'react-native'
+import { ActivityIndicator, FlatList, RefreshControl, View } from 'react-native'
 
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
-import { Image } from 'expo-image'
-import { Link } from 'expo-router'
 import Head from 'expo-router/head'
-import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	withSpring,
-} from 'react-native-reanimated'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
-import { Card } from '@/components/Card'
-import { LinearGradient } from '@/components/LinearGradient'
+import CoffeeStoryBubble from '@/components/CoffeeStoryBubble'
+import MenuListItem from '@/components/MenuListItem'
 import ScreenContainer from '@/components/ScreenContainer'
-import { H2, H3, H4, Paragraph, Text } from '@/components/Text'
+import { H2, H3, Paragraph } from '@/components/Text'
 import { enableAnalytics } from '@/lib/analytics/firebase'
-import { getImageUrl } from '@/lib/image'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { coffeesQueryOptions } from '@/lib/queries/coffees'
@@ -40,12 +24,9 @@ import {
 } from '@/lib/queries/menu'
 import { queryClient } from '@/lib/query-client'
 import { useAddItemGuarded } from '@/lib/stores/order-store'
-import { getProductBaseCost } from '@/lib/utils/price'
 
 import type { Category, Coffee, Product } from '@/lib/api'
 
-const UniImage = withUnistyles(Image)
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
 	color: theme.colors.gray.solid,
 }))
@@ -106,6 +87,10 @@ export default function Menu() {
 	const handleAddToBag = (item: Product) => {
 		addItem({ id: item.product_id, quantity: 1 })
 	}
+
+	const renderCoffeeStory = ({ item }: { item: Coffee }) => (
+		<CoffeeStoryBubble coffee={item} />
+	)
 
 	const renderMenuItem = ({ item }: { item: Product }) => (
 		<ErrorBoundary fallback={menuItemFallback}>
@@ -220,7 +205,7 @@ export default function Menu() {
 							data={coffees}
 							horizontal
 							keyExtractor={(item) => item.slug}
-							renderItem={({ item }) => <CoffeeStoryBubble coffee={item} />}
+							renderItem={renderCoffeeStory}
 							showsHorizontalScrollIndicator={false}
 						/>
 					</View>
@@ -242,146 +227,6 @@ export default function Menu() {
 				</Paragraph>
 			</ScreenContainer>
 		</>
-	)
-}
-
-const UniIonicons = withUnistyles(Ionicons, (theme) => ({
-	color: theme.colors.gray.background,
-}))
-
-function CoffeeStoryBubble({ coffee }: { coffee: Coffee }) {
-	const scale = useSharedValue(1)
-	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
-	}))
-
-	// Get a gradient color based on coffee name hash
-	const gradientIndex =
-		coffee.name
-			// eslint-disable-next-line unicorn/prefer-spread
-			.split('')
-			// eslint-disable-next-line unicorn/prefer-code-point
-			.reduce((accumulator, char) => accumulator + char.charCodeAt(0), 0) % 5
-	const gradientColors = (
-		[
-			['#8B4513', '#D2691E'], // Brown/Tan
-			['#4A2511', '#6F4E37'], // Dark Brown
-			['#654321', '#8B6914'], // Coffee Brown to Gold
-			['#3E2723', '#5D4037'], // Dark Coffee
-			['#3C1A1A', '#6D3838'], // Reddish Brown
-		] as const
-	)[gradientIndex]
-
-	return (
-		<Link asChild href={`/(tabs)/(home)/coffees/${coffee.slug}`}>
-			<AnimatedPressable
-				onPressIn={() => scale.set(withSpring(0.9))}
-				onPressOut={() => scale.set(withSpring(1))}
-				style={animatedStyle}
-			>
-				<View style={styles.storyBubble}>
-					<View style={styles.storyBubbleRing}>
-						<View style={styles.storyBubbleImageContainer}>
-							<LinearGradient
-								colors={gradientColors}
-								end={{ x: 1, y: 1 }}
-								start={{ x: 0, y: 0 }}
-								style={styles.storyBubbleGradient}
-							/>
-							<View style={styles.storyBubbleContent}>
-								<Ionicons color="#FFFFFF" name="cafe" size={32} />
-							</View>
-						</View>
-					</View>
-					<Text numberOfLines={2} style={styles.storyBubbleText}>
-						{coffee.name}
-					</Text>
-				</View>
-			</AnimatedPressable>
-		</Link>
-	)
-}
-
-function MenuListItem({
-	item,
-	onAddToBag,
-}: {
-	item: Product
-	onAddToBag: (item: Product) => void
-}) {
-	const scale = useSharedValue(1)
-	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
-	}))
-
-	const cost = getProductBaseCost(item, true)
-
-	return (
-		<Link asChild href={`/(tabs)/(home)/${item.product_id}`}>
-			<AnimatedPressable
-				onPressIn={() => {
-					// eslint-disable-next-line react-hooks/immutability
-					scale.value = withSpring(0.96)
-				}}
-				onPressOut={() => {
-					// eslint-disable-next-line react-hooks/immutability
-					scale.value = withSpring(1)
-				}}
-				style={animatedStyle}
-			>
-				<Card padded={false} style={styles.menuItem}>
-					<View style={styles.menuItemImageContainer}>
-						{item.photo ? (
-							<UniImage
-								contentFit="cover"
-								placeholder={{
-									cacheKey: `${item.product_id}-placeholder`,
-									uri: getImageUrl(item.photo, {
-										blur: 100,
-										quality: 20,
-										width: 350,
-									}),
-								}}
-								placeholderContentFit="cover"
-								source={{
-									uri: getImageUrl(item.photo, {
-										quality: 85,
-										width: 400,
-									}),
-								}}
-								style={styles.image}
-								transition={200}
-							/>
-						) : (
-							<View aria-hidden style={styles.menuItemImage} />
-						)}
-					</View>
-					<View style={styles.menuItemContent}>
-						<H4 numberOfLines={2}>{item.product_name}</H4>
-						{item.product_production_description ? (
-							<Text>{item.product_production_description}</Text>
-						) : null}
-						<View style={styles.menuItemFooter}>
-							<Text>
-								{'modifications' in item ? <Trans>From {cost}</Trans> : cost}
-							</Text>
-							<View style={styles.menuItemActions}>
-								<TouchableOpacity
-									disabled={!cost}
-									onPress={(event) => {
-										event.stopPropagation()
-										onAddToBag(item)
-									}}
-									style={styles.addToBagButton}
-								>
-									<UniIonicons name="add" size={26} />
-								</TouchableOpacity>
-							</View>
-						</View>
-					</View>
-				</Card>
-			</AnimatedPressable>
-		</Link>
 	)
 }
 
@@ -480,7 +325,6 @@ const styles = StyleSheet.create((theme) => ({
 	storiesSection: {
 		borderBottomColor: theme.colors.gray.border,
 		borderBottomWidth: 1,
-		paddingBottom: theme.spacing.lg,
 	},
 	storiesTitle: {
 		paddingHorizontal: theme.layout.screenPadding,

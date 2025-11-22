@@ -18,7 +18,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	},
 	experiments: {
 		/* Enable until https://github.com/TanStack/form/issues/1501 is fixed */
-		reactCompiler: false,
+		reactCompiler: true,
 		typedRoutes: true,
 	},
 	extra: {
