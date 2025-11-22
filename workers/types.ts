@@ -15,6 +15,9 @@ export type Bindings = Cloudflare.Env & {
 	EXPO_ACCESS_TOKEN: string
 	GA4_API_SECRET: string
 	GA4_MEASUREMENT_ID: string
+	GOOGLE_SERVICE_WALLET_EMAIL: string
+	GOOGLE_SERVICE_WALLET_PRIVATE_KEY: string
+	GOOGLE_WALLET_SECRET_KEY: string
 	JWT_PASS_SECRET: string
 	JWT_SECRET: string
 	KV_CMS: KVNamespace
@@ -26,12 +29,12 @@ export type Bindings = Cloudflare.Env & {
 	SENTRY_DSN: string
 	/** Passkit */
 	SIGNER_CERT: string
+
 	/** Passkit */
 	SIGNER_KEY: string
 	/** Passkit */
 	SIGNER_PASSPHRASE: string
 	STRIPE_SECRET_KEY: string
-
 	STRIPE_WEBHOOK_SECRET: string
 	TEST_OTP_CODE: string
 	TEST_PHONE_NUMBERS: string

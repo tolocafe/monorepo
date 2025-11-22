@@ -11,7 +11,7 @@ import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { trackServerEvent } from 'workers/utils/analytics'
 import { notifyPassUpdate } from 'workers/utils/apns'
-import getPass from 'workers/utils/generate-pass'
+import createApplePass from 'workers/utils/generate-apple-pass'
 import { api, sendSms } from 'workers/utils/poster'
 import { getStripe } from 'workers/utils/stripe'
 import { z } from 'zod/v4'
@@ -407,7 +407,11 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				}
 
 				// Generate updated pass with the SAME auth token from database
-				const pass = await getPass(context, authResult.auth_token, client)
+				const pass = await createApplePass(
+					context,
+					authResult.auth_token,
+					client,
+				)
 
 				// Update the last_updated timestamp
 				await context.env.D1_TOLO.prepare(
@@ -581,7 +585,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						{
 							amount: paymentIntent.amount,
 							client_id: posterClientId,
-							transaction_id: transactionId,
+							// transaction_id: transactionId,
 							type: 2,
 						},
 					)

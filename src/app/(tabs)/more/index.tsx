@@ -111,9 +111,17 @@ export default function More() {
 		try {
 			const token = await getAuthToken()
 
-			const url = `https://app.tolo.cafe/api/passes/${user.client_id}?authenticationToken=${token}`
+			const url = `https://app.tolo.cafe/api/passes/${user.client_id}?authenticationToken=${token}&platform=${Platform.OS}&v=6`
 
-			await addPass(url)
+			if (Platform.OS === 'android') {
+				const data = (await fetch(url).then((response) => response.json())) as {
+					url: string
+				}
+
+				await addPass(data.url, true)
+			} else {
+				await addPass(url, false)
+			}
 		} catch (error) {
 			captureException(error)
 
@@ -165,7 +173,7 @@ export default function More() {
 									<Trans>Top Up Wallet</Trans>
 								</ListItem.Label>
 							</ListItem>
-							{Platform.OS === 'ios' && (
+							{Platform.OS !== 'web' && (
 								<WalletButton
 									onPress={handleAddPass}
 									style={styles.walletButton}
@@ -444,6 +452,7 @@ const styles = StyleSheet.create((theme) => ({
 		textAlign: 'center',
 	},
 	walletButton: {
+		minHeight: 50,
 		width: '100%',
 	},
 	walletList: {

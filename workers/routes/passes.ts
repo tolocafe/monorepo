@@ -2,7 +2,8 @@ import { randomUUID } from 'node:crypto'
 
 import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
-import getPass from 'workers/utils/generate-pass'
+import createApplePass from 'workers/utils/generate-apple-pass'
+import createGooglePass from 'workers/utils/generate-google-pass'
 import { authenticate } from 'workers/utils/jwt'
 import { api } from 'workers/utils/poster'
 
@@ -12,6 +13,7 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 	'/:clientId',
 	async (context) => {
 		try {
+			const platform = context.req.query('platform')
 			const clientId = Number.parseInt(context.req.param('clientId'), 10)
 			const [authenticatedClientId, payload, token] = await authenticate(
 				context,
@@ -38,6 +40,12 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 
 			if (!client) {
 				return context.json({ message: 'Forbidden' }, 403)
+			}
+
+			if (platform === 'google' || platform === 'android') {
+				const pass = await createGooglePass(context, 'null', client)
+
+				return context.json({ url: pass }, 200)
 			}
 
 			// Ensure pass tables exist
@@ -67,7 +75,7 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 					.run()
 			}
 
-			const pass = await getPass(context, passAuthToken, client)
+			const pass = await createApplePass(context, passAuthToken, client)
 
 			return new Response(pass.getAsBuffer() as unknown as BodyInit, {
 				headers: {

@@ -11,7 +11,7 @@ const PASS_TYPE_IDENTIFIER = 'pass.cafe.tolo.app'
 const STORE_IDENTIFIER = 6_749_597_635
 const TEAM_IDENTIFIER = 'AUR7UR6M72'
 
-const currencyFormatter = new Intl.NumberFormat('es-MX', {
+export const currencyFormatter = new Intl.NumberFormat('es-MX', {
 	currency: 'MXN',
 	minimumFractionDigits: 0,
 	style: 'currency',
@@ -32,7 +32,7 @@ const imagesToAdd = (visitCount: number) => {
 	]
 }
 
-export default async function getPass(
+export default async function createApplePass(
 	context: Context<{ Bindings: Bindings }>,
 	passAuthToken: string, // This should be the pass-specific auth token, not JWT
 	client: ClientData,

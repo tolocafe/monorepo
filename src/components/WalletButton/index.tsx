@@ -2,15 +2,19 @@ import type { ComponentProps } from 'react'
 import { Platform } from 'react-native'
 
 import {
-	addPass as RNAddPass,
+	addPassWithSignedJwt,
+	addPass as rnWalletAddPass,
 	RNWalletView,
 } from '@premieroctet/react-native-wallet'
 import { withUnistyles } from 'react-native-unistyles'
 
 type Props = ComponentProps<typeof RNWalletView>
 
-export function addPass(url: string) {
-	return RNAddPass(url)
+export function addPass(urlOrJwt: string, isSigned: boolean) {
+	if (isSigned) {
+		return addPassWithSignedJwt(urlOrJwt)
+	}
+	return rnWalletAddPass(urlOrJwt)
 }
 
 const UniWalletView = withUnistyles(RNWalletView)
