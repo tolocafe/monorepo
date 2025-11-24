@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-base-to-string */
 import { useCallback, useEffect, useState } from 'react'
 import { Platform, Pressable, View } from 'react-native'
 
@@ -42,6 +41,7 @@ export default function SignIn() {
 	const { itemName } = useLocalSearchParams<{ itemName?: string }>()
 	const [stage, setStage] = useState<'code' | 'phone' | 'signup'>('phone')
 	const [_requiredFields, setRequiredFields] = useState<string[]>([])
+	const [retryCount, setRetryCount] = useState(0)
 	const queryClient = useQueryClient()
 
 	const requestOtpMutation = useMutation(requestOtpMutationOptions)
@@ -83,6 +83,7 @@ export default function SignIn() {
 					await requestOtpMutation.mutateAsync({
 						phone: value.phoneNumber.trim(),
 					})
+					setRetryCount(0)
 					setStage('code')
 					resetField('verificationCode')
 
@@ -103,6 +104,7 @@ export default function SignIn() {
 						phone: value.phoneNumber.trim(),
 					})
 
+					setRetryCount(0)
 					setStage('code')
 					resetField('verificationCode')
 
@@ -121,20 +123,70 @@ export default function SignIn() {
 					phone: value.phoneNumber.trim(),
 					sessionName: Platform.OS,
 				})
+				setRetryCount(0)
 			} catch (error: unknown) {
-				if (stage === 'phone') {
-					// Check if it's a validation error requiring name/birthdate
-					const errorResponse = error as {
-						response?: {
-							json?: () => Promise<{
-								error?: string
-								fields?: { name: string }[]
-							}>
-						}
+				// Check if it's an HTTP error with status code
+				const httpError = error as {
+					response?: {
+						json?: () => Promise<{
+							error?: string
+							fields?: { name: string }[]
+						}>
+						status?: number
+					}
+				}
+
+				const statusCode = httpError.response?.status
+
+				// Handle 500 errors with retry logic
+				if (statusCode === 500) {
+					captureException(error, {
+						extra: {
+							retryCount,
+							stage,
+							statusCode,
+						},
+						tags: {
+							feature: 'auth',
+							operation: stage === 'code' ? 'verifyOtp' : 'requestOtp',
+						},
+					})
+
+					const canRetry = retryCount < 2
+					if (canRetry) {
+						setRetryCount((count) => count + 1)
+						Burnt.toast({
+							duration: 4,
+							haptic: 'warning',
+							message: t`Something went wrong. Please try again.`,
+							preset: 'error',
+							title: t`Server Error`,
+						})
+						return
 					}
 
+					// Max retries reached
+					Burnt.toast({
+						duration: 5,
+						haptic: 'error',
+						message: t`We're experiencing technical difficulties. Please try again later.`,
+						preset: 'error',
+						title: t`Service Unavailable`,
+					})
+
+					if (stage === 'code') {
+						resetField('verificationCode')
+					}
+					return
+				}
+
+				// Reset retry count on non-500 errors
+				setRetryCount(0)
+
+				// Check if it's a validation error requiring name/birthdate
+				if (stage === 'phone') {
 					try {
-						const errorData = await errorResponse.response?.json?.()
+						const errorData = await httpError.response?.json?.()
 						if (
 							errorData?.error === 'Some fields are required' &&
 							errorData.fields
@@ -147,26 +199,11 @@ export default function SignIn() {
 					} catch {
 						// Fall through to regular error handling
 					}
+				}
 
-					Burnt.toast({
-						duration: 3,
-						haptic: 'error',
-						message: (error as Error).message || t`Failed to send code`,
-						preset: 'error',
-						title: t`Error`,
-					})
-				} else if (stage === 'signup') {
-					Burnt.toast({
-						duration: 3,
-						haptic: 'error',
-						message: (error as Error).message || t`Failed to send code`,
-						preset: 'error',
-						title: t`Error`,
-					})
-				} else {
-					// Clear OTP on error to allow re-entry
+				// Handle verification code errors
+				if (stage === 'code') {
 					resetField('verificationCode')
-
 					Burnt.toast({
 						duration: 3,
 						haptic: 'error',
@@ -174,13 +211,24 @@ export default function SignIn() {
 						preset: 'error',
 						title: t`Error`,
 					})
+					return
 				}
+
+				// Handle phone/signup errors
+				Burnt.toast({
+					duration: 3,
+					haptic: 'error',
+					message: (error as Error).message || t`Failed to send code`,
+					preset: 'error',
+					title: t`Error`,
+				})
 			}
 		},
 		validators: { onChange: SignInSchema },
 	})
 
 	const handleGoBack = useCallback(() => {
+		setRetryCount(0)
 		if (stage === 'signup') {
 			setStage('phone')
 			setRequiredFields([])
@@ -370,7 +418,7 @@ export default function SignIn() {
 										{field.state.meta.isTouched &&
 										field.state.meta.errors.length > 0 ? (
 											<Text style={styles.errorText}>
-												{String(field.state.meta.errors[0])}
+												{field.state.meta.errors.at(0)?.message}
 											</Text>
 										) : null}
 									</>

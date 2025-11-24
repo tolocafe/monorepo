@@ -2,6 +2,7 @@ import '@/lib/styles/unistyles'
 
 import { View } from 'react-native'
 
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Link, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
@@ -9,21 +10,27 @@ import { StyleSheet } from 'react-native-unistyles'
 import { H1, Text } from '@/components/Text'
 
 export default function NotFoundScreen() {
+	const { t } = useLingui()
+
 	return (
 		<>
 			<Head>
-				<title>Página No Encontrada - TOLO</title>
+				<title>{t`Page Not Found - TOLO`}</title>
 				<meta
-					content="Oops, esta página no existe. Regresa a TOLO para disfrutar de nuestro buen café y descubrir todo lo que tenemos para ti."
+					content={t`Oops, this page doesn't exist. Return to TOLO to enjoy our good coffee and discover everything we have for you.`}
 					name="description"
 				/>
 				<meta content="noindex, nofollow" name="robots" />
 			</Head>
-			<Stack.Screen options={{ title: 'Oops!' }} />
+			<Stack.Screen options={{ title: t`Oops!` }} />
 			<View style={styles.container}>
-				<H1 style={styles.title}>This screen does not exist.</H1>
+				<H1 style={styles.title}>
+					<Trans>This screen does not exist.</Trans>
+				</H1>
 				<Link href="/" style={styles.link}>
-					<Text style={styles.linkText}>Go to home screen!</Text>
+					<Text style={styles.linkText}>
+						<Trans>Go to home screen!</Trans>
+					</Text>
 				</Link>
 			</View>
 		</>

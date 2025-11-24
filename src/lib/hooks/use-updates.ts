@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import NetInfo from '@react-native-community/netinfo'
 import * as Sentry from '@sentry/react-native'
 import * as Updates from 'expo-updates'
 
@@ -25,6 +26,17 @@ export function useUpdates() {
 
 		try {
 			setState((previous) => ({ ...previous, error: null, isChecking: true }))
+
+			// Check network connectivity before attempting update check
+			const networkState = await NetInfo.fetch()
+			if (!networkState.isConnected || !networkState.isInternetReachable) {
+				setState((previous) => ({
+					...previous,
+					error: 'No internet connection',
+					isChecking: false,
+				}))
+				return
+			}
 
 			const update = await Updates.checkForUpdateAsync()
 
