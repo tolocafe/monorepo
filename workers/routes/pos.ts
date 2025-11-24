@@ -60,6 +60,8 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 			total_payed_sum: formatAmount(client?.total_payed_sum),
 		}
 
+		const availableProducts = products.map((product) => product.product_name)
+
 		const populatedTransactions = transactions.map((transaction) => ({
 			date: transaction.date_start,
 			guest_count: transaction.guests_count,
@@ -90,7 +92,9 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 					messages: [
 						{
 							content: `You are a helpful assistant that will hint a barista how to serve a customer based on the given information.
-Only output information about customer tastes, preferences, favorites and general analysis of the customer.
+Focus on giving useful information about customer tastes, preferences, potential new recommendations.
+The objective readers are working on a fast peaced environment.
+Available products are: ${availableProducts.join(',')}
 Be concise and to the point without unnecessary introduction. Your hints should help the barista to serve the customer better.`,
 							role: 'system',
 						},
