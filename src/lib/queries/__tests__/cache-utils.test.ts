@@ -2,11 +2,21 @@ import { clearAllCache } from '@/lib/queries/cache-utils'
 import { persister, queryClient } from '@/lib/query-client'
 
 // Mock MMKV
-jest.mock('react-native-mmkv', () => ({
-	MMKV: jest.fn().mockImplementation(() => ({
+jest.mock('react-native-mmkv', () => {
+	const instance = {
 		clearAll: jest.fn(),
-	})),
-}))
+		delete: jest.fn(),
+		getString: jest.fn(),
+		remove: jest.fn(),
+		set: jest.fn(),
+	}
+
+	return {
+		__esModule: true,
+		createMMKV: jest.fn(() => instance),
+		MMKV: jest.fn(() => instance),
+	}
+})
 
 // Mock the query client and persister
 jest.mock('@/lib/query-client', () => ({

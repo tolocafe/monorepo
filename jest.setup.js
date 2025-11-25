@@ -4,13 +4,20 @@ import { jest } from '@jest/globals'
 // Additional mocks for libraries not covered by jest-expo
 
 // Mock react-native-mmkv
-jest.mock('react-native-mmkv', () => ({
-	MMKV: jest.fn(() => ({
+jest.mock('react-native-mmkv', () => {
+	const instance = {
+		clearAll: jest.fn(),
 		delete: jest.fn(),
 		getString: jest.fn(),
+		remove: jest.fn(),
 		set: jest.fn(),
-	})),
-}))
+	}
+
+	return {
+		createMMKV: jest.fn(() => instance),
+		MMKV: jest.fn(() => instance),
+	}
+})
 
 // Mock Sentry
 jest.mock('@sentry/react-native', () => ({

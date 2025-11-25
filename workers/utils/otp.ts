@@ -38,5 +38,8 @@ export async function verifyOtp(kv: KVNamespace, phone: string, code: string) {
 		throw new HTTPException(401, { message: 'Invalid or expired code' })
 	}
 
+	// OTPs should be single-use; delete after a successful verification
+	await kv.delete(phone)
+
 	return { isTest: false }
 }

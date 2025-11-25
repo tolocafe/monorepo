@@ -23,6 +23,7 @@ module.exports = {
 				'<rootDir>/src/lib/utils/**/*.test.ts',
 				'<rootDir>/src/lib/hooks/**/*.test.ts',
 				'<rootDir>/src/lib/queries/**/*.test.ts',
+				'<rootDir>/src/lib/stores/**/*.test.ts',
 			],
 		},
 		// For component tests (React Native/Expo components)
