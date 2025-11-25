@@ -57,7 +57,9 @@ export default function Menu() {
 			categories
 				.map((category) => {
 					const categoryItems = menu.filter(
-						(item: Product) => item.menu_category_id === category.category_id,
+						(item: Product) =>
+							item.menu_category_id === category.category_id &&
+							item.hidden !== '1',
 					)
 					return { ...category, items: categoryItems }
 				})
@@ -135,7 +137,7 @@ export default function Menu() {
 		</Fragment>
 	)
 
-	if (menu.length === 0) {
+	if (categoriesWithItems.length === 0) {
 		if (isFetching) {
 			return (
 				<View style={styles.loadingContainer}>
