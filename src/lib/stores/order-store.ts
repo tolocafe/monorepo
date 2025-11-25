@@ -116,7 +116,7 @@ export const useOrderStore = create<OrderStore>()(
 					(item) => item.id !== productId,
 				)
 
-				const updatedOrder = { ...currentOrder, items: updatedItems }
+				const updatedOrder = { ...currentOrder, products: updatedItems }
 
 				// If no items left, clear the order
 				if (updatedItems.length === 0) {

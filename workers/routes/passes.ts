@@ -15,22 +15,13 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 		try {
 			const platform = context.req.query('platform')
 			const clientId = Number.parseInt(context.req.param('clientId'), 10)
-			const [authenticatedClientId, payload, token] = await authenticate(
+			const [authenticatedClientId] = await authenticate(
 				context,
 				context.env.JWT_SECRET,
 			)
 
 			if (authenticatedClientId !== clientId) {
-				return context.json(
-					{
-						authenticatedClientId,
-						clientId,
-						message: 'Forbidden, diff',
-						payload,
-						token,
-					},
-					403,
-				)
+				return context.json({ message: 'Forbidden' }, 403)
 			}
 
 			const client = await api.clients.getClientById(
