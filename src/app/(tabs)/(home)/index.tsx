@@ -52,16 +52,14 @@ export default function Menu() {
 	const { data: menu, error, isFetching } = useQuery(productsQueryOptions)
 	const { data: categories } = useQuery(categoriesQueryOptions)
 	const { data: coffees = [] } = useQuery(coffeesQueryOptions)
-	const visibleMenu = useMemo(
-		() => menu.filter((item: Product) => item.hidden !== '1'),
-		[menu],
-	)
 	const categoriesWithItems = useMemo(
 		() =>
 			categories
 				.map((category) => {
-					const categoryItems = visibleMenu.filter(
-						(item: Product) => item.menu_category_id === category.category_id,
+					const categoryItems = menu.filter(
+						(item: Product) =>
+							item.menu_category_id === category.category_id &&
+							item.hidden !== '1',
 					)
 					return { ...category, items: categoryItems }
 				})
@@ -85,7 +83,7 @@ export default function Menu() {
 					return a.category_name.localeCompare(b.category_name)
 				})
 				.filter((category) => category.items.length > 0),
-		[categories, visibleMenu],
+		[categories, menu],
 	)
 
 	const handleAddToBag = (item: Product) => {
@@ -139,7 +137,7 @@ export default function Menu() {
 		</Fragment>
 	)
 
-	if (visibleMenu.length === 0) {
+	if (categoriesWithItems.length === 0) {
 		if (isFetching) {
 			return (
 				<View style={styles.loadingContainer}>
