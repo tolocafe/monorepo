@@ -39,7 +39,7 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 
 		const last90Days = new Date(new Date().setDate(new Date().getDate() - 90))
 
-		const [products, client, transactions] = await Promise.all([
+		const [products, customer, transactions] = await Promise.all([
 			api.menu.getMenuProducts(context.env.POSTER_TOKEN),
 			api.clients.getClientById(
 				context.env.POSTER_TOKEN,
@@ -53,18 +53,31 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 			}),
 		])
 
-		const sanitizedClient = {
-			date_activale: client?.date_activale,
-			firstname: client?.firstname,
-			lastname: client?.lastname,
-			total_payed_sum: formatAmount(client?.total_payed_sum),
+		const sanitizedCustomer = {
+			name: `${customer?.firstname}${customer?.lastname ? ` ${customer.lastname}` : ''}`,
+			registrationDate: customer?.date_activale,
+			totalPayedSum: formatAmount(customer?.total_payed_sum),
 		}
 
-		const availableProducts = products.map((product) => product.product_name)
+		const menu = products.map((product) => ({
+			groupModifications: product.group_modifications?.map((group) => ({
+				modifications: group.modifications.map((modification) => ({
+					name: modification.name,
+					price: modification.price,
+				})),
+				name: group.name,
+			})),
+			modifications: product.modifications?.map((modification) => ({
+				name: modification.name,
+				price: modification.price,
+			})),
+			name: product.product_name,
+		}))
 
-		const populatedTransactions = transactions.map((transaction) => ({
-			date: transaction.date_start,
-			guest_count: transaction.guests_count,
+		const customerTransactions = transactions.map((transaction) => ({
+			amount: formatAmount(transaction.sum),
+			date: new Date(transaction.date_start).toISOString(),
+			guestCount: transaction.guests_count,
 			products: transaction.products?.map((product) => {
 				const productDetails = products.find(
 					(p) => p.product_id === product.product_id,
@@ -79,8 +92,7 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 					name: productDetails?.product_name,
 				}
 			}),
-			service_mode: getServiceMode(transaction.service_mode),
-			sum: formatAmount(transaction.sum),
+			serviceMode: getServiceMode(transaction.service_mode),
 		}))
 
 		let summary = ''
@@ -100,7 +112,8 @@ Goal:
 
 Output:
 - Language: Spanish.
-- Format: 3–6 bullet points.
+- Format: Introduction and 3–6 bullet points.
+- Introduction: A really brief introduction about the customer's preferences and history.
 - First bullets: preference summary (e.g. "Prefiere bebidas calientes y poco dulces").
 - Last 1–2 bullets: concrete recommendations, prefixed with "Recomendación:".
 - Max 500 characters total.
@@ -114,9 +127,9 @@ Constraints:
 						},
 						{
 							content: JSON.stringify({
-								availableProducts,
-								customer: sanitizedClient,
-								transactions: populatedTransactions,
+								customer: sanitizedCustomer,
+								customerTransactions,
+								menu,
 							}),
 							role: 'user',
 						},
@@ -133,9 +146,9 @@ Constraints:
 
 		return context.json(
 			{
-				client: sanitizedClient,
+				client: sanitizedCustomer,
 				summary,
-				transactions: populatedTransactions,
+				transactions: customerTransactions,
 			},
 			200,
 			defaultJsonHeaders,
