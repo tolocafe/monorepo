@@ -86,25 +86,40 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 		let summary = ''
 
 		try {
-			summary = await context.env.AI.run(
-				'@cf/meta/llama-3.3-70b-instruct-fp8-fast',
-				{
-					messages: [
-						{
-							content: `You are a helpful assistant that will hint a barista how to serve a customer based on the given information.
-Focus on giving useful information about customer tastes, preferences, potential new recommendations.
-The objective readers are working on a fast peaced environment.
-Available products are: ${availableProducts.join(',')}
-Be concise and to the point without unnecessary introduction. Your hints should help the barista to serve the customer better.`,
-							role: 'system',
-						},
-						{
-							content: `General customer information: ${JSON.stringify(sanitizedClient)}\n Latest transactions: ${JSON.stringify(populatedTransactions)}`,
-							role: 'user',
-						},
-					],
-				},
-			).then((result) => (result as AiTextGenerationOutput).response ?? '')
+			summary = await context.env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
+				messages: [
+					{
+						content: `
+You generate short, actionable hints for a barista based ONLY on the data provided.
+
+Goal:
+- Infer the customer's stable preferences (taste, temperature, sweetness, milk, size, caffeine, time-of-day).
+- Suggest drinks that match those preferences and EXIST in the available products list.
+
+Output:
+- Language: Spanish.
+- Format: 3–6 bullet points.
+- First bullets: preference summary (e.g. "Prefiere bebidas calientes y poco dulces").
+- Last 1–2 bullets: concrete recommendations, prefixed with "Recomendación:".
+- Max 500 characters total.
+- Do NOT greet, do NOT explain your reasoning, do NOT repeat raw data.
+
+Constraints:
+- Use only products that appear in the "available_products" list.
+- If history is too short or inconsistent, say so briefly and still give 1 safe recommendation if possible.
+`,
+						role: 'system',
+					},
+					{
+						content: JSON.stringify({
+							availableProducts,
+							customer: sanitizedClient,
+							transactions: populatedTransactions,
+						}),
+						role: 'user',
+					},
+				],
+			}).then((result) => result.response ?? '')
 		} catch (error) {
 			// eslint-disable-next-line no-console
 			console.error(error)
