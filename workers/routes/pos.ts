@@ -86,10 +86,12 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 		let summary = ''
 
 		try {
-			summary = await context.env.AI.run('@cf/meta/llama-3.2-3b-instruct', {
-				messages: [
-					{
-						content: `
+			summary = await context.env.AI.run(
+				'@cf/meta/llama-3.2-3b-instruct',
+				{
+					messages: [
+						{
+							content: `
 You generate short, actionable hints for a barista based ONLY on the data provided.
 
 Goal:
@@ -108,18 +110,22 @@ Constraints:
 - Use only products that appear in the "available_products" list.
 - If history is too short or inconsistent, say so briefly and still give 1 safe recommendation if possible.
 `,
-						role: 'system',
-					},
-					{
-						content: JSON.stringify({
-							availableProducts,
-							customer: sanitizedClient,
-							transactions: populatedTransactions,
-						}),
-						role: 'user',
-					},
-				],
-			}).then((result) => result.response ?? '')
+							role: 'system',
+						},
+						{
+							content: JSON.stringify({
+								availableProducts,
+								customer: sanitizedClient,
+								transactions: populatedTransactions,
+							}),
+							role: 'user',
+						},
+					],
+				},
+				{
+					gateway: { id: 'main' },
+				},
+			).then((result) => result.response ?? '')
 		} catch (error) {
 			// eslint-disable-next-line no-console
 			console.error(error)
