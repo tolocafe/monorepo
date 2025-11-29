@@ -3,10 +3,13 @@ import { Platform } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLingui } from '@lingui/react/macro'
+import { useQuery } from '@tanstack/react-query'
 import Head from 'expo-router/head'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Tabs from '@/components/Tabs'
+import { selfQueryOptions } from '@/lib/queries/auth'
+import { INTERNAL_GROUPS } from '@/lib/queries/order-log'
 import { useCurrentOrderItemsCount } from '@/lib/stores/order-store'
 
 export const unstable_settings = {
@@ -17,6 +20,9 @@ export default function TabLayout() {
 	const { t } = useLingui()
 
 	const itemsCount = useCurrentOrderItemsCount()
+	const { data: user } = useQuery(selfQueryOptions)
+
+	const isInternalUser = INTERNAL_GROUPS.has(Number(user?.client_groups_id))
 
 	const { theme } = useUnistyles()
 
@@ -109,6 +115,32 @@ export default function TabLayout() {
 							)
 						},
 						title: t`Orders`,
+					}}
+				/>
+				<Tabs.Screen
+					name="order-log"
+					options={{
+						href: isInternalUser ? undefined : null,
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore - bottom-tabs library has incomplete type definitions
+						tabBarIcon({ focused }: { focused: boolean }) {
+							if (Platform.OS === 'ios') {
+								return {
+									sfSymbol: focused ? 'list.clipboard.fill' : 'list.clipboard',
+								}
+							}
+
+							return (
+								<Ionicons
+									color={
+										focused ? theme.colors.verde.solid : theme.colors.gray.solid
+									}
+									name={focused ? 'clipboard' : 'clipboard-outline'}
+									size={24}
+								/>
+							)
+						},
+						title: t`Log`,
 					}}
 				/>
 				<Tabs.Screen

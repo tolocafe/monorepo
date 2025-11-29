@@ -9,6 +9,9 @@ import { api } from 'workers/utils/poster'
 import type { Product } from '@common/api'
 import type { Bindings } from 'workers/types'
 
+/** Client groups that have access to internal features (team members) */
+const INTERNAL_GROUPS = new Set([8, 9])
+
 const orders = new Hono<{ Bindings: Bindings }>()
 	.get('/', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
@@ -126,6 +129,34 @@ const orders = new Hono<{ Bindings: Bindings }>()
 			throw new HTTPException(500, {
 				message:
 					error instanceof Error ? error.message : 'Failed to create order',
+			})
+		}
+	})
+	/**
+	 * Get all recent orders for internal team members
+	 * Returns orders from today with products included
+	 */
+	.get('/log', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+
+		// Verify user is an internal team member
+		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
+
+		if (!client || !INTERNAL_GROUPS.has(Number(client.client_groups_id))) {
+			throw new HTTPException(403, { message: 'Access denied' })
+		}
+
+		try {
+			const orders = await api.dash.getTransactions(c.env.POSTER_TOKEN, {
+				include_products: 'true',
+				status: '1', // Open orders only
+			})
+
+			return c.json(orders)
+		} catch (error) {
+			captureException(error)
+			throw new HTTPException(500, {
+				message: 'Failed to fetch order log',
 			})
 		}
 	})

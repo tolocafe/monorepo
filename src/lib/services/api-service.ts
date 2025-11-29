@@ -8,6 +8,7 @@ import type {
 	Category,
 	ClientData,
 	Coffee,
+	DashTransaction,
 	Product,
 	TableBill,
 } from '@/lib/api'
@@ -87,6 +88,7 @@ export const api = {
 		get: (orderId: string) =>
 			privateClient.get<OrderDetailResponse>(`orders/${orderId}`).json(),
 		list: () => privateClient.get<CreateOrderResponse>('orders').json(),
+		log: () => privateClient.get<DashTransaction[]>('orders/log').json(),
 	},
 
 	// Generic methods for other endpoints
