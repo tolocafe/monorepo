@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useMemo, useRef } from 'react'
 import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { RefreshControl, TouchableOpacity, View } from 'react-native'
 
@@ -11,16 +11,14 @@ import { router, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import type { Product } from '@common/api'
-
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
+import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { resetBadgeCount } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { orderQueryOptions } from '@/lib/queries/order'
-import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
 import {
 	useCurrentOrder,
@@ -51,30 +49,33 @@ export default function Orders() {
 	const { data: orders } = useQuery(orderQueryOptions)
 	const itemsCount = useCurrentOrderItemsCount()
 
+	// Ensure product data is fetched for current order items
+	const productIds = useMemo(
+		() => [...new Set((currentOrder?.products ?? []).map((p) => p.id))],
+		[currentOrder?.products],
+	)
+	useProductDetails(productIds)
+
 	useFocusEffect(
 		useCallback(() => {
 			void resetBadgeCount()
 		}, []),
 	)
 
-	const currentOrderTotalCents = (() => {
+	const currentOrderTotalCents = useMemo(() => {
 		if (!currentOrder) return 0
 
-		return currentOrder.products.reduce((sum, item) => {
-			const productData = queryClient.getQueryData(
-				productQueryOptions(item.id).queryKey,
-			) as Product
-
-			return (
+		return currentOrder.products.reduce(
+			(sum, item) =>
 				sum +
 				getProductTotalCost({
 					modifications: item.modifications ?? {},
-					product: productData,
+					product: item.id,
 					quantity: item.quantity,
-				})
-			)
-		}, 0)
-	})()
+				}),
+			0,
+		)
+	}, [currentOrder])
 
 	const handleCurrentOrderPress = () => {
 		if (currentOrder) {

@@ -163,7 +163,7 @@ export const useOrderStore = create<OrderStore>()(
 )
 
 export const useCurrentOrderItemsCount = () =>
-	useOrderStore(useShallow((state) => state.getTotalItems()))
+	useOrderStore((state) => state.getTotalItems())
 export const useCurrentOrder = () =>
 	useOrderStore(useShallow((state) => state.currentOrder))
 export const useUpdateItem = () => useOrderStore((state) => state.updateItem)

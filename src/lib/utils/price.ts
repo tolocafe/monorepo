@@ -47,15 +47,18 @@ export function getProductTotalCost({
 	quantity,
 }: {
 	modifications: Record<string, number>
-	product: Product | string
+	product: Product | string | undefined
 	quantity: number
 }) {
 	const productData =
 		typeof product === 'string'
-			? (queryClient.getQueryData<Product>(
-					productQueryOptions(product).queryKey,
-				) as Product)
+			? queryClient.getQueryData<Product>(productQueryOptions(product).queryKey)
 			: product
+
+	// Return 0 if product data is not available in cache
+	if (!productData) {
+		return 0
+	}
 
 	const price = getProductBaseCost(productData, false)
 

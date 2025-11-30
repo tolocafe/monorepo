@@ -394,7 +394,11 @@ function getModificationName({
 }): string {
 	const productData = queryClient.getQueryData<Product>(
 		productQueryOptions(product.id).queryKey,
-	) as Product
+	)
+
+	if (!productData) {
+		return ''
+	}
 
 	const modificationGroup = productData.group_modifications?.find(
 		(modification) =>
@@ -411,13 +415,9 @@ function getModificationName({
 
 function getOrderTotal(products: OrderProduct[]) {
 	return products.reduce((orderTotal, item) => {
-		const productData = queryClient.getQueryData<Product>(
-			productQueryOptions(item.id).queryKey,
-		) as Product
-
 		const unitPriceCents = getProductTotalCost({
 			modifications: item.modifications ?? {},
-			product: productData,
+			product: item.id,
 			quantity: item.quantity,
 		})
 
