@@ -25,17 +25,25 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 	'name' in value &&
 	'token' in value
 
-const getCookieOptions = (isTest: boolean, host?: string) =>
-	({
-		domain: host,
+const getCookieOptions = (origin?: string, isTest = false) => {
+	const isLocalhost = origin ? origin.includes('localhost') : false
+	const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365
+
+	// Cross-origin requests (localhost to remote) require SameSite=None + Secure
+	// Modern browsers treat localhost as a secure context, so Secure cookies work
+	// Same-origin requests can use Strict for better security
+	const isCrossOrigin = isLocalhost || isTest
+
+	return {
+		// Don't set domain - let browser use the server's host
 		httpOnly: true,
-		// 1 year
-		maxAge: 60 * 60 * 24 * 365,
+		maxAge: ONE_YEAR_IN_SECONDS,
 		path: '/api',
-		priority: 'High',
-		sameSite: isTest ? 'None' : 'Lax',
-		secure: !isTest,
-	}) satisfies CookieOptions
+		sameSite: isCrossOrigin ? 'None' : 'Strict',
+		// SameSite=None requires Secure=true (browsers enforce this)
+		secure: true,
+	} satisfies CookieOptions
+}
 
 const auth = new Hono<{ Bindings: Bindings }>()
 	.post('/request-otp', async (context) => {
@@ -170,7 +178,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				context,
 				'tolo_session',
 				token,
-				getCookieOptions(isTest, context.req.header('Host')),
+				getCookieOptions(context.req.header('Origin'), isTest),
 			)
 		}
 
@@ -250,7 +258,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			deleteCookie(
 				context,
 				'tolo_session',
-				getCookieOptions(false, context.req.header('Host')),
+				getCookieOptions(context.req.header('Origin')),
 			)
 		}
 

@@ -28,6 +28,7 @@ export async function getAuthToken(): Promise<null | string> {
  * Use for endpoints that don't require user authentication
  */
 export const publicClient = ky.create({
+	credentials: 'include',
 	headers: { 'Content-Type': 'application/json' },
 	hooks: {
 		afterResponse: [
