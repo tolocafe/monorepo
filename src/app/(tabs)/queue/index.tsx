@@ -1,11 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react'
-import type { ScrollView } from 'react-native'
-import {
-	Pressable,
-	RefreshControl,
-	ScrollView as RNScrollView,
-	View,
-} from 'react-native'
+import { Pressable, RefreshControl, ScrollView, View } from 'react-native'
 
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -13,7 +7,7 @@ import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { Card } from '@/components/Card'
 import ScreenContainer from '@/components/ScreenContainer'
@@ -113,6 +107,10 @@ const MODIFIER_NAME_PRIORITY: Record<string, number> = {
 const HOT_MODIFIERS = new Set(['Caliente', 'Extra Caliente'])
 const COLD_MODIFIERS = new Set(['Frío'])
 
+const UniScrollView = withUnistyles(ScrollView, (_theme, runtime) => ({
+	horizontal: runtime.breakpoint !== 'xs' && runtime.breakpoint !== 'sm',
+}))
+
 export default function BaristaQueue() {
 	const { t } = useLingui()
 	const screenRef = useRef<ScrollView>(null)
@@ -153,32 +151,6 @@ export default function BaristaQueue() {
 		)
 	}, [categories, orders])
 
-	// Poll only when screen is focused and app is active
-	// useEffect(() => {
-	// 	if (!isFocused) {
-	// 		setIsPolling(false)
-	// 		return
-	// 	}
-
-	// 	setIsPolling(true)
-
-	// 	const interval = setInterval(() => {
-	// 		void refetch()
-	// 	}, POLLING_INTERVAL)
-
-	// 	// Also handle app state changes
-	// 	const subscription = AppState.addEventListener('change', (state) => {
-	// 		if (state === 'active' && isFocused) {
-	// 			void refetch()
-	// 		}
-	// 	})
-
-	// 	return () => {
-	// 		clearInterval(interval)
-	// 		subscription.remove()
-	// 		setIsPolling(false)
-	// 	}
-	// }, [isFocused, refetch])
 	useFocusEffect(
 		useCallback(() => {
 			const interval = setInterval(() => {
@@ -261,6 +233,7 @@ export default function BaristaQueue() {
 			<Head>
 				<title>{t`Queue`}</title>
 			</Head>
+
 			<ScreenContainer
 				contentContainerStyle={styles.container}
 				noScroll={orders.length === 0}
@@ -279,7 +252,7 @@ export default function BaristaQueue() {
 
 				{/* Category filter pills */}
 				{availableCategories.length > 0 && (
-					<RNScrollView
+					<ScrollView
 						contentContainerStyle={styles.filterContent}
 						horizontal
 						showsHorizontalScrollIndicator={false}
@@ -326,11 +299,11 @@ export default function BaristaQueue() {
 								</Pressable>
 							)
 						})}
-					</RNScrollView>
+					</ScrollView>
 				)}
 
 				{filteredOrders.length > 0 ? (
-					<View style={styles.ordersList}>
+					<UniScrollView contentContainerStyle={styles.ordersList}>
 						{filteredOrders.map((order) => {
 							const isDineIn = order.service_mode === '1' || !order.service_mode
 							const isTakeaway = order.service_mode === '2'
@@ -550,7 +523,7 @@ export default function BaristaQueue() {
 								</Card>
 							)
 						})}
-					</View>
+					</UniScrollView>
 				) : (
 					<View style={styles.emptyContainer}>
 						<Feather color="#8E8E93" name="coffee" size={64} />
@@ -735,8 +708,8 @@ const styles = StyleSheet.create((theme) => ({
 		fontStyle: 'italic',
 	},
 	container: {
+		flex: 1,
 		gap: theme.spacing.md,
-		padding: theme.layout.screenPadding,
 	},
 	deliveryBadge: {
 		alignItems: 'center',
@@ -774,11 +747,11 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.xxl,
 	},
 	filterContainer: {
-		marginHorizontal: -theme.layout.screenPadding,
+		flexGrow: 0,
+		paddingHorizontal: theme.layout.screenPadding,
 	},
 	filterContent: {
 		gap: theme.spacing.sm,
-		paddingHorizontal: theme.layout.screenPadding,
 	},
 	filterPill: {
 		backgroundColor: theme.colors.gray.background,
@@ -815,6 +788,7 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		flexDirection: 'row',
 		gap: theme.spacing.sm,
+		paddingHorizontal: theme.layout.screenPadding,
 	},
 	modifierTag: {
 		alignItems: 'center',
@@ -836,6 +810,10 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	orderCard: {
 		gap: theme.spacing.sm,
+		width: {
+			md: 'auto',
+			xs: '100%',
+		},
 	},
 	orderHeader: {
 		alignItems: 'center',
@@ -852,7 +830,12 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.sm,
 	},
 	ordersList: {
+		alignContent: 'flex-start',
+		alignItems: 'flex-start',
+		flex: 1,
 		gap: theme.spacing.md,
+		justifyContent: 'flex-start',
+		paddingHorizontal: theme.layout.screenPadding,
 	},
 	orderTime: {
 		color: theme.colors.gray.text,
