@@ -63,7 +63,7 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 			.filter((product) => product.hidden !== '1')
 			.map((product) => ({
 				groupModifications: product.group_modifications?.map((group) => ({
-					modifications: group.modifications.map((modification) => ({
+					modifications: group.modifications?.map((modification) => ({
 						name: modification.name,
 						price: modification.price,
 					})),

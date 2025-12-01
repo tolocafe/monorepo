@@ -67,7 +67,7 @@ export function getProductTotalCost({
 					modificationGroupId,
 			)
 
-			const modification = modificationGroup?.modifications.find(
+			const modification = modificationGroup?.modifications?.find(
 				(modification) => modification.dish_modification_id === modificationId,
 			)
 

@@ -539,11 +539,6 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		marginTop: theme.spacing.md,
 	},
-	header: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		justifyContent: 'flex-end',
-	},
 	backButtonRow: {
 		alignItems: 'center',
 		flexDirection: 'row',
@@ -578,6 +573,11 @@ const styles = StyleSheet.create((theme) => ({
 	errorText: {
 		color: theme.colors.rojo.solid,
 		marginTop: theme.spacing.xs,
+	},
+	header: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
 	},
 	headerIconPressable: {
 		alignItems: 'center',

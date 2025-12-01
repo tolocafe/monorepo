@@ -3,11 +3,10 @@ import { Platform } from 'react-native'
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
 import { deleteItemAsync } from 'expo-secure-store'
 
+import { STORAGE_KEYS } from '@/lib/constants/storage'
 import { api } from '@/lib/services/api-service'
 
 import type { ClientData } from '@/lib/api'
-
-import { STORAGE_KEYS } from '@/lib/constants/storage'
 
 export type RequestOtpMutationOptions = {
 	birthdate?: string

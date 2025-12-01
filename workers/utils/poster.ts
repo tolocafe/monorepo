@@ -241,7 +241,7 @@ export const api = {
 			{
 				category_id: string
 				modification_id: string
-				modificator_name: string | null
+				modificator_name: null | string
 				num: string
 				product_id: string
 				product_name: string
@@ -253,7 +253,7 @@ export const api = {
 				{
 					category_id: string
 					modification_id: string
-					modificator_name: string | null
+					modificator_name: null | string
 					num: string
 					product_id: string
 					product_name: string

@@ -452,10 +452,10 @@ const styles = StyleSheet.create((theme) => ({
 		textAlign: 'center',
 	},
 	walletButton: {
-		width: '100%',
 		_android: {
 			minHeight: 40,
 		},
+		width: '100%',
 	},
 	walletList: {
 		backgroundColor: theme.colors.gray.background,

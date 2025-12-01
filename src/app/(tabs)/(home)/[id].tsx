@@ -138,7 +138,7 @@ export default function MenuDetail() {
 		if (!groups?.length) return
 
 		for (const group of groups) {
-			if (group.modifications.length > 0) {
+			if (group.modifications?.length) {
 				setFieldValue(
 					`modifications.${group.dish_modification_group_id}`,
 					group.modifications[0].dish_modification_id,
@@ -199,7 +199,7 @@ export default function MenuDetail() {
 	const groupModifications = product.group_modifications
 		?.filter(
 			(group) =>
-				group.modifications.length > 0 && !group.name.startsWith('Desechable'),
+				group.modifications?.length && !group.name.startsWith('Desechable'),
 		)
 		.map((group) => ({
 			...group,
@@ -354,7 +354,7 @@ export default function MenuDetail() {
 													accessibilityRole="radiogroup"
 													style={styles.modButtonGroup}
 												>
-													{group.modifications.map((modification) => {
+													{group.modifications?.map((modification) => {
 														const isSelected =
 															state.value === modification.dish_modification_id
 

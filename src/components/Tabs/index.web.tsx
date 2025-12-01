@@ -19,8 +19,8 @@ import type { BottomTabNavigatorProps } from '@react-navigation/bottom-tabs'
 import type { TabTriggerSlotProps } from 'expo-router/ui'
 
 import { isStaticWeb } from '@/lib/constants/is-static-web'
-import { breakpoints } from '@/lib/styles/unistyles'
 import { useIsBarista } from '@/lib/hooks/use-is-barista'
+import { breakpoints } from '@/lib/styles/unistyles'
 
 const DefaultBottomTabs = createBottomTabNavigator()
 const ExpoDefaultBottomTabs = DefaultBottomTabs.Navigator
@@ -32,8 +32,8 @@ type IoniconName = ComponentProps<typeof Ionicons>['name']
 
 type SideTabButtonProps = TabTriggerSlotProps & {
 	icon: IoniconName
-	label: string
 	isHidden?: boolean
+	label: string
 }
 
 const UniImage = withUnistyles(Image)
@@ -69,8 +69,8 @@ function DesktopSideTabs(props: Omit<BottomTabNavigatorProps, 'id'>) {
 					</UITabTrigger>
 					<UITabTrigger asChild href="/queue" name="queue">
 						<SideTabButton
-							isHidden={!isBarista}
 							icon="list-outline"
+							isHidden={!isBarista}
 							label={t`Queue`}
 						/>
 					</UITabTrigger>
@@ -86,9 +86,9 @@ function DesktopSideTabs(props: Omit<BottomTabNavigatorProps, 'id'>) {
 function SideTabButton({
 	icon,
 	isFocused,
+	isHidden,
 	label,
 	ref,
-	isHidden,
 	...rest
 }: SideTabButtonProps) {
 	styles.useVariants({
@@ -177,13 +177,13 @@ function useIsDesktop() {
 const SIDEBAR_WIDTH = 280
 
 const styles = StyleSheet.create((theme) => ({
-	hidden: {
-		display: 'none',
-	},
 	contentArea: {
 		backgroundColor: theme.colors.gray.background,
 		flex: 1,
 		paddingLeft: SIDEBAR_WIDTH,
+	},
+	hidden: {
+		display: 'none',
 	},
 	image: { height: 25, marginBottom: 10, width: 100 },
 	sidebar: {

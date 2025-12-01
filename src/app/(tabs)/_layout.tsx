@@ -115,6 +115,8 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name="queue"
 					options={{
+						href: null, // expo routers
+						sceneStyle: isBarista ? undefined : { display: 'none' },
 						// href: isBarista ? '/(tabs)/queue' : null,
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
@@ -135,10 +137,8 @@ export default function TabLayout() {
 								/>
 							)
 						},
-						sceneStyle: isBarista ? undefined : { display: 'none' },
-						title: t`Queue`,
-						href: null, // expo routers
 						tabBarItemStyle: isBarista ? undefined : { display: 'none' }, // custom routers
+						title: t`Queue`,
 					}}
 				/>
 				<Tabs.Screen

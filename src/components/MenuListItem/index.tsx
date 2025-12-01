@@ -42,11 +42,11 @@ export default function MenuListItem(props: Props) {
 
 	return (
 		<Animated.View style={[animatedStyle, styles.menuItemContainer]}>
-			<Link href={`/(tabs)/(home)/${item.product_id}`} asChild>
+			<Link asChild href={`/(tabs)/(home)/${item.product_id}`}>
 				<Pressable
-					style={styles.link}
 					onPressIn={() => scaleValue.set(withSpring(0.96))}
 					onPressOut={() => scaleValue.set(withSpring(1))}
+					style={styles.link}
 				>
 					<Card padded={false} style={styles.menuItem}>
 						<View style={styles.menuItemImageContainer}>
@@ -116,15 +116,11 @@ const styles = StyleSheet.create((theme, runtime) => {
 			justifyContent: 'center',
 			width: 36,
 		},
-		link: {
-			flex: 1,
-		},
-		menuItemContainer: {
-			width: itemSize,
-			position: 'relative',
-		},
 		image: {
+			flex: 1,
 			objectFit: 'cover',
+		},
+		link: {
 			flex: 1,
 		},
 		menuItem: {
@@ -132,20 +128,24 @@ const styles = StyleSheet.create((theme, runtime) => {
 		},
 		menuItemActions: {
 			alignItems: 'center',
+			bottom: theme.spacing.sm,
 			flexDirection: 'row',
 			gap: theme.spacing.sm,
 			position: 'absolute',
 			right: theme.spacing.sm,
-			bottom: theme.spacing.sm,
 			zIndex: 1,
+		},
+		menuItemContainer: {
+			position: 'relative',
+			width: itemSize,
 		},
 		menuItemContent: {
 			flex: 1,
 			gap: theme.spacing.xs,
 			justifyContent: 'space-between',
 			padding: 10,
-			paddingVertical: theme.spacing.sm,
 			paddingRight: ADD_TO_BAG_BUTTON_SIZE + theme.spacing.md,
+			paddingVertical: theme.spacing.sm,
 		},
 		menuItemFooter: {
 			alignItems: 'center',

@@ -1,79 +1,6 @@
 export const BASE_URL = process.env.EXPO_PUBLIC_API_URL
 export const POSTER_BASE_URL = process.env.EXPO_PUBLIC_POSTER_API_URL
 
-/**
- * Incoming order from Poster API
- * @see https://dev.joinposter.com/en/docs/v3/web/incomingOrders/getIncomingOrders
- */
-export type IncomingOrder = {
-	/** Delivery address */
-	address?: string
-	/** Client ID */
-	client_id: number
-	/** Order comment/note */
-	comment?: string | null
-	/** Order creation date in "Y-m-d H:i:s" format */
-	created_at: string
-	/** Delivery time (if scheduled) */
-	delivery_time?: string
-	/** Client email */
-	email?: string
-	/** Client's first name */
-	first_name?: string
-	/** Incoming order ID */
-	incoming_order_id: number
-	/** Client's last name */
-	last_name?: string
-	/** Client's phone number */
-	phone?: string | null
-	/**
-	 * Products in the order
-	 */
-	products: {
-		/** Product count (as string with decimals e.g. "1.0000000") */
-		count: string
-		/** Order creation date */
-		created_at: string
-		/** Incoming order ID */
-		incoming_order_id: number
-		/** Modifications array with modification ID (m) and amount (a) */
-		modification?: {
-			/** Amount/quantity */
-			a: number
-			/** Modification ID */
-			m: number
-		}[]
-		/** Modification ID (points to a specific modifier) */
-		modificator_id: number | null
-		/** Product price in cents */
-		price: number
-		/** Product ID */
-		product_id: number
-	}[]
-	/**
-	 * Service mode
-	 * - 1: Dine-in (at the table)
-	 * - 2: Takeaway
-	 * - 3: Delivery
-	 */
-	service_mode: number
-	/** Spot/location ID */
-	spot_id: number
-	/**
-	 * Order status
-	 * - 0: New
-	 * - 1: Accepted
-	 * - 7: Canceled
-	 */
-	status: number
-	/** Table ID (for dine-in orders) */
-	table_id?: number | null
-	/** Associated transaction ID (after payment) */
-	transaction_id?: number
-	/** Order update date in "Y-m-d H:i:s" format */
-	updated_at: string
-}
-
 export type Category = {
 	category_color: string
 	category_hidden: string
@@ -305,6 +232,79 @@ export type DashTransaction = {
 	user_id?: number
 }
 
+/**
+ * Incoming order from Poster API
+ * @see https://dev.joinposter.com/en/docs/v3/web/incomingOrders/getIncomingOrders
+ */
+export type IncomingOrder = {
+	/** Delivery address */
+	address?: string
+	/** Client ID */
+	client_id: number
+	/** Order comment/note */
+	comment?: null | string
+	/** Order creation date in "Y-m-d H:i:s" format */
+	created_at: string
+	/** Delivery time (if scheduled) */
+	delivery_time?: string
+	/** Client email */
+	email?: string
+	/** Client's first name */
+	first_name?: string
+	/** Incoming order ID */
+	incoming_order_id: number
+	/** Client's last name */
+	last_name?: string
+	/** Client's phone number */
+	phone?: null | string
+	/**
+	 * Products in the order
+	 */
+	products: {
+		/** Product count (as string with decimals e.g. "1.0000000") */
+		count: string
+		/** Order creation date */
+		created_at: string
+		/** Incoming order ID */
+		incoming_order_id: number
+		/** Modifications array with modification ID (m) and amount (a) */
+		modification?: {
+			/** Amount/quantity */
+			a: number
+			/** Modification ID */
+			m: number
+		}[]
+		/** Modification ID (points to a specific modifier) */
+		modificator_id: null | number
+		/** Product price in cents */
+		price: number
+		/** Product ID */
+		product_id: number
+	}[]
+	/**
+	 * Service mode
+	 * - 1: Dine-in (at the table)
+	 * - 2: Takeaway
+	 * - 3: Delivery
+	 */
+	service_mode: number
+	/** Spot/location ID */
+	spot_id: number
+	/**
+	 * Order status
+	 * - 0: New
+	 * - 1: Accepted
+	 * - 7: Canceled
+	 */
+	status: number
+	/** Table ID (for dine-in orders) */
+	table_id?: null | number
+	/** Associated transaction ID (after payment) */
+	transaction_id?: number
+	/** Order update date in "Y-m-d H:i:s" format */
+	updated_at: string
+}
+
 export type PageInfo = {
 	count: number
 	page: number
@@ -358,7 +358,7 @@ export type PosterModification = {
 export type PosterModificationGroup = {
 	dish_modification_group_id: number
 	is_deleted: number
-	modifications: PosterModification[]
+	modifications?: PosterModification[]
 	name: string
 	num_max: number
 	num_min: number

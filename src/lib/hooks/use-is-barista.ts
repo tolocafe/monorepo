@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import { selfQueryOptions } from '@/lib/queries/auth'
 
-const BARISTA_GROUP_IDS = ['8', '9'] // 8 = owners, 9 = members
+const BARISTA_GROUP_IDS = new Set(['8', '9']) // 8 = owners, 9 = members
 
 /**
  * Hook to check if the current user is a barista (staff member)
@@ -12,6 +12,6 @@ export function useIsBarista(): boolean {
 	const { data: user } = useQuery(selfQueryOptions)
 
 	return Boolean(
-		user?.client_groups_id && BARISTA_GROUP_IDS.includes(user.client_groups_id),
+		user?.client_groups_id && BARISTA_GROUP_IDS.has(user.client_groups_id),
 	)
 }

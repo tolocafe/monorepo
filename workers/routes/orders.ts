@@ -9,10 +9,14 @@ import { api } from 'workers/utils/poster'
 import type { Product } from '@common/api'
 import type { Bindings } from 'workers/types'
 
-const BARISTA_GROUP_IDS = ['8', '9'] // 8 = owners, 9 = members
+const BARISTA_GROUP_IDS = new Set(['8', '9']) // 8 = owners, 9 = members
 
 // Modifiers to ignore (not displayed in barista queue)
-const IGNORED_MODIFIERS = ['Sin Desechable', 'Desechable', 'Para llevar']
+const IGNORED_MODIFIERS = new Set([
+	'Desechable',
+	'Para llevar',
+	'Sin Desechable',
+])
 
 /**
  * Build a map of modifier name → group name from product modifications
@@ -23,20 +27,20 @@ function buildModifierGroupMap(products: Product[]): Map<string, string> {
 	for (const product of products) {
 		// Check group_modifications
 		for (const group of product.group_modifications ?? []) {
-			for (const mod of group.modifications ?? []) {
-				const modName = mod.modificator_name || mod.name
-				if (modName && !map.has(modName)) {
-					map.set(modName, group.name)
+			for (const module_ of group.modifications ?? []) {
+				const moduleName = module_.modificator_name || module_.name
+				if (moduleName && !map.has(moduleName)) {
+					map.set(moduleName, group.name)
 				}
 			}
 		}
 
 		// Check direct modifications (usually single-option modifiers)
-		for (const mod of product.modifications ?? []) {
-			const modName = mod.modificator_name || mod.name
-			if (modName && !map.has(modName)) {
+		for (const module_ of product.modifications ?? []) {
+			const moduleName = module_.modificator_name || module_.name
+			if (moduleName && !map.has(moduleName)) {
 				// Direct modifications don't have a group, use a generic category
-				map.set(modName, 'Option')
+				map.set(moduleName, 'Option')
 			}
 		}
 	}
@@ -48,7 +52,7 @@ function buildModifierGroupMap(products: Product[]): Map<string, string> {
  * Parse comma-separated modifier string into array of modifier objects
  */
 function parseModifiers(
-	modifierString: string | null | undefined,
+	modifierString: null | string | undefined,
 	modifierGroupMap: Map<string, string>,
 ): { group: string; name: string }[] {
 	if (!modifierString) return []
@@ -56,7 +60,7 @@ function parseModifiers(
 	return modifierString
 		.split(',')
 		.map((m) => m.trim())
-		.filter((m) => m && !IGNORED_MODIFIERS.includes(m))
+		.filter((m) => m && !IGNORED_MODIFIERS.has(m))
 		.map((name) => ({
 			group: modifierGroupMap.get(name) || 'Other',
 			name,
@@ -82,7 +86,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 		if (
 			!client?.client_groups_id ||
-			!BARISTA_GROUP_IDS.includes(client.client_groups_id)
+			!BARISTA_GROUP_IDS.has(client.client_groups_id)
 		) {
 			throw new HTTPException(403, { message: 'Access denied' })
 		}
@@ -115,7 +119,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 					)
 
 					// Only use detailed products if we got results
-					if (detailedProducts && detailedProducts.length > 0) {
+					if (detailedProducts.length > 0) {
 						return {
 							...order,
 							products: detailedProducts.map((p) => ({

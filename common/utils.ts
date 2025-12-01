@@ -26,7 +26,10 @@ export function getProductTotalCost({
 	const modificationsPrice = Object.entries(modifications).reduce(
 		(sum, [modificationId, modificationAmount]) => {
 			const modificationGroup = productData.group_modifications?.reduce(
-				(accumulator, { modifications }) => [...accumulator, ...modifications],
+				(accumulator, { modifications = [] }) => [
+					...accumulator,
+					...modifications,
+				],
 				[] as PosterModification[],
 			)
 
@@ -35,7 +38,7 @@ export function getProductTotalCost({
 					modification.dish_modification_id === Number(modificationId),
 			)
 
-			return sum + (modification?.price ?? 0 * modificationAmount) * 100
+			return sum + (modification?.price ?? 0) * modificationAmount * 100
 		},
 		price,
 	)

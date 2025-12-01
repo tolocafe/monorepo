@@ -31,10 +31,18 @@ app
 		'*',
 		cors({
 			credentials: true,
-			origin: (origin) =>
-				['localhost', TOLO_DOMAIN].some((domain) => origin.includes(domain))
-					? origin
-					: null,
+			origin: (origin) => {
+				try {
+					const url = new URL(origin)
+					const isAllowed =
+						url.hostname === 'localhost' ||
+						url.hostname === TOLO_DOMAIN ||
+						url.hostname.endsWith(`.${TOLO_DOMAIN}`)
+					return isAllowed ? origin : null
+				} catch {
+					return null
+				}
+			},
 		}),
 	)
 	.use(async (context, next) => {

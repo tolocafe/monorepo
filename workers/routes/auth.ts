@@ -3,16 +3,20 @@ import { startSpan } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
+import { defaultJsonHeaders } from 'workers/utils/headers'
 
 import type { CookieOptions } from 'hono/utils/cookie'
 
 import { trackServerEvent } from '../utils/analytics'
-import { authenticate, signJwt } from '../utils/jwt'
+import {
+	authenticate,
+	DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
+	signJwt,
+} from '../utils/jwt'
 import { generateOtp, storeOtp, verifyOtp } from '../utils/otp'
 import { api, sendSms } from '../utils/poster'
 
 import type { Bindings } from '../types'
-import { defaultJsonHeaders } from 'workers/utils/headers'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
 
@@ -26,19 +30,22 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 	'name' in value &&
 	'token' in value
 
-const getCookieOptions = (origin?: string, isTest = false) => {
+const getCookieOptions = (options: {
+	expiresIn?: number
+	isTest?: boolean
+	origin: string
+}) => {
 	const isLocalhost = origin ? origin.includes('localhost') : false
-	const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365
 
 	// Cross-origin requests (localhost to remote) require SameSite=None + Secure
 	// Modern browsers treat localhost as a secure context, so Secure cookies work
 	// Same-origin requests can use Strict for better security
-	const isCrossOrigin = isLocalhost || isTest
+	const isCrossOrigin = isLocalhost || options.isTest
 
 	return {
 		// Don't set domain - let browser use the server's host
 		httpOnly: true,
-		maxAge: ONE_YEAR_IN_SECONDS,
+		maxAge: options.expiresIn ?? DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
 		path: '/api',
 		sameSite: isCrossOrigin ? 'None' : 'Strict',
 		// SameSite=None requires Secure=true (browsers enforce this)
@@ -179,7 +186,11 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				context,
 				'tolo_session',
 				token,
-				getCookieOptions(context.req.header('Origin'), isTest),
+				getCookieOptions({
+					expiresIn: DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
+					isTest,
+					origin: context.req.header('Origin') ?? '',
+				}),
 			)
 		}
 
@@ -259,7 +270,10 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			deleteCookie(
 				context,
 				'tolo_session',
-				getCookieOptions(context.req.header('Origin')),
+				getCookieOptions({
+					expiresIn: DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
+					origin: context.req.header('Origin') ?? '',
+				}),
 			)
 		}
 

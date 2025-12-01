@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import type { ScrollView } from 'react-native'
 import {
-	AppState,
 	Pressable,
 	RefreshControl,
 	ScrollView as RNScrollView,
@@ -10,9 +9,9 @@ import {
 
 import { Feather, Ionicons } from '@expo/vector-icons'
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useIsFocused } from '@react-navigation/native'
 import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
+import { useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -26,7 +25,7 @@ import {
 } from '@/lib/queries/menu'
 import { queryClient } from '@/lib/query-client'
 
-const POLLING_INTERVAL = 5_000 // 5 seconds
+const POLLING_INTERVAL = 5000 // 5 seconds
 
 // Category colors for visual distinction
 const CATEGORY_COLORS: Record<string, string> = {
@@ -42,32 +41,32 @@ const CATEGORY_COLORS: Record<string, string> = {
 const DEFAULT_CATEGORY_COLOR = '#8E8E93' // Gray fallback
 
 // Modifier colors by name (specific modifiers)
-const MODIFIER_NAME_COLORS: Record<string, { bg: string; text: string }> = {
+const MODIFIER_NAME_COLORS = {
+	// Milk types
+	Avena: { bg: '#EFEBE9', text: '#6D4C41' }, // Brown for oat
 	// Temperature - hot (red)
 	Caliente: { bg: '#FFEBEE', text: '#D32F2F' },
+	// Matcha grades (green)
+	Ceremonial: { bg: '#E8F5E9', text: '#388E3C' },
+
+	Deslactosada: { bg: '#FCE4EC', text: '#C2185B' }, // Pink for lactose-free
+	Doble: { bg: '#E1BEE7', text: '#6A1B9A' },
+	Entera: { bg: '#E3F2FD', text: '#1565C0' }, // Blue for whole milk
+
 	'Extra Caliente': { bg: '#FFCDD2', text: '#C62828' },
 	// Temperature - cold (blue)
 	Frío: { bg: '#E3F2FD', text: '#1976D2' },
 
-	// Milk types
-	Avena: { bg: '#EFEBE9', text: '#6D4C41' }, // Brown for oat
-	Deslactosada: { bg: '#FCE4EC', text: '#C2185B' }, // Pink for lactose-free
-	Entera: { bg: '#E3F2FD', text: '#1565C0' }, // Blue for whole milk
-
-	// Matcha grades (green)
-	Ceremonial: { bg: '#E8F5E9', text: '#388E3C' },
 	Imperial: { bg: '#C8E6C9', text: '#2E7D32' },
+	// Neutral
+	Natural: { bg: '#FAFAFA', text: '#616161' },
 
 	// Extras (purple)
 	'Una adicional': { bg: '#F3E5F5', text: '#7B1FA2' },
-	Doble: { bg: '#E1BEE7', text: '#6A1B9A' },
-
-	// Neutral
-	Natural: { bg: '#FAFAFA', text: '#616161' },
-}
+} satisfies Record<string, { bg: string; text: string }>
 
 // Modifier colors by group/category (fallback)
-const MODIFIER_GROUP_COLORS: Record<string, { bg: string; text: string }> = {
+const MODIFIER_GROUP_COLORS = {
 	'Caliente/Frío': { bg: '#FFF3E0', text: '#E65100' }, // Orange for temp
 	'Dosis Extra': { bg: '#F3E5F5', text: '#7B1FA2' }, // Purple for extras
 	Leche: { bg: '#E3F2FD', text: '#1565C0' }, // Blue for milk
@@ -75,192 +74,50 @@ const MODIFIER_GROUP_COLORS: Record<string, { bg: string; text: string }> = {
 	Option: { bg: '#F5F5F5', text: '#757575' }, // Gray for generic
 	Other: { bg: '#F5F5F5', text: '#757575' }, // Gray fallback
 	Temperatura: { bg: '#FFF3E0', text: '#E65100' }, // Orange for temp
-}
+} satisfies Record<string, { bg: string; text: string }>
 
 // Priority order for modifier groups (lower = first)
 // 1. Temperature, 2. Milk type, 3. Coffee/Matcha type, 4. Extras, 5. Other
 const MODIFIER_GROUP_PRIORITY: Record<string, number> = {
+	Café: 3,
 	'Caliente/Frío': 1,
-	Temperatura: 1,
+	'Dosis Extra': 4,
 	Leche: 2,
 	Matcha: 3,
-	Café: 3,
-	'Dosis Extra': 4,
 	Option: 5,
 	Other: 6,
+	Temperatura: 1,
 }
 
 // Modifier name priorities for more precise sorting within groups
 const MODIFIER_NAME_PRIORITY: Record<string, number> = {
+	Avena: 2,
 	// Temperature (1)
 	Caliente: 1,
-	'Extra Caliente': 1,
-	Frío: 1,
+	Ceremonial: 3,
+	Deslactosada: 2,
+	Doble: 4,
 	// Milk types (2)
 	Entera: 2,
-	Deslactosada: 2,
-	Avena: 2,
+	'Extra Caliente': 1,
+	Frío: 1,
 	// Coffee/Matcha types (3)
 	Imperial: 3,
-	Ceremonial: 3,
 	Internacional: 3,
 	Natural: 3,
 	// Extras (4)
 	'Una adicional': 4,
-	Doble: 4,
 }
 
 // Temperature-related modifier names
-const HOT_MODIFIERS = ['Caliente', 'Extra Caliente']
-const COLD_MODIFIERS = ['Frío']
-
-/**
- * Get icon for a modifier (currently only temperature)
- */
-function getModifierIcon(
-	name: string,
-): { color: string; name: 'flame' | 'snow' } | null {
-	if (HOT_MODIFIERS.includes(name)) {
-		return { color: '#D32F2F', name: 'flame' }
-	}
-	if (COLD_MODIFIERS.includes(name)) {
-		return { color: '#1976D2', name: 'snow' }
-	}
-	return null
-}
-
-/**
- * Sort modifiers by priority: temperature → milk → coffee/matcha type → extras → other
- */
-function sortModifiers(
-	modifiers: { group: string; name: string }[],
-): { group: string; name: string }[] {
-	return [...modifiers].sort((a, b) => {
-		// First try by specific modifier name
-		const namePriorityA = MODIFIER_NAME_PRIORITY[a.name] ?? 99
-		const namePriorityB = MODIFIER_NAME_PRIORITY[b.name] ?? 99
-		if (namePriorityA !== namePriorityB) {
-			return namePriorityA - namePriorityB
-		}
-		// Fall back to group priority
-		const priorityA = MODIFIER_GROUP_PRIORITY[a.group] ?? 99
-		const priorityB = MODIFIER_GROUP_PRIORITY[b.group] ?? 99
-		return priorityA - priorityB
-	})
-}
-
-/**
- * Get color for a modifier based on name first, then group
- */
-function getModifierColor(
-	name: string,
-	group?: string,
-): { bg: string; text: string } {
-	// First check by specific name
-	if (MODIFIER_NAME_COLORS[name]) {
-		return MODIFIER_NAME_COLORS[name]
-	}
-	// Then by group
-	if (group && MODIFIER_GROUP_COLORS[group]) {
-		return MODIFIER_GROUP_COLORS[group]
-	}
-	// Default gray
-	return { bg: '#F5F5F5', text: '#757575' }
-}
-
-/**
- * Get color based on category name
- */
-function getCategoryColor(categoryName: string | undefined): string {
-	if (!categoryName) return DEFAULT_CATEGORY_COLOR
-	return CATEGORY_COLORS[categoryName] || DEFAULT_CATEGORY_COLOR
-}
-
-/**
- * Parse date from Poster API - can be Unix timestamp (seconds) or "Y-m-d H:i:s" format
- */
-function parseDate(dateValue: string | undefined): Date | null {
-	if (!dateValue) return null
-
-	// Check if it looks like a Unix timestamp (all digits, reasonable range)
-	const numValue = Number(dateValue)
-	if (!isNaN(numValue) && numValue > 1000000000 && numValue < 9999999999) {
-		// Unix timestamp in seconds
-		return new Date(numValue * 1000)
-	}
-	if (!isNaN(numValue) && numValue > 9999999999) {
-		// Unix timestamp in milliseconds
-		return new Date(numValue)
-	}
-
-	// Format: "2023-12-25 14:30:00" - assume Mexico City timezone (UTC-6)
-	const [datePart, timePart] = dateValue.split(' ')
-	if (!datePart || !timePart) return null
-	return new Date(`${datePart}T${timePart}-06:00`)
-}
-
-/**
- * Get minutes elapsed since the given date
- */
-function getMinutesElapsed(dateString: string | undefined): number {
-	const date = parseDate(dateString)
-	if (!date || isNaN(date.getTime())) return 0
-
-	const now = new Date()
-	const diffMs = now.getTime() - date.getTime()
-	return Math.floor(diffMs / 60000)
-}
-
-/**
- * Get color for time based on how old the order is
- * - Normal (< 5 min): default gray
- * - Warning (5-10 min): yellow/amber
- * - Caution (10-15 min): orange
- * - Urgent (> 15 min): red
- */
-function getTimeColor(minutes: number): string {
-	if (minutes >= 15) return '#D32F2F' // Red
-	if (minutes >= 10) return '#F57C00' // Orange
-	if (minutes >= 5) return '#FFA000' // Amber/Yellow
-	return '#8E8E93' // Default gray
-}
-
-/**
- * Get relative time string (e.g., "5m", "1h 20m", "1d 2h")
- */
-function getRelativeTime(dateString: string | undefined): string {
-	const date = parseDate(dateString)
-	if (!date || isNaN(date.getTime())) return ''
-
-	const now = new Date()
-	const diffMs = now.getTime() - date.getTime()
-	const diffMinutes = Math.floor(diffMs / 60000)
-
-	// Handle future dates (shouldn't happen but just in case)
-	if (diffMinutes < 0) return 'Just now'
-	if (diffMinutes < 1) return 'Just now'
-	if (diffMinutes < 60) return `${diffMinutes}m`
-
-	const hours = Math.floor(diffMinutes / 60)
-	if (hours < 24) {
-		const minutes = diffMinutes % 60
-		if (minutes === 0) return `${hours}h`
-		return `${hours}h ${minutes}m`
-	}
-
-	// More than 24 hours - show days
-	const days = Math.floor(hours / 24)
-	const remainingHours = hours % 24
-	if (remainingHours === 0) return `${days}d`
-	return `${days}d ${remainingHours}h`
-}
+const HOT_MODIFIERS = new Set(['Caliente', 'Extra Caliente'])
+const COLD_MODIFIERS = new Set(['Frío'])
 
 export default function BaristaQueue() {
 	const { t } = useLingui()
 	const screenRef = useRef<ScrollView>(null)
-	const isFocused = useIsFocused()
-	const [isPolling, setIsPolling] = useState(false)
-	const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
+
+	const [selectedCategoryId, setSelectedCategoryId] = useState<null | string>(
 		null,
 	)
 
@@ -269,7 +126,6 @@ export default function BaristaQueue() {
 	const {
 		data: orders,
 		isLoading,
-		isFetching,
 		refetch,
 	} = useQuery(baristaQueueQueryOptions)
 	const { data: products } = useQuery(productsQueryOptions)
@@ -277,94 +133,107 @@ export default function BaristaQueue() {
 
 	// Filter categories to only show those with products in the queue
 	const availableCategories = useMemo(() => {
-		if (!categories || !orders) return []
-
 		// Collect all category IDs from products in the queue
 		const categoryIdsInQueue = new Set<string>()
-		orders.forEach((order) => {
-			order.products?.forEach((product) => {
-				if (product.category_id) {
-					categoryIdsInQueue.add(product.category_id)
+		for (const order of orders) {
+			if (order.products)
+				for (const product of order.products) {
+					if (product.category_id) {
+						categoryIdsInQueue.add(product.category_id)
+					}
 				}
-			})
-		})
+		}
 
 		// Filter and sort categories
-		return categories
-			.filter((cat) => categoryIdsInQueue.has(cat.category_id))
-			.sort((a, b) => a.category_name.localeCompare(b.category_name))
+		return (
+			categories
+				.filter((cat) => categoryIdsInQueue.has(cat.category_id))
+				// eslint-disable-next-line unicorn/no-array-sort
+				.sort((a, b) => a.category_name.localeCompare(b.category_name))
+		)
 	}, [categories, orders])
 
 	// Poll only when screen is focused and app is active
-	useEffect(() => {
-		if (!isFocused) {
-			setIsPolling(false)
-			return
-		}
+	// useEffect(() => {
+	// 	if (!isFocused) {
+	// 		setIsPolling(false)
+	// 		return
+	// 	}
 
-		setIsPolling(true)
+	// 	setIsPolling(true)
 
-		const interval = setInterval(() => {
-			void refetch()
-		}, POLLING_INTERVAL)
+	// 	const interval = setInterval(() => {
+	// 		void refetch()
+	// 	}, POLLING_INTERVAL)
 
-		// Also handle app state changes
-		const subscription = AppState.addEventListener('change', (state) => {
-			if (state === 'active' && isFocused) {
+	// 	// Also handle app state changes
+	// 	const subscription = AppState.addEventListener('change', (state) => {
+	// 		if (state === 'active' && isFocused) {
+	// 			void refetch()
+	// 		}
+	// 	})
+
+	// 	return () => {
+	// 		clearInterval(interval)
+	// 		subscription.remove()
+	// 		setIsPolling(false)
+	// 	}
+	// }, [isFocused, refetch])
+	useFocusEffect(
+		useCallback(() => {
+			const interval = setInterval(() => {
 				void refetch()
-			}
-		})
+			}, POLLING_INTERVAL)
 
-		return () => {
-			clearInterval(interval)
-			subscription.remove()
-			setIsPolling(false)
-		}
-	}, [isFocused, refetch])
+			return () => {
+				clearInterval(interval)
+			}
+		}, [refetch]),
+	)
 
 	// Create a map for quick product lookup
 	const productMap = useMemo(() => {
 		const map = new Map<string, (typeof products)[number]>()
-		products?.forEach((product) => {
+		for (const product of products) {
 			map.set(product.product_id, product)
-		})
+		}
 		return map
 	}, [products])
 
 	// Create a map for category ID → category name
 	const categoryMap = useMemo(() => {
 		const map = new Map<string, string>()
-		categories?.forEach((category) => {
+
+		for (const category of categories) {
 			map.set(category.category_id, category.category_name)
-		})
+		}
 		return map
 	}, [categories])
 
 	// Create a map for modification ID → modification name
 	const modificationMap = useMemo(() => {
 		const map = new Map<string, string>()
-		products?.forEach((product) => {
+
+		for (const product of products) {
 			// Get modifications from group_modifications
-			product.group_modifications?.forEach((group) => {
-				group.modifications?.forEach((mod) => {
-					if (mod.dish_modification_id != null) {
+			if (product.group_modifications)
+				for (const group of product.group_modifications) {
+					for (const module_ of group.modifications ?? []) {
 						map.set(
-							String(mod.dish_modification_id),
-							mod.modificator_name || mod.name,
+							String(module_.dish_modification_id),
+							module_.modificator_name || module_.name,
 						)
 					}
-				})
-			})
+				}
 			// Also check direct modifications array
-			product.modifications?.forEach((mod) => {
-				if (mod.dish_modification_id != null) {
+			if (product.modifications)
+				for (const module_ of product.modifications) {
 					map.set(
-						String(mod.dish_modification_id),
-						mod.modificator_name || mod.name,
+						String(module_.dish_modification_id),
+						module_.modificator_name || module_.name,
 					)
 				}
-			})
-		})
+		}
 		return map
 	}, [products])
 
@@ -374,7 +243,6 @@ export default function BaristaQueue() {
 
 	// Filter orders based on selected category
 	const filteredOrders = useMemo(() => {
-		if (!orders) return []
 		if (!selectedCategoryId) return orders
 
 		// Filter orders to only include products from the selected category
@@ -395,7 +263,7 @@ export default function BaristaQueue() {
 			</Head>
 			<ScreenContainer
 				contentContainerStyle={styles.container}
-				noScroll={!orders?.length}
+				noScroll={orders.length === 0}
 				ref={screenRef}
 				refreshControl={
 					<RefreshControl onRefresh={handleRefresh} refreshing={isLoading} />
@@ -407,26 +275,15 @@ export default function BaristaQueue() {
 					<H2>
 						<Trans>Order Queue</Trans>
 					</H2>
-					{isPolling && (
-						<View style={styles.pollingIndicator}>
-							<View
-								style={[
-									styles.pollingDot,
-									isFetching && styles.pollingDotActive,
-								]}
-							/>
-							<Text style={styles.pollingText}>Live</Text>
-						</View>
-					)}
 				</View>
 
 				{/* Category filter pills */}
 				{availableCategories.length > 0 && (
 					<RNScrollView
+						contentContainerStyle={styles.filterContent}
 						horizontal
 						showsHorizontalScrollIndicator={false}
 						style={styles.filterContainer}
-						contentContainerStyle={styles.filterContent}
 					>
 						<Pressable
 							onPress={() => setSelectedCategoryId(null)}
@@ -472,7 +329,7 @@ export default function BaristaQueue() {
 					</RNScrollView>
 				)}
 
-				{filteredOrders?.length ? (
+				{filteredOrders.length > 0 ? (
 					<View style={styles.ordersList}>
 						{filteredOrders.map((order) => {
 							const isDineIn = order.service_mode === '1' || !order.service_mode
@@ -480,7 +337,7 @@ export default function BaristaQueue() {
 							const isDelivery = order.service_mode === '3'
 							const rawTableName =
 								order.table_name ||
-								(order.table_id !== '0' ? order.table_id : null)
+								(order.table_id === '0' ? null : order.table_id)
 							const tableLabel = rawTableName ? `Mesa ${rawTableName}` : null
 							const orderDate = order.date_start || order.date_create
 							const minutesElapsed = getMinutesElapsed(orderDate)
@@ -550,6 +407,7 @@ export default function BaristaQueue() {
 									{order.products && order.products.length > 0 && (
 										<View style={styles.productsList}>
 											{[...order.products]
+												// eslint-disable-next-line unicorn/no-array-reverse
 												.reverse()
 												.map((orderProduct, index) => {
 													const productDetails = productMap.get(
@@ -601,15 +459,15 @@ export default function BaristaQueue() {
 															{modifiers && modifiers.length > 0 && (
 																<View style={styles.modifierTagsContainer}>
 																	{sortModifiers(modifiers).map(
-																		(mod, modIndex) => {
+																		(module_, moduleIndex) => {
 																			const colors = getModifierColor(
-																				mod.name,
-																				mod.group,
+																				module_.name,
+																				module_.group,
 																			)
-																			const icon = getModifierIcon(mod.name)
+																			const icon = getModifierIcon(module_.name)
 																			return (
 																				<View
-																					key={modIndex}
+																					key={moduleIndex}
 																					style={[
 																						styles.modifierTag,
 																						{ backgroundColor: colors.bg },
@@ -628,7 +486,7 @@ export default function BaristaQueue() {
 																							{ color: colors.text },
 																						]}
 																					>
-																						{mod.name}
+																						{module_.name}
 																					</Text>
 																				</View>
 																			)
@@ -642,15 +500,16 @@ export default function BaristaQueue() {
 																legacyModifications.length > 0 && (
 																	<View style={styles.modifierTagsContainer}>
 																		{legacyModifications.map(
-																			(mod, modIndex) => {
-																				const modName =
-																					mod.modification_name ||
-																					modificationMap.get(mod.m) ||
-																					`Mod #${mod.m}`
-																				const colors = getModifierColor(modName)
+																			(module_, moduleIndex) => {
+																				const moduleName =
+																					module_.modification_name ||
+																					modificationMap.get(module_.m) ||
+																					`Mod #${module_.m}`
+																				const colors =
+																					getModifierColor(moduleName)
 																				return (
 																					<View
-																						key={modIndex}
+																						key={moduleIndex}
 																						style={[
 																							styles.modifierTag,
 																							{ backgroundColor: colors.bg },
@@ -662,7 +521,7 @@ export default function BaristaQueue() {
 																								{ color: colors.text },
 																							]}
 																						>
-																							{modName}
+																							{moduleName}
 																						</Text>
 																					</View>
 																				)
@@ -706,6 +565,152 @@ export default function BaristaQueue() {
 			</ScreenContainer>
 		</>
 	)
+}
+
+/**
+ * Get color based on category name
+ */
+function getCategoryColor(categoryName: string | undefined): string {
+	if (!categoryName) return DEFAULT_CATEGORY_COLOR
+	return CATEGORY_COLORS[categoryName] || DEFAULT_CATEGORY_COLOR
+}
+
+/**
+ * Get minutes elapsed since the given date
+ */
+function getMinutesElapsed(dateString: string | undefined): number {
+	const date = parseDate(dateString)
+	if (!date || Number.isNaN(date.getTime())) return 0
+
+	const now = new Date()
+	const diffMs = now.getTime() - date.getTime()
+	return Math.floor(diffMs / 60_000)
+}
+
+/**
+ * Get color for a modifier based on name first, then group
+ */
+function getModifierColor(
+	name: string,
+	group?: string,
+): { bg: string; text: string } {
+	// First check by specific name
+	if (name in MODIFIER_NAME_COLORS) {
+		return MODIFIER_NAME_COLORS[name as keyof typeof MODIFIER_NAME_COLORS]
+	}
+	// Then by group
+	if (group && group in MODIFIER_GROUP_COLORS) {
+		return MODIFIER_GROUP_COLORS[group as keyof typeof MODIFIER_GROUP_COLORS]
+	}
+	// Default gray
+	return { bg: '#F5F5F5', text: '#757575' }
+}
+
+/**
+ * Get icon for a modifier (currently only temperature)
+ */
+function getModifierIcon(
+	name: string,
+): null | { color: string; name: 'flame' | 'snow' } {
+	if (HOT_MODIFIERS.has(name)) {
+		return { color: '#D32F2F', name: 'flame' }
+	}
+	if (COLD_MODIFIERS.has(name)) {
+		return { color: '#1976D2', name: 'snow' }
+	}
+	return null
+}
+
+/**
+ * Get relative time string (e.g., "5m", "1h 20m", "1d 2h")
+ */
+function getRelativeTime(dateString: string | undefined): string {
+	const date = parseDate(dateString)
+	if (!date || Number.isNaN(date.getTime())) return ''
+
+	const now = new Date()
+	const diffMs = now.getTime() - date.getTime()
+	const diffMinutes = Math.floor(diffMs / 60_000)
+
+	// Handle future dates (shouldn't happen but just in case)
+	if (diffMinutes < 0) return 'Just now'
+	if (diffMinutes < 1) return 'Just now'
+	if (diffMinutes < 60) return `${diffMinutes}m`
+
+	const hours = Math.floor(diffMinutes / 60)
+	if (hours < 24) {
+		const minutes = diffMinutes % 60
+		if (minutes === 0) return `${hours}h`
+		return `${hours}h ${minutes}m`
+	}
+
+	// More than 24 hours - show days
+	const days = Math.floor(hours / 24)
+	const remainingHours = hours % 24
+	if (remainingHours === 0) return `${days}d`
+	return `${days}d ${remainingHours}h`
+}
+
+/**
+ * Get color for time based on how old the order is
+ * - Normal (< 5 min): default gray
+ * - Warning (5-10 min): yellow/amber
+ * - Caution (10-15 min): orange
+ * - Urgent (> 15 min): red
+ */
+function getTimeColor(minutes: number): string {
+	if (minutes >= 15) return '#D32F2F' // Red
+	if (minutes >= 10) return '#F57C00' // Orange
+	if (minutes >= 5) return '#FFA000' // Amber/Yellow
+	return '#8E8E93' // Default gray
+}
+
+/**
+ * Parse date from Poster API - can be Unix timestamp (seconds) or "Y-m-d H:i:s" format
+ */
+function parseDate(dateValue: string | undefined): Date | null {
+	if (!dateValue) return null
+
+	// Check if it looks like a Unix timestamp (all digits, reasonable range)
+	const numberValue = Number(dateValue)
+	if (
+		!Number.isNaN(numberValue) &&
+		numberValue > 1_000_000_000 &&
+		numberValue < 9_999_999_999
+	) {
+		// Unix timestamp in seconds
+		return new Date(numberValue * 1000)
+	}
+	if (!Number.isNaN(numberValue) && numberValue > 9_999_999_999) {
+		// Unix timestamp in milliseconds
+		return new Date(numberValue)
+	}
+
+	// Format: "2023-12-25 14:30:00" - assume Mexico City timezone (UTC-6)
+	const [datePart, timePart] = dateValue.split(' ')
+	if (!datePart || !timePart) return null
+	return new Date(`${datePart}T${timePart}-06:00`)
+}
+
+/**
+ * Sort modifiers by priority: temperature → milk → coffee/matcha type → extras → other
+ */
+function sortModifiers(
+	modifiers: { group: string; name: string }[],
+): { group: string; name: string }[] {
+	// eslint-disable-next-line unicorn/no-array-sort
+	return [...modifiers].sort((a, b) => {
+		// First try by specific modifier name
+		const namePriorityA = MODIFIER_NAME_PRIORITY[a.name] ?? 99
+		const namePriorityB = MODIFIER_NAME_PRIORITY[b.name] ?? 99
+		if (namePriorityA !== namePriorityB) {
+			return namePriorityA - namePriorityB
+		}
+		// Fall back to group priority
+		const priorityA = MODIFIER_GROUP_PRIORITY[a.group] ?? 99
+		const priorityB = MODIFIER_GROUP_PRIORITY[b.group] ?? 99
+		return priorityA - priorityB
+	})
 }
 
 const styles = StyleSheet.create((theme) => ({
@@ -792,6 +797,20 @@ const styles = StyleSheet.create((theme) => ({
 	filterPillTextActive: {
 		color: 'white',
 	},
+	guestsBadge: {
+		alignItems: 'center',
+		backgroundColor: '#E8EAF6', // Light indigo
+		borderRadius: theme.borderRadius.sm,
+		flexDirection: 'row',
+		gap: 4,
+		paddingHorizontal: theme.spacing.sm,
+		paddingVertical: 2,
+	},
+	guestsText: {
+		color: '#5C6BC0', // Indigo
+		fontSize: 12,
+		fontWeight: '600',
+	},
 	headerRow: {
 		alignItems: 'center',
 		flexDirection: 'row',
@@ -805,15 +824,15 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: theme.spacing.sm,
 		paddingVertical: theme.spacing.xs,
 	},
-	modifierTagText: {
-		fontSize: 14,
-		fontWeight: '500',
-	},
 	modifierTagsContainer: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		gap: theme.spacing.xs,
 		marginLeft: 32, // Align with product name (badge width + gap)
+	},
+	modifierTagText: {
+		fontSize: 14,
+		fontWeight: '500',
 	},
 	orderCard: {
 		gap: theme.spacing.sm,
@@ -832,26 +851,12 @@ const styles = StyleSheet.create((theme) => ({
 		flexWrap: 'wrap',
 		gap: theme.spacing.sm,
 	},
-	orderTime: {
-		color: theme.colors.gray.text,
-		fontSize: 13,
-	},
 	ordersList: {
 		gap: theme.spacing.md,
 	},
-	guestsBadge: {
-		alignItems: 'center',
-		backgroundColor: '#E8EAF6', // Light indigo
-		borderRadius: theme.borderRadius.sm,
-		flexDirection: 'row',
-		gap: 4,
-		paddingHorizontal: theme.spacing.sm,
-		paddingVertical: 2,
-	},
-	guestsText: {
-		color: '#5C6BC0', // Indigo
-		fontSize: 12,
-		fontWeight: '600',
+	orderTime: {
+		color: theme.colors.gray.text,
+		fontSize: 13,
 	},
 	pollingDot: {
 		backgroundColor: '#34C759',
