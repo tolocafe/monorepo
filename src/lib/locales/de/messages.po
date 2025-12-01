@@ -655,10 +655,6 @@ msgstr ""
 msgid "Processing Payment..."
 msgstr "Zahlung wird verarbeitet..."
 
-#: src/app/(tabs)/orders/[id].tsx:146
-#~ msgid "Product #{0}"
-#~ msgstr "Produkt #{0}"
-
 #: src/app/(tabs)/(home)/[id].tsx:187
 msgid "Product not found"
 msgstr "Produkt nicht gefunden"
@@ -748,10 +744,6 @@ msgstr "Anmelden"
 #: src/app/(tabs)/orders/index.tsx:103
 msgid "Sign In Required"
 msgstr "Anmeldung erforderlich"
-
-#: src/app/sign-in.tsx:255
-#~ msgid "Sign in to add \"{itemName}\" to your bag"
-#~ msgstr "Melden Sie sich an, um „{itemName}\" zu Ihrer Bestellung hinzuzufügen"
 
 #: src/app/sign-in.tsx:315
 msgid "Sign in to add “{itemName}” to your bag"

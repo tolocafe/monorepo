@@ -655,10 +655,6 @@ msgstr ""
 msgid "Processing Payment..."
 msgstr "Processando Pagamento..."
 
-#: src/app/(tabs)/orders/[id].tsx:146
-#~ msgid "Product #{0}"
-#~ msgstr "Produto #{0}"
-
 #: src/app/(tabs)/(home)/[id].tsx:187
 msgid "Product not found"
 msgstr "Produto não encontrado"
