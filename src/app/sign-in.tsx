@@ -8,7 +8,7 @@ import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import { Button } from '@/components/Button'
@@ -35,6 +35,10 @@ const SignInSchema = z.object({
 		.max(6, 'The code must be 6 digits')
 		.or(z.literal('')),
 })
+
+const TextIonicons = withUnistyles(Ionicons, (theme) => ({
+	color: theme.colors.gray.text,
+}))
 
 export default function SignIn() {
 	const { t } = useLingui()
@@ -297,6 +301,14 @@ export default function SignIn() {
 				style={styles.container}
 				withTopPadding
 			>
+				{Platform.OS === 'web' && (
+					<View style={styles.header}>
+						<Pressable onPress={() => router.back()}>
+							<TextIonicons name="close" size={30} />
+						</Pressable>
+					</View>
+				)}
+
 				{itemName && (
 					<View style={styles.messageContainer}>
 						<Paragraph style={styles.message}>
@@ -527,6 +539,11 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		marginTop: theme.spacing.md,
 	},
+	header: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		justifyContent: 'flex-end',
+	},
 	backButtonRow: {
 		alignItems: 'center',
 		flexDirection: 'row',
@@ -538,7 +555,7 @@ const styles = StyleSheet.create((theme) => ({
 	container: {
 		_web: {
 			alignItems: 'center',
-			backgroundColor: 'rgba(1, 1, 1, 0.1)',
+			backgroundColor: 'rgba(1, 1, 1, 0.5)',
 			justifyContent: 'center',
 		},
 	},
@@ -547,8 +564,12 @@ const styles = StyleSheet.create((theme) => ({
 			backgroundColor: theme.colors.gray.background,
 			borderRadius: theme.borderRadius.lg,
 			height: '100%',
-			maxHeight: 600,
-			maxWidth: 600,
+			maxHeight: {
+				md: 600,
+			},
+			maxWidth: {
+				md: 600,
+			},
 			width: '100%',
 		},
 		gap: theme.spacing.md,

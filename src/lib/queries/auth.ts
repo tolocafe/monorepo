@@ -7,7 +7,7 @@ import { api } from '@/lib/services/api-service'
 
 import type { ClientData } from '@/lib/api'
 
-import { STORAGE_KEYS } from '../constants/storage'
+import { STORAGE_KEYS } from '@/lib/constants/storage'
 
 export type RequestOtpMutationOptions = {
 	birthdate?: string

@@ -8,6 +8,7 @@ import type {
 	Category,
 	ClientData,
 	Coffee,
+	DashTransaction,
 	Product,
 	TableBill,
 } from '@/lib/api'
@@ -78,6 +79,8 @@ export const api = {
 	},
 
 	orders: {
+		baristaQueue: () =>
+			privateClient.get<DashTransaction[]>('orders/barista/queue').json(),
 		create: (orderData: CreateOrder) =>
 			privateClient
 				.post<CreateOrderResponse>('orders', { json: orderData })

@@ -12,6 +12,7 @@ import { generateOtp, storeOtp, verifyOtp } from '../utils/otp'
 import { api, sendSms } from '../utils/poster'
 
 import type { Bindings } from '../types'
+import { defaultJsonHeaders } from 'workers/utils/headers'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
 
@@ -210,7 +211,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		if (!client) throw new HTTPException(404, { message: 'Client not found' })
 
-		return c.json(client)
+		return c.json(client, 200, defaultJsonHeaders)
 	})
 	.get('/self/sessions', async (context) => {
 		const [clientId] = await authenticate(context, context.env.JWT_SECRET)

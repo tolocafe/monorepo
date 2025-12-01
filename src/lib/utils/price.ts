@@ -25,7 +25,7 @@ export function formatPrice(value: number | string): string {
 }
 
 export function getProductBaseCost<TFormat extends false | true | undefined>(
-	product: null | Product,
+	product: null | Product | undefined,
 	format: TFormat = true as TFormat,
 ): TFormat extends false ? number : string {
 	const cost = Number(
@@ -47,7 +47,7 @@ export function getProductTotalCost({
 	quantity,
 }: {
 	modifications: Record<string, number>
-	product: Product | string
+	product: Product | string | undefined
 	quantity: number
 }) {
 	const productData =
@@ -61,7 +61,7 @@ export function getProductTotalCost({
 
 	const modificationsPrice = Object.entries(modifications).reduce(
 		(sum, [modificationGroupId, modificationId]) => {
-			const modificationGroup = productData.group_modifications?.find(
+			const modificationGroup = productData?.group_modifications?.find(
 				(modification) =>
 					modification.dish_modification_group_id.toString() ===
 					modificationGroupId,

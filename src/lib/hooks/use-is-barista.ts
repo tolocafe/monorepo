@@ -1,0 +1,17 @@
+import { useQuery } from '@tanstack/react-query'
+
+import { selfQueryOptions } from '@/lib/queries/auth'
+
+const BARISTA_GROUP_IDS = ['8', '9'] // 8 = owners, 9 = members
+
+/**
+ * Hook to check if the current user is a barista (staff member)
+ * @returns isBarista - Whether the user is in a barista group
+ */
+export function useIsBarista(): boolean {
+	const { data: user } = useQuery(selfQueryOptions)
+
+	return Boolean(
+		user?.client_groups_id && BARISTA_GROUP_IDS.includes(user.client_groups_id),
+	)
+}

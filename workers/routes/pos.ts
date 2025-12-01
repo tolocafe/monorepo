@@ -59,37 +59,37 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 			totalPayedSum: formatAmount(customer?.total_payed_sum),
 		}
 
-		const menu = products.map((product) => ({
-			groupModifications: product.group_modifications?.map((group) => ({
-				modifications: group.modifications.map((modification) => ({
+		const menu = products
+			.filter((product) => product.hidden !== '1')
+			.map((product) => ({
+				groupModifications: product.group_modifications?.map((group) => ({
+					modifications: group.modifications.map((modification) => ({
+						name: modification.name,
+						price: modification.price,
+					})),
+					name: group.name,
+				})),
+				modifications: product.modifications?.map((modification) => ({
 					name: modification.name,
 					price: modification.price,
 				})),
-				name: group.name,
-			})),
-			modifications: product.modifications?.map((modification) => ({
-				name: modification.name,
-				price: modification.price,
-			})),
-			name: product.product_name,
-		}))
+				name: product.product_name,
+			}))
 
 		const customerTransactions = transactions.map((transaction) => ({
 			amount: formatAmount(transaction.sum),
 			date: new Date(transaction.date_start).toISOString(),
 			guestCount: transaction.guests_count,
-			products: transaction.products?.map((product) => {
-				const productDetails = products.find(
-					(p) => p.product_id === product.product_id,
+			products: transaction.products?.map((transactionProduct) => {
+				const menuProduct = products.find(
+					(p) => p.product_id === transactionProduct.product_id,
 				)
 
 				return {
-					category: productDetails?.category_name,
-					modifications: productDetails?.modifications?.map((modification) => ({
-						name: modification.name,
-						price: modification.price,
-					})),
-					name: productDetails?.product_name,
+					category: menuProduct?.category_name,
+					// modifications: [], // add modifications for this product order
+					name: menuProduct?.product_name,
+					number: transactionProduct.num,
 				}
 			}),
 			serviceMode: getServiceMode(transaction.service_mode),
@@ -120,7 +120,7 @@ Output:
 - Do NOT greet, do NOT explain your reasoning, do NOT repeat raw data.
 
 Constraints:
-- Use only products that appear in the "available_products" list.
+- Use only products that appear in the "menu" list.
 - If history is too short or inconsistent, say so briefly and still give 1 safe recommendation if possible.
 `,
 							role: 'system',

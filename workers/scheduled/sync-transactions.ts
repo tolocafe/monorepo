@@ -21,7 +21,7 @@ type TransactionData = {
 	products?: {
 		num: string
 		product_id: string
-		product_sum: string
+		product_sum?: string
 	}[]
 	/**
 	 * Transaction status

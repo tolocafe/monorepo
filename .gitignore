@@ -4,6 +4,7 @@
 /certs
 .wrangler/
 .vscode/
+.playwright-mcp/
 
 node_modules/
 package-lock.json
@@ -37,3 +38,4 @@ yarn-error.*
 coverage/
 
 .sentryclirc
+

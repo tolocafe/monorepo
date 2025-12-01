@@ -19,7 +19,6 @@ import { getProductBaseCost } from '@/lib/utils/price'
 import type { Product } from '@/lib/api'
 
 const UniImage = withUnistyles(Image)
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const UniIonicons = withUnistyles(Ionicons, (theme) => ({
 	color: theme.colors.gray.background,
 }))
@@ -29,83 +28,81 @@ type Props = {
 	onAddToBag: (item: Product) => void
 }
 
-export default function MenuListItem({ item, onAddToBag }: Props) {
-	const scale = useSharedValue(1)
+export default function MenuListItem(props: Props) {
+	const { item, onAddToBag } = props
+
+	const scaleValue = useSharedValue(1)
+
 	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
+		transform: [{ scale: scaleValue.get() }],
 	}))
 
 	const cost = getProductBaseCost(item, true)
 	const hasModifications = 'modifications' in item
 
 	return (
-		<Link asChild href={`/(tabs)/(home)/${item.product_id}`}>
-			<AnimatedPressable
-				onPressIn={() => {
-					// eslint-disable-next-line react-hooks/immutability
-					scale.value = withSpring(0.96)
-				}}
-				onPressOut={() => {
-					// eslint-disable-next-line react-hooks/immutability
-					scale.value = withSpring(1)
-				}}
-				style={animatedStyle}
-			>
-				<Card padded={false} style={styles.menuItem}>
-					<View style={styles.menuItemImageContainer}>
-						{item.photo ? (
-							<UniImage
-								contentFit="cover"
-								placeholder={{
-									cacheKey: `${item.product_id}-placeholder`,
-									uri: getImageUrl(item.photo, {
-										blur: 100,
-										quality: 20,
-										width: 350,
-									}),
-								}}
-								placeholderContentFit="cover"
-								source={{
-									uri: getImageUrl(item.photo, {
-										quality: 85,
-										width: 400,
-									}),
-								}}
-								style={styles.image}
-								transition={200}
-							/>
-						) : (
-							<View aria-hidden style={styles.menuItemImage} />
-						)}
-					</View>
-					<View style={styles.menuItemContent}>
-						<H4 numberOfLines={2}>{item.product_name}</H4>
-						{item.product_production_description ? (
-							<Text>{item.product_production_description}</Text>
-						) : null}
-						<View style={styles.menuItemFooter}>
-							<Text>
-								{hasModifications ? <Trans>From {cost}</Trans> : cost}
-							</Text>
-							<View style={styles.menuItemActions}>
-								<TouchableOpacity
-									disabled={!cost}
-									onPress={(event) => {
-										event.stopPropagation()
-										onAddToBag(item)
+		<Animated.View style={[animatedStyle, styles.menuItemContainer]}>
+			<Link href={`/(tabs)/(home)/${item.product_id}`} asChild>
+				<Pressable
+					style={styles.link}
+					onPressIn={() => scaleValue.set(withSpring(0.96))}
+					onPressOut={() => scaleValue.set(withSpring(1))}
+				>
+					<Card padded={false} style={styles.menuItem}>
+						<View style={styles.menuItemImageContainer}>
+							{item.photo ? (
+								<UniImage
+									contentFit="cover"
+									placeholder={{
+										cacheKey: `${item.product_id}-placeholder`,
+										uri: getImageUrl(item.photo, {
+											blur: 100,
+											quality: 20,
+											width: 350,
+										}),
 									}}
-									style={styles.addToBagButton}
-								>
-									<UniIonicons name="add" size={26} />
-								</TouchableOpacity>
+									placeholderContentFit="cover"
+									source={{
+										uri: getImageUrl(item.photo, {
+											quality: 85,
+											width: 400,
+										}),
+									}}
+									style={styles.image}
+									transition={200}
+								/>
+							) : (
+								<View aria-hidden style={styles.image} />
+							)}
+						</View>
+						<View style={styles.menuItemContent}>
+							<H4 numberOfLines={2}>{item.product_name}</H4>
+							{item.product_production_description ? (
+								<Text>{item.product_production_description}</Text>
+							) : null}
+							<View style={styles.menuItemFooter}>
+								<Text>
+									{hasModifications ? <Trans>From {cost}</Trans> : cost}
+								</Text>
 							</View>
 						</View>
-					</View>
-				</Card>
-			</AnimatedPressable>
-		</Link>
+					</Card>
+				</Pressable>
+			</Link>
+			<View style={styles.menuItemActions}>
+				<TouchableOpacity
+					disabled={!cost}
+					onPress={() => onAddToBag(item)}
+					style={styles.addToBagButton}
+				>
+					<UniIonicons name="add" size={26} />
+				</TouchableOpacity>
+			</View>
+		</Animated.View>
 	)
 }
+
+const ADD_TO_BAG_BUTTON_SIZE = 36
 
 const styles = StyleSheet.create((theme, runtime) => {
 	const itemSize = Math.min((runtime.screen.width - 10) * 0.4, 200)
@@ -119,19 +116,28 @@ const styles = StyleSheet.create((theme, runtime) => {
 			justifyContent: 'center',
 			width: 36,
 		},
+		link: {
+			flex: 1,
+		},
+		menuItemContainer: {
+			width: itemSize,
+			position: 'relative',
+		},
 		image: {
-			height: '100%',
 			objectFit: 'cover',
-			width: '100%',
+			flex: 1,
 		},
 		menuItem: {
-			flex: 1,
-			width: itemSize,
+			height: '100%',
 		},
 		menuItemActions: {
 			alignItems: 'center',
 			flexDirection: 'row',
 			gap: theme.spacing.sm,
+			position: 'absolute',
+			right: theme.spacing.sm,
+			bottom: theme.spacing.sm,
+			zIndex: 1,
 		},
 		menuItemContent: {
 			flex: 1,
@@ -139,15 +145,13 @@ const styles = StyleSheet.create((theme, runtime) => {
 			justifyContent: 'space-between',
 			padding: 10,
 			paddingVertical: theme.spacing.sm,
+			paddingRight: ADD_TO_BAG_BUTTON_SIZE + theme.spacing.md,
 		},
 		menuItemFooter: {
 			alignItems: 'center',
 			flexDirection: 'row',
 			justifyContent: 'space-between',
-		},
-		menuItemImage: {
-			height: '100%',
-			width: '100%',
+			minHeight: ADD_TO_BAG_BUTTON_SIZE,
 		},
 		menuItemImageContainer: {
 			backgroundColor: theme.colors.gray.border,

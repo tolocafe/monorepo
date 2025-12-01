@@ -184,13 +184,18 @@ const darkTheme = {
 
 export const breakpoints = {
 	/* eslint-disable perfectionist/sort-objects */
+	/** default */
 	xs: 0,
+	/** phone */
 	sm: 576,
+	/** tablet */
 	md: 768,
+	/** laptop */
 	lg: 992,
+	/** desktop */
 	xl: 1200,
-	superLarge: 2000,
-	tvLike: 4000,
+	/** tv */
+	xxl: 4000,
 	/* eslint-enable perfectionist/sort-objects */
 } as const
 

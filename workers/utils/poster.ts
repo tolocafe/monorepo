@@ -5,6 +5,7 @@ import type {
 	Category,
 	ClientData,
 	DashTransaction,
+	IncomingOrder,
 	PosterResponse,
 	Product,
 	UpdateClientBody,
@@ -229,6 +230,40 @@ export const api = {
 				},
 			).then((response) => response.at(0) ?? null)
 		},
+		/**
+		 * Get products for a specific transaction with modification names
+		 * @see https://dev.joinposter.com/en/docs/v3/web/dash/getTransactionProducts
+		 */
+		async getTransactionProducts(
+			token: string,
+			transactionId: string,
+		): Promise<
+			{
+				category_id: string
+				modification_id: string
+				modificator_name: string | null
+				num: string
+				product_id: string
+				product_name: string
+			}[]
+		> {
+			const data = (await fetch(
+				`${BASE_URL}/dash.getTransactionProducts?${getSearchParameters({ token, transaction_id: transactionId })}`,
+			).then((response) => response.json())) as PosterResponse<
+				{
+					category_id: string
+					modification_id: string
+					modificator_name: string | null
+					num: string
+					product_id: string
+					product_name: string
+				}[]
+			>
+
+			if (data.response != null) return data.response
+
+			return []
+		},
 		getTransactions(
 			token: string,
 			options?: {
@@ -354,6 +389,27 @@ export const api = {
 			getCurrentScope().setExtra('Fetch Data', data)
 
 			throw new Error('Failed to get incoming order')
+		},
+		/**
+		 * Get all incoming orders
+		 * @see https://dev.joinposter.com/en/docs/v3/web/incomingOrders/getIncomingOrders
+		 */
+		async getIncomingOrders(
+			token: string,
+			options?: {
+				/** Filter by status: 0—new, 1—accepted, 7—canceled */
+				status?: '0' | '1' | '7'
+			},
+		) {
+			const data = (await fetch(
+				`${BASE_URL}/incomingOrders.getIncomingOrders?${getSearchParameters({ token, ...options })}`,
+			).then((response) => response.json())) as PosterResponse<IncomingOrder[]>
+
+			if (data.response != null) return data.response
+
+			getCurrentScope().setExtra('Fetch Data', data)
+
+			throw new Error('Failed to get incoming orders')
 		},
 	},
 	menu: {

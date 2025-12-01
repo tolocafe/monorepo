@@ -48,38 +48,37 @@ type StringifyValues<EnvType extends Record<string, unknown>> = {
 		: string
 }
 declare namespace NodeJS {
-	interface ProcessEnv
-		extends StringifyValues<
-			Pick<
-				Cloudflare.Env,
-				| 'EXPO_PUBLIC_API_URL'
-				| 'EXPO_PUBLIC_POSTER_API_URL'
-				| 'EXPO_PUBLIC_SENTRY_DSN'
-				| 'EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY'
-				| 'SENTRY_AUTH_TOKEN'
-				| 'JWT_SECRET'
-				| 'POSTER_TOKEN'
-				| 'AWS_ACCESS_KEY_ID'
-				| 'AWS_SECRET_ACCESS_KEY'
-				| 'SENTRY_DSN'
-				| 'TEST_OTP_CODE'
-				| 'TEST_PHONE_NUMBERS'
-				| 'STRIPE_SECRET_KEY'
-				| 'WEBFLOW_API_TOKEN'
-				| 'STRIPE_WEBHOOK_SECRET'
-				| 'POSTER_APPLICATION_SECRET'
-				| 'WEBFLOW_MENU_COLLECTION_ID'
-				| 'WEBFLOW_COFFEES_COLLECTION_ID'
-				| 'GA4_API_SECRET'
-				| 'GA4_MEASUREMENT_ID'
-				| 'JWT_PASS_SECRET'
-				| 'POSTER_ACCOUNT_NUMBER'
-				| 'BROADCAST_SECRET'
-				| 'CLOUDFLARE_ACCOUNT_ID'
-				| 'CLOUDFLARE_DATABASE_ID'
-				| 'CLOUDFLARE_D1_TOKEN'
-			>
-		> {}
+	interface ProcessEnv extends StringifyValues<
+		Pick<
+			Cloudflare.Env,
+			| 'EXPO_PUBLIC_API_URL'
+			| 'EXPO_PUBLIC_POSTER_API_URL'
+			| 'EXPO_PUBLIC_SENTRY_DSN'
+			| 'EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY'
+			| 'SENTRY_AUTH_TOKEN'
+			| 'JWT_SECRET'
+			| 'POSTER_TOKEN'
+			| 'AWS_ACCESS_KEY_ID'
+			| 'AWS_SECRET_ACCESS_KEY'
+			| 'SENTRY_DSN'
+			| 'TEST_OTP_CODE'
+			| 'TEST_PHONE_NUMBERS'
+			| 'STRIPE_SECRET_KEY'
+			| 'WEBFLOW_API_TOKEN'
+			| 'STRIPE_WEBHOOK_SECRET'
+			| 'POSTER_APPLICATION_SECRET'
+			| 'WEBFLOW_MENU_COLLECTION_ID'
+			| 'WEBFLOW_COFFEES_COLLECTION_ID'
+			| 'GA4_API_SECRET'
+			| 'GA4_MEASUREMENT_ID'
+			| 'JWT_PASS_SECRET'
+			| 'POSTER_ACCOUNT_NUMBER'
+			| 'BROADCAST_SECRET'
+			| 'CLOUDFLARE_ACCOUNT_ID'
+			| 'CLOUDFLARE_DATABASE_ID'
+			| 'CLOUDFLARE_D1_TOKEN'
+		>
+	> {}
 }
 
 // Begin runtime types
@@ -2099,8 +2098,10 @@ declare var Request: {
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/Request)
  */
-interface Request<CfHostMetadata = unknown, Cf = CfProperties<CfHostMetadata>>
-	extends Body {
+interface Request<
+	CfHostMetadata = unknown,
+	Cf = CfProperties<CfHostMetadata>,
+> extends Body {
 	/**
 	 * The **`clone()`** method of the Request interface creates a copy of the current `Request` object.
 	 *
@@ -3123,9 +3124,7 @@ interface TextDecoderStreamTextDecoderStreamInit {
  *
  * [MDN Reference](https://developer.mozilla.org/docs/Web/API/ByteLengthQueuingStrategy)
  */
-declare class ByteLengthQueuingStrategy
-	implements QueuingStrategy<ArrayBufferView>
-{
+declare class ByteLengthQueuingStrategy implements QueuingStrategy<ArrayBufferView> {
 	constructor(init: QueuingStrategyInit)
 	/**
 	 * The read-only **`ByteLengthQueuingStrategy.highWaterMark`** property returns the total number of bytes that can be contained in the internal queue before backpressure is applied.
@@ -8234,8 +8233,7 @@ interface IncomingRequestCfPropertiesBotManagement {
 	 */
 	clientTrustScore: number
 }
-interface IncomingRequestCfPropertiesBotManagementEnterprise
-	extends IncomingRequestCfPropertiesBotManagement {
+interface IncomingRequestCfPropertiesBotManagementEnterprise extends IncomingRequestCfPropertiesBotManagement {
 	/**
 	 * Results of Cloudflare's Bot Management analysis
 	 */
@@ -9706,7 +9704,8 @@ declare namespace CloudflareWorkersModule {
 	export abstract class WorkflowEntrypoint<
 		Env = unknown,
 		T extends Rpc.Serializable<T> | unknown = unknown,
-	> implements Rpc.WorkflowEntrypointBranded
+	>
+		implements Rpc.WorkflowEntrypointBranded
 	{
 		[Rpc.__WORKFLOW_ENTRYPOINT_BRAND]: never
 		protected ctx: ExecutionContext

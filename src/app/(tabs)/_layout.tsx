@@ -7,6 +7,7 @@ import Head from 'expo-router/head'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Tabs from '@/components/Tabs'
+import { useIsBarista } from '@/lib/hooks/use-is-barista'
 import { useCurrentOrderItemsCount } from '@/lib/stores/order-store'
 
 export const unstable_settings = {
@@ -17,7 +18,7 @@ export default function TabLayout() {
 	const { t } = useLingui()
 
 	const itemsCount = useCurrentOrderItemsCount()
-
+	const isBarista = useIsBarista()
 	const { theme } = useUnistyles()
 
 	return (
@@ -109,6 +110,35 @@ export default function TabLayout() {
 							)
 						},
 						title: t`Orders`,
+					}}
+				/>
+				<Tabs.Screen
+					name="queue"
+					options={{
+						// href: isBarista ? '/(tabs)/queue' : null,
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore - bottom-tabs library has incomplete type definitions
+						tabBarIcon({ focused }: { focused: boolean }) {
+							if (Platform.OS === 'ios') {
+								return {
+									sfSymbol: focused ? 'list.clipboard.fill' : 'list.clipboard',
+								}
+							}
+
+							return (
+								<Ionicons
+									color={
+										focused ? theme.colors.verde.solid : theme.colors.gray.solid
+									}
+									name={focused ? 'list' : 'list-outline'}
+									size={24}
+								/>
+							)
+						},
+						sceneStyle: isBarista ? undefined : { display: 'none' },
+						title: t`Queue`,
+						href: null, // expo routers
+						tabBarItemStyle: isBarista ? undefined : { display: 'none' }, // custom routers
 					}}
 				/>
 				<Tabs.Screen

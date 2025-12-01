@@ -49,7 +49,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	},
 	name: 'TOLO',
 	newArchEnabled: true,
-	orientation: 'portrait',
+	orientation: 'default',
 	owner: 'tolo-cafe',
 	plugins: [
 		'expo-font',

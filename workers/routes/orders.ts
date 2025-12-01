@@ -9,6 +9,60 @@ import { api } from 'workers/utils/poster'
 import type { Product } from '@common/api'
 import type { Bindings } from 'workers/types'
 
+const BARISTA_GROUP_IDS = ['8', '9'] // 8 = owners, 9 = members
+
+// Modifiers to ignore (not displayed in barista queue)
+const IGNORED_MODIFIERS = ['Sin Desechable', 'Desechable', 'Para llevar']
+
+/**
+ * Build a map of modifier name → group name from product modifications
+ */
+function buildModifierGroupMap(products: Product[]): Map<string, string> {
+	const map = new Map<string, string>()
+
+	for (const product of products) {
+		// Check group_modifications
+		for (const group of product.group_modifications ?? []) {
+			for (const mod of group.modifications ?? []) {
+				const modName = mod.modificator_name || mod.name
+				if (modName && !map.has(modName)) {
+					map.set(modName, group.name)
+				}
+			}
+		}
+
+		// Check direct modifications (usually single-option modifiers)
+		for (const mod of product.modifications ?? []) {
+			const modName = mod.modificator_name || mod.name
+			if (modName && !map.has(modName)) {
+				// Direct modifications don't have a group, use a generic category
+				map.set(modName, 'Option')
+			}
+		}
+	}
+
+	return map
+}
+
+/**
+ * Parse comma-separated modifier string into array of modifier objects
+ */
+function parseModifiers(
+	modifierString: string | null | undefined,
+	modifierGroupMap: Map<string, string>,
+): { group: string; name: string }[] {
+	if (!modifierString) return []
+
+	return modifierString
+		.split(',')
+		.map((m) => m.trim())
+		.filter((m) => m && !IGNORED_MODIFIERS.includes(m))
+		.map((name) => ({
+			group: modifierGroupMap.get(name) || 'Other',
+			name,
+		}))
+}
+
 const orders = new Hono<{ Bindings: Bindings }>()
 	.get('/', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
@@ -19,6 +73,79 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		})
 
 		return c.json(orders)
+	})
+	.get('/barista/queue', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+
+		// Verify user is a barista
+		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
+
+		if (
+			!client?.client_groups_id ||
+			!BARISTA_GROUP_IDS.includes(client.client_groups_id)
+		) {
+			throw new HTTPException(403, { message: 'Access denied' })
+		}
+
+		// Fetch products and orders in parallel
+		const [orders, allProducts] = await Promise.all([
+			api.dash.getTransactions(c.env.POSTER_TOKEN, {
+				include_products: 'true',
+				status: '1', // Only open transactions
+			}),
+			api.menu.getMenuProducts(c.env.POSTER_TOKEN),
+		])
+
+		// Build modifier → group map from all products
+		const modifierGroupMap = buildModifierGroupMap(allProducts)
+
+		// Filter to only show orders that need preparation (Open, Preparing, Ready)
+		const activeOrders = orders.filter((order) => {
+			const status = Number(order.processing_status)
+			return status === 10 || status === 20 || status === 30
+		})
+
+		// Augment each order with detailed product info (including modifications array)
+		const augmentedOrders = await Promise.all(
+			activeOrders.map(async (order) => {
+				try {
+					const detailedProducts = await api.dash.getTransactionProducts(
+						c.env.POSTER_TOKEN,
+						order.transaction_id,
+					)
+
+					// Only use detailed products if we got results
+					if (detailedProducts && detailedProducts.length > 0) {
+						return {
+							...order,
+							products: detailedProducts.map((p) => ({
+								category_id: p.category_id,
+								// Parse modifiers into array with group names
+								modifiers: parseModifiers(p.modificator_name, modifierGroupMap),
+								num: p.num,
+								product_id: p.product_id,
+								product_name: p.product_name,
+							})),
+						}
+					}
+
+					// Otherwise keep original products
+					return order
+				} catch {
+					// If fetching detailed products fails, return original order
+					return order
+				}
+			}),
+		)
+
+		// Sort by date (oldest first - FIFO for barista queue)
+		augmentedOrders.sort((a, b) => {
+			const dateA = new Date(a.date_start).getTime()
+			const dateB = new Date(b.date_start).getTime()
+			return dateA - dateB
+		})
+
+		return c.json(augmentedOrders)
 	})
 	.get('/:id', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)

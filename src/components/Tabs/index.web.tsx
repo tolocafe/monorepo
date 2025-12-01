@@ -20,6 +20,7 @@ import type { TabTriggerSlotProps } from 'expo-router/ui'
 
 import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { breakpoints } from '@/lib/styles/unistyles'
+import { useIsBarista } from '@/lib/hooks/use-is-barista'
 
 const DefaultBottomTabs = createBottomTabNavigator()
 const ExpoDefaultBottomTabs = DefaultBottomTabs.Navigator
@@ -32,15 +33,17 @@ type IoniconName = ComponentProps<typeof Ionicons>['name']
 type SideTabButtonProps = TabTriggerSlotProps & {
 	icon: IoniconName
 	label: string
+	isHidden?: boolean
 }
 
 const UniImage = withUnistyles(Image)
 
-function DesktopSideTabs(_props: Omit<BottomTabNavigatorProps, 'id'>) {
+function DesktopSideTabs(props: Omit<BottomTabNavigatorProps, 'id'>) {
 	const { t } = useLingui()
+	const isBarista = useIsBarista()
 
 	return (
-		<UITabs>
+		<UITabs {...props}>
 			{/* Main content area */}
 			<View style={styles.contentArea}>
 				<UITabSlot />
@@ -64,6 +67,13 @@ function DesktopSideTabs(_props: Omit<BottomTabNavigatorProps, 'id'>) {
 					<UITabTrigger asChild href="/orders" name="orders">
 						<SideTabButton icon="receipt-outline" label={t`Orders`} />
 					</UITabTrigger>
+					<UITabTrigger asChild href="/queue" name="queue">
+						<SideTabButton
+							isHidden={!isBarista}
+							icon="list-outline"
+							label={t`Queue`}
+						/>
+					</UITabTrigger>
 					<UITabTrigger asChild href="/more" name="more">
 						<SideTabButton icon="ellipsis-horizontal" label={t`More`} />
 					</UITabTrigger>
@@ -78,10 +88,12 @@ function SideTabButton({
 	isFocused,
 	label,
 	ref,
+	isHidden,
 	...rest
 }: SideTabButtonProps) {
 	styles.useVariants({
 		isFocused,
+		isHidden,
 	})
 
 	return (
@@ -165,6 +177,9 @@ function useIsDesktop() {
 const SIDEBAR_WIDTH = 280
 
 const styles = StyleSheet.create((theme) => ({
+	hidden: {
+		display: 'none',
+	},
 	contentArea: {
 		backgroundColor: theme.colors.gray.background,
 		flex: 1,
@@ -200,6 +215,11 @@ const styles = StyleSheet.create((theme) => ({
 			isFocused: {
 				true: {
 					backgroundColor: theme.colors.gray.border,
+				},
+			},
+			isHidden: {
+				true: {
+					display: 'none',
 				},
 			},
 		},

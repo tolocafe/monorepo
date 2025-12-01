@@ -61,9 +61,9 @@ export default function Orders() {
 		if (!currentOrder) return 0
 
 		return currentOrder.products.reduce((sum, item) => {
-			const productData = queryClient.getQueryData(
+			const productData = queryClient.getQueryData<Product>(
 				productQueryOptions(item.id).queryKey,
-			) as Product
+			)
 
 			return (
 				sum +

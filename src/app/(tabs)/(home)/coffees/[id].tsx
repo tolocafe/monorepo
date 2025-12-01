@@ -239,7 +239,7 @@ export default function CoffeeStories() {
 									onPress={handleClose}
 									style={styles.closeButton}
 								>
-									<Ionicons color={WHITE_COLOR} name="close" size={36} />
+									<Ionicons color={WHITE_COLOR} name="close" size={30} />
 								</TouchableOpacity>
 							</View>
 							{/* Header */}
