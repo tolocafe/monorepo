@@ -115,9 +115,8 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name="queue"
 					options={{
-						href: null, // expo routers
+						href: isBarista ? '/(tabs)/queue' : null,
 						sceneStyle: isBarista ? undefined : { display: 'none' },
-						// href: isBarista ? '/(tabs)/queue' : null,
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
 						tabBarIcon({ focused }: { focused: boolean }) {
@@ -125,6 +124,10 @@ export default function TabLayout() {
 								return {
 									sfSymbol: focused ? 'list.clipboard.fill' : 'list.clipboard',
 								}
+							}
+
+							if (Platform.OS === 'android') {
+								return require('@/assets/icons/format-list.svg') as ImageSourcePropType
 							}
 
 							return (
