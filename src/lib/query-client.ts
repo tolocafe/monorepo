@@ -63,7 +63,7 @@ export const queryClient = new QueryClient({
 		},
 		queries: {
 			gcTime: 1000 * 60 * 60, // 1 hour
-			networkMode: 'offlineFirst',
+			networkMode: 'online',
 			refetchOnReconnect: true,
 			refetchOnWindowFocus: true,
 			retry: shouldRetry,

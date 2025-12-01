@@ -33,16 +33,23 @@ export const publicClient = ky.create({
 	hooks: {
 		afterResponse: [
 			async (request, _options, response) => {
-				// On native, persist the token after verifying OTP
-				if (isWeb) return response
+				if (isWeb) {
+					// eslint-disable-next-line no-console
+					console.log('Web environment, not saving token to SecureStore')
+					return response
+				}
 
 				try {
-					if (request.url.includes('/auth/verify-otp')) {
+					const isVerifyOtpEndpoint = request.url.includes('/auth/verify-otp')
+
+					if (isVerifyOtpEndpoint) {
 						const data = (await response
 							.clone()
 							.json()
 							.catch(() => null)) as null | { token: string }
+
 						const token: unknown = data?.token
+
 						if (typeof token === 'string' && token.length > 0) {
 							await SecureStore.setItemAsync(STORAGE_KEYS.AUTH_SESSION, token)
 						}
@@ -74,7 +81,9 @@ export const privateClient = ky.create({
 				if (isWeb) return request
 
 				const token = await getAuthToken()
+
 				if (!token) throw new Error('No auth token found')
+
 				request.headers.set('Authorization', `Bearer ${token}`)
 
 				return request

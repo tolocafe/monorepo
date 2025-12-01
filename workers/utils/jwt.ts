@@ -33,7 +33,9 @@ export function extractToken(
 		: null
 }
 
-export const DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS = 60 * 60 * 24 * 365
+export const DEFAULT_AUTH_TOKEN_VALIDITY_IN_MS = 60 * 60 * 24 * 365 * 1000
+export const DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS =
+	DEFAULT_AUTH_TOKEN_VALIDITY_IN_MS / 1000
 
 export async function signJwt(
 	data: { email?: string; name?: string; phone?: string; sub: string },
@@ -52,7 +54,7 @@ export async function signJwt(
 
 		// Default to 1 year expiration for session tokens
 		jwt.setExpirationTime(
-			options?.expiresIn ?? DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
+			options?.expiresIn ?? DEFAULT_AUTH_TOKEN_VALIDITY_IN_MS,
 		)
 
 		return jwt.sign(secretKey(secret))

@@ -1,6 +1,7 @@
 import { Alert, Linking, Platform, RefreshControl, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
+import { captureException } from '@sentry/react-native'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
@@ -78,7 +79,9 @@ export default function ProfileScreen() {
 	const handleSignOut = async () => {
 		// eslint-disable-next-line unicorn/consistent-function-scoping
 		async function signOutPress() {
-			await signOut().catch(() => {
+			await signOut().catch((error: unknown) => {
+				captureException(error)
+
 				Burnt.toast({
 					duration: 3,
 					haptic: 'error',

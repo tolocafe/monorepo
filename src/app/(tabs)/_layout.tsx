@@ -32,6 +32,7 @@ export default function TabLayout() {
 					default: theme.colors.verde.solid,
 				})}
 				initialRouteName="(home)"
+				labeled
 				minimizeBehavior="automatic"
 				screenOptions={{
 					// eslint-disable-next-line @typescript-eslint/ban-ts-comment
