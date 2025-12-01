@@ -141,6 +141,7 @@ export default function TabLayout() {
 								/>
 							)
 						},
+						tabBarItemHidden: !isBarista,
 						tabBarItemStyle: isBarista ? undefined : { display: 'none' }, // custom routers
 						title: t`Queue`,
 					}}
