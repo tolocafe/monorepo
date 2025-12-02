@@ -71,7 +71,7 @@ msgid "9:00 AM – 4:00 PM"
 msgstr "9:00 AM – 4:00 PM"
 
 #: src/app/(tabs)/more/index.tsx:188
-#: src/app/(tabs)/more/profile.tsx:240
+#: src/app/(tabs)/more/profile.tsx:243
 msgid "Account"
 msgstr "Conta"
 
@@ -95,7 +95,7 @@ msgstr "Adicionar ao Pedido"
 msgid "Additional"
 msgstr "Adicional"
 
-#: src/app/(tabs)/queue/index.tsx:301
+#: src/app/(tabs)/queue/index.tsx:274
 msgid "All"
 msgstr ""
 
@@ -121,7 +121,7 @@ msgstr "Apple Maps"
 msgid "Are you sure you want to clear this order? This action cannot be undone."
 msgstr "Tem certeza de que deseja limpar este pedido? Esta ação não pode ser desfeita."
 
-#: src/app/(tabs)/more/profile.tsx:103
+#: src/app/(tabs)/more/profile.tsx:106
 msgid "Are you sure you want to sign out?"
 msgstr "Tem certeza de que deseja sair?"
 
@@ -129,7 +129,7 @@ msgstr "Tem certeza de que deseja sair?"
 msgid "Balance"
 msgstr "Saldo"
 
-#: src/app/(tabs)/more/profile.tsx:188
+#: src/app/(tabs)/more/profile.tsx:191
 msgid "Birthdate"
 msgstr "Data de nascimento"
 
@@ -146,7 +146,7 @@ msgid "Caffeine"
 msgstr "Cafeína"
 
 #: src/app/(tabs)/more/app.tsx:41
-#: src/app/(tabs)/more/profile.tsx:104
+#: src/app/(tabs)/more/profile.tsx:107
 #: src/app/(tabs)/orders/current.tsx:147
 #: src/app/(tabs)/orders/current.tsx:193
 #: src/app/(tabs)/orders/current.tsx:294
@@ -229,16 +229,16 @@ msgstr "Pedido Atual"
 msgid "Date of birth (optional)"
 msgstr "Data de nascimento (opcional)"
 
-#: src/app/(tabs)/more/profile.tsx:209
+#: src/app/(tabs)/more/profile.tsx:212
 #: src/app/sign-in.tsx:427
 msgid "DD/MM/YYYY"
 msgstr "DD/MM/AAAA"
 
-#: src/app/(tabs)/more/profile.tsx:258
+#: src/app/(tabs)/more/profile.tsx:261
 msgid "Delete"
 msgstr "Excluir"
 
-#: src/app/(tabs)/queue/index.tsx:387
+#: src/app/(tabs)/queue/index.tsx:360
 msgid "Delivery"
 msgstr ""
 
@@ -266,15 +266,15 @@ msgstr "Baixando..."
 msgid "Edit Profile"
 msgstr "Editar Perfil"
 
-#: src/app/(tabs)/more/profile.tsx:161
+#: src/app/(tabs)/more/profile.tsx:164
 msgid "Email"
 msgstr "Email"
 
-#: src/app/(tabs)/more/profile.tsx:42
+#: src/app/(tabs)/more/profile.tsx:43
 msgid "Enter a valid date (YYYY-MM-DD)"
 msgstr "Digite uma data válida (AAAA-MM-DD)"
 
-#: src/app/(tabs)/more/profile.tsx:37
+#: src/app/(tabs)/more/profile.tsx:38
 msgid "Enter a valid email"
 msgstr "Digite um e-mail válido"
 
@@ -286,7 +286,7 @@ msgstr "Entre na sua conta ou crie uma nova usando seu número de telefone"
 msgid "Enter verification code"
 msgstr "Digite o código de verificação"
 
-#: src/app/(tabs)/more/profile.tsx:152
+#: src/app/(tabs)/more/profile.tsx:155
 msgid "Enter your first name"
 msgstr "Digite seu primeiro nome"
 
@@ -295,7 +295,7 @@ msgid "Enter your full name"
 msgstr "Digite seu nome completo"
 
 #: src/app/(tabs)/more/app.tsx:64
-#: src/app/(tabs)/more/profile.tsx:87
+#: src/app/(tabs)/more/profile.tsx:90
 #: src/app/(tabs)/orders/[id].tsx:51
 #: src/app/(tabs)/orders/current.tsx:67
 #: src/app/sign-in.tsx:216
@@ -318,7 +318,7 @@ msgstr "Digite seu nome completo"
 msgid "Error"
 msgstr "Erro"
 
-#: src/app/(tabs)/more/profile.tsx:85
+#: src/app/(tabs)/more/profile.tsx:88
 msgid "Error signing out. Please try again."
 msgstr "Erro ao sair. Tente novamente."
 
@@ -357,7 +357,7 @@ msgstr "Falha ao enviar código"
 msgid "Failed to submit order. Please try again."
 msgstr "Falha ao enviar pedido. Tente novamente."
 
-#: src/app/(tabs)/more/profile.tsx:136
+#: src/app/(tabs)/more/profile.tsx:139
 msgid "First name"
 msgstr "Primeiro nome"
 
@@ -381,7 +381,7 @@ msgstr "Google Maps"
 msgid "History"
 msgstr "Histórico"
 
-#: src/app/(tabs)/_layout.tsx:80
+#: src/app/(tabs)/_layout.tsx:81
 #: src/app/(tabs)/(home)/_layout.tsx:19
 #: src/components/Tabs/index.web.tsx:65
 msgid "Home"
@@ -396,7 +396,7 @@ msgid "In Progress"
 msgstr "Em andamento"
 
 #: src/app/(tabs)/more/app.tsx:91
-#: src/app/(tabs)/more/profile.tsx:131
+#: src/app/(tabs)/more/profile.tsx:134
 msgid "Information"
 msgstr "Informações"
 
@@ -492,7 +492,7 @@ msgstr "Modificações"
 msgid "Monday – Friday"
 msgstr "Segunda – sexta"
 
-#: src/app/(tabs)/_layout.tsx:168
+#: src/app/(tabs)/_layout.tsx:173
 #: src/app/(tabs)/more/_layout.tsx:19
 #: src/components/Tabs/index.web.tsx:78
 msgid "More"
@@ -503,11 +503,11 @@ msgstr "Mais"
 msgid "Name"
 msgstr "Nome"
 
-#: src/app/(tabs)/more/profile.tsx:179
+#: src/app/(tabs)/more/profile.tsx:182
 msgid "name@example.com"
 msgstr "nome@exemplo.com"
 
-#: src/app/(tabs)/queue/index.tsx:561
+#: src/app/(tabs)/queue/index.tsx:534
 msgid "New orders will appear here"
 msgstr ""
 
@@ -520,7 +520,7 @@ msgstr ""
 msgid "No active sessions found."
 msgstr "Nenhuma sessão ativa encontrada."
 
-#: src/app/(tabs)/queue/index.tsx:558
+#: src/app/(tabs)/queue/index.tsx:531
 msgid "No orders in queue"
 msgstr ""
 
@@ -570,11 +570,11 @@ msgstr "Pedido Não Encontrado"
 msgid "Order placed"
 msgstr "Pedido realizado"
 
-#: src/app/(tabs)/queue/index.tsx:276
+#: src/app/(tabs)/queue/index.tsx:249
 msgid "Order Queue"
 msgstr ""
 
-#: src/app/(tabs)/_layout.tsx:112
+#: src/app/(tabs)/_layout.tsx:113
 #: src/app/(tabs)/orders/_layout.tsx:19
 #: src/app/(tabs)/orders/index.tsx:91
 #: src/app/(tabs)/orders/index.tsx:120
@@ -625,7 +625,7 @@ msgstr "Telefone"
 msgid "Phone number"
 msgstr "Número de telefone"
 
-#: src/app/(tabs)/more/profile.tsx:35
+#: src/app/(tabs)/more/profile.tsx:36
 msgid "Please enter your name"
 msgstr "Por favor, digite seu nome"
 
@@ -660,7 +660,7 @@ msgid "Product not found"
 msgstr "Produto não encontrado"
 
 #: src/app/(tabs)/more/_layout.tsx:23
-#: src/app/(tabs)/more/profile.tsx:117
+#: src/app/(tabs)/more/profile.tsx:120
 msgid "Profile"
 msgstr "Perfil"
 
@@ -672,8 +672,8 @@ msgstr "Perfil"
 msgid "Qty: {0}"
 msgstr "Qtd: {0}"
 
-#: src/app/(tabs)/_layout.tsx:141
-#: src/app/(tabs)/queue/index.tsx:262
+#: src/app/(tabs)/_layout.tsx:146
+#: src/app/(tabs)/queue/index.tsx:234
 #: src/components/Tabs/index.web.tsx:74
 msgid "Queue"
 msgstr ""
@@ -694,15 +694,15 @@ msgstr "Runtime"
 msgid "Saturday"
 msgstr "Sábado"
 
-#: src/app/(tabs)/more/profile.tsx:230
+#: src/app/(tabs)/more/profile.tsx:233
 msgid "Save"
 msgstr "Salvar"
 
-#: src/app/(tabs)/more/profile.tsx:54
+#: src/app/(tabs)/more/profile.tsx:55
 msgid "Saved"
 msgstr "Salvo"
 
-#: src/app/(tabs)/more/profile.tsx:228
+#: src/app/(tabs)/more/profile.tsx:231
 msgid "Saving..."
 msgstr "Salvando..."
 
@@ -727,7 +727,7 @@ msgid "Service Unavailable"
 msgstr ""
 
 #: src/app/(tabs)/more/_layout.tsx:24
-#: src/app/(tabs)/more/profile.tsx:249
+#: src/app/(tabs)/more/profile.tsx:252
 #: src/app/(tabs)/more/sessions.tsx:35
 msgid "Sessions"
 msgstr "Sessões"
@@ -753,9 +753,9 @@ msgstr "Entre para adicionar “{itemName}” ao seu carrinho"
 msgid "Sign in to view your account information and access personalized features."
 msgstr "Entre para ver as informações da sua conta e acessar recursos personalizados."
 
-#: src/app/(tabs)/more/profile.tsx:103
-#: src/app/(tabs)/more/profile.tsx:108
-#: src/app/(tabs)/more/profile.tsx:263
+#: src/app/(tabs)/more/profile.tsx:106
+#: src/app/(tabs)/more/profile.tsx:111
+#: src/app/(tabs)/more/profile.tsx:266
 msgid "Sign Out"
 msgstr "Sair"
 
@@ -835,7 +835,7 @@ msgstr "Isso vai limpar todos os dados em cache incluindo itens do menu e pedido
 msgid "Tip"
 msgstr "Gorjeta"
 
-#: src/app/(tabs)/queue/index.tsx:378
+#: src/app/(tabs)/queue/index.tsx:351
 msgid "To Go"
 msgstr ""
 
@@ -975,7 +975,7 @@ msgstr ""
 msgid "Your Phone Number"
 msgstr ""
 
-#: src/app/(tabs)/more/profile.tsx:52
+#: src/app/(tabs)/more/profile.tsx:53
 msgid "Your profile has been updated."
 msgstr "Seu perfil foi atualizado."
 
