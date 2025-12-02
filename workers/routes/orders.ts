@@ -95,7 +95,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		const [orders, allProducts] = await Promise.all([
 			api.dash.getTransactions(c.env.POSTER_TOKEN, {
 				include_products: 'true',
-				status: '1', // Only open transactions
+				status: '0',
 			}),
 			api.menu.getMenuProducts(c.env.POSTER_TOKEN),
 		])
