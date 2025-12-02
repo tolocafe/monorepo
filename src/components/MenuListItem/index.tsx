@@ -1,6 +1,5 @@
-import { Pressable, TouchableOpacity, View } from 'react-native'
+import { Pressable, View } from 'react-native'
 
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans } from '@lingui/react/macro'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
@@ -19,17 +18,13 @@ import { getProductBaseCost } from '@/lib/utils/price'
 import type { Product } from '@/lib/api'
 
 const UniImage = withUnistyles(Image)
-const UniIonicons = withUnistyles(Ionicons, (theme) => ({
-	color: theme.colors.gray.background,
-}))
 
 type Props = {
 	item: Product
-	onAddToBag: (item: Product) => void
 }
 
 export default function MenuListItem(props: Props) {
-	const { item, onAddToBag } = props
+	const { item } = props
 
 	const scaleValue = useSharedValue(1)
 
@@ -89,15 +84,6 @@ export default function MenuListItem(props: Props) {
 					</Card>
 				</Pressable>
 			</Link>
-			<View style={styles.menuItemActions}>
-				<TouchableOpacity
-					disabled={!cost}
-					onPress={() => onAddToBag(item)}
-					style={styles.addToBagButton}
-				>
-					<UniIonicons name="add" size={26} />
-				</TouchableOpacity>
-			</View>
 		</Animated.View>
 	)
 }

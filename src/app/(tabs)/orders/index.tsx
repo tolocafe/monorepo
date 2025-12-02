@@ -229,7 +229,7 @@ export default function Orders() {
 const styles = StyleSheet.create((theme) => ({
 	container: {
 		gap: theme.spacing.md,
-		padding: theme.layout.screenPadding,
+		paddingHorizontal: theme.layout.screenPadding,
 	},
 	currentOrderBottomText: {
 		flexDirection: 'row',

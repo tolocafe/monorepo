@@ -233,9 +233,8 @@ export default function BaristaQueue() {
 			<Head>
 				<title>{t`Queue`}</title>
 			</Head>
-
 			<ScreenContainer
-				contentContainerStyle={styles.container}
+				contentInsetAdjustmentBehavior="automatic"
 				noScroll={orders.length === 0}
 				ref={screenRef}
 				refreshControl={
@@ -244,11 +243,9 @@ export default function BaristaQueue() {
 				withTopGradient
 				withTopPadding
 			>
-				<View style={styles.headerRow}>
-					<H2>
-						<Trans>Order Queue</Trans>
-					</H2>
-				</View>
+				<H2 style={styles.headerRow}>
+					<Trans>Order Queue</Trans>
+				</H2>
 
 				{/* Category filter pills */}
 				{availableCategories.length > 0 && (
@@ -707,10 +704,6 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: 13,
 		fontStyle: 'italic',
 	},
-	container: {
-		flex: 1,
-		gap: theme.spacing.md,
-	},
 	deliveryBadge: {
 		alignItems: 'center',
 		backgroundColor: '#F3E5F5',
@@ -785,9 +778,7 @@ const styles = StyleSheet.create((theme) => ({
 		fontWeight: '600',
 	},
 	headerRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: theme.spacing.sm,
+		marginBottom: theme.spacing.md,
 		paddingHorizontal: theme.layout.screenPadding,
 	},
 	modifierTag: {

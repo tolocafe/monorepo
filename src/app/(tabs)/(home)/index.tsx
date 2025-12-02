@@ -23,7 +23,6 @@ import {
 	productsQueryOptions,
 } from '@/lib/queries/menu'
 import { queryClient } from '@/lib/query-client'
-import { useAddItemGuarded } from '@/lib/stores/order-store'
 
 import type { Category, Coffee, Product } from '@/lib/api'
 
@@ -42,7 +41,7 @@ const CATEGORY_ORDER = ['De Temporada', 'Café', 'Matcha', 'Té y Tisanas']
 
 export default function Menu() {
 	const { t } = useLingui()
-	const addItem = useAddItemGuarded()
+
 	const { data: selfData } = useQuery(selfQueryOptions)
 
 	const screenRef = useRef<ScrollView>(null)
@@ -86,17 +85,13 @@ export default function Menu() {
 		[categories, menu],
 	)
 
-	const handleAddToBag = (item: Product) => {
-		addItem({ id: item.product_id, quantity: 1 })
-	}
-
 	const renderCoffeeStory = ({ item }: { item: Coffee }) => (
 		<CoffeeStoryBubble coffee={item} />
 	)
 
 	const renderMenuItem = ({ item }: { item: Product }) => (
 		<ErrorBoundary fallback={menuItemFallback}>
-			<MenuListItem item={item} onAddToBag={handleAddToBag} />
+			<MenuListItem item={item} />
 		</ErrorBoundary>
 	)
 
@@ -119,6 +114,10 @@ export default function Menu() {
 
 		void requestEnableAnalytics()
 	}, [selfData])
+
+	const handleRefresh = () => {
+		void queryClient.invalidateQueries(productsQueryOptions)
+	}
 
 	const renderCategorySection = (
 		category: Category & { items: Product[] },
@@ -186,12 +185,7 @@ export default function Menu() {
 				contentInsetAdjustmentBehavior="automatic"
 				ref={screenRef}
 				refreshControl={
-					<RefreshControl
-						onRefresh={() =>
-							queryClient.invalidateQueries(productsQueryOptions)
-						}
-						refreshing={false}
-					/>
+					<RefreshControl onRefresh={handleRefresh} refreshing={false} />
 				}
 				withTopGradient
 				withTopPadding

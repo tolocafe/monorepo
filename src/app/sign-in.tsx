@@ -23,6 +23,7 @@ import {
 	requestOtpMutationOptions,
 	verifyOtpMutationOptions,
 } from '@/lib/queries/auth'
+import { formatPhoneNumber } from '@/lib/utils/phone'
 
 const SignInSchema = z.object({
 	birthdate: z.string().trim(),
@@ -367,7 +368,9 @@ export default function SignIn() {
 								<Paragraph>
 									<Trans>
 										Let&apos;s create your account with the phone number{' '}
-										<Paragraph weight="bold">{phoneNumber}</Paragraph>
+										<Paragraph weight="bold">
+											{formatPhoneNumber(phoneNumber)}
+										</Paragraph>
 									</Trans>
 								</Paragraph>
 							)}
@@ -475,9 +478,11 @@ export default function SignIn() {
 						</H2>
 
 						<Subscribe selector={(state) => state.values.phoneNumber}>
-							{(phone) => (
+							{(phoneNumber) => (
 								<Paragraph>
-									<Trans>We sent a code to {phone}</Trans>
+									<Trans>
+										We sent a code to {formatPhoneNumber(phoneNumber)}
+									</Trans>
 								</Paragraph>
 							)}
 						</Subscribe>

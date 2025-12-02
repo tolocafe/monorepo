@@ -138,7 +138,6 @@ export default function More() {
 				<meta content="/more" property="og:url" />
 			</Head>
 			<ScreenContainer
-				contentContainerStyle={styles.scrollContent}
 				ref={screenRef}
 				refreshControl={
 					<RefreshControl
@@ -419,9 +418,6 @@ const styles = StyleSheet.create((theme) => ({
 		minWidth: 120,
 	},
 	pendingCard: {
-		paddingVertical: theme.spacing.lg,
-	},
-	scrollContent: {
 		paddingVertical: theme.spacing.lg,
 	},
 	section: {

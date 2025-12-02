@@ -18,6 +18,15 @@ export function formatPhoneNumber(phone: string): string {
 		return `+1 (${digits.slice(1, 4)}) ${digits.slice(4, 7)}-${digits.slice(7)}`
 	}
 
+	if (digits.length === 12 && digits.startsWith('52')) {
+		const nationalNumber = digits.slice(2)
+		if (nationalNumber.startsWith('55')) {
+			return `(${nationalNumber.slice(0, 2)}) ${nationalNumber.slice(2, 6)} ${nationalNumber.slice(6)}`
+		}
+
+		return `(${nationalNumber.slice(0, 3)}) ${nationalNumber.slice(3, 6)} ${nationalNumber.slice(6)}`
+	}
+
 	// For other formats, just return the original
 	return phone
 }
