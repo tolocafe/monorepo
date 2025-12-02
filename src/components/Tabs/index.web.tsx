@@ -67,11 +67,11 @@ function DesktopSideTabs(props: Omit<BottomTabNavigatorProps, 'id'>) {
 					<UITabTrigger asChild href="/orders" name="orders">
 						<SideTabButton icon="receipt-outline" label={t`Orders`} />
 					</UITabTrigger>
-					<UITabTrigger asChild href="/queue" name="queue">
+					<UITabTrigger asChild href="/team" name="team">
 						<SideTabButton
 							icon="list-outline"
 							isHidden={!isBarista}
-							label={t`Queue`}
+							label={t`Team`}
 						/>
 					</UITabTrigger>
 					<UITabTrigger asChild href="/more" name="more">

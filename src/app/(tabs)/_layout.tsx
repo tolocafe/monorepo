@@ -114,9 +114,9 @@ export default function TabLayout() {
 					}}
 				/>
 				<Tabs.Screen
-					name="queue"
+					name="team"
 					options={{
-						href: isBarista ? '/(tabs)/queue' : null,
+						href: isBarista ? '/(tabs)/team' : null,
 						sceneStyle: isBarista ? undefined : { display: 'none' },
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
@@ -143,7 +143,7 @@ export default function TabLayout() {
 						},
 						tabBarItemHidden: !isBarista,
 						tabBarItemStyle: isBarista ? undefined : { display: 'none' }, // custom routers
-						title: t`Queue`,
+						title: t`Team`,
 					}}
 				/>
 				<Tabs.Screen

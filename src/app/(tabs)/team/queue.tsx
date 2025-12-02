@@ -11,7 +11,7 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { Card } from '@/components/Card'
 import ScreenContainer from '@/components/ScreenContainer'
-import { H2, H3, Paragraph, Text } from '@/components/Text'
+import { H3, Paragraph, Text } from '@/components/Text'
 import { baristaQueueQueryOptions } from '@/lib/queries/barista'
 import {
 	categoriesQueryOptions,
@@ -243,10 +243,6 @@ export default function BaristaQueue() {
 				withTopGradient
 				withTopPadding
 			>
-				<H2 style={styles.headerRow}>
-					<Trans>Order Queue</Trans>
-				</H2>
-
 				{/* Category filter pills */}
 				{availableCategories.length > 0 && (
 					<ScrollView
@@ -776,10 +772,6 @@ const styles = StyleSheet.create((theme) => ({
 		color: '#5C6BC0', // Indigo
 		fontSize: 12,
 		fontWeight: '600',
-	},
-	headerRow: {
-		marginBottom: theme.spacing.md,
-		paddingHorizontal: theme.layout.screenPadding,
 	},
 	modifierTag: {
 		alignItems: 'center',
