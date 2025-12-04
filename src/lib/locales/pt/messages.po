@@ -254,11 +254,26 @@ msgstr "Descubra nosso cardápio de café caseiro com espresso, lattes, cappucci
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides. TOLO - where good coffee meets you."
 msgstr "Descubra nosso cardápio de café caseiro com espresso, lattes, cappuccinos e deliciosos acompanhamentos. TOLO - onde o bom café encontra você."
 
+#: src/app/(tabs)/team/ticket.tsx:90
+msgid "Download PDF"
+msgstr "Baixar PDF"
+
 #: src/app/(tabs)/orders/[id].tsx:233
 msgid "Download Receipt"
 msgstr "Baixar Recibo"
 
+#: src/app/(tabs)/team/_layout.tsx:27
+msgid "Download Ticket"
+msgstr "Baixar Ticket"
+
+#: src/app/(tabs)/team/index.tsx:61
+#: src/app/(tabs)/team/ticket.tsx:60
+#: src/app/(tabs)/team/ticket.tsx:65
+msgid "Download Ticket PDF"
+msgstr "Baixar Ticket PDF"
+
 #: src/app/(tabs)/orders/[id].tsx:231
+#: src/app/(tabs)/team/ticket.tsx:88
 msgid "Downloading..."
 msgstr "Baixando..."
 
@@ -269,6 +284,10 @@ msgstr "Editar Perfil"
 #: src/app/(tabs)/more/profile.tsx:164
 msgid "Email"
 msgstr "Email"
+
+#: src/app/(tabs)/team/ticket.tsx:68
+msgid "Enter a ticket number and download its receipt as PDF."
+msgstr "Digite um número de ticket e baixe seu recibo em PDF."
 
 #: src/app/(tabs)/more/profile.tsx:43
 msgid "Enter a valid date (YYYY-MM-DD)"
@@ -298,6 +317,7 @@ msgstr "Digite seu nome completo"
 #: src/app/(tabs)/more/profile.tsx:90
 #: src/app/(tabs)/orders/[id].tsx:51
 #: src/app/(tabs)/orders/current.tsx:67
+#: src/app/(tabs)/team/ticket.tsx:29
 #: src/app/sign-in.tsx:217
 #: src/app/sign-in.tsx:228
 #: src/containers/table-bill-screen.tsx:81
@@ -327,6 +347,7 @@ msgid "Failed to clear cache. Please try again."
 msgstr "Falha ao limpar cache. Tente novamente."
 
 #: src/app/(tabs)/orders/[id].tsx:51
+#: src/app/(tabs)/team/ticket.tsx:29
 msgid "Failed to download receipt. Please try again."
 msgstr "Falha ao baixar recibo. Tente novamente."
 
@@ -533,11 +554,17 @@ msgstr "Nenhum pedido na fila"
 msgid "No orders yet"
 msgstr "Nenhum pedido ainda"
 
+#: src/app/(tabs)/team/ticket.tsx:41
+#: src/app/(tabs)/team/ticket.tsx:46
+msgid "Not Authorized"
+msgstr "Não Autorizado"
+
 #: src/app/(tabs)/more/index.tsx:204
 msgid "Not provided"
 msgstr "Não fornecido"
 
 #: src/app/(tabs)/orders/[id].tsx:52
+#: src/app/(tabs)/team/ticket.tsx:30
 msgid "OK"
 msgstr "OK"
 
@@ -577,7 +604,7 @@ msgstr "Pedido realizado"
 
 #: src/app/(tabs)/queue/index.tsx:249
 #~ msgid "Order Queue"
-#~ msgstr ""
+#~ msgstr "Fila de Pedidos"
 
 #: src/app/(tabs)/_layout.tsx:113
 #: src/app/(tabs)/orders/_layout.tsx:19
@@ -815,7 +842,7 @@ msgstr "Imposto"
 msgid "Team"
 msgstr "Equipe"
 
-#: src/app/(tabs)/team/index.tsx:60
+#: src/app/(tabs)/team/index.tsx:69
 msgid "Team tools and quick links"
 msgstr "Ferramentas da equipe e links rápidos"
 
@@ -846,6 +873,10 @@ msgstr "Esta tela não existe."
 #: src/app/(tabs)/more/app.tsx:37
 msgid "This will clear all cached data including menu items and orders. Your login credentials and language preference will be preserved. The app will reload fresh data from the server. Continue?"
 msgstr "Isso vai limpar todos os dados em cache incluindo itens do menu e pedidos. Suas credenciais de login e preferência de idioma serão preservadas. O app vai recarregar dados frescos do servidor. Continuar?"
+
+#: src/app/(tabs)/team/ticket.tsx:79
+msgid "Ticket number"
+msgstr "Número do ticket"
 
 #: src/app/(tabs)/orders/[id].tsx:194
 msgid "Tip"
@@ -981,6 +1012,10 @@ msgstr "Bem-vindo"
 #: src/app/(tabs)/orders/current.tsx:139
 msgid "You don't have enough balance in your wallet. Please top up your wallet first."
 msgstr "Você não tem saldo suficiente na sua carteira. Por favor, recarregue sua carteira primeiro."
+
+#: src/app/(tabs)/team/ticket.tsx:49
+msgid "You need barista or owner access to use this tool."
+msgstr "Você precisa de acesso de barista ou proprietário para usar esta ferramenta."
 
 #: src/app/(tabs)/orders/index.tsx:220
 msgid "Your order history will appear here"

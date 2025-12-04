@@ -254,11 +254,26 @@ msgstr "Discover our homemade coffee menu with espresso, lattes, cappuccinos and
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides. TOLO - where good coffee meets you."
 msgstr "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides. TOLO - where good coffee meets you."
 
+#: src/app/(tabs)/team/ticket.tsx:90
+msgid "Download PDF"
+msgstr "Download PDF"
+
 #: src/app/(tabs)/orders/[id].tsx:233
 msgid "Download Receipt"
 msgstr "Download Receipt"
 
+#: src/app/(tabs)/team/_layout.tsx:27
+msgid "Download Ticket"
+msgstr "Download Ticket"
+
+#: src/app/(tabs)/team/index.tsx:61
+#: src/app/(tabs)/team/ticket.tsx:60
+#: src/app/(tabs)/team/ticket.tsx:65
+msgid "Download Ticket PDF"
+msgstr "Download Ticket PDF"
+
 #: src/app/(tabs)/orders/[id].tsx:231
+#: src/app/(tabs)/team/ticket.tsx:88
 msgid "Downloading..."
 msgstr "Downloading..."
 
@@ -269,6 +284,10 @@ msgstr "Edit Profile"
 #: src/app/(tabs)/more/profile.tsx:164
 msgid "Email"
 msgstr "Email"
+
+#: src/app/(tabs)/team/ticket.tsx:68
+msgid "Enter a ticket number and download its receipt as PDF."
+msgstr "Enter a ticket number and download its receipt as PDF."
 
 #: src/app/(tabs)/more/profile.tsx:43
 msgid "Enter a valid date (YYYY-MM-DD)"
@@ -298,6 +317,7 @@ msgstr "Enter your full name"
 #: src/app/(tabs)/more/profile.tsx:90
 #: src/app/(tabs)/orders/[id].tsx:51
 #: src/app/(tabs)/orders/current.tsx:67
+#: src/app/(tabs)/team/ticket.tsx:29
 #: src/app/sign-in.tsx:217
 #: src/app/sign-in.tsx:228
 #: src/containers/table-bill-screen.tsx:81
@@ -327,6 +347,7 @@ msgid "Failed to clear cache. Please try again."
 msgstr "Failed to clear cache. Please try again."
 
 #: src/app/(tabs)/orders/[id].tsx:51
+#: src/app/(tabs)/team/ticket.tsx:29
 msgid "Failed to download receipt. Please try again."
 msgstr "Failed to download receipt. Please try again."
 
@@ -533,11 +554,17 @@ msgstr "No orders in queue"
 msgid "No orders yet"
 msgstr "No orders yet"
 
+#: src/app/(tabs)/team/ticket.tsx:41
+#: src/app/(tabs)/team/ticket.tsx:46
+msgid "Not Authorized"
+msgstr "Not Authorized"
+
 #: src/app/(tabs)/more/index.tsx:204
 msgid "Not provided"
 msgstr "Not provided"
 
 #: src/app/(tabs)/orders/[id].tsx:52
+#: src/app/(tabs)/team/ticket.tsx:30
 msgid "OK"
 msgstr "OK"
 
@@ -815,7 +842,7 @@ msgstr "Tax"
 msgid "Team"
 msgstr "Team"
 
-#: src/app/(tabs)/team/index.tsx:60
+#: src/app/(tabs)/team/index.tsx:69
 msgid "Team tools and quick links"
 msgstr "Team tools and quick links"
 
@@ -829,11 +856,11 @@ msgstr "The order you're looking for doesn't exist."
 
 #: src/app/(tabs)/orders/current.tsx:277
 msgid "The requested order could not be found."
-msgstr "El pedido solicitado no se pudo encontrar."
+msgstr "The requested order could not be found."
 
 #: src/app/(tabs)/(home)/[id].tsx:190
 msgid "The requested product could not be loaded."
-msgstr "El producto solicitado no se pudo cargar."
+msgstr "The requested product could not be loaded."
 
 #: src/app/(tabs)/more/sessions.tsx:54
 msgid "These are the devices and browsers currently signed in to your account."
@@ -845,7 +872,11 @@ msgstr "This screen does not exist."
 
 #: src/app/(tabs)/more/app.tsx:37
 msgid "This will clear all cached data including menu items and orders. Your login credentials and language preference will be preserved. The app will reload fresh data from the server. Continue?"
-msgstr "Esto limpiará todos los datos en caché incluyendo productos del menú y pedidos. Tus credenciales de acceso y preferencia de idioma se conservarán. La app recargará datos frescos del servidor. ¿Continuar?"
+msgstr "This will clear all cached data including menu items and orders. Your login credentials and language preference will be preserved. The app will reload fresh data from the server. Continue?"
+
+#: src/app/(tabs)/team/ticket.tsx:79
+msgid "Ticket number"
+msgstr "Ticket number"
 
 #: src/app/(tabs)/orders/[id].tsx:194
 msgid "Tip"
@@ -861,91 +892,91 @@ msgstr "TOLO - Good Coffee"
 
 #: src/app/(tabs)/(home)/index.tsx:174
 msgid "TOLO menu, good coffee, espresso, latte, cappuccino, coffee shop menu"
-msgstr ""
+msgstr "TOLO menu, good coffee, espresso, latte, cappuccino, coffee shop menu"
 
 #: src/app/(tabs)/more/_layout.tsx:25
 #: src/app/(tabs)/orders/current.tsx:143
 msgid "Top Up"
-msgstr ""
+msgstr "Top Up"
 
 #: src/containers/top-up-screen.tsx:185
 #: src/containers/top-up-screen.tsx:190
 msgid "Top Up - TOLO"
-msgstr ""
+msgstr "Top Up - TOLO"
 
 #: src/app/(tabs)/more/index.tsx:172
 msgid "Top Up Wallet"
-msgstr ""
+msgstr "Top Up Wallet"
 
 #: src/containers/top-up-screen.tsx:244
 msgid "Top Up With Card"
-msgstr ""
+msgstr "Top Up With Card"
 
 #: src/app/(tabs)/orders/[id].tsx:209
 #: src/app/(tabs)/orders/current.tsx:321
 #: src/containers/table-bill-screen.tsx:344
 #: src/containers/table-bill-screen.web.tsx:274
 msgid "Total"
-msgstr ""
+msgstr "Total"
 
 #: src/app/(tabs)/more/visit-us.tsx:91
 msgid "TripAdvisor"
-msgstr ""
+msgstr "TripAdvisor"
 
 #: src/components/phone-number-input/index.tsx:79
 msgid "United States (+1)"
-msgstr ""
+msgstr "United States (+1)"
 
 #: src/app/(tabs)/more/app.tsx:132
 msgid "Update Created At"
-msgstr ""
+msgstr "Update Created At"
 
 #: src/app/(tabs)/more/app.tsx:121
 msgid "Update ID"
-msgstr ""
+msgstr "Update ID"
 
 #: src/app/sign-in.tsx:455
 #: src/app/sign-in.tsx:519
 msgid "Verify"
-msgstr ""
+msgstr "Verify"
 
 #: src/app/sign-in.tsx:517
 msgid "Verifying..."
-msgstr ""
+msgstr "Verifying..."
 
 #: src/app/(tabs)/more/app.tsx:96
 msgid "Version"
-msgstr ""
+msgstr "Version"
 
 #: src/app/(tabs)/more/index.tsx:368
 msgid "Version {appVersion} ({buildVersion})"
-msgstr ""
+msgstr "Version {appVersion} ({buildVersion})"
 
 #: src/app/(tabs)/more/app.tsx:82
 msgid "View app information like version and update channel, and clear cached data."
-msgstr ""
+msgstr "View app information like version and update channel, and clear cached data."
 
 #: src/app/(tabs)/more/visit-us.tsx:87
 msgid "View on TripAdvisor"
-msgstr ""
+msgstr "View on TripAdvisor"
 
 #: src/app/(tabs)/more/_layout.tsx:22
 msgid "Visit Us"
-msgstr ""
+msgstr "Visit Us"
 
 #: src/app/(tabs)/more/visit-us.tsx:23
 #: src/app/(tabs)/more/visit-us.tsx:28
 msgid "Visit Us - TOLO Good Coffee"
-msgstr ""
+msgstr "Visit Us - TOLO Good Coffee"
 
 #: src/app/(tabs)/more/index.tsx:154
 msgid "Wallet"
-msgstr ""
+msgstr "Wallet"
 
 #: src/app/(tabs)/orders/current.tsx:303
 #: src/containers/top-up-screen.tsx:200
 msgid "Wallet Balance"
-msgstr ""
+msgstr "Wallet Balance"
 
 #: src/containers/table-bill-screen.tsx:357
 #: src/containers/table-bill-screen.web.tsx:287
@@ -964,7 +995,7 @@ msgstr "We sent a code to {0}"
 #: src/app/sign-in.tsx:98
 #: src/app/sign-in.tsx:119
 msgid "We sent you a 6-digit code"
-msgstr ""
+msgstr "We sent you a 6-digit code"
 
 #: src/app/sign-in.tsx:177
 msgid "We're experiencing technical difficulties. Please try again later."
@@ -972,15 +1003,19 @@ msgstr "We're experiencing technical difficulties. Please try again later."
 
 #: src/app/(tabs)/more/index.tsx:259
 msgid "Website"
-msgstr ""
+msgstr "Website"
 
 #: src/app/sign-in.tsx:324
 msgid "Welcome"
-msgstr ""
+msgstr "Welcome"
 
 #: src/app/(tabs)/orders/current.tsx:139
 msgid "You don't have enough balance in your wallet. Please top up your wallet first."
-msgstr ""
+msgstr "You don't have enough balance in your wallet. Please top up your wallet first."
+
+#: src/app/(tabs)/team/ticket.tsx:49
+msgid "You need barista or owner access to use this tool."
+msgstr "You need barista or owner access to use this tool."
 
 #: src/app/(tabs)/orders/index.tsx:220
 msgid "Your order history will appear here"
@@ -998,7 +1033,7 @@ msgstr "Your Phone Number"
 
 #: src/app/(tabs)/more/profile.tsx:53
 msgid "Your profile has been updated."
-msgstr ""
+msgstr "Your profile has been updated."
 
 #: src/containers/top-up-screen.tsx:153
 msgid "Your wallet has been topped up successfully!"
