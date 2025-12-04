@@ -7,6 +7,8 @@ import { api } from '../utils/poster'
 
 import type { Bindings } from '../types'
 
+const BARISTA_GROUP_IDS = new Set(['8', '9']) // 8 = owners, 9 = members
+
 const receipts = new Hono<{ Bindings: Bindings }>().get(
 	'/:orderId',
 	async (context) => {
@@ -26,8 +28,18 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 				return context.json({ error: `Order '${orderId}' not found` }, 404)
 			}
 
-			// Verify the order belongs to the authenticated client
-			if (order.client_id !== clientId.toString()) {
+			// Determine if requester is a barista/owner (allowed to download any ticket)
+			const requester = await api.clients.getClientById(
+				context.env.POSTER_TOKEN,
+				clientId,
+			)
+			const isBaristaOrOwner = Boolean(
+				requester?.client_groups_id &&
+				BARISTA_GROUP_IDS.has(requester.client_groups_id),
+			)
+
+			// If not barista/owner, verify the order belongs to the authenticated client
+			if (!isBaristaOrOwner && order.client_id !== clientId.toString()) {
 				throw new HTTPException(403, { message: 'Access denied' })
 			}
 

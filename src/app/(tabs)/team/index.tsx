@@ -52,6 +52,15 @@ export default function TeamIndex() {
 								<Trans>Queue</Trans>
 							</ListItem.Label>
 						</ListItem>
+						<ListItem
+							accessibilityRole="link"
+							chevron
+							onPress={() => router.push('/team/ticket')}
+						>
+							<ListItem.Label>
+								<Trans>Download Ticket PDF</Trans>
+							</ListItem.Label>
+						</ListItem>
 					</List>
 				</View>
 
