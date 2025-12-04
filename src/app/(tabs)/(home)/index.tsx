@@ -12,6 +12,7 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import { Button } from '@/components/Button'
 import CoffeeStoryBubble from '@/components/CoffeeStoryBubble'
 import MenuListItem from '@/components/MenuListItem'
+import PromotionBanner from '@/components/PromotionBanner'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, H3, Paragraph } from '@/components/Text'
 import { enableAnalytics } from '@/lib/analytics/firebase'
@@ -22,6 +23,7 @@ import {
 	categoriesQueryOptions,
 	productsQueryOptions,
 } from '@/lib/queries/menu'
+import { promotionsQueryOptions } from '@/lib/queries/promotions'
 import { queryClient } from '@/lib/query-client'
 
 import type { Category, Coffee, Product } from '@/lib/api'
@@ -51,6 +53,7 @@ export default function Menu() {
 	const { data: menu, error, isFetching } = useQuery(productsQueryOptions)
 	const { data: categories } = useQuery(categoriesQueryOptions)
 	const { data: coffees = [] } = useQuery(coffeesQueryOptions)
+	const { data: promotions = [] } = useQuery(promotionsQueryOptions)
 	const categoriesWithItems = useMemo(
 		() =>
 			categories
@@ -190,6 +193,25 @@ export default function Menu() {
 				withTopGradient
 				withTopPadding
 			>
+				{/* Promotions Section */}
+				{promotions.length > 0 && (
+					<View style={styles.promotionsSection}>
+						<H2 style={styles.promotionsTitle}>
+							<Trans>Promotions</Trans>
+						</H2>
+						<FlatList
+							contentContainerStyle={styles.promotionsContainer}
+							data={promotions}
+							horizontal
+							keyExtractor={(item) => item.id}
+							renderItem={({ item, index }) => (
+								<PromotionBanner index={index} promotion={item} />
+							)}
+							showsHorizontalScrollIndicator={false}
+						/>
+					</View>
+				)}
+
 				{/* Coffee Stories Section */}
 				{coffees.length > 0 && (
 					<View style={styles.storiesSection}>
@@ -317,6 +339,18 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.sm,
 		paddingHorizontal: theme.layout.screenPadding,
 		paddingVertical: theme.spacing.md,
+	},
+	promotionsContainer: {
+		gap: theme.spacing.sm,
+		paddingHorizontal: theme.layout.screenPadding,
+		paddingVertical: theme.spacing.md,
+	},
+	promotionsSection: {
+		borderBottomColor: theme.colors.gray.border,
+		borderBottomWidth: 1,
+	},
+	promotionsTitle: {
+		paddingHorizontal: theme.layout.screenPadding,
 	},
 	storiesSection: {
 		borderBottomColor: theme.colors.gray.border,

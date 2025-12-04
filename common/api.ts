@@ -89,6 +89,23 @@ export type Coffee = {
 }
 
 /**
+ * Promotion banner to be displayed in the app.
+ * Sourced from Poster data (typically special promo products or categories).
+ */
+export type Promotion = {
+	/** Unique identifier for the promotion (usually product_id) */
+	id: string
+	/** Human-readable title for the banner */
+	title: string
+	/** Poster-relative image path (use getImageUrl on the client) */
+	image: string
+	/** Target product to open on tap (if applicable) */
+	productId?: string
+	/** Optional short description or subtitle */
+	subtitle?: string
+}
+
+/**
  * Transaction data from Poster API v3 dash.getTransactions
  *
  * Returns comprehensive transaction data including order details, payment information,

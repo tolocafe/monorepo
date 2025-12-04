@@ -11,6 +11,7 @@ import coffees from './routes/coffees'
 import menu from './routes/menu'
 import orders from './routes/orders'
 import passes from './routes/passes'
+import promotions from './routes/promotions'
 import pos from './routes/pos'
 import receipts from './routes/receipts'
 import tables from './routes/tables'
@@ -82,6 +83,7 @@ app
 	.route('/receipts', receipts)
 	.route('/webhooks', webhooks)
 	.route('/coffees', coffees)
+	.route('/promotions', promotions)
 	.route('/pos', pos)
 	.route('/passes', passes)
 	.route('/broadcast', broadcast)

@@ -11,6 +11,7 @@ import type {
 	DashTransaction,
 	Product,
 	TableBill,
+	Promotion,
 } from '@/lib/api'
 import type { RequestOtpMutationOptions } from '@/lib/queries/auth'
 import type {
@@ -76,6 +77,10 @@ export const api = {
 		getProduct: (productId: string) =>
 			publicClient.get<Product>(`menu/products/${productId}`).json(),
 		getProducts: () => publicClient.get<Product[]>('menu/products').json(),
+	},
+
+	promotions: {
+		getPromotions: () => publicClient.get<Promotion[]>('promotions').json(),
 	},
 
 	orders: {
