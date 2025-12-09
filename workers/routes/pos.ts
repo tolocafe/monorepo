@@ -78,7 +78,7 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 
 		const customerTransactions = transactions.map((transaction) => ({
 			amount: formatAmount(transaction.sum),
-			date: transaction.date_start,
+			date: new Date(Number.parseInt(transaction.date_start)).toISOString(),
 			guestCount: transaction.guests_count,
 			products: transaction.products?.map((transactionProduct) => {
 				const menuProduct = products.find(
@@ -89,7 +89,7 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 					category: menuProduct?.category_name,
 					// modifications: [], // add modifications for this product order
 					name: menuProduct?.product_name,
-					number: transactionProduct.num,
+					number: Number.parseInt(transactionProduct.num),
 				}
 			}),
 			serviceMode: getServiceMode(transaction.service_mode),
