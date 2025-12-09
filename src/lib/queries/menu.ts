@@ -13,3 +13,9 @@ export const productsQueryOptions = queryOptions({
 	queryFn: api.menu.getProducts,
 	queryKey: ['products'] as const,
 })
+
+export const promotionsQueryOptions = queryOptions({
+	initialData: [],
+	queryFn: api.menu.getPromotions,
+	queryKey: ['promotions'] as const,
+})

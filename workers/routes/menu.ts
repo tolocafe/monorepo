@@ -22,6 +22,47 @@ const menu = new Hono<{ Bindings: Bindings }>()
 
 		return context.json(products, 200, defaultJsonHeaders)
 	})
+
+	.get('/promotions', async (context) => {
+		const [posPromotions, webflowPromotions] = await Promise.all([
+			api.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
+			webflow.collections.listPromotions(context.env).catch(() => []),
+		])
+
+		const webflowById = webflowPromotions?.reduce(
+			(accumulator, item) => {
+				const id = String(item['poster-id']) as
+					| keyof typeof accumulator
+					| undefined
+				if (id) accumulator[id] = item
+				return accumulator
+			},
+			{} as Record<string, (typeof webflowPromotions)[number]>,
+		)
+
+		const merged = posPromotions.map((promotion) => {
+			const webflowItem = webflowById?.[
+				promotion.promotion_id as keyof typeof webflowById
+			] as Record<string, unknown> | undefined
+			if (!webflowItem) return promotion
+
+			const image =
+				typeof webflowItem.image === 'string'
+					? { url: webflowItem.image }
+					: (webflowItem.image as undefined | { url?: string })
+
+			return {
+				...promotion,
+				description: webflowItem.description,
+				image,
+				slug: webflowItem.slug,
+				summary: webflowItem.summary,
+			}
+		})
+
+		return context.json(merged, 200, defaultJsonHeaders)
+	})
+
 	.get('/products/:id', async (context) => {
 		const productId = context.req.param('id')
 

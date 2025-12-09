@@ -1,5 +1,6 @@
 export const BASE_URL = process.env.EXPO_PUBLIC_API_URL
 export const POSTER_BASE_URL = process.env.EXPO_PUBLIC_POSTER_API_URL
+export const WEBFLOW_BASE_URL = process.env.EXPO_PUBLIC_WEBFLOW_API_URL
 
 export type Category = {
 	category_color: string
@@ -232,6 +233,17 @@ export type DashTransaction = {
 	user_id?: number
 }
 
+export type Event = {
+	description?: string
+	end_date?: string
+	image?: { url: string }
+	location?: string
+	name: string
+	slug: string
+	start_date?: string
+	summary?: string
+}
+
 /**
  * Incoming order from Poster API
  * @see https://dev.joinposter.com/en/docs/v3/web/incomingOrders/getIncomingOrders
@@ -422,6 +434,42 @@ export type Product = {
 	volume?: number
 	weight_flag: string
 	workshop: string
+}
+
+/**
+ * Promotion data from Poster API
+ * @see https://dev.joinposter.com/en/docs/v3/web/clients/getPromotions
+ */
+export type Promotion = {
+	/** Bonus value for the promotion */
+	bonus?: string
+	/** End date of the promotion */
+	date_end?: string
+	/** Start date of the promotion */
+	date_start?: string
+	/** Discount percentage */
+	discount_percent?: string
+	/** Promotion photo URL */
+	image?: { url: string }
+	/** Promotion name */
+	name: string
+	/** Unique promotion ID */
+	promotion_id: string
+	/**
+	 * Promotion type
+	 * - 0: Manual
+	 * - 1: Discount on products
+	 * - 2: Discount on categories
+	 * - 3: N+1 promotion
+	 * - 4: Fixed bonus
+	 * - 5: Percent bonus
+	 * - 6: Happy hours
+	 */
+	promotion_type: string
+	/** Status: 0=inactive, 1=active */
+	status?: string
+	/** Promotion summary description */
+	summary?: string
 }
 
 export type TableBill = {

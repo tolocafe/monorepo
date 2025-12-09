@@ -53,6 +53,7 @@ export default function MenuListItem(props: Props) {
 										uri: getImageUrl(item.photo, {
 											blur: 100,
 											quality: 20,
+											source: 'poster',
 											width: 350,
 										}),
 									}}
@@ -60,6 +61,7 @@ export default function MenuListItem(props: Props) {
 									source={{
 										uri: getImageUrl(item.photo, {
 											quality: 85,
+											source: 'poster',
 											width: 400,
 										}),
 									}}

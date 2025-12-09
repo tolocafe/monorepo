@@ -9,7 +9,9 @@ import type {
 	ClientData,
 	Coffee,
 	DashTransaction,
+	Event,
 	Product,
+	Promotion,
 	TableBill,
 } from '@/lib/api'
 import type { RequestOtpMutationOptions } from '@/lib/queries/auth'
@@ -69,6 +71,12 @@ export const api = {
 		getCoffees: () => publicClient.get<Coffee[]>('coffees').json(),
 	},
 
+	events: {
+		getEvent: (slug: string) =>
+			publicClient.get<Event>(`events/${slug}`).json(),
+		getEvents: () => publicClient.get<Event[]>('events').json(),
+	},
+
 	get: (endpoint: string) => privateClient.get(endpoint).json(),
 
 	menu: {
@@ -76,6 +84,8 @@ export const api = {
 		getProduct: (productId: string) =>
 			publicClient.get<Product>(`menu/products/${productId}`).json(),
 		getProducts: () => publicClient.get<Product[]>('menu/products').json(),
+		getPromotions: () =>
+			publicClient.get<Promotion[]>('menu/promotions').json(),
 	},
 
 	orders: {

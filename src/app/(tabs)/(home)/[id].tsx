@@ -254,6 +254,7 @@ export default function MenuDetail() {
 								uri: getImageUrl(product.photo_origin || product.photo, {
 									blur: 100,
 									quality: 20,
+									source: 'poster',
 									width: 350,
 								}),
 								width: UnistylesRuntime.screen.width,
@@ -262,6 +263,7 @@ export default function MenuDetail() {
 							source={{
 								uri: getImageUrl(product.photo_origin || product.photo, {
 									quality: 85,
+									source: 'poster',
 									width: 900,
 								}),
 							}}

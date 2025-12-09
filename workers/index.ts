@@ -8,6 +8,7 @@ import auth from './routes/auth'
 import broadcast from './routes/broadcast'
 import clients from './routes/clients'
 import coffees from './routes/coffees'
+import events from './routes/events'
 import menu from './routes/menu'
 import orders from './routes/orders'
 import passes from './routes/passes'
@@ -82,6 +83,7 @@ app
 	.route('/receipts', receipts)
 	.route('/webhooks', webhooks)
 	.route('/coffees', coffees)
+	.route('/events', events)
 	.route('/pos', pos)
 	.route('/passes', passes)
 	.route('/broadcast', broadcast)

@@ -27,6 +27,7 @@ import type {
 	IncomingOrder,
 	PosterResponse,
 	Product,
+	Promotion,
 	UpdateClientBody,
 } from '@common/api'
 import type { CreateOrder } from '@common/schemas'
@@ -302,6 +303,19 @@ export const api = {
 					method: 'GET',
 				},
 			)
+		},
+
+		/**
+		 * Get available promotions
+		 *
+		 * Retrieves all active promotions configured in Poster.
+		 *
+		 * @see https://dev.joinposter.com/en/docs/v3/web/clients/getPromotions
+		 */
+		getPromotions(token: string) {
+			return posterFetch<Promotion[]>(`/clients.getPromotions?token=${token}`, {
+				defaultErrorMessage: 'Failed to get promotions',
+			})
 		},
 
 		/**
