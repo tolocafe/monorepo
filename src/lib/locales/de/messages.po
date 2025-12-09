@@ -344,7 +344,7 @@ msgstr "Fehler beim Abmelden. Bitte versuchen Sie es erneut."
 
 #: src/components/MenuSections/EventsSection.tsx:21
 msgid "Events"
-msgstr ""
+msgstr "Veranstaltungen"
 
 #: src/app/(tabs)/more/app.tsx:62
 msgid "Failed to clear cache. Please try again."
@@ -694,7 +694,7 @@ msgstr "Profil"
 
 #: src/components/MenuSections/PromotionsSection.tsx:18
 msgid "Promotions"
-msgstr ""
+msgstr "Aktionen"
 
 #. placeholder {0}: Math.round(Number(product.num))
 #. placeholder {0}: item.quantity

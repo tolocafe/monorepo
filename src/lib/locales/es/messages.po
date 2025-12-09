@@ -344,7 +344,7 @@ msgstr "Error al cerrar sesión. Por favor, inténtalo de nuevo."
 
 #: src/components/MenuSections/EventsSection.tsx:21
 msgid "Events"
-msgstr ""
+msgstr "Eventos"
 
 #: src/app/(tabs)/more/app.tsx:62
 msgid "Failed to clear cache. Please try again."
@@ -694,7 +694,7 @@ msgstr "Perfil"
 
 #: src/components/MenuSections/PromotionsSection.tsx:18
 msgid "Promotions"
-msgstr ""
+msgstr "Promociones"
 
 #. placeholder {0}: Math.round(Number(product.num))
 #. placeholder {0}: item.quantity

@@ -344,7 +344,7 @@ msgstr "サインアウトエラー。もう一度お試しください。"
 
 #: src/components/MenuSections/EventsSection.tsx:21
 msgid "Events"
-msgstr ""
+msgstr "イベント"
 
 #: src/app/(tabs)/more/app.tsx:62
 msgid "Failed to clear cache. Please try again."
@@ -694,7 +694,7 @@ msgstr "プロフィール"
 
 #: src/components/MenuSections/PromotionsSection.tsx:18
 msgid "Promotions"
-msgstr ""
+msgstr "プロモーション"
 
 #. placeholder {0}: Math.round(Number(product.num))
 #. placeholder {0}: item.quantity

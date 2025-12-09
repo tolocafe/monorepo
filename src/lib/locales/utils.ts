@@ -12,7 +12,7 @@ export const LOCALE_NAMES = {
 	es: 'Español',
 	fr: 'Français',
 	ja: '日本語',
-	pt: 'Protégées',
+	pt: 'Português',
 	de: 'Deutsch',
 } as const
 
