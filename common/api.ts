@@ -117,7 +117,7 @@ export type DashTransaction = {
 	/** Discount amount applied to the transaction */
 	discount: number
 	/** Guest count for the order */
-	guests_count?: number
+	guests_count?: string
 	/**
 	 * Type of payment method used
 	 * - 0: Closed without payment
