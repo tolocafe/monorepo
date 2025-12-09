@@ -87,7 +87,7 @@ msgstr "特別な指示を追加..."
 msgid "Add funds to your TOLO wallet for quick and easy payments."
 msgstr "TOLO Walletに資金を追加して、簡単で迅速なお支払いを。"
 
-#: src/app/(tabs)/(home)/[id].tsx:513
+#: src/app/(tabs)/(home)/[id].tsx:515
 msgid "Add to Order"
 msgstr "注文に追加"
 
@@ -141,7 +141,7 @@ msgstr "ボウルヴィル・ホセ・マリア・ピーノ・スュアレス800
 msgid "Cache cleared"
 msgstr "キャッシュをクリアしました"
 
-#: src/app/(tabs)/(home)/[id].tsx:318
+#: src/app/(tabs)/(home)/[id].tsx:320
 msgid "Caffeine"
 msgstr "カフェイン"
 
@@ -246,11 +246,11 @@ msgstr "配達"
 msgid "Discount"
 msgstr "割引"
 
-#: src/app/(tabs)/(home)/index.tsx:193
+#: src/app/(tabs)/(home)/index.tsx:82
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides."
 msgstr "エスプレッソ、ラテ、カプチーノ、おいしいサイドメニューなど、手作りコーヒーメニューをお楽しみください。"
 
-#: src/app/(tabs)/(home)/index.tsx:184
+#: src/app/(tabs)/(home)/index.tsx:73
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides. TOLO - where good coffee meets you."
 msgstr "エスプレッソ、ラテ、カプチーノ、おいしいサイドメニューなど、手作りコーヒーメニューをお楽しみください。TOLO - 美味しいコーヒーがあなたをお待ちしています。"
 
@@ -342,7 +342,7 @@ msgstr "エラー"
 msgid "Error signing out. Please try again."
 msgstr "サインアウトエラー。もう一度お試しください。"
 
-#: src/app/(tabs)/(home)/index.tsx:245
+#: src/components/MenuSections/EventsSection.tsx:21
 msgid "Events"
 msgstr ""
 
@@ -359,7 +359,7 @@ msgstr "レシートのダウンロードに失敗しました。もう一度お
 msgid "Failed to initialize payment"
 msgstr "支払いの初期化に失敗しました"
 
-#: src/app/(tabs)/(home)/index.tsx:169
+#: src/components/MenuSections/CategoriesSection.tsx:75
 msgid "Failed to load menu. Please try again."
 msgstr "メニューの読み込みに失敗しました。もう一度お試しください。"
 
@@ -386,7 +386,7 @@ msgstr "注文の送信に失敗しました。もう一度お試しください
 msgid "First name"
 msgstr "名前"
 
-#: src/components/MenuListItem/index.tsx:80
+#: src/components/MenuListItem/index.tsx:82
 msgid "From {cost}"
 msgstr "{cost}から"
 
@@ -429,7 +429,7 @@ msgstr "情報"
 msgid "Insufficient Balance"
 msgstr "残高不足"
 
-#: src/app/(tabs)/(home)/[id].tsx:313
+#: src/app/(tabs)/(home)/[id].tsx:315
 msgid "Intensity"
 msgstr "強度"
 
@@ -453,16 +453,12 @@ msgstr "言語"
 msgid "Let's create your account with the phone number <0>{0}</0>"
 msgstr "電話番号<0>{0}</0>でアカウントを作成しましょう"
 
-#: src/app/sign-in.tsx:368
-#~ msgid "Let's create your account with the phone number <0>{phoneNumber}</0>"
-#~ msgstr "電話番号<0>{phoneNumber}</0>でアカウントを作成しましょう"
-
 #: src/containers/table-bill-screen.tsx:213
 #: src/containers/table-bill-screen.web.tsx:143
 msgid "Loading bill..."
 msgstr "会計を読み込み中..."
 
-#: src/app/(tabs)/(home)/index.tsx:159
+#: src/components/MenuSections/CategoriesSection.tsx:65
 msgid "Loading menu..."
 msgstr "メニューを読み込み中..."
 
@@ -500,12 +496,12 @@ msgstr "メンテナンス"
 msgid "Maximum length is 2000 characters"
 msgstr "最大2000文字です"
 
-#: src/app/(tabs)/(home)/index.tsx:260
+#: src/components/MenuSections/CategoriesSection.tsx:89
 msgid "Menu"
 msgstr "メニュー"
 
-#: src/app/(tabs)/(home)/index.tsx:182
-#: src/app/(tabs)/(home)/index.tsx:191
+#: src/app/(tabs)/(home)/index.tsx:71
+#: src/app/(tabs)/(home)/index.tsx:80
 msgid "Menu - TOLO Good Coffee"
 msgstr "メニュー - TOLOグッドコーヒー"
 
@@ -513,8 +509,8 @@ msgstr "メニュー - TOLOグッドコーヒー"
 msgid "Mexico (+52)"
 msgstr "メキシコ (+52)"
 
-#: src/app/(tabs)/(home)/[id].tsx:340
-#: src/app/(tabs)/(home)/[id].tsx:412
+#: src/app/(tabs)/(home)/[id].tsx:342
+#: src/app/(tabs)/(home)/[id].tsx:414
 msgid "Modifications"
 msgstr "カスタマイズ"
 
@@ -606,10 +602,6 @@ msgstr "注文が見つかりません"
 msgid "Order placed"
 msgstr "注文しました"
 
-#: src/app/(tabs)/queue/index.tsx:249
-#~ msgid "Order Queue"
-#~ msgstr "注文キュー"
-
 #: src/app/(tabs)/_layout.tsx:113
 #: src/app/(tabs)/orders/_layout.tsx:19
 #: src/app/(tabs)/orders/index.tsx:91
@@ -618,7 +610,7 @@ msgstr "注文しました"
 msgid "Orders"
 msgstr "注文"
 
-#: src/app/(tabs)/(home)/index.tsx:211
+#: src/components/MenuSections/CoffeesSection.tsx:18
 msgid "Our Beans"
 msgstr "当店の豆"
 
@@ -679,7 +671,7 @@ msgstr "Walletをチャージするにはサインインしてください"
 msgid "Please sign in to view your order history"
 msgstr "注文履歴を表示するにはサインインしてください"
 
-#: src/app/(tabs)/(home)/index.tsx:267
+#: src/app/(tabs)/(home)/index.tsx:105
 msgid ""
 "Prices are subject to change without notice.\n"
 "Calories and volume are approximate and may vary between preparations."
@@ -700,7 +692,7 @@ msgstr "商品が見つかりません"
 msgid "Profile"
 msgstr "プロフィール"
 
-#: src/app/(tabs)/(home)/index.tsx:228
+#: src/components/MenuSections/PromotionsSection.tsx:18
 msgid "Promotions"
 msgstr ""
 
@@ -718,11 +710,11 @@ msgstr "数量: {0}"
 msgid "Queue"
 msgstr "キュー"
 
-#: src/app/(tabs)/(home)/[id].tsx:325
+#: src/app/(tabs)/(home)/[id].tsx:327
 msgid "Recipe"
 msgstr "レシピ"
 
-#: src/app/(tabs)/(home)/index.tsx:172
+#: src/components/MenuSections/CategoriesSection.tsx:78
 msgid "Retry"
 msgstr "再試行"
 
@@ -898,7 +890,7 @@ msgstr "お持ち帰り"
 msgid "TOLO - Good Coffee"
 msgstr "TOLO - 美味しいコーヒー"
 
-#: src/app/(tabs)/(home)/index.tsx:188
+#: src/app/(tabs)/(home)/index.tsx:77
 msgid "TOLO menu, good coffee, espresso, latte, cappuccino, coffee shop menu"
 msgstr "TOLOメニュー、美味しいコーヒー、エスプレッソ、ラテ、カプチーノ、コーヒーショップメニュー"
 
@@ -995,10 +987,6 @@ msgstr "この支払いを処理するために電話番号が必要です。"
 #: src/app/sign-in.tsx:483
 msgid "We sent a code to {0}"
 msgstr "{0}にコードを送信しました"
-
-#: src/app/sign-in.tsx:480
-#~ msgid "We sent a code to {phone}"
-#~ msgstr "{phone}にコードを送信しました"
 
 #: src/app/sign-in.tsx:98
 #: src/app/sign-in.tsx:119

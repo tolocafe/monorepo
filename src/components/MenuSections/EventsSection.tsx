@@ -12,7 +12,7 @@ export function EventsSection() {
 	const { data } = useQuery(eventsQueryOptions)
 
 	if (data.length === 0) {
-		return <h1>NO DATA</h1>
+		return null
 	}
 
 	return (

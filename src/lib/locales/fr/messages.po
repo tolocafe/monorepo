@@ -87,7 +87,7 @@ msgstr "Ajoutez des instructions spéciales..."
 msgid "Add funds to your TOLO wallet for quick and easy payments."
 msgstr "Ajoutez des fonds à votre portefeuille TOLO pour des paiements rapides et faciles."
 
-#: src/app/(tabs)/(home)/[id].tsx:513
+#: src/app/(tabs)/(home)/[id].tsx:515
 msgid "Add to Order"
 msgstr "Ajouter à la commande"
 
@@ -141,7 +141,7 @@ msgstr "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
 msgid "Cache cleared"
 msgstr "Cache vidé"
 
-#: src/app/(tabs)/(home)/[id].tsx:318
+#: src/app/(tabs)/(home)/[id].tsx:320
 msgid "Caffeine"
 msgstr "Caféine"
 
@@ -246,11 +246,11 @@ msgstr "Livraison"
 msgid "Discount"
 msgstr "Réduction"
 
-#: src/app/(tabs)/(home)/index.tsx:193
+#: src/app/(tabs)/(home)/index.tsx:82
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides."
 msgstr "Découvrez notre menu de café maison avec espresso, lattes, cappuccinos et délicieux accompagnements."
 
-#: src/app/(tabs)/(home)/index.tsx:184
+#: src/app/(tabs)/(home)/index.tsx:73
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides. TOLO - where good coffee meets you."
 msgstr "Découvrez notre menu de café maison avec espresso, lattes, cappuccinos et délicieux accompagnements. TOLO - où le bon café vous rencontre."
 
@@ -342,7 +342,7 @@ msgstr "Erreur"
 msgid "Error signing out. Please try again."
 msgstr "Erreur lors de la déconnexion. Veuillez réessayer."
 
-#: src/app/(tabs)/(home)/index.tsx:245
+#: src/components/MenuSections/EventsSection.tsx:21
 msgid "Events"
 msgstr ""
 
@@ -359,7 +359,7 @@ msgstr "Échec du téléchargement du reçu. Veuillez réessayer."
 msgid "Failed to initialize payment"
 msgstr "Échec de l'initialisation du paiement"
 
-#: src/app/(tabs)/(home)/index.tsx:169
+#: src/components/MenuSections/CategoriesSection.tsx:75
 msgid "Failed to load menu. Please try again."
 msgstr "Échec du chargement du menu. Veuillez réessayer."
 
@@ -386,7 +386,7 @@ msgstr "Échec de la soumission de la commande. Veuillez réessayer."
 msgid "First name"
 msgstr "Prénom"
 
-#: src/components/MenuListItem/index.tsx:80
+#: src/components/MenuListItem/index.tsx:82
 msgid "From {cost}"
 msgstr "De {cost}"
 
@@ -429,7 +429,7 @@ msgstr "Informations"
 msgid "Insufficient Balance"
 msgstr "Solde insuffisant"
 
-#: src/app/(tabs)/(home)/[id].tsx:313
+#: src/app/(tabs)/(home)/[id].tsx:315
 msgid "Intensity"
 msgstr "Intensité"
 
@@ -453,16 +453,12 @@ msgstr "Langue"
 msgid "Let's create your account with the phone number <0>{0}</0>"
 msgstr "Créons votre compte avec le numéro de téléphone <0>{0}</0>"
 
-#: src/app/sign-in.tsx:368
-#~ msgid "Let's create your account with the phone number <0>{phoneNumber}</0>"
-#~ msgstr "Créons votre compte avec le numéro de téléphone <0>{phoneNumber}</0>"
-
 #: src/containers/table-bill-screen.tsx:213
 #: src/containers/table-bill-screen.web.tsx:143
 msgid "Loading bill..."
 msgstr "Chargement de l'addition..."
 
-#: src/app/(tabs)/(home)/index.tsx:159
+#: src/components/MenuSections/CategoriesSection.tsx:65
 msgid "Loading menu..."
 msgstr "Chargement du menu..."
 
@@ -500,12 +496,12 @@ msgstr "Maintenance"
 msgid "Maximum length is 2000 characters"
 msgstr "La longueur maximale est de 2000 caractères"
 
-#: src/app/(tabs)/(home)/index.tsx:260
+#: src/components/MenuSections/CategoriesSection.tsx:89
 msgid "Menu"
 msgstr "Menu"
 
-#: src/app/(tabs)/(home)/index.tsx:182
-#: src/app/(tabs)/(home)/index.tsx:191
+#: src/app/(tabs)/(home)/index.tsx:71
+#: src/app/(tabs)/(home)/index.tsx:80
 msgid "Menu - TOLO Good Coffee"
 msgstr "Menu - TOLO Bon Café"
 
@@ -513,8 +509,8 @@ msgstr "Menu - TOLO Bon Café"
 msgid "Mexico (+52)"
 msgstr "Mexique (+52)"
 
-#: src/app/(tabs)/(home)/[id].tsx:340
-#: src/app/(tabs)/(home)/[id].tsx:412
+#: src/app/(tabs)/(home)/[id].tsx:342
+#: src/app/(tabs)/(home)/[id].tsx:414
 msgid "Modifications"
 msgstr "Modifications"
 
@@ -606,10 +602,6 @@ msgstr "Commande introuvable"
 msgid "Order placed"
 msgstr "Commande passée"
 
-#: src/app/(tabs)/queue/index.tsx:249
-#~ msgid "Order Queue"
-#~ msgstr "File d'attente des commandes"
-
 #: src/app/(tabs)/_layout.tsx:113
 #: src/app/(tabs)/orders/_layout.tsx:19
 #: src/app/(tabs)/orders/index.tsx:91
@@ -618,7 +610,7 @@ msgstr "Commande passée"
 msgid "Orders"
 msgstr "Commandes"
 
-#: src/app/(tabs)/(home)/index.tsx:211
+#: src/components/MenuSections/CoffeesSection.tsx:18
 msgid "Our Beans"
 msgstr "Nos Grains"
 
@@ -679,7 +671,7 @@ msgstr "Veuillez vous connecter pour recharger votre portefeuille"
 msgid "Please sign in to view your order history"
 msgstr "Veuillez vous connecter pour voir votre historique de commandes"
 
-#: src/app/(tabs)/(home)/index.tsx:267
+#: src/app/(tabs)/(home)/index.tsx:105
 msgid ""
 "Prices are subject to change without notice.\n"
 "Calories and volume are approximate and may vary between preparations."
@@ -700,7 +692,7 @@ msgstr "Produit introuvable"
 msgid "Profile"
 msgstr "Profil"
 
-#: src/app/(tabs)/(home)/index.tsx:228
+#: src/components/MenuSections/PromotionsSection.tsx:18
 msgid "Promotions"
 msgstr ""
 
@@ -718,11 +710,11 @@ msgstr "Qté: {0}"
 msgid "Queue"
 msgstr "File d'attente"
 
-#: src/app/(tabs)/(home)/[id].tsx:325
+#: src/app/(tabs)/(home)/[id].tsx:327
 msgid "Recipe"
 msgstr "Recette"
 
-#: src/app/(tabs)/(home)/index.tsx:172
+#: src/components/MenuSections/CategoriesSection.tsx:78
 msgid "Retry"
 msgstr "Réessayer"
 
@@ -898,7 +890,7 @@ msgstr "À emporter"
 msgid "TOLO - Good Coffee"
 msgstr "TOLO - Bon Café"
 
-#: src/app/(tabs)/(home)/index.tsx:188
+#: src/app/(tabs)/(home)/index.tsx:77
 msgid "TOLO menu, good coffee, espresso, latte, cappuccino, coffee shop menu"
 msgstr "Menu TOLO, bon café, espresso, latte, cappuccino, menu de café"
 
@@ -995,10 +987,6 @@ msgstr "Nous avons besoin de votre numéro de téléphone pour traiter ce paieme
 #: src/app/sign-in.tsx:483
 msgid "We sent a code to {0}"
 msgstr "Nous avons envoyé un code à {0}"
-
-#: src/app/sign-in.tsx:480
-#~ msgid "We sent a code to {phone}"
-#~ msgstr "Nous avons envoyé un code à {phone}"
 
 #: src/app/sign-in.tsx:98
 #: src/app/sign-in.tsx:119

@@ -10,7 +10,10 @@ import { promotionsQueryOptions } from '@/lib/queries/menu'
 
 export function PromotionsSection() {
 	const { data } = useQuery(promotionsQueryOptions)
-	if (data.length === 0) return null
+
+	if (data.length === 0) {
+		return null
+	}
 
 	return (
 		<View style={styles.promotionsSection}>

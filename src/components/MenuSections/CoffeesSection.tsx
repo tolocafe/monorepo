@@ -10,7 +10,10 @@ import { coffeesQueryOptions } from '@/lib/queries/coffees'
 
 export function CoffeesSection() {
 	const { data } = useQuery(coffeesQueryOptions)
-	if (data.length === 0) return null
+
+	if (data.length === 0) {
+		return null
+	}
 
 	return (
 		<View style={styles.storiesSection}>
