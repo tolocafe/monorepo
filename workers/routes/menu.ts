@@ -55,6 +55,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 				...promotion,
 				description: webflowItem.description,
 				image,
+				name: webflowItem.name ?? promotion.name,
 				slug: webflowItem.slug,
 				summary: webflowItem.summary,
 			}
