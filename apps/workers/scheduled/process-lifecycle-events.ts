@@ -1,6 +1,8 @@
 import * as Sentry from '@sentry/cloudflare'
+import { and, eq, isNotNull, sql } from 'drizzle-orm'
+import { orderLines, transactions } from 'workers/db/schema'
 
-import type { SyncResult } from './sync-transactions'
+import type { Database, SyncResult } from './sync-transactions'
 
 export type CustomerLifecycleEvent =
 	| FirstTimeCustomerEvent
@@ -76,7 +78,7 @@ type BaseLifecycleEvent = {
  */
 export default async function processCustomerLifecycleEvents(
 	syncResult: SyncResult,
-	database: D1Database,
+	database: Database,
 ): Promise<CustomerLifecycleEvent[]> {
 	const events: CustomerLifecycleEvent[] = []
 
@@ -93,52 +95,52 @@ export default async function processCustomerLifecycleEvents(
 
 		// Process newly created transactions
 		for (const transaction of syncResult.created) {
-			// Skip transactions without a customer (client_id is null)
-			if (!transaction.client_id) {
+			// Skip transactions without a customer (client_id is null or '0')
+			if (!transaction.client_id || transaction.client_id === '0') {
 				continue
 			}
 
+			const clientId = Number.parseInt(transaction.client_id, 10)
+			const transactionId = Number.parseInt(transaction.transaction_id, 10)
+
 			// Check if this is a new customer or a revival
-			const customerHistory = await getCustomerHistory(
-				transaction.client_id,
-				database,
-			)
+			const customerHistory = await getCustomerHistory(clientId, database)
 
 			if (customerHistory.total_orders === 1) {
 				// First time customer
 				events.push({
-					customer_id: transaction.client_id,
+					customer_id: clientId,
 					data: {
-						payed_sum: transaction.payed_sum.toString(),
-						transaction_date: transaction.date_created,
+						payed_sum: transaction.payed_sum,
+						transaction_date: transaction.date_create,
 					},
-					transaction_id: transaction.transaction_id,
+					transaction_id: transactionId,
 					type: 'first_time_customer',
 				})
 
 				Sentry.addBreadcrumb({
 					category: 'lifecycle',
-					data: { client_id: transaction.client_id },
+					data: { client_id: clientId },
 					level: 'info',
 					message: 'First time customer detected',
 				})
 			} else if (customerHistory.days_since_last_order >= 30) {
 				// Revival - customer hasn't ordered in 30+ days
 				events.push({
-					customer_id: transaction.client_id,
+					customer_id: clientId,
 					data: {
 						days_since_last_order: customerHistory.days_since_last_order,
 						last_transaction_date: customerHistory.last_transaction_date || '',
-						transaction_date: transaction.date_created,
+						transaction_date: transaction.date_create,
 					},
-					transaction_id: transaction.transaction_id,
+					transaction_id: transactionId,
 					type: 'revival',
 				})
 
 				Sentry.addBreadcrumb({
 					category: 'lifecycle',
 					data: {
-						client_id: transaction.client_id,
+						client_id: clientId,
 						days_inactive: customerHistory.days_since_last_order,
 					},
 					level: 'info',
@@ -149,18 +151,18 @@ export default async function processCustomerLifecycleEvents(
 			// Check for milestone orders (5th, 10th, 25th, 50th, 100th, etc.)
 			if (isMilestone(customerHistory.total_orders)) {
 				events.push({
-					customer_id: transaction.client_id,
+					customer_id: clientId,
 					data: {
 						order_count: customerHistory.total_orders,
 					},
-					transaction_id: transaction.transaction_id,
+					transaction_id: transactionId,
 					type: 'milestone_order',
 				})
 
 				Sentry.addBreadcrumb({
 					category: 'lifecycle',
 					data: {
-						client_id: transaction.client_id,
+						client_id: clientId,
 						order_count: customerHistory.total_orders,
 					},
 					level: 'info',
@@ -175,25 +177,25 @@ export default async function processCustomerLifecycleEvents(
 				transaction.products.length > 0
 			) {
 				const discoveredProducts = await findDiscoveredProducts(
-					transaction.client_id,
+					clientId,
 					transaction.products.map((p) => p.product_id),
 					database,
 				)
 
 				if (discoveredProducts.length > 0) {
 					events.push({
-						customer_id: transaction.client_id,
+						customer_id: clientId,
 						data: {
 							discovered_product_ids: discoveredProducts,
 						},
-						transaction_id: transaction.transaction_id,
+						transaction_id: transactionId,
 						type: 'product_discovery',
 					})
 
 					Sentry.addBreadcrumb({
 						category: 'lifecycle',
 						data: {
-							client_id: transaction.client_id,
+							client_id: clientId,
 							discovered_products_count: discoveredProducts.length,
 						},
 						level: 'info',
@@ -205,30 +207,33 @@ export default async function processCustomerLifecycleEvents(
 
 		// Process updated transactions
 		for (const transaction of syncResult.updated) {
-			// Skip transactions without a customer (client_id is null)
-			if (!transaction.client_id) {
+			// Skip transactions without a customer (client_id is null or '0')
+			if (!transaction.client_id || transaction.client_id === '0') {
 				continue
 			}
 
+			const clientId = Number.parseInt(transaction.client_id, 10)
+			const transactionId = Number.parseInt(transaction.transaction_id, 10)
+
 			// Find the previous version to compare
 			const previousVersion = await database
-				.prepare(
-					`SELECT date_close FROM transactions WHERE transaction_id = ?1`,
-				)
-				.bind(transaction.transaction_id)
-				.first<{ date_close: string }>()
+				.select({ date_close: transactions.dateClose })
+				.from(transactions)
+				.where(eq(transactions.id, transactionId))
+				.limit(1)
+				.then((rows) => rows.at(0))
 
 			if (!previousVersion) continue
 
 			// Check if payment was just completed (date_close was added)
 			if (!previousVersion.date_close && transaction.date_close) {
 				events.push({
-					customer_id: transaction.client_id,
+					customer_id: clientId,
 					data: {
 						date_close: transaction.date_close,
-						payed_sum: transaction.payed_sum,
+						payed_sum: Number.parseInt(transaction.payed_sum, 10),
 					},
-					transaction_id: transaction.transaction_id,
+					transaction_id: transactionId,
 					type: 'payment_completion',
 				})
 
@@ -309,45 +314,28 @@ export default async function processCustomerLifecycleEvents(
 async function findDiscoveredProducts(
 	clientId: number,
 	currentProductIds: string[],
-	database: D1Database,
+	database: Database,
 ): Promise<string[]> {
 	if (currentProductIds.length === 0) return []
 
-	// Get all products this customer has purchased before (excluding current transaction)
 	const previousProducts = await database
-		.prepare(
-			`
-			SELECT DISTINCT products
-			FROM transactions
-			WHERE client_id = ?1
-		`,
+		.select({ productId: orderLines.productId })
+		.from(orderLines)
+		.innerJoin(transactions, eq(orderLines.transactionId, transactions.id))
+		.where(
+			and(
+				eq(transactions.customerId, clientId),
+				isNotNull(orderLines.productId),
+			),
 		)
-		.bind(clientId)
-		.all<{ products: string }>()
+		.groupBy(orderLines.productId)
 
-	// Flatten all previous product IDs
-	const previousProductIds = new Set<string>()
-	for (const row of previousProducts.results) {
-		try {
-			const products = JSON.parse(row.products) as unknown
-			if (Array.isArray(products)) {
-				for (const product of products) {
-					if (
-						typeof product === 'object' &&
-						product !== null &&
-						'product_id' in product
-					) {
-						const productId = (product as { product_id: unknown }).product_id
-						if (typeof productId === 'string') {
-							previousProductIds.add(productId)
-						}
-					}
-				}
-			}
-		} catch {
-			// Skip invalid JSON
-		}
-	}
+	const previousProductIds = new Set<string>(
+		previousProducts
+			.map((row) => row.productId)
+			.filter((id): id is number => id != null)
+			.map((id) => id.toString()),
+	)
 
 	// Find products in current order that aren't in previous orders
 	return currentProductIds.filter((id) => !previousProductIds.has(id))
@@ -358,33 +346,27 @@ async function findDiscoveredProducts(
  */
 async function getCustomerHistory(
 	clientId: number,
-	database: D1Database,
+	database: Database,
 ): Promise<{
 	days_since_last_order: number
 	last_transaction_date: null | string
 	total_orders: number
 }> {
-	const result = await database
-		.prepare(
-			`
-			SELECT
-				COUNT(*) as total_orders,
-				MAX(date_created) as last_transaction_date
-			FROM transactions
-			WHERE client_id = ?1
-		`,
-		)
-		.bind(clientId)
-		.first<{
-			last_transaction_date: null | string
-			total_orders: number
-		}>()
+	const [result] = await database
+		.select({
+			last_transaction_date: sql<
+				null | string
+			>`MAX(${transactions.dateCreated})`,
+			total_orders: sql<number>`COUNT(*)`,
+		})
+		.from(transactions)
+		.where(eq(transactions.customerId, clientId))
 
-	if (!result?.last_transaction_date) {
+	if (!result.last_transaction_date) {
 		return {
 			days_since_last_order: 0,
 			last_transaction_date: null,
-			total_orders: result?.total_orders || 0,
+			total_orders: result.total_orders || 0,
 		}
 	}
 
