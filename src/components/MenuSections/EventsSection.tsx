@@ -2,11 +2,15 @@ import { FlatList, View } from 'react-native'
 
 import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
+
+import type { Event } from '@common/api'
 
 import EventCard from '@/components/EventCard'
 import { H2 } from '@/components/Text'
 import { eventsQueryOptions } from '@/lib/queries/events'
+
+const UniFlatList = withUnistyles(FlatList)
 
 export function EventsSection() {
 	const { data } = useQuery(eventsQueryOptions)
@@ -20,22 +24,23 @@ export function EventsSection() {
 			<H2 style={styles.eventsTitle}>
 				<Trans>Events</Trans>
 			</H2>
-			<FlatList
+			<UniFlatList
 				contentContainerStyle={styles.eventsContainer}
 				data={data}
 				horizontal
-				keyExtractor={(item) => item.slug}
-				renderItem={({ item }) => <EventCard event={item} />}
+				keyExtractor={(item) => (item as Event).slug}
+				renderItem={({ item }) => <EventCard event={item as Event} />}
 				showsHorizontalScrollIndicator={false}
 			/>
 		</View>
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, runtime) => ({
 	eventsContainer: {
 		gap: theme.spacing.md,
-		paddingHorizontal: theme.layout.screenPadding,
+		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
+		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 		paddingVertical: theme.spacing.md,
 	},
 	eventsSection: {
@@ -43,6 +48,7 @@ const styles = StyleSheet.create((theme) => ({
 		borderBottomWidth: 1,
 	},
 	eventsTitle: {
-		paddingHorizontal: theme.layout.screenPadding,
+		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
+		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 	},
 }))

@@ -2,11 +2,15 @@ import { FlatList, View } from 'react-native'
 
 import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import CoffeeStoryBubble from '@/components/CoffeeStoryBubble'
 import { H2 } from '@/components/Text'
 import { coffeesQueryOptions } from '@/lib/queries/coffees'
+
+import type { Coffee } from '@/lib/api'
+
+const UniFlatList = withUnistyles(FlatList)
 
 export function CoffeesSection() {
 	const { data } = useQuery(coffeesQueryOptions)
@@ -20,22 +24,23 @@ export function CoffeesSection() {
 			<H2 style={styles.storiesTitle}>
 				<Trans>Our Beans</Trans>
 			</H2>
-			<FlatList
+			<UniFlatList
 				contentContainerStyle={styles.storiesContainer}
 				data={data}
 				horizontal
-				keyExtractor={(item) => item.slug}
-				renderItem={({ item }) => <CoffeeStoryBubble coffee={item} />}
+				keyExtractor={(item) => (item as Coffee).slug}
+				renderItem={({ item }) => <CoffeeStoryBubble coffee={item as Coffee} />}
 				showsHorizontalScrollIndicator={false}
 			/>
 		</View>
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, runtime) => ({
 	storiesContainer: {
 		gap: theme.spacing.sm,
-		paddingHorizontal: theme.layout.screenPadding,
+		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
+		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 		paddingVertical: theme.spacing.md,
 	},
 	storiesSection: {
@@ -43,6 +48,7 @@ const styles = StyleSheet.create((theme) => ({
 		borderBottomWidth: 1,
 	},
 	storiesTitle: {
-		paddingHorizontal: theme.layout.screenPadding,
+		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
+		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 	},
 }))

@@ -1,20 +1,14 @@
-import {
-	StyleSheet,
-	UnistylesRuntime,
-	withUnistyles,
-} from 'react-native-unistyles'
+import { StyleSheet, useUnistyles, withUnistyles } from 'react-native-unistyles'
 
 import { LinearGradient } from '@/components/LinearGradient'
 
 const styles = StyleSheet.create({
 	gradient: {
-		height: UnistylesRuntime.insets.top,
-		left: 0,
-		position: 'absolute',
-		right: 0,
-		top: 0,
+		...StyleSheet.absoluteFillObject,
+		bottom: 'auto',
+		height: 50,
 		width: '100%',
-		zIndex: 99_999,
+		zIndex: 999_999,
 	},
 })
 
@@ -34,7 +28,9 @@ const UniLinearGradient = withUnistyles(LinearGradient, (_theme, rt) => ({
 }))
 
 export default function HeaderGradient() {
-	if (UnistylesRuntime.insets.top === 0) {
+	const unistyles = useUnistyles()
+
+	if (unistyles.rt.insets.top === 0) {
 		return null
 	}
 

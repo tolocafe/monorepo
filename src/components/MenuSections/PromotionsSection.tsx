@@ -2,11 +2,15 @@ import { FlatList, View } from 'react-native'
 
 import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { StyleSheet } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
+
+import type { Promotion } from '@common/api'
 
 import PromotionCard from '@/components/PromotionCard'
 import { H2 } from '@/components/Text'
 import { promotionsQueryOptions } from '@/lib/queries/menu'
+
+const UniFlatList = withUnistyles(FlatList)
 
 export function PromotionsSection() {
 	const { data } = useQuery(promotionsQueryOptions)
@@ -20,22 +24,25 @@ export function PromotionsSection() {
 			<H2 style={styles.promotionsTitle}>
 				<Trans>Promotions</Trans>
 			</H2>
-			<FlatList
+			<UniFlatList
 				contentContainerStyle={styles.promotionsContainer}
 				data={data}
 				horizontal
-				keyExtractor={(item) => item.promotion_id}
-				renderItem={({ item }) => <PromotionCard promotion={item} />}
+				keyExtractor={(item) => (item as Promotion).promotion_id}
+				renderItem={({ item }) => (
+					<PromotionCard promotion={item as Promotion} />
+				)}
 				showsHorizontalScrollIndicator={false}
 			/>
 		</View>
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, runtime) => ({
 	promotionsContainer: {
 		gap: theme.spacing.md,
-		paddingHorizontal: theme.layout.screenPadding,
+		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
+		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 		paddingVertical: theme.spacing.md,
 	},
 	promotionsSection: {
@@ -43,6 +50,7 @@ const styles = StyleSheet.create((theme) => ({
 		borderBottomWidth: 1,
 	},
 	promotionsTitle: {
-		paddingHorizontal: theme.layout.screenPadding,
+		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
+		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 	},
 }))

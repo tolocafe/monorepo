@@ -21,10 +21,13 @@ const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
 }))
 
 const CATEGORY_ORDER = ['De Temporada', 'Café', 'Matcha', 'Té y Tisanas']
-const categoryKeyExtractor = (item: Product) => item.product_id
-const menuItemFallback = <View aria-hidden />
 
-export function CategoriesSection() {
+const categoryKeyExtractor = (item: unknown) => (item as Product).product_id
+
+const menuItemFallback = <View aria-hidden />
+const UniFlatList = withUnistyles(FlatList)
+
+export function MenuSection() {
 	const productsQuery = useQuery(productsQueryOptions)
 	const categoriesQuery = useQuery(categoriesQueryOptions)
 
@@ -91,15 +94,15 @@ export function CategoriesSection() {
 			</View>
 			{categoriesWithItems.map((category) => (
 				<Fragment key={category.category_id}>
-					<H3 style={styles.subtitle}>{category.category_name}</H3>
-					<FlatList
+					<H3 style={styles.categorySubtitle}>{category.category_name}</H3>
+					<UniFlatList
 						contentContainerStyle={styles.categoryItems}
 						data={category.items}
 						horizontal
 						keyExtractor={categoryKeyExtractor}
 						renderItem={({ item }) => (
 							<ErrorBoundary fallback={menuItemFallback}>
-								<MenuListItem item={item} />
+								<MenuListItem item={item as Product} />
 							</ErrorBoundary>
 						)}
 						showsHorizontalScrollIndicator={false}
@@ -110,18 +113,24 @@ export function CategoriesSection() {
 	)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, runtime) => ({
 	categoryItems: {
 		gap: theme.spacing.sm,
 		overflow: 'visible',
 		paddingBottom: theme.spacing.lg,
-		paddingHorizontal: theme.layout.screenPadding,
+		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
+		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 		paddingTop: theme.spacing.md,
+	},
+	categorySubtitle: {
+		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
+		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 	},
 	categoryTitle: {
 		color: theme.colors.gray.text,
 		marginBottom: theme.spacing.md,
-		paddingHorizontal: theme.layout.screenPadding,
+		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
+		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 	},
 	errorContainer: {
 		alignItems: 'center',
@@ -144,8 +153,5 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	loadingText: {
 		color: theme.colors.crema.solid,
-	},
-	subtitle: {
-		paddingHorizontal: theme.layout.screenPadding,
 	},
 }))

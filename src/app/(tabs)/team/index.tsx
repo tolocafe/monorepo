@@ -35,34 +35,31 @@ export default function TeamIndex() {
 					/>
 				}
 				withTopGradient
-				withTopPadding
 			>
-				<View style={styles.section}>
-					<H2 style={styles.sectionTitle}>
-						<Trans>Team</Trans>
-					</H2>
+				<H2 style={styles.sectionTitle}>
+					<Trans>Team</Trans>
+				</H2>
 
-					<List>
-						<ListItem
-							accessibilityRole="link"
-							chevron
-							onPress={() => router.push('/team/queue')}
-						>
-							<ListItem.Label>
-								<Trans>Queue</Trans>
-							</ListItem.Label>
-						</ListItem>
-						<ListItem
-							accessibilityRole="link"
-							chevron
-							onPress={() => router.push('/team/ticket')}
-						>
-							<ListItem.Label>
-								<Trans>Download Ticket PDF</Trans>
-							</ListItem.Label>
-						</ListItem>
-					</List>
-				</View>
+				<List>
+					<ListItem
+						accessibilityRole="link"
+						chevron
+						onPress={() => router.push('/team/queue')}
+					>
+						<ListItem.Label>
+							<Trans>Queue</Trans>
+						</ListItem.Label>
+					</ListItem>
+					<ListItem
+						accessibilityRole="link"
+						chevron
+						onPress={() => router.push('/team/ticket')}
+					>
+						<ListItem.Label>
+							<Trans>Download Ticket PDF</Trans>
+						</ListItem.Label>
+					</ListItem>
+				</List>
 
 				<View style={styles.footer}>
 					<Paragraph style={styles.footerText}>
@@ -84,10 +81,7 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: theme.typography.caption.fontSize,
 		textAlign: 'center',
 	},
-	section: {
-		marginBottom: theme.spacing.lg,
-		paddingHorizontal: theme.layout.screenPadding,
-	},
+
 	sectionTitle: {
 		marginBottom: theme.spacing.sm,
 	},

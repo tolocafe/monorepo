@@ -85,13 +85,12 @@ export default function Menu() {
 				<meta content="/" property="og:url" />
 			</Head>
 			<ScreenContainer
-				contentInsetAdjustmentBehavior="automatic"
 				ref={screenRef}
 				refreshControl={
 					<RefreshControl onRefresh={handleRefresh} refreshing={false} />
 				}
+				withPaddingEdges={['top', 'bottom']}
 				withTopGradient
-				withTopPadding
 			>
 				<CoffeesSection />
 

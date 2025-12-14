@@ -146,7 +146,6 @@ export default function More() {
 					/>
 				}
 				withTopGradient
-				withTopPadding
 			>
 				{user && (
 					<View style={styles.section}>
@@ -422,7 +421,6 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	section: {
 		marginBottom: theme.spacing.lg,
-		paddingHorizontal: theme.layout.screenPadding,
 	},
 	sectionTitle: {
 		marginBottom: theme.spacing.sm,

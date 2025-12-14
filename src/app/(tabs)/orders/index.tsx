@@ -120,9 +120,9 @@ export default function Orders() {
 				<title>{t`Orders`}</title>
 			</Head>
 			<ScreenContainer
-				contentContainerStyle={styles.container}
+				// contentContainerStyle={styles.container}
 				noScroll={!orders?.length}
-				ref={screenRef}
+				// ref={screenRef}
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(orderQueryOptions)}
@@ -130,7 +130,6 @@ export default function Orders() {
 					/>
 				}
 				withTopGradient
-				withTopPadding
 			>
 				{/* Current Order in Progress */}
 				{currentOrder && (
@@ -228,8 +227,8 @@ export default function Orders() {
 
 const styles = StyleSheet.create((theme) => ({
 	container: {
-		gap: theme.spacing.md,
-		paddingHorizontal: theme.layout.screenPadding,
+		// gap: theme.spacing.md,
+		// paddingHorizontal: theme.layout.screenPadding,
 	},
 	currentOrderBottomText: {
 		flexDirection: 'row',
