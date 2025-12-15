@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react'
-import { Alert, View } from 'react-native'
+import { Alert, Platform, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
 import Head from 'expo-router/head'
@@ -40,7 +40,10 @@ export default function TeamTicketDownload() {
 				<Head>
 					<title>{t`Not Authorized`}</title>
 				</Head>
-				<ScreenContainer withTopGradient withTopPadding>
+				<ScreenContainer
+					withHeaderPadding
+					withTopGradient={Platform.OS !== 'ios'}
+				>
 					<View style={styles.centered}>
 						<H2>
 							<Trans>Not Authorized</Trans>
@@ -57,40 +60,40 @@ export default function TeamTicketDownload() {
 	return (
 		<>
 			<Head>
-				<title>{t`Download Ticket PDF`}</title>
+				<title>{t`Ticket`}</title>
 			</Head>
-			<ScreenContainer withTopGradient withTopPadding>
-				<View style={styles.section}>
-					<H2 style={styles.title}>
-						<Trans>Download Ticket PDF</Trans>
-					</H2>
-					<Paragraph style={styles.helperText}>
-						<Trans>
-							Enter a ticket number and download its receipt as PDF.
-						</Trans>
-					</Paragraph>
-					<View style={styles.form}>
-						<Input
-							autoCapitalize="none"
-							autoCorrect={false}
-							editable={!isDownloading}
-							keyboardType="number-pad"
-							onChangeText={setTicketId}
-							placeholder={t`Ticket number`}
-							returnKeyType="done"
-							value={ticketId}
-						/>
-						<Button
-							disabled={!canDownload || isDownloading}
-							onPress={handleDownload}
-						>
-							{isDownloading ? (
-								<Trans>Downloading...</Trans>
-							) : (
-								<Trans>Download PDF</Trans>
-							)}
-						</Button>
-					</View>
+			<ScreenContainer
+				contentContainerStyle={styles.contentContainerStyle}
+				withHeaderPadding
+				withTopGradient={Platform.OS === 'android'}
+			>
+				<H2 style={styles.title}>
+					<Trans>Ticket</Trans>
+				</H2>
+				<Paragraph style={styles.helperText}>
+					<Trans>Enter a ticket number and download its receipt as PDF.</Trans>
+				</Paragraph>
+				<View style={styles.form}>
+					<Input
+						autoCapitalize="none"
+						autoCorrect={false}
+						editable={!isDownloading}
+						keyboardType="number-pad"
+						onChangeText={setTicketId}
+						placeholder={t`Ticket number`}
+						returnKeyType="done"
+						value={ticketId}
+					/>
+					<Button
+						disabled={!canDownload || isDownloading}
+						onPress={handleDownload}
+					>
+						{isDownloading ? (
+							<Trans>Downloading...</Trans>
+						) : (
+							<Trans>Download PDF</Trans>
+						)}
+					</Button>
 				</View>
 			</ScreenContainer>
 		</>
@@ -105,16 +108,15 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'center',
 		paddingHorizontal: theme.spacing.lg,
 	},
+	contentContainerStyle: {
+		gap: theme.spacing.xs,
+	},
 	form: {
 		gap: theme.spacing.md,
 		marginTop: theme.spacing.md,
 	},
 	helperText: {
 		color: theme.colors.crema.solid,
-	},
-	section: {
-		gap: theme.spacing.xs,
-		paddingHorizontal: theme.layout.screenPadding,
 	},
 	title: {
 		marginBottom: theme.spacing.xs,

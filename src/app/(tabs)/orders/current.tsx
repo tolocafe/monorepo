@@ -17,6 +17,7 @@ import type { CreateOrder } from '@common/schemas'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { Input } from '@/components/Input'
+import { ModifierTag } from '@/components/ModifierTag'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics/firebase'
@@ -34,11 +35,18 @@ import {
 	useCurrentOrder,
 	useUpdateItem,
 } from '@/lib/stores/order-store'
+import { sortModifiers } from '@/lib/utils/modifier-tags'
 import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
 
 import type { OrderProduct } from '@/lib/stores/order-store'
 
 const IGNORED_MODIFICATION_GROUP_ID = '4'
+
+type ModificationTag = {
+	group: string
+	modificationGroupId: string
+	name: string
+}
 
 export default function OrderDetail() {
 	const { t } = useLingui()
@@ -186,6 +194,12 @@ export default function OrderDetail() {
 	}
 
 	const handleClearOrder = useCallback(() => {
+		if (Platform.OS === 'web') {
+			clearOrder()
+			router.back()
+			return
+		}
+
 		Alert.alert(
 			t`Clear Order`,
 			t`Are you sure you want to clear this order? This action cannot be undone.`,
@@ -203,67 +217,83 @@ export default function OrderDetail() {
 		)
 	}, [clearOrder, t])
 
-	const renderOrderProduct = (product: OrderProduct, index: number) => (
-		<View key={`${product.id}-${index}`} style={styles.orderItem}>
-			<View style={styles.itemHeader}>
-				<Paragraph style={styles.itemName}>
-					{getProductName(product.id)}
-				</Paragraph>
-			</View>
+	const renderOrderProduct = (product: OrderProduct, index: number) => {
+		const modificationTags = Object.entries(product.modifications ?? {})
+			.filter(
+				([groupModificationId]) =>
+					groupModificationId !== IGNORED_MODIFICATION_GROUP_ID,
+			)
+			.map(([modificationGroupId, modificationId]) =>
+				getModificationTag({
+					modificationGroupId,
+					modificationId,
+					product,
+				}),
+			)
+			.filter((tag): tag is ModificationTag => tag !== null)
 
-			<View style={styles.itemDetails}>
-				<View style={styles.quantityContainer}>
-					<Pressable
-						onLongPress={() => handleQuantityChange(product, 0)}
-						onPress={() => handleQuantityChange(product, product.quantity - 1)}
-						style={styles.quantityButton}
-					>
-						<Text>
-							<Ionicons name="remove" size={20} />
-						</Text>
-					</Pressable>
-					<Text align="center" style={styles.quantity}>
-						{product.quantity}
-					</Text>
-					<Pressable
-						onPress={() => handleQuantityChange(product, product.quantity + 1)}
-						style={styles.quantityButton}
-					>
-						<Text>
-							<Ionicons name="add" size={20} />
-						</Text>
-					</Pressable>
+		const sortedTags = sortModifiers(modificationTags)
+
+		return (
+			<View key={`${product.id}-${index}`} style={styles.orderItem}>
+				<View style={styles.itemHeader}>
+					<Paragraph style={styles.itemName}>
+						{getProductName(product.id)}
+					</Paragraph>
 				</View>
-				<Paragraph>
-					{formatPrice(
-						getProductTotalCost({
-							modifications: product.modifications ?? {},
-							product: product.id,
-							quantity: product.quantity,
-						}),
-					)}
-				</Paragraph>
-			</View>
-			{Object.keys(product.modifications ?? {}).length > 0 && (
-				<View style={styles.modifications}>
-					{Object.entries(product.modifications ?? {})
-						.filter(
-							([groupModificationId]) =>
-								groupModificationId !== IGNORED_MODIFICATION_GROUP_ID,
-						)
-						.map(([modificationGroupId, modificationId]) => (
-							<Paragraph key={modificationGroupId} style={styles.itemMeta}>
-								{getModificationName({
-									modificationGroupId,
-									modificationId,
-									product,
-								})}
-							</Paragraph>
+
+				<View style={styles.itemDetails}>
+					<View style={styles.quantityContainer}>
+						<Pressable
+							onLongPress={() => handleQuantityChange(product, 0)}
+							onPress={() =>
+								handleQuantityChange(product, product.quantity - 1)
+							}
+							style={styles.quantityButton}
+						>
+							<Text>
+								<Ionicons name="remove" size={20} />
+							</Text>
+						</Pressable>
+						<Text align="center" style={styles.quantity}>
+							{product.quantity}
+						</Text>
+						<Pressable
+							onPress={() =>
+								handleQuantityChange(product, product.quantity + 1)
+							}
+							style={styles.quantityButton}
+						>
+							<Text>
+								<Ionicons name="add" size={20} />
+							</Text>
+						</Pressable>
+					</View>
+					<Paragraph>
+						{formatPrice(
+							getProductTotalCost({
+								modifications: product.modifications ?? {},
+								product: product.id,
+								quantity: product.quantity,
+							}),
+						)}
+					</Paragraph>
+				</View>
+
+				{sortedTags.length > 0 && (
+					<View style={styles.modifications}>
+						{sortedTags.map((tag) => (
+							<ModifierTag
+								group={tag.group}
+								key={tag.modificationGroupId}
+								name={tag.name}
+							/>
 						))}
-				</View>
-			)}
-		</View>
-	)
+					</View>
+				)}
+			</View>
+		)
+	}
 
 	if (!order) {
 		return (
@@ -296,16 +326,23 @@ export default function OrderDetail() {
 					),
 				}}
 			/>
-			<ScreenContainer contentContainerStyle={styles.container} keyboardAware>
+			<ScreenContainer
+				contentContainerStyle={styles.container}
+				keyboardAware
+				withHeaderPadding
+			>
 				{user && (
-					<Card style={styles.walletCard}>
-						<Paragraph>
-							<Trans>Wallet Balance</Trans>
-						</Paragraph>
-						<Paragraph weight="bold">
-							{formatPrice(user.ewallet ?? '0')}
-						</Paragraph>
-					</Card>
+					<>
+						<H2>
+							<Trans>Payment</Trans>
+						</H2>
+						<Card style={styles.walletCard}>
+							<Text>
+								<Trans>Wallet Balance</Trans>
+							</Text>
+							<Text weight="bold">{formatPrice(user.ewallet ?? '0')}</Text>
+						</Card>
+					</>
 				)}
 
 				<H2>
@@ -346,7 +383,8 @@ export default function OrderDetail() {
 									multiline
 									numberOfLines={3}
 									onChangeText={(text) => field.handleChange(text)}
-									placeholder={t`Add any special instructions...`}
+									placeholder={t`Add any special instructions or requests...`}
+									style={styles.notesInput}
 									value={field.state.value}
 								/>
 							)}
@@ -354,36 +392,33 @@ export default function OrderDetail() {
 					</Card>
 				</View>
 
-				<View style={styles.actionButtons}>
-					<Subscribe
-						selector={(state) => [state.canSubmit, state.isSubmitting] as const}
-					>
-						{([canSubmit, isSubmitting]) => {
-							const hasInsufficientBalance =
-								!user || Number(user.ewallet ?? '0') < orderTotal
+				<Subscribe
+					selector={(state) => [state.canSubmit, state.isSubmitting] as const}
+				>
+					{([canSubmit, isSubmitting]) => {
+						const hasInsufficientBalance =
+							!user || Number(user.ewallet ?? '0') < orderTotal
 
-							return (
-								<Button
-									disabled={!canSubmit || hasInsufficientBalance}
-									fullWidth
-									onPress={handleSubmit}
-								>
-									{isSubmitting ? (
-										<Trans>Sending Order...</Trans>
-									) : (
-										<Trans>Send Order</Trans>
-									)}
-								</Button>
-							)
-						}}
-					</Subscribe>
-				</View>
+						return (
+							<Button
+								disabled={!canSubmit || hasInsufficientBalance}
+								onPress={handleSubmit}
+							>
+								{isSubmitting ? (
+									<Trans>Sending Order...</Trans>
+								) : (
+									<Trans>Send Order</Trans>
+								)}
+							</Button>
+						)
+					}}
+				</Subscribe>
 			</ScreenContainer>
 		</>
 	)
 }
 
-function getModificationName({
+function getModificationTag({
 	modificationGroupId,
 	modificationId,
 	product,
@@ -391,10 +426,12 @@ function getModificationName({
 	modificationGroupId: string
 	modificationId: number
 	product: OrderProduct
-}): string {
+}): ModificationTag | null {
 	const productData = queryClient.getQueryData<Product>(
 		productQueryOptions(product.id).queryKey,
-	) as Product
+	)
+
+	if (!productData) return null
 
 	const modificationGroup = productData.group_modifications?.find(
 		(modification) =>
@@ -406,7 +443,13 @@ function getModificationName({
 		(modification) => modification.dish_modification_id === modificationId,
 	)
 
-	return modification?.name || ''
+	if (!modification?.name) return null
+
+	return {
+		group: modificationGroup?.name || 'Other',
+		modificationGroupId,
+		name: modification.name,
+	}
 }
 
 function getOrderTotal(products: OrderProduct[]) {
@@ -454,28 +497,25 @@ const styles = StyleSheet.create((theme) => ({
 	itemHeader: {
 		flexDirection: 'row',
 	},
-	itemMeta: {
-		backgroundColor: theme.colors.gray.solid,
-		borderRadius: theme.borderRadius.md,
-		color: '#fff',
-		fontSize: theme.fontSizes.xs,
-		paddingHorizontal: theme.spacing.sm,
-		paddingVertical: 1,
-	},
 	itemName: {
 		flex: 1,
 		fontWeight: theme.fontWeights.bold,
 	},
 	itemsCard: {
 		gap: theme.spacing.md,
+		paddingTop: theme.spacing.md,
 	},
 	modifications: {
 		flexDirection: 'row',
+		flexWrap: 'wrap',
 		gap: theme.spacing.xs,
 		marginBottom: theme.spacing.sm,
 	},
 	noteSection: {
 		gap: theme.spacing.md,
+	},
+	notesInput: {
+		marginVertical: theme.spacing.sm,
 	},
 	orderItem: {
 		gap: theme.spacing.sm,
@@ -507,11 +547,11 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingBottom: theme.spacing.md,
 		paddingTop: theme.spacing.sm,
 	},
 	walletCard: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
+		paddingVertical: theme.spacing.md,
 	},
 }))

@@ -92,11 +92,11 @@ export default function Menu() {
 				withPaddingEdges={['top', 'bottom']}
 				withTopGradient
 			>
-				<CoffeesSection />
-
 				<PromotionsSection />
 
 				<CategoriesSection />
+
+				<CoffeesSection />
 
 				<EventsSection />
 

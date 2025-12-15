@@ -20,6 +20,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import { CheckedButton } from '@/components/CheckedButton'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -190,10 +191,14 @@ export default function TopUpScreen() {
 				<meta content={t`Top Up - TOLO`} property="og:title" />
 				<meta content="/more/top-up" property="og:url" />
 			</Head>
-			<ScreenContainer contentContainerStyle={styles.container}>
+			<ScreenContainer
+				contentContainerStyle={styles.contentContainer}
+				withHeaderPadding
+			>
 				<H2>
 					<Trans>Current Balance</Trans>
 				</H2>
+
 				<Card style={styles.balanceCard}>
 					<View style={styles.balanceRow}>
 						<Label>
@@ -206,43 +211,48 @@ export default function TopUpScreen() {
 				</Card>
 
 				<H2>
-					<Trans>Select Amount</Trans>
+					<Trans>Amount</Trans>
 				</H2>
 
 				<View style={styles.amountGrid}>
 					{TOP_UP_AMOUNTS.map((amount) => (
-						<View key={amount} style={styles.amountButton}>
-							<Button
-								disabled={isLoading}
-								fullWidth
-								onPress={() => handleAmountSelect(amount)}
-								textStyle={styles.amountButtonText}
-								variant={selectedAmount === amount ? 'primary' : 'surface'}
-							>
-								{formatPrice(amount)}
-							</Button>
-						</View>
+						<CheckedButton
+							accessibilityRole="radio"
+							checked={selectedAmount === amount}
+							disabled={isLoading}
+							key={amount}
+							onPress={() => handleAmountSelect(amount)}
+							style={styles.amountButton}
+							textStyle={styles.amountButtonText}
+						>
+							{formatPrice(amount)}
+						</CheckedButton>
 					))}
 				</View>
 
-				{isPlatformPaySupported && (
-					<PlatformPayButton
-						appearance={PlatformPay.ButtonStyle.Automatic}
-						disabled={!selectedAmount || isLoading}
-						onPress={() => handlePayment(true)}
-						style={{ height: 40, width: '100%' }}
-						type={PlatformPay.ButtonType.TopUp}
-					/>
-				)}
+				<H2>
+					<Trans>Method</Trans>
+				</H2>
+				<View style={{ flexDirection: 'row', gap: 10 }}>
+					{isPlatformPaySupported && (
+						<PlatformPayButton
+							appearance={PlatformPay.ButtonStyle.Automatic}
+							borderRadius={40}
+							disabled={!selectedAmount || isLoading}
+							onPress={() => handlePayment(true)}
+							style={{ flex: 1 }}
+							type={PlatformPay.ButtonType.TopUp}
+						/>
+					)}
 
-				<Button
-					disabled={!selectedAmount || isLoading}
-					fullWidth
-					onPress={() => handlePayment(false)}
-					variant="primary"
-				>
-					{isLoading ? t`Processing Payment...` : t`Top Up With Card`}
-				</Button>
+					<Button
+						disabled={!selectedAmount || isLoading}
+						onPress={() => handlePayment(false)}
+						variant="primary"
+					>
+						{isLoading ? t`Processing Payment...` : t`Top Up With Card`}
+					</Button>
+				</View>
 
 				<Paragraph style={styles.infoText}>
 					<Trans>
@@ -259,20 +269,18 @@ export default function TopUpScreen() {
 const styles = StyleSheet.create((theme) => ({
 	amountButton: {
 		flex: 1,
-		minHeight: 56,
 	},
 	amountButtonText: {
-		fontSize: theme.typography.h4.fontSize,
+		fontSize: theme.fontSizes.lg,
 	},
 	amountGrid: {
 		flexDirection: 'row',
-		flexWrap: 'wrap',
-		gap: theme.spacing.sm,
-		marginBottom: theme.spacing.md,
+		gap: theme.spacing.xs,
 	},
 	balanceAmount: {
 		color: theme.colors.verde.solid,
 		fontSize: theme.typography.h3.fontSize,
+		paddingVertical: theme.spacing.xs,
 	},
 	balanceCard: {
 		backgroundColor: theme.colors.gray.background,
@@ -282,9 +290,8 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
-	container: {
-		gap: theme.spacing.lg,
-		padding: theme.layout.screenPadding,
+	contentContainer: {
+		gap: theme.spacing.md,
 	},
 	infoText: {
 		color: theme.colors.gray.solid,

@@ -44,6 +44,7 @@ export default function SessionsScreen() {
 						refreshing={isPending}
 					/>
 				}
+				withHeaderPadding
 				withTopGradient
 			>
 				<View style={styles.section}>
@@ -92,9 +93,7 @@ export default function SessionsScreen() {
 
 const styles = StyleSheet.create((theme) => ({
 	container: {
-		flex: 1,
 		gap: theme.spacing.md,
-		padding: theme.layout.screenPadding,
 	},
 	description: {
 		color: theme.colors.crema.solid,

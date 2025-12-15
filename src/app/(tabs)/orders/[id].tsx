@@ -111,8 +111,8 @@ export default function OrderDetail() {
 						refreshing={false}
 					/>
 				}
+				withHeaderPadding
 				withTopGradient
-				withTopPadding
 			>
 				{/* Order Header */}
 				<Card style={styles.orderHeaderCard}>

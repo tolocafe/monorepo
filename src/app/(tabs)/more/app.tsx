@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Alert, View } from 'react-native'
+import { Alert, Platform, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
 import * as Burnt from 'burnt'
@@ -85,7 +85,11 @@ export default function AppInfoScreen() {
 				<meta content={t`App - TOLO`} property="og:title" />
 				<meta content="/more/app" property="og:url" />
 			</Head>
-			<ScreenContainer contentContainerStyle={styles.contentContainer}>
+			<ScreenContainer
+				contentContainerStyle={styles.contentContainer}
+				withHeaderPadding
+				withTopGradient={Platform.OS === 'android'}
+			>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
 						<Trans>Information</Trans>
@@ -168,7 +172,7 @@ export default function AppInfoScreen() {
 
 const styles = StyleSheet.create((theme) => ({
 	contentContainer: {
-		padding: theme.layout.screenPadding,
+		gap: theme.spacing.md,
 	},
 	description: {
 		color: theme.colors.crema.solid,
@@ -191,11 +195,9 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	section: {
 		gap: theme.spacing.sm,
-		marginBottom: theme.spacing.lg,
 	},
 	sectionTitle: {
 		color: theme.colors.gray.text,
-		marginBottom: theme.spacing.sm,
 	},
 	value: {
 		color: theme.colors.crema.solid,

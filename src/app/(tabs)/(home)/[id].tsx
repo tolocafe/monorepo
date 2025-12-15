@@ -4,7 +4,6 @@ import {
 	Platform,
 	Pressable,
 	RefreshControl,
-	TouchableOpacity,
 	View,
 } from 'react-native'
 
@@ -32,7 +31,7 @@ import {
 } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
-import HeaderGradient from '@/components/HeaderGradient'
+import { CheckedButton } from '@/components/CheckedButton'
 import { LevelIndicator } from '@/components/LevelIndicator'
 import { LinearGradient } from '@/components/LinearGradient'
 import ScreenContainer from '@/components/ScreenContainer'
@@ -40,7 +39,6 @@ import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
 import WebContent from '@/components/WebContent'
 import { trackEvent } from '@/lib/analytics/firebase'
 import { getImageUrl } from '@/lib/image'
-import { useTabBarHeight } from '@/lib/navigation/tab-bar-height'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
@@ -94,9 +92,11 @@ const gradient = {
 	start: { x: 0, y: 0 },
 }
 
+const PADDING_EDGES = ['bottom'] as const
+
 export default function MenuDetail() {
 	const { t } = useLingui()
-	const tabBarHeight = useTabBarHeight()
+
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const { data: selfData } = useQuery(selfQueryOptions)
 
@@ -174,13 +174,13 @@ export default function MenuDetail() {
 		return (
 			<ScreenContainer>
 				<View style={styles.header}>
-					<TouchableOpacity onPress={handleClose} style={styles.closeButton}>
+					<Pressable onPress={handleClose} style={styles.closeButton}>
 						<Ionicons
 							color={styles.closeButtonText.color}
 							name="close"
 							size={20}
 						/>
-					</TouchableOpacity>
+					</Pressable>
 				</View>
 				<View style={styles.content}>
 					<H1>
@@ -232,10 +232,7 @@ export default function MenuDetail() {
 					}),
 				}}
 			/>
-			{Platform.select({ default: <HeaderGradient />, ios: undefined })}
 			<ScreenContainer
-				contentContainerStyle={{ paddingBottom: Math.max(tabBarHeight, 40) }}
-				contentInsetAdjustmentBehavior="never"
 				refreshControl={
 					<RefreshControl
 						onRefresh={() =>
@@ -244,6 +241,9 @@ export default function MenuDetail() {
 						refreshing={false}
 					/>
 				}
+				withHeaderPadding
+				withPaddingEdges={PADDING_EDGES}
+				withTopGradient={Platform.OS !== 'ios'}
 			>
 				<View style={styles.heroImageContainer}>
 					{hasImage ? (
@@ -296,18 +296,20 @@ export default function MenuDetail() {
 							<Paragraph>{product['small-description']}</Paragraph>
 						) : null}
 
-						<View style={styles.badges}>
-							{product.volume ? (
-								<View style={styles.badge}>
-									<Text style={styles.badgeText}>{product.volume} ml</Text>
-								</View>
-							) : null}
-							{product.calories ? (
-								<View style={styles.badge}>
-									<Text style={styles.badgeText}>{product.calories} Cal</Text>
-								</View>
-							) : null}
-						</View>
+						{Boolean(product.volume || product.calories) && (
+							<View style={styles.badges}>
+								{product.volume ? (
+									<View style={styles.badge}>
+										<Text style={styles.badgeText}>{product.volume} ml</Text>
+									</View>
+								) : null}
+								{product.calories ? (
+									<View style={styles.badge}>
+										<Text style={styles.badgeText}>{product.calories} Cal</Text>
+									</View>
+								) : null}
+							</View>
+						)}
 
 						{(product.intensity || product.caffeine) && (
 							<View style={styles.levels}>
@@ -361,42 +363,25 @@ export default function MenuDetail() {
 															state.value === modification.dish_modification_id
 
 														return (
-															<TouchableOpacity
+															<CheckedButton
 																accessibilityRole="radio"
-																accessibilityState={{ selected: isSelected }}
+																checked={isSelected}
 																key={modification.dish_modification_id}
 																onPress={() =>
 																	handleChange(
 																		modification.dish_modification_id,
 																	)
 																}
-																style={styles.modButton}
+																right={
+																	modification.price
+																		? `+${formatPrice(
+																				modification.price * 100,
+																			)}`
+																		: null
+																}
 															>
-																<View style={styles.modButtonRow}>
-																	{isSelected ? (
-																		<View style={styles.modCheck}>
-																			<Ionicons
-																				color={styles.modCheckIcon.color}
-																				name="checkmark"
-																				size={16}
-																			/>
-																		</View>
-																	) : null}
-																	<Text style={styles.modButtonText}>
-																		{modification.name}
-																	</Text>
-																	{modification.price ? (
-																		<Text
-																			style={[
-																				styles.modButtonText,
-																				styles.modItemPrice,
-																			]}
-																		>
-																			+{formatPrice(modification.price * 100)}
-																		</Text>
-																	) : null}
-																</View>
-															</TouchableOpacity>
+																{modification.name}
+															</CheckedButton>
 														)
 													})}
 												</View>
@@ -422,7 +407,8 @@ export default function MenuDetail() {
 												modification.dish_modification_id
 
 											return (
-												<TouchableOpacity
+												<CheckedButton
+													checked={isSelected}
 													key={modification.dish_modification_id}
 													onPress={() =>
 														handleChange({
@@ -431,33 +417,14 @@ export default function MenuDetail() {
 																modification.dish_modification_id,
 														})
 													}
-													style={styles.modButton}
+													right={
+														modification.price
+															? `+${formatPrice(modification.price * 100)}`
+															: null
+													}
 												>
-													<View style={styles.modButtonRow}>
-														{isSelected ? (
-															<View style={styles.modCheck}>
-																<Ionicons
-																	color={styles.modCheckIcon.color}
-																	name="checkmark"
-																	size={16}
-																/>
-															</View>
-														) : null}
-														<Text style={styles.modButtonText}>
-															{modification.modificator_name}
-														</Text>
-														{modification.price ? (
-															<Text
-																style={[
-																	styles.modButtonText,
-																	styles.modItemPrice,
-																]}
-															>
-																+{formatPrice(modification.price * 100)}
-															</Text>
-														) : null}
-													</View>
-												</TouchableOpacity>
+													{modification.modificator_name}
+												</CheckedButton>
 											)
 										})}
 									</View>
@@ -483,16 +450,16 @@ export default function MenuDetail() {
 						<View style={styles.bottomButton}>
 							<View style={styles.quantityButtons}>
 								{quantity > 1 && (
-									<TouchableOpacity
+									<Pressable
 										onPress={decrementQuantity}
 										style={styles.quantityButtonMinus}
 									>
 										<Text style={styles.whiteText}>
 											<Ionicons name="remove" size={26} />
 										</Text>
-									</TouchableOpacity>
+									</Pressable>
 								)}
-								<TouchableOpacity
+								<Pressable
 									onPress={incrementQuantity}
 									style={[
 										styles.quantityButton,
@@ -502,7 +469,7 @@ export default function MenuDetail() {
 									<Text style={styles.whiteText}>
 										<Ionicons name="add" size={26} />
 									</Text>
-								</TouchableOpacity>
+								</Pressable>
 							</View>
 							<Button
 								asChild
@@ -610,7 +577,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	addButton: {
 		flex: 1,
 		flexDirection: 'row',
-		height: 50,
+		height: 45,
 		justifyContent: 'space-between',
 	},
 	badge: {
@@ -631,7 +598,10 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	},
 	bottomButton: {
 		alignItems: 'center',
-		bottom: Math.max(runtime.insets.bottom, theme.layout.screenPadding),
+		bottom: Platform.select({
+			default: theme.spacing.md,
+			ios: runtime.insets.bottom,
+		}),
 		flexDirection: 'row',
 		gap: theme.spacing.sm,
 		left: theme.layout.screenPadding,
@@ -665,8 +635,15 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		fontWeight: theme.fontWeights.bold,
 	},
 	content: {
+		_web: {
+			paddingBottom: 50,
+		},
 		gap: theme.spacing.xxl,
 		padding: theme.layout.screenPadding,
+		paddingBottom: Platform.select({
+			android: 40,
+			default: theme.layout.screenPadding,
+		}),
 	},
 	header: {
 		alignItems: 'center',
@@ -693,43 +670,10 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	levels: {
 		gap: theme.spacing.md,
 	},
-	modButton: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.gray.background,
-		borderColor: theme.colors.gray.border,
-		borderRadius: theme.borderRadius.full,
-		borderWidth: 1,
-		justifyContent: 'center',
-		minHeight: 44,
-		minWidth: 64,
-		paddingHorizontal: theme.spacing.md,
-		paddingVertical: theme.spacing.sm,
-	},
 	modButtonGroup: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
-		gap: theme.spacing.sm,
-	},
-	modButtonRow: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: theme.spacing.sm,
-		justifyContent: 'space-between',
-	},
-	modButtonText: {
-		fontSize: theme.typography.button.fontSize,
-		fontWeight: theme.fontWeights.semibold,
-	},
-	modCheck: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.verde.solid,
-		borderRadius: theme.borderRadius.full,
-		height: 20,
-		justifyContent: 'center',
-		width: 20,
-	},
-	modCheckIcon: {
-		color: '#FFFFFF',
+		gap: theme.spacing.xs,
 	},
 	modGroup: {
 		gap: theme.spacing.xs,
@@ -737,9 +681,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	},
 	modGroupTitle: {
 		marginBottom: theme.spacing.xs,
-	},
-	modItemPrice: {
-		color: theme.colors.verde.text,
 	},
 	price: {
 		color: theme.colors.verde.solid,
@@ -752,18 +693,18 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		backgroundColor: theme.colors.verde.solid,
 		borderBottomRightRadius: theme.borderRadius.full,
 		borderTopRightRadius: theme.borderRadius.full,
-		height: 50,
+		height: 45,
 		justifyContent: 'center',
-		width: 50,
+		width: 45,
 	},
 	quantityButtonMinus: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.verde.solid,
 		borderBottomLeftRadius: theme.borderRadius.full,
 		borderTopLeftRadius: theme.borderRadius.full,
-		height: 50,
+		height: 45,
 		justifyContent: 'center',
-		width: 50,
+		width: 45,
 	},
 	quantityButtons: {
 		flexDirection: 'row',
@@ -775,8 +716,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	quantityText: {
 		backgroundColor: theme.colors.verde.interactive,
 		borderRadius: theme.borderRadius.full,
-		paddingHorizontal: theme.spacing.md,
-		paddingVertical: theme.spacing.xs,
+		paddingHorizontal: theme.spacing.sm,
 	},
 	recipeSection: {
 		backgroundColor: theme.colors.gray.background,

@@ -36,6 +36,10 @@ type SideTabButtonProps = TabTriggerSlotProps & {
 	label: string
 }
 
+export function useBottomTabBarHeight() {
+	return 0
+}
+
 const UniImage = withUnistyles(Image)
 
 function DesktopSideTabs(props: Omit<BottomTabNavigatorProps, 'id'>) {

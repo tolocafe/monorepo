@@ -13,7 +13,6 @@ type Props = ComponentProps<typeof Pressable> & {
 	asChild?: boolean
 	children: ReactNode
 	disabled?: boolean
-	fullWidth?: boolean
 	onPress?: (event: GestureResponderEvent) => void
 	testID?: string
 	textStyle?: StyleProp<TextStyle>
@@ -36,19 +35,16 @@ function Button({
 	asChild = false,
 	children,
 	disabled = false,
-	fullWidth = false,
 	style,
 	textStyle,
 	variant = 'primary',
 	...props
 }: Props) {
 	const buttonState = disabled ? 'disabled' : undefined
-	const buttonWidth = fullWidth ? 'fullWidth' : undefined
 
 	styles.useVariants({
 		state: buttonState,
 		variant,
-		width: buttonWidth,
 	})
 
 	return (
@@ -81,6 +77,7 @@ export { Button }
 const styles = StyleSheet.create((theme) => ({
 	button: {
 		alignItems: 'center',
+		backgroundColor: 'green',
 		borderCurve: Platform.OS === 'ios' ? 'continuous' : undefined,
 		borderRadius: theme.borderRadius.lg,
 		justifyContent: 'center',
@@ -118,12 +115,7 @@ const styles = StyleSheet.create((theme) => ({
 						},
 					},
 					backgroundColor: 'transparent',
-				},
-			},
-			width: {
-				fullWidth: {
-					alignSelf: 'stretch',
-					flex: 1,
+					paddingVertical: theme.spacing.sm,
 				},
 			},
 		},

@@ -19,4 +19,6 @@ const Tabs = withLayoutContext<
 	NativeBottomTabNavigationEventMap
 >(BottomTabNavigator)
 
+export { useBottomTabBarHeight } from 'react-native-bottom-tabs'
+
 export default Tabs

@@ -39,12 +39,11 @@ const styles = StyleSheet.create((theme) => ({
 		backgroundColor: theme.colors.gray.background,
 		borderCurve: 'continuous',
 		borderRadius: theme.borderRadius.lg,
-		boxShadow: `0px 5px ${theme.spacing.sm}px 0px rgba(0, 0, 0, 0.1)`,
 		variants: {
 			padding: {
 				padded: {
 					padding: theme.spacing.md,
-					paddingVertical: theme.spacing.sm,
+					paddingVertical: theme.spacing.xs,
 				},
 			},
 		},

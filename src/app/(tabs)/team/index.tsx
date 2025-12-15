@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 import type { ScrollView } from 'react-native'
-import { RefreshControl, View } from 'react-native'
+import { RefreshControl } from 'react-native'
 
 import { Trans } from '@lingui/react/macro'
 import { router } from 'expo-router'
@@ -9,7 +9,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { List, ListItem } from '@/components/List'
 import ScreenContainer from '@/components/ScreenContainer'
-import { H2, Paragraph } from '@/components/Text'
+import { H2 } from '@/components/Text'
 import { queryClient } from '@/lib/query-client'
 
 export default function TeamIndex() {
@@ -56,16 +56,10 @@ export default function TeamIndex() {
 						onPress={() => router.push('/team/ticket')}
 					>
 						<ListItem.Label>
-							<Trans>Download Ticket PDF</Trans>
+							<Trans>Tickets</Trans>
 						</ListItem.Label>
 					</ListItem>
 				</List>
-
-				<View style={styles.footer}>
-					<Paragraph style={styles.footerText}>
-						<Trans>Team tools and quick links</Trans>
-					</Paragraph>
-				</View>
 			</ScreenContainer>
 		</>
 	)

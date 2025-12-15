@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import type { ScrollView } from 'react-native'
 import {
 	Alert,
@@ -90,6 +90,7 @@ export default function More() {
 	const screenRef = useRef<ScrollView>(null)
 	const colorScheme = useColorScheme()
 	const dropdownStyles = createDropdownStyles(colorScheme === 'dark')
+	const [isAddingPass, setIsAddingPass] = useState(false)
 
 	const groupName = getGroupName(user?.client_groups_name)
 
@@ -109,6 +110,8 @@ export default function More() {
 		if (!user) return
 
 		try {
+			setIsAddingPass(true)
+
 			const token = await getAuthToken()
 
 			const url = `https://app.tolo.cafe/api/passes/${user.client_id}?authenticationToken=${token}&platform=${Platform.OS}`
@@ -126,6 +129,8 @@ export default function More() {
 			captureException(error)
 
 			Alert.alert(error instanceof Error ? error.message : 'Failed to add pass')
+		} finally {
+			setIsAddingPass(false)
 		}
 	}
 
@@ -173,6 +178,7 @@ export default function More() {
 							</ListItem>
 							{Platform.OS !== 'web' && (
 								<WalletButton
+									disabled={isAddingPass}
 									onPress={handleAddPass}
 									style={styles.walletButton}
 								/>

@@ -1,4 +1,4 @@
-import { Linking, View } from 'react-native'
+import { Linking, Platform, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
 import Head from 'expo-router/head'
@@ -28,7 +28,10 @@ export default function VisitUs() {
 				<meta content={t`Visit Us - TOLO Good Coffee`} property="og:title" />
 				<meta content="/more/visit-us" property="og:url" />
 			</Head>
-			<ScreenContainer>
+			<ScreenContainer
+				withHeaderPadding
+				withTopGradient={Platform.OS === 'android'}
+			>
 				<View style={styles.section}>
 					<Card>
 						<Text style={styles.cardTitle}>
@@ -140,6 +143,5 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	section: {
 		marginBottom: theme.spacing.lg,
-		padding: theme.layout.screenPadding,
 	},
 }))

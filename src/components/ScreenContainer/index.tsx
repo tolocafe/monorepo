@@ -1,6 +1,7 @@
 import type { ComponentProps, RefObject } from 'react'
 import { Platform, ScrollView, View } from 'react-native'
 
+import { useHeaderHeight } from '@react-navigation/elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import {
 	StyleSheet,
@@ -9,6 +10,7 @@ import {
 } from 'react-native-unistyles'
 
 import HeaderGradient from '@/components/HeaderGradient'
+import { useBottomTabBarHeight } from '@/components/Tabs'
 
 const DEFAULT_PADDING_EDGES = ['bottom', 'left', 'right', 'top'] as const
 
@@ -19,6 +21,7 @@ export type Props = Omit<
 	keyboardAware?: boolean
 	noScroll?: boolean
 	ref?: RefObject<null | ScrollView>
+	withHeaderPadding?: boolean
 	/**
 	 * The edges to apply padding to.
 	 * @default ['bottom', 'left', 'right', 'top']
@@ -37,11 +40,19 @@ export default function ScreenContainer({
 	noScroll = false,
 	ref,
 	style,
+	withHeaderPadding,
 	withPaddingEdges = DEFAULT_PADDING_EDGES,
 	withTopGradient,
 	...rest
 }: Props) {
-	const topAccessory = withTopGradient ? <HeaderGradient /> : null
+	const navigationTabBarHeight = useBottomTabBarHeight()
+	const tabBarHeight = Platform.OS === 'ios' ? navigationTabBarHeight : 0
+
+	const navigationHeaderHeight = useHeaderHeight()
+	const headerHeight = withHeaderPadding ? navigationHeaderHeight : 0
+	const topAccessory = withTopGradient ? (
+		<HeaderGradient height={headerHeight} />
+	) : null
 
 	styles.useVariants({
 		withBottomPadding: withPaddingEdges.includes('bottom'),
@@ -54,7 +65,13 @@ export default function ScreenContainer({
 		return (
 			<>
 				{topAccessory}
-				<View {...rest} style={[styles.container, contentContainerStyle]}>
+				<View
+					{...rest}
+					style={[
+						styles.contentContainer(tabBarHeight, headerHeight),
+						contentContainerStyle,
+					]}
+				>
 					{children}
 				</View>
 			</>
@@ -68,7 +85,7 @@ export default function ScreenContainer({
 				<UniKeyboardAwareScrollView
 					automaticallyAdjustsScrollIndicatorInsets
 					contentContainerStyle={[
-						styles.contentContainer,
+						styles.contentContainer(tabBarHeight, headerHeight),
 						contentContainerStyle,
 					]}
 					keyboardDismissMode="interactive"
@@ -87,7 +104,10 @@ export default function ScreenContainer({
 		<>
 			{topAccessory}
 			<UniScrollView
-				contentContainerStyle={[styles.contentContainer, contentContainerStyle]}
+				contentContainerStyle={[
+					styles.contentContainer(tabBarHeight, headerHeight),
+					contentContainerStyle,
+				]}
 				ref={ref}
 				style={[styles.scrollViewContainer, style]}
 				{...rest}
@@ -113,12 +133,18 @@ const styles = StyleSheet.create((theme, runtime) => ({
 			},
 		},
 	},
-	contentContainer: {
+	contentContainer: (bottomTabBarHeight: number, headerHeight: number) => ({
 		flexGrow: 1,
-		paddingBottom: Math.max(runtime.insets.bottom, theme.layout.screenPadding),
+		paddingBottom:
+			bottomTabBarHeight +
+			Math.max(runtime.insets.bottom, theme.layout.screenPadding),
 		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
 		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
-		paddingTop: Math.max(runtime.insets.top, theme.layout.screenPadding),
+		paddingTop: Math.max(
+			runtime.insets.top,
+			theme.layout.screenPadding,
+			headerHeight,
+		),
 		variants: {
 			withBottomPadding: {
 				false: {
@@ -141,7 +167,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 				},
 			},
 		},
-	},
+	}),
 	scrollViewContainer: {
 		backgroundColor: theme.colors.crema.background,
 	},

@@ -120,9 +120,9 @@ export default function Orders() {
 				<title>{t`Orders`}</title>
 			</Head>
 			<ScreenContainer
-				// contentContainerStyle={styles.container}
+				contentContainerStyle={styles.contentContainer}
 				noScroll={!orders?.length}
-				// ref={screenRef}
+				ref={screenRef}
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(orderQueryOptions)}
@@ -226,9 +226,8 @@ export default function Orders() {
 }
 
 const styles = StyleSheet.create((theme) => ({
-	container: {
-		// gap: theme.spacing.md,
-		// paddingHorizontal: theme.layout.screenPadding,
+	contentContainer: {
+		gap: theme.spacing.md,
 	},
 	currentOrderBottomText: {
 		flexDirection: 'row',

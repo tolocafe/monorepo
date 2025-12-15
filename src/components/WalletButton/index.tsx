@@ -6,9 +6,9 @@ import {
 	addPass as rnWalletAddPass,
 	RNWalletView,
 } from '@premieroctet/react-native-wallet'
-import { withUnistyles } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-type Props = ComponentProps<typeof RNWalletView>
+type Props = ComponentProps<typeof RNWalletView> & { disabled?: boolean }
 
 export function addPass(urlOrJwt: string, isSigned: boolean) {
 	if (isSigned) {
@@ -19,8 +19,24 @@ export function addPass(urlOrJwt: string, isSigned: boolean) {
 
 const UniWalletView = withUnistyles(RNWalletView)
 
-export default function WalletButton(props: Props) {
+const styles = StyleSheet.create({
+	button: {
+		opacity: 1,
+		variants: {
+			disabled: {
+				true: {
+					opacity: 0.5,
+					touchAction: 'none',
+				},
+			},
+		},
+	},
+})
+
+export default function WalletButton({ disabled, style, ...props }: Props) {
+	styles.useVariants({ disabled })
+
 	if (Platform.OS === 'macos') return null
 
-	return <UniWalletView {...props} />
+	return <UniWalletView {...props} style={[style, styles.button]} />
 }

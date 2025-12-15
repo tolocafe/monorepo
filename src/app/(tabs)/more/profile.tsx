@@ -127,7 +127,8 @@ export default function ProfileScreen() {
 						refreshing={false}
 					/>
 				}
-				withTopGradient={Platform.OS === 'ios'}
+				withHeaderPadding
+				withTopGradient={Platform.OS === 'android'}
 			>
 				<View style={styles.section}>
 					<H2>
@@ -283,7 +284,6 @@ function getFullName(
 const styles = StyleSheet.create((theme) => ({
 	contentContainer: {
 		gap: theme.spacing.lg,
-		padding: theme.layout.screenPadding,
 	},
 	label: {
 		marginBottom: theme.spacing.xs,
