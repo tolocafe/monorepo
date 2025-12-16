@@ -240,7 +240,7 @@ export default function TopUpScreen() {
 							borderRadius={40}
 							disabled={!selectedAmount || isLoading}
 							onPress={() => handlePayment(true)}
-							style={{ flex: 1 }}
+							style={styles.platformPayButton}
 							type={PlatformPay.ButtonType.TopUp}
 						/>
 					)}
@@ -297,5 +297,8 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.gray.solid,
 		fontSize: theme.typography.caption.fontSize,
 		padding: theme.spacing.lg,
+	},
+	platformPayButton: {
+		flex: 1,
 	},
 }))
