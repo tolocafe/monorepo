@@ -7,11 +7,11 @@ import { StyleSheet } from 'react-native-unistyles'
 import { Text } from '@/components/Text'
 import { getModifierColor, getModifierIcon } from '@/lib/utils/modifier-tags'
 
-type Props = {
+type Props = Pick<ComponentProps<typeof View>, 'accessibilityLabel'> & {
 	group?: string
 	name: string
 	testID?: string
-} & Pick<ComponentProps<typeof View>, 'accessibilityLabel'>
+}
 
 export function ModifierTag({
 	accessibilityLabel,

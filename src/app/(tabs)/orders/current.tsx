@@ -469,10 +469,6 @@ function getOrderTotal(products: OrderProduct[]) {
 }
 
 const styles = StyleSheet.create((theme) => ({
-	actionButtons: {
-		flexDirection: 'row',
-		gap: theme.spacing.md,
-	},
 	container: {
 		gap: theme.spacing.md,
 	},

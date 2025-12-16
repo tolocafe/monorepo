@@ -300,7 +300,7 @@ export default function SignIn() {
 				contentContainerStyle={styles.contentContainer}
 				keyboardAware
 				style={styles.container}
-				withTopPadding
+				withHeaderPadding
 			>
 				{Platform.OS === 'web' && (
 					<View style={styles.header}>

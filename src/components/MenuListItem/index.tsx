@@ -96,14 +96,6 @@ const styles = StyleSheet.create((theme, runtime) => {
 	const itemSize = Math.min((runtime.screen.width - 10) * 0.4, 200)
 
 	return {
-		addToBagButton: {
-			alignItems: 'center',
-			backgroundColor: theme.colors.verde.solid,
-			borderRadius: theme.borderRadius.full,
-			height: 36,
-			justifyContent: 'center',
-			width: 36,
-		},
 		image: {
 			flex: 1,
 			objectFit: 'cover',
@@ -113,15 +105,6 @@ const styles = StyleSheet.create((theme, runtime) => {
 		},
 		menuItem: {
 			height: '100%',
-		},
-		menuItemActions: {
-			alignItems: 'center',
-			bottom: theme.spacing.sm,
-			flexDirection: 'row',
-			gap: theme.spacing.sm,
-			position: 'absolute',
-			right: theme.spacing.sm,
-			zIndex: 1,
 		},
 		menuItemContainer: {
 			position: 'relative',

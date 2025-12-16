@@ -3,11 +3,7 @@ import { Platform, ScrollView, View } from 'react-native'
 
 import { useHeaderHeight } from '@react-navigation/elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
-import {
-	StyleSheet,
-	UnistylesRuntime,
-	withUnistyles,
-} from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import HeaderGradient from '@/components/HeaderGradient'
 import { useBottomTabBarHeight } from '@/components/Tabs'
@@ -119,20 +115,6 @@ export default function ScreenContainer({
 }
 
 const styles = StyleSheet.create((theme, runtime) => ({
-	container: {
-		backgroundColor: theme.colors.crema.background,
-		flex: 1,
-		variants: {
-			withTopPadding: {
-				true: {
-					paddingTop:
-						Platform.OS === 'ios'
-							? 0
-							: Math.max(theme.spacing.sm, UnistylesRuntime.insets.top),
-				},
-			},
-		},
-	},
 	contentContainer: (bottomTabBarHeight: number, headerHeight: number) => ({
 		flexGrow: 1,
 		paddingBottom:

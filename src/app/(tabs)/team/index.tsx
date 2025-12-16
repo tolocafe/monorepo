@@ -66,16 +66,6 @@ export default function TeamIndex() {
 }
 
 const styles = StyleSheet.create((theme) => ({
-	footer: {
-		alignItems: 'center',
-		paddingVertical: theme.spacing.md,
-	},
-	footerText: {
-		color: theme.colors.gray.text,
-		fontSize: theme.typography.caption.fontSize,
-		textAlign: 'center',
-	},
-
 	sectionTitle: {
 		marginBottom: theme.spacing.sm,
 	},
