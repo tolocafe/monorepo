@@ -30,7 +30,7 @@ export default function VisitUs() {
 			</Head>
 			<ScreenContainer
 				withHeaderPadding
-				withTopGradient={Platform.OS === 'android'}
+				withTopGradient={Platform.OS !== 'ios'}
 			>
 				<View style={styles.section}>
 					<Card>

@@ -176,7 +176,7 @@ export default function BaristaQueue() {
 					<RefreshControl onRefresh={handleRefresh} refreshing={isLoading} />
 				}
 				withHeaderPadding
-				withTopGradient={Platform.OS === 'android'}
+				withTopGradient={Platform.OS !== 'ios'}
 			>
 				{/* Category filter pills */}
 				{availableCategories.length > 0 && (

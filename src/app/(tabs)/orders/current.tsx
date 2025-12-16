@@ -301,12 +301,11 @@ export default function OrderDetail() {
 				<Head>
 					<title>{t`Order Not Found`}</title>
 				</Head>
-				<View style={styles.container}>
-					<View style={styles.emptyContainer}>
-						<Paragraph style={styles.emptyText}>
-							<Trans>The requested order could not be found.</Trans>
-						</Paragraph>
-					</View>
+
+				<View style={styles.emptyContainer}>
+					<Paragraph style={styles.emptyText}>
+						<Trans>The requested order could not be found.</Trans>
+					</Paragraph>
 				</View>
 			</>
 		)
@@ -330,6 +329,7 @@ export default function OrderDetail() {
 				contentContainerStyle={styles.container}
 				keyboardAware
 				withHeaderPadding
+				withTopGradient={Platform.OS !== 'ios'}
 			>
 				{user && (
 					<>
@@ -474,9 +474,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.md,
 	},
 	container: {
-		flex: 1,
 		gap: theme.spacing.md,
-		padding: theme.layout.screenPadding,
 	},
 	emptyContainer: {
 		alignItems: 'center',

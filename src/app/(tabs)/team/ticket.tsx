@@ -65,7 +65,7 @@ export default function TeamTicketDownload() {
 			<ScreenContainer
 				contentContainerStyle={styles.contentContainerStyle}
 				withHeaderPadding
-				withTopGradient={Platform.OS === 'android'}
+				withTopGradient={Platform.OS !== 'ios'}
 			>
 				<H2 style={styles.title}>
 					<Trans>Ticket</Trans>
