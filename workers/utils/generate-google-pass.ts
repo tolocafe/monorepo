@@ -50,9 +50,13 @@ async function createLoyaltyObject({
 }) {
 	const passId = `TOLO-${client.client_id.padStart(8, '0')}`
 
+	// Count only closed transactions (status: '2') from all time
+	// Default date_from is 'one month ago', so we need to specify a date far in the past
 	const visitsCount = await api.dash
 		.getTransactions(context.env.POSTER_TOKEN, {
+			date_from: '20200101',
 			id: client.client_id,
+			status: '2',
 			type: 'clients',
 		})
 		.catch(() => [] as DashTransaction[])
