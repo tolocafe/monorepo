@@ -1,7 +1,7 @@
 {
 	"name": "@tolo/app",
 	"main": "src/index.ts",
-	"version": "1.2.7",
+	"version": "1.2.8",
 	"packageManager": "bun@1.2.23",
 	"scripts": {
 		"start": "expo start",
