@@ -32,6 +32,7 @@ import {
 
 import { Button } from '@/components/Button'
 import { CheckedButton } from '@/components/CheckedButton'
+import { HeaderIconIonicons } from '@/components/Icons'
 import { LevelIndicator } from '@/components/LevelIndicator'
 import { LinearGradient } from '@/components/LinearGradient'
 import ScreenContainer from '@/components/ScreenContainer'
@@ -93,6 +94,10 @@ const gradient = {
 }
 
 const PADDING_EDGES = ['bottom'] as const
+
+const GrayIonIcon = withUnistyles(Ionicons, (theme) => ({
+	color: theme.colors.gray.text,
+}))
 
 export default function MenuDetail() {
 	const { t } = useLingui()
@@ -175,11 +180,7 @@ export default function MenuDetail() {
 			<ScreenContainer>
 				<View style={styles.header}>
 					<Pressable onPress={handleClose} style={styles.closeButton}>
-						<Ionicons
-							color={styles.closeButtonText.color}
-							name="close"
-							size={20}
-						/>
+						<GrayIonIcon name="close" size={20} />
 					</Pressable>
 				</View>
 				<View style={styles.content}>
@@ -219,14 +220,7 @@ export default function MenuDetail() {
 						default: undefined,
 						ios: () => (
 							<Pressable onPress={handleClose}>
-								<Ionicons
-									color={Platform.select({
-										android: 'white',
-										default: styles.closeButtonText.color,
-									})}
-									name="close-outline"
-									size={35}
-								/>
+								<HeaderIconIonicons name="close-outline" size={35} />
 							</Pressable>
 						),
 					}),
@@ -628,11 +622,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
 		width: theme.spacing.xl,
-	},
-	closeButtonText: {
-		color: theme.colors.gray.text,
-		fontSize: theme.fontSizes.lg,
-		fontWeight: theme.fontWeights.bold,
 	},
 	content: {
 		_web: {

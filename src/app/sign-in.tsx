@@ -12,6 +12,7 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import { Button } from '@/components/Button'
+import { TextColorIonicons } from '@/components/Icons'
 import Input from '@/components/Input'
 import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
@@ -278,11 +279,7 @@ export default function SignIn() {
 							onPress={() => router.back()}
 							style={styles.headerIconPressable}
 						>
-							<Ionicons
-								color={styles.headerIconText.color}
-								name="close"
-								size={24}
-							/>
+							<TextColorIonicons name="close" size={24} />
 						</Pressable>
 					),
 					headerShadowVisible: false,
@@ -590,10 +587,6 @@ const styles = StyleSheet.create((theme) => ({
 		minHeight: 44,
 		minWidth: 44,
 		padding: theme.spacing.sm,
-	},
-	headerIconText: {
-		color: theme.colors.gray.text,
-		fontSize: theme.fontSizes.xxl,
 	},
 	inputContainer: {
 		marginBottom: theme.spacing.md,

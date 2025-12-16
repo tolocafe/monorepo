@@ -2,10 +2,10 @@ import type { ReactElement, ReactNode } from 'react'
 import { Children, isValidElement } from 'react'
 import { TouchableOpacity, View } from 'react-native'
 
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { Card } from '@/components/Card'
+import { TextColorIonicons } from '@/components/Icons'
 import { Label, Text } from '@/components/Text'
 
 export type ListItemAccessoryProps = {
@@ -129,13 +129,7 @@ export function ListItem({
 
 			{/* Accessory or chevron */}
 			{accessoryChild ||
-				(showChevron && (
-					<Ionicons
-						color={styles.caret.color}
-						name="chevron-forward"
-						size={20}
-					/>
-				))}
+				(showChevron && <TextColorIonicons name="chevron-forward" size={20} />)}
 		</Container>
 	)
 }
@@ -168,11 +162,6 @@ ListItem.Accessory = ListItemAccessory
 
 const styles = StyleSheet.create((theme) => ({
 	accessoryContainer: {
-		marginLeft: theme.spacing.sm,
-	},
-	caret: {
-		color: theme.colors.gray.text,
-		fontSize: 30,
 		marginLeft: theme.spacing.sm,
 	},
 	contentContainer: {

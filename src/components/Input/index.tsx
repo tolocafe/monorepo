@@ -24,6 +24,10 @@ const UniMaskedTextInput = withUnistyles(MaskedTextInput, (theme) => ({
 	},
 }))
 
+const GrayRNTextInput = withUnistyles(RNTextInput, (theme) => ({
+	placeholderTextColor: theme.colors.crema.solid,
+}))
+
 export function Input({
 	borderless,
 	error = false,
@@ -53,13 +57,7 @@ export function Input({
 		)
 	}
 
-	return (
-		<RNTextInput
-			placeholderTextColor={styles.placeholder.color}
-			{...rest}
-			style={[styles.base, style]}
-		/>
-	)
+	return <GrayRNTextInput {...rest} style={[styles.base, style]} />
 }
 
 const styles = StyleSheet.create((theme) => ({
@@ -97,9 +95,6 @@ const styles = StyleSheet.create((theme) => ({
 				},
 			},
 		},
-	},
-	placeholder: {
-		color: theme.colors.crema.solid,
 	},
 }))
 

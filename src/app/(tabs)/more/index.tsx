@@ -23,6 +23,7 @@ import * as DropdownMenu from 'zeego/dropdown-menu'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
+import { TextColorIonicons } from '@/components/Icons'
 import { List, ListItem } from '@/components/List'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
@@ -333,11 +334,7 @@ export default function More() {
 										<Label style={styles.languageDropdownText}>
 											{LOCALE_NAMES[i18n.locale as Locale]}
 										</Label>
-										<Ionicons
-											color={styles.languageDropdownArrow.color}
-											name="chevron-down"
-											size={16}
-										/>
+										<TextColorIonicons name="chevron-down" size={16} />
 									</View>
 								</DropdownMenu.Trigger>
 								<DropdownMenu.Content style={dropdownStyles.content}>
@@ -407,11 +404,6 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.gray.text,
 		fontSize: theme.typography.caption.fontSize,
 		textAlign: 'center',
-	},
-	languageDropdownArrow: {
-		color: theme.colors.gray.text,
-		fontSize: 12,
-		marginLeft: theme.spacing.sm,
 	},
 	languageDropdownText: {
 		flex: 1,
