@@ -18,7 +18,7 @@ import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { Input } from '@/components/Input'
 import { ModifierTag } from '@/components/ModifierTag'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics/firebase'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
@@ -325,7 +325,7 @@ export default function OrderDetail() {
 					),
 				}}
 			/>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.container}
 				keyboardAware
 				withHeaderPadding
@@ -413,7 +413,7 @@ export default function OrderDetail() {
 						)
 					}}
 				</Subscribe>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

@@ -35,7 +35,7 @@ import { CheckedButton } from '@/components/CheckedButton'
 import { HeaderIconIonicons } from '@/components/Icons'
 import { LevelIndicator } from '@/components/LevelIndicator'
 import { LinearGradient } from '@/components/LinearGradient'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
 import WebContent from '@/components/WebContent'
 import { trackEvent } from '@/lib/analytics/firebase'
@@ -170,14 +170,14 @@ export default function MenuDetail() {
 	if (!product) {
 		if (isPending) {
 			return (
-				<ScreenContainer data-testid="loading">
+				<TabScreenContainer data-testid="loading">
 					<ActivityIndicator size="large" />
-				</ScreenContainer>
+				</TabScreenContainer>
 			)
 		}
 
 		return (
-			<ScreenContainer>
+			<TabScreenContainer>
 				<View style={styles.header}>
 					<Pressable onPress={handleClose} style={styles.closeButton}>
 						<GrayIonIcon name="close" size={20} />
@@ -191,7 +191,7 @@ export default function MenuDetail() {
 						<Trans>The requested product could not be loaded.</Trans>
 					</Paragraph>
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 		)
 	}
 
@@ -226,7 +226,7 @@ export default function MenuDetail() {
 					}),
 				}}
 			/>
-			<ScreenContainer
+			<TabScreenContainer
 				refreshControl={
 					<RefreshControl
 						onRefresh={() =>
@@ -427,7 +427,7 @@ export default function MenuDetail() {
 						</>
 					)}
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 			<Subscribe
 				selector={({ values }) =>
 					[values.quantity, values.modifications] as const

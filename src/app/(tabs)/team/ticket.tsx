@@ -7,7 +7,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import Input from '@/components/Input'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph } from '@/components/Text'
 import { useIsBarista } from '@/lib/hooks/use-is-barista'
 import { downloadReceipt } from '@/lib/utils/download-receipt'
@@ -40,7 +40,7 @@ export default function TeamTicketDownload() {
 				<Head>
 					<title>{t`Not Authorized`}</title>
 				</Head>
-				<ScreenContainer
+				<TabScreenContainer
 					withHeaderPadding
 					withTopGradient={Platform.OS !== 'ios'}
 				>
@@ -52,7 +52,7 @@ export default function TeamTicketDownload() {
 							<Trans>You need barista or owner access to use this tool.</Trans>
 						</Paragraph>
 					</View>
-				</ScreenContainer>
+				</TabScreenContainer>
 			</>
 		)
 	}
@@ -62,7 +62,7 @@ export default function TeamTicketDownload() {
 			<Head>
 				<title>{t`Ticket`}</title>
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.contentContainerStyle}
 				withHeaderPadding
 				withTopGradient={Platform.OS !== 'ios'}
@@ -95,7 +95,7 @@ export default function TeamTicketDownload() {
 						)}
 					</Button>
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

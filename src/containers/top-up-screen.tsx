@@ -21,7 +21,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { CheckedButton } from '@/components/CheckedButton'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { privateClient } from '@/lib/services/http-client'
@@ -191,7 +191,7 @@ export default function TopUpScreen() {
 				<meta content={t`Top Up - TOLO`} property="og:title" />
 				<meta content="/more/top-up" property="og:url" />
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				withHeaderPadding
 			>
@@ -261,7 +261,7 @@ export default function TopUpScreen() {
 						🔒 Your payment information is encrypted and secure
 					</Trans>
 				</Paragraph>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

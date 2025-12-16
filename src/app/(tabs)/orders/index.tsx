@@ -15,7 +15,7 @@ import type { Product } from '@common/api'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { resetBadgeCount } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -90,7 +90,7 @@ export default function Orders() {
 				<Head>
 					<title>{t`Orders`}</title>
 				</Head>
-				<ScreenContainer noScroll>
+				<TabScreenContainer noScroll>
 					<View style={styles.signInContainer}>
 						<UniImage
 							contentFit="contain"
@@ -109,7 +109,7 @@ export default function Orders() {
 							<Trans>Sign In</Trans>
 						</Button>
 					</View>
-				</ScreenContainer>
+				</TabScreenContainer>
 			</>
 		)
 	}
@@ -119,7 +119,7 @@ export default function Orders() {
 			<Head>
 				<title>{t`Orders`}</title>
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				noScroll={!orders?.length}
 				ref={screenRef}
@@ -220,7 +220,7 @@ export default function Orders() {
 						</Paragraph>
 					</View>
 				)}
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

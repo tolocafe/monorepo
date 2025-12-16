@@ -25,7 +25,7 @@ import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { TextColorIonicons } from '@/components/Icons'
 import { List, ListItem } from '@/components/List'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
 import WalletButton, { addPass } from '@/components/WalletButton'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
@@ -143,7 +143,7 @@ export default function More() {
 				<meta content="More - TOLO" property="og:title" />
 				<meta content="/more" property="og:url" />
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				ref={screenRef}
 				refreshControl={
 					<RefreshControl
@@ -372,7 +372,7 @@ export default function More() {
 						</Trans>
 					</Paragraph>
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

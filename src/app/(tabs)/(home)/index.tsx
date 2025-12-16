@@ -21,7 +21,7 @@ import {
 	productsQueryOptions,
 	promotionsQueryOptions,
 } from '@/components/MenuSections/queries'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { Paragraph } from '@/components/Text'
 import { enableAnalytics } from '@/lib/analytics/firebase'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
@@ -84,7 +84,7 @@ export default function Menu() {
 				/>
 				<meta content="/" property="og:url" />
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				ref={screenRef}
 				refreshControl={
 					<RefreshControl onRefresh={handleRefresh} refreshing={false} />
@@ -106,7 +106,7 @@ export default function Menu() {
 						volume are approximate and may vary between preparations.
 					</Trans>
 				</Paragraph>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

@@ -10,7 +10,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import PhoneNumberInput from '@/components/phone-number-input'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -136,14 +136,14 @@ export default function TableBillScreenWeb() {
 						title: t`Table Bill`,
 					}}
 				/>
-				<ScreenContainer>
+				<TabScreenContainer>
 					<View style={styles.loadingContainer}>
 						<ActivityIndicator size="large" />
 						<Paragraph>
 							<Trans>Loading bill...</Trans>
 						</Paragraph>
 					</View>
-				</ScreenContainer>
+				</TabScreenContainer>
 			</>
 		)
 	}
@@ -161,7 +161,7 @@ export default function TableBillScreenWeb() {
 						title: t`Table Bill`,
 					}}
 				/>
-				<ScreenContainer>
+				<TabScreenContainer>
 					<View style={styles.errorContainer}>
 						<H2>
 							<Trans>Table Not Found</Trans>
@@ -176,7 +176,7 @@ export default function TableBillScreenWeb() {
 							<Trans>Close</Trans>
 						</Button>
 					</View>
-				</ScreenContainer>
+				</TabScreenContainer>
 			</>
 		)
 	}
@@ -194,7 +194,7 @@ export default function TableBillScreenWeb() {
 						title: t`Payment Successful`,
 					}}
 				/>
-				<ScreenContainer>
+				<TabScreenContainer>
 					<View style={styles.successContainer}>
 						<H2>
 							<Trans>✓ Payment Successful!</Trans>
@@ -205,7 +205,7 @@ export default function TableBillScreenWeb() {
 							</Trans>
 						</Paragraph>
 					</View>
-				</ScreenContainer>
+				</TabScreenContainer>
 			</>
 		)
 	}
@@ -222,7 +222,7 @@ export default function TableBillScreenWeb() {
 					title: tableBill.tableName,
 				}}
 			/>
-			<ScreenContainer contentContainerStyle={styles.container}>
+			<TabScreenContainer contentContainerStyle={styles.container}>
 				{/* Table Header */}
 				<Card>
 					<H2>{tableBill.tableName}</H2>
@@ -302,7 +302,7 @@ export default function TableBillScreenWeb() {
 						<Trans>Pay {formatPrice(tableBill.total)}</Trans>
 					)}
 				</Button>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

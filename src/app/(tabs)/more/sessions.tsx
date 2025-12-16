@@ -6,7 +6,7 @@ import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { List, ListItem } from '@/components/List'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph } from '@/components/Text'
 import { sessionsQueryOptions } from '@/lib/queries/auth'
 
@@ -34,7 +34,7 @@ export default function SessionsScreen() {
 			<Head>
 				<title>{t`Sessions`}</title>
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.container}
 				refreshControl={
 					<RefreshControl
@@ -86,7 +86,7 @@ export default function SessionsScreen() {
 						</View>
 					)}
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

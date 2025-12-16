@@ -17,7 +17,7 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { Card } from '@/components/Card'
 import { ModifierTag } from '@/components/ModifierTag'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Paragraph, Text } from '@/components/Text'
 import { baristaQueueQueryOptions } from '@/lib/queries/barista'
 import {
@@ -168,7 +168,7 @@ export default function BaristaQueue() {
 			<Head>
 				<title>{t`Queue`}</title>
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				noScroll={orders.length === 0}
 				ref={screenRef}
@@ -424,7 +424,7 @@ export default function BaristaQueue() {
 						</Paragraph>
 					</View>
 				)}
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

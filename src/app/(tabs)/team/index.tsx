@@ -8,7 +8,7 @@ import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { List, ListItem } from '@/components/List'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2 } from '@/components/Text'
 import { queryClient } from '@/lib/query-client'
 
@@ -26,7 +26,7 @@ export default function TeamIndex() {
 				<meta content="Team - TOLO" property="og:title" />
 				<meta content="/team" property="og:url" />
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				ref={screenRef}
 				refreshControl={
 					<RefreshControl
@@ -60,7 +60,7 @@ export default function TeamIndex() {
 						</ListItem.Label>
 					</ListItem>
 				</List>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }
