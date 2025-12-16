@@ -50,4 +50,3 @@ const styles = StyleSheet.create((theme) => ({
 		fontWeight: '500',
 	}),
 }))
-
