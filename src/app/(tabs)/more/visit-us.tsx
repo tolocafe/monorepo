@@ -6,7 +6,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Label, Text } from '@/components/Text'
 
 const APPLE_MAPS_URL = 'https://maps.apple/p/97fTAIvUnQ-uSU'
@@ -28,7 +28,7 @@ export default function VisitUs() {
 				<meta content={t`Visit Us - TOLO Good Coffee`} property="og:title" />
 				<meta content="/more/visit-us" property="og:url" />
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				withHeaderPadding
 				withTopGradient={Platform.OS !== 'ios'}
 			>
@@ -96,7 +96,7 @@ export default function VisitUs() {
 						</View>
 					</Card>
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

@@ -32,9 +32,10 @@ import {
 
 import { Button } from '@/components/Button'
 import { CheckedButton } from '@/components/CheckedButton'
+import { HeaderIconIonicons } from '@/components/Icons'
 import { LevelIndicator } from '@/components/LevelIndicator'
 import { LinearGradient } from '@/components/LinearGradient'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
 import WebContent from '@/components/WebContent'
 import { trackEvent } from '@/lib/analytics/firebase'
@@ -93,6 +94,10 @@ const gradient = {
 }
 
 const PADDING_EDGES = ['bottom'] as const
+
+const GrayIonIcon = withUnistyles(Ionicons, (theme) => ({
+	color: theme.colors.gray.text,
+}))
 
 export default function MenuDetail() {
 	const { t } = useLingui()
@@ -165,21 +170,17 @@ export default function MenuDetail() {
 	if (!product) {
 		if (isPending) {
 			return (
-				<ScreenContainer data-testid="loading">
+				<TabScreenContainer data-testid="loading">
 					<ActivityIndicator size="large" />
-				</ScreenContainer>
+				</TabScreenContainer>
 			)
 		}
 
 		return (
-			<ScreenContainer>
+			<TabScreenContainer>
 				<View style={styles.header}>
 					<Pressable onPress={handleClose} style={styles.closeButton}>
-						<Ionicons
-							color={styles.closeButtonText.color}
-							name="close"
-							size={20}
-						/>
+						<GrayIonIcon name="close" size={20} />
 					</Pressable>
 				</View>
 				<View style={styles.content}>
@@ -190,7 +191,7 @@ export default function MenuDetail() {
 						<Trans>The requested product could not be loaded.</Trans>
 					</Paragraph>
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 		)
 	}
 
@@ -219,20 +220,13 @@ export default function MenuDetail() {
 						default: undefined,
 						ios: () => (
 							<Pressable onPress={handleClose}>
-								<Ionicons
-									color={Platform.select({
-										android: 'white',
-										default: styles.closeButtonText.color,
-									})}
-									name="close-outline"
-									size={35}
-								/>
+								<HeaderIconIonicons name="close-outline" size={35} />
 							</Pressable>
 						),
 					}),
 				}}
 			/>
-			<ScreenContainer
+			<TabScreenContainer
 				refreshControl={
 					<RefreshControl
 						onRefresh={() =>
@@ -433,7 +427,7 @@ export default function MenuDetail() {
 						</>
 					)}
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 			<Subscribe
 				selector={({ values }) =>
 					[values.quantity, values.modifications] as const
@@ -628,11 +622,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
 		width: theme.spacing.xl,
-	},
-	closeButtonText: {
-		color: theme.colors.gray.text,
-		fontSize: theme.fontSizes.lg,
-		fontWeight: theme.fontWeights.bold,
 	},
 	content: {
 		_web: {

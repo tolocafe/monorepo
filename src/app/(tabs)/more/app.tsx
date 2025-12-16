@@ -10,7 +10,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { useUpdates } from '@/lib/hooks/use-updates'
 import { clearAllCache } from '@/lib/queries/cache-utils'
@@ -85,7 +85,7 @@ export default function AppInfoScreen() {
 				<meta content={t`App - TOLO`} property="og:title" />
 				<meta content="/more/app" property="og:url" />
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				withHeaderPadding
 				withTopGradient={Platform.OS !== 'ios'}
@@ -165,7 +165,7 @@ export default function AppInfoScreen() {
 						</Button>
 					</Card>
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

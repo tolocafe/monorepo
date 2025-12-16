@@ -17,7 +17,7 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { Card } from '@/components/Card'
 import { ModifierTag } from '@/components/ModifierTag'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Paragraph, Text } from '@/components/Text'
 import { baristaQueueQueryOptions } from '@/lib/queries/barista'
 import {
@@ -168,7 +168,7 @@ export default function BaristaQueue() {
 			<Head>
 				<title>{t`Queue`}</title>
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				noScroll={orders.length === 0}
 				ref={screenRef}
@@ -424,7 +424,7 @@ export default function BaristaQueue() {
 						</Paragraph>
 					</View>
 				)}
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }
@@ -616,23 +616,11 @@ const styles = StyleSheet.create((theme) => ({
 		fontSize: 12,
 		fontWeight: '600',
 	},
-	modifierTag: {
-		alignItems: 'center',
-		borderRadius: theme.borderRadius.sm,
-		flexDirection: 'row',
-		gap: theme.spacing.xs,
-		paddingHorizontal: theme.spacing.sm,
-		paddingVertical: theme.spacing.xs,
-	},
 	modifierTagsContainer: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		gap: theme.spacing.xs,
 		marginLeft: 32, // Align with product name (badge width + gap)
-	},
-	modifierTagText: {
-		fontSize: 14,
-		fontWeight: '500',
 	},
 	orderCard: {
 		gap: theme.spacing.sm,
@@ -666,25 +654,6 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.gray.text,
 		fontSize: 13,
 	},
-	pollingDot: {
-		backgroundColor: '#34C759',
-		borderRadius: 4,
-		height: 8,
-		width: 8,
-	},
-	pollingDotActive: {
-		opacity: 0.5,
-	},
-	pollingIndicator: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: 4,
-	},
-	pollingText: {
-		color: '#34C759',
-		fontSize: 12,
-		fontWeight: '600',
-	},
 	productItem: {
 		alignItems: 'center',
 		flexDirection: 'row',
@@ -713,16 +682,6 @@ const styles = StyleSheet.create((theme) => ({
 	productsList: {
 		gap: theme.spacing.sm,
 		marginTop: theme.spacing.xs,
-	},
-	statusBadge: {
-		borderRadius: theme.borderRadius.sm,
-		paddingHorizontal: theme.spacing.sm,
-		paddingVertical: 2,
-	},
-	statusText: {
-		color: 'white',
-		fontSize: 12,
-		fontWeight: '600',
 	},
 	timeContainer: {
 		alignItems: 'center',

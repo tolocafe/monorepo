@@ -437,11 +437,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		justifyContent: 'space-between',
 		paddingHorizontal: theme.layout.screenPadding,
 	},
-	headerContent: {
-		alignItems: 'center',
-		flexDirection: 'row',
-		gap: theme.spacing.sm,
-	},
 	headerText: {
 		color: WHITE_COLOR,
 		fontSize: theme.fontSizes.md,

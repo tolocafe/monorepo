@@ -186,9 +186,6 @@ const styles = StyleSheet.create((theme) => ({
 		flex: 1,
 		paddingLeft: SIDEBAR_WIDTH,
 	},
-	hidden: {
-		display: 'none',
-	},
 	image: { height: 25, marginBottom: 10, width: 100 },
 	sidebar: {
 		backgroundColor: theme.colors.gray.background,

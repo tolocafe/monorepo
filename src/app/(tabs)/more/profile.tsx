@@ -13,7 +13,7 @@ import { z } from 'zod/v4'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { List, ListItem } from '@/components/List'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label } from '@/components/Text'
 import {
 	selfQueryOptions,
@@ -119,7 +119,7 @@ export default function ProfileScreen() {
 			<Head>
 				<title>{t`Profile`}</title>
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				refreshControl={
 					<RefreshControl
@@ -269,7 +269,7 @@ export default function ProfileScreen() {
 						</ListItem>
 					</List>
 				</View>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

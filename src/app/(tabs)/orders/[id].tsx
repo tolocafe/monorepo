@@ -16,7 +16,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
-import ScreenContainer from '@/components/ScreenContainer'
+import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { orderDetailQueryOptions } from '@/lib/queries/order'
@@ -62,13 +62,13 @@ export default function OrderDetail() {
 				<Head>
 					<title>{t`Loading Order`}</title>
 				</Head>
-				<ScreenContainer>
+				<TabScreenContainer>
 					<View style={styles.loadingContainer}>
 						<H2>
 							<Trans>Loading Order...</Trans>
 						</H2>
 					</View>
-				</ScreenContainer>
+				</TabScreenContainer>
 			</>
 		)
 	}
@@ -79,7 +79,7 @@ export default function OrderDetail() {
 				<Head>
 					<title>{t`Order Not Found`}</title>
 				</Head>
-				<ScreenContainer>
+				<TabScreenContainer>
 					<View style={styles.errorContainer}>
 						<H2>
 							<Trans>Order Not Found</Trans>
@@ -91,7 +91,7 @@ export default function OrderDetail() {
 							<Trans>Go Back</Trans>
 						</Button>
 					</View>
-				</ScreenContainer>
+				</TabScreenContainer>
 			</>
 		)
 	}
@@ -101,7 +101,7 @@ export default function OrderDetail() {
 			<Head>
 				<title>{t`Order ${id}`}</title>
 			</Head>
-			<ScreenContainer
+			<TabScreenContainer
 				contentContainerStyle={styles.container}
 				refreshControl={
 					<RefreshControl
@@ -235,7 +235,7 @@ export default function OrderDetail() {
 						</Text>
 					</View>
 				</TouchableOpacity>
-			</ScreenContainer>
+			</TabScreenContainer>
 		</>
 	)
 }

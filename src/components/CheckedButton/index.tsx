@@ -56,11 +56,7 @@ export function CheckedButton({
 				<View style={styles.left}>
 					{checked ? (
 						<View style={styles.check}>
-							<Ionicons
-								color={styles.checkIcon.color}
-								name="checkmark"
-								size={16}
-							/>
+							<Ionicons color="white" name="checkmark" size={16} />
 						</View>
 					) : null}
 					<Text style={[styles.label, textStyle]}>{children}</Text>
@@ -109,9 +105,6 @@ const styles = StyleSheet.create((theme) => ({
 		height: 20,
 		justifyContent: 'center',
 		width: 20,
-	},
-	checkIcon: {
-		color: '#FFFFFF',
 	},
 	content: {
 		alignItems: 'center',

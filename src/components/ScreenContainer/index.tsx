@@ -3,11 +3,7 @@ import { Platform, ScrollView, View } from 'react-native'
 
 import { useHeaderHeight } from '@react-navigation/elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
-import {
-	StyleSheet,
-	UnistylesRuntime,
-	withUnistyles,
-} from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import HeaderGradient from '@/components/HeaderGradient'
 import { useBottomTabBarHeight } from '@/components/Tabs'
@@ -21,6 +17,7 @@ export type Props = Omit<
 	keyboardAware?: boolean
 	noScroll?: boolean
 	ref?: RefObject<null | ScrollView>
+	tabBarHeight?: number
 	withHeaderPadding?: boolean
 	/**
 	 * The edges to apply padding to.
@@ -40,14 +37,12 @@ export default function ScreenContainer({
 	noScroll = false,
 	ref,
 	style,
+	tabBarHeight,
 	withHeaderPadding,
 	withPaddingEdges = DEFAULT_PADDING_EDGES,
 	withTopGradient,
 	...rest
 }: Props) {
-	const navigationTabBarHeight = useBottomTabBarHeight()
-	const tabBarHeight = Platform.OS === 'ios' ? navigationTabBarHeight : 0
-
 	const navigationHeaderHeight = useHeaderHeight()
 	const headerHeight = withHeaderPadding ? navigationHeaderHeight : 0
 	const topAccessory = withTopGradient ? (
@@ -118,32 +113,30 @@ export default function ScreenContainer({
 	)
 }
 
+/**
+ * Should be used inside a tab screen.
+ */
+export function TabScreenContainer(
+	props: Omit<ComponentProps<typeof ScreenContainer>, 'tabBarHeight'>,
+) {
+	const navigationTabBarHeight = useBottomTabBarHeight()
+	const tabBarHeight = Platform.OS === 'ios' ? navigationTabBarHeight : 0
+
+	return <ScreenContainer {...props} tabBarHeight={tabBarHeight} />
+}
+
 const styles = StyleSheet.create((theme, runtime) => ({
-	container: {
-		backgroundColor: theme.colors.crema.background,
-		flex: 1,
-		variants: {
-			withTopPadding: {
-				true: {
-					paddingTop:
-						Platform.OS === 'ios'
-							? 0
-							: Math.max(theme.spacing.sm, UnistylesRuntime.insets.top),
-				},
-			},
-		},
-	},
-	contentContainer: (bottomTabBarHeight: number, headerHeight: number) => ({
+	contentContainer: (bottomTabBarHeight?: number, headerHeight?: number) => ({
 		flexGrow: 1,
 		paddingBottom:
-			bottomTabBarHeight +
+			(bottomTabBarHeight ?? 0) +
 			Math.max(runtime.insets.bottom, theme.layout.screenPadding),
 		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
 		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 		paddingTop: Math.max(
 			runtime.insets.top,
 			theme.layout.screenPadding,
-			headerHeight,
+			headerHeight ?? 0,
 		),
 		variants: {
 			withBottomPadding: {
