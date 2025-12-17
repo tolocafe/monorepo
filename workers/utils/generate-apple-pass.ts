@@ -19,7 +19,7 @@ export const currencyFormatter = new Intl.NumberFormat('es-MX', {
 })
 
 const imagesToAdd = (visitCount: number) => {
-	const stripIndex = visitCount % 11
+	const stripIndex = Math.min(visitCount, 10)
 
 	return [
 		{ name: 'icon.png', path: '/pass/icon.png' },

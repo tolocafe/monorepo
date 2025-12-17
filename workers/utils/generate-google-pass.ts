@@ -190,7 +190,7 @@ function getLoyaltyObject({
 	passId: string
 	points: number
 }) {
-	const stripIndex = points % 11
+	const stripIndex = Math.min(points, 10)
 	const discountPercentage = Number.parseInt(
 		client.discount_per || client.client_groups_discount || '0',
 	)

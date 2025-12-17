@@ -93,7 +93,10 @@ export default function RedeemDrink() {
 		if (Platform.OS === 'web') return
 
 		const subscription = CameraView.onModernBarcodeScanned((event) => {
-			setScannedClientId(event.data)
+			if (event.data.startsWith('TOLO-')) {
+				const customerId = event.data.split('-')[1]
+				setScannedClientId(customerId)
+			}
 			// Dismiss the scanner on iOS (Android auto-dismisses)
 			void CameraView.dismissScanner()
 		})
