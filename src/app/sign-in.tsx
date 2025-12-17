@@ -277,9 +277,8 @@ export default function SignIn() {
 							accessibilityLabel={t`Close`}
 							accessibilityRole="button"
 							onPress={() => router.back()}
-							style={styles.headerIconPressable}
 						>
-							<TextColorIonicons name="close" size={24} />
+							<TextColorIonicons name="close" size={28} />
 						</Pressable>
 					),
 					headerShadowVisible: false,
@@ -580,13 +579,6 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		flexDirection: 'row',
 		justifyContent: 'flex-end',
-	},
-	headerIconPressable: {
-		alignItems: 'center',
-		justifyContent: 'center',
-		minHeight: 44,
-		minWidth: 44,
-		padding: theme.spacing.sm,
 	},
 	inputContainer: {
 		marginBottom: theme.spacing.md,

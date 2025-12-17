@@ -24,7 +24,8 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 const GRADIENT_START = { x: 0, y: 0 }
 const GRADIENT_END = { x: 1, y: 1 }
 
-const BUBBLE_SIZE = 55
+const BUBBLE_CONTENT_SIZE = 55
+export const BUBBLE_SIZE = BUBBLE_CONTENT_SIZE + 16
 
 type Props = {
 	coffee: Coffee
@@ -83,7 +84,7 @@ const styles = StyleSheet.create((theme) => ({
 	storyBubble: {
 		alignItems: 'center',
 		gap: theme.spacing.xs,
-		width: BUBBLE_SIZE + 16,
+		width: BUBBLE_SIZE,
 	},
 	storyBubbleContent: {
 		alignItems: 'center',
@@ -99,9 +100,9 @@ const styles = StyleSheet.create((theme) => ({
 	storyBubbleImageContainer: {
 		backgroundColor: theme.colors.gray.background,
 		borderRadius: theme.borderRadius.full,
-		height: BUBBLE_SIZE,
+		height: BUBBLE_CONTENT_SIZE,
 		overflow: 'hidden',
-		width: BUBBLE_SIZE,
+		width: BUBBLE_CONTENT_SIZE,
 	},
 	storyBubbleRing: {
 		alignItems: 'center',

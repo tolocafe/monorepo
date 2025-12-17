@@ -12,6 +12,12 @@ import { promotionsQueryOptions } from '@/lib/queries/menu'
 
 const UniFlatList = withUnistyles(FlatList)
 
+const handleRenderItem = ({ item }: { item: unknown }) => (
+	<PromotionCard promotion={item as Promotion} />
+)
+
+const handleKeyExtractor = (item: unknown) => (item as Promotion).promotion_id
+
 export function PromotionsSection() {
 	const { data } = useQuery(promotionsQueryOptions)
 
@@ -28,10 +34,8 @@ export function PromotionsSection() {
 				contentContainerStyle={styles.promotionsContainer}
 				data={data}
 				horizontal
-				keyExtractor={(item) => (item as Promotion).promotion_id}
-				renderItem={({ item }) => (
-					<PromotionCard promotion={item as Promotion} />
-				)}
+				keyExtractor={handleKeyExtractor}
+				renderItem={handleRenderItem}
 				showsHorizontalScrollIndicator={false}
 			/>
 		</View>

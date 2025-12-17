@@ -10,10 +10,12 @@ export default function TableBillRedirect() {
 	const { table_id } = useLocalSearchParams<{ table_id: string }>()
 
 	useEffect(() => {
-		// eslint-disable-next-line no-console
-		console.warn(
-			`[Deprecated] /tables/${table_id} route is deprecated. Use /tables/[location_id]/[table_id] instead`,
-		)
+		if (__DEV__) {
+			// eslint-disable-next-line no-console
+			console.warn(
+				`[Deprecated] /tables/${table_id} route is deprecated. Use /tables/[location_id]/[table_id] instead`,
+			)
+		}
 	}, [table_id])
 
 	return <Redirect href={`/tables/1/${table_id}`} />

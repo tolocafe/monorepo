@@ -92,7 +92,6 @@ const styles = StyleSheet.create((theme, runtime) => {
 			overflow: 'hidden',
 		},
 		container: {
-			height: imageHeight + 80, // Image height + content area
 			width: itemWidth,
 		},
 		content: {

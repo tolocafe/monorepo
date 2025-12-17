@@ -4,10 +4,10 @@ import { ActivityIndicator, FlatList, View } from 'react-native'
 import { Trans } from '@lingui/react/macro'
 import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
-import { StyleSheet, withUnistyles } from 'react-native-unistyles'
+import { StyleSheet, useUnistyles, withUnistyles } from 'react-native-unistyles'
 
 import { Button } from '@/components/Button'
-import MenuListItem from '@/components/MenuListItem'
+import MenuListItem, { getItemSize } from '@/components/MenuListItem'
 import { H2, H3, Paragraph } from '@/components/Text'
 import {
 	categoriesQueryOptions,
@@ -25,14 +25,28 @@ const CATEGORY_ORDER = ['De Temporada', 'Café', 'Matcha', 'Té y Tisanas']
 const categoryKeyExtractor = (item: unknown) => (item as Product).product_id
 
 const menuItemFallback = <View aria-hidden />
+
 const UniFlatList = withUnistyles(FlatList)
+
+const handleRenderItem = ({ item }: { item: unknown }) => (
+	<ErrorBoundary fallback={menuItemFallback}>
+		<MenuListItem item={item as Product} />
+	</ErrorBoundary>
+)
 
 export function MenuSection() {
 	const productsQuery = useQuery(productsQueryOptions)
 	const categoriesQuery = useQuery(categoriesQueryOptions)
+	const { rt } = useUnistyles()
 
 	const menu = productsQuery.data
 	const categories = categoriesQuery.data
+
+	const handleGetItemLayout = (_item: unknown, index: number) => ({
+		index,
+		length: getItemSize(rt.screen.width),
+		offset: getItemSize(rt.screen.width) * index,
+	})
 
 	const categoriesWithItems = useMemo(() => {
 		if (!categories || !menu) return []
@@ -100,13 +114,10 @@ export function MenuSection() {
 					<UniFlatList
 						contentContainerStyle={styles.categoryItems}
 						data={category.items}
+						getItemLayout={handleGetItemLayout}
 						horizontal
 						keyExtractor={categoryKeyExtractor}
-						renderItem={({ item }) => (
-							<ErrorBoundary fallback={menuItemFallback}>
-								<MenuListItem item={item as Product} />
-							</ErrorBoundary>
-						)}
+						renderItem={handleRenderItem}
 						showsHorizontalScrollIndicator={false}
 					/>
 				</Fragment>

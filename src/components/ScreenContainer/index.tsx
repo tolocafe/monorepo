@@ -63,6 +63,7 @@ export default function ScreenContainer({
 				<View
 					{...rest}
 					style={[
+						styles.scrollViewContainer,
 						styles.contentContainer(tabBarHeight, headerHeight),
 						contentContainerStyle,
 					]}

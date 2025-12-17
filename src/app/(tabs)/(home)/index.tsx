@@ -13,14 +13,14 @@ import {
 	CoffeesSection,
 	EventsSection,
 	PromotionsSection,
-} from '@/components/MenuSections'
+} from '@/components/HomeSections'
 import {
 	categoriesQueryOptions,
 	coffeesQueryOptions,
 	eventsQueryOptions,
 	productsQueryOptions,
 	promotionsQueryOptions,
-} from '@/components/MenuSections/queries'
+} from '@/components/HomeSections/queries'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { Paragraph } from '@/components/Text'
 import { enableAnalytics } from '@/lib/analytics/firebase'

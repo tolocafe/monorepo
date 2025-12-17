@@ -10,8 +10,10 @@ export const clearAllCache = async () => {
 		// Step 2: Clear persisted cache through the persister
 		await persister.removeClient()
 	} catch (error) {
-		// eslint-disable-next-line no-console
-		console.warn('Failed to clear persisted cache:', error)
+		if (__DEV__) {
+			// eslint-disable-next-line no-console
+			console.warn('Failed to clear persisted cache:', error)
+		}
 	}
 
 	try {
@@ -22,8 +24,10 @@ export const clearAllCache = async () => {
 		// Note: Language storage (default MMKV instance) and auth credentials
 		// are preserved to maintain user's language preference and login state
 	} catch (error) {
-		// eslint-disable-next-line no-console
-		console.warn('Failed to clear MMKV storage:', error)
+		if (__DEV__) {
+			// eslint-disable-next-line no-console
+			console.warn('Failed to clear MMKV storage:', error)
+		}
 	}
 
 	// Step 3: Clear in-memory cache and remove all queries

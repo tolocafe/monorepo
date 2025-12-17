@@ -4,13 +4,25 @@ import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import CoffeeStoryBubble from '@/components/CoffeeStoryBubble'
+import CoffeeStoryBubble, { BUBBLE_SIZE } from '@/components/CoffeeStoryBubble'
 import { H2 } from '@/components/Text'
 import { coffeesQueryOptions } from '@/lib/queries/coffees'
 
 import type { Coffee } from '@/lib/api'
 
 const UniFlatList = withUnistyles(FlatList)
+
+const handleGetItemLayout = (_item: unknown, index: number) => ({
+	index,
+	length: BUBBLE_SIZE,
+	offset: BUBBLE_SIZE * index,
+})
+
+const handleRenderItem = ({ item }: { item: unknown }) => (
+	<CoffeeStoryBubble coffee={item as Coffee} />
+)
+
+const handleKeyExtractor = (item: unknown) => (item as Coffee).slug
 
 export function CoffeesSection() {
 	const { data } = useQuery(coffeesQueryOptions)
@@ -27,9 +39,10 @@ export function CoffeesSection() {
 			<UniFlatList
 				contentContainerStyle={styles.storiesContainer}
 				data={data}
+				getItemLayout={handleGetItemLayout}
 				horizontal
-				keyExtractor={(item) => (item as Coffee).slug}
-				renderItem={({ item }) => <CoffeeStoryBubble coffee={item as Coffee} />}
+				keyExtractor={handleKeyExtractor}
+				renderItem={handleRenderItem}
 				showsHorizontalScrollIndicator={false}
 			/>
 		</View>

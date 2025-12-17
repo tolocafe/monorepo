@@ -23,6 +23,10 @@ type Props = {
 	item: Product
 }
 
+export function getItemSize(screenWidth: number) {
+	return Math.min((screenWidth - 10) * 0.4, 200)
+}
+
 export default function MenuListItem(props: Props) {
 	const { item } = props
 
@@ -91,7 +95,7 @@ export default function MenuListItem(props: Props) {
 }
 
 const styles = StyleSheet.create((theme, runtime) => {
-	const itemSize = Math.min((runtime.screen.width - 10) * 0.4, 200)
+	const itemSize = getItemSize(runtime.screen.width)
 	const ADD_TO_BAG_BUTTON_SIZE = 36
 
 	return {
