@@ -23,7 +23,7 @@
 		"run_worker_first": ["/api/*"],
 	},
 	"triggers": {
-		"crons": ["*/5 * * * *"],
+		"crons": ["*/15 * * * *"],
 	},
 	"kv_namespaces": [
 		{
@@ -52,4 +52,10 @@
 	"browser": {
 		"binding": "BROWSER",
 	},
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "b4c25cd838cb4c2cb2c97f557b36b36a",
+		},
+	],
 }

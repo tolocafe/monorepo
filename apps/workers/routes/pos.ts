@@ -137,6 +137,7 @@ Constraints:
 				},
 				{
 					gateway: { id: 'main' },
+					tags: ['pos'],
 				},
 			).then((result) => result.response ?? '')
 		} catch (error) {

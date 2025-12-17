@@ -18,12 +18,14 @@
 		"format": "prettier --write .",
 		"format:check": "prettier --check .",
 		"typecheck": "tsc --noEmit",
-		"deploy:workers": "wrangler deploy --no-bundle --upload-source-maps --var SENTRY_RELEASE:$(sentry-cli releases propose-version)",
+		"deploy:workers": "wrangler deploy --upload-source-maps --var SENTRY_RELEASE:$(sentry-cli releases propose-version)",
 		"deploy": "wrangler deploy --outdir dist --upload-source-maps --var SENTRY_RELEASE:$(sentry-cli releases propose-version)",
 		"update:publish": "eas update --auto",
 		"clean": "rm -rf node_modules ios dist .wrangler coverage android .expo && bun install",
 		"sentry:sourcemaps": "_SENTRY_RELEASE=$(sentry-cli releases propose-version) && sentry-cli releases new $_SENTRY_RELEASE --org=tolo-cafe --project=workers && sentry-cli sourcemaps upload --org=tolo-cafe --project=workers --release=$_SENTRY_RELEASE --strip-prefix 'dist/..' dist",
-		"postdeploy": "bun run sentry:sourcemaps"
+		"postdeploy": "bun run sentry:sourcemaps",
+		"db:push": "drizzle-kit push",
+		"db:studio": "drizzle-kit studio"
 	},
 	"dependencies": {
 		"@aws-sdk/client-sns": "3.887.0",
@@ -35,6 +37,7 @@
 		"@lingui/core": "5.6.1",
 		"@lingui/macro": "5.6.1",
 		"@lingui/react": "5.6.1",
+		"@neondatabase/serverless": "^1.0.2",
 		"@premieroctet/react-native-wallet": "1.0.2",
 		"@react-native-community/netinfo": "11.4.1",
 		"@react-native-firebase/analytics": "23.7.0",
@@ -50,6 +53,7 @@
 		"@tanstack/react-query": "5.90.12",
 		"@tanstack/react-query-persist-client": "5.90.14",
 		"burnt": "0.13.0",
+		"drizzle-orm": "^1.0.0-beta.3-36e9b9e",
 		"expo": "~54.0.29",
 		"expo-application": "~7.0.8",
 		"expo-build-properties": "~1.0.10",
@@ -84,6 +88,7 @@
 		"jsonwebtoken": "9.0.3",
 		"ky": "1.14.1",
 		"passkit-generator": "3.5.6",
+		"postgres": "^3.4.7",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
 		"react-native": "0.81.5",
@@ -111,7 +116,7 @@
 	"devDependencies": {
 		"@babel/core": "~7.26.0",
 		"@cloudflare/puppeteer": "^1.0.4",
-		"@cloudflare/vitest-pool-workers": "0.10.14",
+		"@cloudflare/vitest-pool-workers": "0.10.11",
 		"@eslint/js": "~9.39.1",
 		"@lingui/babel-plugin-lingui-macro": "5.6.1",
 		"@lingui/metro-transformer": "~5.6.1",
@@ -125,6 +130,7 @@
 		"@types/react": "~19.1.10",
 		"@types/react-dom": "^19.2.3",
 		"babel-plugin-react-compiler": "19.1.0-rc.3",
+		"drizzle-kit": "^1.0.0-beta.3-36e9b9e",
 		"eslint": "9.39.1",
 		"eslint-config-expo": "~10.0.0",
 		"eslint-plugin-perfectionist": "~4.15.1",
@@ -141,7 +147,7 @@
 		"react-test-renderer": "19.1.0",
 		"typescript": "~5.9.3",
 		"typescript-eslint": "~8.49.0",
-		"wrangler": "4.53.0"
+		"wrangler": "4.51.0"
 	},
 	"prettier": "prettier-config-cretia",
 	"private": true

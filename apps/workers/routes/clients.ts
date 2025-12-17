@@ -2,20 +2,20 @@ import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
 
-import { notifyApplePassUpdate } from '../utils/apns'
-import { TEAM_GROUP_IDS } from '../utils/constants'
-import { notifyGooglePassUpdate } from '../utils/generate-google-pass'
-import { authenticate } from '../utils/jwt'
+import { notifyApplePassUpdate } from '~workers/utils/apns'
+import { TEAM_GROUP_IDS } from '~workers/utils/constants'
+import { notifyGooglePassUpdate } from '~workers/utils/generate-google-pass'
+import { authenticate } from '~workers/utils/jwt'
 import {
 	canRedeemBirthdayDrink,
 	createRedemption,
 	getCustomerPoints,
 	POINTS_PER_REDEMPTION,
-} from '../utils/points'
-import { api } from '../utils/poster'
-import { notifyRedemption } from '../utils/push-notifications'
+} from '~workers/utils/points'
+import { api } from '~workers/utils/poster'
+import { notifyRedemption } from '~workers/utils/push-notifications'
 
-import type { Bindings } from '../types'
+import type { Bindings } from '~workers/types'
 
 const updateClientSchema = z.object({
 	birthday: z.string().optional(),

@@ -15,7 +15,7 @@ import passes from './routes/passes'
 import pos from './routes/pos'
 import receipts from './routes/receipts'
 import tables from './routes/tables'
-import transactions from './routes/transactions'
+import transactionsRouter from './routes/transactions'
 import webhooks from './routes/webhooks'
 import scheduledHandler from './scheduled'
 import { defaultJsonHeaders } from './utils/headers'
@@ -78,7 +78,7 @@ app
 	.route('/menu', menu)
 	.route('/auth', auth)
 	.route('/clients', clients)
-	.route('/transactions', transactions)
+	.route('/transactions', transactionsRouter)
 	.route('/orders', orders)
 	.route('/receipts', receipts)
 	.route('/webhooks', webhooks)

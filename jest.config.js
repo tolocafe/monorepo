@@ -10,10 +10,16 @@ module.exports = {
 		'!**/coverage/**',
 		'!**/node_modules/**',
 	],
+	globals: {
+		__DEV__: true,
+	},
 	projects: [
 		// For utility tests (no React Native components)
 		{
 			displayName: 'utils',
+			globals: {
+				__DEV__: true,
+			},
 			moduleNameMapper: {
 				'^@/(.*)$': '<rootDir>/src/$1',
 				'^@common/(.*)$': '<rootDir>/common/$1',
@@ -29,6 +35,9 @@ module.exports = {
 		// For component tests (React Native/Expo components)
 		{
 			displayName: 'components',
+			globals: {
+				__DEV__: true,
+			},
 			moduleNameMapper: {
 				'^@/(.*)$': '<rootDir>/src/$1',
 				'^@common/(.*)$': '<rootDir>/common/$1',

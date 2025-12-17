@@ -18,6 +18,9 @@ export type Bindings = Cloudflare.Env & {
 	GOOGLE_SERVICE_WALLET_EMAIL: string
 	GOOGLE_SERVICE_WALLET_PRIVATE_KEY: string
 	GOOGLE_WALLET_SECRET_KEY: string
+	HYPERDRIVE: {
+		connectionString: string
+	}
 	JWT_PASS_SECRET: string
 	JWT_SECRET: string
 	KV_CMS: KVNamespace
