@@ -8,7 +8,7 @@ import { productsQueryOptions } from './menu'
 export const productQueryOptions = (productId: string) =>
 	queryOptions({
 		enabled: Boolean(productId),
-		initialData: () => {
+		placeholderData: () => {
 			const product = queryClient
 				.getQueryData(productsQueryOptions.queryKey)
 				?.find((product) => product.product_id === productId)
