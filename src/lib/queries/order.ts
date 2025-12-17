@@ -59,7 +59,7 @@ export const orderQueryOptions = queryOptions({
 
 export const orderDetailQueryOptions = (orderId: string) =>
 	queryOptions({
-		placeholderData: () => {
+		initialData: () => {
 			const orders = queryClient.getQueryData(orderQueryOptions.queryKey)
 			const order = orders?.find((order) => order.transaction_id === orderId)
 
