@@ -21,6 +21,19 @@ export default async function ensureTables(database: D1Database) {
 		)
 		.run()
 
+	// Add missing columns to existing table (SQLite safe - ignores if column exists)
+	await database
+		.prepare(`ALTER TABLE transactions ADD COLUMN client_id INTEGER`)
+		.run()
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+		.catch(() => {})
+
+	await database
+		.prepare(`ALTER TABLE transactions ADD COLUMN table_id INTEGER`)
+		.run()
+		// eslint-disable-next-line @typescript-eslint/no-empty-function
+		.catch(() => {})
+
 	// Create indexes
 	await database
 		.prepare(

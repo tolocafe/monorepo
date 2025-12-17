@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
 /* eslint-disable unicorn/no-keyword-prefix */
+import { captureException } from '@sentry/cloudflare'
 import { JWT } from 'google-auth-library'
 import jwt from 'jsonwebtoken'
 
@@ -10,15 +10,17 @@ import type { Bindings } from 'workers/types'
 import { getCustomerPoints, POINTS_PER_REDEMPTION } from './points'
 import { api } from './poster'
 
+const GOOGLE_WALLET_BASE_URL =
+	'https://walletobjects.googleapis.com/walletobjects/v1' as const
+const ISSUER_ID = '3388000000022990889' as const
+const PASS_CLASS_ID = `${ISSUER_ID}.10.pass.cafe.tolo.app` as const
+
 export default async function createGooglePass(
 	context: Context<{ Bindings: Bindings }>,
 	_passAuthToken: string,
 	client: ClientData,
 ) {
 	try {
-		const issuerId = '3388000000022990889'
-		const PASS_CLASS_ID = `${issuerId}.10.pass.cafe.tolo.app` as const
-
 		await getOrCreateLoyaltyClass({
 			classId: PASS_CLASS_ID,
 			context,
@@ -28,13 +30,90 @@ export default async function createGooglePass(
 			classId: PASS_CLASS_ID,
 			client,
 			context,
-			issuerId,
+			issuerId: ISSUER_ID,
 		})
 
 		return loyaltyObject
 	} catch (error) {
-		console.log(error)
+		captureException(error)
 		throw error
+	}
+}
+
+/**
+ * Update Google Wallet loyalty object for a client
+ * This directly updates the loyalty object via the Google Pay API
+ * Call this whenever the client's points or transaction data changes
+ */
+export async function notifyGooglePassUpdate(
+	clientId: number,
+	database: D1Database,
+	environment: Bindings,
+): Promise<{ error?: string; success: boolean }> {
+	const passId = `TOLO-${clientId.toString().padStart(8, '0')}`
+	const objectId = `${ISSUER_ID}.0.${passId}`
+
+	try {
+		const client = await api.clients.getClientById(
+			environment.POSTER_TOKEN,
+			clientId,
+		)
+
+		if (!client) {
+			return { error: 'Client not found', success: false }
+		}
+
+		const transactionsCount = await api.dash
+			.getTransactions(environment.POSTER_TOKEN, {
+				date_from: '2025-01-01',
+				id: clientId.toString(),
+				status: '2',
+				type: 'clients',
+			})
+			.then((transactions) => transactions.length)
+			.catch(() => 0)
+
+		const pointsData = await getCustomerPoints(
+			database,
+			clientId,
+			transactionsCount,
+		)
+
+		const loyaltyObject = getLoyaltyObject({
+			classId: PASS_CLASS_ID,
+			client,
+			objectId,
+			passId,
+			points: pointsData.points,
+		})
+
+		const googleClient = getGoogleClient({
+			email: environment.GOOGLE_SERVICE_WALLET_EMAIL,
+			key: formatPrivateKey(environment.GOOGLE_SERVICE_WALLET_PRIVATE_KEY),
+		})
+
+		await googleClient.request({
+			data: loyaltyObject,
+			method: 'PATCH',
+			url: `${GOOGLE_WALLET_BASE_URL}/loyaltyObject/${objectId}`,
+		})
+
+		return { success: true }
+	} catch (error) {
+		// 404 means user hasn't added pass yet - not an error
+		if (
+			error instanceof Error &&
+			'response' in error &&
+			(error.response as { status: number }).status === 404
+		) {
+			return { error: 'Pass not found', success: false }
+		}
+
+		captureException(error)
+		return {
+			error: error instanceof Error ? error.message : 'Unknown error',
+			success: false,
+		}
 	}
 }
 
@@ -286,8 +365,6 @@ async function getOrCreateLoyaltyClass({
 }) {
 	const baseUrl = 'https://walletobjects.googleapis.com/walletobjects/v1'
 
-	console.log('Getting Google client')
-
 	const googleClient = getGoogleClient({
 		email: context.env.GOOGLE_SERVICE_WALLET_EMAIL,
 		key: formatPrivateKey(context.env.GOOGLE_SERVICE_WALLET_PRIVATE_KEY),
@@ -329,8 +406,6 @@ async function getOrCreateLoyaltyClass({
 				})
 				.then((response) => response.data)
 		} else {
-			// Something else went wrong
-			console.log(error)
 			throw error
 		}
 	}

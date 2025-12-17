@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/cloudflare'
-import { notifyPassUpdate } from 'workers/utils/apns'
+import { notifyApplePassUpdate } from 'workers/utils/apns'
 import { api } from 'workers/utils/poster'
 
 import type { Bindings } from '../types'
@@ -216,7 +216,7 @@ export default async function syncTransactions(
 						// Notify Apple Wallet Pass of new transaction (affects wallet balance)
 						if (transactionData.client_id) {
 							try {
-								const passUpdateResult = await notifyPassUpdate(
+								const passUpdateResult = await notifyApplePassUpdate(
 									transactionData.client_id,
 									database,
 									environment,

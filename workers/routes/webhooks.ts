@@ -10,7 +10,7 @@ import { Expo } from 'expo-server-sdk'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { trackServerEvent } from 'workers/utils/analytics'
-import { notifyPassUpdate } from 'workers/utils/apns'
+import { notifyApplePassUpdate } from 'workers/utils/apns'
 import createApplePass from 'workers/utils/generate-apple-pass'
 import { api, sendSms } from 'workers/utils/poster'
 import { getStripe } from 'workers/utils/stripe'
@@ -104,7 +104,7 @@ async function sendPassUpdateNotification(
 		await ensurePassTables(context.env.D1_TOLO)
 
 		// Send pass update notification using reusable utility
-		const result = await notifyPassUpdate(
+		const result = await notifyApplePassUpdate(
 			clientId,
 			context.env.D1_TOLO,
 			context.env,

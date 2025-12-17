@@ -2,7 +2,9 @@ import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
 
+import { notifyApplePassUpdate } from '../utils/apns'
 import { TEAM_GROUP_IDS } from '../utils/constants'
+import { notifyGooglePassUpdate } from '../utils/generate-google-pass'
 import { authenticate } from '../utils/jwt'
 import {
 	canRedeemBirthdayDrink,
@@ -160,6 +162,12 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			body.type,
 			authClientId,
 		)
+
+		// Notify wallet providers to update the pass
+		await Promise.allSettled([
+			notifyApplePassUpdate(clientId, c.env.D1_TOLO, c.env),
+			notifyGooglePassUpdate(clientId, c.env.D1_TOLO, c.env),
+		])
 
 		return c.json({
 			message: 'Redemption successful',

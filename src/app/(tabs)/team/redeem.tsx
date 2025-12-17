@@ -82,10 +82,9 @@ export default function RedeemDrink() {
 	}, [])
 
 	// Intercept back navigation when there's a scanned customer
-	usePreventRemove(Boolean(scannedClientId), ({ data }) => {
-		if (data.action.type === 'GO_BACK') {
-			handleReset()
-		}
+	// Reset state instead of navigating away, allowing barista to scan another customer
+	usePreventRemove(Boolean(scannedClientId), () => {
+		handleReset()
 	})
 
 	// Listen for barcode scans from launchScanner
