@@ -29,10 +29,6 @@ msgstr "{0} - Bill"
 msgid "{0} - TOLO Good Coffee"
 msgstr "{0} - TOLO Good Coffee"
 
-#: src/app/(tabs)/team/redeem.tsx:318
-#~ msgid "{0} bonus points"
-#~ msgstr "{0} bonus points"
-
 #. placeholder {0}: selectedDrinkType === 'birthday' ? 'Birthday' : 'Points'
 #. placeholder {1}: clientName || t`customer`
 #: src/app/(tabs)/team/redeem.tsx:194
@@ -43,10 +39,6 @@ msgstr "{0} drink redeemed for {1}."
 #: src/app/(tabs)/team/redeem.tsx:205
 msgid "{0} points ({POINTS_PER_REDEMPTION} = ☕️)"
 msgstr "{0} points ({POINTS_PER_REDEMPTION} = ☕️)"
-
-#: src/app/(tabs)/team/redeem.tsx:247
-#~ msgid "{0} visits"
-#~ msgstr "{0} visits"
 
 #. placeholder {0}: order.processing_status === 10 && 'Open'
 #. placeholder {1}: order.processing_status === 20 && 'Preparing'
@@ -76,10 +68,6 @@ msgid ""
 msgstr ""
 "💳 Secure payments powered by Stripe\n"
 "🔒 Your payment information is encrypted and secure"
-
-#: src/app/(tabs)/team/redeem.tsx:307
-#~ msgid "${0} total spent"
-#~ msgstr "${0} total spent"
 
 #: src/app/sign-in.tsx:338
 msgid "0000000000"
@@ -173,10 +161,6 @@ msgstr "Birthday"
 msgid "Birthday drink already redeemed this year."
 msgstr "Birthday drink already redeemed this year."
 
-#: src/app/(tabs)/team/redeem.tsx:386
-#~ msgid "Birthday drink only available during birthday month."
-#~ msgstr "Birthday drink only available during birthday month."
-
 #: src/app/(tabs)/more/visit-us.tsx:41
 msgid "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
 msgstr "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
@@ -196,10 +180,6 @@ msgstr "Caffeine"
 #: src/app/(tabs)/orders/current.tsx:323
 msgid "Cancel"
 msgstr "Cancel"
-
-#: src/app/(tabs)/team/redeem.tsx:175
-#~ msgid "Card Scanned"
-#~ msgstr "Card Scanned"
 
 #: src/app/sign-in.tsx:465
 #: src/app/sign-in.tsx:527
@@ -624,18 +604,6 @@ msgstr "No active sessions found."
 msgid "No birthday on file."
 msgstr "No birthday on file."
 
-#: src/app/(tabs)/team/redeem.tsx:477
-#~ msgid "No bonus points available."
-#~ msgstr "No bonus points available."
-
-#: src/app/(tabs)/team/redeem.tsx:370
-#~ msgid "No free drinks available. Customer needs a birthday this month or {POINTS_PER_REDEMPTION}+ points."
-#~ msgstr "No free drinks available. Customer needs a birthday this month or {POINTS_PER_REDEMPTION}+ points."
-
-#: src/app/(tabs)/team/redeem.tsx:364
-#~ msgid "No free drinks available. Customer needs a birthday this month or bonus points."
-#~ msgstr "No free drinks available. Customer needs a birthday this month or bonus points."
-
 #: src/app/(tabs)/team/queue.tsx:420
 msgid "No orders in queue"
 msgstr "No orders in queue"
@@ -643,10 +611,6 @@ msgstr "No orders in queue"
 #: src/app/(tabs)/orders/index.tsx:216
 msgid "No orders yet"
 msgstr "No orders yet"
-
-#: src/app/(tabs)/team/redeem.tsx:408
-#~ msgid "No visits recorded yet."
-#~ msgstr "No visits recorded yet."
 
 #: src/app/(tabs)/team/redeem.tsx:132
 #: src/app/(tabs)/team/redeem.tsx:140
@@ -829,12 +793,6 @@ msgstr "Recipe"
 msgid "Redeem"
 msgstr "Redeem"
 
-#: src/app/(tabs)/team/_layout.tsx:31
-#: src/app/(tabs)/team/index.tsx:59
-#: src/app/(tabs)/team/redeem.tsx:205
-#~ msgid "Redeem Drink"
-#~ msgstr "Redeem Drink"
-
 #: src/app/(tabs)/team/redeem.tsx:53
 msgid "Redemption Failed"
 msgstr "Redemption Failed"
@@ -867,22 +825,9 @@ msgstr "Saved"
 msgid "Saving..."
 msgstr "Saving..."
 
-#: src/app/(tabs)/team/redeem.tsx:216
-#~ msgid "Scan a customer's card to register a free drink redemption."
-#~ msgstr "Scan a customer's card to register a free drink redemption."
-
-#: src/app/(tabs)/team/redeem.tsx:271
-#: src/app/(tabs)/team/redeem.tsx:434
-#~ msgid "Scan Another"
-#~ msgstr "Scan Another"
-
 #: src/app/(tabs)/team/redeem.tsx:282
 msgid "Scan Card"
 msgstr "Scan Card"
-
-#: src/app/(tabs)/team/redeem.tsx:287
-#~ msgid "Select drink type"
-#~ msgstr "Select drink type"
 
 #: src/app/(tabs)/team/redeem.tsx:221
 msgid "Select Redemption"
@@ -1012,10 +957,6 @@ msgstr "The requested product could not be loaded."
 msgid "These are the devices and browsers currently signed in to your account."
 msgstr "These are the devices and browsers currently signed in to your account."
 
-#: src/app/(tabs)/team/redeem.tsx:235
-#~ msgid "This month!"
-#~ msgstr "This month!"
-
 #: src/app/+not-found.tsx:28
 msgid "This screen does not exist."
 msgstr "This screen does not exist."
@@ -1089,10 +1030,6 @@ msgstr "Try Again"
 #: src/components/phone-number-input/index.tsx:75
 msgid "United States (+1)"
 msgstr "United States (+1)"
-
-#: src/app/(tabs)/team/redeem.tsx:266
-#~ msgid "Unknown Customer"
-#~ msgstr "Unknown Customer"
 
 #: src/app/(tabs)/more/app.tsx:136
 msgid "Update Created At"

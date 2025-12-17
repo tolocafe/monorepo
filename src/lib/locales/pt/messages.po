@@ -29,10 +29,6 @@ msgstr "{0} - Conta"
 msgid "{0} - TOLO Good Coffee"
 msgstr "{0} - TOLO Bom Café"
 
-#: src/app/(tabs)/team/redeem.tsx:318
-#~ msgid "{0} bonus points"
-#~ msgstr ""
-
 #. placeholder {0}: selectedDrinkType === 'birthday' ? 'Birthday' : 'Points'
 #. placeholder {1}: clientName || t`customer`
 #: src/app/(tabs)/team/redeem.tsx:194
@@ -43,10 +39,6 @@ msgstr ""
 #: src/app/(tabs)/team/redeem.tsx:205
 msgid "{0} points ({POINTS_PER_REDEMPTION} = ☕️)"
 msgstr ""
-
-#: src/app/(tabs)/team/redeem.tsx:247
-#~ msgid "{0} visits"
-#~ msgstr ""
 
 #. placeholder {0}: order.processing_status === 10 && 'Open'
 #. placeholder {1}: order.processing_status === 20 && 'Preparing'
@@ -76,10 +68,6 @@ msgid ""
 msgstr ""
 "💳 Pagamentos seguros com Stripe\n"
 "🔒 Suas informações de pagamento são criptografadas e seguras"
-
-#: src/app/(tabs)/team/redeem.tsx:307
-#~ msgid "${0} total spent"
-#~ msgstr ""
 
 #: src/app/sign-in.tsx:338
 msgid "0000000000"
@@ -173,10 +161,6 @@ msgstr ""
 msgid "Birthday drink already redeemed this year."
 msgstr ""
 
-#: src/app/(tabs)/team/redeem.tsx:386
-#~ msgid "Birthday drink only available during birthday month."
-#~ msgstr ""
-
 #: src/app/(tabs)/more/visit-us.tsx:41
 msgid "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
 msgstr "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, México"
@@ -196,10 +180,6 @@ msgstr "Cafeína"
 #: src/app/(tabs)/orders/current.tsx:323
 msgid "Cancel"
 msgstr "Cancelar"
-
-#: src/app/(tabs)/team/redeem.tsx:175
-#~ msgid "Card Scanned"
-#~ msgstr ""
 
 #: src/app/sign-in.tsx:465
 #: src/app/sign-in.tsx:527
@@ -624,18 +604,6 @@ msgstr "Nenhuma sessão ativa encontrada."
 msgid "No birthday on file."
 msgstr ""
 
-#: src/app/(tabs)/team/redeem.tsx:477
-#~ msgid "No bonus points available."
-#~ msgstr ""
-
-#: src/app/(tabs)/team/redeem.tsx:370
-#~ msgid "No free drinks available. Customer needs a birthday this month or {POINTS_PER_REDEMPTION}+ points."
-#~ msgstr ""
-
-#: src/app/(tabs)/team/redeem.tsx:364
-#~ msgid "No free drinks available. Customer needs a birthday this month or bonus points."
-#~ msgstr ""
-
 #: src/app/(tabs)/team/queue.tsx:420
 msgid "No orders in queue"
 msgstr "Nenhum pedido na fila"
@@ -643,10 +611,6 @@ msgstr "Nenhum pedido na fila"
 #: src/app/(tabs)/orders/index.tsx:216
 msgid "No orders yet"
 msgstr "Nenhum pedido ainda"
-
-#: src/app/(tabs)/team/redeem.tsx:408
-#~ msgid "No visits recorded yet."
-#~ msgstr ""
 
 #: src/app/(tabs)/team/redeem.tsx:132
 #: src/app/(tabs)/team/redeem.tsx:140
@@ -829,12 +793,6 @@ msgstr "Receita"
 msgid "Redeem"
 msgstr ""
 
-#: src/app/(tabs)/team/_layout.tsx:31
-#: src/app/(tabs)/team/index.tsx:59
-#: src/app/(tabs)/team/redeem.tsx:205
-#~ msgid "Redeem Drink"
-#~ msgstr ""
-
 #: src/app/(tabs)/team/redeem.tsx:53
 msgid "Redemption Failed"
 msgstr ""
@@ -867,22 +825,9 @@ msgstr "Salvo"
 msgid "Saving..."
 msgstr "Salvando..."
 
-#: src/app/(tabs)/team/redeem.tsx:216
-#~ msgid "Scan a customer's card to register a free drink redemption."
-#~ msgstr ""
-
-#: src/app/(tabs)/team/redeem.tsx:271
-#: src/app/(tabs)/team/redeem.tsx:434
-#~ msgid "Scan Another"
-#~ msgstr ""
-
 #: src/app/(tabs)/team/redeem.tsx:282
 msgid "Scan Card"
 msgstr ""
-
-#: src/app/(tabs)/team/redeem.tsx:287
-#~ msgid "Select drink type"
-#~ msgstr ""
 
 #: src/app/(tabs)/team/redeem.tsx:221
 msgid "Select Redemption"
@@ -1012,10 +957,6 @@ msgstr "O produto solicitado não pôde ser carregado."
 msgid "These are the devices and browsers currently signed in to your account."
 msgstr "Estes são os dispositivos e navegadores atualmente conectados à sua conta."
 
-#: src/app/(tabs)/team/redeem.tsx:235
-#~ msgid "This month!"
-#~ msgstr ""
-
 #: src/app/+not-found.tsx:28
 msgid "This screen does not exist."
 msgstr "Esta tela não existe."
@@ -1089,10 +1030,6 @@ msgstr ""
 #: src/components/phone-number-input/index.tsx:75
 msgid "United States (+1)"
 msgstr "Estados Unidos (+1)"
-
-#: src/app/(tabs)/team/redeem.tsx:266
-#~ msgid "Unknown Customer"
-#~ msgstr ""
 
 #: src/app/(tabs)/more/app.tsx:136
 msgid "Update Created At"

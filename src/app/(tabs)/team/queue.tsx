@@ -27,6 +27,8 @@ import {
 import { queryClient } from '@/lib/query-client'
 import { sortModifiers } from '@/lib/utils/modifier-tags'
 
+import type { Product } from '@/lib/api'
+
 const POLLING_INTERVAL = 5000 // 5 seconds
 
 // Category colors for visual distinction
@@ -80,7 +82,7 @@ export default function BaristaQueue() {
 		// Filter and sort categories
 		return (
 			categories
-				.filter((cat) => categoryIdsInQueue.has(cat.category_id))
+				?.filter((cat) => categoryIdsInQueue.has(cat.category_id))
 				// eslint-disable-next-line unicorn/no-array-sort
 				.sort((a, b) => a.category_name.localeCompare(b.category_name))
 		)
@@ -100,7 +102,9 @@ export default function BaristaQueue() {
 
 	// Create a map for quick product lookup
 	const productMap = useMemo(() => {
-		const map = new Map<string, (typeof products)[number]>()
+		const map = new Map<string, Product>()
+		if (!products) return map
+
 		for (const product of products) {
 			map.set(product.product_id, product)
 		}
@@ -111,6 +115,8 @@ export default function BaristaQueue() {
 	const categoryMap = useMemo(() => {
 		const map = new Map<string, string>()
 
+		if (!categories) return map
+
 		for (const category of categories) {
 			map.set(category.category_id, category.category_name)
 		}
@@ -120,6 +126,7 @@ export default function BaristaQueue() {
 	// Create a map for modification ID → modification name
 	const modificationMap = useMemo(() => {
 		const map = new Map<string, string>()
+		if (!products) return map
 
 		for (const product of products) {
 			// Get modifications from group_modifications
@@ -179,7 +186,7 @@ export default function BaristaQueue() {
 				withTopGradient={Platform.OS !== 'ios'}
 			>
 				{/* Category filter pills */}
-				{availableCategories.length > 0 && (
+				{availableCategories?.length ? (
 					<ScrollView
 						contentContainerStyle={styles.filterContent}
 						horizontal
@@ -228,7 +235,7 @@ export default function BaristaQueue() {
 							)
 						})}
 					</ScrollView>
-				)}
+				) : null}
 
 				{filteredOrders.length > 0 ? (
 					<UniScrollView contentContainerStyle={styles.ordersList}>
