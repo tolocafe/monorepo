@@ -3,7 +3,7 @@ import { queryOptions } from '@tanstack/react-query'
 import { api } from '@/lib/services/api-service'
 
 export const eventsQueryOptions = queryOptions({
-	initialData: [],
+	placeholderData: [],
 	queryFn: api.events.getEvents,
 	queryKey: ['events'],
 })
