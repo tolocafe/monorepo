@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Dimensions, Pressable, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Pressable, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useQuery } from '@tanstack/react-query'
@@ -21,6 +21,10 @@ import { scheduleOnRN } from 'react-native-worklets'
 
 import { LinearGradient } from '@/components/LinearGradient'
 import { H1, Text } from '@/components/Text'
+import {
+	COFFEE_STORY_GRADIENT_COLORS,
+	getCoffeeGradientIndex,
+} from '@/lib/constants/coffee-gradients'
 import { coffeeQueryOptions, coffeesQueryOptions } from '@/lib/queries/coffees'
 
 import type { Coffee } from '@/lib/api'
@@ -30,19 +34,13 @@ const STORY_DURATION = 10_000
 const PAGES_PER_COFFEE = 3
 const WHITE_COLOR = '#FFFFFF'
 const WHITE_ALPHA_30 = 'rgba(255, 255, 255, 0.3)'
+/** Offset for tap areas to avoid overlapping with header controls */
+const TAP_AREAS_TOP_OFFSET = 80
 
 const SPRING_CONFIG = {
 	damping: 200,
 	stiffness: 1000,
 } as const
-
-const GRADIENTS = [
-	['#A0522D', '#D2691E', '#F4A460'], // Burnt Sienna to Sandy Brown (Caramel)
-	['#8B2500', '#B8410B', '#D2691E'], // Dark Cherry to Burnt Orange (Cherry)
-	['#6B4423', '#8B6914', '#DAA520'], // Coffee to Goldenrod (Honey/Golden)
-	['#B8610B', '#D87020', '#F4A460'], // Burnt Orange to Peach (Peach/Apricot)
-	['#704214', '#A0522D', '#CD853F'], // Rich Brown to Peru (Chocolate/Walnut)
-] as const
 
 type DetailRowProps = {
 	icon: keyof typeof Ionicons.glyphMap
@@ -190,7 +188,13 @@ export default function CoffeeStories() {
 
 	const currentPageInCoffee = currentPageIndex % PAGES_PER_COFFEE
 	const currentCoffeeStory = coffeeStories[currentCoffeeIndex]
-	const gradientColors = GRADIENTS[currentCoffeeIndex % GRADIENTS.length]
+	const gradientColors =
+		COFFEE_STORY_GRADIENT_COLORS[
+			getCoffeeGradientIndex(
+				currentCoffeeStory.name,
+				COFFEE_STORY_GRADIENT_COLORS.length,
+			)
+		]
 
 	// Determine which image to show based on current page
 	const currentImage =
@@ -235,12 +239,9 @@ export default function CoffeeStories() {
 							</View>
 							<View style={styles.header}>
 								<H1 style={styles.headerText}>{currentCoffeeStory.name}</H1>
-								<TouchableOpacity
-									onPress={handleClose}
-									style={styles.closeButton}
-								>
+								<Pressable onPress={handleClose} style={styles.closeButton}>
 									<Ionicons color={WHITE_COLOR} name="close" size={30} />
-								</TouchableOpacity>
+								</Pressable>
 							</View>
 							{/* Header */}
 
@@ -480,7 +481,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	tapAreas: {
 		...StyleSheet.absoluteFillObject,
 		flexDirection: 'row',
-		transform: [{ translateY: 80 }],
+		transform: [{ translateY: TAP_AREAS_TOP_OFFSET }],
 		zIndex: 3,
 	},
 	tastingNoteCircle: {

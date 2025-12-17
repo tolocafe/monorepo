@@ -32,7 +32,7 @@ export const verifyOtpMutationOptions = mutationOptions({
 
 export const selfQueryOptions = queryOptions({
 	queryFn: () => api.auth.self(),
-	queryKey: ['self'],
+	queryKey: ['self'] as const,
 	retry: false,
 })
 
@@ -61,5 +61,5 @@ export const signOutMutationOptions = mutationOptions({
 
 export const sessionsQueryOptions = queryOptions({
 	queryFn: () => api.auth.sessions(),
-	queryKey: ['auth', 'sessions'],
+	queryKey: ['auth', 'sessions'] as const,
 })

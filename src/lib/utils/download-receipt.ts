@@ -42,8 +42,10 @@ export async function downloadReceipt(orderId: string): Promise<void> {
 			}
 		}
 	} catch (error) {
-		// eslint-disable-next-line no-console
-		console.error('Error downloading receipt:', error)
+		if (__DEV__) {
+			// eslint-disable-next-line no-console
+			console.error('Error downloading receipt:', error)
+		}
 
 		if (error instanceof Error) {
 			throw new Error(`Failed to download receipt: ${error.message}`)

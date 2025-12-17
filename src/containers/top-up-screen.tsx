@@ -233,7 +233,7 @@ export default function TopUpScreen() {
 				<H2>
 					<Trans>Method</Trans>
 				</H2>
-				<View style={{ flexDirection: 'row', gap: 10 }}>
+				<View style={styles.paymentMethodsRow}>
 					{isPlatformPaySupported && (
 						<PlatformPayButton
 							appearance={PlatformPay.ButtonStyle.Automatic}
@@ -297,6 +297,10 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.gray.solid,
 		fontSize: theme.typography.caption.fontSize,
 		padding: theme.spacing.lg,
+	},
+	paymentMethodsRow: {
+		flexDirection: 'row',
+		gap: theme.spacing.sm,
 	},
 	platformPayButton: {
 		flex: 1,

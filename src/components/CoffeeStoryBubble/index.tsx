@@ -12,18 +12,14 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { LinearGradient } from '@/components/LinearGradient'
 import { Text } from '@/components/Text'
+import {
+	COFFEE_GRADIENT_COLORS,
+	getCoffeeGradientIndex,
+} from '@/lib/constants/coffee-gradients'
 
 import type { Coffee } from '@/lib/api'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
-
-const GRADIENT_COLORS = [
-	['#8B4513', '#D2691E'], // Brown/Tan
-	['#4A2511', '#6F4E37'], // Dark Brown
-	['#654321', '#8B6914'], // Coffee Brown to Gold
-	['#3E2723', '#5D4037'], // Dark Coffee
-	['#3C1A1A', '#6D3838'], // Reddish Brown
-] as const
 
 const GRADIENT_START = { x: 0, y: 0 }
 const GRADIENT_END = { x: 1, y: 1 }
@@ -41,14 +37,8 @@ export default function CoffeeStoryBubble({ coffee }: Props) {
 		transform: [{ scale: scale.value }],
 	}))
 
-	// Get a gradient color based on coffee name hash
-	const gradientIndex =
-		coffee.name
-			// eslint-disable-next-line unicorn/prefer-spread
-			.split('')
-			// eslint-disable-next-line unicorn/prefer-code-point
-			.reduce((accumulator, char) => accumulator + char.charCodeAt(0), 0) % 5
-	const gradientColors = GRADIENT_COLORS[gradientIndex]
+	const gradientIndex = getCoffeeGradientIndex(coffee.name)
+	const gradientColors = COFFEE_GRADIENT_COLORS[gradientIndex]
 
 	return (
 		<Link asChild href={`/(tabs)/(home)/coffees/${coffee.slug}`}>
@@ -71,7 +61,7 @@ export default function CoffeeStoryBubble({ coffee }: Props) {
 									source={
 										require('@/assets/images/coffee-bean.png') as ImageSourcePropType
 									}
-									style={{ height: 30, width: 30 }}
+									style={styles.coffeeBeanImage}
 								/>
 							</View>
 						</View>
@@ -86,6 +76,10 @@ export default function CoffeeStoryBubble({ coffee }: Props) {
 }
 
 const styles = StyleSheet.create((theme) => ({
+	coffeeBeanImage: {
+		height: 30,
+		width: 30,
+	},
 	storyBubble: {
 		alignItems: 'center',
 		gap: theme.spacing.xs,

@@ -8,5 +8,5 @@ import { api } from '@/lib/services/api-service'
 export const tableQueryOptions = (locationId: string, tableId: string) =>
 	queryOptions({
 		queryFn: () => api.tables.get(locationId, tableId),
-		queryKey: ['tables', locationId, tableId],
+		queryKey: ['tables', locationId, tableId] as const,
 	})

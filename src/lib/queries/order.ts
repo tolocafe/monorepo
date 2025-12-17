@@ -54,7 +54,7 @@ export const createStripeTransactionMutationOptions = mutationOptions({
 
 export const orderQueryOptions = queryOptions({
 	queryFn: () => api.orders.list(),
-	queryKey: ['orders'],
+	queryKey: ['orders'] as const,
 })
 
 export const orderDetailQueryOptions = (orderId: string) =>
@@ -81,5 +81,5 @@ export const orderDetailQueryOptions = (orderId: string) =>
 			return
 		},
 		queryFn: () => api.orders.get(orderId),
-		queryKey: ['orders', orderId],
+		queryKey: ['orders', orderId] as const,
 	})

@@ -2,8 +2,8 @@ import { useMemo, useState } from 'react'
 import {
 	ActivityIndicator,
 	Alert,
+	Pressable,
 	RefreshControl,
-	TouchableOpacity,
 	View,
 } from 'react-native'
 
@@ -212,7 +212,7 @@ export default function OrderDetail() {
 					</View>
 				</Card>
 
-				<TouchableOpacity
+				<Pressable
 					disabled={isDownloading}
 					onPress={handleDownloadReceipt}
 					style={[
@@ -234,7 +234,7 @@ export default function OrderDetail() {
 							)}
 						</Text>
 					</View>
-				</TouchableOpacity>
+				</Pressable>
 			</TabScreenContainer>
 		</>
 	)
