@@ -54,7 +54,7 @@ async function createLoyaltyObject({
 	// Default date_from is 'one month ago', so we need to specify a date far in the past
 	const visitsCount = await api.dash
 		.getTransactions(context.env.POSTER_TOKEN, {
-			date_from: '20200101',
+			date_from: '2020-01-01',
 			id: client.client_id,
 			status: '2',
 			type: 'clients',
