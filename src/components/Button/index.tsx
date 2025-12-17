@@ -129,7 +129,7 @@ const styles = StyleSheet.create((theme) => ({
 		variants: {
 			variant: {
 				primary: {
-					color: theme.colors.gray.background,
+					color: 'white',
 				},
 				surface: {
 					color: theme.colors.gray.text,
