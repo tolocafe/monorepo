@@ -900,7 +900,7 @@ function toCents(value: number | string) {
 }
 
 function toISO(dateString: string) {
-	if (!dateString || !dateString.trim()) return null
+	if (!dateString?.trim()) return null
 
 	// Poster returns either:
 	// 1. Unix timestamp in milliseconds as string (e.g., "1766004553569")
@@ -908,11 +908,13 @@ function toISO(dateString: string) {
 
 	// Try parsing as Unix timestamp first
 	const timestamp = Number.parseInt(dateString, 10)
-	if (!Number.isNaN(timestamp) && timestamp > 0) {
-		// If it's a reasonable timestamp (after 2000-01-01 and before 2100-01-01)
-		if (timestamp > 946684800000 && timestamp < 4102444800000) {
-			return new Date(timestamp).toISOString()
-		}
+	if (
+		!Number.isNaN(timestamp) &&
+		timestamp > 0 && // If it's a reasonable timestamp (after 2000-01-01 and before 2100-01-01)
+		timestamp > 946_684_800_000 &&
+		timestamp < 4_102_444_800_000
+	) {
+		return new Date(timestamp).toISOString()
 	}
 
 	// Fall back to "Y-m-d H:i:s" format parsing
