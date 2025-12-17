@@ -438,10 +438,10 @@ export const api = {
 		getTransactions(
 			token: string,
 			options?: {
-			/** Y-m-d format, e.g. '2023-12-01'. Default: one month ago */
-			date_from?: string
-			/** Y-m-d format, e.g. '2023-12-31'. Default: current date */
-			date_to?: string
+				/** Y-m-d format, e.g. '2023-12-01'. Default: one month ago */
+				date_from?: string
+				/** Y-m-d format, e.g. '2023-12-31'. Default: current date */
+				date_to?: string
 				/** Entity ID. Requires `type` to be set */
 				id?: string
 				include_history?: 'true'
