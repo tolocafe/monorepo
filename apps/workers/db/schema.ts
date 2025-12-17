@@ -2,18 +2,16 @@ import { defineRelations, sql } from 'drizzle-orm'
 import {
 	boolean,
 	integer,
-	pgSchema,
+	pgTable,
 	primaryKey,
 	text,
 } from 'drizzle-orm/pg-core'
-
-const tolo = pgSchema(null as unknown as string)
 
 // ============================================================================
 // Tables
 // ============================================================================
 
-export const syncState = tolo.table('sync_state', {
+export const syncState = pgTable('sync_state', {
 	cursor: text('cursor'),
 	id: text('id').primaryKey(),
 	// Tiered sync timestamps
@@ -26,12 +24,12 @@ export const syncState = tolo.table('sync_state', {
 	updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
-export const clientGroups = tolo.table('client_groups', {
+export const clientGroups = pgTable('client_groups', {
 	id: integer('id').primaryKey().notNull(),
 	name: text('name'),
 })
 
-export const customers = tolo.table('customers', {
+export const customers = pgTable('customers', {
 	birthday: text('birthday'),
 	bonus: integer('bonus'),
 	city: text('city'),
@@ -52,7 +50,7 @@ export const customers = tolo.table('customers', {
 	updatedAt: text('updated_at'),
 })
 
-export const locations = tolo.table('locations', {
+export const locations = pgTable('locations', {
 	address: text('address'),
 	city: text('city'),
 	country: text('country'),
@@ -62,7 +60,7 @@ export const locations = tolo.table('locations', {
 	tabletId: integer('tablet_id'),
 })
 
-export const menuCategories = tolo.table('menu_categories', {
+export const menuCategories = pgTable('menu_categories', {
 	color: text('color'),
 	hidden: boolean('hidden'),
 	id: integer('id').primaryKey().notNull(),
@@ -74,7 +72,7 @@ export const menuCategories = tolo.table('menu_categories', {
 	visibleRaw: text('visible_raw'),
 })
 
-export const products = tolo.table('products', {
+export const products = pgTable('products', {
 	barcode: text('barcode'),
 	caffeine: integer('caffeine'),
 	code: text('code'),
@@ -106,7 +104,7 @@ export const products = tolo.table('products', {
 	workshop: text('workshop'),
 })
 
-export const productModifierGroups = tolo.table('product_modifier_groups', {
+export const productModifierGroups = pgTable('product_modifier_groups', {
 	id: integer('id').primaryKey().notNull(),
 	isDeleted: boolean('is_deleted'),
 	name: text('name'),
@@ -116,7 +114,7 @@ export const productModifierGroups = tolo.table('product_modifier_groups', {
 	type: integer('type'),
 })
 
-export const productModifiers = tolo.table('product_modifiers', {
+export const productModifiers = pgTable('product_modifiers', {
 	groupId: integer('group_id'),
 	id: integer('id').primaryKey().notNull(),
 	isDeleted: boolean('is_deleted'),
@@ -125,7 +123,7 @@ export const productModifiers = tolo.table('product_modifiers', {
 	productId: integer('product_id'),
 })
 
-export const ingredients = tolo.table('ingredients', {
+export const ingredients = pgTable('ingredients', {
 	cost: integer('cost'),
 	id: integer('id').primaryKey().notNull(),
 	lossesRaw: text('losses_raw'),
@@ -134,7 +132,7 @@ export const ingredients = tolo.table('ingredients', {
 	weight: integer('weight'),
 })
 
-export const dishes = tolo.table('dishes', {
+export const dishes = pgTable('dishes', {
 	cookingTime: text('cooking_time'),
 	id: integer('id').primaryKey().notNull(),
 	netWeight: integer('net_weight'),
@@ -142,7 +140,7 @@ export const dishes = tolo.table('dishes', {
 	workshop: text('workshop'),
 })
 
-export const productIngredients = tolo.table(
+export const productIngredients = pgTable(
 	'product_ingredients',
 	{
 		ingredientId: integer('ingredient_id').notNull(),
@@ -152,7 +150,7 @@ export const productIngredients = tolo.table(
 	(table) => [primaryKey({ columns: [table.productId, table.ingredientId] })],
 )
 
-export const transactions = tolo.table('transactions', {
+export const transactions = pgTable('transactions', {
 	bonusUsed: integer('bonus_used'),
 	comment: text('comment'),
 	customerId: integer('customer_id'),
@@ -183,7 +181,7 @@ export const transactions = tolo.table('transactions', {
 	userId: integer('user_id'),
 })
 
-export const orderLines = tolo.table(
+export const orderLines = pgTable(
 	'order_lines',
 	{
 		categoryId: integer('category_id'),
@@ -198,7 +196,7 @@ export const orderLines = tolo.table(
 	(table) => [primaryKey({ columns: [table.transactionId, table.lineIndex] })],
 )
 
-export const transactionProductModifiers = tolo.table(
+export const transactionProductModifiers = pgTable(
 	'transaction_product_modifiers',
 	{
 		amount: integer('amount'),
