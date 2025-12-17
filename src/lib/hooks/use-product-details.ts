@@ -2,9 +2,9 @@ import { useMemo } from 'react'
 
 import { useQueries, useQueryClient } from '@tanstack/react-query'
 
-import type { Product } from '@common/api'
-
 import { productQueryOptions } from '@/lib/queries/product'
+
+import type { Product } from '~common/api'
 
 /**
  * Hook to fetch missing product details and provide a helper to get product names

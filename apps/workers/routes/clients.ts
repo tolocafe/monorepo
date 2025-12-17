@@ -13,6 +13,7 @@ import {
 	POINTS_PER_REDEMPTION,
 } from '../utils/points'
 import { api } from '../utils/poster'
+import { notifyRedemption } from '../utils/push-notifications'
 
 import type { Bindings } from '../types'
 
@@ -163,10 +164,11 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			authClientId,
 		)
 
-		// Notify wallet providers to update the pass
+		// Notify wallet providers and send push notification
 		await Promise.allSettled([
 			notifyApplePassUpdate(clientId, c.env.D1_TOLO, c.env),
 			notifyGooglePassUpdate(clientId, c.env.D1_TOLO, c.env),
+			notifyRedemption(clientId, c.env.D1_TOLO, body.type),
 		])
 
 		return c.json({

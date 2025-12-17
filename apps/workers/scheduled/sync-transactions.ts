@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/cloudflare'
-import { notifyApplePassUpdate } from 'workers/utils/apns'
-import { api } from 'workers/utils/poster'
+
+import { notifyApplePassUpdate } from '~workers/utils/apns'
+import { api } from '~workers/utils/poster'
 
 import type { Bindings } from '../types'
 

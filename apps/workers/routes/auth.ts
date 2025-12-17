@@ -1,11 +1,12 @@
-import { RequestOtpSchema, VerifyOtpSchema } from '@common/schemas'
 import { startSpan } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
-import { defaultJsonHeaders } from 'workers/utils/headers'
 
 import type { CookieOptions } from 'hono/utils/cookie'
+
+import { RequestOtpSchema, VerifyOtpSchema } from '~common/schemas'
+import { defaultJsonHeaders } from '~workers/utils/headers'
 
 import { trackServerEvent } from '../utils/analytics'
 import {

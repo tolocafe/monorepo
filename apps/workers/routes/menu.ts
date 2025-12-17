@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
-import webflow from 'workers/utils/webflow'
+
+import webflow from '~workers/utils/webflow'
 
 import { defaultJsonHeaders } from '../utils/headers'
 import { api } from '../utils/poster'

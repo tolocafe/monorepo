@@ -1,8 +1,9 @@
 import { Hono } from 'hono'
-import { api, sendSms } from 'workers/utils/poster'
 import { z } from 'zod'
 
-import type { Bindings } from 'workers/types'
+import { api, sendSms } from '~workers/utils/poster'
+
+import type { Bindings } from '~workers/types'
 
 const broadcastBodySchema = z.strictObject({
 	message: z.string().max(255).min(1),

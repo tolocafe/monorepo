@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
-import webflow from 'workers/utils/webflow'
 
-import { defaultJsonHeaders } from '../utils/headers'
+import { defaultJsonHeaders } from '~workers/utils/headers'
+import webflow from '~workers/utils/webflow'
 
 import type { Bindings } from '../types'
 

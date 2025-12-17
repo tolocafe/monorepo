@@ -1,0 +1,20 @@
+{
+	"compilerOptions": {
+		"allowSyntheticDefaultImports": true,
+		"allowUnreachableCode": false,
+		"alwaysStrict": true,
+		"incremental": true,
+		"noImplicitAny": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"baseUrl": ".",
+		"removeComments": true,
+		"skipLibCheck": true,
+		"strict": true,
+		"strictNullChecks": true,
+		"jsx": "react-jsx",
+		"types": ["node"]
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
+	"files": ["src/js/index.tsx"]
+}

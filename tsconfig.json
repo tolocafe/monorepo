@@ -10,7 +10,8 @@
 		"baseUrl": ".",
 		"paths": {
 			"@/*": ["./src/*"],
-			"@common/*": ["./common/*"]
+			"~common/*": ["./common/*"],
+			"~workers/*": ["./apps/workers/*"]
 		},
 		"removeComments": true,
 		"skipLibCheck": true,
@@ -26,12 +27,12 @@
 		"expo-env.d.ts",
 		"src/**/*.d.ts",
 		"common/**/*.ts",
-		"workers/**/*.ts",
+		"apps/workers/**/*.ts",
 		"prisma.config.ts",
 		"eslint.config.mjs",
 		"vitest.config.mts",
 		".expo/types/**/*.ts",
 		"worker-configuration.d.ts"
 	],
-	"files": ["src/index.ts", "workers/index.ts"]
+	"files": ["src/index.ts", "apps/workers/index.ts"]
 }

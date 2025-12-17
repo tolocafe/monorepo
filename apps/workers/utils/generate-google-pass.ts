@@ -3,9 +3,10 @@ import { captureException } from '@sentry/cloudflare'
 import { JWT } from 'google-auth-library'
 import jwt from 'jsonwebtoken'
 
-import type { ClientData } from '@common/api'
 import type { Context } from 'hono'
-import type { Bindings } from 'workers/types'
+
+import type { ClientData } from '~common/api'
+import type { Bindings } from '~workers/types'
 
 import { getCustomerPoints, POINTS_PER_REDEMPTION } from './points'
 import { api } from './poster'

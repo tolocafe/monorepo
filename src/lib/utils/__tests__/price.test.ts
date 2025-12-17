@@ -1,6 +1,6 @@
 import { describe, expect, it } from '@jest/globals'
 
-import type { Product } from '@common/api'
+import type { Product } from '~common/api'
 
 import { formatPrice, getProductBaseCost } from '../price'
 

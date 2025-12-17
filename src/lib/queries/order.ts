@@ -1,13 +1,13 @@
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
 
+import { queryClient } from '@/lib/query-client'
+import { api } from '@/lib/services/api-service'
+
 import type {
 	CreateEWalletTransaction,
 	CreateOrder,
 	CreateStripeTransaction,
-} from '@common/schemas'
-
-import { queryClient } from '@/lib/query-client'
-import { api } from '@/lib/services/api-service'
+} from '~common/schemas'
 
 export type CreateOrderResponse = {
 	date_start: string

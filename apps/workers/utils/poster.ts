@@ -29,8 +29,8 @@ import type {
 	Product,
 	Promotion,
 	UpdateClientBody,
-} from '@common/api'
-import type { CreateOrder } from '@common/schemas'
+} from '~common/api'
+import type { CreateOrder } from '~common/schemas'
 
 const snsClient = new AWS.SNS({
 	credentials: {

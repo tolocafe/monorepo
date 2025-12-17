@@ -6,6 +6,8 @@
 .vscode/
 .playwright-mcp/
 
+/apps/poster-plugin/manifest.json
+
 node_modules/
 package-lock.json
 

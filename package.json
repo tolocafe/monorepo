@@ -123,6 +123,7 @@
 		"@types/jsonwebtoken": "^9.0.10",
 		"@types/node": "24.10.0",
 		"@types/react": "~19.1.10",
+		"@types/react-dom": "^19.2.3",
 		"babel-plugin-react-compiler": "19.1.0-rc.3",
 		"eslint": "9.39.1",
 		"eslint-config-expo": "~10.0.0",

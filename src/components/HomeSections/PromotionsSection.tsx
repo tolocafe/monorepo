@@ -4,11 +4,11 @@ import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import type { Promotion } from '@common/api'
-
 import PromotionCard from '@/components/PromotionCard'
 import { H2 } from '@/components/Text'
 import { promotionsQueryOptions } from '@/lib/queries/menu'
+
+import type { Promotion } from '~common/api'
 
 const UniFlatList = withUnistyles(FlatList)
 

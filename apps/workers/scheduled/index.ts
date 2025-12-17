@@ -1,9 +1,10 @@
 import * as Sentry from '@sentry/cloudflare'
-import ensureTables from 'workers/scheduled/ensure-tables'
-import processCustomerLifecycleEvents from 'workers/scheduled/process-lifecycle-events'
-import syncTransactions from 'workers/scheduled/sync-transactions'
 
-import type { Bindings } from 'workers/types'
+import ensureTables from '~workers/scheduled/ensure-tables'
+import processCustomerLifecycleEvents from '~workers/scheduled/process-lifecycle-events'
+import syncTransactions from '~workers/scheduled/sync-transactions'
+
+import type { Bindings } from '~workers/types'
 
 async function syncData(
 	_controller: ScheduledController,

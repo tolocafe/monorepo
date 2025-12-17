@@ -4,11 +4,11 @@ import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import type { Event } from '@common/api'
-
 import EventCard from '@/components/EventCard'
 import { H2 } from '@/components/Text'
 import { eventsQueryOptions } from '@/lib/queries/events'
+
+import type { Event } from '~common/api'
 
 const UniFlatList = withUnistyles(FlatList)
 

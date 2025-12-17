@@ -11,9 +11,6 @@ import Head from 'expo-router/head'
 import * as StoreReview from 'expo-store-review'
 import { StyleSheet } from 'react-native-unistyles'
 
-import type { Product } from '@common/api'
-import type { CreateOrder } from '@common/schemas'
-
 import Button from '@/components/Button'
 import Card from '@/components/Card'
 import { Input } from '@/components/Input'
@@ -39,6 +36,8 @@ import { sortModifiers } from '@/lib/utils/modifier-tags'
 import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
 
 import type { OrderProduct } from '@/lib/stores/order-store'
+import type { Product } from '~common/api'
+import type { CreateOrder } from '~common/schemas'
 
 const IGNORED_MODIFICATION_GROUP_ID = '4'
 

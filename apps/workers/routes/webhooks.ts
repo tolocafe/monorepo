@@ -6,18 +6,19 @@ import {
 	captureException,
 	getCurrentScope,
 } from '@sentry/cloudflare'
-import { Expo } from 'expo-server-sdk'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
-import { trackServerEvent } from 'workers/utils/analytics'
-import { notifyApplePassUpdate } from 'workers/utils/apns'
-import createApplePass from 'workers/utils/generate-apple-pass'
-import { api, sendSms } from 'workers/utils/poster'
-import { getStripe } from 'workers/utils/stripe'
 import { z } from 'zod/v4'
 
-import type { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk'
+import type { ExpoPushMessage } from 'expo-server-sdk'
 import type { Context } from 'hono'
+
+import { trackServerEvent } from '~workers/utils/analytics'
+import { notifyApplePassUpdate } from '~workers/utils/apns'
+import createApplePass from '~workers/utils/generate-apple-pass'
+import { api, sendSms } from '~workers/utils/poster'
+import { sendPushNotifications } from '~workers/utils/push-notifications'
+import { getStripe } from '~workers/utils/stripe'
 
 import type { Bindings } from '../types'
 
@@ -702,7 +703,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			}
 		}
 
-		const expo = new Expo()
 		const messages: ExpoPushMessage[] = []
 
 		captureEvent({
@@ -915,14 +915,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		}
 
 		if (messages.length > 0) {
-			const chunks = expo.chunkPushNotifications(messages)
-
-			const tickets: ExpoPushTicket[] = []
-			for (const chunk of chunks) {
-				const ticket = await expo.sendPushNotificationsAsync(chunk)
-				tickets.push(...ticket)
-			}
-
+			const tickets = await sendPushNotifications(messages)
 			getCurrentScope().setExtra('Tickets', tickets)
 		}
 

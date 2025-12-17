@@ -1,4 +1,4 @@
-import type { Bindings } from 'workers/types'
+import type { Bindings } from '~workers/types'
 
 const BASE_WEBFLOW_URL = 'https://api.webflow.com/v2'
 
