@@ -70,9 +70,7 @@ function Button({
 	)
 }
 
-Button.Text = ButtonText
-
-export { Button }
+export default Object.assign(Button, { Text: ButtonText })
 
 const styles = StyleSheet.create((theme) => ({
 	button: {

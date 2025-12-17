@@ -11,8 +11,8 @@ import { router, Stack, useLocalSearchParams } from 'expo-router'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
-import { Button } from '@/components/Button'
-import { TextColorIonicons } from '@/components/Icons'
+import Button from '@/components/Button'
+import { TextColorIcon } from '@/components/Icons'
 import Input from '@/components/Input'
 import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
@@ -278,7 +278,7 @@ export default function SignIn() {
 							accessibilityRole="button"
 							onPress={() => router.back()}
 						>
-							<TextColorIonicons name="close" size={28} />
+							<TextColorIcon name="close" size={28} />
 						</Pressable>
 					),
 					headerShadowVisible: false,

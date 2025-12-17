@@ -4,8 +4,8 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { Button } from '@/components/Button'
-import { Card } from '@/components/Card'
+import Button from '@/components/Button'
+import Card from '@/components/Card'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Label, Text } from '@/components/Text'
 

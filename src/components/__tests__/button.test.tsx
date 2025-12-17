@@ -3,7 +3,7 @@ import { fireEvent, screen } from '@testing-library/react-native'
 
 import { render } from '@/test-utils'
 
-import { Button } from '../Button'
+import Button from '../Button'
 
 const noop = () => null
 

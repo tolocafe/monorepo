@@ -115,7 +115,7 @@ export default function ScreenContainer({
 }
 
 /**
- * Should be used inside a tab screen.
+ * Should be used inside a tab screen. Component specialized for tab screens.
  */
 export function TabScreenContainer(
 	props: Omit<ComponentProps<typeof ScreenContainer>, 'tabBarHeight'>,

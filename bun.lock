@@ -32,6 +32,7 @@
         "expo": "~54.0.27",
         "expo-application": "~7.0.8",
         "expo-build-properties": "~1.0.10",
+        "expo-camera": "^17.0.10",
         "expo-color-space-plugin": "0.1.0",
         "expo-constants": "~18.0.11",
         "expo-crypto": "~15.0.8",
@@ -1766,6 +1767,8 @@
     "expo-asset": ["expo-asset@12.0.11", "", { "dependencies": { "@expo/image-utils": "^0.8.8", "expo-constants": "~18.0.11" }, "peerDependencies": { "expo": "*", "react": "*", "react-native": "*" } }, "sha512-pnK/gQ5iritDPBeK54BV35ZpG7yeW5DtgGvJHruIXkyDT9BCoQq3i0AAxfcWG/e4eiRmTzAt5kNVYFJi48uo+A=="],
 
     "expo-build-properties": ["expo-build-properties@1.0.10", "", { "dependencies": { "ajv": "^8.11.0", "semver": "^7.6.0" }, "peerDependencies": { "expo": "*" } }, "sha512-mFCZbrbrv0AP5RB151tAoRzwRJelqM7bCJzCkxpu+owOyH+p/rFC/q7H5q8B9EpVWj8etaIuszR+gKwohpmu1Q=="],
+
+    "expo-camera": ["expo-camera@17.0.10", "", { "dependencies": { "invariant": "^2.2.4" }, "peerDependencies": { "expo": "*", "react": "*", "react-native": "*", "react-native-web": "*" }, "optionalPeers": ["react-native-web"] }, "sha512-w1RBw83mAGVk4BPPwNrCZyFop0VLiVSRE3c2V9onWbdFwonpRhzmB4drygG8YOUTl1H3wQvALJHyMPTbgsK1Jg=="],
 
     "expo-color-space-plugin": ["expo-color-space-plugin@0.1.0", "", { "peerDependencies": { "expo": ">=53.0.0" }, "bin": { "expo-color-space-plugin": "build/cli.js" } }, "sha512-upnnJyCzuCiDD+90ovstQDifdVXflxywPUKPzktgU7d30I3v5jAA/R59G8hofaeerxBKc+VMopl4gx15qbAe8Q=="],
 

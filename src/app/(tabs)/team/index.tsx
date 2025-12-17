@@ -27,6 +27,7 @@ export default function TeamIndex() {
 				<meta content="/team" property="og:url" />
 			</Head>
 			<TabScreenContainer
+				contentContainerStyle={styles.contentContainer}
 				ref={screenRef}
 				refreshControl={
 					<RefreshControl
@@ -50,6 +51,21 @@ export default function TeamIndex() {
 							<Trans>Queue</Trans>
 						</ListItem.Label>
 					</ListItem>
+				</List>
+
+				<H2 style={styles.sectionTitle}>
+					<Trans>Customers</Trans>
+				</H2>
+				<List>
+					<ListItem
+						accessibilityRole="link"
+						chevron
+						onPress={() => router.push('/team/redeem')}
+					>
+						<ListItem.Label>
+							<Trans>Redeem</Trans>
+						</ListItem.Label>
+					</ListItem>
 					<ListItem
 						accessibilityRole="link"
 						chevron
@@ -66,6 +82,9 @@ export default function TeamIndex() {
 }
 
 const styles = StyleSheet.create((theme) => ({
+	contentContainer: {
+		gap: theme.spacing.md,
+	},
 	sectionTitle: {
 		marginBottom: theme.spacing.sm,
 	},

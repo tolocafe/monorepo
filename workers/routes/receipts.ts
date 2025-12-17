@@ -1,13 +1,12 @@
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
+import { TEAM_GROUP_IDS } from '../utils/constants'
 import { generateReceiptPDF } from '../utils/generate-receipt'
 import { authenticate } from '../utils/jwt'
 import { api } from '../utils/poster'
 
 import type { Bindings } from '../types'
-
-const BARISTA_GROUP_IDS = new Set(['8', '9']) // 8 = owners, 9 = members
 
 const receipts = new Hono<{ Bindings: Bindings }>().get(
 	'/:orderId',
@@ -35,7 +34,7 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 			)
 			const isBaristaOrOwner = Boolean(
 				requester?.client_groups_id &&
-				BARISTA_GROUP_IDS.has(requester.client_groups_id),
+				TEAM_GROUP_IDS.has(requester.client_groups_id),
 			)
 
 			// If not barista/owner, verify the order belongs to the authenticated client

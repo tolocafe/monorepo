@@ -3,13 +3,12 @@ import { getProductTotalCost } from '@common/utils'
 import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
+import { TEAM_GROUP_IDS } from 'workers/utils/constants'
 import { authenticate } from 'workers/utils/jwt'
 import { api } from 'workers/utils/poster'
 
 import type { Product } from '@common/api'
 import type { Bindings } from 'workers/types'
-
-const BARISTA_GROUP_IDS = new Set(['8', '9']) // 8 = owners, 9 = members
 
 // Modifiers to ignore (not displayed in barista queue)
 const IGNORED_MODIFIERS = new Set([
@@ -86,7 +85,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 		if (
 			!client?.client_groups_id ||
-			!BARISTA_GROUP_IDS.has(client.client_groups_id)
+			!TEAM_GROUP_IDS.has(client.client_groups_id)
 		) {
 			throw new HTTPException(403, { message: 'Access denied' })
 		}

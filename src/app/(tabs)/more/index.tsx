@@ -21,9 +21,9 @@ import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
-import { Button } from '@/components/Button'
-import { Card } from '@/components/Card'
-import { TextColorIonicons } from '@/components/Icons'
+import Button from '@/components/Button'
+import Card from '@/components/Card'
+import { TextColorIcon } from '@/components/Icons'
 import { List, ListItem } from '@/components/List'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
@@ -334,7 +334,7 @@ export default function More() {
 										<Label style={styles.languageDropdownText}>
 											{LOCALE_NAMES[i18n.locale as Locale]}
 										</Label>
-										<TextColorIonicons name="chevron-down" size={16} />
+										<TextColorIcon name="chevron-down" size={16} />
 									</View>
 								</DropdownMenu.Trigger>
 								<DropdownMenu.Content style={dropdownStyles.content}>

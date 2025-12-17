@@ -2,7 +2,14 @@ import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
 
+import { TEAM_GROUP_IDS } from '../utils/constants'
 import { authenticate } from '../utils/jwt'
+import {
+	canRedeemBirthdayDrink,
+	createRedemption,
+	getCustomerPoints,
+	POINTS_PER_REDEMPTION,
+} from '../utils/points'
 import { api } from '../utils/poster'
 
 import type { Bindings } from '../types'
@@ -21,6 +28,144 @@ const updateClientSchema = z.object({
 const pushTokensSchema = z.string().max(255).min(1)
 
 const clients = new Hono<{ Bindings: Bindings }>()
+	// Get client by ID (team members and owners only)
+	.get('/:id', async (c) => {
+		const [authClientId] = await authenticate(c, c.env.JWT_SECRET)
+
+		// Verify user is a team member or owner
+		const authClient = await api.clients.getClientById(
+			c.env.POSTER_TOKEN,
+			authClientId,
+		)
+
+		if (
+			!authClient?.client_groups_id ||
+			!TEAM_GROUP_IDS.has(authClient.client_groups_id)
+		) {
+			throw new HTTPException(403, { message: 'Access denied' })
+		}
+
+		const id = c.req.param('id')
+		if (!id) {
+			throw new HTTPException(400, { message: 'Client ID required' })
+		}
+
+		const client = await api.clients.getClientById(
+			c.env.POSTER_TOKEN,
+			Number.parseInt(id, 10),
+		)
+
+		if (!client) {
+			throw new HTTPException(404, { message: 'Client not found' })
+		}
+
+		const clientTransactions = await api.dash.getTransactions(
+			c.env.POSTER_TOKEN,
+			{ date_from: '2025-01-01', id, status: '2', type: 'clients' },
+		)
+
+		const pointsData = await getCustomerPoints(
+			c.env.D1_TOLO,
+			Number.parseInt(id, 10),
+			clientTransactions.length,
+		)
+
+		// Check if customer can redeem birthday drink
+		const canRedeemBirthday = await canRedeemBirthdayDrink(
+			c.env.D1_TOLO,
+			Number.parseInt(id, 10),
+			client.birthday,
+		)
+
+		// Return only essential information for redemption verification
+		return c.json({
+			birthday: client.birthday,
+			canRedeemBirthday,
+			client_groups_name: client.client_groups_name,
+			client_id: client.client_id,
+			firstname: client.firstname,
+			lastname: client.lastname,
+			phone: client.phone,
+			points: pointsData.points,
+		})
+	})
+	// Create a redemption (team members and owners only)
+	.post('/:id/redeem', async (c) => {
+		const [authClientId] = await authenticate(c, c.env.JWT_SECRET)
+
+		// Verify user is a team member or owner
+		const authClient = await api.clients.getClientById(
+			c.env.POSTER_TOKEN,
+			authClientId,
+		)
+
+		if (
+			!authClient?.client_groups_id ||
+			!TEAM_GROUP_IDS.has(authClient.client_groups_id)
+		) {
+			throw new HTTPException(403, { message: 'Access denied' })
+		}
+
+		const id = c.req.param('id')
+		if (!id) {
+			throw new HTTPException(400, { message: 'Client ID required' })
+		}
+
+		const bodyUnknown = (await c.req.json()) as unknown
+		const body = z
+			.object({
+				type: z.enum(['birthday', 'visits']),
+			})
+			.parse(bodyUnknown)
+
+		const clientId = Number.parseInt(id, 10)
+
+		// Validate the redemption is allowed
+		if (body.type === 'birthday') {
+			const client = await api.clients.getClientById(
+				c.env.POSTER_TOKEN,
+				clientId,
+			)
+			const canRedeem = await canRedeemBirthdayDrink(
+				c.env.D1_TOLO,
+				clientId,
+				client?.birthday,
+			)
+			if (!canRedeem) {
+				throw new HTTPException(400, {
+					message: 'Birthday drink not available for this customer',
+				})
+			}
+		} else {
+			const clientTransactions = await api.dash.getTransactions(
+				c.env.POSTER_TOKEN,
+				{ date_from: '2025-01-01', id, status: '2', type: 'clients' },
+			)
+			const pointsData = await getCustomerPoints(
+				c.env.D1_TOLO,
+				clientId,
+				clientTransactions.length,
+			)
+			if (pointsData.points < POINTS_PER_REDEMPTION) {
+				throw new HTTPException(400, {
+					message: 'Not enough points for redemption',
+				})
+			}
+		}
+
+		// Create the redemption
+		const redemption = await createRedemption(
+			c.env.D1_TOLO,
+			clientId,
+			body.type,
+			authClientId,
+		)
+
+		return c.json({
+			message: 'Redemption successful',
+			redemption,
+		})
+	})
 	.put('/:id', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 

@@ -3,10 +3,11 @@
 import { JWT } from 'google-auth-library'
 import jwt from 'jsonwebtoken'
 
-import type { ClientData, DashTransaction } from '@common/api'
+import type { ClientData } from '@common/api'
 import type { Context } from 'hono'
 import type { Bindings } from 'workers/types'
 
+import { getCustomerPoints, POINTS_PER_REDEMPTION } from './points'
 import { api } from './poster'
 
 export default async function createGooglePass(
@@ -51,22 +52,29 @@ async function createLoyaltyObject({
 	const passId = `TOLO-${client.client_id.padStart(8, '0')}`
 
 	// Count only closed transactions (status: '2') from all time
-	// Default date_from is 'one month ago', so we need to specify a date far in the past
-	const visitsCount = await api.dash
+	const transactionsCount = await api.dash
 		.getTransactions(context.env.POSTER_TOKEN, {
 			date_from: '2025-01-01',
 			id: client.client_id,
 			status: '2',
 			type: 'clients',
 		})
-		.catch(() => [] as DashTransaction[])
+		.then((transactions) => transactions.length)
+		.catch(() => 0)
+
+	// Calculate points based on transactions and redemptions
+	const pointsData = await getCustomerPoints(
+		context.env.D1_TOLO,
+		Number.parseInt(client.client_id, 10),
+		transactionsCount,
+	)
 
 	const loyaltyObject = getLoyaltyObject({
 		classId,
 		client,
 		objectId: `${issuerId}.0.${passId}`,
 		passId,
-		visitsCount: visitsCount.length,
+		points: pointsData.points,
 	})
 
 	return jwt.sign(
@@ -174,15 +182,15 @@ function getLoyaltyObject({
 	client,
 	objectId,
 	passId,
-	visitsCount,
+	points,
 }: {
 	classId: string
 	client: ClientData
 	objectId: string
 	passId: string
-	visitsCount: number
+	points: number
 }) {
-	const stripIndex = visitsCount % 11
+	const stripIndex = points % 11
 	const discountPercentage = Number.parseInt(
 		client.discount_per || client.client_groups_discount || '0',
 	)
@@ -252,9 +260,9 @@ function getLoyaltyObject({
 		},
 		secondaryLoyaltyPoints: {
 			balance: {
-				int: visitsCount,
+				int: points,
 			},
-			label: 'Visitas',
+			label: `Puntos (${POINTS_PER_REDEMPTION} = ☕️)`,
 		},
 		state: 'ACTIVE',
 		textModulesData,

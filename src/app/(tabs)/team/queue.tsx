@@ -15,7 +15,7 @@ import { useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import { Card } from '@/components/Card'
+import Card from '@/components/Card'
 import { ModifierTag } from '@/components/ModifierTag'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Paragraph, Text } from '@/components/Text'

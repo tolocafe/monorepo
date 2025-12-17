@@ -5,7 +5,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { Button } from '@/components/Button'
+import Button from '@/components/Button'
 import Input from '@/components/Input'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph } from '@/components/Text'

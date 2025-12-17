@@ -26,6 +26,10 @@ export default function Layout() {
 				name="ticket"
 				options={{ headerLargeTitle: false, title: t`Download Ticket` }}
 			/>
+			<Stack.Screen
+				name="redeem"
+				options={{ headerLargeTitle: false, title: t`Redeem` }}
+			/>
 		</Stack>
 	)
 }

@@ -30,7 +30,7 @@ import {
 	withUnistyles,
 } from 'react-native-unistyles'
 
-import { Button } from '@/components/Button'
+import Button from '@/components/Button'
 import { CheckedButton } from '@/components/CheckedButton'
 import { HeaderIconIonicons } from '@/components/Icons'
 import { LevelIndicator } from '@/components/LevelIndicator'

@@ -51,6 +51,15 @@ export const api = {
 				.json(),
 	},
 	client: {
+		get: (clientId: string) =>
+			privateClient.get<ClientData>(`clients/${clientId}`).json(),
+		redeem: (clientId: string, type: 'birthday' | 'visits') =>
+			privateClient
+				.post<{
+					message: string
+					redemption: { createdAt: string; id: number }
+				}>(`clients/${clientId}/redeem`, { json: { type } })
+				.json(),
 		update: (clientId: string, data: Record<string, unknown>) =>
 			privateClient
 				.put<ClientData>(`clients/${clientId}`, {

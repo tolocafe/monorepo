@@ -6,7 +6,7 @@ import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { StyleSheet, useUnistyles, withUnistyles } from 'react-native-unistyles'
 
-import { Button } from '@/components/Button'
+import Button from '@/components/Button'
 import MenuListItem, { getItemSize } from '@/components/MenuListItem'
 import { H2, H3, Paragraph } from '@/components/Text'
 import {

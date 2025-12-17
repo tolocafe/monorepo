@@ -5,6 +5,7 @@ import type { ClientData } from '@common/api'
 import type { Context } from 'hono'
 import type { Bindings } from 'workers/types'
 
+import { getCustomerPoints } from './points'
 import { api } from './poster'
 
 const PASS_TYPE_IDENTIFIER = 'pass.cafe.tolo.app'
@@ -66,13 +67,21 @@ export default async function createApplePass(
 	pass.type = 'storeCard'
 
 	// Count only closed transactions (status: '2') from all time
-	// Default date_from is 'one month ago', so we need to specify a date far in the past
-	const visitsCount = await api.dash.getTransactions(context.env.POSTER_TOKEN, {
-		date_from: '2025-01-01',
-		id: client.client_id,
-		status: '2',
-		type: 'clients',
-	})
+	const transactionsCount = await api.dash
+		.getTransactions(context.env.POSTER_TOKEN, {
+			date_from: '2025-01-01',
+			id: client.client_id,
+			status: '2',
+			type: 'clients',
+		})
+		.then((transactions) => transactions.length)
+
+	// Calculate points based on transactions and redemptions
+	const pointsData = await getCustomerPoints(
+		context.env.D1_TOLO,
+		Number.parseInt(client.client_id, 10),
+		transactionsCount,
+	)
 
 	pass.headerFields.push(
 		{
@@ -83,9 +92,9 @@ export default async function createApplePass(
 			),
 		},
 		{
-			key: 'visits',
-			label: 'Visitas',
-			value: visitsCount.length,
+			key: 'points',
+			label: `Puntos`,
+			value: pointsData.points,
 		},
 	)
 
@@ -124,7 +133,7 @@ export default async function createApplePass(
 		message: barcodeMessage,
 	})
 
-	for (const { name, path } of imagesToAdd(visitsCount.length)) {
+	for (const { name, path } of imagesToAdd(pointsData.points)) {
 		try {
 			const imageBuffer = await getAssetImage(context.env.ASSETS, path)
 			pass.addBuffer(name, imageBuffer)

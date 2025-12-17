@@ -4,8 +4,8 @@ import { Pressable, View } from 'react-native'
 
 import { StyleSheet } from 'react-native-unistyles'
 
-import { Card } from '@/components/Card'
-import { TextColorIonicons } from '@/components/Icons'
+import Card from '@/components/Card'
+import { TextColorIcon } from '@/components/Icons'
 import { Label, Text } from '@/components/Text'
 
 export type ListItemAccessoryProps = {
@@ -127,7 +127,7 @@ export function ListItem({
 
 			{/* Accessory or chevron */}
 			{accessoryChild ||
-				(showChevron && <TextColorIonicons name="chevron-forward" size={20} />)}
+				(showChevron && <TextColorIcon name="chevron-forward" size={20} />)}
 		</Pressable>
 	)
 }

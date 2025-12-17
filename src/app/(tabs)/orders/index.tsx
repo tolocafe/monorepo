@@ -13,8 +13,8 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import type { Product } from '@common/api'
 
-import { Button } from '@/components/Button'
-import { Card } from '@/components/Card'
+import Button from '@/components/Button'
+import Card from '@/components/Card'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { resetBadgeCount } from '@/lib/notifications'

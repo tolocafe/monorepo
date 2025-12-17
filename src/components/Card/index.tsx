@@ -12,7 +12,7 @@ type Props = {
 	testID?: string
 }
 
-export function Card({
+function Card({
 	accessibilityLabel,
 	children,
 	padded = true,
@@ -33,6 +33,8 @@ export function Card({
 		</View>
 	)
 }
+
+export default Card
 
 const styles = StyleSheet.create((theme) => ({
 	base: {

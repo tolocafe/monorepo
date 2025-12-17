@@ -5,7 +5,7 @@ import { useLingui } from '@lingui/react/macro'
 import { StyleSheet } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
-import { TextColorIonicons } from '@/components/Icons'
+import { TextColorIcon } from '@/components/Icons'
 import Input from '@/components/Input'
 import { Text } from '@/components/Text'
 
@@ -64,7 +64,7 @@ export function PhoneNumberInput({
 							<Text style={styles.flag}>{selectedCountry?.flag}</Text>
 							<Text style={styles.code}>{selectedCountry?.prefix}</Text>
 							<View style={styles.chevronWrapper}>
-								<TextColorIonicons name="chevron-down" size={14} />
+								<TextColorIcon name="chevron-down" size={14} />
 							</View>
 						</View>
 					</View>
