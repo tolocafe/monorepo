@@ -1,7 +1,6 @@
 import * as Sentry from '@sentry/cloudflare'
 
 import { getDatabase } from '~workers/db/client'
-import { ensureSchema } from '~workers/db/ensure-schema'
 import processCustomerLifecycleEvents from '~workers/scheduled/process-lifecycle-events'
 import syncTransactions from '~workers/scheduled/sync-transactions'
 
@@ -13,15 +12,6 @@ async function syncData(
 	_context: ExecutionContext,
 ) {
 	try {
-		// Ensure schema exists (tables are managed via migrations)
-		await ensureSchema(environment.HYPERDRIVE)
-
-		Sentry.addBreadcrumb({
-			category: 'scheduled',
-			level: 'info',
-			message: 'Schema ensured, starting sync',
-		})
-
 		const neonDatabase = getDatabase(environment.HYPERDRIVE)
 
 		const result = await syncTransactions(

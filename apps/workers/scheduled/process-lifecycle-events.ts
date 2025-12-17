@@ -1,6 +1,9 @@
 import * as Sentry from '@sentry/cloudflare'
 import { and, eq, isNotNull, sql } from 'drizzle-orm'
-import { orderLines, transactions } from 'workers/db/schema'
+
+import { orderLines, transactions } from '~workers/db/schema'
+
+import type { DashTransaction } from '~common/api'
 
 import type { Database, SyncResult } from './sync-transactions'
 
@@ -178,7 +181,10 @@ export default async function processCustomerLifecycleEvents(
 			) {
 				const discoveredProducts = await findDiscoveredProducts(
 					clientId,
-					transaction.products.map((p) => p.product_id),
+					transaction.products.map(
+						(p: NonNullable<DashTransaction['products']>[number]) =>
+							p.product_id,
+					),
 					database,
 				)
 

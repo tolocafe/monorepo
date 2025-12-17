@@ -2,6 +2,7 @@ import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
 import * as schema from './schema'
+import { relations } from './schema'
 
 type HyperdriveBinding = {
 	connectionString: string
@@ -21,5 +22,5 @@ export function getDatabase(hyperdrive: HyperdriveBinding) {
 	// eslint-disable-next-line no-console
 	console.log('[DB] Postgres connection created, initializing Drizzle...')
 
-	return drizzle(sql, { schema })
+	return drizzle({ client: sql, relations, schema })
 }

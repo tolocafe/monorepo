@@ -1,4 +1,4 @@
-import { relations, sql } from 'drizzle-orm'
+import { defineRelations, sql } from 'drizzle-orm'
 import {
 	boolean,
 	integer,
@@ -7,6 +7,8 @@ import {
 	text,
 } from 'drizzle-orm/pg-core'
 
+// Use a dedicated schema owned by the app (not `public`, not Hyperdrive-owned).
+// This makes `drizzle-kit push` work reliably and avoids relying on search_path.
 const tolo = pgSchema('tolo')
 
 // ============================================================================
@@ -16,8 +18,13 @@ const tolo = pgSchema('tolo')
 export const syncState = tolo.table('sync_state', {
 	cursor: text('cursor'),
 	id: text('id').primaryKey(),
+	// Tiered sync timestamps
+	lastAllSyncAt: text('last_all_sync_at'), // Full sync (monthly)
+	lastMonthSyncAt: text('last_month_sync_at'), // Last month sync (weekly)
+	lastTodaySyncAt: text('last_today_sync_at'), // Today sync (every run)
 	lastTransactionDate: text('last_transaction_date'),
 	lastTransactionId: integer('last_transaction_id'),
+	lastWeekSyncAt: text('last_week_sync_at'), // Last week sync (daily)
 	updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
 })
 
@@ -211,145 +218,144 @@ export const transactionProductModifiers = tolo.table(
 )
 
 // ============================================================================
-// Relations (for query builder with eager loading)
+// Relations (Drizzle Relations v2 - for query builder with eager loading)
 // ============================================================================
 
-export const clientGroupsRelations = relations(clientGroups, ({ many }) => ({
-	customers: many(customers),
-}))
-
-export const customersRelations = relations(customers, ({ many, one }) => ({
-	clientGroup: one(clientGroups, {
-		fields: [customers.clientGroupId],
-		references: [clientGroups.id],
-	}),
-	transactions: many(transactions),
-}))
-
-export const locationsRelations = relations(locations, ({ many }) => ({
-	transactions: many(transactions),
-}))
-
-export const menuCategoriesRelations = relations(
-	menuCategories,
-	({ many, one }) => ({
-		children: many(menuCategories, { relationName: 'parentChild' }),
-		parent: one(menuCategories, {
-			fields: [menuCategories.parentId],
-			references: [menuCategories.id],
-			relationName: 'parentChild',
-		}),
-		products: many(products),
-	}),
-)
-
-export const productsRelations = relations(products, ({ many, one }) => ({
-	dishes: many(dishes),
-	menuCategory: one(menuCategories, {
-		fields: [products.menuCategoryId],
-		references: [menuCategories.id],
-	}),
-	modifierGroups: many(productModifierGroups),
-	modifiers: many(productModifiers),
-	orderLines: many(orderLines),
-	productIngredients: many(productIngredients),
-}))
-
-export const productModifierGroupsRelations = relations(
-	productModifierGroups,
-	({ many, one }) => ({
-		modifiers: many(productModifiers),
-		product: one(products, {
-			fields: [productModifierGroups.productId],
-			references: [products.id],
-		}),
-	}),
-)
-
-export const productModifiersRelations = relations(
-	productModifiers,
-	({ many, one }) => ({
-		group: one(productModifierGroups, {
-			fields: [productModifiers.groupId],
-			references: [productModifierGroups.id],
-		}),
-		product: one(products, {
-			fields: [productModifiers.productId],
-			references: [products.id],
-		}),
-		transactionModifiers: many(transactionProductModifiers),
-	}),
-)
-
-export const ingredientsRelations = relations(ingredients, ({ many }) => ({
-	productIngredients: many(productIngredients),
-}))
-
-export const dishesRelations = relations(dishes, ({ one }) => ({
-	product: one(products, {
-		fields: [dishes.productId],
-		references: [products.id],
-	}),
-}))
-
-export const productIngredientsRelations = relations(
-	productIngredients,
-	({ one }) => ({
-		ingredient: one(ingredients, {
-			fields: [productIngredients.ingredientId],
-			references: [ingredients.id],
-		}),
-		product: one(products, {
-			fields: [productIngredients.productId],
-			references: [products.id],
-		}),
-	}),
-)
-
-export const transactionsRelations = relations(
-	transactions,
-	({ many, one }) => ({
-		customer: one(customers, {
-			fields: [transactions.customerId],
-			references: [customers.id],
-		}),
-		location: one(locations, {
-			fields: [transactions.locationId],
-			references: [locations.id],
-		}),
-		orderLines: many(orderLines),
-	}),
-)
-
-export const orderLinesRelations = relations(orderLines, ({ many, one }) => ({
-	modifiers: many(transactionProductModifiers),
-	product: one(products, {
-		fields: [orderLines.productId],
-		references: [products.id],
-	}),
-	transaction: one(transactions, {
-		fields: [orderLines.transactionId],
-		references: [transactions.id],
-	}),
-}))
-
-export const transactionProductModifiersRelations = relations(
-	transactionProductModifiers,
-	({ one }) => ({
-		modifier: one(productModifiers, {
-			fields: [transactionProductModifiers.modifierId],
-			references: [productModifiers.id],
-		}),
-		orderLine: one(orderLines, {
-			fields: [
-				transactionProductModifiers.transactionId,
-				transactionProductModifiers.lineIndex,
-			],
-			references: [orderLines.transactionId, orderLines.lineIndex],
-		}),
-		transaction: one(transactions, {
-			fields: [transactionProductModifiers.transactionId],
-			references: [transactions.id],
-		}),
+export const relations = defineRelations(
+	{
+		clientGroups,
+		customers,
+		dishes,
+		ingredients,
+		locations,
+		menuCategories,
+		orderLines,
+		productIngredients,
+		productModifierGroups,
+		productModifiers,
+		products,
+		transactionProductModifiers,
+		transactions,
+	},
+	(r) => ({
+		clientGroups: {
+			customers: r.many.customers(),
+		},
+		customers: {
+			clientGroup: r.one.clientGroups({
+				from: r.customers.clientGroupId,
+				to: r.clientGroups.id,
+			}),
+			transactions: r.many.transactions(),
+		},
+		dishes: {
+			product: r.one.products({
+				from: r.dishes.productId,
+				to: r.products.id,
+			}),
+		},
+		ingredients: {
+			productIngredients: r.many.productIngredients(),
+		},
+		locations: {
+			transactions: r.many.transactions(),
+		},
+		menuCategories: {
+			children: r.many.menuCategories({
+				alias: 'parentChild',
+				from: r.menuCategories.id,
+				to: r.menuCategories.parentId,
+			}),
+			parent: r.one.menuCategories({
+				alias: 'parentChild',
+				from: r.menuCategories.parentId,
+				to: r.menuCategories.id,
+			}),
+			products: r.many.products(),
+		},
+		orderLines: {
+			modifiers: r.many.transactionProductModifiers({
+				from: [r.orderLines.transactionId, r.orderLines.lineIndex],
+				to: [
+					r.transactionProductModifiers.transactionId,
+					r.transactionProductModifiers.lineIndex,
+				],
+			}),
+			product: r.one.products({
+				from: r.orderLines.productId,
+				to: r.products.id,
+			}),
+			transaction: r.one.transactions({
+				from: r.orderLines.transactionId,
+				to: r.transactions.id,
+			}),
+		},
+		productIngredients: {
+			ingredient: r.one.ingredients({
+				from: r.productIngredients.ingredientId,
+				to: r.ingredients.id,
+			}),
+			product: r.one.products({
+				from: r.productIngredients.productId,
+				to: r.products.id,
+			}),
+		},
+		productModifierGroups: {
+			modifiers: r.many.productModifiers(),
+			product: r.one.products({
+				from: r.productModifierGroups.productId,
+				to: r.products.id,
+			}),
+		},
+		productModifiers: {
+			group: r.one.productModifierGroups({
+				from: r.productModifiers.groupId,
+				to: r.productModifierGroups.id,
+			}),
+			product: r.one.products({
+				from: r.productModifiers.productId,
+				to: r.products.id,
+			}),
+			transactionModifiers: r.many.transactionProductModifiers(),
+		},
+		products: {
+			dishes: r.many.dishes(),
+			menuCategory: r.one.menuCategories({
+				from: r.products.menuCategoryId,
+				to: r.menuCategories.id,
+			}),
+			modifierGroups: r.many.productModifierGroups(),
+			modifiers: r.many.productModifiers(),
+			orderLines: r.many.orderLines(),
+			productIngredients: r.many.productIngredients(),
+		},
+		transactionProductModifiers: {
+			modifier: r.one.productModifiers({
+				from: r.transactionProductModifiers.modifierId,
+				to: r.productModifiers.id,
+			}),
+			orderLine: r.one.orderLines({
+				from: [
+					r.transactionProductModifiers.transactionId,
+					r.transactionProductModifiers.lineIndex,
+				],
+				to: [r.orderLines.transactionId, r.orderLines.lineIndex],
+			}),
+			transaction: r.one.transactions({
+				from: r.transactionProductModifiers.transactionId,
+				to: r.transactions.id,
+			}),
+		},
+		transactions: {
+			customer: r.one.customers({
+				from: r.transactions.customerId,
+				to: r.customers.id,
+			}),
+			location: r.one.locations({
+				from: r.transactions.locationId,
+				to: r.locations.id,
+			}),
+			orderLines: r.many.orderLines(),
+		},
 	}),
 )

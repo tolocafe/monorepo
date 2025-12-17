@@ -1,13 +1,9 @@
 import * as Sentry from '@sentry/cloudflare'
 import { captureEvent } from '@sentry/cloudflare'
-import { eq, sql } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 
-import { getDatabase } from './db/client'
-import { ensureSchema } from './db/ensure-schema'
-import { syncState, transactions as transactionsTable } from './db/schema'
 import auth from './routes/auth'
 import broadcast from './routes/broadcast'
 import clients from './routes/clients'
@@ -22,7 +18,6 @@ import tables from './routes/tables'
 import transactionsRouter from './routes/transactions'
 import webhooks from './routes/webhooks'
 import scheduledHandler from './scheduled'
-import syncTransactions from './scheduled/sync-transactions'
 import { defaultJsonHeaders } from './utils/headers'
 import { authenticate } from './utils/jwt'
 
@@ -93,116 +88,6 @@ app
 	.route('/passes', passes)
 	.route('/broadcast', broadcast)
 	.route('/tables', tables)
-	.get('/debug/run-sync', async (context) => {
-		try {
-			const hyperdrive = context.env.HYPERDRIVE as { connectionString: string }
-			await ensureSchema(hyperdrive)
-
-			// Reset cursor if ?reset=1 to do a full re-sync
-			const reset = context.req.query('reset')
-			if (reset === '1') {
-				const database = getDatabase(hyperdrive)
-				await database.execute(
-					sql`DELETE FROM tolo.sync_state WHERE id = 'transactions'`,
-				)
-			}
-
-			const result = await syncTransactions(
-				context.env.POSTER_TOKEN,
-				hyperdrive,
-				context.env.D1_TOLO,
-				context.env,
-			)
-
-			return context.json(
-				{
-					created: result.created.length,
-					errors: result.errors,
-					errorSamples: result.errorSamples,
-					fetched: result.fetchedCount,
-					startCursor: result.startCursor,
-					synced: result.synced,
-					toProcess: result.toProcessCount,
-					updated: result.updated.length,
-				},
-				200,
-				defaultJsonHeaders,
-			)
-		} catch (error) {
-			Sentry.captureException(error, {
-				contexts: { debug_route: { path: '/api/debug/run-sync' } },
-			})
-			return context.json(
-				{
-					detail:
-						error instanceof Error
-							? error.message
-							: typeof error === 'string'
-								? error
-								: 'Unknown error',
-					error: 'Internal Server Error',
-				},
-				500,
-				defaultJsonHeaders,
-			)
-		}
-	})
-	.get('/debug/db', async (context) => {
-		try {
-			const hyperdrive = context.env.HYPERDRIVE as { connectionString: string }
-			await ensureSchema(hyperdrive)
-			const database = getDatabase(hyperdrive)
-
-			const reset = context.req.query('reset')
-			if (reset === '1') {
-				await database.execute(
-					sql`DELETE FROM tolo.sync_state WHERE id = 'transactions'`,
-				)
-			}
-			const txnRows = await database
-				.select({ count: sql<number>`count(*)` })
-				.from(transactionsTable)
-			const transactionCount = txnRows[0]?.count ?? 0
-
-			const syncCursorRows = await database
-				.select({
-					lastTransactionId: syncState.lastTransactionId,
-					updatedAt: syncState.updatedAt,
-				})
-				.from(syncState)
-				.where(eq(syncState.id, 'transactions'))
-			const syncCursor = syncCursorRows[0]
-
-			return context.json(
-				{
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- may be undefined if no row
-					lastTransactionId: syncCursor?.lastTransactionId ?? null,
-					transactions: transactionCount,
-					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- may be undefined if no row
-					updatedAt: syncCursor?.updatedAt ?? null,
-				},
-				200,
-				defaultJsonHeaders,
-			)
-		} catch (error) {
-			Sentry.captureException(error, {
-				contexts: { debug_route: { path: '/api/debug/db' } },
-			})
-			return context.json(
-				{
-					detail:
-						error instanceof Error
-							? error.message
-							: typeof error === 'string'
-								? error
-								: 'Unknown error',
-					error: 'Internal Server Error',
-				},
-				500,
-				defaultJsonHeaders,
-			)
-		}
-	})
 	.all('*', (context) => {
 		captureEvent({
 			extra: {

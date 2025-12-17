@@ -1,3 +1,4 @@
+/* eslint-disable max-params */
 /* eslint-disable @typescript-eslint/no-unnecessary-condition -- API data types may not reflect runtime nullability */
 import * as Sentry from '@sentry/cloudflare'
 import { desc, eq } from 'drizzle-orm'
@@ -19,7 +20,7 @@ import {
 	transactionProductModifiers,
 	transactions,
 } from '~workers/db/schema'
-import { notifyPassUpdate } from '~workers/utils/apns'
+import { notifyApplePassUpdate } from '~workers/utils/apns'
 import { api } from '~workers/utils/poster'
 
 import type {
@@ -29,7 +30,7 @@ import type {
 	PosterModification,
 	PosterModificationGroup,
 	Product as PosterProduct,
-} from '@common/api'
+} from '~common/api'
 
 import type { Bindings } from '../types'
 
@@ -58,8 +59,11 @@ type Cache = {
 }
 
 /**
- * Sync transaction data from Poster to D1 using Drizzle with incremental cursor.
- * Stops fetching once a known transaction is encountered.
+ * Tiered sync strategy:
+ * - Today: Always sync incrementally (from cursor)
+ * - Last week: Update weekly (if last sync > 1 day ago)
+ * - Last month: Update weekly (if last sync > 1 week ago)
+ * - All transactions: Full sync monthly (if last sync > 1 month ago)
  */
 export default async function syncTransactions(
 	token: string,
@@ -69,205 +73,210 @@ export default async function syncTransactions(
 ) {
 	const startTime = Date.now()
 	// eslint-disable-next-line no-console
-	console.log('[syncTransactions] Starting sync...')
+	console.log('[syncTransactions] Starting tiered sync...')
 
 	const database_ = getDatabase(hyperdrive)
-	// eslint-disable-next-line no-console
-	console.log('[syncTransactions] Database connection ready')
 
 	try {
 		Sentry.addBreadcrumb({
 			category: 'sync',
 			level: 'info',
-			message: 'Starting scheduled data sync (Drizzle)',
-		})
-		Sentry.captureMessage('sync:start', 'info')
-
-		const today = new Date()
-		// Fetch last 365 days to ensure we get all historical transactions
-		const last365DaysAgo = new Date(today.getTime() - 1000 * 60 * 60 * 24 * 365)
-
-		// eslint-disable-next-line no-console
-		console.log('[syncTransactions] Fetching transactions from Poster API...')
-
-		const fetched = await api.dash.getTransactions(token, {
-			date_from: formatApiDate(last365DaysAgo),
-			date_to: formatApiDate(today),
-			include_products: 'true',
+			message: 'Starting tiered data sync',
 		})
 
-		// eslint-disable-next-line no-console
-		console.log(
-			`[syncTransactions] Fetched ${fetched.length} transactions from Poster`,
-		)
-
-		Sentry.addBreadcrumb({
-			category: 'sync',
-			data: { fetched: fetched.length },
-			level: 'info',
-			message: 'Fetched transactions from Poster',
-		})
-
-		// eslint-disable-next-line no-console
-		console.log('[syncTransactions] Getting sync cursor from database...')
 		const state = await getTransactionCursor(database_)
-		// eslint-disable-next-line no-console
-		console.log(
-			`[syncTransactions] Cursor: ${state?.lastTransactionId ?? 'none'}`,
-		)
+		const now = new Date()
+		const nowISO = now.toISOString()
 
-		const sorted = [...fetched].toSorted(
-			(a, b) =>
-				Number.parseInt(b.transaction_id, 10) -
-				Number.parseInt(a.transaction_id, 10),
-		)
+		// Calculate date ranges
+		const today = new Date(now.getFullYear(), now.getMonth(), now.getDate())
+		const oneDayAgo = new Date(now.getTime() - 1000 * 60 * 60 * 24)
+		const oneWeekAgo = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 7)
+		const oneMonthAgo = new Date(now.getTime() - 1000 * 60 * 60 * 24 * 30)
 
-		const toProcess: DashTransaction[] = []
-		for (const tx of sorted) {
-			const txId = Number.parseInt(tx.transaction_id, 10)
-			if (state?.lastTransactionId && txId <= state.lastTransactionId) {
-				break
-			}
-			toProcess.push(tx)
-		}
-
-		// Process oldest first for deterministic inserts
-		toProcess.reverse()
+		// Determine what needs syncing
+		const needsAllSync =
+			!state?.lastAllSyncAt || new Date(state.lastAllSyncAt) < oneMonthAgo
+		const needsMonthSync =
+			!state?.lastMonthSyncAt || new Date(state.lastMonthSyncAt) < oneWeekAgo
+		const needsWeekSync =
+			!state?.lastWeekSyncAt || new Date(state.lastWeekSyncAt) < oneDayAgo
 
 		// eslint-disable-next-line no-console
-		console.log(
-			`[syncTransactions] ${toProcess.length} transactions to process`,
-		)
-
-		Sentry.addBreadcrumb({
-			category: 'sync',
-			data: {
-				cursor: state?.lastTransactionId ?? null,
-				toProcess: toProcess.length,
-			},
-			level: 'info',
-			message: 'Prepared transaction batch',
+		console.log('[syncTransactions] Sync needs:', {
+			all: needsAllSync,
+			month: needsMonthSync,
+			today: true,
+			week: needsWeekSync,
 		})
 
-		const created: DashTransaction[] = []
-		const updated: DashTransaction[] = []
-		let errors = 0
+		const allCreated: DashTransaction[] = []
+		const allUpdated: DashTransaction[] = []
+		let totalErrors = 0
 		const errorSamples: string[] = []
 
-		const caches = createCaches()
-
-		for (let index = 0; index < toProcess.length; index++) {
-			const tx = toProcess[index]
-
-			if (index % 100 === 0) {
-				// eslint-disable-next-line no-console
-				console.log(
-					`[syncTransactions] Processing ${index + 1}/${toProcess.length}...`,
-				)
-			}
-
-			try {
-				const upsertResult = await upsertTransaction(
-					{
-						cache: caches,
-						database: database_,
-						environment,
-						passDatabase,
-						token,
-					},
-					tx,
-				)
-
-				if (upsertResult === 'created') {
-					created.push(tx)
-				} else {
-					updated.push(tx)
-				}
-
-				// Save progress every 50 transactions to avoid losing work on timeout
-				if ((index + 1) % 50 === 0) {
-					const txId = Number.parseInt(tx.transaction_id, 10)
-					await upsertSyncState(database_, txId)
-					// eslint-disable-next-line no-console
-					console.log(
-						`[syncTransactions] Progress saved at transaction ${txId}`,
-					)
-				}
-			} catch (error) {
-				errors++
-				const message = error instanceof Error ? error.message : String(error)
-				// eslint-disable-next-line no-console
-				console.error(
-					`[syncTransactions] ERROR processing tx ${tx.transaction_id}: ${message}`,
-				)
-				if (errorSamples.length < 5) {
-					errorSamples.push(message)
-				}
-				Sentry.captureException(error, {
-					contexts: {
-						transaction: {
-							transaction_id: tx.transaction_id,
-						},
-					},
-					level: 'error',
-					tags: { operation: 'transaction_sync' },
-				})
-			}
+		// 1. Sync all transactions (monthly)
+		if (needsAllSync) {
+			// eslint-disable-next-line no-console
+			console.log(
+				'[syncTransactions] ⚡ Syncing ALL transactions (monthly full sync)...',
+			)
+			const allSyncStart = Date.now()
+			const result = await syncDateRange(
+				database_,
+				token,
+				passDatabase,
+				environment,
+				null, // No date limit - sync all
+				false, // Don't stop at cursor
+			)
+			const allSyncDuration = Date.now() - allSyncStart
+			// eslint-disable-next-line no-console
+			console.log(
+				`[syncTransactions] ✅ All sync complete: ${result.created.length} created, ${result.updated.length} updated, ${result.errors} errors in ${allSyncDuration}ms`,
+			)
+			allCreated.push(...result.created)
+			allUpdated.push(...result.updated)
+			totalErrors += result.errors
+			errorSamples.push(...result.errorSamples)
+			await updateSyncTimestamp(database_, 'lastAllSyncAt', nowISO)
 		}
 
-		const lastProcessed = toProcess.at(-1)
-		const lastProcessedId =
-			lastProcessed === undefined
-				? (state?.lastTransactionId ?? null)
-				: Number.parseInt(lastProcessed.transaction_id, 10)
-
-		if (lastProcessedId) {
-			await upsertSyncState(database_, lastProcessedId)
+		// 2. Sync last month (weekly)
+		if (needsMonthSync) {
+			// eslint-disable-next-line no-console
+			console.log('[syncTransactions] 📅 Syncing last month (weekly update)...')
+			const monthSyncStart = Date.now()
+			const result = await syncDateRange(
+				database_,
+				token,
+				passDatabase,
+				environment,
+				oneMonthAgo,
+				false, // Update all in range
+			)
+			const monthSyncDuration = Date.now() - monthSyncStart
+			// eslint-disable-next-line no-console
+			console.log(
+				`[syncTransactions] ✅ Month sync complete: ${result.created.length} created, ${result.updated.length} updated, ${result.errors} errors in ${monthSyncDuration}ms`,
+			)
+			allCreated.push(...result.created)
+			allUpdated.push(...result.updated)
+			totalErrors += result.errors
+			errorSamples.push(...result.errorSamples)
+			await updateSyncTimestamp(database_, 'lastMonthSyncAt', nowISO)
 		}
+
+		// 3. Sync last week (daily)
+		if (needsWeekSync) {
+			// eslint-disable-next-line no-console
+			console.log('[syncTransactions] 📆 Syncing last week (daily update)...')
+			const weekSyncStart = Date.now()
+			const result = await syncDateRange(
+				database_,
+				token,
+				passDatabase,
+				environment,
+				oneWeekAgo,
+				false, // Update all in range
+			)
+			const weekSyncDuration = Date.now() - weekSyncStart
+			// eslint-disable-next-line no-console
+			console.log(
+				`[syncTransactions] ✅ Week sync complete: ${result.created.length} created, ${result.updated.length} updated, ${result.errors} errors in ${weekSyncDuration}ms`,
+			)
+			allCreated.push(...result.created)
+			allUpdated.push(...result.updated)
+			totalErrors += result.errors
+			errorSamples.push(...result.errorSamples)
+			await updateSyncTimestamp(database_, 'lastWeekSyncAt', nowISO)
+		}
+
+		// 4. Always sync today (incremental from cursor)
+		// eslint-disable-next-line no-console
+		console.log(
+			'[syncTransactions] 🕐 Syncing today (incremental from cursor)...',
+		)
+		const todaySyncStart = Date.now()
+		const todayResult = await syncDateRange(
+			database_,
+			token,
+			passDatabase,
+			environment,
+			today,
+			true, // Stop at cursor for incremental sync
+		)
+		const todaySyncDuration = Date.now() - todaySyncStart
+		// eslint-disable-next-line no-console
+		console.log(
+			`[syncTransactions] ✅ Today sync complete: ${todayResult.created.length} created, ${todayResult.updated.length} updated, ${todayResult.errors} errors in ${todaySyncDuration}ms`,
+		)
+		allCreated.push(...todayResult.created)
+		allUpdated.push(...todayResult.updated)
+		totalErrors += todayResult.errors
+		errorSamples.push(...todayResult.errorSamples)
+
+		// Update today sync timestamp and cursor
+		if (todayResult.lastProcessedId) {
+			await upsertSyncState(database_, todayResult.lastProcessedId)
+		}
+		await updateSyncTimestamp(database_, 'lastTodaySyncAt', nowISO)
 
 		const duration = Date.now() - startTime
 
 		Sentry.setContext('Sync Results', {
-			created: created.length,
+			created: allCreated.length,
 			duration_ms: duration,
-			errors,
-			synced: created.length + updated.length,
-			updated: updated.length,
+			errors: totalErrors,
+			synced: allCreated.length + allUpdated.length,
+			updated: allUpdated.length,
 		})
 
 		Sentry.captureMessage(
-			`sync:done created=${created.length} updated=${updated.length} errors=${errors} toProcess=${toProcess.length}`,
-			errors > 0 ? 'warning' : 'info',
+			`sync:done created=${allCreated.length} updated=${allUpdated.length} errors=${totalErrors}`,
+			totalErrors > 0 ? 'warning' : 'info',
 		)
 
 		return {
-			created,
-			errors,
+			created: allCreated,
+			errors: totalErrors,
 			errorSamples,
-			fetchedCount: fetched.length,
+			fetchedCount: todayResult.fetchedCount ?? 0,
 			startCursor: state?.lastTransactionId ?? null,
-			synced: created.length + updated.length,
-			toProcessCount: toProcess.length,
-			updated,
+			synced: allCreated.length + allUpdated.length,
+			toProcessCount: todayResult.toProcessCount ?? 0,
+			updated: allUpdated,
 		}
 	} catch (error) {
 		const duration = Date.now() - startTime
+		const errorMessage = error instanceof Error ? error.message : String(error)
+		const errorStack = error instanceof Error ? error.stack : undefined
+
+		// eslint-disable-next-line no-console
+		console.error('[syncTransactions] ❌ FATAL ERROR:', errorMessage)
+		if (errorStack) {
+			// eslint-disable-next-line no-console
+			console.error('[syncTransactions] Stack:', errorStack)
+		}
 
 		Sentry.setContext('Sync Error', {
 			duration_ms: duration,
-			error: error instanceof Error ? error.message : String(error),
+			error: errorMessage,
+			stack: errorStack,
 		})
 
 		Sentry.captureException(error, {
 			level: 'error',
-			tags: {
-				sync_operation: 'transactions',
-			},
+			tags: { sync_operation: 'transactions' },
 		})
 
-		Sentry.captureMessage('sync:failed', 'error')
-
-		return { created: [], errors: 1, errorSamples: [], synced: 0, updated: [] }
+		return {
+			created: [],
+			errors: 1,
+			errorSamples: [errorMessage],
+			synced: 0,
+			updated: [],
+		}
 	}
 }
 
@@ -455,6 +464,7 @@ async function ensureLocation(database: Database, id: number, cache: Cache) {
 }
 
 async function ensureModifier(database: Database, id: number, cache: Cache) {
+	if (!Number.isFinite(id) || id <= 0) return
 	if (cache.modifiers.has(id)) return
 	const existing = await database
 		.select()
@@ -540,7 +550,114 @@ async function ensureProduct(
 	cache.products.add(id)
 }
 
+/**
+ * Fetch transactions for a date range with automatic pagination/chunking.
+ * Splits large date ranges into smaller chunks to avoid API limits and memory issues.
+ */
+async function fetchTransactionsPaginated(
+	token: string,
+	dateFrom: Date,
+	dateTo: Date,
+	options?: {
+		/** Maximum days per chunk (default: 30) */
+		chunkDays?: number
+		/** Maximum transactions per chunk before splitting further */
+		maxTransactionsPerChunk?: number
+	},
+): Promise<DashTransaction[]> {
+	const chunkDays = options?.chunkDays ?? 30
+	const maxTransactionsPerChunk = options?.maxTransactionsPerChunk ?? 1000
+
+	const totalDays = Math.ceil(
+		(dateTo.getTime() - dateFrom.getTime()) / (1000 * 60 * 60 * 24),
+	)
+
+	// If range is small enough, fetch directly
+	if (totalDays <= chunkDays) {
+		// eslint-disable-next-line no-console
+		console.log(
+			`[fetchTransactionsPaginated] Fetching ${totalDays} days directly (${formatApiDate(dateFrom)} to ${formatApiDate(dateTo)})...`,
+		)
+		const startFetch = Date.now()
+		const fetched = await api.dash.getTransactions(token, {
+			date_from: formatApiDate(dateFrom),
+			date_to: formatApiDate(dateTo),
+			include_products: 'true',
+		})
+		const fetchDuration = Date.now() - startFetch
+		// eslint-disable-next-line no-console
+		console.log(
+			`[fetchTransactionsPaginated] Fetched ${fetched.length} transactions in ${fetchDuration}ms`,
+		)
+
+		// If response is too large, split further
+		if (fetched.length > maxTransactionsPerChunk && totalDays > 1) {
+			// eslint-disable-next-line no-console
+			console.log(
+				`[fetchTransactionsPaginated] Response too large (${fetched.length} > ${maxTransactionsPerChunk}), splitting into smaller chunks...`,
+			)
+			const midDate = new Date(
+				dateFrom.getTime() + (dateTo.getTime() - dateFrom.getTime()) / 2,
+			)
+			const [first, second] = await Promise.all([
+				fetchTransactionsPaginated(token, dateFrom, midDate, options),
+				fetchTransactionsPaginated(token, midDate, dateTo, options),
+			])
+			// eslint-disable-next-line no-console
+			console.log(
+				`[fetchTransactionsPaginated] Combined ${first.length} + ${second.length} = ${first.length + second.length} transactions`,
+			)
+			return [...first, ...second]
+		}
+
+		return fetched
+	}
+
+	// Split into chunks
+	const numberChunks = Math.ceil(totalDays / chunkDays)
+	// eslint-disable-next-line no-console
+	console.log(
+		`[fetchTransactionsPaginated] Splitting ${totalDays} days into ${numberChunks} chunks of ${chunkDays} days...`,
+	)
+
+	let currentFrom = new Date(dateFrom)
+	const chunks: Promise<DashTransaction[]>[] = []
+	let chunkIndex = 0
+
+	while (currentFrom < dateTo) {
+		const currentTo = new Date(
+			Math.min(
+				currentFrom.getTime() + chunkDays * 24 * 60 * 60 * 1000,
+				dateTo.getTime(),
+			),
+		)
+
+		// eslint-disable-next-line no-console
+		console.log(
+			`[fetchTransactionsPaginated] Chunk ${chunkIndex + 1}/${numberChunks}: ${formatApiDate(currentFrom)} to ${formatApiDate(currentTo)}`,
+		)
+
+		chunks.push(
+			fetchTransactionsPaginated(token, currentFrom, currentTo, options),
+		)
+
+		currentFrom = new Date(currentTo.getTime() + 1) // Start next chunk 1ms after previous
+		chunkIndex++
+	}
+
+	const startChunks = Date.now()
+	const results = await Promise.all(chunks)
+	const chunksDuration = Date.now() - startChunks
+	const totalFetched = results.reduce((sum, chunk) => sum + chunk.length, 0)
+	// eslint-disable-next-line no-console
+	console.log(
+		`[fetchTransactionsPaginated] Completed ${numberChunks} chunks: ${totalFetched} total transactions in ${chunksDuration}ms`,
+	)
+	return results.flat()
+}
+
 async function findModifierIdByName(database: Database, name: string) {
+	if (!name.trim()) return null
 	const found = await database
 		.select({ id: productModifiers.id })
 		.from(productModifiers)
@@ -645,6 +762,134 @@ function mapProduct(product: PosterProduct) {
 	} satisfies typeof products.$inferInsert
 }
 
+/**
+ * Sync transactions for a specific date range
+ */
+async function syncDateRange(
+	database: Database,
+	token: string,
+	passDatabase: D1Database,
+	environment: Bindings,
+	dateFrom: Date | null, // null = all transactions
+	stopAtCursor: boolean, // true = incremental (stop at known transaction)
+): Promise<{
+	created: DashTransaction[]
+	errors: number
+	errorSamples: string[]
+	fetchedCount?: number
+	lastProcessedId?: number
+	toProcessCount?: number
+	updated: DashTransaction[]
+}> {
+	const today = new Date()
+	const dateFrom_ =
+		dateFrom ?? new Date(today.getTime() - 1000 * 60 * 60 * 24 * 365 * 10) // 10 years ago for "all"
+
+	// eslint-disable-next-line no-console
+	console.log(
+		`[syncDateRange] Fetching from ${formatApiDate(dateFrom_)} to ${formatApiDate(today)}`,
+	)
+
+	const fetched = await fetchTransactionsPaginated(token, dateFrom_, today, {
+		chunkDays: 30, // Fetch in 30-day chunks
+		maxTransactionsPerChunk: 1000, // Split further if > 1000 transactions
+	})
+
+	// eslint-disable-next-line no-console
+	console.log(`[syncDateRange] Fetched ${fetched.length} transactions`)
+
+	const state = await getTransactionCursor(database)
+
+	const sorted = [...fetched].toSorted(
+		(a, b) =>
+			Number.parseInt(b.transaction_id, 10) -
+			Number.parseInt(a.transaction_id, 10),
+	)
+
+	const toProcess: DashTransaction[] = []
+	if (stopAtCursor && state?.lastTransactionId) {
+		// Incremental: only process new transactions
+		for (const tx of sorted) {
+			const txId = Number.parseInt(tx.transaction_id, 10)
+			if (txId <= state.lastTransactionId) {
+				break
+			}
+			toProcess.push(tx)
+		}
+	} else {
+		// Full update: process all transactions in range
+		toProcess.push(...sorted)
+	}
+
+	// Process oldest first
+	toProcess.reverse()
+
+	// eslint-disable-next-line no-console
+	console.log(`[syncDateRange] Processing ${toProcess.length} transactions`)
+
+	const created: DashTransaction[] = []
+	const updated: DashTransaction[] = []
+	let errors = 0
+	const errorSamples: string[] = []
+	const caches = createCaches()
+
+	for (let index = 0; index < toProcess.length; index++) {
+		const tx = toProcess[index]
+
+		if (index % 100 === 0 && index > 0) {
+			// eslint-disable-next-line no-console
+			console.log(
+				`[syncDateRange] Processing ${index + 1}/${toProcess.length}...`,
+			)
+		}
+
+		try {
+			const upsertResult = await upsertTransaction(
+				{
+					cache: caches,
+					database,
+					environment,
+					passDatabase,
+					token,
+				},
+				tx,
+			)
+
+			if (upsertResult === 'created') {
+				created.push(tx)
+			} else {
+				updated.push(tx)
+			}
+		} catch (error) {
+			errors++
+			const message = error instanceof Error ? error.message : String(error)
+			if (errorSamples.length < 5) {
+				errorSamples.push(message)
+			}
+			Sentry.captureException(error, {
+				contexts: { transaction: { transaction_id: tx.transaction_id } },
+				level: 'error',
+				tags: { operation: 'transaction_sync' },
+			})
+		}
+	}
+
+	const lastProcessed = toProcess.at(-1)
+	const lastProcessedId = lastProcessed
+		? Number.parseInt(lastProcessed.transaction_id, 10)
+		: undefined
+
+	return {
+		created,
+		errors,
+		errorSamples,
+		fetchedCount: fetched.length,
+		lastProcessedId,
+		toProcessCount: toProcess.length,
+		updated,
+	}
+}
+
 function toCents(value: number | string) {
 	const number_ =
 		typeof value === 'number'
@@ -655,10 +900,50 @@ function toCents(value: number | string) {
 }
 
 function toISO(dateString: string) {
-	// Poster returns "Y-m-d H:i:s"
+	if (!dateString || !dateString.trim()) return null
+
+	// Poster returns either:
+	// 1. Unix timestamp in milliseconds as string (e.g., "1766004553569")
+	// 2. "Y-m-d H:i:s" format (e.g., "2023-12-25 14:30:00")
+
+	// Try parsing as Unix timestamp first
+	const timestamp = Number.parseInt(dateString, 10)
+	if (!Number.isNaN(timestamp) && timestamp > 0) {
+		// If it's a reasonable timestamp (after 2000-01-01 and before 2100-01-01)
+		if (timestamp > 946684800000 && timestamp < 4102444800000) {
+			return new Date(timestamp).toISOString()
+		}
+	}
+
+	// Fall back to "Y-m-d H:i:s" format parsing
 	const parsed = new Date(dateString.replace(' ', 'T') + 'Z')
 	if (Number.isNaN(parsed.getTime())) return null
 	return parsed.toISOString()
+}
+
+async function updateSyncTimestamp(
+	database: Database,
+	field:
+		| 'lastAllSyncAt'
+		| 'lastMonthSyncAt'
+		| 'lastTodaySyncAt'
+		| 'lastWeekSyncAt',
+	timestamp: string,
+) {
+	const existing = await getTransactionCursor(database)
+	const payload = {
+		[field]: timestamp,
+		id: 'transactions',
+		...existing,
+	}
+
+	await database
+		.insert(syncState)
+		.values(payload)
+		.onConflictDoUpdate({
+			set: { [field]: timestamp },
+			target: syncState.id,
+		})
 }
 
 async function upsertDish(database: Database, product: PosterProduct) {
@@ -694,6 +979,7 @@ async function upsertLineModifiers(
 	if (product.modification) {
 		for (const module_ of product.modification) {
 			const modifierId = Number.parseInt(module_.m, 10)
+			if (!Number.isFinite(modifierId)) continue
 			await ensureModifier(database, modifierId, cache)
 			modifiersToPersist.push({
 				modifierId,
@@ -704,6 +990,7 @@ async function upsertLineModifiers(
 
 	if (product.modifiers) {
 		for (const module_ of product.modifiers) {
+			if (!module_.name) continue
 			const modifierId = await findModifierIdByName(database, module_.name)
 			if (modifierId) {
 				modifiersToPersist.push({
@@ -749,13 +1036,15 @@ async function upsertModifier(
 	cache: Cache,
 ) {
 	const id = module_.dish_modification_id
+	if (!Number.isFinite(id) || id <= 0) return
 	if (cache.modifiers.has(id)) return
 
+	const safeName = module_.modificator_name?.trim() || `modifier-${id}`
 	const payload = {
 		groupId,
 		id,
 		isDeleted: false,
-		name: module_.modificator_name,
+		name: safeName,
 		priceDiff: module_.price ? toCents(module_.price) : null,
 		productId: Number.parseInt(productId, 10),
 	} satisfies typeof productModifiers.$inferInsert
@@ -974,7 +1263,11 @@ async function upsertTransaction(
 		syncedAt: new Date().toISOString(),
 		tableId: tx.table_id ? Number.parseInt(tx.table_id, 10) : null,
 		tipSum: tx.tip_sum ? toCents(tx.tip_sum) : null,
-		type: tx.type ?? null,
+		// type: 0 = Sale, 1 = Return. Default to 0 (Sale) if null/undefined
+		type:
+			tx.type !== null && tx.type !== undefined
+				? Number.parseInt(String(tx.type), 10)
+				: 0,
 		updatedAt: new Date().toISOString(),
 		userId: tx.user_id ?? null,
 	}
@@ -988,7 +1281,7 @@ async function upsertTransaction(
 	await upsertOrderLines(database, token, tx, cache)
 
 	if (!existing && customerId) {
-		await notifyPassUpdate(customerId, passDatabase, environment)
+		await notifyApplePassUpdate(customerId, passDatabase, environment)
 	}
 
 	if (!existing) return 'created'
