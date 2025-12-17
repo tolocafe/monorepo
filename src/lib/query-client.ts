@@ -5,6 +5,10 @@ import { createMMKV } from 'react-native-mmkv'
 
 import { STORAGE_KEYS } from '@/lib/constants/storage'
 
+// Cache time constants - gcTime must be >= maxAge for persistence to work correctly
+const FIVE_MINUTES = 1000 * 60 * 5
+const ONE_HOUR = 1000 * 60 * 60
+
 export const queryStore = createMMKV({
 	id: STORAGE_KEYS.QUERY,
 })
@@ -15,11 +19,14 @@ export const storage = {
 	setItem: (key: string, value: string) => queryStore.set(key, value),
 }
 
-// Create the persister
+// Create the persister with maxAge matching gcTime
 export const persister = createAsyncStoragePersister({
 	key: 'REACT_QUERY_OFFLINE_CACHE',
 	storage,
 })
+
+// Max age for persisted cache - must be <= gcTime
+export const persistMaxAge = ONE_HOUR
 
 function retryDelay(attemptIndex: number, error: unknown) {
 	if (error instanceof HTTPError && error.response.headers.get('Retry-After')) {
@@ -62,13 +69,15 @@ export const queryClient = new QueryClient({
 			retryDelay,
 		},
 		queries: {
-			gcTime: 1000 * 60 * 60, // 1 hour
+			// gcTime must be >= staleTime and >= persistMaxAge for proper caching
+			gcTime: ONE_HOUR,
 			networkMode: 'offlineFirst',
 			refetchOnReconnect: true,
 			refetchOnWindowFocus: true,
 			retry: shouldRetry,
 			retryDelay,
-			staleTime: 0,
+			// staleTime enables SWR: data is shown from cache while revalidating in background
+			staleTime: FIVE_MINUTES,
 		},
 	},
 })

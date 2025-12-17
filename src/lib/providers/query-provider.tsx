@@ -7,7 +7,7 @@ import NetInfo from '@react-native-community/netinfo'
 import { focusManager, onlineManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 
-import { persister, queryClient } from '@/lib/query-client'
+import { persister, persistMaxAge, queryClient } from '@/lib/query-client'
 
 // Set up focus manager for React Native
 focusManager.setEventListener((handleFocus) => {
@@ -30,7 +30,10 @@ onlineManager.setEventListener((setOnline) =>
 	}),
 )
 
-const persistOptions = { persister }
+const persistOptions = {
+	maxAge: persistMaxAge,
+	persister,
+}
 
 type Props = {
 	children: ReactNode
