@@ -83,14 +83,3 @@ export const orderDetailQueryOptions = (orderId: string) =>
 		queryFn: () => api.orders.get(orderId),
 		queryKey: ['orders', orderId],
 	})
-
-export type FormattedCreateOrderResponse = Omit<
-	CreateOrderResponse,
-	'order'
-> & {
-	order: CreateOrderResponse & { sumFormatted: string }
-}
-
-export function formatCreateOrderResponse(response: CreateOrderResponse) {
-	return response
-}

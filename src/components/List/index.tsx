@@ -1,6 +1,6 @@
 import type { ReactElement, ReactNode } from 'react'
 import { Children, isValidElement } from 'react'
-import { TouchableOpacity, View } from 'react-native'
+import { Pressable, View } from 'react-native'
 
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -81,8 +81,6 @@ export function ListItem({
 	style,
 	testID,
 }: ListItemProps) {
-	const Container = TouchableOpacity
-
 	// Extract child components
 	const childrenArray = Children.toArray(children)
 	const iconChild = childrenArray.find(
@@ -111,7 +109,7 @@ export function ListItem({
 	styles.useVariants({ centered })
 
 	return (
-		<Container
+		<Pressable
 			accessibilityRole={accessibilityRole}
 			disabled={disabled || !onPress}
 			onPress={onPress}
@@ -130,7 +128,7 @@ export function ListItem({
 			{/* Accessory or chevron */}
 			{accessoryChild ||
 				(showChevron && <TextColorIonicons name="chevron-forward" size={20} />)}
-		</Container>
+		</Pressable>
 	)
 }
 

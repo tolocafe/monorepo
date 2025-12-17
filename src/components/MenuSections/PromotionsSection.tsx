@@ -15,7 +15,7 @@ const UniFlatList = withUnistyles(FlatList)
 export function PromotionsSection() {
 	const { data } = useQuery(promotionsQueryOptions)
 
-	if (data.length === 0) {
+	if (!data?.length) {
 		return null
 	}
 

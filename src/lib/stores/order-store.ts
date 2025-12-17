@@ -26,7 +26,6 @@ export type OrderProduct = {
 	modifications?: Modifications
 	quantity: number
 }
-
 const zustandJsonStorage = {
 	getItem: (key: string) => zustandStore.getString(key) ?? null,
 	removeItem: (key: string) => zustandStore.remove(key),
@@ -47,6 +46,11 @@ type OrderStore = {
 		modifications: Modifications | undefined,
 		quantity: number,
 	) => void
+}
+
+function getOrderTotalItems(order: null | Order | undefined): number {
+	if (!order) return 0
+	return order.products.reduce((total, item) => total + item.quantity, 0)
 }
 
 export const useOrderStore = create<OrderStore>()(
@@ -101,12 +105,7 @@ export const useOrderStore = create<OrderStore>()(
 			},
 			currentOrder: null,
 			getTotalItems() {
-				const { currentOrder } = get()
-				if (!currentOrder) return 0
-				return currentOrder.products.reduce(
-					(total, item) => total + item.quantity,
-					0,
-				)
+				return getOrderTotalItems(get().currentOrder)
 			},
 			removeItem(productId) {
 				const { currentOrder } = get()
@@ -163,7 +162,7 @@ export const useOrderStore = create<OrderStore>()(
 )
 
 export const useCurrentOrderItemsCount = () =>
-	useOrderStore(useShallow((state) => state.getTotalItems()))
+	useOrderStore(useShallow((state) => getOrderTotalItems(state.currentOrder)))
 export const useCurrentOrder = () =>
 	useOrderStore(useShallow((state) => state.currentOrder))
 export const useUpdateItem = () => useOrderStore((state) => state.updateItem)

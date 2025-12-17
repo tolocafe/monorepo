@@ -519,7 +519,7 @@ function AnimatedPrice({ children }: { children: string }) {
 
 	return (
 		<Animated.View style={animatedPriceStyle}>
-			<Button.Text style={[styles.whiteText, { paddingHorizontal: 5 }]}>
+			<Button.Text style={[styles.whiteText, styles.priceText]}>
 				{children}
 			</Button.Text>
 		</Animated.View>
@@ -673,6 +673,9 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	},
 	price: {
 		color: theme.colors.verde.solid,
+	},
+	priceText: {
+		paddingHorizontal: 5,
 	},
 	productInfo: {
 		gap: theme.spacing.md,

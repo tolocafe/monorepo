@@ -34,8 +34,10 @@ export const publicClient = ky.create({
 		afterResponse: [
 			async (request, _options, response) => {
 				if (isWeb) {
-					// eslint-disable-next-line no-console
-					console.log('Web environment, not saving token to SecureStore')
+					if (__DEV__) {
+						// eslint-disable-next-line no-console
+						console.log('Web environment, not saving token to SecureStore')
+					}
 					return response
 				}
 

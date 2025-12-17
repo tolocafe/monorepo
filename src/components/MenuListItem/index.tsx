@@ -90,10 +90,9 @@ export default function MenuListItem(props: Props) {
 	)
 }
 
-const ADD_TO_BAG_BUTTON_SIZE = 36
-
 const styles = StyleSheet.create((theme, runtime) => {
 	const itemSize = Math.min((runtime.screen.width - 10) * 0.4, 200)
+	const ADD_TO_BAG_BUTTON_SIZE = 36
 
 	return {
 		image: {

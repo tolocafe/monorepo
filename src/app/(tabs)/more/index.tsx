@@ -4,8 +4,8 @@ import {
 	Alert,
 	Linking,
 	Platform,
+	Pressable,
 	RefreshControl,
-	TouchableOpacity,
 	View,
 } from 'react-native'
 
@@ -266,7 +266,7 @@ export default function More() {
 							</ListItem.Label>
 						</ListItem>
 						<View style={styles.socialIconsRow}>
-							<TouchableOpacity
+							<Pressable
 								accessibilityRole="button"
 								onPress={() => Linking.openURL('mailto:contacto@tolo.cafe')}
 								style={styles.socialIcon}
@@ -276,8 +276,8 @@ export default function More() {
 									name="mail-outline"
 									size={28}
 								/>
-							</TouchableOpacity>
-							<TouchableOpacity
+							</Pressable>
+							<Pressable
 								accessibilityRole="button"
 								onPress={() =>
 									Linking.openURL('https://instagram.com/tolo.cafe')
@@ -289,8 +289,8 @@ export default function More() {
 									name="logo-instagram"
 									size={28}
 								/>
-							</TouchableOpacity>
-							<TouchableOpacity
+							</Pressable>
+							<Pressable
 								accessibilityRole="button"
 								onPress={() => Linking.openURL('https://wa.me/5217229721819')}
 								style={styles.socialIcon}
@@ -300,8 +300,8 @@ export default function More() {
 									name="logo-whatsapp"
 									size={28}
 								/>
-							</TouchableOpacity>
-							<TouchableOpacity
+							</Pressable>
+							<Pressable
 								accessibilityRole="button"
 								onPress={() =>
 									Linking.openURL('https://www.tiktok.com/@tolo.cafe')
@@ -313,7 +313,7 @@ export default function More() {
 									name="logo-tiktok"
 									size={28}
 								/>
-							</TouchableOpacity>
+							</Pressable>
 						</View>
 					</List>
 				</View>

@@ -34,17 +34,19 @@ export function MenuSection() {
 	const menu = productsQuery.data
 	const categories = categoriesQuery.data
 
-	const categoriesWithItems = useMemo(
-		() =>
+	const categoriesWithItems = useMemo(() => {
+		if (!categories || !menu) return []
+
+		return (
 			categories
-				.map((category) => {
-					const categoryItems = menu.filter(
+				.map((category) => ({
+					...category,
+					items: menu.filter(
 						(item: Product) =>
 							item.menu_category_id === category.category_id &&
 							item.hidden !== '1',
-					)
-					return { ...category, items: categoryItems }
-				})
+					),
+				}))
 				// eslint-disable-next-line unicorn/no-array-sort
 				.sort((a, b) => {
 					const indexA = CATEGORY_ORDER.indexOf(a.category_name)
@@ -55,9 +57,9 @@ export function MenuSection() {
 					if (indexB !== -1) return 1
 					return a.category_name.localeCompare(b.category_name)
 				})
-				.filter((category) => category.items.length > 0),
-		[categories, menu],
-	)
+				.filter((category) => category.items.length > 0)
+		)
+	}, [categories, menu])
 
 	if (categoriesWithItems.length === 0) {
 		if (productsQuery.isFetching) {

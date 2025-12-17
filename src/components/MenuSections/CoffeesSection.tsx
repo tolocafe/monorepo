@@ -15,7 +15,7 @@ const UniFlatList = withUnistyles(FlatList)
 export function CoffeesSection() {
 	const { data } = useQuery(coffeesQueryOptions)
 
-	if (data.length === 0) {
+	if (!data?.length) {
 		return null
 	}
 

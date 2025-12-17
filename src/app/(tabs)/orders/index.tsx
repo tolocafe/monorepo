@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react'
 import type { ImageSourcePropType, ScrollView } from 'react-native'
-import { RefreshControl, TouchableOpacity, View } from 'react-native'
+import { Pressable, RefreshControl, View } from 'react-native'
 
 import { Feather } from '@expo/vector-icons'
 import { Select, Trans, useLingui } from '@lingui/react/macro'
@@ -137,7 +137,7 @@ export default function Orders() {
 						<H2>
 							<Trans>In Progress</Trans>
 						</H2>
-						<TouchableOpacity
+						<Pressable
 							onPress={handleCurrentOrderPress}
 							style={styles.currentOrderCard}
 						>
@@ -157,7 +157,7 @@ export default function Orders() {
 							<Text style={styles.currentOrderText}>
 								<Feather name="chevron-right" size={24} />
 							</Text>
-						</TouchableOpacity>
+						</Pressable>
 					</>
 				)}
 
@@ -169,7 +169,7 @@ export default function Orders() {
 						</H2>
 						<View style={styles.ordersList}>
 							{orders.map((order) => (
-								<TouchableOpacity
+								<Pressable
 									key={order.transaction_id}
 									onPress={() => handleOrderPress(order.transaction_id)}
 								>
@@ -199,7 +199,7 @@ export default function Orders() {
 											<Feather color="#666666" name="chevron-right" size={24} />
 										</View>
 									</Card>
-								</TouchableOpacity>
+								</Pressable>
 							))}
 						</View>
 					</>

@@ -1,7 +1,7 @@
 import type { Product } from '@common/api'
 
-import { productQueryOptions } from '../queries/product'
-import { queryClient } from '../query-client'
+import { productQueryOptions } from '@/lib/queries/product'
+import { queryClient } from '@/lib/query-client'
 
 const formatter = new Intl.NumberFormat('en-US', {
 	currency: 'USD',

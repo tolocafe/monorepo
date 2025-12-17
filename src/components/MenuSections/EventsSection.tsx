@@ -15,7 +15,7 @@ const UniFlatList = withUnistyles(FlatList)
 export function EventsSection() {
 	const { data } = useQuery(eventsQueryOptions)
 
-	if (data.length === 0) {
+	if (!data?.length) {
 		return null
 	}
 
