@@ -7,9 +7,7 @@ import {
 	text,
 } from 'drizzle-orm/pg-core'
 
-// Use a dedicated schema owned by the app (not `public`, not Hyperdrive-owned).
-// This makes `drizzle-kit push` work reliably and avoids relying on search_path.
-const tolo = pgSchema('tolo')
+const tolo = pgSchema(null as unknown as string)
 
 // ============================================================================
 // Tables
