@@ -35,7 +35,9 @@ const getCookieOptions = (options: {
 	isTest?: boolean
 	origin: string
 }) => {
-	const isLocalhost = origin ? origin.includes('localhost') : false
+	const isLocalhost = options.origin
+		? options.origin.includes('localhost')
+		: false
 
 	// Cross-origin requests (localhost to remote) require SameSite=None + Secure
 	// Modern browsers treat localhost as a secure context, so Secure cookies work
@@ -43,12 +45,10 @@ const getCookieOptions = (options: {
 	const isCrossOrigin = isLocalhost || options.isTest
 
 	return {
-		// Don't set domain - let browser use the server's host
 		httpOnly: true,
 		maxAge: options.expiresIn ?? DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
 		path: '/api',
 		sameSite: isCrossOrigin ? 'None' : 'Strict',
-		// SameSite=None requires Secure=true (browsers enforce this)
 		secure: true,
 	} satisfies CookieOptions
 }
