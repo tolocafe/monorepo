@@ -17,7 +17,7 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"strictNullChecks": true,
-		"types": ["jest", "node"]
+		"types": ["jest", "node", "@playwright/test"]
 	},
 	"extends": "expo/tsconfig.base",
 	"include": [
@@ -33,7 +33,9 @@
 		"eslint.config.mjs",
 		"vitest.config.mts",
 		".expo/types/**/*.ts",
-		"worker-configuration.d.ts"
+		"worker-configuration.d.ts",
+		"e2e/**/*.ts",
+		"playwright.config.ts"
 	],
 	"files": ["src/index.ts", "apps/workers/index.ts"]
 }
