@@ -4,6 +4,7 @@ import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 
 import type { CookieOptions } from 'hono/utils/cookie'
+import type { Context } from 'hono'
 
 import { RequestOtpSchema, VerifyOtpSchema } from '~common/schemas'
 import { defaultJsonHeaders } from '~workers/utils/headers'
@@ -30,6 +31,23 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 	'createdAt' in value &&
 	'name' in value &&
 	'token' in value
+
+/**
+ * Determine if the request is from a web browser based on Origin and User-Agent headers
+ */
+const isWebRequest = (context: Context): boolean => {
+	const origin = context.req.header('Origin')
+	const userAgent = context.req.header('User-Agent') ?? ''
+
+	return (
+		origin !== undefined &&
+		(userAgent.includes('Mozilla') ||
+			userAgent.includes('Chrome') ||
+			userAgent.includes('Safari') ||
+			userAgent.includes('Firefox') ||
+			userAgent.includes('Edge'))
+	)
+}
 
 const getCookieOptions = (options: {
 	expiresIn?: number
@@ -196,21 +214,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		])
 
 		// Set HttpOnly cookie for web clients that accept cookies
-		// Check if request has an Origin header (typical for web browsers)
-		// and User-Agent contains browser indicators
-		const origin = context.req.header('Origin')
-		const userAgent = context.req.header('User-Agent') ?? ''
-		const isWebRequest =
-			origin !== undefined &&
-			(userAgent.includes('Mozilla') ||
-				userAgent.includes('Chrome') ||
-				userAgent.includes('Safari') ||
-				userAgent.includes('Firefox') ||
-				userAgent.includes('Edge'))
-
 		const responseBody = { client: posterClient, token }
 
-		if (isWebRequest) {
+		if (isWebRequest(context)) {
 			setCookie(
 				context,
 				'tolo_session',
@@ -218,7 +224,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				getCookieOptions({
 					expiresIn: DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
 					isTest,
-					origin,
+					origin: context.req.header('Origin') ?? '',
 				}),
 			)
 		}
@@ -293,23 +299,13 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		)
 
 		// Clear the HttpOnly cookie for web requests
-		const origin = context.req.header('Origin')
-		const userAgent = context.req.header('User-Agent') ?? ''
-		const isWebRequest =
-			origin !== undefined &&
-			(userAgent.includes('Mozilla') ||
-				userAgent.includes('Chrome') ||
-				userAgent.includes('Safari') ||
-				userAgent.includes('Firefox') ||
-				userAgent.includes('Edge'))
-
-		if (isWebRequest) {
+		if (isWebRequest(context)) {
 			deleteCookie(
 				context,
 				'tolo_session',
 				getCookieOptions({
 					expiresIn: DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
-					origin,
+					origin: context.req.header('Origin') ?? '',
 				}),
 			)
 		}
