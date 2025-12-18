@@ -327,9 +327,13 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				const parameters: string[] = [deviceLibraryId, passTypeIdentifier]
 
 				if (passesUpdatedSince) {
-					const sinceDate = new Date(
-						Number.parseInt(passesUpdatedSince) * 1000,
-					).toISOString()
+					// Validate timestamp is a valid number
+					const timestamp = Number.parseInt(passesUpdatedSince, 10)
+					if (Number.isNaN(timestamp) || timestamp < 0) {
+						return context.json({}, 400)
+					}
+
+					const sinceDate = new Date(timestamp * 1000).toISOString()
 					query += ' AND COALESCE(pu.last_updated, pr.created_at) > ?'
 					parameters.push(sinceDate)
 				}

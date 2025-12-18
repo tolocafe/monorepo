@@ -15,7 +15,14 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 	async (context) => {
 		try {
 			const platform = context.req.query('platform')
-			const clientId = Number.parseInt(context.req.param('clientId'), 10)
+			const clientIdRaw = context.req.param('clientId')
+			const clientId = Number.parseInt(clientIdRaw, 10)
+
+			// Validate clientId is a valid number
+			if (Number.isNaN(clientId) || clientId <= 0) {
+				return context.json({ message: 'Invalid client ID' }, 400)
+			}
+
 			const [authenticatedClientId] = await authenticate(
 				context,
 				context.env.JWT_SECRET,

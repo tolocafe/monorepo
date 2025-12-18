@@ -53,10 +53,12 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			throw new HTTPException(400, { message: 'Client ID required' })
 		}
 
-		const client = await api.clients.getClientById(
-			c.env.POSTER_TOKEN,
-			Number.parseInt(id, 10),
-		)
+		const clientId = Number.parseInt(id, 10)
+		if (Number.isNaN(clientId) || clientId <= 0) {
+			throw new HTTPException(400, { message: 'Invalid client ID' })
+		}
+
+		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
 
 		if (!client) {
 			throw new HTTPException(404, { message: 'Client not found' })

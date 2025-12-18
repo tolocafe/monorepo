@@ -195,12 +195,22 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				: Promise.resolve(),
 		])
 
-		// For web: set HttpOnly cookie. For native: client uses token from body
-		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')
+		// Set HttpOnly cookie for web clients that accept cookies
+		// Check if request has an Origin header (typical for web browsers)
+		// and User-Agent contains browser indicators
+		const origin = context.req.header('Origin')
+		const userAgent = context.req.header('User-Agent') ?? ''
+		const isWebRequest =
+			origin !== undefined &&
+			(userAgent.includes('Mozilla') ||
+				userAgent.includes('Chrome') ||
+				userAgent.includes('Safari') ||
+				userAgent.includes('Firefox') ||
+				userAgent.includes('Edge'))
 
 		const responseBody = { client: posterClient, token }
 
-		if (isWeb) {
+		if (isWebRequest) {
 			setCookie(
 				context,
 				'tolo_session',
@@ -208,7 +218,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				getCookieOptions({
 					expiresIn: DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
 					isTest,
-					origin: context.req.header('Origin') ?? '',
+					origin,
 				}),
 			)
 		}
@@ -282,16 +292,24 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			),
 		)
 
-		// For web, clear the HttpOnly cookie
-		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')
+		// Clear the HttpOnly cookie for web requests
+		const origin = context.req.header('Origin')
+		const userAgent = context.req.header('User-Agent') ?? ''
+		const isWebRequest =
+			origin !== undefined &&
+			(userAgent.includes('Mozilla') ||
+				userAgent.includes('Chrome') ||
+				userAgent.includes('Safari') ||
+				userAgent.includes('Firefox') ||
+				userAgent.includes('Edge'))
 
-		if (isWeb) {
+		if (isWebRequest) {
 			deleteCookie(
 				context,
 				'tolo_session',
 				getCookieOptions({
 					expiresIn: DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
-					origin: context.req.header('Origin') ?? '',
+					origin,
 				}),
 			)
 		}
