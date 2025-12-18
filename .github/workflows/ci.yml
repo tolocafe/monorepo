@@ -68,10 +68,8 @@ jobs:
       - name: 📦 Install dependencies
         run: bun install --frozen-lockfile
 
-      - name: 🎭 Install Playwright with dependencies
-        run: |
-          npm install --no-save --legacy-peer-deps @playwright/test
-          npx playwright install --with-deps chromium
+      - name: 🎭 Install Playwright browsers
+        run: bunx playwright install --with-deps chromium
 
       - name: 🧪 Run E2E tests
         run: bun run test:e2e

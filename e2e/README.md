@@ -4,11 +4,11 @@ End-to-end tests using Playwright for desktop and mobile web.
 
 ## Prerequisites
 
-Playwright must be installed separately since it's not compatible with bun's package manager:
+Install dependencies including Playwright:
 
 ```bash
-npm install --no-save --legacy-peer-deps @playwright/test
-npx playwright install chromium
+bun install
+bunx playwright install chromium
 ```
 
 ## Running Tests
@@ -75,6 +75,6 @@ test.describe('Feature Name', () => {
 
 ## Notes
 
-- Due to bun compatibility issues with `@playwright/test`, Playwright is installed via npm but tests run via npx
+- Playwright is installed via bun and tests run via bunx
 - The web server runs on `http://localhost:8081` by default
 - Tests use `networkidle` to wait for page loads to ensure data is loaded
