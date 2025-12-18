@@ -698,8 +698,13 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		if (data) {
 			try {
 				parsedData = (JSON.parse(data) || null) as unknown as EventData
-			} catch {
-				//
+			} catch (error) {
+				// Invalid JSON in webhook data - log and continue with null
+				captureEvent({
+					extra: { data, error: error instanceof Error ? error.message : 'Unknown' },
+					level: 'warning',
+					message: 'Failed to parse webhook data JSON',
+				})
 			}
 		}
 
@@ -786,6 +791,10 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				if (transactions.length === 1) {
 					await sendSms(
+						{
+							accessKeyId: context.env.AWS_ACCESS_KEY_ID,
+							secretAccessKey: context.env.AWS_SECRET_ACCESS_KEY,
+						},
 						context.env.POSTER_TOKEN,
 						client.phone,
 						'[TOLO] Nos regalas un minuto? Deja tu reseña sobre nosotros en https://l.tolo.cafe/resena',

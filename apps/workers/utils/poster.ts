@@ -32,14 +32,6 @@ import type {
 } from '~common/api'
 import type { CreateOrder } from '~common/schemas'
 
-const snsClient = new AWS.SNS({
-	credentials: {
-		accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-	},
-	region: 'us-east-1',
-})
-
 /** Poster API base URL */
 const BASE_URL = 'https://joinposter.com/api'
 
@@ -871,12 +863,19 @@ export async function closePosterOrder(
  * Note: This is NOT the Poster API sendSms endpoint, but uses AWS SNS directly.
  */
 export async function sendSms(
+	/** AWS credentials for SNS */
+	credentials: { accessKeyId: string; secretAccessKey: string },
 	/** Unused (kept for API consistency) */
 	_token: string,
 	/** International format, e.g. "+1234567890" */
 	phone: string,
 	message: string,
 ) {
+	const snsClient = new AWS.SNS({
+		credentials,
+		region: 'us-east-1',
+	})
+
 	return snsClient.send(
 		new AWS.PublishCommand({ Message: message, PhoneNumber: phone }),
 	)

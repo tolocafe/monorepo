@@ -30,7 +30,15 @@ const broadcast = new Hono<{ Bindings: Bindings }>().post(
 			)
 
 			for (const client of clientsWithPhoneNumbers) {
-				await sendSms(context.env.POSTER_TOKEN, client.phone, message)
+				await sendSms(
+					{
+						accessKeyId: context.env.AWS_ACCESS_KEY_ID,
+						secretAccessKey: context.env.AWS_SECRET_ACCESS_KEY,
+					},
+					context.env.POSTER_TOKEN,
+					client.phone,
+					message,
+				)
 			}
 		}
 		if (type === 'push') {

@@ -97,9 +97,17 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		const code = generateOtp()
 
+		const testPhoneNumbers = (context.env.TEST_PHONE_NUMBERS ?? '')
+			.split(',')
+			.filter(Boolean)
+
 		await Promise.all([
-			storeOtp(context.env.KV_OTP, phone, code),
+			storeOtp(context.env.KV_OTP, phone, code, testPhoneNumbers),
 			sendSms(
+				{
+					accessKeyId: context.env.AWS_ACCESS_KEY_ID,
+					secretAccessKey: context.env.AWS_SECRET_ACCESS_KEY,
+				},
 				context.env.POSTER_TOKEN,
 				phone,
 				`[TOLO] Tu código de verificación es ${code}`,
@@ -113,7 +121,17 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			await context.req.json(),
 		)
 
-		const { isTest } = await verifyOtp(context.env.KV_OTP, phone, code)
+		const testPhoneNumbers = (context.env.TEST_PHONE_NUMBERS ?? '')
+			.split(',')
+			.filter(Boolean)
+
+		const { isTest } = await verifyOtp(
+			context.env.KV_OTP,
+			phone,
+			code,
+			testPhoneNumbers,
+			context.env.TEST_OTP_CODE,
+		)
 
 		const posterClient = await api.clients.getClient(
 			context.env.POSTER_TOKEN,

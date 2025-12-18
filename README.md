@@ -10,6 +10,12 @@ React Native app for TOLO Coffee Shop built with Expo.
 - **Themes**: Light/dark mode
 - **OTA Updates**: Over-the-air updates with fingerprint runtime policy
 
+## Security
+
+- **Rate Limiting**: Rate limiting is configured via Cloudflare Page Rules to prevent abuse of authentication and API endpoints
+- **Authentication**: JWT-based authentication with secure HttpOnly cookies for web clients
+- **OTP Security**: Single-use OTP codes with TTL expiration stored in KV
+
 ## Quick Start
 
 ```bash

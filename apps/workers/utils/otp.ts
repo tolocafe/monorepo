@@ -1,10 +1,6 @@
 import { HTTPException } from 'hono/http-exception'
 
-import { testPhoneNumbers } from './constants'
-
 const DEFAULT_OTP_TTL = 300
-
-const TEST_OTP_CODE = process.env.TEST_OTP_CODE as string | undefined
 
 export function generateOtp(length = 6) {
 	return [...crypto.getRandomValues(new Uint32Array(length))]
@@ -16,6 +12,7 @@ export async function storeOtp(
 	kv: KVNamespace,
 	phone: string,
 	code: string,
+	testPhoneNumbers: string[],
 	ttl = DEFAULT_OTP_TTL,
 ) {
 	if (testPhoneNumbers.includes(phone)) return
@@ -23,12 +20,14 @@ export async function storeOtp(
 	await kv.put(phone, code, { expirationTtl: ttl })
 }
 
-export async function verifyOtp(kv: KVNamespace, phone: string, code: string) {
-	if (
-		testPhoneNumbers.includes(phone) &&
-		TEST_OTP_CODE &&
-		code === TEST_OTP_CODE
-	) {
+export async function verifyOtp(
+	kv: KVNamespace,
+	phone: string,
+	code: string,
+	testPhoneNumbers: string[],
+	testOtpCode?: string,
+) {
+	if (testPhoneNumbers.includes(phone) && testOtpCode && code === testOtpCode) {
 		return { isTest: true }
 	}
 
