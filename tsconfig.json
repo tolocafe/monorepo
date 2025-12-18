@@ -33,9 +33,8 @@
 		"eslint.config.mjs",
 		"vitest.config.mts",
 		".expo/types/**/*.ts",
-		"worker-configuration.d.ts",
-		"e2e/**/*.ts",
-		"playwright.config.ts"
+		"worker-configuration.d.ts"
 	],
+	"exclude": ["e2e/**/*", "playwright.config.ts"],
 	"files": ["src/index.ts", "apps/workers/index.ts"]
 }
