@@ -17,7 +17,7 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"strictNullChecks": true,
-		"types": ["jest", "node", "@playwright/test"]
+		"types": ["jest", "node"]
 	},
 	"extends": "expo/tsconfig.base",
 	"include": [

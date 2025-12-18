@@ -4,9 +4,10 @@ End-to-end tests using Playwright for desktop and mobile web.
 
 ## Prerequisites
 
-Playwright browsers must be installed. If not already installed, run:
+Playwright must be installed separately since it's not compatible with bun's package manager:
 
 ```bash
+npm install --no-save --legacy-peer-deps @playwright/test
 npx playwright install chromium
 ```
 

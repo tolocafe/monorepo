@@ -122,8 +122,6 @@
 		"@cloudflare/puppeteer": "^1.0.4",
 		"@cloudflare/vitest-pool-workers": "0.10.11",
 		"@eslint/js": "~9.39.1",
-		"@playwright/test": "1.48.2",
-		"playwright-core": "1.48.2",
 		"@lingui/babel-plugin-lingui-macro": "5.6.1",
 		"@lingui/metro-transformer": "~5.6.1",
 		"@react-native/metro-config": "0.81.1",
