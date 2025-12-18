@@ -35,10 +35,18 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 /**
  * Determine if the request is from a web browser based on Origin and User-Agent headers
  * 
- * NOTE: This is a convenience detection to decide whether to set HttpOnly cookies,
- * NOT a security boundary. The token is always returned in the response body for
- * native clients. This detection is purely for UX - web browsers benefit from
- * HttpOnly cookies while native apps use Bearer tokens.
+ * IMPORTANT: This is NOT a security mechanism and SHOULD NOT be used for authorization.
+ * This is purely a UX convenience to decide whether to set HttpOnly cookies for browsers.
+ * 
+ * Security notes:
+ * - User-Agent can be easily spoofed - this is acceptable here
+ * - The authentication token is ALWAYS returned in the response body
+ * - Native apps use the token from the response body with Bearer auth
+ * - Web browsers benefit from HttpOnly cookies for XSS protection
+ * - Both mechanisms are equally secure (cookies + Bearer tokens both validated via JWT)
+ * 
+ * If a malicious client spoofs User-Agent to get a cookie, they still need valid JWT
+ * and the cookie won't help them since they can't extract it (HttpOnly).
  */
 const isWebRequest = (context: Context): boolean => {
 	const origin = context.req.header('Origin')

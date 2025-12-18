@@ -22,6 +22,8 @@ import { getStripe } from '~workers/utils/stripe'
 
 import type { Bindings } from '../types'
 
+const SECONDS_PER_DAY = 86400
+
 type EventData =
 	| undefined
 	| {
@@ -329,7 +331,8 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				if (passesUpdatedSince) {
 					// Validate timestamp is a valid number within reasonable bounds
 					const timestamp = Number.parseInt(passesUpdatedSince, 10)
-					const maxFutureTimestamp = Math.floor(Date.now() / 1000) + 86400 // 24 hours in future
+					const maxFutureTimestamp =
+						Math.floor(Date.now() / 1000) + SECONDS_PER_DAY
 
 					if (
 						Number.isNaN(timestamp) ||
