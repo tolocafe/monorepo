@@ -34,6 +34,11 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 
 /**
  * Determine if the request is from a web browser based on Origin and User-Agent headers
+ * 
+ * NOTE: This is a convenience detection to decide whether to set HttpOnly cookies,
+ * NOT a security boundary. The token is always returned in the response body for
+ * native clients. This detection is purely for UX - web browsers benefit from
+ * HttpOnly cookies while native apps use Bearer tokens.
  */
 const isWebRequest = (context: Context): boolean => {
 	const origin = context.req.header('Origin')

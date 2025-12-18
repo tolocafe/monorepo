@@ -327,9 +327,15 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				const parameters: string[] = [deviceLibraryId, passTypeIdentifier]
 
 				if (passesUpdatedSince) {
-					// Validate timestamp is a valid number
+					// Validate timestamp is a valid number within reasonable bounds
 					const timestamp = Number.parseInt(passesUpdatedSince, 10)
-					if (Number.isNaN(timestamp) || timestamp < 0) {
+					const maxFutureTimestamp = Math.floor(Date.now() / 1000) + 86400 // 24 hours in future
+
+					if (
+						Number.isNaN(timestamp) ||
+						timestamp < 0 ||
+						timestamp > maxFutureTimestamp
+					) {
 						return context.json({}, 400)
 					}
 
@@ -703,9 +709,12 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			try {
 				parsedData = (JSON.parse(data) || null) as unknown as EventData
 			} catch (error) {
-				// Invalid JSON in webhook data - log and continue with null
+				// Invalid JSON in webhook data - log error but not the raw data to avoid leaking sensitive info
 				captureEvent({
-					extra: { data, error: error instanceof Error ? error.message : 'Unknown' },
+					extra: {
+						dataLength: data.length,
+						error: error instanceof Error ? error.message : 'Unknown',
+					},
 					level: 'warning',
 					message: 'Failed to parse webhook data JSON',
 				})

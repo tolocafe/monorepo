@@ -54,7 +54,11 @@ const clients = new Hono<{ Bindings: Bindings }>()
 		}
 
 		const clientId = Number.parseInt(id, 10)
-		if (Number.isNaN(clientId) || clientId <= 0) {
+		if (
+			Number.isNaN(clientId) ||
+			clientId <= 0 ||
+			clientId > Number.MAX_SAFE_INTEGER
+		) {
 			throw new HTTPException(400, { message: 'Invalid client ID' })
 		}
 
