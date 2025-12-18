@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { toCents, toISO } from './sync-transactions'
+import { toCents, toISO } from './sync/utils'
 
 describe('monetary helpers', () => {
 	it('converts string amounts to cents', () => {

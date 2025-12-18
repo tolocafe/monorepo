@@ -5,7 +5,7 @@ import { orderLines, transactions } from '~workers/db/schema'
 
 import type { DashTransaction } from '~common/api'
 
-import type { Database, SyncResult } from './sync-transactions'
+import type { Database, SyncResult } from './sync/transactions'
 
 export type CustomerLifecycleEvent =
 	| FirstTimeCustomerEvent

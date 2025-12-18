@@ -2,9 +2,10 @@ import * as Sentry from '@sentry/cloudflare'
 
 import { getDatabase } from '~workers/db/client'
 import processCustomerLifecycleEvents from '~workers/scheduled/process-lifecycle-events'
-import syncTransactions from '~workers/scheduled/sync-transactions'
 
 import type { Bindings } from '~workers/types'
+
+import syncTransactions from './sync/transactions'
 
 async function syncData(
 	_controller: ScheduledController,

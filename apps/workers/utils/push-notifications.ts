@@ -69,7 +69,11 @@ export async function sendPushNotifications(
 export async function sendPushNotificationToClient(
 	clientId: number,
 	database: D1Database,
-	message: { body: string; title: string },
+	message: {
+		body: string
+		data?: Record<string, unknown>
+		title: string
+	},
 ): Promise<{ failed: number; sent: number }> {
 	try {
 		const tokens = await getClientPushTokens(clientId, database)
@@ -80,6 +84,7 @@ export async function sendPushNotificationToClient(
 
 		const messages: ExpoPushMessage[] = tokens.map((token) => ({
 			body: message.body,
+			data: message.data,
 			title: message.title,
 			to: token,
 		}))
