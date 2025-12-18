@@ -36,14 +36,11 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 function getIsWebRequest(context: Context): boolean {
 	const origin = context.req.header('Origin')
 	const userAgent = context.req.header('User-Agent') ?? ''
+	const browserIdentifiers = ['Mozilla', 'Chrome', 'Safari', 'Firefox', 'Edge']
 
 	return (
 		origin !== undefined &&
-		(userAgent.includes('Mozilla') ||
-			userAgent.includes('Chrome') ||
-			userAgent.includes('Safari') ||
-			userAgent.includes('Firefox') ||
-			userAgent.includes('Edge'))
+		browserIdentifiers.some((identifier) => userAgent.includes(identifier))
 	)
 }
 
