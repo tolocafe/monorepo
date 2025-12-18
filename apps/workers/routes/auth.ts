@@ -17,6 +17,7 @@ import {
 } from '../utils/jwt'
 import { generateOtp, storeOtp, verifyOtp } from '../utils/otp'
 import { api, sendSms } from '../utils/poster'
+import { parseTestPhoneNumbers } from '../utils/constants'
 
 import type { Bindings } from '../types'
 
@@ -32,23 +33,7 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 	'name' in value &&
 	'token' in value
 
-/**
- * Determine if the request is from a web browser based on Origin and User-Agent headers
- * 
- * IMPORTANT: This is NOT a security mechanism and SHOULD NOT be used for authorization.
- * This is purely a UX convenience to decide whether to set HttpOnly cookies for browsers.
- * 
- * Security notes:
- * - User-Agent can be easily spoofed - this is acceptable here
- * - The authentication token is ALWAYS returned in the response body
- * - Native apps use the token from the response body with Bearer auth
- * - Web browsers benefit from HttpOnly cookies for XSS protection
- * - Both mechanisms are equally secure (cookies + Bearer tokens both validated via JWT)
- * 
- * If a malicious client spoofs User-Agent to get a cookie, they still need valid JWT
- * and the cookie won't help them since they can't extract it (HttpOnly).
- */
-const isWebRequest = (context: Context): boolean => {
+function getIsWebRequest(context: Context): boolean {
 	const origin = context.req.header('Origin')
 	const userAgent = context.req.header('User-Agent') ?? ''
 
@@ -128,12 +113,11 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		const code = generateOtp()
 
-		const testPhoneNumbers = (context.env.TEST_PHONE_NUMBERS ?? '')
-			.split(',')
-			.filter(Boolean)
-
 		await Promise.all([
-			storeOtp(context.env.KV_OTP, phone, code, testPhoneNumbers),
+			storeOtp(phone, code, {
+				kv: context.env.KV_OTP,
+				testPhoneNumbers: parseTestPhoneNumbers(context.env.TEST_PHONE_NUMBERS),
+			}),
 			sendSms(
 				{
 					accessKeyId: context.env.AWS_ACCESS_KEY_ID,
@@ -152,17 +136,11 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			await context.req.json(),
 		)
 
-		const testPhoneNumbers = (context.env.TEST_PHONE_NUMBERS ?? '')
-			.split(',')
-			.filter(Boolean)
-
-		const { isTest } = await verifyOtp(
-			context.env.KV_OTP,
-			phone,
-			code,
-			testPhoneNumbers,
-			context.env.TEST_OTP_CODE,
-		)
+		const { isTest } = await verifyOtp(phone, code, {
+			kv: context.env.KV_OTP,
+			testOtpCode: context.env.TEST_OTP_CODE,
+			testPhoneNumbers: parseTestPhoneNumbers(context.env.TEST_PHONE_NUMBERS),
+		})
 
 		const posterClient = await api.clients.getClient(
 			context.env.POSTER_TOKEN,
@@ -226,10 +204,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				: Promise.resolve(),
 		])
 
-		// Set HttpOnly cookie for web clients that accept cookies
 		const responseBody = { client: posterClient, token }
 
-		if (isWebRequest(context)) {
+		if (getIsWebRequest(context)) {
 			setCookie(
 				context,
 				'tolo_session',
@@ -311,8 +288,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			),
 		)
 
-		// Clear the HttpOnly cookie for web requests
-		if (isWebRequest(context)) {
+		if (getIsWebRequest(context)) {
 			deleteCookie(
 				context,
 				'tolo_session',
