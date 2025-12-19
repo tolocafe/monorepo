@@ -13,6 +13,7 @@ import {
 	CoffeesSection,
 	EventsSection,
 	PromotionsSection,
+	SectionErrorBoundary,
 } from '@/components/HomeSections'
 import {
 	categoriesQueryOptions,
@@ -92,13 +93,21 @@ export default function Menu() {
 				withPaddingEdges={['top', 'bottom']}
 				withTopGradient
 			>
-				<PromotionsSection />
+				<SectionErrorBoundary>
+					<PromotionsSection />
+				</SectionErrorBoundary>
 
-				<CategoriesSection />
+				<SectionErrorBoundary>
+					<CategoriesSection />
+				</SectionErrorBoundary>
 
-				<CoffeesSection />
+				<SectionErrorBoundary>
+					<CoffeesSection />
+				</SectionErrorBoundary>
 
-				<EventsSection />
+				<SectionErrorBoundary>
+					<EventsSection />
+				</SectionErrorBoundary>
 
 				<Paragraph align="center" style={styles.disclaimer}>
 					<Trans>

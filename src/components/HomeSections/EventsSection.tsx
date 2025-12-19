@@ -1,6 +1,7 @@
 import { FlatList, View } from 'react-native'
 
 import { Trans } from '@lingui/react/macro'
+import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
@@ -11,6 +12,16 @@ import { eventsQueryOptions } from '@/lib/queries/events'
 import type { Event } from '~common/api'
 
 const UniFlatList = withUnistyles(FlatList)
+
+const eventItemFallback = <View aria-hidden />
+
+const handleKeyExtractor = (item: unknown) => (item as Event).slug
+
+const handleRenderItem = ({ item }: { item: unknown }) => (
+	<ErrorBoundary fallback={eventItemFallback}>
+		<EventCard event={item as Event} />
+	</ErrorBoundary>
+)
 
 export function EventsSection() {
 	const { data } = useQuery(eventsQueryOptions)
@@ -28,8 +39,8 @@ export function EventsSection() {
 				contentContainerStyle={styles.eventsContainer}
 				data={data}
 				horizontal
-				keyExtractor={(item) => (item as Event).slug}
-				renderItem={({ item }) => <EventCard event={item as Event} />}
+				keyExtractor={handleKeyExtractor}
+				renderItem={handleRenderItem}
 				showsHorizontalScrollIndicator={false}
 			/>
 		</View>
