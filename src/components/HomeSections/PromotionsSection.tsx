@@ -1,6 +1,7 @@
 import { FlatList, View } from 'react-native'
 
 import { Trans } from '@lingui/react/macro'
+import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
@@ -12,8 +13,12 @@ import type { Promotion } from '~common/api'
 
 const UniFlatList = withUnistyles(FlatList)
 
+const promotionItemFallback = <View aria-hidden />
+
 const handleRenderItem = ({ item }: { item: unknown }) => (
-	<PromotionCard promotion={item as Promotion} />
+	<ErrorBoundary fallback={promotionItemFallback}>
+		<PromotionCard promotion={item as Promotion} />
+	</ErrorBoundary>
 )
 
 const handleKeyExtractor = (item: unknown) => (item as Promotion).promotion_id

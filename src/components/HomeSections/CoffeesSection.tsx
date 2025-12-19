@@ -1,6 +1,7 @@
 import { FlatList, View } from 'react-native'
 
 import { Trans } from '@lingui/react/macro'
+import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
@@ -12,6 +13,8 @@ import type { Coffee } from '@/lib/api'
 
 const UniFlatList = withUnistyles(FlatList)
 
+const coffeeItemFallback = <View aria-hidden />
+
 const handleGetItemLayout = (_item: unknown, index: number) => ({
 	index,
 	length: BUBBLE_SIZE,
@@ -19,7 +22,9 @@ const handleGetItemLayout = (_item: unknown, index: number) => ({
 })
 
 const handleRenderItem = ({ item }: { item: unknown }) => (
-	<CoffeeStoryBubble coffee={item as Coffee} />
+	<ErrorBoundary fallback={coffeeItemFallback}>
+		<CoffeeStoryBubble coffee={item as Coffee} />
+	</ErrorBoundary>
 )
 
 const handleKeyExtractor = (item: unknown) => (item as Coffee).slug
