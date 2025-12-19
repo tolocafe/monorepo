@@ -453,6 +453,8 @@ export type Promotion = {
 	image?: { url: string }
 	/** Promotion name */
 	name: string
+	/** Price in cents (e.g., "350" = $3.50) */
+	price?: string
 	/** Unique promotion ID */
 	promotion_id: string
 	/**

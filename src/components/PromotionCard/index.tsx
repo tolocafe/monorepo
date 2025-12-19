@@ -11,6 +11,7 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import Card from '@/components/Card'
 import { H4, Text } from '@/components/Text'
 import { getImageUrl } from '@/lib/image'
+import { formatPrice } from '@/lib/utils/price'
 
 import type { Promotion } from '@/lib/api'
 
@@ -68,6 +69,9 @@ export default function PromotionCard({ promotion }: Props) {
 								{promotion.summary}
 							</Text>
 						) : null}
+						{promotion.price ? (
+							<Text style={styles.price}>{formatPrice(promotion.price)}</Text>
+						) : null}
 					</View>
 				</Card>
 			</Pressable>
@@ -119,6 +123,11 @@ const styles = StyleSheet.create((theme, runtime) => {
 		},
 		pressable: {
 			flex: 1,
+		},
+		price: {
+			color: theme.colors.verde.interactive,
+			fontSize: theme.fontSizes.md,
+			fontWeight: '600',
 		},
 		summary: {
 			color: theme.colors.gray.solid,
