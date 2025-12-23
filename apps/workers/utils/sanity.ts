@@ -34,7 +34,7 @@ type Product = SanitySchema<
 		name: LocaleText | undefined
 		posterId: string
 		slug: LocaleText
-		tag: LocaleText | undefined
+		tag: 'FAVORITE' | 'NEW' | 'SEASONAL' | 'SPECIAL' | undefined
 	}
 >
 
