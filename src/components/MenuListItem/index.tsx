@@ -75,6 +75,11 @@ export default function MenuListItem(props: Props) {
 							) : (
 								<View aria-hidden style={styles.image} />
 							)}
+							{item.tag ? (
+								<View style={styles.tag}>
+									<Text style={styles.tagText}>{item.tag}</Text>
+								</View>
+							) : null}
 						</View>
 						<View style={styles.menuItemContent}>
 							<H4 numberOfLines={2}>{item.product_name}</H4>
@@ -140,6 +145,21 @@ const styles = StyleSheet.create((theme, runtime) => {
 			height: itemSize,
 			overflow: 'hidden',
 			width: '100%',
+		},
+		tag: {
+			backgroundColor: theme.colors.naranja.solid,
+			borderCurve: 'continuous',
+			borderRadius: theme.borderRadius.sm,
+			paddingHorizontal: theme.spacing.xs,
+			paddingVertical: 2,
+			position: 'absolute',
+			right: theme.spacing.xs,
+			top: theme.spacing.xs,
+		},
+		tagText: {
+			color: '#FFFFFF',
+			fontSize: theme.fontSizes.xs,
+			fontWeight: '600',
 		},
 	}
 })

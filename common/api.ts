@@ -428,6 +428,7 @@ export type Product = {
 		spot_id: string
 		visible: string
 	}[]
+	tag: string
 	tax_id: string
 	type: string
 	unit: string

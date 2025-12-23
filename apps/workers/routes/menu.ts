@@ -43,6 +43,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 				intensity: sanityProduct?.intensity,
 				name,
 				product_name: name,
+				tag: sanityProduct?.tag?.[language],
 			}
 		})
 
@@ -132,6 +133,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 				intensity: sanityProduct?.intensity,
 				name,
 				product_name: name,
+				tag: sanityProduct?.tag?.[language],
 			}
 
 			return context.json(body, 200, defaultJsonHeaders)
