@@ -1,5 +1,7 @@
 import { Pressable, View } from 'react-native'
 
+import { msg } from '@lingui/core/macro'
+import { useLingui } from '@lingui/react'
 import { Trans } from '@lingui/react/macro'
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
@@ -19,6 +21,13 @@ import type { Product } from '@/lib/api'
 
 const UniImage = withUnistyles(Image)
 
+const tagLabels = {
+	FAVORITE: msg`Favorite`,
+	NEW: msg`New`,
+	SEASONAL: msg`Seasonal`,
+	SPECIAL: msg`Special`,
+} as const
+
 type Props = {
 	item: Product
 }
@@ -29,6 +38,7 @@ export function getItemSize(screenWidth: number) {
 
 export default function MenuListItem(props: Props) {
 	const { item } = props
+	const { _ } = useLingui()
 
 	const scaleValue = useSharedValue(1)
 
@@ -75,9 +85,11 @@ export default function MenuListItem(props: Props) {
 							) : (
 								<View aria-hidden style={styles.image} />
 							)}
-							{item.tag ? (
+							{item.tag && item.tag in tagLabels ? (
 								<View style={styles.tag}>
-									<Text style={styles.tagText}>{item.tag}</Text>
+									<Text style={styles.tagText}>
+										{_(tagLabels[item.tag as keyof typeof tagLabels])}
+									</Text>
 								</View>
 							) : null}
 						</View>
@@ -148,18 +160,18 @@ const styles = StyleSheet.create((theme, runtime) => {
 		},
 		tag: {
 			backgroundColor: theme.colors.naranja.solid,
-			borderCurve: 'continuous',
-			borderRadius: theme.borderRadius.sm,
-			paddingHorizontal: theme.spacing.xs,
-			paddingVertical: 2,
+			borderRadius: theme.borderRadius.full,
+			paddingHorizontal: theme.spacing.sm,
+			paddingVertical: theme.spacing.xxs,
 			position: 'absolute',
-			right: theme.spacing.xs,
-			top: theme.spacing.xs,
+			right: theme.spacing.sm,
+			top: theme.spacing.sm,
 		},
 		tagText: {
 			color: '#FFFFFF',
 			fontSize: theme.fontSizes.xs,
 			fontWeight: '600',
+			textTransform: 'uppercase',
 		},
 	}
 })

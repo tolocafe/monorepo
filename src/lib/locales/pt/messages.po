@@ -31,12 +31,12 @@ msgstr "{0} - TOLO Bom Café"
 
 #. placeholder {0}: selectedDrinkType === 'birthday' ? 'Birthday' : 'Points'
 #. placeholder {1}: clientName || t`customer`
-#: src/app/(tabs)/team/redeem.tsx:194
+#: src/app/(tabs)/team/redeem.tsx:196
 msgid "{0} drink redeemed for {1}."
 msgstr ""
 
 #. placeholder {0}: clientData.points
-#: src/app/(tabs)/team/redeem.tsx:205
+#: src/app/(tabs)/team/redeem.tsx:207
 msgid "{0} points ({POINTS_PER_REDEMPTION} = ☕️)"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgstr "Conta"
 msgid "Active Sessions"
 msgstr "Sessões Ativas"
 
-#: src/app/(tabs)/orders/current.tsx:386
+#: src/app/(tabs)/orders/current.tsx:385
 msgid "Add any special instructions or requests..."
 msgstr "Adicione qualquer instrução ou pedido especial..."
 
@@ -102,11 +102,11 @@ msgstr "Adicione fundos à sua carteira TOLO para pagamentos rápidos e fáceis.
 msgid "Add to Order"
 msgstr "Adicionar ao Pedido"
 
-#: src/app/(tabs)/orders/current.tsx:368
+#: src/app/(tabs)/orders/current.tsx:367
 msgid "Additional"
 msgstr "Adicional"
 
-#: src/app/(tabs)/team/queue.tsx:202
+#: src/app/(tabs)/team/queue.tsx:209
 msgid "All"
 msgstr "Todos"
 
@@ -136,7 +136,7 @@ msgstr "App - TOLO"
 msgid "Apple Maps"
 msgstr "Apple Maps"
 
-#: src/app/(tabs)/orders/current.tsx:205
+#: src/app/(tabs)/orders/current.tsx:204
 msgid "Are you sure you want to clear this order? This action cannot be undone."
 msgstr "Tem certeza de que deseja limpar este pedido? Esta ação não pode ser desfeita."
 
@@ -152,12 +152,12 @@ msgstr "Saldo"
 msgid "Birthdate"
 msgstr "Data de nascimento"
 
-#: src/app/(tabs)/team/redeem.tsx:213
-#: src/app/(tabs)/team/redeem.tsx:231
+#: src/app/(tabs)/team/redeem.tsx:215
+#: src/app/(tabs)/team/redeem.tsx:233
 msgid "Birthday"
 msgstr ""
 
-#: src/app/(tabs)/team/redeem.tsx:244
+#: src/app/(tabs)/team/redeem.tsx:246
 msgid "Birthday drink already redeemed this year."
 msgstr ""
 
@@ -175,9 +175,9 @@ msgstr "Cafeína"
 
 #: src/app/(tabs)/more/app.tsx:41
 #: src/app/(tabs)/more/profile.tsx:107
-#: src/app/(tabs)/orders/current.tsx:155
-#: src/app/(tabs)/orders/current.tsx:207
-#: src/app/(tabs)/orders/current.tsx:323
+#: src/app/(tabs)/orders/current.tsx:154
+#: src/app/(tabs)/orders/current.tsx:206
+#: src/app/(tabs)/orders/current.tsx:322
 msgid "Cancel"
 msgstr "Cancelar"
 
@@ -190,7 +190,7 @@ msgstr "Alterar número de telefone"
 msgid "Channel"
 msgstr "Canal"
 
-#: src/app/(tabs)/orders/current.tsx:214
+#: src/app/(tabs)/orders/current.tsx:213
 msgid "Clear"
 msgstr "Limpar"
 
@@ -200,7 +200,7 @@ msgstr "Limpar"
 msgid "Clear Cache"
 msgstr "Limpar Cache"
 
-#: src/app/(tabs)/orders/current.tsx:204
+#: src/app/(tabs)/orders/current.tsx:203
 msgid "Clear Order"
 msgstr "Limpar Pedido"
 
@@ -212,7 +212,7 @@ msgstr "Limpe o cache do app para remover dados armazenados e recarregar conteú
 msgid "Clearing Cache..."
 msgstr "Limpando Cache..."
 
-#: src/app/(tabs)/team/redeem.tsx:296
+#: src/app/(tabs)/team/redeem.tsx:298
 msgid "Client ID"
 msgstr ""
 
@@ -235,7 +235,7 @@ msgstr "Código enviado"
 msgid "Come visit TOLO. Find our hours, address and quick links to your preferred maps app."
 msgstr "Venha visitar a TOLO. Encontre nossos horários, endereço e links rápidos para seu app de mapas preferido."
 
-#: src/app/(tabs)/team/redeem.tsx:273
+#: src/app/(tabs)/team/redeem.tsx:275
 msgid "Confirm Redemption"
 msgstr ""
 
@@ -247,7 +247,7 @@ msgstr "Contato"
 msgid "Continue"
 msgstr "Continuar"
 
-#: src/app/(tabs)/team/redeem.tsx:177
+#: src/app/(tabs)/team/redeem.tsx:179
 msgid "Could not find a customer with this ID. Please try again."
 msgstr ""
 
@@ -260,16 +260,16 @@ msgid "Current Balance"
 msgstr "Saldo Atual"
 
 #: src/app/(tabs)/orders/_layout.tsx:21
-#: src/app/(tabs)/orders/current.tsx:317
+#: src/app/(tabs)/orders/current.tsx:316
 #: src/app/(tabs)/orders/index.tsx:146
 msgid "Current Order"
 msgstr "Pedido Atual"
 
-#: src/app/(tabs)/team/redeem.tsx:196
+#: src/app/(tabs)/team/redeem.tsx:198
 msgid "customer"
 msgstr ""
 
-#: src/app/(tabs)/team/redeem.tsx:174
+#: src/app/(tabs)/team/redeem.tsx:176
 msgid "Customer Not Found"
 msgstr ""
 
@@ -290,7 +290,7 @@ msgstr "DD/MM/AAAA"
 msgid "Delete"
 msgstr "Excluir"
 
-#: src/app/(tabs)/team/queue.tsx:288
+#: src/app/(tabs)/team/queue.tsx:295
 msgid "Delivery"
 msgstr "Entrega"
 
@@ -362,7 +362,7 @@ msgstr "Digite seu nome completo"
 #: src/app/(tabs)/more/app.tsx:64
 #: src/app/(tabs)/more/profile.tsx:90
 #: src/app/(tabs)/orders/[id].tsx:51
-#: src/app/(tabs)/orders/current.tsx:75
+#: src/app/(tabs)/orders/current.tsx:74
 #: src/app/(tabs)/team/ticket.tsx:29
 #: src/app/sign-in.tsx:218
 #: src/app/sign-in.tsx:229
@@ -424,15 +424,19 @@ msgstr "Falha ao processar pagamento. Tente novamente."
 msgid "Failed to send code"
 msgstr "Falha ao enviar código"
 
-#: src/app/(tabs)/orders/current.tsx:73
+#: src/app/(tabs)/orders/current.tsx:72
 msgid "Failed to submit order. Please try again."
 msgstr "Falha ao enviar pedido. Tente novamente."
+
+#: src/components/MenuListItem/index.tsx:25
+msgid "Favorite"
+msgstr ""
 
 #: src/app/(tabs)/more/profile.tsx:140
 msgid "First name"
 msgstr "Primeiro nome"
 
-#: src/components/MenuListItem/index.tsx:86
+#: src/components/MenuListItem/index.tsx:105
 msgid "From {cost}"
 msgstr "A partir de {cost}"
 
@@ -471,7 +475,7 @@ msgstr "Em andamento"
 msgid "Information"
 msgstr "Informações"
 
-#: src/app/(tabs)/orders/current.tsx:146
+#: src/app/(tabs)/orders/current.tsx:145
 msgid "Insufficient Balance"
 msgstr "Saldo Insuficiente"
 
@@ -484,7 +488,7 @@ msgid "Invalid verification code"
 msgstr "Código de verificação inválido"
 
 #: src/app/(tabs)/orders/[id].tsx:147
-#: src/app/(tabs)/orders/current.tsx:349
+#: src/app/(tabs)/orders/current.tsx:348
 #: src/containers/table-bill-screen.tsx:304
 #: src/containers/table-bill-screen.web.tsx:234
 msgid "Items"
@@ -504,7 +508,7 @@ msgstr "Vamos criar sua conta com o número de telefone <0>{0}</0>"
 msgid "Loading bill..."
 msgstr "Carregando conta..."
 
-#: src/app/(tabs)/team/redeem.tsx:167
+#: src/app/(tabs)/team/redeem.tsx:169
 msgid "Loading customer..."
 msgstr ""
 
@@ -542,7 +546,7 @@ msgstr "Carregando..."
 msgid "Maintenance"
 msgstr "Manutenção"
 
-#: src/app/(tabs)/orders/current.tsx:376
+#: src/app/(tabs)/orders/current.tsx:375
 msgid "Maximum length is 2000 characters"
 msgstr "O comprimento máximo é de 2000 caracteres"
 
@@ -587,7 +591,11 @@ msgstr "Nome"
 msgid "name@example.com"
 msgstr "nome@exemplo.com"
 
-#: src/app/(tabs)/team/queue.tsx:423
+#: src/components/MenuListItem/index.tsx:26
+msgid "New"
+msgstr ""
+
+#: src/app/(tabs)/team/queue.tsx:430
 msgid "New orders will appear here"
 msgstr "Novos pedidos aparecerão aqui"
 
@@ -600,11 +608,11 @@ msgstr "Nenhuma conta ativa foi encontrada para esta mesa. Por favor, verifique 
 msgid "No active sessions found."
 msgstr "Nenhuma sessão ativa encontrada."
 
-#: src/app/(tabs)/team/redeem.tsx:246
+#: src/app/(tabs)/team/redeem.tsx:248
 msgid "No birthday on file."
 msgstr ""
 
-#: src/app/(tabs)/team/queue.tsx:420
+#: src/app/(tabs)/team/queue.tsx:427
 msgid "No orders in queue"
 msgstr "Nenhum pedido na fila"
 
@@ -612,14 +620,14 @@ msgstr "Nenhum pedido na fila"
 msgid "No orders yet"
 msgstr "Nenhum pedido ainda"
 
-#: src/app/(tabs)/team/redeem.tsx:132
-#: src/app/(tabs)/team/redeem.tsx:140
+#: src/app/(tabs)/team/redeem.tsx:134
+#: src/app/(tabs)/team/redeem.tsx:142
 #: src/app/(tabs)/team/ticket.tsx:41
 #: src/app/(tabs)/team/ticket.tsx:49
 msgid "Not Authorized"
 msgstr "Não Autorizado"
 
-#: src/app/(tabs)/team/redeem.tsx:253
+#: src/app/(tabs)/team/redeem.tsx:255
 msgid "Not enough points. Need {POINTS_PER_REDEMPTION} points for a free drink."
 msgstr ""
 
@@ -648,7 +656,7 @@ msgstr "Abrir localização no Apple Maps"
 msgid "Open location in Google Maps"
 msgstr "Abrir localização no Google Maps"
 
-#: src/app/(tabs)/team/redeem.tsx:289
+#: src/app/(tabs)/team/redeem.tsx:291
 msgid "or enter manually"
 msgstr ""
 
@@ -662,11 +670,11 @@ msgstr "Detalhe do Pedido"
 
 #: src/app/(tabs)/orders/[id].tsx:80
 #: src/app/(tabs)/orders/[id].tsx:85
-#: src/app/(tabs)/orders/current.tsx:302
+#: src/app/(tabs)/orders/current.tsx:301
 msgid "Order Not Found"
 msgstr "Pedido Não Encontrado"
 
-#: src/app/(tabs)/orders/current.tsx:92
+#: src/app/(tabs)/orders/current.tsx:91
 msgid "Order placed"
 msgstr "Pedido realizado"
 
@@ -692,7 +700,7 @@ msgstr "Página não encontrada - TOLO"
 msgid "Pay {0}"
 msgstr "Pagar {0}"
 
-#: src/app/(tabs)/orders/current.tsx:337
+#: src/app/(tabs)/orders/current.tsx:336
 msgid "Payment"
 msgstr "Pagamento"
 
@@ -778,7 +786,7 @@ msgstr "Qtd: {0}"
 
 #: src/app/(tabs)/team/_layout.tsx:23
 #: src/app/(tabs)/team/index.tsx:51
-#: src/app/(tabs)/team/queue.tsx:169
+#: src/app/(tabs)/team/queue.tsx:176
 msgid "Queue"
 msgstr "Fila"
 
@@ -788,8 +796,8 @@ msgstr "Receita"
 
 #: src/app/(tabs)/team/_layout.tsx:31
 #: src/app/(tabs)/team/index.tsx:66
-#: src/app/(tabs)/team/redeem.tsx:153
 #: src/app/(tabs)/team/redeem.tsx:155
+#: src/app/(tabs)/team/redeem.tsx:157
 msgid "Redeem"
 msgstr ""
 
@@ -797,7 +805,7 @@ msgstr ""
 msgid "Redemption Failed"
 msgstr ""
 
-#: src/app/(tabs)/team/redeem.tsx:191
+#: src/app/(tabs)/team/redeem.tsx:193
 msgid "Redemption Successful!"
 msgstr ""
 
@@ -825,19 +833,23 @@ msgstr "Salvo"
 msgid "Saving..."
 msgstr "Salvando..."
 
-#: src/app/(tabs)/team/redeem.tsx:282
+#: src/app/(tabs)/team/redeem.tsx:284
 msgid "Scan Card"
 msgstr ""
 
-#: src/app/(tabs)/team/redeem.tsx:221
+#: src/components/MenuListItem/index.tsx:27
+msgid "Seasonal"
+msgstr ""
+
+#: src/app/(tabs)/team/redeem.tsx:223
 msgid "Select Redemption"
 msgstr ""
 
-#: src/app/(tabs)/orders/current.tsx:410
+#: src/app/(tabs)/orders/current.tsx:409
 msgid "Send Order"
 msgstr "Enviar Pedido"
 
-#: src/app/(tabs)/orders/current.tsx:408
+#: src/app/(tabs)/orders/current.tsx:407
 msgid "Sending Order..."
 msgstr "Enviando Pedido..."
 
@@ -886,11 +898,15 @@ msgstr "Sair"
 msgid "Something went wrong. Please try again."
 msgstr "Algo deu errado. Tente novamente."
 
+#: src/components/MenuListItem/index.tsx:28
+msgid "Special"
+msgstr ""
+
 #: src/app/(tabs)/more/index.tsx:256
 msgid "Stores"
 msgstr "Lojas"
 
-#: src/app/(tabs)/team/redeem.tsx:305
+#: src/app/(tabs)/team/redeem.tsx:307
 msgid "Submit"
 msgstr ""
 
@@ -937,7 +953,7 @@ msgstr "Imposto"
 msgid "Team"
 msgstr "Equipe"
 
-#: src/app/(tabs)/orders/current.tsx:90
+#: src/app/(tabs)/orders/current.tsx:89
 msgid "Thanks! We'll start preparing it now."
 msgstr "Obrigado! Vamos começar a preparar agora."
 
@@ -945,7 +961,7 @@ msgstr "Obrigado! Vamos começar a preparar agora."
 msgid "The order you're looking for doesn't exist."
 msgstr "O pedido que você está procurando não existe."
 
-#: src/app/(tabs)/orders/current.tsx:307
+#: src/app/(tabs)/orders/current.tsx:306
 msgid "The requested order could not be found."
 msgstr "O pedido solicitado não pôde ser encontrado."
 
@@ -982,7 +998,7 @@ msgstr "Tickets"
 msgid "Tip"
 msgstr "Gorjeta"
 
-#: src/app/(tabs)/team/queue.tsx:279
+#: src/app/(tabs)/team/queue.tsx:286
 msgid "To Go"
 msgstr "Para viagem"
 
@@ -995,7 +1011,7 @@ msgid "TOLO menu, good coffee, espresso, latte, cappuccino, coffee shop menu"
 msgstr "Menu TOLO, bom café, espresso, latte, cappuccino, menu de cafeteria"
 
 #: src/app/(tabs)/more/_layout.tsx:25
-#: src/app/(tabs)/orders/current.tsx:151
+#: src/app/(tabs)/orders/current.tsx:150
 msgid "Top Up"
 msgstr "Recarregar"
 
@@ -1013,7 +1029,7 @@ msgid "Top Up With Card"
 msgstr "Recarregar com Cartão"
 
 #: src/app/(tabs)/orders/[id].tsx:209
-#: src/app/(tabs)/orders/current.tsx:358
+#: src/app/(tabs)/orders/current.tsx:357
 #: src/containers/table-bill-screen.tsx:344
 #: src/containers/table-bill-screen.web.tsx:274
 msgid "Total"
@@ -1023,7 +1039,7 @@ msgstr "Total"
 msgid "TripAdvisor"
 msgstr "TripAdvisor"
 
-#: src/app/(tabs)/team/redeem.tsx:182
+#: src/app/(tabs)/team/redeem.tsx:184
 msgid "Try Again"
 msgstr ""
 
@@ -1073,7 +1089,7 @@ msgstr "Visite-nos"
 msgid "Visit Us - TOLO Good Coffee"
 msgstr "Visite-nos - TOLO Bom Café"
 
-#: src/app/(tabs)/team/redeem.tsx:236
+#: src/app/(tabs)/team/redeem.tsx:238
 msgid "Visits"
 msgstr ""
 
@@ -1081,7 +1097,7 @@ msgstr ""
 msgid "Wallet"
 msgstr "Wallet"
 
-#: src/app/(tabs)/orders/current.tsx:341
+#: src/app/(tabs)/orders/current.tsx:340
 #: src/containers/top-up-screen.tsx:205
 msgid "Wallet Balance"
 msgstr "Saldo Wallet"
@@ -1113,11 +1129,11 @@ msgstr "Site"
 msgid "Welcome"
 msgstr "Bem-vindo"
 
-#: src/app/(tabs)/orders/current.tsx:147
+#: src/app/(tabs)/orders/current.tsx:146
 msgid "You don't have enough balance in your wallet. Please top up your wallet first."
 msgstr "Você não tem saldo suficiente na sua carteira. Por favor, recarregue sua carteira primeiro."
 
-#: src/app/(tabs)/team/redeem.tsx:143
+#: src/app/(tabs)/team/redeem.tsx:145
 #: src/app/(tabs)/team/ticket.tsx:52
 msgid "You need barista or owner access to use this tool."
 msgstr "Você precisa de acesso de barista ou proprietário para usar esta ferramenta."
