@@ -1,12 +1,10 @@
-import { Platform } from 'react-native'
-
 import * as SecureStore from 'expo-secure-store'
 import ky from 'ky'
 
 import { BASE_URL } from '@/lib/api'
 import { STORAGE_KEYS } from '@/lib/constants/storage'
-
-const isWeb = Platform.OS === 'web'
+import { getCurrentLocale } from '@/lib/locales/init'
+import { isWeb } from '@/lib/utils/device'
 
 /**
  * Gets the current auth token from platform-appropriate storage
@@ -63,6 +61,12 @@ export const publicClient = ky.create({
 				return response
 			},
 		],
+		beforeRequest: [
+			(request) => {
+				const locale = getCurrentLocale()
+				if (locale) request.headers.set('Accept-Language', locale)
+			},
+		],
 	},
 	prefixUrl: `${BASE_URL}/api`,
 })
@@ -79,6 +83,9 @@ export const privateClient = ky.create({
 	hooks: {
 		beforeRequest: [
 			async (request) => {
+				const locale = getCurrentLocale()
+				if (locale) request.headers.set('Accept-Language', locale)
+
 				// Web uses HttpOnly cookie; native uses Authorization header
 				if (isWeb) return request
 

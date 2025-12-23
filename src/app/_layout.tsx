@@ -39,15 +39,17 @@ export const unstable_settings = {
 	initialRouteName: '(tabs)',
 }
 
-Notifications.setNotificationHandler({
-	// eslint-disable-next-line @typescript-eslint/require-await
-	handleNotification: async () => ({
-		shouldPlaySound: true,
-		shouldSetBadge: true,
-		shouldShowBanner: true,
-		shouldShowList: true,
-	}),
-})
+if (Platform.OS !== 'web') {
+	Notifications.setNotificationHandler({
+		// eslint-disable-next-line @typescript-eslint/require-await
+		handleNotification: async () => ({
+			shouldPlaySound: true,
+			shouldSetBadge: true,
+			shouldShowBanner: true,
+			shouldShowList: true,
+		}),
+	})
+}
 
 function RootLayout() {
 	const colorScheme = useColorScheme()

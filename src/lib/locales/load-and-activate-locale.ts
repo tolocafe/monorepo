@@ -2,6 +2,7 @@ import { i18n } from '@lingui/core'
 import { Locale, LOCALE_KEY, languageStorage } from './utils'
 import * as Sentry from '@sentry/react-native'
 import { messages as esMessages } from '@/lib/locales/es/messages.po'
+import { queryClient } from '@/lib/query-client'
 
 export async function loadAndActivateLocale(locale: Locale): Promise<void> {
 	try {
@@ -36,6 +37,7 @@ export async function loadAndActivateLocale(locale: Locale): Promise<void> {
 				break
 		}
 
+		queryClient.invalidateQueries({ queryKey: ['menu'] })
 		languageStorage.set(LOCALE_KEY, locale)
 	} catch (error) {
 		Sentry.captureException(error, {

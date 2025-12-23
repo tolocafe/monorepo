@@ -1,13 +1,9 @@
-import { Platform } from 'react-native'
 import { getLocales } from 'expo-localization'
+
+import { canUseDOM, isDevice } from '@/lib/utils/device'
 
 import { loadAndActivateLocale } from './load-and-activate-locale'
 import { AVAILABLE_LOCALES, languageStorage, Locale, LOCALE_KEY } from './utils'
-
-const canUseDOM =
-	// eslint-disable-next-line unicorn/prefer-global-this, @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-deprecated
-	typeof window !== 'undefined' && window.document?.createElement != null
-const isDevice = Platform.OS === 'ios' || Platform.OS === 'android'
 
 function getDefaultLocale() {
 	const locale = getLocales()[0].languageCode?.slice(0, 2)
@@ -17,6 +13,14 @@ function getDefaultLocale() {
 	}
 
 	return 'es'
+}
+
+export function getCurrentLocale() {
+	if (isDevice || canUseDOM) {
+		return languageStorage.getString(LOCALE_KEY) ?? null
+	}
+
+	return getDefaultLocale()
 }
 
 const INITIAL_LOCALE = ((canUseDOM || isDevice

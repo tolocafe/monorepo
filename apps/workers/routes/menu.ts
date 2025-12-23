@@ -1,11 +1,11 @@
 import { Hono } from 'hono'
 
+import { defaultJsonHeaders } from '~workers/utils/headers'
+import { api } from '~workers/utils/poster'
+import sanity from '~workers/utils/sanity'
 import webflow from '~workers/utils/webflow'
 
-import { defaultJsonHeaders } from '../utils/headers'
-import { api } from '../utils/poster'
-
-import type { Bindings } from '../types'
+import type { Bindings } from '~workers/types'
 
 const menu = new Hono<{ Bindings: Bindings }>()
 	.get('/categories', async (context) => {
@@ -17,18 +17,47 @@ const menu = new Hono<{ Bindings: Bindings }>()
 	})
 
 	.get('/products', async (context) => {
-		const products = await api.menu.getMenuProducts(context.env.POSTER_TOKEN, {
-			type: 'products',
+		const language = context.get('language') as 'en' | 'es'
+
+		const [posterProducts, sanityProducts] = await Promise.all([
+			api.menu.getMenuProducts(context.env.POSTER_TOKEN, {
+				type: 'products',
+			}),
+			sanity.listProducts(context.env).catch(() => null),
+		])
+
+		// eslint-disable-next-line no-console
+		console.log(sanityProducts)
+
+		const body = posterProducts.map((product) => {
+			const sanityProduct = sanityProducts?.find(
+				(sanityProduct) => sanityProduct.posterId === product.product_id,
+			)
+
+			const name = sanityProduct?.name?.[language] ?? product.product_name
+
+			return {
+				...product,
+				caffeine: sanityProduct?.caffeine,
+				excerpt: sanityProduct?.excerpt?.[language],
+				intensity: sanityProduct?.intensity,
+				name,
+				product_name: name,
+			}
 		})
 
-		return context.json(products, 200, defaultJsonHeaders)
+		return context.json(body, 200, defaultJsonHeaders)
 	})
 
 	.get('/promotions', async (context) => {
-		const [posPromotions, webflowPromotions] = await Promise.all([
-			api.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
-			webflow.collections.listPromotions(context.env).catch(() => []),
-		])
+		// const _language = context.get('language')
+
+		const [posterPromotions, webflowPromotions, _sanityPromotions] =
+			await Promise.all([
+				api.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
+				webflow.collections.listPromotions(context.env).catch(() => []),
+				sanity.listPromotions(context.env).catch(() => []),
+			])
 
 		const webflowById = webflowPromotions?.reduce(
 			(accumulator, item) => {
@@ -41,7 +70,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 			{} as Record<string, (typeof webflowPromotions)[number]>,
 		)
 
-		const merged = posPromotions.map((promotion) => {
+		const merged = posterPromotions.map((promotion) => {
 			const webflowItem = webflowById?.[
 				promotion.promotion_id as keyof typeof webflowById
 			] as Record<string, unknown> | undefined
@@ -66,6 +95,8 @@ const menu = new Hono<{ Bindings: Bindings }>()
 	})
 
 	.get('/products/:id', async (context) => {
+		const language = context.get('language') as 'en' | 'es'
+
 		const productId = context.req.param('id')
 
 		if (!productId) {
@@ -79,18 +110,31 @@ const menu = new Hono<{ Bindings: Bindings }>()
 		try {
 			const collectionItemId = await context.env.KV_CMS.get(productId)
 
-			const [collectionItem, product] = await Promise.all([
+			const [posterProduct, webflowProduct, sanityProduct] = await Promise.all([
+				api.menu.getProduct(context.env.POSTER_TOKEN, productId),
 				collectionItemId
 					? webflow.collections.getProduct(context.env, collectionItemId)
 					: Promise.resolve(null),
-				api.menu.getProduct(context.env.POSTER_TOKEN, productId),
+				sanity.getProduct(context.env, productId).catch(() => null),
 			])
 
-			return context.json(
-				{ ...collectionItem, ...product },
-				200,
-				defaultJsonHeaders,
-			)
+			const name =
+				sanityProduct?.name?.[language] ||
+				webflowProduct?.name ||
+				posterProduct.product_name
+
+			const body = {
+				...webflowProduct,
+				...posterProduct,
+				caffeine: sanityProduct?.caffeine,
+				description: sanityProduct?.description?.[language],
+				excerpt: sanityProduct?.excerpt?.[language],
+				intensity: sanityProduct?.intensity,
+				name,
+				product_name: name,
+			}
+
+			return context.json(body, 200, defaultJsonHeaders)
 		} catch {
 			return context.json(
 				{ error: 'Failed to fetch product details' },

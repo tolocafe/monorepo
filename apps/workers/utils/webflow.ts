@@ -1,6 +1,6 @@
 import type { Bindings } from '~workers/types'
 
-const BASE_WEBFLOW_URL = 'https://api.webflow.com/v2'
+const WEBFLOW_BASE_URL = 'https://api.webflow.com/v2'
 
 const webflow = {
 	collections: {
@@ -8,7 +8,7 @@ const webflow = {
 			const collectionId = environment.WEBFLOW_COFFEES_COLLECTION_ID
 
 			const data = await fetch(
-				`${BASE_WEBFLOW_URL}/collections/${collectionId}/items/${itemId}/live`,
+				`${WEBFLOW_BASE_URL}/collections/${collectionId}/items/${itemId}/live`,
 				{
 					headers: { Authorization: `Bearer ${environment.WEBFLOW_API_TOKEN}` },
 				},
@@ -23,7 +23,7 @@ const webflow = {
 			const collectionId = environment.WEBFLOW_EVENTS_COLLECTION_ID
 
 			const data = await fetch(
-				`${BASE_WEBFLOW_URL}/collections/${collectionId}/items/${itemId}/live`,
+				`${WEBFLOW_BASE_URL}/collections/${collectionId}/items/${itemId}/live`,
 				{
 					headers: { Authorization: `Bearer ${environment.WEBFLOW_API_TOKEN}` },
 				},
@@ -38,7 +38,7 @@ const webflow = {
 			const collectionId = environment.WEBFLOW_MENU_COLLECTION_ID
 
 			const data = await fetch(
-				`${BASE_WEBFLOW_URL}/collections/${collectionId}/items/${itemId}/live`,
+				`${WEBFLOW_BASE_URL}/collections/${collectionId}/items/${itemId}/live`,
 				{
 					headers: { Authorization: `Bearer ${environment.WEBFLOW_API_TOKEN}` },
 				},
@@ -54,7 +54,7 @@ const webflow = {
 			const collectionId = environment.WEBFLOW_COFFEES_COLLECTION_ID
 
 			const data = await fetch(
-				`${BASE_WEBFLOW_URL}/collections/${collectionId}/items/live`,
+				`${WEBFLOW_BASE_URL}/collections/${collectionId}/items/live`,
 				{
 					headers: { Authorization: `Bearer ${environment.WEBFLOW_API_TOKEN}` },
 				},
@@ -72,7 +72,7 @@ const webflow = {
 			const collectionId = environment.WEBFLOW_EVENTS_COLLECTION_ID
 
 			const data = await fetch(
-				`${BASE_WEBFLOW_URL}/collections/${collectionId}/items/live`,
+				`${WEBFLOW_BASE_URL}/collections/${collectionId}/items/live`,
 				{
 					headers: { Authorization: `Bearer ${environment.WEBFLOW_API_TOKEN}` },
 				},
@@ -90,7 +90,7 @@ const webflow = {
 			const collectionId = environment.WEBFLOW_PROMOTIONS_COLLECTION_ID
 
 			const data = await fetch(
-				`${BASE_WEBFLOW_URL}/collections/${collectionId}/items/live`,
+				`${WEBFLOW_BASE_URL}/collections/${collectionId}/items/live`,
 				{
 					headers: { Authorization: `Bearer ${environment.WEBFLOW_API_TOKEN}` },
 				},

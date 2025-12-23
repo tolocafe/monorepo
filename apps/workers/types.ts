@@ -29,10 +29,12 @@ export type Bindings = Cloudflare.Env & {
 	POSTER_ACCOUNT_NUMBER: string
 	POSTER_APPLICATION_SECRET: string
 	POSTER_TOKEN: string
+	SANITY_API_VERSION: string
+	SANITY_PROJECT_ID: string
+
 	SENTRY_DSN: string
 	/** Passkit */
 	SIGNER_CERT: string
-
 	/** Passkit */
 	SIGNER_KEY: string
 	/** Passkit */
@@ -44,6 +46,7 @@ export type Bindings = Cloudflare.Env & {
 	WEBFLOW_API_TOKEN: string
 	WEBFLOW_COFFEES_COLLECTION_ID: string
 	WEBFLOW_EVENTS_COLLECTION_ID: string
+
 	WEBFLOW_MENU_COLLECTION_ID: string
 	WEBFLOW_PROMOTIONS_COLLECTION_ID: string
 	/** Passkit */

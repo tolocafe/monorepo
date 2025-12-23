@@ -3,6 +3,7 @@ import { captureEvent } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
+import { languageDetector } from 'hono/language'
 
 import auth from './routes/auth'
 import broadcast from './routes/broadcast'
@@ -28,6 +29,12 @@ const app = new Hono<{ Bindings: Bindings }>().basePath('/api')
 const TOLO_DOMAIN = 'tolo.cafe'
 
 app
+	.use(
+		languageDetector({
+			fallbackLanguage: 'es',
+			supportedLanguages: ['en', 'es'],
+		}),
+	)
 	.use(
 		'*',
 		cors({

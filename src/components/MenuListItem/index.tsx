@@ -78,8 +78,10 @@ export default function MenuListItem(props: Props) {
 						</View>
 						<View style={styles.menuItemContent}>
 							<H4 numberOfLines={2}>{item.product_name}</H4>
-							{item.product_production_description ? (
-								<Text>{item.product_production_description}</Text>
+							{item.excerpt ? (
+								<Text numberOfLines={2} style={styles.excerpt}>
+									{item.excerpt}
+								</Text>
 							) : null}
 							<View style={styles.menuItemFooter}>
 								<Text>
@@ -99,6 +101,10 @@ const styles = StyleSheet.create((theme, runtime) => {
 	const ADD_TO_BAG_BUTTON_SIZE = 36
 
 	return {
+		excerpt: {
+			color: theme.colors.gray.text,
+			fontSize: theme.fontSizes.sm,
+		},
 		image: {
 			flex: 1,
 			objectFit: 'cover',
@@ -118,13 +124,12 @@ const styles = StyleSheet.create((theme, runtime) => {
 			gap: theme.spacing.xs,
 			justifyContent: 'space-between',
 			padding: 10,
-			paddingRight: ADD_TO_BAG_BUTTON_SIZE + theme.spacing.md,
 			paddingVertical: theme.spacing.sm,
 		},
 		menuItemFooter: {
 			alignItems: 'center',
 			flexDirection: 'row',
-			justifyContent: 'space-between',
+			justifyContent: 'flex-end',
 			minHeight: ADD_TO_BAG_BUTTON_SIZE,
 		},
 		menuItemImageContainer: {

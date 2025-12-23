@@ -64,7 +64,7 @@ export default function PromotionCard({ promotion }: Props) {
 					<View style={styles.content}>
 						<H4 numberOfLines={2}>{promotion.name}</H4>
 						{promotion.summary ? (
-							<Text numberOfLines={2} style={styles.summary}>
+							<Text numberOfLines={2} style={styles.excerpt}>
 								{promotion.summary}
 							</Text>
 						) : null}
@@ -100,6 +100,10 @@ const styles = StyleSheet.create((theme, runtime) => {
 			justifyContent: 'center',
 			padding: theme.spacing.md,
 		},
+		excerpt: {
+			color: theme.colors.gray.solid,
+			fontSize: theme.fontSizes.sm,
+		},
 		image: {
 			flex: 1,
 			objectFit: 'cover',
@@ -119,10 +123,6 @@ const styles = StyleSheet.create((theme, runtime) => {
 		},
 		pressable: {
 			flex: 1,
-		},
-		summary: {
-			color: theme.colors.gray.solid,
-			fontSize: theme.fontSizes.sm,
 		},
 	}
 })

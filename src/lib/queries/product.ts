@@ -16,5 +16,5 @@ export const productQueryOptions = (productId: string) =>
 			return product
 		},
 		queryFn: () => api.menu.getProduct(productId),
-		queryKey: ['product', productId] as const,
+		queryKey: ['menu', 'products', productId] as const,
 	})

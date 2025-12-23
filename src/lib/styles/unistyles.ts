@@ -64,14 +64,16 @@ const lightTheme = {
 		},
 	},
 	fontSizes: {
-		lg: 18,
 		/** body, p, text input  */
+		/* eslint-disable perfectionist/sort-objects */
+		xs: 14,
+		sm: 15,
 		md: 16,
-		sm: 14,
+		lg: 18,
 		xl: 20,
-		xs: 12,
 		xxl: 24,
 		xxxl: 32,
+		/* eslint-enable perfectionist/sort-objects */
 	} as const,
 	fontWeights: {
 		bold: '700',

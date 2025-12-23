@@ -9,9 +9,9 @@ import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
 import {
-	CategoriesSection,
 	CoffeesSection,
 	EventsSection,
+	MenuSection,
 	PromotionsSection,
 } from '@/components/HomeSections'
 import {
@@ -94,7 +94,7 @@ export default function Menu() {
 			>
 				<PromotionsSection />
 
-				<CategoriesSection />
+				<MenuSection />
 
 				<CoffeesSection />
 

@@ -395,6 +395,7 @@ export type Product = {
 	cost_netto: string
 	description?: string
 	different_spots_prices: string
+	excerpt: string | undefined
 	fiscal: string
 	group_modifications?: PosterModificationGroup[]
 	hidden: string
