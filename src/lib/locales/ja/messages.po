@@ -33,12 +33,12 @@ msgstr "{0} - TOLOグッドコーヒー"
 #. placeholder {1}: clientName || t`customer`
 #: src/app/(tabs)/team/redeem.tsx:196
 msgid "{0} drink redeemed for {1}."
-msgstr ""
+msgstr "{0}ドリンクを{1}様に交換しました。"
 
 #. placeholder {0}: clientData.points
 #: src/app/(tabs)/team/redeem.tsx:207
 msgid "{0} points ({POINTS_PER_REDEMPTION} = ☕️)"
-msgstr ""
+msgstr "{0} ポイント ({POINTS_PER_REDEMPTION} = ☕️)"
 
 #. placeholder {0}: order.processing_status === 10 && 'Open'
 #. placeholder {1}: order.processing_status === 20 && 'Preparing'
@@ -120,7 +120,7 @@ msgstr "金額"
 
 #: src/app/(tabs)/team/redeem.tsx:54
 msgid "An error occurred"
-msgstr ""
+msgstr "エラーが発生しました"
 
 #: src/app/(tabs)/more/_layout.tsx:21
 #: src/app/(tabs)/more/index.tsx:362
@@ -155,11 +155,11 @@ msgstr "生年月日"
 #: src/app/(tabs)/team/redeem.tsx:215
 #: src/app/(tabs)/team/redeem.tsx:233
 msgid "Birthday"
-msgstr ""
+msgstr "誕生日"
 
 #: src/app/(tabs)/team/redeem.tsx:246
 msgid "Birthday drink already redeemed this year."
-msgstr ""
+msgstr "今年の誕生日ドリンクは既に交換済みです。"
 
 #: src/app/(tabs)/more/visit-us.tsx:41
 msgid "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
@@ -214,7 +214,7 @@ msgstr "キャッシュをクリア中..."
 
 #: src/app/(tabs)/team/redeem.tsx:298
 msgid "Client ID"
-msgstr ""
+msgstr "顧客ID"
 
 #: src/app/sign-in.tsx:277
 #: src/containers/table-bill-screen.tsx:246
@@ -237,7 +237,7 @@ msgstr "TOLOにお越しください。営業時間、住所、お好みのマ�
 
 #: src/app/(tabs)/team/redeem.tsx:275
 msgid "Confirm Redemption"
-msgstr ""
+msgstr "交換を確認"
 
 #: src/app/(tabs)/more/index.tsx:246
 msgid "Contact"
@@ -249,7 +249,7 @@ msgstr "継続"
 
 #: src/app/(tabs)/team/redeem.tsx:179
 msgid "Could not find a customer with this ID. Please try again."
-msgstr ""
+msgstr "このIDの顧客が見つかりませんでした。もう一度お試しください。"
 
 #: src/app/sign-in.tsx:360
 msgid "Create account"
@@ -267,15 +267,15 @@ msgstr "現在の注文"
 
 #: src/app/(tabs)/team/redeem.tsx:198
 msgid "customer"
-msgstr ""
+msgstr "お客様"
 
 #: src/app/(tabs)/team/redeem.tsx:176
 msgid "Customer Not Found"
-msgstr ""
+msgstr "顧客が見つかりません"
 
 #: src/app/(tabs)/team/index.tsx:57
 msgid "Customers"
-msgstr ""
+msgstr "顧客"
 
 #: src/app/sign-in.tsx:410
 msgid "Date of birth (optional)"
@@ -430,7 +430,7 @@ msgstr "注文の送信に失敗しました。もう一度お試しください
 
 #: src/components/MenuListItem/index.tsx:25
 msgid "Favorite"
-msgstr ""
+msgstr "お気に入り"
 
 #: src/app/(tabs)/more/profile.tsx:140
 msgid "First name"
@@ -510,7 +510,7 @@ msgstr "会計を読み込み中..."
 
 #: src/app/(tabs)/team/redeem.tsx:169
 msgid "Loading customer..."
-msgstr ""
+msgstr "顧客を読み込み中..."
 
 #: src/components/HomeSections/MenuSection.tsx:84
 msgid "Loading menu..."
@@ -593,7 +593,7 @@ msgstr "name@example.com"
 
 #: src/components/MenuListItem/index.tsx:26
 msgid "New"
-msgstr ""
+msgstr "新着"
 
 #: src/app/(tabs)/team/queue.tsx:430
 msgid "New orders will appear here"
@@ -610,7 +610,7 @@ msgstr "アクティブなセッションが見つかりませんでした。"
 
 #: src/app/(tabs)/team/redeem.tsx:248
 msgid "No birthday on file."
-msgstr ""
+msgstr "誕生日が登録されていません。"
 
 #: src/app/(tabs)/team/queue.tsx:427
 msgid "No orders in queue"
@@ -629,7 +629,7 @@ msgstr "権限がありません"
 
 #: src/app/(tabs)/team/redeem.tsx:255
 msgid "Not enough points. Need {POINTS_PER_REDEMPTION} points for a free drink."
-msgstr ""
+msgstr "ポイントが不足しています。無料ドリンクには{POINTS_PER_REDEMPTION}ポイントが必要です。"
 
 #: src/app/(tabs)/more/index.tsx:210
 msgid "Not provided"
@@ -658,7 +658,7 @@ msgstr "Google Mapsで位置を開く"
 
 #: src/app/(tabs)/team/redeem.tsx:291
 msgid "or enter manually"
-msgstr ""
+msgstr "または手動で入力"
 
 #: src/app/(tabs)/orders/[id].tsx:102
 msgid "Order {id}"
@@ -799,15 +799,15 @@ msgstr "レシピ"
 #: src/app/(tabs)/team/redeem.tsx:155
 #: src/app/(tabs)/team/redeem.tsx:157
 msgid "Redeem"
-msgstr ""
+msgstr "交換"
 
 #: src/app/(tabs)/team/redeem.tsx:53
 msgid "Redemption Failed"
-msgstr ""
+msgstr "交換失敗"
 
 #: src/app/(tabs)/team/redeem.tsx:193
 msgid "Redemption Successful!"
-msgstr ""
+msgstr "交換成功！"
 
 #: src/components/HomeSections/MenuSection.tsx:97
 msgid "Retry"
@@ -835,15 +835,15 @@ msgstr "保存中..."
 
 #: src/app/(tabs)/team/redeem.tsx:284
 msgid "Scan Card"
-msgstr ""
+msgstr "カードをスキャン"
 
 #: src/components/MenuListItem/index.tsx:27
 msgid "Seasonal"
-msgstr ""
+msgstr "季節限定"
 
 #: src/app/(tabs)/team/redeem.tsx:223
 msgid "Select Redemption"
-msgstr ""
+msgstr "交換を選択"
 
 #: src/app/(tabs)/orders/current.tsx:409
 msgid "Send Order"
@@ -900,7 +900,7 @@ msgstr "問題が発生しました。もう一度お試しください。"
 
 #: src/components/MenuListItem/index.tsx:28
 msgid "Special"
-msgstr ""
+msgstr "スペシャル"
 
 #: src/app/(tabs)/more/index.tsx:256
 msgid "Stores"
@@ -908,7 +908,7 @@ msgstr "店舗"
 
 #: src/app/(tabs)/team/redeem.tsx:307
 msgid "Submit"
-msgstr ""
+msgstr "送信"
 
 #: src/app/(tabs)/orders/[id].tsx:177
 #: src/containers/table-bill-screen.tsx:330
@@ -1041,7 +1041,7 @@ msgstr "TripAdvisor"
 
 #: src/app/(tabs)/team/redeem.tsx:184
 msgid "Try Again"
-msgstr ""
+msgstr "再試行"
 
 #: src/components/phone-number-input/index.tsx:75
 msgid "United States (+1)"
@@ -1091,7 +1091,7 @@ msgstr "店舗情報 - TOLOグッドコーヒー"
 
 #: src/app/(tabs)/team/redeem.tsx:238
 msgid "Visits"
-msgstr ""
+msgstr "訪問"
 
 #: src/app/(tabs)/more/index.tsx:159
 msgid "Wallet"

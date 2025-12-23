@@ -33,12 +33,12 @@ msgstr "{0} - TOLO Bom Café"
 #. placeholder {1}: clientName || t`customer`
 #: src/app/(tabs)/team/redeem.tsx:196
 msgid "{0} drink redeemed for {1}."
-msgstr ""
+msgstr "Bebida de {0} trocada para {1}."
 
 #. placeholder {0}: clientData.points
 #: src/app/(tabs)/team/redeem.tsx:207
 msgid "{0} points ({POINTS_PER_REDEMPTION} = ☕️)"
-msgstr ""
+msgstr "{0} pontos ({POINTS_PER_REDEMPTION} = ☕️)"
 
 #. placeholder {0}: order.processing_status === 10 && 'Open'
 #. placeholder {1}: order.processing_status === 20 && 'Preparing'
@@ -120,7 +120,7 @@ msgstr "Valor"
 
 #: src/app/(tabs)/team/redeem.tsx:54
 msgid "An error occurred"
-msgstr ""
+msgstr "Ocorreu um erro"
 
 #: src/app/(tabs)/more/_layout.tsx:21
 #: src/app/(tabs)/more/index.tsx:362
@@ -155,11 +155,11 @@ msgstr "Data de nascimento"
 #: src/app/(tabs)/team/redeem.tsx:215
 #: src/app/(tabs)/team/redeem.tsx:233
 msgid "Birthday"
-msgstr ""
+msgstr "Aniversário"
 
 #: src/app/(tabs)/team/redeem.tsx:246
 msgid "Birthday drink already redeemed this year."
-msgstr ""
+msgstr "Bebida de aniversário já foi trocada este ano."
 
 #: src/app/(tabs)/more/visit-us.tsx:41
 msgid "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
@@ -214,7 +214,7 @@ msgstr "Limpando Cache..."
 
 #: src/app/(tabs)/team/redeem.tsx:298
 msgid "Client ID"
-msgstr ""
+msgstr "ID do Cliente"
 
 #: src/app/sign-in.tsx:277
 #: src/containers/table-bill-screen.tsx:246
@@ -237,7 +237,7 @@ msgstr "Venha visitar a TOLO. Encontre nossos horários, endereço e links rápi
 
 #: src/app/(tabs)/team/redeem.tsx:275
 msgid "Confirm Redemption"
-msgstr ""
+msgstr "Confirmar Troca"
 
 #: src/app/(tabs)/more/index.tsx:246
 msgid "Contact"
@@ -249,7 +249,7 @@ msgstr "Continuar"
 
 #: src/app/(tabs)/team/redeem.tsx:179
 msgid "Could not find a customer with this ID. Please try again."
-msgstr ""
+msgstr "Não foi possível encontrar um cliente com este ID. Tente novamente."
 
 #: src/app/sign-in.tsx:360
 msgid "Create account"
@@ -267,15 +267,15 @@ msgstr "Pedido Atual"
 
 #: src/app/(tabs)/team/redeem.tsx:198
 msgid "customer"
-msgstr ""
+msgstr "cliente"
 
 #: src/app/(tabs)/team/redeem.tsx:176
 msgid "Customer Not Found"
-msgstr ""
+msgstr "Cliente não encontrado"
 
 #: src/app/(tabs)/team/index.tsx:57
 msgid "Customers"
-msgstr ""
+msgstr "Clientes"
 
 #: src/app/sign-in.tsx:410
 msgid "Date of birth (optional)"
@@ -430,7 +430,7 @@ msgstr "Falha ao enviar pedido. Tente novamente."
 
 #: src/components/MenuListItem/index.tsx:25
 msgid "Favorite"
-msgstr ""
+msgstr "Favorito"
 
 #: src/app/(tabs)/more/profile.tsx:140
 msgid "First name"
@@ -510,7 +510,7 @@ msgstr "Carregando conta..."
 
 #: src/app/(tabs)/team/redeem.tsx:169
 msgid "Loading customer..."
-msgstr ""
+msgstr "Carregando cliente..."
 
 #: src/components/HomeSections/MenuSection.tsx:84
 msgid "Loading menu..."
@@ -593,7 +593,7 @@ msgstr "nome@exemplo.com"
 
 #: src/components/MenuListItem/index.tsx:26
 msgid "New"
-msgstr ""
+msgstr "Novo"
 
 #: src/app/(tabs)/team/queue.tsx:430
 msgid "New orders will appear here"
@@ -610,7 +610,7 @@ msgstr "Nenhuma sessão ativa encontrada."
 
 #: src/app/(tabs)/team/redeem.tsx:248
 msgid "No birthday on file."
-msgstr ""
+msgstr "Sem data de aniversário registrada."
 
 #: src/app/(tabs)/team/queue.tsx:427
 msgid "No orders in queue"
@@ -629,7 +629,7 @@ msgstr "Não Autorizado"
 
 #: src/app/(tabs)/team/redeem.tsx:255
 msgid "Not enough points. Need {POINTS_PER_REDEMPTION} points for a free drink."
-msgstr ""
+msgstr "Pontos insuficientes. Precisa de {POINTS_PER_REDEMPTION} pontos para uma bebida grátis."
 
 #: src/app/(tabs)/more/index.tsx:210
 msgid "Not provided"
@@ -658,7 +658,7 @@ msgstr "Abrir localização no Google Maps"
 
 #: src/app/(tabs)/team/redeem.tsx:291
 msgid "or enter manually"
-msgstr ""
+msgstr "ou digite manualmente"
 
 #: src/app/(tabs)/orders/[id].tsx:102
 msgid "Order {id}"
@@ -799,15 +799,15 @@ msgstr "Receita"
 #: src/app/(tabs)/team/redeem.tsx:155
 #: src/app/(tabs)/team/redeem.tsx:157
 msgid "Redeem"
-msgstr ""
+msgstr "Trocar"
 
 #: src/app/(tabs)/team/redeem.tsx:53
 msgid "Redemption Failed"
-msgstr ""
+msgstr "Troca Falhada"
 
 #: src/app/(tabs)/team/redeem.tsx:193
 msgid "Redemption Successful!"
-msgstr ""
+msgstr "Troca bem-sucedida!"
 
 #: src/components/HomeSections/MenuSection.tsx:97
 msgid "Retry"
@@ -835,15 +835,15 @@ msgstr "Salvando..."
 
 #: src/app/(tabs)/team/redeem.tsx:284
 msgid "Scan Card"
-msgstr ""
+msgstr "Escanear Cartão"
 
 #: src/components/MenuListItem/index.tsx:27
 msgid "Seasonal"
-msgstr ""
+msgstr "Sazonal"
 
 #: src/app/(tabs)/team/redeem.tsx:223
 msgid "Select Redemption"
-msgstr ""
+msgstr "Selecionar Troca"
 
 #: src/app/(tabs)/orders/current.tsx:409
 msgid "Send Order"
@@ -900,7 +900,7 @@ msgstr "Algo deu errado. Tente novamente."
 
 #: src/components/MenuListItem/index.tsx:28
 msgid "Special"
-msgstr ""
+msgstr "Especial"
 
 #: src/app/(tabs)/more/index.tsx:256
 msgid "Stores"
@@ -908,7 +908,7 @@ msgstr "Lojas"
 
 #: src/app/(tabs)/team/redeem.tsx:307
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: src/app/(tabs)/orders/[id].tsx:177
 #: src/containers/table-bill-screen.tsx:330
@@ -1041,7 +1041,7 @@ msgstr "TripAdvisor"
 
 #: src/app/(tabs)/team/redeem.tsx:184
 msgid "Try Again"
-msgstr ""
+msgstr "Tentar Novamente"
 
 #: src/components/phone-number-input/index.tsx:75
 msgid "United States (+1)"
@@ -1091,7 +1091,7 @@ msgstr "Visite-nos - TOLO Bom Café"
 
 #: src/app/(tabs)/team/redeem.tsx:238
 msgid "Visits"
-msgstr ""
+msgstr "Visitas"
 
 #: src/app/(tabs)/more/index.tsx:159
 msgid "Wallet"

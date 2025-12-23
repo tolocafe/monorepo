@@ -5,6 +5,8 @@ import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
 import { languageDetector } from 'hono/language'
 
+import { SUPPORTED_LOCALES } from '~common/locales'
+
 import auth from './routes/auth'
 import broadcast from './routes/broadcast'
 import clients from './routes/clients'
@@ -32,7 +34,7 @@ app
 	.use(
 		languageDetector({
 			fallbackLanguage: 'es',
-			supportedLanguages: ['en', 'es'],
+			supportedLanguages: [...SUPPORTED_LOCALES],
 		}),
 	)
 	.use(

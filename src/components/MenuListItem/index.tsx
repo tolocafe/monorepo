@@ -170,8 +170,7 @@ const styles = StyleSheet.create((theme, runtime) => {
 		tagText: {
 			color: '#FFFFFF',
 			fontSize: theme.fontSizes.xs,
-			fontWeight: '600',
-			textTransform: 'uppercase',
+			fontWeight: theme.fontWeights.semibold,
 		},
 	}
 })

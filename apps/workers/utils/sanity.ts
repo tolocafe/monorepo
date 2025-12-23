@@ -1,3 +1,4 @@
+import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
 
 type Bean = SanitySchema<
@@ -20,9 +21,7 @@ type Event = SanitySchema<
 
 type LocaleText = {
 	_type: 'localeString'
-	en: string
-	es: string
-}
+} & Record<SupportedLocale, string>
 
 type Product = SanitySchema<
 	'product',

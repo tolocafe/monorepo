@@ -33,7 +33,7 @@ msgstr "{0} - TOLO Buen Café"
 #. placeholder {1}: clientName || t`customer`
 #: src/app/(tabs)/team/redeem.tsx:196
 msgid "{0} drink redeemed for {1}."
-msgstr ""
+msgstr "Bebida de {0} canjeada para {1}."
 
 #. placeholder {0}: clientData.points
 #: src/app/(tabs)/team/redeem.tsx:207
@@ -267,7 +267,7 @@ msgstr "Pedido Actual"
 
 #: src/app/(tabs)/team/redeem.tsx:198
 msgid "customer"
-msgstr ""
+msgstr "cliente"
 
 #: src/app/(tabs)/team/redeem.tsx:176
 msgid "Customer Not Found"
@@ -799,7 +799,7 @@ msgstr "Receta"
 #: src/app/(tabs)/team/redeem.tsx:155
 #: src/app/(tabs)/team/redeem.tsx:157
 msgid "Redeem"
-msgstr ""
+msgstr "Canjear"
 
 #: src/app/(tabs)/team/redeem.tsx:53
 msgid "Redemption Failed"

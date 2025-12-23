@@ -1,5 +1,6 @@
 import { Hono } from 'hono'
 
+import type { SupportedLocale } from '~common/locales'
 import { defaultJsonHeaders } from '~workers/utils/headers'
 import { api } from '~workers/utils/poster'
 import sanity from '~workers/utils/sanity'
@@ -17,7 +18,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 	})
 
 	.get('/products', async (context) => {
-		const language = context.get('language') as 'en' | 'es'
+		const language = context.get('language') as SupportedLocale
 
 		const [posterProducts, sanityProducts] = await Promise.all([
 			api.menu.getMenuProducts(context.env.POSTER_TOKEN, {
@@ -96,7 +97,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 	})
 
 	.get('/products/:id', async (context) => {
-		const language = context.get('language') as 'en' | 'es'
+		const language = context.get('language') as SupportedLocale
 
 		const productId = context.req.param('id')
 

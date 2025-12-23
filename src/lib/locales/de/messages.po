@@ -430,7 +430,7 @@ msgstr "Bestellung konnte nicht übermittelt werden. Bitte versuchen Sie es erne
 
 #: src/components/MenuListItem/index.tsx:25
 msgid "Favorite"
-msgstr ""
+msgstr "Favorit"
 
 #: src/app/(tabs)/more/profile.tsx:140
 msgid "First name"
@@ -593,7 +593,7 @@ msgstr "name@beispiel.com"
 
 #: src/components/MenuListItem/index.tsx:26
 msgid "New"
-msgstr ""
+msgstr "Neu"
 
 #: src/app/(tabs)/team/queue.tsx:430
 msgid "New orders will appear here"
@@ -839,7 +839,7 @@ msgstr "Karte scannen"
 
 #: src/components/MenuListItem/index.tsx:27
 msgid "Seasonal"
-msgstr ""
+msgstr "Saisonal"
 
 #: src/app/(tabs)/team/redeem.tsx:223
 msgid "Select Redemption"
@@ -900,7 +900,7 @@ msgstr "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
 
 #: src/components/MenuListItem/index.tsx:28
 msgid "Special"
-msgstr ""
+msgstr "Spezial"
 
 #: src/app/(tabs)/more/index.tsx:256
 msgid "Stores"

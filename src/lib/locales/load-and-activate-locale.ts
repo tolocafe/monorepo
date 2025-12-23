@@ -4,7 +4,16 @@ import * as Sentry from '@sentry/react-native'
 import { messages as esMessages } from '@/lib/locales/es/messages.po'
 import { queryClient } from '@/lib/query-client'
 
+let isLoadingLocale = false
+
 export async function loadAndActivateLocale(locale: Locale): Promise<void> {
+	// If we're already loading this locale, skip
+	if (isLoadingLocale && i18n.locale === locale) {
+		return
+	}
+
+	isLoadingLocale = true
+
 	try {
 		switch (locale) {
 			case 'en': {
@@ -37,13 +46,15 @@ export async function loadAndActivateLocale(locale: Locale): Promise<void> {
 				break
 		}
 
-		queryClient.invalidateQueries({ queryKey: ['menu'] })
 		languageStorage.set(LOCALE_KEY, locale)
+		queryClient.invalidateQueries({ queryKey: ['menu'] })
 	} catch (error) {
 		Sentry.captureException(error, {
 			extra: { currentLocale: i18n.locale, language: locale },
 			tags: { feature: 'i18n', operation: 'loadLanguageMessages' },
 		})
 		throw error
+	} finally {
+		isLoadingLocale = false
 	}
 }

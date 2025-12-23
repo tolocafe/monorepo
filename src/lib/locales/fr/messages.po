@@ -237,7 +237,7 @@ msgstr "Venez visiter TOLO. Trouvez nos horaires, adresse et liens rapides vers 
 
 #: src/app/(tabs)/team/redeem.tsx:275
 msgid "Confirm Redemption"
-msgstr ""
+msgstr "Confirmer l'échange"
 
 #: src/app/(tabs)/more/index.tsx:246
 msgid "Contact"
@@ -249,7 +249,7 @@ msgstr "Continuer"
 
 #: src/app/(tabs)/team/redeem.tsx:179
 msgid "Could not find a customer with this ID. Please try again."
-msgstr ""
+msgstr "Client avec cet ID introuvable. Veuillez réessayer."
 
 #: src/app/sign-in.tsx:360
 msgid "Create account"
@@ -267,15 +267,15 @@ msgstr "Commande actuelle"
 
 #: src/app/(tabs)/team/redeem.tsx:198
 msgid "customer"
-msgstr ""
+msgstr "client"
 
 #: src/app/(tabs)/team/redeem.tsx:176
 msgid "Customer Not Found"
-msgstr ""
+msgstr "Client introuvable"
 
 #: src/app/(tabs)/team/index.tsx:57
 msgid "Customers"
-msgstr ""
+msgstr "Clients"
 
 #: src/app/sign-in.tsx:410
 msgid "Date of birth (optional)"
@@ -430,7 +430,7 @@ msgstr "Échec de la soumission de la commande. Veuillez réessayer."
 
 #: src/components/MenuListItem/index.tsx:25
 msgid "Favorite"
-msgstr ""
+msgstr "Favori"
 
 #: src/app/(tabs)/more/profile.tsx:140
 msgid "First name"
@@ -510,7 +510,7 @@ msgstr "Chargement de l'addition..."
 
 #: src/app/(tabs)/team/redeem.tsx:169
 msgid "Loading customer..."
-msgstr ""
+msgstr "Chargement du client..."
 
 #: src/components/HomeSections/MenuSection.tsx:84
 msgid "Loading menu..."
@@ -593,7 +593,7 @@ msgstr "nom@exemple.com"
 
 #: src/components/MenuListItem/index.tsx:26
 msgid "New"
-msgstr ""
+msgstr "Nouveau"
 
 #: src/app/(tabs)/team/queue.tsx:430
 msgid "New orders will appear here"
@@ -610,7 +610,7 @@ msgstr "Aucune session active trouvée."
 
 #: src/app/(tabs)/team/redeem.tsx:248
 msgid "No birthday on file."
-msgstr ""
+msgstr "Aucun anniversaire enregistré."
 
 #: src/app/(tabs)/team/queue.tsx:427
 msgid "No orders in queue"
@@ -629,7 +629,7 @@ msgstr "Non autorisé"
 
 #: src/app/(tabs)/team/redeem.tsx:255
 msgid "Not enough points. Need {POINTS_PER_REDEMPTION} points for a free drink."
-msgstr ""
+msgstr "Pas assez de points. {POINTS_PER_REDEMPTION} points nécessaires pour une boisson gratuite."
 
 #: src/app/(tabs)/more/index.tsx:210
 msgid "Not provided"
@@ -658,7 +658,7 @@ msgstr "Ouvrir l'emplacement dans Google Maps"
 
 #: src/app/(tabs)/team/redeem.tsx:291
 msgid "or enter manually"
-msgstr ""
+msgstr "ou entrer manuellement"
 
 #: src/app/(tabs)/orders/[id].tsx:102
 msgid "Order {id}"
@@ -799,15 +799,15 @@ msgstr "Recette"
 #: src/app/(tabs)/team/redeem.tsx:155
 #: src/app/(tabs)/team/redeem.tsx:157
 msgid "Redeem"
-msgstr ""
+msgstr "Échanger"
 
 #: src/app/(tabs)/team/redeem.tsx:53
 msgid "Redemption Failed"
-msgstr ""
+msgstr "Échange échoué"
 
 #: src/app/(tabs)/team/redeem.tsx:193
 msgid "Redemption Successful!"
-msgstr ""
+msgstr "Échange réussi !"
 
 #: src/components/HomeSections/MenuSection.tsx:97
 msgid "Retry"
@@ -835,15 +835,15 @@ msgstr "Enregistrement..."
 
 #: src/app/(tabs)/team/redeem.tsx:284
 msgid "Scan Card"
-msgstr ""
+msgstr "Scanner la carte"
 
 #: src/components/MenuListItem/index.tsx:27
 msgid "Seasonal"
-msgstr ""
+msgstr "Saisonnier"
 
 #: src/app/(tabs)/team/redeem.tsx:223
 msgid "Select Redemption"
-msgstr ""
+msgstr "Sélectionner l'échange"
 
 #: src/app/(tabs)/orders/current.tsx:409
 msgid "Send Order"
@@ -900,7 +900,7 @@ msgstr "Un problème est survenu. Veuillez réessayer."
 
 #: src/components/MenuListItem/index.tsx:28
 msgid "Special"
-msgstr ""
+msgstr "Spécial"
 
 #: src/app/(tabs)/more/index.tsx:256
 msgid "Stores"
@@ -908,7 +908,7 @@ msgstr "Magasins"
 
 #: src/app/(tabs)/team/redeem.tsx:307
 msgid "Submit"
-msgstr ""
+msgstr "Soumettre"
 
 #: src/app/(tabs)/orders/[id].tsx:177
 #: src/containers/table-bill-screen.tsx:330
@@ -1041,7 +1041,7 @@ msgstr "TripAdvisor"
 
 #: src/app/(tabs)/team/redeem.tsx:184
 msgid "Try Again"
-msgstr ""
+msgstr "Réessayer"
 
 #: src/components/phone-number-input/index.tsx:75
 msgid "United States (+1)"
@@ -1091,7 +1091,7 @@ msgstr "Visitez-nous - TOLO Bon Café"
 
 #: src/app/(tabs)/team/redeem.tsx:238
 msgid "Visits"
-msgstr ""
+msgstr "Visites"
 
 #: src/app/(tabs)/more/index.tsx:159
 msgid "Wallet"

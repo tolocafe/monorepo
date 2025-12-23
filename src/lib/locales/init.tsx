@@ -1,3 +1,4 @@
+import { i18n } from '@lingui/core'
 import { getLocales } from 'expo-localization'
 
 import { canUseDOM, isDevice } from '@/lib/utils/device'
@@ -16,6 +17,12 @@ function getDefaultLocale() {
 }
 
 export function getCurrentLocale() {
+	// If i18n has an active locale, use it (it's the source of truth once activated)
+	if (i18n.locale && AVAILABLE_LOCALES.includes(i18n.locale as Locale)) {
+		return i18n.locale as Locale
+	}
+
+	// Otherwise fall back to storage or default
 	if (isDevice || canUseDOM) {
 		return languageStorage.getString(LOCALE_KEY) ?? null
 	}
