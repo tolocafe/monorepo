@@ -8,7 +8,6 @@ import {
 } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useAutoheight } from '@formidable-webview/webshell'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useQuery } from '@tanstack/react-query'
@@ -30,6 +29,7 @@ import {
 	withUnistyles,
 } from 'react-native-unistyles'
 
+import { BlockText } from '@/components/BlockText'
 import Button from '@/components/Button'
 import { CheckedButton } from '@/components/CheckedButton'
 import { HeaderIconIonicons } from '@/components/Icons'
@@ -62,21 +62,6 @@ const linearGradientColors = [
 ] as const
 
 const UniImage = withUnistyles(Image)
-
-const config = {
-	initialHeight: 50,
-	webshellProps: {
-		contentMode: 'mobile' as const,
-		disableScrollViewPanResponder: true,
-		javaScriptEnabled: false,
-		scalesPageToFit: false,
-		showsVerticalScrollIndicator: false,
-		style: {
-			backgroundColor: 'transparent',
-		},
-		webshellDebug: false,
-	},
-} satisfies Parameters<typeof useAutoheight>[0]
 
 // eslint-disable-next-line unicorn/prevent-abbreviations
 export async function generateStaticParams() {
@@ -152,9 +137,6 @@ export default function MenuDetail() {
 		}
 	}, [product?.group_modifications, setFieldValue])
 
-	const { autoheightWebshellProps } = useAutoheight(config)
-
-	const htmlDescriptionSource = useGetFormattedHTMLContent(product?.description)
 	const htmlRecipeSource = useGetFormattedHTMLContent(product?.recipe)
 
 	const incrementQuantity = useCallback(
@@ -248,7 +230,6 @@ export default function MenuDetail() {
 								uri: getImageUrl(product.photo_origin || product.photo, {
 									blur: 100,
 									quality: 20,
-									source: 'poster',
 									width: 350,
 								}),
 								width: UnistylesRuntime.screen.width,
@@ -257,7 +238,6 @@ export default function MenuDetail() {
 							source={{
 								uri: getImageUrl(product.photo_origin || product.photo, {
 									quality: 85,
-									source: 'poster',
 									width: 900,
 								}),
 							}}
@@ -281,11 +261,8 @@ export default function MenuDetail() {
 					<View style={styles.productInfo}>
 						<H2 style={styles.price}>{getProductBaseCost(product)}</H2>
 
-						{htmlDescriptionSource ? (
-							<WebContent
-								{...autoheightWebshellProps}
-								source={htmlDescriptionSource}
-							/>
+						{product.blockContent ? (
+							<BlockText value={product.blockContent} />
 						) : product['small-description'] ? (
 							<Paragraph>{product['small-description']}</Paragraph>
 						) : null}

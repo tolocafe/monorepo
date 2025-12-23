@@ -388,7 +388,7 @@ msgstr "エラー"
 msgid "Error signing out. Please try again."
 msgstr "サインアウトエラー。もう一度お試しください。"
 
-#: src/components/HomeSections/EventsSection.tsx:25
+#: src/components/HomeSections/EventsSection.tsx:23
 msgid "Events"
 msgstr "イベント"
 
@@ -611,6 +611,10 @@ msgstr "アクティブなセッションが見つかりませんでした。"
 #: src/app/(tabs)/team/redeem.tsx:248
 msgid "No birthday on file."
 msgstr "誕生日が登録されていません。"
+
+#: src/components/HomeSections/EventsSection.tsx:37
+msgid "No events scheduled at the moment"
+msgstr ""
 
 #: src/app/(tabs)/team/queue.tsx:427
 msgid "No orders in queue"

@@ -44,6 +44,7 @@ export default function PromotionCard({ promotion }: Props) {
 									uri: getImageUrl(promotion.image.url, {
 										blur: 100,
 										quality: 20,
+										source: 'sanity',
 										width: 400,
 									}),
 								}}
@@ -51,6 +52,7 @@ export default function PromotionCard({ promotion }: Props) {
 								source={{
 									uri: getImageUrl(promotion.image.url, {
 										quality: 85,
+										source: 'sanity',
 										width: 600,
 									}),
 								}}
@@ -63,9 +65,9 @@ export default function PromotionCard({ promotion }: Props) {
 					</View>
 					<View style={styles.content}>
 						<H4 numberOfLines={2}>{promotion.name}</H4>
-						{promotion.summary ? (
+						{promotion.excerpt ? (
 							<Text numberOfLines={2} style={styles.excerpt}>
-								{promotion.summary}
+								{promotion.excerpt}
 							</Text>
 						) : null}
 					</View>

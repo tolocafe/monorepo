@@ -1,11 +1,11 @@
 import { Hono } from 'hono'
 
-import type { SupportedLocale } from '~common/locales'
 import { defaultJsonHeaders } from '~workers/utils/headers'
 import { api } from '~workers/utils/poster'
 import sanity from '~workers/utils/sanity'
-import webflow from '~workers/utils/webflow'
 
+import type { Product, Promotion } from '~common/api'
+import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
 
 const menu = new Hono<{ Bindings: Bindings }>()
@@ -24,7 +24,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 			api.menu.getMenuProducts(context.env.POSTER_TOKEN, {
 				type: 'products',
 			}),
-			sanity.listProducts(context.env).catch(() => null),
+			sanity.listProducts(context.env, language).catch(() => null),
 		])
 
 		// eslint-disable-next-line no-console
@@ -35,62 +35,61 @@ const menu = new Hono<{ Bindings: Bindings }>()
 				(sanityProduct) => sanityProduct.posterId === product.product_id,
 			)
 
-			const name = sanityProduct?.name?.[language] ?? product.product_name
+			const name = sanityProduct?.name ?? product.product_name
+			// Use first Sanity image as photo, fallback to Poster photo
+			const photo = sanityProduct?.images?.[0]?.sourceId ?? product.photo
 
 			return {
 				...product,
+				// Map Sanity 'body' to API 'blockContent' and 'description'
+				blockContent: sanityProduct?.body,
 				caffeine: sanityProduct?.caffeine,
-				excerpt: sanityProduct?.excerpt?.[language],
+				description: sanityProduct?.body,
+				excerpt: sanityProduct?.excerpt,
+				images: sanityProduct?.images,
 				intensity: sanityProduct?.intensity,
 				name,
+				photo,
 				product_name: name,
 				tag: sanityProduct?.tag,
-			}
+			} satisfies Product
 		})
 
 		return context.json(body, 200, defaultJsonHeaders)
 	})
 
 	.get('/promotions', async (context) => {
-		// const _language = context.get('language')
+		const language = context.get('language') as SupportedLocale
 
-		const [posterPromotions, webflowPromotions, _sanityPromotions] =
-			await Promise.all([
-				api.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
-				webflow.collections.listPromotions(context.env).catch(() => []),
-				sanity.listPromotions(context.env).catch(() => []),
-			])
+		const [posterPromotions, sanityPromotions] = await Promise.all([
+			api.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
+			sanity.listPromotions(context.env, language).catch(() => []),
+		])
 
-		const webflowById = webflowPromotions?.reduce(
-			(accumulator, item) => {
-				const id = String(item['poster-id']) as
-					| keyof typeof accumulator
-					| undefined
-				if (id) accumulator[id] = item
-				return accumulator
-			},
-			{} as Record<string, (typeof webflowPromotions)[number]>,
-		)
+		const sanityById = sanityPromotions.reduce<
+			Record<string, (typeof sanityPromotions)[number] | undefined>
+		>((accumulator, item) => {
+			const id = item.posterId
+			if (id) accumulator[id] = item
+			return accumulator
+		}, {})
 
 		const merged = posterPromotions.map((promotion) => {
-			const webflowItem = webflowById?.[
-				promotion.promotion_id as keyof typeof webflowById
-			] as Record<string, unknown> | undefined
-			if (!webflowItem) return promotion
+			const sanityItem = sanityById[promotion.promotion_id]
 
-			const image =
-				typeof webflowItem.image === 'string'
-					? { url: webflowItem.image }
-					: (webflowItem.image as undefined | { url?: string })
+			if (!sanityItem) return promotion
 
 			return {
 				...promotion,
-				description: webflowItem.description,
-				image,
-				name: webflowItem.name ?? promotion.name,
-				slug: webflowItem.slug,
-				summary: webflowItem.summary,
-			}
+				// Sanity fields are already localized from the query
+				description: sanityItem.body
+					? JSON.stringify(sanityItem.body)
+					: undefined,
+				excerpt: sanityItem.excerpt,
+				images: sanityItem.images,
+				name: sanityItem.name ?? promotion.name,
+				slug: sanityItem.slug?.current,
+			} satisfies Promotion
 		})
 
 		return context.json(merged, 200, defaultJsonHeaders)
@@ -110,32 +109,29 @@ const menu = new Hono<{ Bindings: Bindings }>()
 		}
 
 		try {
-			const collectionItemId = await context.env.KV_CMS.get(productId)
-
-			const [posterProduct, webflowProduct, sanityProduct] = await Promise.all([
+			const [posterProduct, sanityProduct] = await Promise.all([
 				api.menu.getProduct(context.env.POSTER_TOKEN, productId),
-				collectionItemId
-					? webflow.collections.getProduct(context.env, collectionItemId)
-					: Promise.resolve(null),
-				sanity.getProduct(context.env, productId).catch(() => null),
+				sanity.getProduct(context.env, productId, language).catch(() => null),
 			])
 
-			const name =
-				sanityProduct?.name?.[language] ||
-				webflowProduct?.name ||
-				posterProduct.product_name
+			const name = sanityProduct?.name || posterProduct.product_name
+			// Use first Sanity image as photo, fallback to Poster photo
+			const photo = sanityProduct?.images?.[0]?.sourceId ?? posterProduct.photo
 
 			const body = {
-				...webflowProduct,
 				...posterProduct,
+				// Map Sanity 'body' to API 'blockContent' and 'description'
+				blockContent: sanityProduct?.body,
 				caffeine: sanityProduct?.caffeine,
-				description: sanityProduct?.description?.[language],
-				excerpt: sanityProduct?.excerpt?.[language],
+				description: sanityProduct?.body,
+				excerpt: sanityProduct?.excerpt,
+				images: sanityProduct?.images,
 				intensity: sanityProduct?.intensity,
 				name,
+				photo,
 				product_name: name,
 				tag: sanityProduct?.tag,
-			}
+			} satisfies Product
 
 			return context.json(body, 200, defaultJsonHeaders)
 		} catch {

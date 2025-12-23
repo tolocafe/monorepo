@@ -1,16 +1,32 @@
 import { Hono } from 'hono'
 
 import { defaultJsonHeaders } from '~workers/utils/headers'
-import webflow from '~workers/utils/webflow'
+import sanity, {
+	getLocalizedSlug,
+	getLocalizedString,
+} from '~workers/utils/sanity'
+
+import type { SupportedLocale } from '~common/locales'
 
 import type { Bindings } from '../types'
 
 const coffees = new Hono<{ Bindings: Bindings }>()
 	.get('/', async (context) => {
-		try {
-			const coffees = await webflow.collections.listCoffees(context.env)
+		const language = context.get('language') as SupportedLocale
 
-			return context.json(coffees ?? [], 200, defaultJsonHeaders)
+		try {
+			const beans = await sanity.listBeans(context.env)
+
+			const localized = beans.map((bean) => ({
+				name: getLocalizedString(bean.name, language) || '',
+				origin: getLocalizedString(bean.origin, language) || '',
+				process: getLocalizedString(bean.process, language) || '',
+				region: getLocalizedString(bean.region, language) || '',
+				slug: getLocalizedSlug(bean.slug, language) || '',
+				'tasting-notes': getLocalizedString(bean.tastingNotes, language),
+			}))
+
+			return context.json(localized, 200, defaultJsonHeaders)
 		} catch {
 			return context.json(
 				{ error: 'Failed to fetch coffees' },
@@ -20,12 +36,19 @@ const coffees = new Hono<{ Bindings: Bindings }>()
 		}
 	})
 	.get('/:id', async (context) => {
-		const coffee = await webflow.collections.getCoffee(
-			context.env,
-			context.req.param('id'),
-		)
+		const language = context.get('language') as SupportedLocale
+		const bean = await sanity.getBean(context.env, context.req.param('id'))
 
-		return context.json(coffee, 200, defaultJsonHeaders)
+		const localized = {
+			name: getLocalizedString(bean.name, language) || '',
+			origin: getLocalizedString(bean.origin, language) || '',
+			process: getLocalizedString(bean.process, language) || '',
+			region: getLocalizedString(bean.region, language) || '',
+			slug: getLocalizedSlug(bean.slug, language) || '',
+			'tasting-notes': getLocalizedString(bean.tastingNotes, language),
+		}
+
+		return context.json(localized, 200, defaultJsonHeaders)
 	})
 
 export default coffees

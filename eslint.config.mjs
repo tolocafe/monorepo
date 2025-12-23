@@ -161,6 +161,7 @@ export default [
 			],
 			'react/jsx-curly-brace-presence': ['warn', { props: 'never' }],
 			'react/jsx-no-useless-fragment': 'error',
+			'react/prop-types': 'off',
 			'react/self-closing-comp': 'warn',
 			'require-atomic-updates': 'error',
 			'unicorn/consistent-destructuring': 'off',

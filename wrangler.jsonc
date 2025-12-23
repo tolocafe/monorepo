@@ -13,9 +13,6 @@
 	},
 	"compatibility_flags": ["nodejs_compat"],
 	"placement": { "mode": "smart" },
-	"vars": {
-		"WEBFLOW_MENU_COLLECTION_ID": "68a3bdb4084807fcb0d41bb4",
-	},
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./dist",

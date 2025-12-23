@@ -67,7 +67,7 @@ export default function MenuListItem(props: Props) {
 										uri: getImageUrl(item.photo, {
 											blur: 100,
 											quality: 20,
-											source: 'poster',
+											source: 'sanity',
 											width: 350,
 										}),
 									}}
@@ -75,7 +75,7 @@ export default function MenuListItem(props: Props) {
 									source={{
 										uri: getImageUrl(item.photo, {
 											quality: 85,
-											source: 'poster',
+											source: 'sanity',
 											width: 400,
 										}),
 									}}
@@ -87,14 +87,12 @@ export default function MenuListItem(props: Props) {
 							)}
 							{item.tag && item.tag in tagLabels ? (
 								<View style={styles.tag}>
-									<Text style={styles.tagText}>
-										{_(tagLabels[item.tag as keyof typeof tagLabels])}
-									</Text>
+									<Text style={styles.tagText}>{_(tagLabels[item.tag])}</Text>
 								</View>
 							) : null}
 						</View>
 						<View style={styles.menuItemContent}>
-							<H4 numberOfLines={2}>{item.product_name}</H4>
+							<H4 numberOfLines={2}>{item.name}</H4>
 							{item.excerpt ? (
 								<Text numberOfLines={2} style={styles.excerpt}>
 									{item.excerpt}

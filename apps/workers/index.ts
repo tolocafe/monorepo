@@ -33,7 +33,7 @@ const TOLO_DOMAIN = 'tolo.cafe'
 app
 	.use(
 		languageDetector({
-			fallbackLanguage: 'es',
+			fallbackLanguage: SUPPORTED_LOCALES[0],
 			supportedLanguages: [...SUPPORTED_LOCALES],
 		}),
 	)

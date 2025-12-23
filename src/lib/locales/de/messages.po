@@ -388,7 +388,7 @@ msgstr "Fehler"
 msgid "Error signing out. Please try again."
 msgstr "Fehler beim Abmelden. Bitte versuchen Sie es erneut."
 
-#: src/components/HomeSections/EventsSection.tsx:25
+#: src/components/HomeSections/EventsSection.tsx:23
 msgid "Events"
 msgstr "Veranstaltungen"
 
@@ -611,6 +611,10 @@ msgstr "Keine aktiven Sitzungen gefunden."
 #: src/app/(tabs)/team/redeem.tsx:248
 msgid "No birthday on file."
 msgstr "Kein Geburtstag hinterlegt."
+
+#: src/components/HomeSections/EventsSection.tsx:37
+msgid "No events scheduled at the moment"
+msgstr ""
 
 #: src/app/(tabs)/team/queue.tsx:427
 msgid "No orders in queue"

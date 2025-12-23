@@ -388,7 +388,7 @@ msgstr "Erreur"
 msgid "Error signing out. Please try again."
 msgstr "Erreur lors de la déconnexion. Veuillez réessayer."
 
-#: src/components/HomeSections/EventsSection.tsx:25
+#: src/components/HomeSections/EventsSection.tsx:23
 msgid "Events"
 msgstr "Événements"
 
@@ -611,6 +611,10 @@ msgstr "Aucune session active trouvée."
 #: src/app/(tabs)/team/redeem.tsx:248
 msgid "No birthday on file."
 msgstr "Aucun anniversaire enregistré."
+
+#: src/components/HomeSections/EventsSection.tsx:37
+msgid "No events scheduled at the moment"
+msgstr ""
 
 #: src/app/(tabs)/team/queue.tsx:427
 msgid "No orders in queue"

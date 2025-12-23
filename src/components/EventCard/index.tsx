@@ -75,9 +75,9 @@ export default function EventCard({ event }: Props) {
 								{event.location}
 							</Text>
 						) : null}
-						{event.start_date ? (
+						{event.dates?.[0] ? (
 							<Text numberOfLines={1} style={styles.meta}>
-								{event.start_date}
+								{event.dates[0]}
 							</Text>
 						) : null}
 					</View>
@@ -101,7 +101,6 @@ const styles = StyleSheet.create((theme, runtime) => {
 			overflow: 'hidden',
 		},
 		container: {
-			height: imageHeight + 100,
 			width: itemWidth,
 		},
 		content: {

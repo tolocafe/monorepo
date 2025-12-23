@@ -1,6 +1,7 @@
 export const BASE_URL = process.env.EXPO_PUBLIC_API_URL
 export const POSTER_BASE_URL = process.env.EXPO_PUBLIC_POSTER_API_URL
-export const WEBFLOW_BASE_URL = process.env.EXPO_PUBLIC_WEBFLOW_API_URL
+
+import type { PortableTextBlock } from '@portabletext/types'
 
 export type Category = {
 	category_color: string
@@ -80,13 +81,13 @@ export type Coffee = {
 	process: string
 	region: string
 	/* Region or producer image */
-	'region-image'?: WebflowImage
+	'region-image'?: { alt?: string; url: string }
 	slug: string
 	/* comma separated list of tasting notes */
 	'tasting-notes'?: string
 	varietal: string
 	/* Varietal or process image */
-	'varietal-image'?: WebflowImage
+	'varietal-image'?: { alt?: string; url: string }
 }
 
 /**
@@ -234,13 +235,12 @@ export type DashTransaction = {
 }
 
 export type Event = {
+	dates?: string[]
 	description?: string
-	end_date?: string
 	image?: { url: string }
 	location?: string
 	name: string
 	slug: string
-	start_date?: string
 	summary?: string
 }
 
@@ -384,6 +384,8 @@ export type PosterResponse<ResponseShape> = {
 
 export type Product = {
 	barcode: string
+	/* Block content for rich text description */
+	blockContent?: PortableTextBlock[]
 	/* Caffeine level of the beverage, 0 - 5  */
 	caffeine?: number
 	/* Calories in kcal  */
@@ -393,12 +395,14 @@ export type Product = {
 	cooking_time: string
 	cost: string
 	cost_netto: string
-	description?: string
+	description?: PortableTextBlock[]
 	different_spots_prices: string
-	excerpt: string | undefined
+	excerpt?: string
 	fiscal: string
 	group_modifications?: PosterModificationGroup[]
 	hidden: string
+	/** Array of Sanity image references */
+	images?: SanityImageReference[]
 	ingredient_id: string
 	ingredients?: PosterIngredient[]
 	/* Strength level of the beverage, 0 - 5  */
@@ -406,6 +410,7 @@ export type Product = {
 	master_id: string
 	menu_category_id: string
 	modifications?: PosterModification[]
+	name: string
 	nodiscount: string
 	out: number
 	photo: string
@@ -413,6 +418,7 @@ export type Product = {
 	price?: Record<string, string>
 	product_code: string
 	product_id: string
+	/** Being deprecated, use `name` instead */
 	product_name: string
 	product_production_description: string
 	product_tax_id: string
@@ -428,7 +434,8 @@ export type Product = {
 		spot_id: string
 		visible: string
 	}[]
-	tag: string
+	/** Product tag from Sanity (FAVORITE, NEW, SEASONAL, SPECIAL) */
+	tag?: 'FAVORITE' | 'NEW' | 'SEASONAL' | 'SPECIAL'
 	tax_id: string
 	type: string
 	unit: string
@@ -439,7 +446,7 @@ export type Product = {
 }
 
 /**
- * Promotion data from Poster API
+ * Promotion data from Poster API, enhanced with Sanity CMS content
  * @see https://dev.joinposter.com/en/docs/v3/web/clients/getPromotions
  */
 export type Promotion = {
@@ -449,10 +456,16 @@ export type Promotion = {
 	date_end?: string
 	/** Start date of the promotion */
 	date_start?: string
+	/** Promotion description from Sanity */
+	description?: string
 	/** Discount percentage */
 	discount_percent?: string
-	/** Promotion photo URL */
+	/** Promotion summary description from Sanity */
+	excerpt?: string
+	/** Promotion photo URL (legacy, use images array) */
 	image?: { url: string }
+	/** Array of Sanity image references */
+	images?: SanityImageReference[]
 	/** Promotion name */
 	name: string
 	/** Unique promotion ID */
@@ -467,11 +480,20 @@ export type Promotion = {
 	 * - 5: Percent bonus
 	 * - 6: Happy hours
 	 */
-	promotion_type: string
+	promotion_type?: string
+	/** URL slug from Sanity for deep linking */
+	slug?: string
 	/** Status: 0=inactive, 1=active */
 	status?: string
-	/** Promotion summary description */
-	summary?: string
+}
+
+/**
+ * Image reference from Sanity CMS
+ * Contains only the asset ID for client-side URL construction
+ */
+export type SanityImageReference = {
+	/** Sanity asset ID (e.g., "image-abc123def456-1200x800-jpg") */
+	sourceId: string
 }
 
 export type TableBill = {
@@ -503,9 +525,3 @@ export type UpdateClientBody = Partial<{
 	phone: string
 	total_payed_sum: number
 }>
-
-export type WebflowImage = {
-	alt?: string
-	fileId: string
-	url: string
-}
