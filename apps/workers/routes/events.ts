@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 
 import { defaultJsonHeaders } from '~workers/utils/headers'
@@ -25,7 +26,7 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				// Extract asset IDs from images array
 				const images = event.images
 					?.map((img) => {
-						if (!img?.asset?._ref) return null
+						if (!img.asset?._ref) return null
 						return {
 							sourceId: img.asset._ref,
 						}
@@ -45,7 +46,7 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 			return context.json(localized, 200, defaultJsonHeaders)
 		} catch (error) {
-			console.error(error)
+			captureException(error)
 
 			return context.json(
 				{ error: 'Failed to fetch events' },
@@ -61,7 +62,7 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		// Extract asset IDs from images array
 		const images = event.images
 			?.map((img) => {
-				if (!img?.asset?._ref) return null
+				if (!img.asset?._ref) return null
 				return {
 					sourceId: img.asset._ref,
 				}

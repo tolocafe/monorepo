@@ -61,7 +61,7 @@ export default function SignIn() {
 				.then((granted) => {
 					if (granted) {
 						void enableAnalytics()
-						identify({
+						void identify({
 							email: data.client.email,
 							firstName: data.client.firstname,
 							lastName: data.client.lastname,

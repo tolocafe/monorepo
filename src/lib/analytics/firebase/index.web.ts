@@ -13,7 +13,7 @@ import { requestTrackingPermissionAsync } from '@/lib/notifications'
 
 import type { AnalyticsEvent, EventProperties } from './utils'
 
-export async function enableAnalytics() {
+export function enableAnalytics() {
 	try {
 		const analytics = getAnalytics()
 
@@ -27,6 +27,23 @@ export async function enableAnalytics() {
 		})
 	} catch (error) {
 		captureException(error)
+	}
+}
+
+export function hash256(value: string, type?: 'email' | 'phone') {
+	try {
+		const algorithm = CryptoDigestAlgorithm.SHA256
+
+		if (type === 'email') {
+			return digestStringAsync(algorithm, value.toLowerCase())
+		}
+		if (type === 'phone') {
+			return digestStringAsync(algorithm, `+${value.replaceAll(/\D/g, '')}`)
+		}
+
+		return digestStringAsync(algorithm, value)
+	} catch {
+		return null
 	}
 }
 
@@ -66,23 +83,6 @@ export async function identify({
 		})
 	} catch (error) {
 		captureException(error)
-	}
-}
-
-export function hash256(value: string, type?: 'email' | 'phone') {
-	try {
-		const algorithm = CryptoDigestAlgorithm.SHA256
-
-		if (type === 'email') {
-			return digestStringAsync(algorithm, value.toLowerCase())
-		}
-		if (type === 'phone') {
-			return digestStringAsync(algorithm, `+${value.replaceAll(/\D/g, '')}`)
-		}
-
-		return digestStringAsync(algorithm, value)
-	} catch {
-		return null
 	}
 }
 

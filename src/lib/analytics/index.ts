@@ -5,8 +5,6 @@ import { posthog } from './posthog'
 
 import type { AnalyticsEvent, EventProperties } from './firebase/utils'
 
-export type { AnalyticsEvent, EventProperties }
-
 export type UserIdentity = {
 	email?: string
 	firstName?: string
@@ -37,9 +35,7 @@ export async function identify(identity: UserIdentity) {
 	try {
 		await enableAnalytics()
 
-		const promises: Promise<unknown>[] = []
-
-		promises.push(
+		const promises: Promise<unknown>[] = [
 			firebaseAnalytics.identify({
 				email,
 				firstName,
@@ -47,7 +43,7 @@ export async function identify(identity: UserIdentity) {
 				phoneNumber,
 				userId,
 			}),
-		)
+		]
 
 		if (userId) {
 			const properties: Record<string, string> = {}
@@ -103,3 +99,5 @@ export async function track(
 		Sentry.captureException(error)
 	}
 }
+
+export { type AnalyticsEvent, type EventProperties } from './firebase/utils'

@@ -25,6 +25,6 @@ export const posthogStorage: PostHogCustomStorage = {
 	setItem(key: string, value: string) {
 		if (!canUseDOM || isDevice) return
 
-		posthogStore.set(key, value) ?? null
+		posthogStore.set(key, value)
 	},
 }

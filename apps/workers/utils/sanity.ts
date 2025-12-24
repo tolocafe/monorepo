@@ -29,7 +29,7 @@ type Event = SanitySchema<
 			_key: string
 			_type: 'image'
 			alt?: LocaleText
-			asset: { _ref: string; _type: 'reference' }
+			asset?: { _ref: string; _type: 'reference' }
 		}[]
 		isFeatured?: boolean
 		location?: { _ref: string; _type: 'reference' }

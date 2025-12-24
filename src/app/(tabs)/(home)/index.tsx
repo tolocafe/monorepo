@@ -23,11 +23,11 @@ import {
 } from '@/components/HomeSections/queries'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { Paragraph } from '@/components/Text'
+import { identify } from '@/lib/analytics'
 import { enableAnalytics } from '@/lib/analytics/firebase'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { queryClient } from '@/lib/query-client'
-import { identify } from '@/lib/analytics'
 
 export default function Menu() {
 	const { t } = useLingui()
