@@ -27,6 +27,7 @@ import { enableAnalytics } from '@/lib/analytics/firebase'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { queryClient } from '@/lib/query-client'
+import { identify } from '@/lib/analytics'
 
 export default function Menu() {
 	const { t } = useLingui()
@@ -45,7 +46,8 @@ export default function Menu() {
 
 			if (!granted) return
 
-			void enableAnalytics({
+			void enableAnalytics()
+			void identify({
 				email: selfData?.email,
 				firstName: selfData?.firstname,
 				lastName: selfData?.lastname,
