@@ -52,7 +52,9 @@ describe('cache-utils', () => {
 
 	describe('clearAllCache', () => {
 		it('clears cache types while preserving credentials and language preferences', async () => {
-			;(persister.removeClient as unknown as jest.Mock).mockResolvedValue(null)
+			;(persister.removeClient as unknown as jest.Mock).mockResolvedValue(
+				null as never,
+			)
 
 			await clearAllCache()
 
