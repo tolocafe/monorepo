@@ -39,7 +39,9 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			})
 
 			return context.json(localized, 200, defaultJsonHeaders)
-		} catch {
+		} catch (error) {
+			console.error(error)
+
 			return context.json(
 				{ error: 'Failed to fetch events' },
 				500,
