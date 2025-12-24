@@ -28,13 +28,13 @@ module.exports = {
 			testMatch: [
 				'<rootDir>/src/lib/utils/**/*.test.ts',
 				'<rootDir>/src/lib/hooks/**/*.test.ts',
-				'<rootDir>/src/lib/queries/**/*.test.ts',
-				'<rootDir>/src/lib/stores/**/*.test.ts',
+				'<rootDir>/src/lib/constants/**/*.test.ts',
+				'<rootDir>/src/lib/locales/**/*.test.ts',
 			],
 		},
-		// For component tests (React Native/Expo components)
+		// For React Native/Expo tests (queries, stores, components)
 		{
-			displayName: 'components',
+			displayName: 'react-native',
 			globals: {
 				__DEV__: true,
 			},
@@ -42,13 +42,14 @@ module.exports = {
 				'^@/(.*)$': '<rootDir>/src/$1',
 				'^@common/(.*)$': '<rootDir>/common/$1',
 			},
-			preset: 'react-native',
+			preset: 'jest-expo',
 			setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
 			testMatch: [
 				'<rootDir>/src/components/**/*.test.tsx',
 				'<rootDir>/src/app/**/*.test.tsx',
 				'<rootDir>/src/lib/contexts/**/*.test.tsx',
-				'<rootDir>/src/lib/hooks/**/*.test.tsx',
+				'<rootDir>/src/lib/queries/**/*.test.ts',
+				'<rootDir>/src/lib/stores/**/*.test.ts',
 			],
 			transformIgnorePatterns: [
 				'node_modules/(?!(?:.pnpm/)?((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|react-native-unistyles|@bottom-tabs|react-native-mmkv|zustand|ky))',

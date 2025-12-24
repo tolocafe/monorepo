@@ -4,17 +4,12 @@ import { STORAGE_KEYS } from '../storage'
 
 describe('storage', () => {
 	describe('STORAGE_KEYS', () => {
-		it('should have AUTH_SESSION key', () => {
+		it('should have correct key values', () => {
 			expect(STORAGE_KEYS.AUTH_SESSION).toBe('auth_session')
-		})
-
-		it('should have ZUSTAND_STORE key', () => {
 			expect(STORAGE_KEYS.ZUSTAND).toBe('zustand_store')
-		})
-
-		it('should have all required storage keys', () => {
-			expect(STORAGE_KEYS).toHaveProperty('AUTH_SESSION')
-			expect(STORAGE_KEYS).toHaveProperty('ZUSTAND_STORE')
+			expect(STORAGE_KEYS.POSTHOG).toBe('posthog_store')
+			expect(STORAGE_KEYS.QUERY).toBe('query_store')
+			expect(STORAGE_KEYS.SETTINGS).toBe('settings_store')
 		})
 
 		it('should have string values for all keys', () => {
@@ -23,8 +18,8 @@ describe('storage', () => {
 			}
 		})
 
-		it('should have exactly 2 keys', () => {
-			expect(Object.keys(STORAGE_KEYS)).toHaveLength(2)
+		it('should have exactly 5 keys', () => {
+			expect(Object.keys(STORAGE_KEYS)).toHaveLength(5)
 		})
 	})
 })

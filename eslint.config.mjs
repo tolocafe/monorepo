@@ -30,6 +30,7 @@ export default [
 			'playwright-report',
 			'src/lib/locales/',
 			'worker-configuration.d.ts',
+			'apps/poster-plugin/bundle.js',
 		],
 	},
 	{

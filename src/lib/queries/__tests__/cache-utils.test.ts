@@ -1,3 +1,12 @@
+import {
+	afterEach,
+	beforeEach,
+	describe,
+	expect,
+	it,
+	jest,
+} from '@jest/globals'
+
 import { clearAllCache } from '@/lib/queries/cache-utils'
 import { persister, queryClient } from '@/lib/query-client'
 
@@ -55,7 +64,9 @@ describe('cache-utils', () => {
 
 		it('handles persister errors gracefully', async () => {
 			const error = new Error('Failed to clear persisted cache')
-			;(persister.removeClient as unknown as jest.Mock).mockRejectedValue(error)
+			;(persister.removeClient as unknown as jest.Mock).mockRejectedValue(
+				error as never,
+			)
 
 			await clearAllCache()
 
@@ -67,7 +78,7 @@ describe('cache-utils', () => {
 
 		it('clears in-memory cache even if persister fails', async () => {
 			;(persister.removeClient as unknown as jest.Mock).mockRejectedValue(
-				new Error('Persister error'),
+				new Error('Persister error') as never,
 			)
 
 			await clearAllCache()
