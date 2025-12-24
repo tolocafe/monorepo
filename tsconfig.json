@@ -35,5 +35,6 @@
 		".expo/types/**/*.ts",
 		"worker-configuration.d.ts"
 	],
+	"exclude": ["e2e/**/*", "playwright.config.ts"],
 	"files": ["src/index.ts", "apps/workers/index.ts"]
 }

@@ -200,4 +200,8 @@ export default [
 		files: ['**/*.js', '**/*.jsx', '**/*.mjs'],
 		...tseslint.configs.disableTypeChecked,
 	},
+	{
+		files: ['e2e/**/*.ts', 'playwright.config.ts'],
+		...tseslint.configs.disableTypeChecked,
+	},
 ]
