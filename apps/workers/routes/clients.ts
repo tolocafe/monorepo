@@ -15,6 +15,7 @@ import {
 import { api } from '~workers/utils/poster'
 import { notifyRedemption } from '~workers/utils/push-notifications'
 
+import type { RedeemClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
 
 const updateClientSchema = z.object({
@@ -81,7 +82,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 		)
 
 		// Return only essential information for redemption verification
-		return c.json({
+		return c.json<RedeemClientData>({
 			birthday: client.birthday,
 			canRedeemBirthday,
 			client_groups_name: client.client_groups_name,

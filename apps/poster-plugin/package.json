@@ -40,6 +40,7 @@
 		"md5": "~2.2.1",
 		"prettier": "~3.6.2",
 		"request": "~2.88.0",
+		"sass": "^1.97.1",
 		"shelljs": "~0.8.5",
 		"typescript-eslint": "~8.47.0",
 		"vite": "^5.2.9",

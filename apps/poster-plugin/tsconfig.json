@@ -8,6 +8,9 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"baseUrl": ".",
+		"paths": {
+			"~common/*": ["../../common/*"]
+		},
 		"removeComments": true,
 		"skipLibCheck": true,
 		"strict": true,

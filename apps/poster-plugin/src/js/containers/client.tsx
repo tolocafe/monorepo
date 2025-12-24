@@ -1,21 +1,12 @@
 import { useEffect, useState } from 'react'
 
-const BASE_URL = 'https://app.tolo.cafe/api/pos'
+import type { PosClientData } from '~common/api'
 
-type ClientData = {
-	client: {
-		date_activale: string
-		firstname: string
-		lastname: string
-		total_payed_sum: number
-	}
-	summary: string
-	transactions: unknown[]
-}
+const BASE_URL = 'https://app.tolo.cafe/api/pos'
 
 export default function ClientScreen({ clientId }: { clientId: string }) {
 	const [dataState, setDataState] = useState({
-		data: null as ClientData | null,
+		data: null as null | PosClientData,
 		error: null as Error | null | string,
 		loading: true,
 	})
@@ -34,7 +25,7 @@ export default function ClientScreen({ clientId }: { clientId: string }) {
 			(response: { result: string }) => {
 				try {
 					setDataState({
-						data: JSON.parse(response.result) as ClientData,
+						data: JSON.parse(response.result) as PosClientData,
 						error: null,
 						loading: false,
 					})
@@ -67,9 +58,7 @@ export default function ClientScreen({ clientId }: { clientId: string }) {
 
 	return (
 		<div>
-			<h1>
-				{dataState.data.client.firstname} {dataState.data.client.lastname}
-			</h1>
+			<h1>{dataState.data.client.name}</h1>
 
 			<h2>General</h2>
 			<label>
@@ -77,10 +66,24 @@ export default function ClientScreen({ clientId }: { clientId: string }) {
 				<span>{dataState.data.summary}</span>
 			</label>
 
+			<h2>Programa de lealtad</h2>
+			<label>
+				<b>Puntos</b>
+				<span>{dataState.data.client.points}</span>
+			</label>
+			<label>
+				<b>Bebida de cumpleaños</b>
+				<span>
+					{dataState.data.client.canRedeemBirthday
+						? '✓ Disponible'
+						: '✗ No disponible'}
+				</span>
+			</label>
+
 			<h2>Finanzas</h2>
 			<label>
 				<b>Total pagado</b>
-				<span>{dataState.data.client.total_payed_sum}</span>
+				<span>{dataState.data.client.totalPayedSum}</span>
 			</label>
 			<label>
 				<b>Transacciones totales</b>
@@ -88,7 +91,7 @@ export default function ClientScreen({ clientId }: { clientId: string }) {
 			</label>
 			<label>
 				<b>Registro desde</b>
-				<span>{dataState.data.client.date_activale}</span>
+				<span>{dataState.data.client.registrationDate}</span>
 			</label>
 		</div>
 	)

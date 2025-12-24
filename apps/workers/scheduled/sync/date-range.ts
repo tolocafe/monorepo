@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/cloudflare'
 
 import type { DashTransaction } from '~common/api'
+import type { Bindings } from '~workers/types'
 
 import { createCaches } from './ensure'
 import { processTransactionEvents } from './events'
@@ -9,7 +10,6 @@ import { getTransactionCursor } from './state'
 import { upsertTransaction } from './transaction'
 import { formatApiDate } from './utils'
 
-import type { Bindings } from '../../types'
 import type { TransactionChange } from './events'
 import type { Database } from './transactions'
 

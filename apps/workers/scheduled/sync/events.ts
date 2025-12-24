@@ -3,9 +3,9 @@ import * as Sentry from '@sentry/cloudflare'
 import { notifyApplePassUpdate } from '~workers/utils/apns'
 import { sendPushNotificationToClient } from '~workers/utils/push-notifications'
 
-import { parsePosterDate } from './utils'
+import type { Bindings } from '~workers/types'
 
-import type { Bindings } from '../../types'
+import { parsePosterDate } from './utils'
 
 /**
  * Maximum age for orders to receive notifications (10 minutes in milliseconds)

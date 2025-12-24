@@ -3,6 +3,7 @@ import * as Sentry from '@sentry/cloudflare'
 import { getDatabase } from '~workers/db/client'
 
 import type { DashTransaction } from '~common/api'
+import type { Bindings } from '~workers/types'
 
 import { syncDateRange } from './date-range'
 import {
@@ -10,8 +11,6 @@ import {
 	updateSyncTimestamp,
 	upsertSyncState,
 } from './state'
-
-import type { Bindings } from '../../types'
 
 export type Database = ReturnType<typeof getDatabase>
 

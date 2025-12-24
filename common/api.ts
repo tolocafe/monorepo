@@ -326,6 +326,28 @@ export type PageInfo = {
 	per_page: number
 }
 
+export type PosClientData = {
+	client: {
+		canRedeemBirthday: boolean
+		name: string
+		points: number
+		registrationDate?: string
+		totalPayedSum: string
+	}
+	summary: string
+	transactions: {
+		amount: string
+		date: string
+		guestCount: number
+		products?: {
+			category?: string
+			name?: string
+			number: number
+		}[]
+		serviceMode?: string
+	}[]
+}
+
 export type PosterIngredient = {
 	ingredient_id: string
 	ingredient_name: string
@@ -488,6 +510,17 @@ export type Promotion = {
 	slug?: string
 	/** Status: 0=inactive, 1=active */
 	status?: string
+}
+
+export type RedeemClientData = {
+	birthday?: string
+	canRedeemBirthday: boolean
+	client_groups_name?: string
+	client_id: string
+	firstname: string
+	lastname: string
+	phone: string
+	points: number
 }
 
 /**

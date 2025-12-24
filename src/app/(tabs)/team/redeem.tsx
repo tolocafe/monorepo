@@ -193,10 +193,15 @@ export default function RedeemDrink() {
 								<Trans>Redemption Successful!</Trans>
 							</H2>
 							<Paragraph style={styles.successText}>
-								<Trans>
-									{selectedDrinkType === 'birthday' ? 'Birthday' : 'Points'}{' '}
-									drink redeemed for {clientName || t`customer`}.
-								</Trans>
+								{selectedDrinkType === 'birthday' ? (
+									<Trans>
+										Birthday drink redeemed for {clientName || 'customer'}.
+									</Trans>
+								) : (
+									<Trans>
+										Points drink redeemed for {clientName || 'customer'}.
+									</Trans>
+								)}
 							</Paragraph>
 						</View>
 					) : (
