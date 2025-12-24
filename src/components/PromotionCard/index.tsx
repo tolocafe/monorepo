@@ -36,12 +36,12 @@ export default function PromotionCard({ promotion }: Props) {
 			>
 				<Card padded={false} style={styles.card}>
 					<View style={styles.imageContainer}>
-						{promotion.image ? (
+						{promotion.images?.[0]?.sourceId ? (
 							<UniImage
 								contentFit="cover"
 								placeholder={{
 									cacheKey: `promotion-${promotion.promotion_id}-placeholder`,
-									uri: getImageUrl(promotion.image.url, {
+									uri: getImageUrl(promotion.images[0].sourceId, {
 										blur: 100,
 										quality: 20,
 										source: 'sanity',
@@ -50,7 +50,7 @@ export default function PromotionCard({ promotion }: Props) {
 								}}
 								placeholderContentFit="cover"
 								source={{
-									uri: getImageUrl(promotion.image.url, {
+									uri: getImageUrl(promotion.images[0].sourceId, {
 										quality: 85,
 										source: 'sanity',
 										width: 600,

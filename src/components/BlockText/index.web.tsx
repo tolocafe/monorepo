@@ -3,6 +3,10 @@ import type { CSSProperties } from 'react'
 import { PortableText } from '@portabletext/react'
 import { useUnistyles } from 'react-native-unistyles'
 
+import type { PortableTextComponents } from '@portabletext/react'
+
+import { H1, H2, H3, H4, Paragraph, Text } from '@/components/Text'
+
 import type { BlockTextProps } from './types'
 
 /**
@@ -13,7 +17,7 @@ import type { BlockTextProps } from './types'
  * <BlockText value={portableTextContent} />
  * ```
  */
-export function BlockText({ style, value }: BlockTextProps) {
+export default function BlockText({ style, value }: BlockTextProps) {
 	const { theme } = useUnistyles()
 
 	if (!value || value.length === 0) {
@@ -25,68 +29,12 @@ export function BlockText({ style, value }: BlockTextProps) {
 	 */
 	const components = {
 		block: {
-			h1: ({ children }: { children?: React.ReactNode }) => (
-				<h1
-					style={{
-						color: theme.colors.gray.text,
-						fontSize: theme.typography.h1.fontSize,
-						fontWeight: theme.typography.h1.fontWeight,
-						marginBottom: theme.spacing.lg,
-						marginTop: 0,
-					}}
-				>
-					{children}
-				</h1>
-			),
-			h2: ({ children }: { children?: React.ReactNode }) => (
-				<h2
-					style={{
-						color: theme.colors.gray.text,
-						fontSize: theme.typography.h2.fontSize,
-						fontWeight: theme.typography.h2.fontWeight,
-						marginBottom: theme.spacing.md,
-						marginTop: 0,
-					}}
-				>
-					{children}
-				</h2>
-			),
-			h3: ({ children }: { children?: React.ReactNode }) => (
-				<h3
-					style={{
-						color: theme.colors.gray.text,
-						fontSize: theme.typography.h3.fontSize,
-						fontWeight: theme.typography.h3.fontWeight,
-						marginBottom: theme.spacing.md,
-						marginTop: 0,
-					}}
-				>
-					{children}
-				</h3>
-			),
-			h4: ({ children }: { children?: React.ReactNode }) => (
-				<h4
-					style={{
-						color: theme.colors.gray.text,
-						fontSize: theme.typography.h4.fontSize,
-						fontWeight: theme.typography.h4.fontWeight,
-						marginBottom: theme.spacing.sm,
-						marginTop: 0,
-					}}
-				>
-					{children}
-				</h4>
-			),
-			normal: ({ children }: { children?: React.ReactNode }) => (
-				<p
-					style={{
-						color: theme.colors.gray.text,
-						marginBottom: theme.spacing.md,
-						marginTop: 0,
-					}}
-				>
-					{children}
-				</p>
+			h1: (props: { children?: React.ReactNode }) => <H1 {...props} />,
+			h2: (props: { children?: React.ReactNode }) => <H2 {...props} />,
+			h3: (props: { children?: React.ReactNode }) => <H3 {...props} />,
+			h4: (props: { children?: React.ReactNode }) => <H4 {...props} />,
+			normal: (props: { children?: React.ReactNode }) => (
+				<Paragraph {...props} />
 			),
 		},
 		list: {
@@ -125,13 +73,11 @@ export function BlockText({ style, value }: BlockTextProps) {
 			em: ({ children }: { children?: React.ReactNode }) => (
 				<em style={{ fontStyle: 'italic' }}>{children}</em>
 			),
-			strong: ({ children }: { children?: React.ReactNode }) => (
-				<strong style={{ fontWeight: theme.fontWeights.semibold }}>
-					{children}
-				</strong>
+			strong: (props: { children?: React.ReactNode }) => (
+				<Text weight="bold" {...props} />
 			),
 		},
-	}
+	} satisfies PortableTextComponents
 
 	return (
 		<div

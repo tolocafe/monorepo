@@ -1,36 +1,40 @@
 import { Hono } from 'hono'
 
+import { defaultJsonHeaders } from '~workers/utils/headers'
 import sanity, {
 	getLocalizedSlug,
 	getLocalizedString,
 } from '~workers/utils/sanity'
 
+import type { Event } from '~common/api'
 import type { SupportedLocale } from '~common/locales'
+import type { Bindings } from '~workers/types'
 
-import { defaultJsonHeaders } from '../utils/headers'
+type Variables = {
+	language: SupportedLocale
+}
 
-import type { Bindings } from '../types'
-
-const events = new Hono<{ Bindings: Bindings }>()
+const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 	.get('/', async (context) => {
-		const language = context.get('language') as SupportedLocale
+		const language = context.get('language')
 
 		try {
 			const sanityEvents = await sanity.listEvents(context.env)
 
-			const localized = sanityEvents.map((event) => {
-				const imageUrl = event.image
-					? `https://cdn.sanity.io/images/${context.env.SANITY_PROJECT_ID}/${context.env.SANITY_DATASET}/${event.image.asset._ref.replace('image-', '').replace(/-([a-z]+)$/, '.$1')}`
-					: undefined
+			const localized = sanityEvents.map((event): Event => {
+				// Extract asset IDs from images array
+				const images = event.images?.map((img) => ({
+					sourceId: img.asset._ref,
+				}))
 
 				return {
-					dates: event.dates,
-					description: getLocalizedString(event.description, language),
-					image: imageUrl ? { url: imageUrl } : undefined,
-					location: getLocalizedString(event.location, language),
+					dates: event.startDate ? [event.startDate] : undefined,
+					description: getLocalizedString(event.excerpt, language),
+					images,
+					location: undefined, // Location is a reference, would need separate query
 					name: getLocalizedString(event.name, language) || '',
 					slug: getLocalizedSlug(event.slug, language) || '',
-					summary: getLocalizedString(event.summary, language),
+					summary: getLocalizedString(event.excerpt, language),
 				}
 			})
 
@@ -44,21 +48,22 @@ const events = new Hono<{ Bindings: Bindings }>()
 		}
 	})
 	.get('/:id', async (context) => {
-		const language = context.get('language') as SupportedLocale
+		const language = context.get('language')
 		const event = await sanity.getEvent(context.env, context.req.param('id'))
 
-		const imageUrl = event.image
-			? `https://cdn.sanity.io/images/${context.env.SANITY_PROJECT_ID}/${context.env.SANITY_DATASET}/${event.image.asset._ref.replace('image-', '').replace(/-([a-z]+)$/, '.$1')}`
-			: undefined
+		// Extract asset IDs from images array
+		const images = event.images?.map((img) => ({
+			sourceId: img.asset._ref,
+		}))
 
 		const localized = {
-			dates: event.dates,
-			description: getLocalizedString(event.description, language),
-			image: imageUrl ? { url: imageUrl } : undefined,
-			location: getLocalizedString(event.location, language),
+			dates: event.startDate ? [event.startDate] : undefined,
+			description: getLocalizedString(event.excerpt, language),
+			images,
+			location: undefined, // Location is a reference, would need separate query
 			name: getLocalizedString(event.name, language) || '',
 			slug: getLocalizedSlug(event.slug, language) || '',
-			summary: getLocalizedString(event.summary, language),
+			summary: getLocalizedString(event.excerpt, language),
 		}
 
 		return context.json(localized, 200, defaultJsonHeaders)

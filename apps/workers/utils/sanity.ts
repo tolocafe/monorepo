@@ -22,19 +22,23 @@ type Bean = SanitySchema<
 type Event = SanitySchema<
 	'event',
 	{
-		dates: string[] | undefined
-		description: LocaleText | undefined
-		image:
-			| undefined
-			| {
-					_type: 'image'
-					alt: LocaleText | undefined
-					asset: { _ref: string; _type: 'reference' }
-			  }
-		location: LocaleText | undefined
+		body?: LocaleBlockContent
+		endDate?: string
+		excerpt?: LocaleText
+		images?: {
+			_key: string
+			_type: 'image'
+			alt?: LocaleText
+			asset: { _ref: string; _type: 'reference' }
+		}[]
+		isFeatured?: boolean
+		location?: { _ref: string; _type: 'reference' }
+		maxAttendees?: number
 		name: LocaleText
+		registrationUrl?: string
 		slug: LocaleSlug
-		summary: LocaleText | undefined
+		startDate: string
+		status: 'cancelled' | 'completed' | 'ongoing' | 'upcoming'
 	}
 >
 

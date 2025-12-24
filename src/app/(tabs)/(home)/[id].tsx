@@ -29,7 +29,7 @@ import {
 	withUnistyles,
 } from 'react-native-unistyles'
 
-import { BlockText } from '@/components/BlockText'
+import BlockText from '@/components/BlockText'
 import Button from '@/components/Button'
 import { CheckedButton } from '@/components/CheckedButton'
 import { HeaderIconIonicons } from '@/components/Icons'
@@ -230,6 +230,7 @@ export default function MenuDetail() {
 								uri: getImageUrl(product.photo_origin || product.photo, {
 									blur: 100,
 									quality: 20,
+									source: 'sanity',
 									width: 350,
 								}),
 								width: UnistylesRuntime.screen.width,
@@ -238,6 +239,7 @@ export default function MenuDetail() {
 							source={{
 								uri: getImageUrl(product.photo_origin || product.photo, {
 									quality: 85,
+									source: 'sanity',
 									width: 900,
 								}),
 							}}
@@ -284,13 +286,20 @@ export default function MenuDetail() {
 
 						{(product.intensity || product.caffeine) && (
 							<View style={styles.levels}>
-								<LevelIndicator
-									label={t`Intensity`}
-									level={product.intensity}
-								/>
+								{product.intensity ? (
+									<LevelIndicator
+										label={t`Intensity`}
+										level={product.intensity}
+									/>
+								) : null}
+								{product.caffeine ? (
+									<LevelIndicator
+										label={t`Caffeine`}
+										level={product.caffeine}
+									/>
+								) : null}
 							</View>
 						)}
-						<LevelIndicator label={t`Caffeine`} level={product.caffeine} />
 					</View>
 
 					{htmlRecipeSource &&
@@ -300,10 +309,7 @@ export default function MenuDetail() {
 								<Trans>Recipe</Trans>
 							</H2>
 							<View style={styles.recipeSection}>
-								<WebContent
-									{...autoheightWebshellProps}
-									source={htmlRecipeSource}
-								/>
+								<WebContent source={htmlRecipeSource} />
 							</View>
 						</View>
 					) : null}
@@ -632,7 +638,11 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		objectFit: 'cover',
 		width: '100%',
 	},
-	imageFallback: { height: '100%', width: '100%' },
+	imageFallback: {
+		backgroundColor: theme.colors.verde.interactive,
+		height: '100%',
+		width: '100%',
+	},
 	levels: {
 		gap: theme.spacing.md,
 	},

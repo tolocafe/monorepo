@@ -8,7 +8,11 @@ import type { Product, Promotion } from '~common/api'
 import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
 
-const menu = new Hono<{ Bindings: Bindings }>()
+type Variables = {
+	language: SupportedLocale
+}
+
+const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 	.get('/categories', async (context) => {
 		const categories = await api.menu.getMenuCategories(
 			context.env.POSTER_TOKEN,
@@ -18,7 +22,7 @@ const menu = new Hono<{ Bindings: Bindings }>()
 	})
 
 	.get('/products', async (context) => {
-		const language = context.get('language') as SupportedLocale
+		const language = context.get('language')
 
 		const [posterProducts, sanityProducts] = await Promise.all([
 			api.menu.getMenuProducts(context.env.POSTER_TOKEN, {
@@ -26,9 +30,6 @@ const menu = new Hono<{ Bindings: Bindings }>()
 			}),
 			sanity.listProducts(context.env, language).catch(() => null),
 		])
-
-		// eslint-disable-next-line no-console
-		console.log(sanityProducts)
 
 		const body = posterProducts.map((product) => {
 			const sanityProduct = sanityProducts?.find(
@@ -55,11 +56,14 @@ const menu = new Hono<{ Bindings: Bindings }>()
 			} satisfies Product
 		})
 
-		return context.json(body, 200, defaultJsonHeaders)
+		return context.json(body, 200, {
+			...defaultJsonHeaders,
+			'Content-Language': language,
+		})
 	})
 
 	.get('/promotions', async (context) => {
-		const language = context.get('language') as SupportedLocale
+		const language = context.get('language')
 
 		const [posterPromotions, sanityPromotions] = await Promise.all([
 			api.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
@@ -92,11 +96,14 @@ const menu = new Hono<{ Bindings: Bindings }>()
 			} satisfies Promotion
 		})
 
-		return context.json(merged, 200, defaultJsonHeaders)
+		return context.json(merged, 200, {
+			...defaultJsonHeaders,
+			'Content-Language': language,
+		})
 	})
 
 	.get('/products/:id', async (context) => {
-		const language = context.get('language') as SupportedLocale
+		const language = context.get('language')
 
 		const productId = context.req.param('id')
 
@@ -133,7 +140,10 @@ const menu = new Hono<{ Bindings: Bindings }>()
 				tag: sanityProduct?.tag,
 			} satisfies Product
 
-			return context.json(body, 200, defaultJsonHeaders)
+			return context.json(body, 200, {
+				...defaultJsonHeaders,
+				'Content-Language': language,
+			})
 		} catch {
 			return context.json(
 				{ error: 'Failed to fetch product details' },

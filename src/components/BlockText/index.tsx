@@ -3,7 +3,9 @@ import { View } from 'react-native'
 import { PortableText } from '@portabletext/react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { H1, H2, H3, H4, Paragraph } from '@/components/Text'
+import type { PortableTextComponents } from '@portabletext/react-native'
+
+import { H1, H2, H3, H4, Paragraph, Text } from '@/components/Text'
 
 import type { BlockTextProps } from './types'
 
@@ -12,24 +14,22 @@ import type { BlockTextProps } from './types'
  */
 const components = {
 	block: {
-		h1: ({ children }: { children: React.ReactNode }) => <H1>{children}</H1>,
-		h2: ({ children }: { children: React.ReactNode }) => <H2>{children}</H2>,
-		h3: ({ children }: { children: React.ReactNode }) => <H3>{children}</H3>,
-		h4: ({ children }: { children: React.ReactNode }) => <H4>{children}</H4>,
-		normal: ({ children }: { children: React.ReactNode }) => (
-			<Paragraph style={styles.paragraph}>{children}</Paragraph>
-		),
+		h1: (props: { children?: React.ReactNode }) => <H1 {...props} />,
+		h2: (props: { children?: React.ReactNode }) => <H2 {...props} />,
+		h3: (props: { children?: React.ReactNode }) => <H3 {...props} />,
+		h4: (props: { children?: React.ReactNode }) => <H4 {...props} />,
+		normal: (props: { children?: React.ReactNode }) => <Paragraph {...props} />,
 	},
 	list: {
-		bullet: ({ children }: { children: React.ReactNode }) => (
+		bullet: ({ children }: { children?: React.ReactNode }) => (
 			<View style={styles.list}>{children}</View>
 		),
-		number: ({ children }: { children: React.ReactNode }) => (
+		number: ({ children }: { children?: React.ReactNode }) => (
 			<View style={styles.list}>{children}</View>
 		),
 	},
 	listItem: {
-		bullet: ({ children }: { children: React.ReactNode }) => (
+		bullet: ({ children }: { children?: React.ReactNode }) => (
 			<View style={styles.listItem}>
 				<Paragraph style={styles.bullet}>•</Paragraph>
 				<View style={styles.listItemContent}>
@@ -41,7 +41,7 @@ const components = {
 			children,
 			index,
 		}: {
-			children: React.ReactNode
+			children?: React.ReactNode
 			index: number
 		}) => (
 			<View style={styles.listItem}>
@@ -53,14 +53,14 @@ const components = {
 		),
 	},
 	marks: {
-		strong: ({ children }: { children: React.ReactNode }) => (
-			<Paragraph style={styles.strong}>{children}</Paragraph>
-		),
 		em: ({ children }: { children: React.ReactNode }) => (
 			<Paragraph style={styles.italic}>{children}</Paragraph>
 		),
+		strong: (props: { children: React.ReactNode }) => (
+			<Text weight="bold" {...props} />
+		),
 	},
-}
+} satisfies PortableTextComponents
 
 /**
  * BlockText component for rendering Portable Text in React Native
@@ -70,14 +70,14 @@ const components = {
  * <BlockText value={portableTextContent} />
  * ```
  */
-export function BlockText({ value, style }: BlockTextProps) {
+export default function BlockText({ style, value }: BlockTextProps) {
 	if (!value || value.length === 0) {
 		return null
 	}
 
 	return (
 		<View style={style}>
-			<PortableText value={value} components={components} />
+			<PortableText components={components} value={value} />
 		</View>
 	)
 }

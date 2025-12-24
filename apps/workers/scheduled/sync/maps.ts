@@ -73,7 +73,10 @@ export function mapProduct(product: PosterProduct) {
 		caffeine: product.caffeine || null,
 		code: product.product_code || null,
 		color: product.color || null,
-		description: product.description || product['small-description'] || null,
+		description:
+			typeof product.description === 'string'
+				? product.description
+				: product['small-description'] ?? null,
 		differentSpotRaw: product.different_spots_prices || null,
 		hidden: product.hidden === '1',
 		id: Number.parseInt(product.product_id, 10),

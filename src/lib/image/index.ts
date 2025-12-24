@@ -1,4 +1,4 @@
-import imageUrlBuilder from '@sanity/image-url'
+import { createImageUrlBuilder } from '@sanity/image-url'
 
 import { POSTER_BASE_URL } from '@/lib/api'
 
@@ -9,7 +9,7 @@ const SANITY_PROJECT_ID = 'm1zo6pvi'
 const SANITY_DATASET = 'production'
 
 // Initialize Sanity image URL builder
-const builder = imageUrlBuilder({
+const builder = createImageUrlBuilder({
 	dataset: SANITY_DATASET,
 	projectId: SANITY_PROJECT_ID,
 })
@@ -66,6 +66,15 @@ export function buildSanityImageUrl(
 }
 
 /**
+ * Helper to get the first image sourceId from a SanityImageReference array
+ */
+export function getFirstImageSourceId(
+	images: SanityImageReference[] | undefined,
+): string | undefined {
+	return images?.[0]?.sourceId
+}
+
+/**
  * Get image URL from either Sanity or Poster source
  * For Sanity images, pass the sourceId from SanityImageReference
  */
@@ -84,13 +93,4 @@ export function getImageUrl(
 	}
 
 	return `https://app.tolo.cafe/cdn-cgi/image/quality=${quality},format=${format},blur=${blur},width=${width}/${source === 'poster' ? POSTER_BASE_URL : ''}${path}`
-}
-
-/**
- * Helper to get the first image sourceId from a SanityImageReference array
- */
-export function getFirstImageSourceId(
-	images: SanityImageReference[] | undefined,
-): string | undefined {
-	return images?.[0]?.sourceId
 }

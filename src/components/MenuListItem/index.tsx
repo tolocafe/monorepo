@@ -83,7 +83,7 @@ export default function MenuListItem(props: Props) {
 									transition={200}
 								/>
 							) : (
-								<View aria-hidden style={styles.image} />
+								<View aria-hidden />
 							)}
 							{item.tag && item.tag in tagLabels ? (
 								<View style={styles.tag}>
@@ -124,6 +124,7 @@ const styles = StyleSheet.create((theme, runtime) => {
 			flex: 1,
 			objectFit: 'cover',
 		},
+
 		link: {
 			flex: 1,
 		},
@@ -148,7 +149,7 @@ const styles = StyleSheet.create((theme, runtime) => {
 			minHeight: ADD_TO_BAG_BUTTON_SIZE,
 		},
 		menuItemImageContainer: {
-			backgroundColor: theme.colors.gray.border,
+			backgroundColor: theme.colors.verde.interactive,
 			borderCurve: 'continuous',
 			borderTopLeftRadius: theme.borderRadius.lg,
 			borderTopRightRadius: theme.borderRadius.lg,

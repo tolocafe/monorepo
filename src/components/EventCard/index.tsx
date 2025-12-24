@@ -38,21 +38,23 @@ export default function EventCard({ event }: Props) {
 			>
 				<Card padded={false} style={styles.card}>
 					<View style={styles.imageContainer}>
-						{event.image ? (
+						{event.images?.[0]?.sourceId ? (
 							<UniImage
 								contentFit="cover"
 								placeholder={{
 									cacheKey: `event-${event.slug}-placeholder`,
-									uri: getImageUrl(event.image.url, {
+									uri: getImageUrl(event.images[0].sourceId, {
 										blur: 100,
 										quality: 20,
+										source: 'sanity',
 										width: 350,
 									}),
 								}}
 								placeholderContentFit="cover"
 								source={{
-									uri: getImageUrl(event.image.url, {
+									uri: getImageUrl(event.images[0].sourceId, {
 										quality: 90,
+										source: 'sanity',
 										width: 350,
 									}),
 								}}

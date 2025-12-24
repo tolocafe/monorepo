@@ -3,10 +3,10 @@ import { captureEvent } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
-import { languageDetector } from 'hono/language'
 
-import { SUPPORTED_LOCALES } from '~common/locales'
+import type { SupportedLocale } from '~common/locales'
 
+import { languageDetector } from './lib/language-detector'
 import auth from './routes/auth'
 import broadcast from './routes/broadcast'
 import clients from './routes/clients'
@@ -26,17 +26,18 @@ import { authenticate } from './utils/jwt'
 
 import type { Bindings } from './types'
 
-const app = new Hono<{ Bindings: Bindings }>().basePath('/api')
+type Variables = {
+	language: SupportedLocale
+}
+
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>().basePath(
+	'/api',
+)
 
 const TOLO_DOMAIN = 'tolo.cafe'
 
 app
-	.use(
-		languageDetector({
-			fallbackLanguage: SUPPORTED_LOCALES[0],
-			supportedLanguages: [...SUPPORTED_LOCALES],
-		}),
-	)
+	.use(languageDetector)
 	.use(
 		'*',
 		cors({

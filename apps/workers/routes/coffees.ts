@@ -10,9 +10,13 @@ import type { SupportedLocale } from '~common/locales'
 
 import type { Bindings } from '../types'
 
-const coffees = new Hono<{ Bindings: Bindings }>()
+type Variables = {
+	language: SupportedLocale
+}
+
+const coffees = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 	.get('/', async (context) => {
-		const language = context.get('language') as SupportedLocale
+		const language = context.get('language')
 
 		try {
 			const beans = await sanity.listBeans(context.env)
@@ -36,7 +40,7 @@ const coffees = new Hono<{ Bindings: Bindings }>()
 		}
 	})
 	.get('/:id', async (context) => {
-		const language = context.get('language') as SupportedLocale
+		const language = context.get('language')
 		const bean = await sanity.getBean(context.env, context.req.param('id'))
 
 		const localized = {
