@@ -2,9 +2,7 @@ import PostHog from 'posthog-react-native'
 
 import { posthogStorage } from './storage'
 
-const POSTHOG_API_KEY =
-	process.env.EXPO_PUBLIC_POSTHOG_API_KEY ??
-	'phc_eKnsCYCIb1V2QaTGpkmlSgwiyL51s4bNgwVfdmkZXv6'
+const POSTHOG_API_KEY = process.env.EXPO_PUBLIC_POSTHOG_API_KEY as string
 const POSTHOG_HOST = 'https://a.tolo.cafe'
 
 /**
