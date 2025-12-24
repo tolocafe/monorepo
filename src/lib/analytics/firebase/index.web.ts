@@ -13,7 +13,24 @@ import { requestTrackingPermissionAsync } from '@/lib/notifications'
 
 import type { AnalyticsEvent, EventProperties } from './utils'
 
-export async function enableAnalytics({
+export async function enableAnalytics() {
+	try {
+		const analytics = getAnalytics()
+
+		setAnalyticsCollectionEnabled(analytics, true)
+
+		setConsent({
+			ad_personalization: 'granted',
+			ad_storage: 'granted',
+			ad_user_data: 'granted',
+			analytics_storage: 'granted',
+		})
+	} catch (error) {
+		captureException(error)
+	}
+}
+
+export async function identify({
 	email,
 	firstName,
 	lastName,
@@ -28,15 +45,6 @@ export async function enableAnalytics({
 }) {
 	try {
 		const analytics = getAnalytics()
-
-		setAnalyticsCollectionEnabled(analytics, true)
-
-		setConsent({
-			ad_personalization: 'granted',
-			ad_storage: 'granted',
-			ad_user_data: 'granted',
-			analytics_storage: 'granted',
-		})
 
 		const [emailAddressHash, firstNameHash, lastNameHash, phoneNumberHash] =
 			await Promise.all([

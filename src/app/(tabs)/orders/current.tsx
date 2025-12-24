@@ -17,7 +17,7 @@ import { Input } from '@/components/Input'
 import { ModifierTag } from '@/components/ModifierTag'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
-import { trackEvent } from '@/lib/analytics/firebase'
+import { track } from '@/lib/analytics'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { useRegisterForPushNotifications } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -75,7 +75,7 @@ export default function OrderDetail() {
 			})
 		},
 		onSuccess() {
-			void trackEvent('purchase', {
+			void track('purchase', {
 				currency: 'MXN',
 				price: orderTotal.toString(),
 				quantity: order?.products
@@ -112,7 +112,7 @@ export default function OrderDetail() {
 	useEffect(() => {
 		if (!order?.products) return
 
-		void trackEvent('view_cart', {
+		void track('view_cart', {
 			currency: 'MXN',
 			price: orderTotal.toString(),
 			quantity: order.products
@@ -159,7 +159,7 @@ export default function OrderDetail() {
 				return
 			}
 
-			void trackEvent('begin_checkout', {
+			void track('begin_checkout', {
 				currency: 'MXN',
 				price: orderTotal.toString(),
 				quantity: order?.products

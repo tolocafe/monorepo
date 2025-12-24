@@ -13,7 +13,7 @@ function getDefaultLocale() {
 		return locale
 	}
 
-	return 'es'
+	return AVAILABLE_LOCALES[0]
 }
 
 export function getCurrentLocale() {

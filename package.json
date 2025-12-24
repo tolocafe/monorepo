@@ -1,7 +1,7 @@
 {
 	"name": "@tolo/app",
 	"main": "src/index.ts",
-	"version": "1.4.1",
+	"version": "1.4.2",
 	"packageManager": "bun@1.2.23",
 	"scripts": {
 		"start": "expo start",
@@ -93,6 +93,7 @@
 		"ky": "1.14.1",
 		"passkit-generator": "3.5.6",
 		"postgres": "^3.4.7",
+		"posthog-react-native": "4.17.0",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
 		"react-native": "0.81.5",

@@ -21,6 +21,7 @@ export default function Root({ children }: PropsWithChildren) {
 					rel="dns-prefetch"
 				/>
 				<link href="https://firebase.googleapis.com" rel="dns-prefetch" />
+				<link href="https://a.tolo.cafe" rel="dns-prefetch" />
 
 				{/* SEO and Performance Meta Tags */}
 				<meta

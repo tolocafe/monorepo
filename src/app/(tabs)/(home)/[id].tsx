@@ -38,7 +38,7 @@ import { LinearGradient } from '@/components/LinearGradient'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
 import WebContent from '@/components/WebContent'
-import { trackEvent } from '@/lib/analytics/firebase'
+import { track } from '@/lib/analytics'
 import { getImageUrl } from '@/lib/image'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { productQueryOptions } from '@/lib/queries/product'
@@ -119,7 +119,7 @@ export default function MenuDetail() {
 	/** Track view item event */
 	useEffect(() => {
 		if (!product?.product_id) return
-		void trackEvent('view_item', { item_id: product.product_id })
+		void track('view_item', { item_id: product.product_id })
 	}, [product?.product_id])
 
 	/** Default each group to its first modification when product loads */

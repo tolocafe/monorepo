@@ -15,7 +15,25 @@ import type { AnalyticsEvent, EventProperties } from './utils'
 
 const algorithm = CryptoDigestAlgorithm.SHA256
 
-export async function enableAnalytics({
+export async function enableAnalytics() {
+	try {
+		const analytics = getAnalytics()
+
+		await Promise.all([
+			setAnalyticsCollectionEnabled(analytics, true),
+			setConsent(analytics, {
+				ad_personalization: true,
+				ad_storage: true,
+				ad_user_data: true,
+				analytics_storage: true,
+			}),
+		])
+	} catch (error) {
+		captureException(error)
+	}
+}
+
+export async function identify({
 	email,
 	firstName,
 	lastName,
@@ -31,16 +49,6 @@ export async function enableAnalytics({
 	const analytics = getAnalytics()
 
 	try {
-		await Promise.all([
-			setAnalyticsCollectionEnabled(analytics, true),
-			setConsent(analytics, {
-				ad_personalization: true,
-				ad_storage: true,
-				ad_user_data: true,
-				analytics_storage: true,
-			}),
-		])
-
 		const [emailAddressHash, firstNameHash, lastNameHash, phoneNumberHash] =
 			await Promise.all([
 				email ? hash256(email, 'email') : null,

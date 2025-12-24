@@ -16,6 +16,7 @@ import { StatusBar } from 'expo-status-bar'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { FacebookPixel } from '@/lib/analytics/facebook-pixel'
+import { posthog, PostHogProvider } from '@/lib/analytics/posthog'
 import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import '@/lib/analytics/firebase/init'
@@ -103,33 +104,35 @@ function RootLayout() {
 					<StatusBar style="auto" />
 					<FacebookPixel />
 					<I18nProvider i18n={i18n}>
-						<Stack initialRouteName="(tabs)">
-							<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-							<Stack.Screen name="+not-found" />
-							<Stack.Screen
-								name="sign-in"
-								options={{
-									presentation: Platform.select({
-										default: 'modal',
-										web: 'transparentModal',
-									}),
-								}}
-							/>
-							<Stack.Screen
-								name="tables/[table_id]"
-								options={{
-									headerShown: false,
-									presentation: 'modal',
-								}}
-							/>
-							<Stack.Screen
-								name="tables/[location_id]/[table_id]"
-								options={{
-									presentation: 'modal',
-								}}
-							/>
-						</Stack>
-						<Toaster position="bottom-right" />
+						<PostHogProvider client={posthog}>
+							<Stack initialRouteName="(tabs)">
+								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+								<Stack.Screen name="+not-found" />
+								<Stack.Screen
+									name="sign-in"
+									options={{
+										presentation: Platform.select({
+											default: 'modal',
+											web: 'transparentModal',
+										}),
+									}}
+								/>
+								<Stack.Screen
+									name="tables/[table_id]"
+									options={{
+										headerShown: false,
+										presentation: 'modal',
+									}}
+								/>
+								<Stack.Screen
+									name="tables/[location_id]/[table_id]"
+									options={{
+										presentation: 'modal',
+									}}
+								/>
+							</Stack>
+							<Toaster position="bottom-right" />
+						</PostHogProvider>
 					</I18nProvider>
 				</ThemeProvider>
 			</QueryProvider>

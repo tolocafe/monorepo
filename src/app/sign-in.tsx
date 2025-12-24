@@ -18,7 +18,8 @@ import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
-import { enableAnalytics, trackEvent } from '@/lib/analytics/firebase'
+import { enableAnalytics, identify } from '@/lib/analytics'
+import { track } from '@/lib/analytics'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import {
 	requestOtpMutationOptions,
@@ -58,10 +59,9 @@ export default function SignIn() {
 
 			requestTrackingPermissionAsync()
 				.then((granted) => {
-					void trackEvent('login')
-
 					if (granted) {
-						void enableAnalytics({
+						void enableAnalytics()
+						identify({
 							email: data.client.email,
 							firstName: data.client.firstname,
 							lastName: data.client.lastname,
@@ -69,6 +69,8 @@ export default function SignIn() {
 							userId: data.client.client_id,
 						})
 					}
+
+					void track('login')
 				})
 				.catch(captureException)
 
