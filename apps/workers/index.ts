@@ -71,8 +71,9 @@ app
 					phone: 'phone' in payload ? (payload.phone as string) : undefined,
 				})
 			}
-		} catch {
-			//
+		} catch (error) {
+			// Authentication is optional in middleware - continue even if it fails
+			// Individual routes will handle authentication requirements
 		}
 		return next()
 	})

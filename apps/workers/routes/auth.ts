@@ -4,6 +4,7 @@ import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 
 import type { CookieOptions } from 'hono/utils/cookie'
+import type { Context } from 'hono'
 
 import { RequestOtpSchema, VerifyOtpSchema } from '~common/schemas'
 import { defaultJsonHeaders } from '~workers/utils/headers'
@@ -16,6 +17,7 @@ import {
 } from '../utils/jwt'
 import { generateOtp, storeOtp, verifyOtp } from '../utils/otp'
 import { api, sendSms } from '../utils/poster'
+import { parseTestPhoneNumbers } from '../utils/constants'
 
 import type { Bindings } from '../types'
 
@@ -30,6 +32,17 @@ const isSessionRecord = (value: unknown): value is SessionRecord =>
 	'createdAt' in value &&
 	'name' in value &&
 	'token' in value
+
+function getIsWebRequest(context: Context): boolean {
+	const origin = context.req.header('Origin')
+	const userAgent = context.req.header('User-Agent') ?? ''
+	const browserIdentifiers = ['Mozilla', 'Chrome', 'Safari', 'Firefox', 'Edge']
+
+	return (
+		origin !== undefined &&
+		browserIdentifiers.some((identifier) => userAgent.includes(identifier))
+	)
+}
 
 const getCookieOptions = (options: {
 	expiresIn?: number
@@ -98,8 +111,15 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		const code = generateOtp()
 
 		await Promise.all([
-			storeOtp(context.env.KV_OTP, phone, code),
+			storeOtp(phone, code, {
+				kv: context.env.KV_OTP,
+				testPhoneNumbers: parseTestPhoneNumbers(context.env.TEST_PHONE_NUMBERS),
+			}),
 			sendSms(
+				{
+					accessKeyId: context.env.AWS_ACCESS_KEY_ID,
+					secretAccessKey: context.env.AWS_SECRET_ACCESS_KEY,
+				},
 				context.env.POSTER_TOKEN,
 				phone,
 				`[TOLO] Tu código de verificación es ${code}`,
@@ -113,7 +133,11 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			await context.req.json(),
 		)
 
-		const { isTest } = await verifyOtp(context.env.KV_OTP, phone, code)
+		const { isTest } = await verifyOtp(phone, code, {
+			kv: context.env.KV_OTP,
+			testOtpCode: context.env.TEST_OTP_CODE,
+			testPhoneNumbers: parseTestPhoneNumbers(context.env.TEST_PHONE_NUMBERS),
+		})
 
 		const posterClient = await api.clients.getClient(
 			context.env.POSTER_TOKEN,
@@ -177,12 +201,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				: Promise.resolve(),
 		])
 
-		// For web: set HttpOnly cookie. For native: client uses token from body
-		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')
-
 		const responseBody = { client: posterClient, token }
 
-		if (isWeb) {
+		if (getIsWebRequest(context)) {
 			setCookie(
 				context,
 				'tolo_session',
@@ -264,10 +285,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			),
 		)
 
-		// For web, clear the HttpOnly cookie
-		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')
-
-		if (isWeb) {
+		if (getIsWebRequest(context)) {
 			deleteCookie(
 				context,
 				'tolo_session',

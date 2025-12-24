@@ -9,6 +9,10 @@ export type Bindings = Cloudflare.Env & {
 	/** APNs for PassKit push notifications */
 	APNS_TEAM_ID: string
 	ASSETS: Fetcher
+	/** AWS SNS for SMS notifications */
+	AWS_ACCESS_KEY_ID: string
+	/** AWS SNS for SMS notifications */
+	AWS_SECRET_ACCESS_KEY: string
 	BROADCAST_SECRET: string
 	BROWSER: BrowserWorker
 	D1_TOLO: D1Database

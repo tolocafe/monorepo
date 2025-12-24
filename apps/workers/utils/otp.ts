@@ -1,10 +1,6 @@
 import { HTTPException } from 'hono/http-exception'
 
-import { testPhoneNumbers } from './constants'
-
 const DEFAULT_OTP_TTL = 300
-
-const TEST_OTP_CODE = process.env.TEST_OTP_CODE as string | undefined
 
 export function generateOtp(length = 6) {
 	return [...crypto.getRandomValues(new Uint32Array(length))]
@@ -13,33 +9,45 @@ export function generateOtp(length = 6) {
 }
 
 export async function storeOtp(
-	kv: KVNamespace,
 	phone: string,
 	code: string,
-	ttl = DEFAULT_OTP_TTL,
+	options: {
+		kv: KVNamespace
+		testPhoneNumbers: string[]
+		ttl?: number
+	},
 ) {
-	if (testPhoneNumbers.includes(phone)) return
+	if (options.testPhoneNumbers.includes(phone)) return
 
-	await kv.put(phone, code, { expirationTtl: ttl })
+	await options.kv.put(phone, code, {
+		expirationTtl: options.ttl ?? DEFAULT_OTP_TTL,
+	})
 }
 
-export async function verifyOtp(kv: KVNamespace, phone: string, code: string) {
+export async function verifyOtp(
+	phone: string,
+	code: string,
+	options: {
+		kv: KVNamespace
+		testOtpCode?: string
+		testPhoneNumbers: string[]
+	},
+) {
 	if (
-		testPhoneNumbers.includes(phone) &&
-		TEST_OTP_CODE &&
-		code === TEST_OTP_CODE
+		options.testPhoneNumbers.includes(phone) &&
+		options.testOtpCode &&
+		code === options.testOtpCode
 	) {
 		return { isTest: true }
 	}
 
-	const stored = await kv.get(phone)
+	const stored = await options.kv.get(phone)
 
 	if (!stored || stored !== code) {
 		throw new HTTPException(401, { message: 'Invalid or expired code' })
 	}
 
-	// OTPs should be single-use; delete after a successful verification
-	await kv.delete(phone)
+	await options.kv.delete(phone)
 
 	return { isTest: false }
 }
