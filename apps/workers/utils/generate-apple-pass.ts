@@ -7,7 +7,7 @@ import type { ClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
 
 import { api } from './poster'
-import { getCustomerStamps, STAMPS_PER_REDEMPTION } from './stamps'
+import { getCustomerStamps } from './stamps'
 
 const PASS_TYPE_IDENTIFIER = 'pass.cafe.tolo.app'
 const STORE_IDENTIFIER = 6_749_597_635
@@ -94,7 +94,7 @@ export default async function createApplePass(
 		},
 		{
 			key: 'stamps',
-			label: `Sellos (${STAMPS_PER_REDEMPTION} = ☕️)`,
+			label: `Sellos`,
 			value: stampsData.stamps,
 		},
 	)

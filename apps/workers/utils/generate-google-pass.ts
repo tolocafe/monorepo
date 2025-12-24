@@ -9,7 +9,7 @@ import type { ClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
 
 import { api } from './poster'
-import { getCustomerStamps, STAMPS_PER_REDEMPTION } from './stamps'
+import { getCustomerStamps } from './stamps'
 
 const GOOGLE_WALLET_BASE_URL =
 	'https://walletobjects.googleapis.com/walletobjects/v1' as const
@@ -342,7 +342,7 @@ function getLoyaltyObject({
 			balance: {
 				int: stamps,
 			},
-			label: `Sellos (${STAMPS_PER_REDEMPTION} = ☕️)`,
+			label: `Sellos`,
 		},
 		state: 'ACTIVE',
 		textModulesData,
