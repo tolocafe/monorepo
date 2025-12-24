@@ -76,7 +76,7 @@ export function mapProduct(product: PosterProduct) {
 		description:
 			typeof product.description === 'string'
 				? product.description
-				: product['small-description'] ?? null,
+				: (product['small-description'] ?? null),
 		differentSpotRaw: product.different_spots_prices || null,
 		hidden: product.hidden === '1',
 		id: Number.parseInt(product.product_id, 10),
