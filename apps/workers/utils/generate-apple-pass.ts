@@ -6,8 +6,8 @@ import type { Context } from 'hono'
 import type { ClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
 
-import { getCustomerPoints } from './points'
 import { api } from './poster'
+import { getCustomerStamps, STAMPS_PER_REDEMPTION } from './stamps'
 
 const PASS_TYPE_IDENTIFIER = 'pass.cafe.tolo.app'
 const STORE_IDENTIFIER = 6_749_597_635
@@ -77,8 +77,8 @@ export default async function createApplePass(
 		})
 		.then((transactions) => transactions.length)
 
-	// Calculate points based on transactions and redemptions
-	const pointsData = await getCustomerPoints(
+	// Calculate stamps based on transactions and redemptions
+	const stampsData = await getCustomerStamps(
 		context.env.D1_TOLO,
 		Number.parseInt(client.client_id, 10),
 		transactionsCount,
@@ -93,9 +93,9 @@ export default async function createApplePass(
 			),
 		},
 		{
-			key: 'points',
-			label: `Puntos`,
-			value: pointsData.points,
+			key: 'stamps',
+			label: `Sellos (${STAMPS_PER_REDEMPTION} = ☕️)`,
+			value: stampsData.stamps,
 		},
 	)
 
@@ -134,7 +134,7 @@ export default async function createApplePass(
 		message: barcodeMessage,
 	})
 
-	for (const { name, path } of imagesToAdd(pointsData.points)) {
+	for (const { name, path } of imagesToAdd(stampsData.stamps)) {
 		try {
 			const imageBuffer = await getAssetImage(context.env.ASSETS, path)
 			pass.addBuffer(name, imageBuffer)

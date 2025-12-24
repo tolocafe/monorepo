@@ -68,8 +68,8 @@ export default function ClientScreen({ clientId }: { clientId: string }) {
 
 			<h2>Programa de lealtad</h2>
 			<label>
-				<b>Puntos</b>
-				<span>{dataState.data.client.points}</span>
+				<b>Sellos</b>
+				<span>{dataState.data.client.stamps}</span>
 			</label>
 			<label>
 				<b>Bebida de cumpleaños</b>

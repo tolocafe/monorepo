@@ -63,20 +63,21 @@ export default function MenuListItem(props: Props) {
 								<UniImage
 									contentFit="cover"
 									placeholder={{
-										cacheKey: `${item.product_id}-placeholder`,
+										cacheKey: `${item.photo}-placeholder`,
 										uri: getImageUrl(item.photo, {
 											blur: 100,
 											quality: 20,
 											source: 'sanity',
-											width: 350,
+											width: 300,
 										}),
 									}}
 									placeholderContentFit="cover"
 									source={{
+										cacheKey: `${item.photo}-image`,
 										uri: getImageUrl(item.photo, {
-											quality: 85,
+											quality: 90,
 											source: 'sanity',
-											width: 400,
+											width: 300,
 										}),
 									}}
 									style={styles.image}

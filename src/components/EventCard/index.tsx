@@ -29,6 +29,8 @@ export default function EventCard({ event }: Props) {
 		transform: [{ scale: scaleValue.get() }],
 	}))
 
+	const imageSourceId = event.images?.[0]?.sourceId
+
 	return (
 		<Animated.View style={[animatedStyle, styles.container]}>
 			<Pressable
@@ -42,8 +44,8 @@ export default function EventCard({ event }: Props) {
 							<UniImage
 								contentFit="cover"
 								placeholder={{
-									cacheKey: `event-${event.slug}-placeholder`,
-									uri: getImageUrl(event.images[0].sourceId, {
+									cacheKey: `${imageSourceId}-placeholder`,
+									uri: getImageUrl(imageSourceId, {
 										blur: 100,
 										quality: 20,
 										source: 'sanity',
@@ -52,7 +54,8 @@ export default function EventCard({ event }: Props) {
 								}}
 								placeholderContentFit="cover"
 								source={{
-									uri: getImageUrl(event.images[0].sourceId, {
+									cacheKey: `${imageSourceId}-image`,
+									uri: getImageUrl(imageSourceId, {
 										quality: 90,
 										source: 'sanity',
 										width: 350,

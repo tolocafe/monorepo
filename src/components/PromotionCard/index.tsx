@@ -27,6 +27,8 @@ export default function PromotionCard({ promotion }: Props) {
 		transform: [{ scale: scaleValue.get() }],
 	}))
 
+	const imageSourceId = promotion.images?.[0]?.sourceId
+
 	return (
 		<Animated.View style={[animatedStyle, styles.container]}>
 			<Pressable
@@ -40,8 +42,8 @@ export default function PromotionCard({ promotion }: Props) {
 							<UniImage
 								contentFit="cover"
 								placeholder={{
-									cacheKey: `promotion-${promotion.promotion_id}-placeholder`,
-									uri: getImageUrl(promotion.images[0].sourceId, {
+									cacheKey: `${imageSourceId}-placeholder`,
+									uri: getImageUrl(imageSourceId, {
 										blur: 100,
 										quality: 20,
 										source: 'sanity',
@@ -50,7 +52,8 @@ export default function PromotionCard({ promotion }: Props) {
 								}}
 								placeholderContentFit="cover"
 								source={{
-									uri: getImageUrl(promotion.images[0].sourceId, {
+									cacheKey: `${imageSourceId}-image`,
+									uri: getImageUrl(imageSourceId, {
 										quality: 85,
 										source: 'sanity',
 										width: 600,

@@ -99,7 +99,7 @@ export type Coffee = {
  * @see https://dev.joinposter.com/en/docs/v3/web/dash/getTransactions
  */
 export type DashTransaction = {
-	/** Bonus points used in the transaction */
+	/** Bonus stamps used in the transaction */
 	bonus: number
 	/** Client's first name */
 	client_firstname?: string
@@ -127,7 +127,7 @@ export type DashTransaction = {
 	 * - 3: Mixed payment (combination of methods)
 	 */
 	pay_type: string
-	/** Amount paid using bonus points (in currency units as string) */
+	/** Amount paid using bonus stamps (in currency units as string) */
 	payed_bonus: string
 	/** Amount paid by card (in currency units as string) */
 	payed_card: string
@@ -330,8 +330,8 @@ export type PosClientData = {
 	client: {
 		canRedeemBirthday: boolean
 		name: string
-		points: number
 		registrationDate?: string
+		stamps: number
 		totalPayedSum: string
 	}
 	summary: string
@@ -520,7 +520,7 @@ export type RedeemClientData = {
 	firstname: string
 	lastname: string
 	phone: string
-	points: number
+	stamps: number
 }
 
 /**

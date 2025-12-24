@@ -8,8 +8,8 @@ import type { Context } from 'hono'
 import type { ClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
 
-import { getCustomerPoints, POINTS_PER_REDEMPTION } from './points'
 import { api } from './poster'
+import { getCustomerStamps, STAMPS_PER_REDEMPTION } from './stamps'
 
 const GOOGLE_WALLET_BASE_URL =
 	'https://walletobjects.googleapis.com/walletobjects/v1' as const
@@ -74,7 +74,7 @@ export async function notifyGooglePassUpdate(
 			.then((transactions) => transactions.length)
 			.catch(() => 0)
 
-		const pointsData = await getCustomerPoints(
+		const stampsData = await getCustomerStamps(
 			database,
 			clientId,
 			transactionsCount,
@@ -85,7 +85,7 @@ export async function notifyGooglePassUpdate(
 			client,
 			objectId,
 			passId,
-			points: pointsData.points,
+			stamps: stampsData.stamps,
 		})
 
 		const googleClient = getGoogleClient({
@@ -142,8 +142,8 @@ async function createLoyaltyObject({
 		.then((transactions) => transactions.length)
 		.catch(() => 0)
 
-	// Calculate points based on transactions and redemptions
-	const pointsData = await getCustomerPoints(
+	// Calculate stamps based on transactions and redemptions
+	const stampsData = await getCustomerStamps(
 		context.env.D1_TOLO,
 		Number.parseInt(client.client_id, 10),
 		transactionsCount,
@@ -154,7 +154,7 @@ async function createLoyaltyObject({
 		client,
 		objectId: `${issuerId}.0.${passId}`,
 		passId,
-		points: pointsData.points,
+		stamps: stampsData.stamps,
 	})
 
 	return jwt.sign(
@@ -262,15 +262,15 @@ function getLoyaltyObject({
 	client,
 	objectId,
 	passId,
-	points,
+	stamps,
 }: {
 	classId: string
 	client: ClientData
 	objectId: string
 	passId: string
-	points: number
+	stamps: number
 }) {
-	const stripIndex = Math.min(points, 10)
+	const stripIndex = Math.min(stamps, 10)
 	const discountPercentage = Number.parseInt(
 		client.discount_per || client.client_groups_discount || '0',
 	)
@@ -340,9 +340,9 @@ function getLoyaltyObject({
 		},
 		secondaryLoyaltyPoints: {
 			balance: {
-				int: points,
+				int: stamps,
 			},
-			label: `Puntos (${POINTS_PER_REDEMPTION} = ☕️)`,
+			label: `Sellos (${STAMPS_PER_REDEMPTION} = ☕️)`,
 		},
 		state: 'ACTIVE',
 		textModulesData,

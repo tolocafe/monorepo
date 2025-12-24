@@ -35,7 +35,7 @@ export async function notifyRedemption(
 					title: 'Bebida de cumpleaños',
 				}
 			: {
-					body: '☕️ Se ha canjeado una bebida con tus puntos de lealtad',
+					body: '☕️ Se ha canjeado una bebida con tus sellos de lealtad',
 					title: 'Bebida canjeada',
 				}
 

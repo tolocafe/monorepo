@@ -6,13 +6,13 @@ import { notifyApplePassUpdate } from '~workers/utils/apns'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { notifyGooglePassUpdate } from '~workers/utils/generate-google-pass'
 import { authenticate } from '~workers/utils/jwt'
+import { api } from '~workers/utils/poster'
 import {
 	canRedeemBirthdayDrink,
 	createRedemption,
-	getCustomerPoints,
-	POINTS_PER_REDEMPTION,
-} from '~workers/utils/points'
-import { api } from '~workers/utils/poster'
+	getCustomerStamps,
+	STAMPS_PER_REDEMPTION,
+} from '~workers/utils/stamps'
 import { notifyRedemption } from '~workers/utils/push-notifications'
 
 import type { RedeemClientData } from '~common/api'
@@ -68,7 +68,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			{ date_from: '2025-01-01', id, status: '2', type: 'clients' },
 		)
 
-		const pointsData = await getCustomerPoints(
+		const pointsData = await getCustomerStamps(
 			c.env.D1_TOLO,
 			Number.parseInt(id, 10),
 			clientTransactions.length,
@@ -90,7 +90,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			firstname: client.firstname,
 			lastname: client.lastname,
 			phone: client.phone,
-			points: pointsData.points,
+			stamps: pointsData.stamps,
 		})
 	})
 	// Create a redemption (team members and owners only)
@@ -145,14 +145,14 @@ const clients = new Hono<{ Bindings: Bindings }>()
 				c.env.POSTER_TOKEN,
 				{ date_from: '2025-01-01', id, status: '2', type: 'clients' },
 			)
-			const pointsData = await getCustomerPoints(
+			const pointsData = await getCustomerStamps(
 				c.env.D1_TOLO,
 				clientId,
 				clientTransactions.length,
 			)
-			if (pointsData.points < POINTS_PER_REDEMPTION) {
+			if (pointsData.stamps < STAMPS_PER_REDEMPTION) {
 				throw new HTTPException(400, {
-					message: 'Not enough points for redemption',
+					message: 'Not enough stamps for redemption',
 				})
 			}
 		}

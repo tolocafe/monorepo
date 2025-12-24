@@ -1,11 +1,11 @@
 import { Hono } from 'hono'
 
 import { defaultJsonHeaders } from '~workers/utils/headers'
+import { api } from '~workers/utils/poster'
 import {
 	canRedeemBirthdayDrink,
-	getCustomerPoints,
-} from '~workers/utils/points'
-import { api } from '~workers/utils/poster'
+	getCustomerStamps,
+} from '~workers/utils/stamps'
 
 import type { PosClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
@@ -58,13 +58,13 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 			}),
 		])
 
-		// Get closed transactions for 2025 to calculate points
+		// Get closed transactions for 2025 to calculate stamps
 		const closedTransactions2025 = await api.dash.getTransactions(
 			context.env.POSTER_TOKEN,
 			{ date_from: '2025-01-01', id: customerId, status: '2', type: 'clients' },
 		)
 
-		const pointsData = await getCustomerPoints(
+		const stampsData = await getCustomerStamps(
 			context.env.D1_TOLO,
 			Number.parseInt(customerId),
 			closedTransactions2025.length,
@@ -79,8 +79,8 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 		const sanitizedCustomer = {
 			canRedeemBirthday,
 			name: `${customer?.firstname}${customer?.lastname ? ` ${customer.lastname}` : ''}`,
-			points: pointsData.points,
 			registrationDate: customer?.date_activale,
+			stamps: stampsData.stamps,
 			totalPayedSum: formatAmount(customer?.total_payed_sum),
 		}
 

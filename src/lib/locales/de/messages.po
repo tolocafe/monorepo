@@ -29,10 +29,10 @@ msgstr "{0} - Rechnung"
 msgid "{0} - TOLO Good Coffee"
 msgstr "{0} - TOLO Guter Kaffee"
 
-#. placeholder {0}: clientData.points
+#. placeholder {0}: clientData.stamps
 #: src/app/(tabs)/team/redeem.tsx:212
-msgid "{0} points ({POINTS_PER_REDEMPTION} = ☕️)"
-msgstr "{0} Punkte ({POINTS_PER_REDEMPTION} = ☕️)"
+msgid "{0} stamps ({STAMPS_PER_REDEMPTION} = ☕️)"
+msgstr ""
 
 #. placeholder {0}: order.processing_status === 10 && 'Open'
 #. placeholder {1}: order.processing_status === 20 && 'Preparing'
@@ -627,8 +627,8 @@ msgid "Not Authorized"
 msgstr "Nicht autorisiert"
 
 #: src/app/(tabs)/team/redeem.tsx:260
-msgid "Not enough points. Need {POINTS_PER_REDEMPTION} points for a free drink."
-msgstr "Nicht genug Punkte. {POINTS_PER_REDEMPTION} Punkte werden für ein Gratisgetränk benötigt."
+msgid "Not enough stamps. Need {STAMPS_PER_REDEMPTION} stamps for a free drink."
+msgstr ""
 
 #: src/app/(tabs)/more/index.tsx:210
 msgid "Not provided"
@@ -749,11 +749,6 @@ msgstr "Bitte melden Sie sich an, um Ihre Wallet aufzuladen"
 #: src/app/(tabs)/orders/index.tsx:106
 msgid "Please sign in to view your order history"
 msgstr "Bitte melden Sie sich an, um Ihren Bestellverlauf zu sehen"
-
-#. placeholder {0}: clientName || 'customer'
-#: src/app/(tabs)/team/redeem.tsx:201
-msgid "Points drink redeemed for {0}."
-msgstr ""
 
 #: src/app/(tabs)/(home)/index.tsx:106
 msgid ""
@@ -905,6 +900,11 @@ msgstr "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
 #: src/components/MenuListItem/index.tsx:28
 msgid "Special"
 msgstr "Spezial"
+
+#. placeholder {0}: clientName || 'customer'
+#: src/app/(tabs)/team/redeem.tsx:201
+msgid "Stamps drink redeemed for {0}."
+msgstr ""
 
 #: src/app/(tabs)/more/index.tsx:256
 msgid "Stores"

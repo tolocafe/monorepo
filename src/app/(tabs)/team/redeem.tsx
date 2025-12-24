@@ -26,8 +26,8 @@ import { formatDate } from '@/lib/utils/format-date'
 type DrinkType = 'birthday' | 'visits'
 
 // Check availability of each drink type
-// 10 points required for a visits redemption
-const POINTS_PER_REDEMPTION = 10
+// 10 stamps required for a visits redemption
+const STAMPS_PER_REDEMPTION = 10
 
 export default function RedeemDrink() {
 	const { t } = useLingui()
@@ -104,11 +104,11 @@ export default function RedeemDrink() {
 	}, [])
 
 	const hasBirthday = Boolean(clientData?.birthday)
-	const points = clientData?.points ?? 0
-	const hasEnoughPoints = points >= POINTS_PER_REDEMPTION
+	const stamps = clientData?.stamps ?? 0
+	const hasEnoughStamps = stamps >= STAMPS_PER_REDEMPTION
 	// Birthday eligibility is determined by the API (one per year, from birthday until redeemed)
 	const canRedeemBirthday = clientData?.canRedeemBirthday ?? false
-	const canRedeemVisits = hasEnoughPoints
+	const canRedeemVisits = hasEnoughStamps
 
 	// Derive selected drink type: user selection takes priority, otherwise auto-select best available
 	const selectedDrinkType: DrinkType =
@@ -199,7 +199,7 @@ export default function RedeemDrink() {
 									</Trans>
 								) : (
 									<Trans>
-										Points drink redeemed for {clientName || 'customer'}.
+										Stamps drink redeemed for {clientName || 'customer'}.
 									</Trans>
 								)}
 							</Paragraph>
@@ -210,7 +210,7 @@ export default function RedeemDrink() {
 							<View style={styles.clientInfo}>
 								<Text style={styles.clientMeta}>
 									<Trans>
-										{clientData.points} points ({POINTS_PER_REDEMPTION} = ☕️)
+										{clientData.stamps} stamps ({STAMPS_PER_REDEMPTION} = ☕️)
 									</Trans>
 									{clientData.client_groups_name &&
 										` · ${clientData.client_groups_name}`}
@@ -258,7 +258,7 @@ export default function RedeemDrink() {
 								{selectedDrinkType === 'visits' && !canRedeemVisits && (
 									<Admonition>
 										<Trans>
-											Not enough points. Need {POINTS_PER_REDEMPTION} points for
+											Not enough stamps. Need {STAMPS_PER_REDEMPTION} stamps for
 											a free drink.
 										</Trans>
 									</Admonition>

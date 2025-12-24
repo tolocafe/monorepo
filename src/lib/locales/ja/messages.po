@@ -29,10 +29,10 @@ msgstr "{0} - 会計"
 msgid "{0} - TOLO Good Coffee"
 msgstr "{0} - TOLOグッドコーヒー"
 
-#. placeholder {0}: clientData.points
+#. placeholder {0}: clientData.stamps
 #: src/app/(tabs)/team/redeem.tsx:212
-msgid "{0} points ({POINTS_PER_REDEMPTION} = ☕️)"
-msgstr "{0} ポイント ({POINTS_PER_REDEMPTION} = ☕️)"
+msgid "{0} stamps ({STAMPS_PER_REDEMPTION} = ☕️)"
+msgstr ""
 
 #. placeholder {0}: order.processing_status === 10 && 'Open'
 #. placeholder {1}: order.processing_status === 20 && 'Preparing'
@@ -627,8 +627,8 @@ msgid "Not Authorized"
 msgstr "権限がありません"
 
 #: src/app/(tabs)/team/redeem.tsx:260
-msgid "Not enough points. Need {POINTS_PER_REDEMPTION} points for a free drink."
-msgstr "ポイントが不足しています。無料ドリンクには{POINTS_PER_REDEMPTION}ポイントが必要です。"
+msgid "Not enough stamps. Need {STAMPS_PER_REDEMPTION} stamps for a free drink."
+msgstr ""
 
 #: src/app/(tabs)/more/index.tsx:210
 msgid "Not provided"
@@ -749,11 +749,6 @@ msgstr "Walletをチャージするにはサインインしてください"
 #: src/app/(tabs)/orders/index.tsx:106
 msgid "Please sign in to view your order history"
 msgstr "注文履歴を表示するにはサインインしてください"
-
-#. placeholder {0}: clientName || 'customer'
-#: src/app/(tabs)/team/redeem.tsx:201
-msgid "Points drink redeemed for {0}."
-msgstr ""
 
 #: src/app/(tabs)/(home)/index.tsx:106
 msgid ""
@@ -905,6 +900,11 @@ msgstr "問題が発生しました。もう一度お試しください。"
 #: src/components/MenuListItem/index.tsx:28
 msgid "Special"
 msgstr "スペシャル"
+
+#. placeholder {0}: clientName || 'customer'
+#: src/app/(tabs)/team/redeem.tsx:201
+msgid "Stamps drink redeemed for {0}."
+msgstr ""
 
 #: src/app/(tabs)/more/index.tsx:256
 msgid "Stores"

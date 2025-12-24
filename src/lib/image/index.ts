@@ -79,7 +79,7 @@ export function getFirstImageSourceId(
  * For Sanity images, pass the sourceId from SanityImageReference
  */
 export function getImageUrl(
-	path: string,
+	path: string | undefined,
 	{
 		blur = 0,
 		format = 'auto',

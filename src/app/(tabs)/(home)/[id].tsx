@@ -191,6 +191,8 @@ export default function MenuDetail() {
 				.replace(/^Temperatura .*/, 'Temperatura'),
 		}))
 
+	const imageSourceId = product.images?.[0]?.sourceId
+
 	return (
 		<>
 			<Head>
@@ -226,19 +228,20 @@ export default function MenuDetail() {
 						<UniImage
 							contentFit="cover"
 							placeholder={{
-								cacheKey: `${product.product_id}-placeholder`,
-								uri: getImageUrl(product.photo_origin || product.photo, {
+								cacheKey: `${imageSourceId}-placeholder`,
+								uri: getImageUrl(product.images?.[0]?.sourceId, {
 									blur: 100,
 									quality: 20,
 									source: 'sanity',
-									width: 350,
+									width: 200,
 								}),
 								width: UnistylesRuntime.screen.width,
 							}}
 							placeholderContentFit="cover"
 							source={{
-								uri: getImageUrl(product.photo_origin || product.photo, {
-									quality: 85,
+								cacheKey: `${imageSourceId}-image`,
+								uri: getImageUrl(imageSourceId, {
+									quality: 95,
 									source: 'sanity',
 									width: 900,
 								}),
