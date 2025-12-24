@@ -23,9 +23,14 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 			const localized = sanityEvents.map((event): Event => {
 				// Extract asset IDs from images array
-				const images = event.images?.map((img) => ({
-					sourceId: img.asset._ref,
-				}))
+				const images = event.images
+					?.map((img) => {
+						if (!img?.asset?._ref) return null
+						return {
+							sourceId: img.asset._ref,
+						}
+					})
+					.filter((img): img is { sourceId: string } => img !== null)
 
 				return {
 					dates: event.startDate ? [event.startDate] : undefined,
@@ -54,9 +59,14 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		const event = await sanity.getEvent(context.env, context.req.param('id'))
 
 		// Extract asset IDs from images array
-		const images = event.images?.map((img) => ({
-			sourceId: img.asset._ref,
-		}))
+		const images = event.images
+			?.map((img) => {
+				if (!img?.asset?._ref) return null
+				return {
+					sourceId: img.asset._ref,
+				}
+			})
+			.filter((img): img is { sourceId: string } => img !== null)
 
 		const localized = {
 			dates: event.startDate ? [event.startDate] : undefined,
