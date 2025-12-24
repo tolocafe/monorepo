@@ -7,13 +7,13 @@ import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { notifyGooglePassUpdate } from '~workers/utils/generate-google-pass'
 import { authenticate } from '~workers/utils/jwt'
 import { api } from '~workers/utils/poster'
+import { notifyRedemption } from '~workers/utils/push-notifications'
 import {
 	canRedeemBirthdayDrink,
 	createRedemption,
 	getCustomerStamps,
 	STAMPS_PER_REDEMPTION,
 } from '~workers/utils/stamps'
-import { notifyRedemption } from '~workers/utils/push-notifications'
 
 import type { RedeemClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
