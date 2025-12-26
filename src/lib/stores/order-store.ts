@@ -32,6 +32,9 @@ const zustandJsonStorage = {
 	setItem: (key: string, value: string) => zustandStore.set(key, value),
 }
 
+/** Default location ID - hard-coded for now until UI is implemented */
+const DEFAULT_LOCATION_ID = '1'
+
 type OrderStore = {
 	addItem: (
 		item: Pick<OrderProduct, 'id' | 'modifications' | 'quantity'>,
@@ -41,6 +44,8 @@ type OrderStore = {
 	currentOrder: null | Order
 	getTotalItems: () => number
 	removeItem: (productId: string) => void
+	selectedLocationId: string
+	setSelectedLocationId: (locationId: string) => void
 	updateItem: (
 		productId: string,
 		modifications: Modifications | undefined,
@@ -124,6 +129,10 @@ export const useOrderStore = create<OrderStore>()(
 					set({ currentOrder: updatedOrder })
 				}
 			},
+			selectedLocationId: DEFAULT_LOCATION_ID,
+			setSelectedLocationId(locationId) {
+				set({ selectedLocationId: locationId })
+			},
 			updateItem(productId, modifications, quantity) {
 				const { currentOrder } = get()
 				if (!currentOrder) return
@@ -155,7 +164,10 @@ export const useOrderStore = create<OrderStore>()(
 		}),
 		{
 			name: 'tolo-order-storage',
-			partialize: (state) => ({ currentOrder: state.currentOrder }),
+			partialize: (state) => ({
+				currentOrder: state.currentOrder,
+				selectedLocationId: state.selectedLocationId,
+			}),
 			storage: createJSONStorage(() => zustandJsonStorage),
 		},
 	),
@@ -167,6 +179,10 @@ export const useCurrentOrder = () =>
 	useOrderStore(useShallow((state) => state.currentOrder))
 export const useUpdateItem = () => useOrderStore((state) => state.updateItem)
 export const useClearOrder = () => useOrderStore((state) => state.clearOrder)
+export const useSelectedLocationId = () =>
+	useOrderStore((state) => state.selectedLocationId)
+export const useSetSelectedLocationId = () =>
+	useOrderStore((state) => state.setSelectedLocationId)
 
 export const useAddItemGuarded = () => {
 	const addItem = useOrderStore((state) => state.addItem)
