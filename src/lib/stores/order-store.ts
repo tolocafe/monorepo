@@ -53,6 +53,17 @@ type OrderStore = {
 	) => void
 }
 
+/**
+ * Gets the default location ID for orders.
+ * For later implementation: use WiFi SSID or Geolocation to determine location.
+ * Currently returns a hardcoded value.
+ */
+export function getDefaultLocationId(): string {
+	// TODO: Implement WiFi SSID detection
+	// TODO: Implement Geolocation-based detection
+	return DEFAULT_LOCATION_ID
+}
+
 function getOrderTotalItems(order: null | Order | undefined): number {
 	if (!order) return 0
 	return order.products.reduce((total, item) => total + item.quantity, 0)
@@ -129,7 +140,7 @@ export const useOrderStore = create<OrderStore>()(
 					set({ currentOrder: updatedOrder })
 				}
 			},
-			selectedLocationId: DEFAULT_LOCATION_ID,
+			selectedLocationId: getDefaultLocationId(),
 			setSelectedLocationId(locationId) {
 				set({ selectedLocationId: locationId })
 			},
