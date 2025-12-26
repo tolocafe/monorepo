@@ -117,7 +117,7 @@ msgid "An error occurred"
 msgstr "エラーが発生しました"
 
 #: src/app/(tabs)/more/_layout.tsx:21
-#: src/app/(tabs)/more/index.tsx:381
+#: src/app/(tabs)/more/index.tsx:383
 msgid "App"
 msgstr "App"
 
@@ -489,7 +489,7 @@ msgstr "無効な認証コード"
 msgid "Items"
 msgstr "商品"
 
-#: src/app/(tabs)/more/index.tsx:341
+#: src/app/(tabs)/more/index.tsx:343
 msgid "Language"
 msgstr "言語"
 
@@ -866,7 +866,7 @@ msgstr "サービス利用不可"
 msgid "Sessions"
 msgstr "セッション"
 
-#: src/app/(tabs)/more/index.tsx:335
+#: src/app/(tabs)/more/index.tsx:337
 msgid "Settings"
 msgstr "設定"
 
@@ -1072,7 +1072,7 @@ msgstr "確認中..."
 msgid "Version"
 msgstr "バージョン"
 
-#: src/app/(tabs)/more/index.tsx:389
+#: src/app/(tabs)/more/index.tsx:391
 msgid "Version {appVersion} ({buildVersion})"
 msgstr "バージョン {appVersion} ({buildVersion})"
 

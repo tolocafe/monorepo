@@ -213,11 +213,12 @@ export default function OrderDetail() {
 				</Card>
 
 				<Pressable
-					disabled={isDownloading}
+					disabled={isDownloading || order.processing_status === 10}
 					onPress={handleDownloadReceipt}
 					style={[
 						styles.downloadButton,
-						isDownloading && styles.downloadButtonDisabled,
+						(isDownloading || order.processing_status === 10) &&
+							styles.downloadButtonDisabled,
 					]}
 				>
 					<View style={styles.downloadButtonContent}>

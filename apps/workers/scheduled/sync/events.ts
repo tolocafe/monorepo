@@ -1,115 +1,65 @@
+/**
+ * Transaction event processing for the polling sync
+ *
+ * This module bridges the sync layer with the shared order-events utility,
+ * handling sync-specific concerns like Apple Pass updates and date parsing.
+ */
 import * as Sentry from '@sentry/cloudflare'
 
 import { notifyApplePassUpdate } from '~workers/utils/apns'
-import { sendPushNotificationToClient } from '~workers/utils/push-notifications'
+import {
+	detectOrderEvents,
+	processOrderEvents,
+	type TransactionChange,
+} from '~workers/utils/order-events'
 
 import type { Bindings } from '~workers/types'
 
 import { parsePosterDate } from './utils'
 
-/**
- * Maximum age for orders to receive notifications (10 minutes in milliseconds)
- */
-const MAX_NOTIFICATION_AGE_MS = 10 * 60 * 1000
+import type { Database } from './transactions'
 
-export type TransactionChange = {
-	action: 'created' | 'updated'
-	customerId: null | number
-	dateStart: string // Order start date in "Y-m-d H:i:s" format
-	oldProcessingStatus?: number
-	processingStatus: number
-	serviceMode: null | number
-	transactionId: number
-}
+// Re-export types for convenience
+export type { OrderEvent, TransactionChange } from '~workers/utils/order-events'
 
 /**
- * Process transaction changes and send appropriate notifications
- * This is called after sync completes to handle all event-driven actions
+ * Process transaction changes from the sync
+ *
+ * This is the main entry point for event processing after a sync completes.
+ * It handles:
+ * - Detecting order events from transaction changes
+ * - Processing analytics and notifications via shared utility
+ * - Updating Apple Passes for customers with new orders
  */
 export async function processTransactionEvents(
 	changes: TransactionChange[],
 	passDatabase: D1Database,
 	environment: Bindings,
+	database: Database,
 ): Promise<void> {
 	// Track new customers for pass updates
 	const customerIdsForPassUpdate = new Set<number>()
+	// Collect detected order events for analytics
+	const orderEvents: ReturnType<typeof detectOrderEvents> = []
 
 	for (const change of changes) {
 		if (change.customerId && change.action === 'created') {
 			customerIdsForPassUpdate.add(change.customerId)
 		}
-	}
 
-	// Process notifications for takeaway orders
-	const notificationPromises: Promise<void>[] = []
-	const now = Date.now()
+		// Detect order events based on status changes
+		const detectedEvents = detectOrderEvents(change)
 
-	for (const change of changes) {
-		// Only process takeaway orders (service_mode === 2)
-		if (change.serviceMode !== 2 || !change.customerId) continue
-
-		// Skip notifications for orders that started more than 10 minutes ago
-		// This prevents notifications for stale orders detected during sync
-		try {
-			const orderDate = parsePosterDate(change.dateStart)
-			const orderAgeMs = now - orderDate.getTime()
-
-			if (orderAgeMs > MAX_NOTIFICATION_AGE_MS) {
-				continue
-			}
-		} catch (error) {
-			// Log invalid date format and skip this order
-			Sentry.captureException(error, {
-				contexts: {
-					transaction: {
-						date_start: change.dateStart,
-						transaction_id: change.transactionId,
-					},
-				},
-				level: 'warning',
-				tags: { operation: 'date_parsing' },
-			})
-			continue
-		}
-
-		const isStatusChange =
-			change.action === 'updated' &&
-			change.oldProcessingStatus !== undefined &&
-			change.oldProcessingStatus !== change.processingStatus
-
-		const isNewOrderPreparing =
-			change.action === 'created' && change.processingStatus === 20
-
-		if (isStatusChange || isNewOrderPreparing) {
-			const notification = getOrderStatusNotification(change.processingStatus)
-
-			if (notification && change.customerId) {
-				const customerId = change.customerId
-				notificationPromises.push(
-					(async () => {
-						try {
-							await sendPushNotificationToClient(customerId, passDatabase, {
-								...notification,
-								data: { orderId: change.transactionId.toString() },
-							})
-						} catch (error) {
-							// Log but don't fail event processing
-							Sentry.captureException(error, {
-								contexts: {
-									transaction: {
-										customer_id: customerId,
-										processing_status: change.processingStatus,
-										transaction_id: change.transactionId,
-									},
-								},
-								level: 'warning',
-								tags: { operation: 'order_notification' },
-							})
-						}
-					})(),
-				)
+		// Attach order dates to events for notification filtering
+		for (const event of detectedEvents) {
+			try {
+				event.orderDate = parsePosterDate(change.dateStart)
+			} catch {
+				// Skip invalid dates
 			}
 		}
+
+		orderEvents.push(...detectedEvents)
 	}
 
 	// Process Apple Pass updates for new customers
@@ -127,48 +77,21 @@ export async function processTransactionEvents(
 		)
 	}
 
-	// Process all events in parallel
-	await Promise.allSettled([...notificationPromises, ...passUpdatePromises])
-}
+	// Process order events (analytics + notifications) using shared utility
+	const [eventResult] = await Promise.allSettled([
+		processOrderEvents(orderEvents, passDatabase, environment, { database }),
+		...passUpdatePromises,
+	])
 
-/**
- * Get notification message for order status
- */
-function getOrderStatusNotification(
-	processingStatus: number,
-): null | { body: string; title: string } {
-	switch (processingStatus) {
-		case 10: // Open
-			// Usually sent when order is first created, handled separately
-			return null
-		case 20: // Preparing
-			return {
-				body: '🧑🏽‍🍳 Ahora estamos trabajando en tu pedido, te avisaremos cuando esté listo',
-				title: 'Pedido aceptado',
-			}
-		case 30: // Ready
-			return {
-				body: '✅ Tu pedido ya está listo, te esperamos!',
-				title: 'Pedido listo',
-			}
-		case 40: // En route
-			// TODO: Add ETA notification
-			return null
-		case 50: // Delivered
-			return {
-				body: 'Disfruta tu pedido ☕️🥐, esperamos que lo disfrutes!',
-				title: 'Pedido entregado',
-			}
-		case 60: // Closed
-			// Order completed, no notification needed
-			return null
-		case 70: // Deleted
-			// Order cancelled
-			return {
-				body: '🚨 Comunícate con nosotros para resolverlo cuanto antes',
-				title: 'Pedido no aceptado',
-			}
-		default:
-			return null
+	// Log summary of order events
+	if (orderEvents.length > 0 && eventResult.status === 'fulfilled') {
+		const { analyticsCount, notificationCount } = eventResult.value
+		const eventTypes = [...new Set(orderEvents.map((e) => e.eventType))].join(
+			', ',
+		)
+		// eslint-disable-next-line no-console
+		console.log(
+			`[events] ${orderEvents.length} events (${eventTypes}) → ${analyticsCount} analytics, ${notificationCount} notifications`,
+		)
 	}
 }

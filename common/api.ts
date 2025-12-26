@@ -120,6 +120,44 @@ export type DashTransaction = {
 	/** Guest count for the order */
 	guests_count?: string
 	/**
+	 * Transaction history array (only included when include_history: 'true')
+	 * Contains operation records like open, additem, changeorderstatus, close, etc.
+	 */
+	history?: {
+		/** History entry ID */
+		history_id: string
+		/** Location/spot tablet ID */
+		spot_tablet_id?: string
+		/** Timestamp when the operation occurred */
+		time: string
+		/**
+		 * Type of operation:
+		 * - open: Receipt opened
+		 * - additem: Product added
+		 * - changeorderstatus: Order status changed (value: 1=accepted, 4=cancelled)
+		 * - close: Receipt printed and closed
+		 * - delete: Receipt deleted
+		 * - changeitemcount: Product quantity changed
+		 * - endtokitchen: Items sent to kitchen
+		 * - setclient: Client added
+		 */
+		type_history: string
+		/** User ID who performed the operation */
+		user_id?: string
+		/** Primary value (meaning depends on type_history) */
+		value: string
+		/** Secondary value */
+		value2?: string
+		/** Tertiary value */
+		value3?: string
+		/** Quaternary value (e.g., service mode for 'open') */
+		value4?: string
+		/** Quinary value */
+		value5?: string
+		/** Text value (often JSON string with additional data) */
+		value_text?: null | string
+	}[]
+	/**
 	 * Type of payment method used
 	 * - 0: Closed without payment
 	 * - 1: Payment by cash

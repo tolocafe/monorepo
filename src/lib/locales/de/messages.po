@@ -117,7 +117,7 @@ msgid "An error occurred"
 msgstr "Ein Fehler ist aufgetreten"
 
 #: src/app/(tabs)/more/_layout.tsx:21
-#: src/app/(tabs)/more/index.tsx:381
+#: src/app/(tabs)/more/index.tsx:383
 msgid "App"
 msgstr "App"
 
@@ -489,7 +489,7 @@ msgstr "Ungültiger Bestätigungscode"
 msgid "Items"
 msgstr "Artikel"
 
-#: src/app/(tabs)/more/index.tsx:341
+#: src/app/(tabs)/more/index.tsx:343
 msgid "Language"
 msgstr "Sprache"
 
@@ -866,7 +866,7 @@ msgstr "Dienst nicht verfügbar"
 msgid "Sessions"
 msgstr "Sitzungen"
 
-#: src/app/(tabs)/more/index.tsx:335
+#: src/app/(tabs)/more/index.tsx:337
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -1072,7 +1072,7 @@ msgstr "Wird bestätigt..."
 msgid "Version"
 msgstr "Version"
 
-#: src/app/(tabs)/more/index.tsx:389
+#: src/app/(tabs)/more/index.tsx:391
 msgid "Version {appVersion} ({buildVersion})"
 msgstr "Version {appVersion} ({buildVersion})"
 

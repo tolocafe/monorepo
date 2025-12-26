@@ -15,6 +15,7 @@ export type CreateOrderResponse = {
 	pay_type: string
 	/** 10: Open, 20: Preparing, 30: Ready, 40: En route, 50: Delivered, 60: Closed, 70: Deleted */
 	processing_status: '10' | '20' | '30' | '40' | '50' | '60' | '70'
+	/** 1: Open, 2: Closed, 3: Removed, 4: Declined */
 	status: string
 	sum: number
 	transaction_id: string

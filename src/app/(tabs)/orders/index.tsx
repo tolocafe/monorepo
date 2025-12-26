@@ -48,7 +48,7 @@ export default function Orders() {
 	useScrollToTop(screenRef)
 
 	const currentOrder = useCurrentOrder()
-	const { data: orders } = useQuery(orderQueryOptions)
+	const { data: orders, isRefetching } = useQuery(orderQueryOptions)
 	const itemsCount = useCurrentOrderItemsCount()
 
 	useFocusEffect(
@@ -126,7 +126,7 @@ export default function Orders() {
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(orderQueryOptions)}
-						refreshing={false}
+						refreshing={isRefetching}
 					/>
 				}
 				withTopGradient
@@ -175,19 +175,23 @@ export default function Orders() {
 								>
 									<Card style={styles.orderCard}>
 										<View>
-											<Text weight="bold">
-												<Select
-													_Status10="Open"
-													_Status20="Preparing"
-													_Status30="Ready"
-													_Status40="En route"
-													_Status50="Delivered"
-													_Status60="Closed"
-													_Status70="Deleted"
-													other="Unknown"
-													value={`Status${order.processing_status}`}
-												/>
-											</Text>
+											{order.status === '4' ? (
+												<Text weight="bold">Declined</Text>
+											) : (
+												<Text weight="bold">
+													<Select
+														_Status10="Open"
+														_Status20="Preparing"
+														_Status30="Ready"
+														_Status40="En route"
+														_Status50="Delivered"
+														_Status60="Closed"
+														_Status70="Deleted"
+														other="Unknown"
+														value={`Status${order.processing_status}`}
+													/>
+												</Text>
+											)}
 											<Text>
 												{new Date(
 													Number(order.date_start),

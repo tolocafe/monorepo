@@ -677,9 +677,39 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		return context.json({ received: true })
 	})
 	/**
-	 * Poster is very unreliable and we should not rely on it. Prefer `scheduled/sync-transactions.ts` for syncing transactions.
+	 * Poster webhook is disabled. We now use polling via `scheduled/sync-transactions.ts`.
+	 * Keeping route for backwards compatibility - returns 410 Gone.
+	 *
+	 * To re-enable webhooks, use the shared order-events utility:
+	 * @example
+	 * ```ts
+	 * import { createOrderEvent, processOrderEvents, getEventTypeFromStatus } from '~workers/utils/order-events'
+	 *
+	 * const eventType = getEventTypeFromStatus(processingStatus)
+	 * if (eventType) {
+	 *   const event = createOrderEvent({
+	 *     transactionId,
+	 *     customerId,
+	 *     eventType,
+	 *     serviceMode,
+	 *     orderDate: new Date(),
+	 *   })
+	 *   await processOrderEvents([event], passDatabase, env, { skipAgeCheck: true })
+	 * }
+	 * ```
 	 */
-	.post('/poster', async (context) => {
+	.post('/poster', (context) => {
+		return context.json(
+			{ message: 'Webhook disabled. Using polling instead.' },
+			410,
+		)
+	})
+
+	/**
+	 * @deprecated - Poster webhook implementation (disabled)
+	 * This code is preserved for reference but no longer executed.
+	 */
+	.post('/poster-disabled', async (context) => {
 		const body = (await context.req.json()) as unknown
 
 		const parsedBody = posterWebhookDataSchema.parse(body)

@@ -159,6 +159,11 @@ export const transactions = pgTable('transactions', {
 	dateStart: text('date_start'),
 	discount: integer('discount'),
 	id: integer('id').primaryKey().notNull(),
+	/**
+	 * Whether the order has been accepted via Poster POS "accept order" action.
+	 * Detected from transaction history changeorderstatus with value: 1.
+	 */
+	isAccepted: boolean('is_accepted').default(false),
 	locationId: integer('location_id'),
 	payedBonus: integer('payed_bonus'),
 	payedCard: integer('payed_card'),

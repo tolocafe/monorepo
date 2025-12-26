@@ -12,10 +12,11 @@ export function formatApiDate(date: Date): string {
 /**
  * Parse Poster API date string to Date object
  * Input format: "Y-m-d H:i:s" (e.g., "2023-12-25 14:30:00")
+ * Note: Poster dates are in Mexico City timezone (UTC-6)
  */
 export function parsePosterDate(dateString: string): Date {
-	// Convert "Y-m-d H:i:s" to "Y-m-dTH:i:sZ" format
-	const isoString = dateString.replace(' ', 'T') + 'Z'
+	// Convert "Y-m-d H:i:s" to ISO format with Mexico City offset
+	const isoString = dateString.replace(' ', 'T') + '-06:00'
 	const date = new Date(isoString)
 
 	// Validate the parsed date

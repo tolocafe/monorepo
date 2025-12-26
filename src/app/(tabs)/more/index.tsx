@@ -287,7 +287,9 @@ export default function More() {
 							<Pressable
 								accessibilityRole="button"
 								onPress={() => {
-									void trackEvent('social:link_click', { platform: 'instagram' })
+									void trackEvent('social:link_click', {
+										platform: 'instagram',
+									})
 									void Linking.openURL('https://instagram.com/tolo.cafe')
 								}}
 								style={styles.socialIcon}

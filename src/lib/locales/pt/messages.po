@@ -117,7 +117,7 @@ msgid "An error occurred"
 msgstr "Ocorreu um erro"
 
 #: src/app/(tabs)/more/_layout.tsx:21
-#: src/app/(tabs)/more/index.tsx:381
+#: src/app/(tabs)/more/index.tsx:383
 msgid "App"
 msgstr "App"
 
@@ -489,7 +489,7 @@ msgstr "Código de verificação inválido"
 msgid "Items"
 msgstr "Itens"
 
-#: src/app/(tabs)/more/index.tsx:341
+#: src/app/(tabs)/more/index.tsx:343
 msgid "Language"
 msgstr "Idioma"
 
@@ -866,7 +866,7 @@ msgstr "Serviço Indisponível"
 msgid "Sessions"
 msgstr "Sessões"
 
-#: src/app/(tabs)/more/index.tsx:335
+#: src/app/(tabs)/more/index.tsx:337
 msgid "Settings"
 msgstr "Configurações"
 
@@ -1072,7 +1072,7 @@ msgstr "Verificando..."
 msgid "Version"
 msgstr "Versão"
 
-#: src/app/(tabs)/more/index.tsx:389
+#: src/app/(tabs)/more/index.tsx:391
 msgid "Version {appVersion} ({buildVersion})"
 msgstr "Versão {appVersion} ({buildVersion})"
 

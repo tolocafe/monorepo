@@ -13,6 +13,18 @@ import type { TransactionChange } from './events'
 import type { Database } from './transactions'
 
 /**
+ * Check if transaction history contains "order accepted" event
+ * In Poster, accepting an order adds a changeorderstatus entry with value: 1
+ */
+function isOrderAccepted(tx: DashTransaction): boolean {
+	if (!tx.history) return false
+	return tx.history.some(
+		(entry) =>
+			entry.type_history === 'changeorderstatus' && entry.value === '1',
+	)
+}
+
+/**
  * Upsert a transaction and return change information
  * Returns change details for event processing
  */
@@ -46,6 +58,9 @@ export async function upsertTransaction(
 		await ensureLocation(database, locationId, cache)
 	}
 
+	// Check if order has been accepted via Poster POS
+	const isAccepted = isOrderAccepted(tx)
+
 	// NOTE: Order lines are inserted AFTER the transaction due to foreign key constraint
 	const payload = {
 		bonusUsed: tx.payed_bonus ? toCents(tx.payed_bonus) : null,
@@ -58,6 +73,7 @@ export async function upsertTransaction(
 		dateStart: tx.date_start ? (toISO(tx.date_start) ?? null) : null,
 		discount: tx.discount || null,
 		id: txId,
+		isAccepted,
 		locationId,
 		payedBonus: tx.payed_bonus ? toCents(tx.payed_bonus) : null,
 		payedCard: tx.payed_card ? toCents(tx.payed_card) : null,
@@ -95,10 +111,17 @@ export async function upsertTransaction(
 	return {
 		action: existing ? 'updated' : 'created',
 		customerId,
+		dateClose: payload.dateClose,
 		dateStart: tx.date_start,
+		isAccepted,
+		oldDateClose: existing?.dateClose ?? null,
+		oldIsAccepted: existing?.isAccepted ?? false,
 		oldProcessingStatus: existing?.processingStatus,
+		oldStatus: existing?.status,
+		payedSum: payload.payedSum,
 		processingStatus: payload.processingStatus,
 		serviceMode: payload.serviceMode,
+		status: payload.status,
 		transactionId: txId,
 	}
 }

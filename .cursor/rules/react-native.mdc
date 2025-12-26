@@ -32,7 +32,8 @@ alwaysApply: false
 - Avoid enums; use const objects or maps instead
 - Use functional components with TypeScript interfaces
 - Implement strict null checks and proper error handling
-- Define proper prop types and return types
+- **Prefer inferred return types**: Let TypeScript infer function return types rather than explicitly annotating them. Only add explicit return types when the inference is incorrect, for public API documentation, or when the function is complex enough that explicit types improve readability
+- Define proper prop types for components
 - Use generic types for reusable components
 - Leverage discriminated unions for complex state scenarios
 

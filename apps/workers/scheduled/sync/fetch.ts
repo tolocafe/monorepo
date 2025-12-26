@@ -28,28 +28,15 @@ export async function fetchTransactionsPaginated(
 
 	// If range is small enough, fetch directly
 	if (totalDays <= chunkDays) {
-		// eslint-disable-next-line no-console
-		console.log(
-			`[fetchTransactionsPaginated] Fetching ${totalDays} days directly (${formatApiDate(dateFrom)} to ${formatApiDate(dateTo)})...`,
-		)
-		const startFetch = Date.now()
 		const fetched = await api.dash.getTransactions(token, {
 			date_from: formatApiDate(dateFrom),
 			date_to: formatApiDate(dateTo),
+			include_history: 'true',
 			include_products: 'true',
 		})
-		const fetchDuration = Date.now() - startFetch
-		// eslint-disable-next-line no-console
-		console.log(
-			`[fetchTransactionsPaginated] Fetched ${fetched.length} transactions in ${fetchDuration}ms`,
-		)
 
 		// If response is too large, split further
 		if (fetched.length > maxTransactionsPerChunk && totalDays > 1) {
-			// eslint-disable-next-line no-console
-			console.log(
-				`[fetchTransactionsPaginated] Response too large (${fetched.length} > ${maxTransactionsPerChunk}), splitting into smaller chunks...`,
-			)
 			const midDate = new Date(
 				dateFrom.getTime() + (dateTo.getTime() - dateFrom.getTime()) / 2,
 			)
@@ -57,10 +44,6 @@ export async function fetchTransactionsPaginated(
 				fetchTransactionsPaginated(token, dateFrom, midDate, options),
 				fetchTransactionsPaginated(token, midDate, dateTo, options),
 			])
-			// eslint-disable-next-line no-console
-			console.log(
-				`[fetchTransactionsPaginated] Combined ${first.length} + ${second.length} = ${first.length + second.length} transactions`,
-			)
 			return [...first, ...second]
 		}
 
@@ -68,15 +51,8 @@ export async function fetchTransactionsPaginated(
 	}
 
 	// Split into chunks
-	const numberChunks = Math.ceil(totalDays / chunkDays)
-	// eslint-disable-next-line no-console
-	console.log(
-		`[fetchTransactionsPaginated] Splitting ${totalDays} days into ${numberChunks} chunks of ${chunkDays} days...`,
-	)
-
 	let currentFrom = new Date(dateFrom)
 	const chunks: Promise<DashTransaction[]>[] = []
-	let chunkIndex = 0
 
 	while (currentFrom < dateTo) {
 		const currentTo = new Date(
@@ -86,26 +62,13 @@ export async function fetchTransactionsPaginated(
 			),
 		)
 
-		// eslint-disable-next-line no-console
-		console.log(
-			`[fetchTransactionsPaginated] Chunk ${chunkIndex + 1}/${numberChunks}: ${formatApiDate(currentFrom)} to ${formatApiDate(currentTo)}`,
-		)
-
 		chunks.push(
 			fetchTransactionsPaginated(token, currentFrom, currentTo, options),
 		)
 
-		currentFrom = new Date(currentTo.getTime() + 1) // Start next chunk 1ms after previous
-		chunkIndex++
+		currentFrom = new Date(currentTo.getTime() + 1)
 	}
 
-	const startChunks = Date.now()
 	const results = await Promise.all(chunks)
-	const chunksDuration = Date.now() - startChunks
-	const totalFetched = results.reduce((sum, chunk) => sum + chunk.length, 0)
-	// eslint-disable-next-line no-console
-	console.log(
-		`[fetchTransactionsPaginated] Completed ${numberChunks} chunks: ${totalFetched} total transactions in ${chunksDuration}ms`,
-	)
 	return results.flat()
 }
