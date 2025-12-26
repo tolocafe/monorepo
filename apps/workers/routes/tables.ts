@@ -2,11 +2,12 @@ import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-import { extractToken, verifyJwt } from '../utils/jwt'
-import { api as posterApi } from '../utils/poster'
-import { getStripe } from '../utils/stripe'
+import { extractToken, verifyJwt } from '~workers/utils/jwt'
+import { api as posterApi } from '~workers/utils/poster'
+import { trackEvent } from '~workers/utils/posthog'
+import { getStripe } from '~workers/utils/stripe'
 
-import type { Bindings } from '../types'
+import type { Bindings } from '~workers/types'
 
 const PayTableSchema = z.object({
 	paymentIntentId: z.string(),
@@ -202,6 +203,32 @@ tables.post('/:locationId/:tableId/pay', async (c) => {
 			payed_third_party: amountInPesos,
 			paymentIntentId,
 			transaction_id: transactionId,
+		})
+
+		// Track table payment completion
+		const itemCount =
+			tableTransaction.products?.reduce(
+				(sum, p) => sum + Math.round(Number(p.num)),
+				0,
+			) ?? 0
+
+		// Use client ID or generate anonymous ID for guest
+		const distinctId = assignedClientId
+			? assignedClientId.toString()
+			: `guest_${tableId}_${transactionId}`
+
+		await trackEvent(c, {
+			distinctId,
+			event: 'table:payment_complete',
+			properties: {
+				bill_total: amountInPesos,
+				currency: 'MXN',
+				is_guest: !authenticatedClientId,
+				item_count: itemCount,
+				payment_method: 'card',
+				table_id: tableId,
+				transaction_id: paymentIntentId,
+			},
 		})
 
 		return c.json({

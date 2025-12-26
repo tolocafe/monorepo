@@ -7,6 +7,7 @@ import { getProductTotalCost } from '~common/utils'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { authenticate } from '~workers/utils/jwt'
 import { api } from '~workers/utils/poster'
+import { trackEvent } from '~workers/utils/posthog'
 
 import type { Product } from '~common/api'
 import type { Bindings } from '~workers/types'
@@ -244,11 +245,44 @@ const orders = new Hono<{ Bindings: Bindings }>()
 				'CREATE TABLE IF NOT EXISTS wallet_orders (transaction_id INTEGER, order_id INTEGER, client_id INTEGER, amount INTEGER)',
 			)
 
-			await context.env.D1_TOLO.prepare(
-				'INSERT INTO wallet_orders (transaction_id, order_id, client_id, amount) VALUES (?, ?, ?, ?)',
-			)
-				.bind(transactionId, order.incoming_order_id, clientId, paymentAmount)
-				.run()
+			await Promise.all([
+				context.env.D1_TOLO.prepare(
+					'INSERT INTO wallet_orders (transaction_id, order_id, client_id, amount) VALUES (?, ?, ?, ?)',
+				)
+					.bind(transactionId, order.incoming_order_id, clientId, paymentAmount)
+					.run(),
+				// Track order completion with PostHog
+				trackEvent(context, {
+					distinctId: clientId.toString(),
+					event: 'order:purchase_complete',
+					properties: {
+						currency: 'MXN',
+						item_count: parsedBody.products.reduce(
+							(sum, p) => sum + (p.count || 1),
+							0,
+						),
+						order_id: order.incoming_order_id,
+						order_total: paymentAmount,
+						products: parsedBody.products.map((product) => ({
+							price: getProductTotalCost({
+								modifications:
+									product.modification?.reduce(
+										(accumulator, current) => {
+											accumulator[current.m] = current.a
+											return accumulator
+										},
+										{} as Record<string, number>,
+									) ?? {},
+								product: products.find(
+									(p) => p.product_id === product.product_id,
+								) as Product,
+							}),
+							product_id: product.product_id,
+							quantity: product.count || 1,
+						})),
+					},
+				}),
+			])
 
 			return context.json(order)
 		} catch (error) {

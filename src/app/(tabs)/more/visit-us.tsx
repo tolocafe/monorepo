@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { Linking, Platform, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -8,6 +9,7 @@ import Button from '@/components/Button'
 import Card from '@/components/Card'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Label, Text } from '@/components/Text'
+import { trackEvent } from '@/lib/analytics'
 
 const APPLE_MAPS_URL = 'https://maps.apple/p/97fTAIvUnQ-uSU'
 const GOOGLE_MAPS_URL = 'https://maps.app.goo.gl/V9Uz531Jz94ziYDn9'
@@ -16,6 +18,11 @@ const TRIPADVISOR_URL =
 
 export default function VisitUs() {
 	const { t } = useLingui()
+
+	// Track screen view
+	useEffect(() => {
+		void trackEvent('store:visit_us_view')
+	}, [])
 
 	return (
 		<>
@@ -101,15 +108,18 @@ export default function VisitUs() {
 	)
 }
 
-function handleOpenAppleMaps(): void {
+function handleOpenAppleMaps() {
+	void trackEvent('store:directions_click', { map_provider: 'apple' })
 	void Linking.openURL(APPLE_MAPS_URL)
 }
 
-function handleOpenGoogleMaps(): void {
+function handleOpenGoogleMaps() {
+	void trackEvent('store:directions_click', { map_provider: 'google' })
 	void Linking.openURL(GOOGLE_MAPS_URL)
 }
 
-function handleOpenTripAdvisor(): void {
+function handleOpenTripAdvisor() {
+	void trackEvent('store:tripadvisor_click')
 	void Linking.openURL(TRIPADVISOR_URL)
 }
 

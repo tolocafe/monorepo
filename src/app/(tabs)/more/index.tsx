@@ -28,6 +28,7 @@ import { List, ListItem } from '@/components/List'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
 import WalletButton, { addPass } from '@/components/WalletButton'
+import { trackEvent } from '@/lib/analytics'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { loadAndActivateLocale } from '@/lib/locales/load-and-activate-locale'
 import { LOCALE_NAMES } from '@/lib/locales/utils'
@@ -109,6 +110,9 @@ export default function More() {
 
 	async function handleAddPass() {
 		if (!user) return
+
+		// Track wallet pass add intent
+		void trackEvent('wallet:pass_add', { platform: Platform.OS })
 
 		try {
 			setIsAddingPass(true)
@@ -268,7 +272,10 @@ export default function More() {
 						<View style={styles.socialIconsRow}>
 							<Pressable
 								accessibilityRole="button"
-								onPress={() => Linking.openURL('mailto:contacto@tolo.cafe')}
+								onPress={() => {
+									void trackEvent('social:link_click', { platform: 'email' })
+									void Linking.openURL('mailto:contacto@tolo.cafe')
+								}}
 								style={styles.socialIcon}
 							>
 								<Ionicons
@@ -279,9 +286,10 @@ export default function More() {
 							</Pressable>
 							<Pressable
 								accessibilityRole="button"
-								onPress={() =>
-									Linking.openURL('https://instagram.com/tolo.cafe')
-								}
+								onPress={() => {
+									void trackEvent('social:link_click', { platform: 'instagram' })
+									void Linking.openURL('https://instagram.com/tolo.cafe')
+								}}
 								style={styles.socialIcon}
 							>
 								<Ionicons
@@ -292,7 +300,10 @@ export default function More() {
 							</Pressable>
 							<Pressable
 								accessibilityRole="button"
-								onPress={() => Linking.openURL('https://wa.me/5217229721819')}
+								onPress={() => {
+									void trackEvent('social:link_click', { platform: 'whatsapp' })
+									void Linking.openURL('https://wa.me/5217229721819')
+								}}
 								style={styles.socialIcon}
 							>
 								<Ionicons
@@ -303,9 +314,10 @@ export default function More() {
 							</Pressable>
 							<Pressable
 								accessibilityRole="button"
-								onPress={() =>
-									Linking.openURL('https://www.tiktok.com/@tolo.cafe')
-								}
+								onPress={() => {
+									void trackEvent('social:link_click', { platform: 'tiktok' })
+									void Linking.openURL('https://www.tiktok.com/@tolo.cafe')
+								}}
 								style={styles.socialIcon}
 							>
 								<Ionicons
@@ -341,7 +353,14 @@ export default function More() {
 									{AVAILABLE_LANGUAGES.map((locale) => (
 										<DropdownMenu.Item
 											key={locale}
-											onSelect={() => loadAndActivateLocale(locale)}
+											onSelect={() => {
+												const oldLocale = i18n.locale
+												void trackEvent('settings:language_change', {
+													new_locale: locale,
+													old_locale: oldLocale,
+												})
+												void loadAndActivateLocale(locale)
+											}}
 											style={dropdownStyles.item}
 										>
 											<DropdownMenu.ItemTitle style={dropdownStyles.itemTitle}>

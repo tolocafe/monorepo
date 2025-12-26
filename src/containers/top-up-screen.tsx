@@ -23,6 +23,7 @@ import Card from '@/components/Card'
 import { CheckedButton } from '@/components/CheckedButton'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
+import { trackEvent } from '@/lib/analytics'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { privateClient } from '@/lib/services/http-client'
 import { formatPrice } from '@/lib/utils/price'
@@ -69,8 +70,18 @@ export default function TopUpScreen() {
 		void getIsPlatformPaySupported().then(setIsPlatformPaySupported)
 	}, [])
 
+	// Track wallet screen view
+	useEffect(() => {
+		void trackEvent('wallet:screen_view', {
+			current_balance: Number(user?.ewallet ?? '0'),
+		})
+	}, [user?.ewallet])
+
 	const handleAmountSelect = (amount: number) => {
 		setSelectedAmount(amount)
+		void trackEvent('wallet:amount_select', {
+			selected_amount: amount / 100,
+		})
 	}
 
 	const handlePayment = async (isPlatformPay: boolean) => {
@@ -80,6 +91,18 @@ export default function TopUpScreen() {
 			Alert.alert(t`Error`, t`Please sign in to top up your wallet`)
 			return
 		}
+
+		// Track topup start
+		const paymentMethod = isPlatformPay
+			? Platform.OS === 'ios'
+				? 'apple_pay'
+				: 'google_pay'
+			: 'card'
+
+		void trackEvent('wallet:topup_start', {
+			payment_method: paymentMethod,
+			topup_amount: selectedAmount / 100,
+		})
 
 		setIsLoading(true)
 

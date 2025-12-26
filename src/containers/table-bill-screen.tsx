@@ -20,6 +20,7 @@ import Card from '@/components/Card'
 import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
+import { trackEvent } from '@/lib/analytics'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { tableQueryOptions } from '@/lib/queries/tables'
 import { api } from '@/lib/services/api-service'
@@ -59,6 +60,17 @@ export default function TableBillScreen() {
 		void getIsPlatformPaySupported().then(setIsPlatformPaySupported)
 	}, [])
 
+	// Track table bill view
+	useEffect(() => {
+		if (!tableBill) return
+
+		void trackEvent('table:bill_view', {
+			bill_total: tableBill.total / 100,
+			item_count: tableBill.items.reduce((sum, item) => sum + item.quantity, 0),
+			table_id,
+		})
+	}, [tableBill, table_id])
+
 	// Auto-dismiss after successful payment
 	useEffect(() => {
 		if (paymentSuccess) {
@@ -81,6 +93,13 @@ export default function TableBillScreen() {
 			Alert.alert(t`Error`, t`Please provide your phone number to continue`)
 			return
 		}
+
+		// Track table payment start
+		void trackEvent('table:payment_start', {
+			bill_total: tableBill.total / 100,
+			payment_method: Platform.OS === 'ios' ? 'apple_pay' : 'google_pay',
+			table_id,
+		})
 
 		try {
 			setIsLoading(true)
@@ -153,6 +172,13 @@ export default function TableBillScreen() {
 			Alert.alert(t`Error`, t`Please provide your phone number to continue`)
 			return
 		}
+
+		// Track table payment start
+		void trackEvent('table:payment_start', {
+			bill_total: tableBill.total / 100,
+			payment_method: 'card',
+			table_id,
+		})
 
 		try {
 			setIsLoading(true)

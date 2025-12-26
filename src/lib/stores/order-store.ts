@@ -4,7 +4,7 @@ import { createJSONStorage, persist } from 'zustand/middleware'
 import { create } from 'zustand/react'
 import { useShallow } from 'zustand/react/shallow'
 
-import { track } from '@/lib/analytics'
+import { trackEvent } from '@/lib/analytics'
 import { selfQueryOptions } from '@/lib/queries/auth'
 
 import { zustandStore } from '.'
@@ -180,8 +180,11 @@ export const useAddItemGuarded = () => {
 			return false
 		}
 
-		void track('add_to_cart', {
-			item_id: item.id,
+		void trackEvent('cart:item_add', {
+			has_modifications: Boolean(
+				item.modifications && Object.keys(item.modifications).length > 0,
+			),
+			product_id: item.id,
 			quantity: item.quantity.toString(),
 		})
 

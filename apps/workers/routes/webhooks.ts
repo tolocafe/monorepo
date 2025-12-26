@@ -17,6 +17,7 @@ import { trackServerEvent } from '~workers/utils/analytics'
 import { notifyApplePassUpdate } from '~workers/utils/apns'
 import createApplePass from '~workers/utils/generate-apple-pass'
 import { api, sendSms } from '~workers/utils/poster'
+import { trackEvent } from '~workers/utils/posthog'
 import { sendPushNotifications } from '~workers/utils/push-notifications'
 import { getStripe } from '~workers/utils/stripe'
 
@@ -610,6 +611,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 								new Date().toISOString(),
 							)
 							.run(),
+						// GA4 tracking (keeping for backward compatibility)
 						trackServerEvent(context, {
 							eventName: 'purchase',
 							eventParams: {
@@ -618,6 +620,18 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 								value: paymentIntent.amount / 100,
 							},
 							userId: posterClientId.toString(),
+						}),
+						// PostHog tracking for wallet top-up
+						trackEvent(context, {
+							distinctId: posterClientId.toString(),
+							event: 'wallet:topup_complete',
+							properties: {
+								amount: paymentIntent.amount / 100,
+								currency: paymentIntent.currency.toUpperCase(),
+								payment_method: 'card',
+								topup_amount: paymentIntent.amount / 100,
+								transaction_id: paymentIntent.id,
+							},
 						}),
 					])
 
@@ -758,24 +772,39 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					break
 				}
 
-				await trackServerEvent(context, {
-					eventName: 'purchase',
-					eventParams: {
-						currency: 'MXN',
-						transaction_id: object_id as string,
-						value:
-							parsedData && 'value_absolute' in parsedData
-								? (parsedData.value_absolute as number)
-								: undefined,
-					},
-					userData: {
-						emailAddress: client.email,
-						firstName: client.firstname,
-						lastName: client.lastname,
-						phoneNumber: client.phone,
-					},
-					userId: client.client_id,
-				})
+				const purchaseValue =
+					parsedData && 'value_absolute' in parsedData
+						? (parsedData.value_absolute as number)
+						: undefined
+
+				await Promise.all([
+					// GA4 tracking (keeping for backward compatibility)
+					trackServerEvent(context, {
+						eventName: 'purchase',
+						eventParams: {
+							currency: 'MXN',
+							transaction_id: object_id as string,
+							value: purchaseValue,
+						},
+						userData: {
+							emailAddress: client.email,
+							firstName: client.firstname,
+							lastName: client.lastname,
+							phoneNumber: client.phone,
+						},
+						userId: client.client_id,
+					}),
+					// PostHog tracking for actual purchase
+					trackEvent(context, {
+						distinctId: client.client_id,
+						event: 'purchase',
+						properties: {
+							currency: 'MXN',
+							order_total: purchaseValue,
+							transaction_id: object_id as string,
+						},
+					}),
+				])
 
 				// Send review prompt
 

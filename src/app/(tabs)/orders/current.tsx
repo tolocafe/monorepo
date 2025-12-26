@@ -17,7 +17,7 @@ import { Input } from '@/components/Input'
 import { ModifierTag } from '@/components/ModifierTag'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
-import { track } from '@/lib/analytics'
+import { trackEvent } from '@/lib/analytics'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { useRegisterForPushNotifications } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -75,13 +75,7 @@ export default function OrderDetail() {
 			})
 		},
 		onSuccess() {
-			void track('purchase', {
-				currency: 'MXN',
-				price: orderTotal.toString(),
-				quantity: order?.products
-					.reduce((sum, product) => sum + product.quantity, 0)
-					.toString(),
-			})
+			// Note: order:purchase_complete is now tracked on the backend
 
 			Burnt.toast({
 				duration: 3,
@@ -103,7 +97,6 @@ export default function OrderDetail() {
 		},
 	})
 
-	// eslint-disable-next-line react-hooks/preserve-manual-memoization
 	const orderTotal = useMemo(
 		() => getOrderTotal(order?.products ?? []),
 		[order?.products],
@@ -112,12 +105,15 @@ export default function OrderDetail() {
 	useEffect(() => {
 		if (!order?.products) return
 
-		void track('view_cart', {
+		const itemCount = order.products.reduce(
+			(sum, product) => sum + product.quantity,
+			0,
+		)
+
+		void trackEvent('cart:view', {
+			cart_total: orderTotal,
 			currency: 'MXN',
-			price: orderTotal.toString(),
-			quantity: order.products
-				.reduce((sum, product) => sum + product.quantity, 0)
-				.toString(),
+			item_count: itemCount,
 		})
 	}, [order?.products, orderTotal])
 
@@ -139,8 +135,16 @@ export default function OrderDetail() {
 			const hasInsufficientBalance =
 				!user || Number(user.ewallet ?? '0') < orderTotal
 
+			const itemCount =
+				order?.products.reduce((sum, product) => sum + product.quantity, 0) ?? 0
+
 			// Require explicit action if funds are insufficient
 			if (hasInsufficientBalance) {
+				void trackEvent('checkout:insufficient_balance', {
+					available_balance: Number(user?.ewallet ?? '0'),
+					required_amount: orderTotal,
+				})
+
 				Alert.alert(
 					t`Insufficient Balance`,
 					t`You don't have enough balance in your wallet. Please top up your wallet first.`,
@@ -159,12 +163,10 @@ export default function OrderDetail() {
 				return
 			}
 
-			void track('begin_checkout', {
+			void trackEvent('checkout:start', {
+				cart_total: orderTotal,
 				currency: 'MXN',
-				price: orderTotal.toString(),
-				quantity: order?.products
-					.reduce((sum, product) => sum + product.quantity, 0)
-					.toString(),
+				item_count: itemCount,
 			})
 
 			const orderApiFormat = {
@@ -188,8 +190,25 @@ export default function OrderDetail() {
 		},
 	})
 
-	const handleQuantityChange = (product: OrderProduct, quantity: number) => {
-		updateItem(product.id, product.modifications, quantity)
+	const handleQuantityChange = (
+		product: OrderProduct,
+		nextQuantity: number,
+	) => {
+		const previousQuantity = product.quantity
+
+		if (nextQuantity <= 0) {
+			void trackEvent('cart:item_remove', {
+				product_id: product.id,
+			})
+		} else if (nextQuantity !== previousQuantity) {
+			void trackEvent('cart:item_quantity_update', {
+				new_quantity: nextQuantity,
+				old_quantity: previousQuantity,
+				product_id: product.id,
+			})
+		}
+
+		updateItem(product.id, product.modifications, nextQuantity)
 	}
 
 	const handleClearOrder = useCallback(() => {

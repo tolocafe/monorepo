@@ -19,7 +19,7 @@ import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { enableAnalytics, identify } from '@/lib/analytics'
-import { track } from '@/lib/analytics'
+import { trackEvent } from '@/lib/analytics'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import {
 	requestOtpMutationOptions,
@@ -57,6 +57,7 @@ export default function SignIn() {
 		async onSuccess(data) {
 			await queryClient.invalidateQueries({ queryKey: ['self'] })
 
+			// Note: auth:user_login is now tracked on the backend
 			requestTrackingPermissionAsync()
 				.then((granted) => {
 					if (granted) {
@@ -69,14 +70,19 @@ export default function SignIn() {
 							userId: data.client.client_id,
 						})
 					}
-
-					void track('login')
 				})
 				.catch(captureException)
 
 			router.replace('/', { withAnchor: false })
 		},
 	})
+
+	// Track sign-in screen view
+	useEffect(() => {
+		void trackEvent('auth:signin_screen_view', {
+			has_item_context: Boolean(itemName),
+		})
+	}, [itemName])
 
 	const { Field, handleSubmit, resetField, Subscribe } = useForm({
 		defaultValues: {

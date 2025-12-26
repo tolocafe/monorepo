@@ -2,24 +2,42 @@ import { startSpan } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
-
 import type { CookieOptions } from 'hono/utils/cookie'
 
 import { RequestOtpSchema, VerifyOtpSchema } from '~common/schemas'
 import { defaultJsonHeaders } from '~workers/utils/headers'
+import type { ClientData } from '~common/api'
 
-import { trackServerEvent } from '../utils/analytics'
+import { trackServerEvent } from '~workers/utils/analytics'
 import {
 	authenticate,
 	DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
 	signJwt,
-} from '../utils/jwt'
-import { generateOtp, storeOtp, verifyOtp } from '../utils/otp'
-import { api, sendSms } from '../utils/poster'
+} from '~workers/utils/jwt'
+import { generateOtp, storeOtp, verifyOtp } from '~workers/utils/otp'
+import { api, sendSms } from '~workers/utils/poster'
+import { trackEvent } from '~workers/utils/posthog'
 
-import type { Bindings } from '../types'
+import type { Bindings } from '~workers/types'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
+
+/**
+ * Build user properties for PostHog identification
+ */
+function buildUserProperties(client: ClientData) {
+	return {
+		birthday: client.birthday,
+		group_id: client.client_groups_id,
+		group_name: client.client_groups_name,
+		created_at: client.date_activale,
+		email: client.email,
+		first_name: client.firstname,
+		last_name: client.lastname,
+		name: client.name,
+		phone: client.phone,
+	}
+}
 
 const UNVERIFIED_CLIENT_GROUP_ID = '1'
 const VERIFIED_CLIENT_GROUP_ID = 3
@@ -73,7 +91,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				)
 			}
 
-			const nextClient = await api.clients.createClient(
+			const nextClientId = await api.clients.createClient(
 				context.env.POSTER_TOKEN,
 				{
 					birthday: birthdate,
@@ -84,15 +102,33 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				},
 			)
 
-			await trackServerEvent(context, {
-				eventName: 'sign_up',
-				userData: {
-					emailAddress: email,
-					firstName: name,
-					phoneNumber: phone,
-				},
-				userId: nextClient.toString(),
-			})
+			// Track signup with both GA4 and PostHog
+			await Promise.all([
+				trackServerEvent(context, {
+					eventName: 'sign_up',
+					userData: {
+						emailAddress: email,
+						firstName: name,
+						phoneNumber: phone,
+					},
+					userId: nextClientId.toString(),
+				}),
+				trackEvent(context, {
+					distinctId: nextClientId.toString(),
+					event: 'auth:user_signup',
+					properties: {
+						signup_method: 'phone',
+					},
+					userProperties: {
+						created_at: new Date().toISOString(),
+						email,
+						first_name: name,
+						is_team_member: false,
+						name,
+						phone,
+					},
+				}),
+			])
 		}
 
 		const code = generateOtp()
@@ -149,6 +185,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			: []
 
 		await Promise.all([
+			// GA4 tracking
 			trackServerEvent(context, {
 				eventName: 'login',
 				userData: {
@@ -158,6 +195,16 @@ const auth = new Hono<{ Bindings: Bindings }>()
 					phoneNumber: posterClient.phone,
 				},
 				userId: clientId,
+			}),
+			// PostHog tracking with full user properties
+			trackEvent(context, {
+				distinctId: clientId,
+				event: 'auth:user_login',
+				properties: {
+					login_method: 'otp',
+					session_name: sessionName,
+				},
+				userProperties: buildUserProperties(posterClient),
 			}),
 			startSpan({ name: 'KV_SESSIONS.put' }, () =>
 				context.env.KV_SESSIONS.put(
@@ -256,13 +303,19 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			? parsedSessionsUnknown.filter((record) => isSessionRecord(record))
 			: []
 
-		// Clear all sessions for this client
-		await startSpan({ name: 'KV_SESSIONS.put' }, () =>
-			context.env.KV_SESSIONS.put(
-				clientId.toString(),
-				JSON.stringify(sessions.filter((session) => session.token !== token)),
+		// Clear session and track logout
+		await Promise.all([
+			startSpan({ name: 'KV_SESSIONS.put' }, () =>
+				context.env.KV_SESSIONS.put(
+					clientId.toString(),
+					JSON.stringify(sessions.filter((session) => session.token !== token)),
+				),
 			),
-		)
+			trackEvent(context, {
+				distinctId: clientId.toString(),
+				event: 'auth:user_logout',
+			}),
+		])
 
 		// For web, clear the HttpOnly cookie
 		const isWeb = (context.req.header('User-Agent') ?? '').includes('Mozilla')

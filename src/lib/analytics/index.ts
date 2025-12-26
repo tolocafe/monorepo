@@ -84,7 +84,7 @@ export async function reset() {
 	}
 }
 
-export async function track(
+export async function trackEvent(
 	event: AnalyticsEvent,
 	properties?: EventProperties,
 ) {

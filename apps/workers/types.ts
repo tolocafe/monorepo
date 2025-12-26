@@ -29,6 +29,7 @@ export type Bindings = Cloudflare.Env & {
 	POSTER_ACCOUNT_NUMBER: string
 	POSTER_APPLICATION_SECRET: string
 	POSTER_TOKEN: string
+	POSTHOG_API_KEY: string
 	SANITY_API_VERSION: string
 	SANITY_PROJECT_ID: string
 

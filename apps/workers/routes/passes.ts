@@ -7,6 +7,7 @@ import createApplePass from '~workers/utils/generate-apple-pass'
 import createGooglePass from '~workers/utils/generate-google-pass'
 import { authenticate } from '~workers/utils/jwt'
 import { api } from '~workers/utils/poster'
+import { trackEvent } from '~workers/utils/posthog'
 
 import type { Bindings } from '~workers/types'
 
@@ -36,6 +37,15 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 
 			if (platform === 'google' || platform === 'android') {
 				const pass = await createGooglePass(context, 'null', client)
+
+				// Track Google/Android pass download
+				await trackEvent(context, {
+					distinctId: clientId.toString(),
+					event: 'wallet:pass_download',
+					properties: {
+						platform: 'android',
+					},
+				})
 
 				return context.json({ url: pass }, 200)
 			}
@@ -68,6 +78,15 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 			}
 
 			const pass = await createApplePass(context, passAuthToken, client)
+
+			// Track Apple/iOS pass download
+			await trackEvent(context, {
+				distinctId: clientId.toString(),
+				event: 'wallet:pass_download',
+				properties: {
+					platform: 'ios',
+				},
+			})
 
 			return new Response(pass.getAsBuffer() as unknown as BodyInit, {
 				headers: {
