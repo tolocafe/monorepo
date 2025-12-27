@@ -15,7 +15,6 @@ export type PostHogEventProperties = {
 	is_guest?: boolean
 	item_count?: number
 	order_id?: number | string
-	order_total?: number
 	payment_method?: string
 	platform?: string
 	products?: {

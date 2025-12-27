@@ -107,12 +107,19 @@ export async function upsertTransaction(
 	// Insert order lines AFTER transaction (due to foreign key constraint)
 	await upsertOrderLines(database, token, tx, cache)
 
+	// Calculate actual income (card + cash + third-party, excludes eWallet/bonus)
+	const incomeAmount =
+		(payload.payedCard ?? 0) +
+		(payload.payedCash ?? 0) +
+		(payload.payedThirdParty ?? 0)
+
 	// Return change information for event processing
 	return {
 		action: existing ? 'updated' : 'created',
 		customerId,
 		dateClose: payload.dateClose,
 		dateStart: tx.date_start,
+		incomeAmount,
 		isAccepted,
 		oldDateClose: existing?.dateClose ?? null,
 		oldIsAccepted: existing?.isAccepted ?? false,

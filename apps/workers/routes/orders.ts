@@ -256,13 +256,13 @@ const orders = new Hono<{ Bindings: Bindings }>()
 					distinctId: clientId.toString(),
 					event: 'order:purchase_complete',
 					properties: {
+						amount: paymentAmount,
 						currency: 'MXN',
 						item_count: parsedBody.products.reduce(
 							(sum, p) => sum + (p.count || 1),
 							0,
 						),
 						order_id: order.incoming_order_id,
-						order_total: paymentAmount,
 						products: parsedBody.products.map((product) => ({
 							price: getProductTotalCost({
 								modifications:

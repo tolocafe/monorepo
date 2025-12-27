@@ -4,18 +4,7 @@
  * This module provides decoupled event detection and processing that can be used
  * by both the polling-based sync and webhook handlers.
  *
- * @example Webhook usage
- * ```ts
- * const event = createOrderEvent({
- *   transactionId: 123,
- *   customerId: 456,
- *   eventType: 'order:accepted',
- *   serviceMode: 2,
- * })
- * await processOrderEvents([event], passDatabase, env)
- * ```
- *
- * @example Polling usage (with change detection)
+ * @example
  * ```ts
  * const events = detectOrderEvents(transactionChange)
  * await processOrderEvents(events, passDatabase, env)
@@ -56,6 +45,11 @@ export type TransactionChange = {
 	dateClose: null | string
 	dateStart: string // Order start date in "Y-m-d H:i:s" format
 	/**
+	 * Actual income amount in cents (card + cash + third-party).
+	 * Excludes eWallet/bonus since those are pre-paid.
+	 */
+	incomeAmount: number
+	/**
 	 * Whether order was accepted (from history changeorderstatus with value: 1)
 	 * This is the Poster POS "accept order" action, separate from processing_status
 	 */
@@ -86,6 +80,11 @@ export type TransactionChange = {
 export type OrderEvent = {
 	customerId: null | number
 	eventType: MessageType
+	/**
+	 * Actual income amount in cents (card + cash + third-party).
+	 * Excludes eWallet/bonus since those are pre-paid.
+	 */
+	incomeAmount?: number
 	/** Order start time for notification filtering */
 	orderDate?: Date
 	payedSum?: number
@@ -109,31 +108,6 @@ const STATUS_PROGRESSION: Array<{ messageType: MessageType; status: number }> =
 	]
 
 /**
- * Create an order event directly (for webhook usage)
- *
- * @example
- * ```ts
- * const event = createOrderEvent({
- *   transactionId: 123,
- *   customerId: 456,
- *   eventType: 'order:accepted',
- *   serviceMode: 2,
- *   orderDate: new Date(),
- * })
- * ```
- */
-export function createOrderEvent(params: {
-	customerId: null | number
-	eventType: MessageType
-	orderDate?: Date
-	payedSum?: number
-	serviceMode: null | number
-	transactionId: number
-}): OrderEvent {
-	return params
-}
-
-/**
  * Detect order events from a transaction change
  * For newly synced transactions, emits implied events based on current status
  *
@@ -145,6 +119,7 @@ export function detectOrderEvents(change: TransactionChange): OrderEvent[] {
 
 	const baseEvent = {
 		customerId: change.customerId,
+		incomeAmount: change.incomeAmount,
 		payedSum: change.payedSum,
 		serviceMode: change.serviceMode,
 		transactionId: change.transactionId,
@@ -328,12 +303,11 @@ export async function processOrderEvents(
 					event: event.eventType,
 					properties: {
 						...baseProperties,
-						// PostHog revenue properties
-						...(event.payedSum !== undefined
+						// Actual income (card + cash + third-party, excludes eWallet)
+						...(event.incomeAmount !== undefined
 							? {
+									amount: Math.floor(event.incomeAmount / 10000),
 									currency: 'MXN',
-									order_total: event.payedSum / 100,
-									price: event.payedSum,
 								}
 							: {}),
 					},

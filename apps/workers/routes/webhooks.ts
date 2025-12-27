@@ -679,24 +679,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 	/**
 	 * Poster webhook is disabled. We now use polling via `scheduled/sync-transactions.ts`.
 	 * Keeping route for backwards compatibility - returns 410 Gone.
-	 *
-	 * To re-enable webhooks, use the shared order-events utility:
-	 * @example
-	 * ```ts
-	 * import { createOrderEvent, processOrderEvents, getEventTypeFromStatus } from '~workers/utils/order-events'
-	 *
-	 * const eventType = getEventTypeFromStatus(processingStatus)
-	 * if (eventType) {
-	 *   const event = createOrderEvent({
-	 *     transactionId,
-	 *     customerId,
-	 *     eventType,
-	 *     serviceMode,
-	 *     orderDate: new Date(),
-	 *   })
-	 *   await processOrderEvents([event], passDatabase, env, { skipAgeCheck: true })
-	 * }
-	 * ```
 	 */
 	.post('/poster', (context) => {
 		return context.json(
@@ -829,8 +811,8 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						distinctId: client.client_id,
 						event: 'purchase',
 						properties: {
+							amount: purchaseValue,
 							currency: 'MXN',
-							order_total: purchaseValue,
 							transaction_id: object_id as string,
 						},
 					}),
