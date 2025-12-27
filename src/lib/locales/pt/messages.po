@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. placeholder {0}: `Status${order.processing_status}`
-#: src/app/(tabs)/orders/index.tsx:179
+#: src/app/(tabs)/orders/index.tsx:182
 msgid "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Closed} Status70 {Deleted} other {Unknown}}"
 msgstr "{0, select, Status10 {Aberto} Status20 {Preparando} Status30 {Pronto} Status40 {A caminho} Status50 {Entregue} Status60 {Fechado} Status70 {Excluído} other {Desconhecido}}"
 
@@ -100,7 +100,7 @@ msgstr "Adicionar ao Pedido"
 msgid "Additional"
 msgstr "Adicional"
 
-#: src/app/(tabs)/team/queue.tsx:209
+#: src/app/(tabs)/team/queue.tsx:300
 msgid "All"
 msgstr "Todos"
 
@@ -285,7 +285,12 @@ msgstr "DD/MM/AAAA"
 msgid "Delete"
 msgstr "Excluir"
 
-#: src/app/(tabs)/team/queue.tsx:295
+#: src/app/(tabs)/team/queue.tsx:496
+#: src/app/(tabs)/team/queue.tsx:598
+msgid "Delivered"
+msgstr ""
+
+#: src/app/(tabs)/team/queue.tsx:386
 msgid "Delivery"
 msgstr "Entrega"
 
@@ -305,7 +310,7 @@ msgstr "Descubra nosso cardápio de café caseiro com espresso, lattes, cappucci
 msgid "Download PDF"
 msgstr "Baixar PDF"
 
-#: src/app/(tabs)/orders/[id].tsx:233
+#: src/app/(tabs)/orders/[id].tsx:234
 msgid "Download Receipt"
 msgstr "Baixar Recibo"
 
@@ -313,7 +318,7 @@ msgstr "Baixar Recibo"
 msgid "Download Ticket"
 msgstr "Baixar Ticket"
 
-#: src/app/(tabs)/orders/[id].tsx:231
+#: src/app/(tabs)/orders/[id].tsx:232
 #: src/app/(tabs)/team/ticket.tsx:92
 msgid "Downloading..."
 msgstr "Baixando..."
@@ -590,7 +595,7 @@ msgstr "nome@exemplo.com"
 msgid "New"
 msgstr "Novo"
 
-#: src/app/(tabs)/team/queue.tsx:430
+#: src/app/(tabs)/team/queue.tsx:464
 msgid "New orders will appear here"
 msgstr "Novos pedidos aparecerão aqui"
 
@@ -611,11 +616,11 @@ msgstr "Sem data de aniversário registrada."
 msgid "No events scheduled at the moment"
 msgstr ""
 
-#: src/app/(tabs)/team/queue.tsx:427
+#: src/app/(tabs)/team/queue.tsx:461
 msgid "No orders in queue"
 msgstr "Nenhum pedido na fila"
 
-#: src/app/(tabs)/orders/index.tsx:216
+#: src/app/(tabs)/orders/index.tsx:220
 msgid "No orders yet"
 msgstr "Nenhum pedido ainda"
 
@@ -724,6 +729,11 @@ msgstr "Pagamento Bem-sucedido"
 msgid "Payment successful!"
 msgstr "Pagamento realizado com sucesso!"
 
+#: src/app/(tabs)/team/queue.tsx:497
+#: src/app/(tabs)/team/queue.tsx:570
+msgid "Pending"
+msgstr ""
+
 #: src/app/(tabs)/more/index.tsx:211
 msgid "Phone"
 msgstr "Telefone"
@@ -785,7 +795,7 @@ msgstr "Qtd: {0}"
 
 #: src/app/(tabs)/team/_layout.tsx:23
 #: src/app/(tabs)/team/index.tsx:51
-#: src/app/(tabs)/team/queue.tsx:176
+#: src/app/(tabs)/team/queue.tsx:267
 msgid "Queue"
 msgstr "Fila"
 
@@ -1002,7 +1012,7 @@ msgstr "Tickets"
 msgid "Tip"
 msgstr "Gorjeta"
 
-#: src/app/(tabs)/team/queue.tsx:286
+#: src/app/(tabs)/team/queue.tsx:377
 msgid "To Go"
 msgstr "Para viagem"
 
@@ -1133,6 +1143,11 @@ msgstr "Site"
 msgid "Welcome"
 msgstr "Bem-vindo"
 
+#: src/app/(tabs)/team/queue.tsx:494
+#: src/app/(tabs)/team/queue.tsx:584
+msgid "Working"
+msgstr ""
+
 #: src/app/(tabs)/orders/current.tsx:150
 msgid "You don't have enough balance in your wallet. Please top up your wallet first."
 msgstr "Você não tem saldo suficiente na sua carteira. Por favor, recarregue sua carteira primeiro."
@@ -1142,7 +1157,7 @@ msgstr "Você não tem saldo suficiente na sua carteira. Por favor, recarregue s
 msgid "You need barista or owner access to use this tool."
 msgstr "Você precisa de acesso de barista ou proprietário para usar esta ferramenta."
 
-#: src/app/(tabs)/orders/index.tsx:219
+#: src/app/(tabs)/orders/index.tsx:223
 msgid "Your order history will appear here"
 msgstr "Seu histórico de pedidos aparecerá aqui"
 

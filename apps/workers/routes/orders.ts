@@ -1,13 +1,9 @@
 import { captureException } from '@sentry/cloudflare'
-import { eq } from 'drizzle-orm'
-import { drizzle } from 'drizzle-orm/neon-http'
-import { neon } from '@neondatabase/serverless'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
 import { CreateOrderSchema, UpdateQueueItemStateSchema } from '~common/schemas'
 import { getProductTotalCost } from '~common/utils'
-import { queueItemStates } from '~workers/db/schema'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { authenticate } from '~workers/utils/jwt'
 import { api } from '~workers/utils/poster'
@@ -15,6 +11,17 @@ import { trackEvent } from '~workers/utils/posthog'
 
 import type { Product, QueueItemState } from '~common/api'
 import type { Bindings } from '~workers/types'
+
+/** KV key prefix for queue item states */
+const QUEUE_STATE_PREFIX = 'queue:state:'
+
+/** TTL for queue states (24 hours - orders should be completed by then) */
+const QUEUE_STATE_TTL = 60 * 60 * 24
+
+/** Generate KV key for a queue item state */
+function getQueueStateKey(transactionId: number, lineIndex: number): string {
+	return `${QUEUE_STATE_PREFIX}${transactionId}:${lineIndex}`
+}
 
 // Modifiers to ignore (not displayed in barista queue)
 const IGNORED_MODIFIERS = new Set([
@@ -72,14 +79,6 @@ function parseModifiers(
 		}))
 }
 
-/**
- * Helper to get drizzle db instance
- */
-function getDb(env: Bindings) {
-	const sql = neon(env.HYPERDRIVE.connectionString)
-	return drizzle(sql)
-}
-
 const orders = new Hono<{ Bindings: Bindings }>()
 	.get('/', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
@@ -104,10 +103,16 @@ const orders = new Hono<{ Bindings: Bindings }>()
 			throw new HTTPException(403, { message: 'Access denied' })
 		}
 
-		const db = getDb(c.env)
+		// List all keys with the queue state prefix and fetch their values
+		const listResult = await c.env.KV_CMS.list({ prefix: QUEUE_STATE_PREFIX })
+		const states: QueueItemState[] = []
 
-		// Get all queue item states
-		const states = await db.select().from(queueItemStates)
+		for (const key of listResult.keys) {
+			const value = await c.env.KV_CMS.get<QueueItemState>(key.name, 'json')
+			if (value) {
+				states.push(value)
+			}
+		}
 
 		return c.json(states)
 	})
@@ -132,37 +137,27 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		}
 
 		const { transactionId, lineIndex, status } = parsed.data
-		const updatedBy = `${client.firstname ?? ''} ${client.lastname ?? ''}`.trim() || 'Unknown'
+		const updatedBy =
+			`${client.firstname ?? ''} ${client.lastname ?? ''}`.trim() || 'Unknown'
 
-		const db = getDb(c.env)
-
-		// Upsert the queue item state
-		await db
-			.insert(queueItemStates)
-			.values({
-				lineIndex,
-				status,
-				transactionId,
-				updatedAt: new Date().toISOString(),
-				updatedBy,
-				updatedByClientId: clientId,
-			})
-			.onConflictDoUpdate({
-				set: {
-					status,
-					updatedAt: new Date().toISOString(),
-					updatedBy,
-					updatedByClientId: clientId,
-				},
-				target: [queueItemStates.transactionId, queueItemStates.lineIndex],
-			})
-
-		return c.json({
+		const key = getQueueStateKey(transactionId, lineIndex)
+		const state: QueueItemState = {
 			lineIndex,
 			status,
-			success: true,
 			transactionId,
+			updatedAt: new Date().toISOString(),
 			updatedBy,
+			updatedByClientId: clientId,
+		}
+
+		// Store in KV with TTL
+		await c.env.KV_CMS.put(key, JSON.stringify(state), {
+			expirationTtl: QUEUE_STATE_TTL,
+		})
+
+		return c.json({
+			...state,
+			success: true,
 		})
 	})
 	.get('/barista/queue', async (c) => {

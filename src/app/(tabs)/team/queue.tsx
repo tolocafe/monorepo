@@ -8,18 +8,24 @@ import {
 } from 'react-native'
 
 import { Feather, Ionicons } from '@expo/vector-icons'
+import { t } from '@lingui/core/macro'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
+import * as ContextMenu from 'zeego/context-menu'
 
 import Card from '@/components/Card'
 import { ModifierTag } from '@/components/ModifierTag'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Paragraph, Text } from '@/components/Text'
-import { baristaQueueQueryOptions } from '@/lib/queries/barista'
+import {
+	baristaQueueQueryOptions,
+	baristaQueueStatesQueryOptions,
+	updateQueueItemStateMutationOptions,
+} from '@/lib/queries/barista'
 import {
 	categoriesQueryOptions,
 	productsQueryOptions,
@@ -27,7 +33,7 @@ import {
 import { queryClient } from '@/lib/query-client'
 import { sortModifiers } from '@/lib/utils/modifier-tags'
 
-import type { Product } from '@/lib/api'
+import type { DashTransaction, Product, QueueItemState } from '@/lib/api'
 
 const POLLING_INTERVAL = 5000 // 5 seconds
 
@@ -44,12 +50,38 @@ const CATEGORY_COLORS: Record<string, string> = {
 
 const DEFAULT_CATEGORY_COLOR = '#8E8E93' // Gray fallback
 
+// Status colors
+const STATUS_COLORS = {
+	delivered: '#4CAF50', // Green
+	unselected: 'transparent',
+	working: '#FF9800', // Orange
+} as const
+
+type QueueItemStatus = 'delivered' | 'unselected' | 'working'
+
 const UniScrollView = withUnistyles(ScrollView, (_theme, runtime) => ({
 	horizontal: runtime.breakpoint !== 'xs' && runtime.breakpoint !== 'sm',
 }))
 
+/** Represents a single product item in the queue with its state */
+type QueueProduct = {
+	categoryId?: string
+	count: number
+	lineIndex: number
+	modifiers?: { group: string; name: string }[]
+	productId: string
+	productName: string
+	state?: QueueItemState
+	transactionId: string
+}
+
+/** Represents an order with ungrouped products */
+type QueueOrder = DashTransaction & {
+	queueProducts: QueueProduct[]
+}
+
 export default function BaristaQueue() {
-	const { t } = useLingui()
+	const { t: tFunction } = useLingui()
 	const screenRef = useRef<ScrollView>(null)
 
 	const [selectedCategoryId, setSelectedCategoryId] = useState<null | string>(
@@ -61,10 +93,30 @@ export default function BaristaQueue() {
 	const {
 		data: orders,
 		isLoading,
-		refetch,
+		refetch: refetchOrders,
 	} = useQuery(baristaQueueQueryOptions)
+	const { data: queueStates, refetch: refetchStates } = useQuery(
+		baristaQueueStatesQueryOptions,
+	)
 	const { data: products } = useQuery(productsQueryOptions)
 	const { data: categories } = useQuery(categoriesQueryOptions)
+
+	const updateStateMutation = useMutation({
+		...updateQueueItemStateMutationOptions,
+		onSuccess: () => {
+			void refetchStates()
+		},
+	})
+
+	// Create a map for queue states lookup
+	const statesMap = useMemo(() => {
+		const map = new Map<string, QueueItemState>()
+		for (const state of queueStates) {
+			const key = `${state.transactionId}:${state.lineIndex}`
+			map.set(key, state)
+		}
+		return map
+	}, [queueStates])
 
 	// Filter categories to only show those with products in the queue
 	const availableCategories = useMemo(() => {
@@ -87,6 +139,11 @@ export default function BaristaQueue() {
 				.sort((a, b) => a.category_name.localeCompare(b.category_name))
 		)
 	}, [categories, orders])
+
+	const refetch = useCallback(() => {
+		void refetchOrders()
+		void refetchStates()
+	}, [refetchOrders, refetchStates])
 
 	useFocusEffect(
 		useCallback(() => {
@@ -123,57 +180,91 @@ export default function BaristaQueue() {
 		return map
 	}, [categories])
 
-	// Create a map for modification ID → modification name
-	const modificationMap = useMemo(() => {
-		const map = new Map<string, string>()
-		if (!products) return map
-
-		for (const product of products) {
-			// Get modifications from group_modifications
-			if (product.group_modifications)
-				for (const group of product.group_modifications) {
-					for (const module_ of group.modifications ?? []) {
-						map.set(
-							String(module_.dish_modification_id),
-							module_.modificator_name || module_.name,
-						)
-					}
-				}
-			// Also check direct modifications array
-			if (product.modifications)
-				for (const module_ of product.modifications) {
-					map.set(
-						String(module_.dish_modification_id),
-						module_.modificator_name || module_.name,
-					)
-				}
-		}
-		return map
-	}, [products])
-
 	const handleRefresh = useCallback(() => {
 		void queryClient.invalidateQueries(baristaQueueQueryOptions)
+		void queryClient.invalidateQueries(baristaQueueStatesQueryOptions)
 	}, [])
+
+	const handleStatusChange = useCallback(
+		(transactionId: number, lineIndex: number, status: QueueItemStatus) => {
+			updateStateMutation.mutate({
+				lineIndex,
+				status,
+				transactionId,
+			})
+		},
+		[updateStateMutation],
+	)
+
+	// Process orders to ungroup products with different statuses
+	const processedOrders = useMemo<QueueOrder[]>(() => {
+		return orders.map((order) => {
+			const queueProducts: QueueProduct[] = []
+
+			if (order.products) {
+				// Reverse to show oldest first, and ungroup each product unit
+				const reversedProducts = [...order.products].reverse()
+
+				for (const [
+					originalIndex,
+					orderProduct,
+				] of reversedProducts.entries()) {
+					const productDetails = productMap.get(orderProduct.product_id)
+					const count = Math.floor(Number(orderProduct.num)) || 1
+
+					// Get the line index (original order in the array)
+					const lineIndex = order.products.length - 1 - originalIndex
+
+					// Ungroup: create separate entries for each unit
+					for (let unitIndex = 0; unitIndex < count; unitIndex++) {
+						// Use the line index for state lookup
+						const stateKey = `${order.transaction_id}:${lineIndex}`
+						const state = statesMap.get(stateKey)
+
+						queueProducts.push({
+							categoryId:
+								orderProduct.category_id || productDetails?.menu_category_id,
+							count: 1, // Each entry is 1 unit
+							lineIndex,
+							modifiers: orderProduct.modifiers,
+							productId: orderProduct.product_id,
+							productName:
+								orderProduct.product_name ||
+								productDetails?.product_name ||
+								`Product ${orderProduct.product_id}`,
+							state,
+							transactionId: order.transaction_id,
+						})
+					}
+				}
+			}
+
+			return {
+				...order,
+				queueProducts,
+			}
+		})
+	}, [orders, productMap, statesMap])
 
 	// Filter orders based on selected category
 	const filteredOrders = useMemo(() => {
-		if (!selectedCategoryId) return orders
+		if (!selectedCategoryId) return processedOrders
 
 		// Filter orders to only include products from the selected category
-		return orders
+		return processedOrders
 			.map((order) => ({
 				...order,
-				products: order.products?.filter(
-					(product) => product.category_id === selectedCategoryId,
+				queueProducts: order.queueProducts.filter(
+					(product) => product.categoryId === selectedCategoryId,
 				),
 			}))
-			.filter((order) => order.products && order.products.length > 0)
-	}, [orders, selectedCategoryId])
+			.filter((order) => order.queueProducts.length > 0)
+	}, [processedOrders, selectedCategoryId])
 
 	return (
 		<>
 			<Head>
-				<title>{t`Queue`}</title>
+				<title>{tFunction`Queue`}</title>
 			</Head>
 			<TabScreenContainer
 				contentContainerStyle={styles.contentContainer}
@@ -312,95 +403,38 @@ export default function BaristaQueue() {
 										</Text>
 									)}
 
-									{order.products && order.products.length > 0 && (
+									{order.queueProducts.length > 0 && (
 										<View style={styles.productsList}>
-											{[...order.products]
-												// eslint-disable-next-line unicorn/no-array-reverse
-												.reverse()
-												.map((orderProduct, index) => {
-													const productDetails = productMap.get(
-														orderProduct.product_id,
-													)
-													// Get category name to determine color
-													// Use category_id from augmented product data, or fall back to product lookup
-													const categoryId =
-														orderProduct.category_id ||
-														productDetails?.menu_category_id
-													const categoryName = categoryId
-														? categoryMap.get(categoryId)
-														: undefined
-													const productColor = getCategoryColor(categoryName)
-													const productName =
-														orderProduct.product_name ||
-														productDetails?.product_name ||
-														`Product ${orderProduct.product_id}`
+											{order.queueProducts.map((queueProduct, index) => {
+												const categoryName = queueProduct.categoryId
+													? categoryMap.get(queueProduct.categoryId)
+													: undefined
+												const productColor = getCategoryColor(categoryName)
+												const status: QueueItemStatus =
+													(queueProduct.state?.status as QueueItemStatus) ||
+													'unselected'
+												const statusColor = STATUS_COLORS[status]
+												const updatedBy = queueProduct.state?.updatedBy
 
-													// Get modifiers array (new API format) or fall back to legacy
-													const modifiers = orderProduct.modifiers
-													const legacyModifications = orderProduct.modification
-
-													// Parse quantity - it's a string like "1" or "2"
-													const count =
-														Math.floor(Number(orderProduct.num)) || 1
-
-													return (
-														<View
-															key={index}
-															style={styles.productItemContainer}
-														>
-															<View style={styles.productItem}>
-																<View
-																	style={[
-																		styles.productQuantityBadge,
-																		{ backgroundColor: productColor },
-																	]}
-																>
-																	<Text style={styles.productQuantityText}>
-																		{count}
-																	</Text>
-																</View>
-																<Text style={styles.productName}>
-																	{productName}
-																</Text>
-															</View>
-															{/* Show modifier tags from new API format (with group info) */}
-															{modifiers && modifiers.length > 0 && (
-																<View style={styles.modifierTagsContainer}>
-																	{sortModifiers(modifiers).map(
-																		(module_, moduleIndex) => (
-																			<ModifierTag
-																				group={module_.group}
-																				key={`${module_.group}-${module_.name}-${moduleIndex}`}
-																				name={module_.name}
-																			/>
-																		),
-																	)}
-																</View>
-															)}
-															{/* Fallback: Show modifications from legacy array */}
-															{!modifiers?.length &&
-																legacyModifications &&
-																legacyModifications.length > 0 && (
-																	<View style={styles.modifierTagsContainer}>
-																		{legacyModifications.map(
-																			(module_, moduleIndex) => {
-																				const moduleName =
-																					module_.modification_name ||
-																					modificationMap.get(module_.m) ||
-																					`Mod #${module_.m}`
-																				return (
-																					<ModifierTag
-																						key={`${moduleName}-${moduleIndex}`}
-																						name={moduleName}
-																					/>
-																				)
-																			},
-																		)}
-																	</View>
-																)}
-														</View>
-													)
-												})}
+												return (
+													<QueueProductItem
+														key={`${queueProduct.transactionId}-${queueProduct.lineIndex}-${index}`}
+														categoryColor={productColor}
+														modifiers={queueProduct.modifiers}
+														onStatusChange={(newStatus) =>
+															handleStatusChange(
+																Number(queueProduct.transactionId),
+																queueProduct.lineIndex,
+																newStatus,
+															)
+														}
+														productName={queueProduct.productName}
+														status={status}
+														statusColor={statusColor}
+														updatedBy={updatedBy}
+													/>
+												)
+											})}
 										</View>
 									)}
 
@@ -433,6 +467,139 @@ export default function BaristaQueue() {
 				)}
 			</TabScreenContainer>
 		</>
+	)
+}
+
+type QueueProductItemProps = {
+	categoryColor: string
+	modifiers?: { group: string; name: string }[]
+	onStatusChange: (status: QueueItemStatus) => void
+	productName: string
+	status: QueueItemStatus
+	statusColor: string
+	updatedBy?: string
+}
+
+function QueueProductItem({
+	categoryColor,
+	modifiers,
+	onStatusChange,
+	productName,
+	status,
+	statusColor,
+	updatedBy,
+}: QueueProductItemProps) {
+	const statusLabel =
+		status === 'working'
+			? t`Working`
+			: status === 'delivered'
+				? t`Delivered`
+				: t`Pending`
+
+	return (
+		<ContextMenu.Root>
+			<ContextMenu.Trigger>
+				<View style={styles.productItemContainer}>
+					<View style={styles.productItem}>
+						<View
+							style={[
+								styles.productQuantityBadge,
+								{ backgroundColor: categoryColor },
+								status !== 'unselected' && {
+									borderColor: statusColor,
+									borderWidth: 3,
+								},
+							]}
+						>
+							{status === 'delivered' ? (
+								<Feather color="white" name="check" size={14} />
+							) : status === 'working' ? (
+								<Feather color="white" name="loader" size={14} />
+							) : (
+								<Text style={styles.productQuantityText}>1</Text>
+							)}
+						</View>
+						<View style={styles.productNameContainer}>
+							<Text
+								style={[
+									styles.productName,
+									status === 'delivered' && styles.productNameDelivered,
+								]}
+							>
+								{productName}
+							</Text>
+							{updatedBy && (
+								<Text style={styles.updatedByText}>{updatedBy}</Text>
+							)}
+						</View>
+						{/* Status indicator */}
+						{status !== 'unselected' && (
+							<View
+								style={[styles.statusBadge, { backgroundColor: statusColor }]}
+							>
+								<Text style={styles.statusBadgeText}>{statusLabel}</Text>
+							</View>
+						)}
+					</View>
+					{/* Show modifier tags */}
+					{modifiers && modifiers.length > 0 && (
+						<View style={styles.modifierTagsContainer}>
+							{sortModifiers(modifiers).map((modifier, moduleIndex) => (
+								<ModifierTag
+									group={modifier.group}
+									key={`${modifier.group}-${modifier.name}-${moduleIndex}`}
+									name={modifier.name}
+								/>
+							))}
+						</View>
+					)}
+				</View>
+			</ContextMenu.Trigger>
+			<ContextMenu.Content>
+				<ContextMenu.Item
+					key="pending"
+					onSelect={() => onStatusChange('unselected')}
+				>
+					<ContextMenu.ItemIcon
+						ios={{
+							name: 'circle',
+							pointSize: 18,
+						}}
+					/>
+					<ContextMenu.ItemTitle>
+						<Trans>Pending</Trans>
+					</ContextMenu.ItemTitle>
+				</ContextMenu.Item>
+				<ContextMenu.Item
+					key="working"
+					onSelect={() => onStatusChange('working')}
+				>
+					<ContextMenu.ItemIcon
+						ios={{
+							name: 'arrow.triangle.2.circlepath',
+							pointSize: 18,
+						}}
+					/>
+					<ContextMenu.ItemTitle>
+						<Trans>Working</Trans>
+					</ContextMenu.ItemTitle>
+				</ContextMenu.Item>
+				<ContextMenu.Item
+					key="delivered"
+					onSelect={() => onStatusChange('delivered')}
+				>
+					<ContextMenu.ItemIcon
+						ios={{
+							name: 'checkmark.circle.fill',
+							pointSize: 18,
+						}}
+					/>
+					<ContextMenu.ItemTitle>
+						<Trans>Delivered</Trans>
+					</ContextMenu.ItemTitle>
+				</ContextMenu.Item>
+			</ContextMenu.Content>
+		</ContextMenu.Root>
 	)
 }
 
@@ -670,9 +837,16 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.xs,
 	},
 	productName: {
-		flex: 1,
 		fontSize: 15,
 		fontWeight: '600',
+	},
+	productNameContainer: {
+		flex: 1,
+		gap: 2,
+	},
+	productNameDelivered: {
+		opacity: 0.5,
+		textDecorationLine: 'line-through',
 	},
 	productQuantityBadge: {
 		alignItems: 'center',
@@ -689,6 +863,16 @@ const styles = StyleSheet.create((theme) => ({
 	productsList: {
 		gap: theme.spacing.sm,
 		marginTop: theme.spacing.xs,
+	},
+	statusBadge: {
+		borderRadius: theme.borderRadius.sm,
+		paddingHorizontal: theme.spacing.sm,
+		paddingVertical: 2,
+	},
+	statusBadgeText: {
+		color: 'white',
+		fontSize: 11,
+		fontWeight: '600',
 	},
 	timeContainer: {
 		alignItems: 'center',
@@ -708,5 +892,9 @@ const styles = StyleSheet.create((theme) => ({
 		color: '#007AFF',
 		fontSize: 12,
 		fontWeight: '600',
+	},
+	updatedByText: {
+		color: theme.colors.gray.text,
+		fontSize: 11,
 	},
 }))

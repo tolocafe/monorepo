@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. placeholder {0}: `Status${order.processing_status}`
-#: src/app/(tabs)/orders/index.tsx:179
+#: src/app/(tabs)/orders/index.tsx:182
 msgid "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Closed} Status70 {Deleted} other {Unknown}}"
 msgstr "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Closed} Status70 {Deleted} other {Unknown}}"
 
@@ -100,7 +100,7 @@ msgstr "Add to Order"
 msgid "Additional"
 msgstr "Additional"
 
-#: src/app/(tabs)/team/queue.tsx:209
+#: src/app/(tabs)/team/queue.tsx:300
 msgid "All"
 msgstr "All"
 
@@ -285,7 +285,12 @@ msgstr "DD/MM/YYYY"
 msgid "Delete"
 msgstr "Delete"
 
-#: src/app/(tabs)/team/queue.tsx:295
+#: src/app/(tabs)/team/queue.tsx:496
+#: src/app/(tabs)/team/queue.tsx:598
+msgid "Delivered"
+msgstr "Delivered"
+
+#: src/app/(tabs)/team/queue.tsx:386
 msgid "Delivery"
 msgstr "Delivery"
 
@@ -305,7 +310,7 @@ msgstr "Discover our homemade coffee menu with espresso, lattes, cappuccinos and
 msgid "Download PDF"
 msgstr "Download PDF"
 
-#: src/app/(tabs)/orders/[id].tsx:233
+#: src/app/(tabs)/orders/[id].tsx:234
 msgid "Download Receipt"
 msgstr "Download Receipt"
 
@@ -313,7 +318,7 @@ msgstr "Download Receipt"
 msgid "Download Ticket"
 msgstr "Download Ticket"
 
-#: src/app/(tabs)/orders/[id].tsx:231
+#: src/app/(tabs)/orders/[id].tsx:232
 #: src/app/(tabs)/team/ticket.tsx:92
 msgid "Downloading..."
 msgstr "Downloading..."
@@ -590,7 +595,7 @@ msgstr "name@example.com"
 msgid "New"
 msgstr "New"
 
-#: src/app/(tabs)/team/queue.tsx:430
+#: src/app/(tabs)/team/queue.tsx:464
 msgid "New orders will appear here"
 msgstr "New orders will appear here"
 
@@ -611,11 +616,11 @@ msgstr "No birthday on file."
 msgid "No events scheduled at the moment"
 msgstr "No events scheduled at the moment"
 
-#: src/app/(tabs)/team/queue.tsx:427
+#: src/app/(tabs)/team/queue.tsx:461
 msgid "No orders in queue"
 msgstr "No orders in queue"
 
-#: src/app/(tabs)/orders/index.tsx:216
+#: src/app/(tabs)/orders/index.tsx:220
 msgid "No orders yet"
 msgstr "No orders yet"
 
@@ -724,6 +729,11 @@ msgstr "Payment Successful"
 msgid "Payment successful!"
 msgstr "Payment successful!"
 
+#: src/app/(tabs)/team/queue.tsx:497
+#: src/app/(tabs)/team/queue.tsx:570
+msgid "Pending"
+msgstr "Pending"
+
 #: src/app/(tabs)/more/index.tsx:211
 msgid "Phone"
 msgstr "Phone"
@@ -785,7 +795,7 @@ msgstr "Qty: {0}"
 
 #: src/app/(tabs)/team/_layout.tsx:23
 #: src/app/(tabs)/team/index.tsx:51
-#: src/app/(tabs)/team/queue.tsx:176
+#: src/app/(tabs)/team/queue.tsx:267
 msgid "Queue"
 msgstr "Queue"
 
@@ -1002,7 +1012,7 @@ msgstr "Tickets"
 msgid "Tip"
 msgstr "Tip"
 
-#: src/app/(tabs)/team/queue.tsx:286
+#: src/app/(tabs)/team/queue.tsx:377
 msgid "To Go"
 msgstr "To Go"
 
@@ -1133,6 +1143,11 @@ msgstr "Website"
 msgid "Welcome"
 msgstr "Welcome"
 
+#: src/app/(tabs)/team/queue.tsx:494
+#: src/app/(tabs)/team/queue.tsx:584
+msgid "Working"
+msgstr "Working"
+
 #: src/app/(tabs)/orders/current.tsx:150
 msgid "You don't have enough balance in your wallet. Please top up your wallet first."
 msgstr "You don't have enough balance in your wallet. Please top up your wallet first."
@@ -1142,7 +1157,7 @@ msgstr "You don't have enough balance in your wallet. Please top up your wallet 
 msgid "You need barista or owner access to use this tool."
 msgstr "You need barista or owner access to use this tool."
 
-#: src/app/(tabs)/orders/index.tsx:219
+#: src/app/(tabs)/orders/index.tsx:223
 msgid "Your order history will appear here"
 msgstr "Your order history will appear here"
 
