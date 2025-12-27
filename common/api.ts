@@ -599,3 +599,22 @@ export type UpdateClientBody = Partial<{
 	phone: string
 	total_payed_sum: number
 }>
+
+/**
+ * Queue item state for barista queue management
+ * Tracks the preparation status of individual order line items
+ */
+export type QueueItemState = {
+	/** Line index within the transaction */
+	lineIndex: number
+	/** Status: 'unselected' | 'working' | 'delivered' */
+	status: 'delivered' | 'unselected' | 'working'
+	/** Transaction ID from Poster */
+	transactionId: number
+	/** Timestamp of last update */
+	updatedAt?: string
+	/** Name of the team member who last updated this item */
+	updatedBy?: string
+	/** Client ID of the team member who last updated */
+	updatedByClientId?: number
+}

@@ -1,15 +1,19 @@
 import { captureException } from '@sentry/cloudflare'
+import { eq } from 'drizzle-orm'
+import { drizzle } from 'drizzle-orm/neon-http'
+import { neon } from '@neondatabase/serverless'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
-import { CreateOrderSchema } from '~common/schemas'
+import { CreateOrderSchema, UpdateQueueItemStateSchema } from '~common/schemas'
 import { getProductTotalCost } from '~common/utils'
+import { queueItemStates } from '~workers/db/schema'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { authenticate } from '~workers/utils/jwt'
 import { api } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 
-import type { Product } from '~common/api'
+import type { Product, QueueItemState } from '~common/api'
 import type { Bindings } from '~workers/types'
 
 // Modifiers to ignore (not displayed in barista queue)
@@ -68,6 +72,14 @@ function parseModifiers(
 		}))
 }
 
+/**
+ * Helper to get drizzle db instance
+ */
+function getDb(env: Bindings) {
+	const sql = neon(env.HYPERDRIVE.connectionString)
+	return drizzle(sql)
+}
+
 const orders = new Hono<{ Bindings: Bindings }>()
 	.get('/', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
@@ -78,6 +90,80 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		})
 
 		return c.json(orders)
+	})
+	.get('/barista/queue/states', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+
+		// Verify user is a barista
+		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
+
+		if (
+			!client?.client_groups_id ||
+			!TEAM_GROUP_IDS.has(client.client_groups_id)
+		) {
+			throw new HTTPException(403, { message: 'Access denied' })
+		}
+
+		const db = getDb(c.env)
+
+		// Get all queue item states
+		const states = await db.select().from(queueItemStates)
+
+		return c.json(states)
+	})
+	.put('/barista/queue/state', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+
+		// Verify user is a barista
+		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
+
+		if (
+			!client?.client_groups_id ||
+			!TEAM_GROUP_IDS.has(client.client_groups_id)
+		) {
+			throw new HTTPException(403, { message: 'Access denied' })
+		}
+
+		const body = await c.req.json()
+		const parsed = UpdateQueueItemStateSchema.safeParse(body)
+
+		if (!parsed.success) {
+			throw new HTTPException(400, { message: 'Invalid request body' })
+		}
+
+		const { transactionId, lineIndex, status } = parsed.data
+		const updatedBy = `${client.firstname ?? ''} ${client.lastname ?? ''}`.trim() || 'Unknown'
+
+		const db = getDb(c.env)
+
+		// Upsert the queue item state
+		await db
+			.insert(queueItemStates)
+			.values({
+				lineIndex,
+				status,
+				transactionId,
+				updatedAt: new Date().toISOString(),
+				updatedBy,
+				updatedByClientId: clientId,
+			})
+			.onConflictDoUpdate({
+				set: {
+					status,
+					updatedAt: new Date().toISOString(),
+					updatedBy,
+					updatedByClientId: clientId,
+				},
+				target: [queueItemStates.transactionId, queueItemStates.lineIndex],
+			})
+
+		return c.json({
+			lineIndex,
+			status,
+			success: true,
+			transactionId,
+			updatedBy,
+		})
 	})
 	.get('/barista/queue', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)

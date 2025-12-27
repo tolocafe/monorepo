@@ -68,3 +68,15 @@ export const CreateStripeTransactionSchema = z.strictObject({
 export type CreateStripeTransaction = z.infer<
 	typeof CreateStripeTransactionSchema
 >
+
+export const QueueItemStatus = z.enum(['unselected', 'working', 'delivered'])
+
+export type QueueItemStatus = z.infer<typeof QueueItemStatus>
+
+export const UpdateQueueItemStateSchema = z.strictObject({
+	lineIndex: z.int().min(0),
+	status: QueueItemStatus,
+	transactionId: z.int().positive(),
+})
+
+export type UpdateQueueItemState = z.infer<typeof UpdateQueueItemStateSchema>

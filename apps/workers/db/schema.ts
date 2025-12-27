@@ -218,6 +218,29 @@ export const transactionProductModifiers = pgTable(
 	],
 )
 
+/**
+ * Queue item states for barista queue management
+ * Tracks the preparation status of individual order line items
+ */
+export const queueItemStates = pgTable(
+	'queue_item_states',
+	{
+		/** Line index within the transaction */
+		lineIndex: integer('line_index').notNull(),
+		/** Status: 'unselected' | 'working' | 'delivered' */
+		status: text('status').notNull().default('unselected'),
+		/** Transaction ID from Poster */
+		transactionId: integer('transaction_id').notNull(),
+		/** Timestamp of last update */
+		updatedAt: text('updated_at').default(sql`CURRENT_TIMESTAMP`),
+		/** Name of the team member who last updated this item */
+		updatedBy: text('updated_by'),
+		/** Client ID of the team member who last updated */
+		updatedByClientId: integer('updated_by_client_id'),
+	},
+	(table) => [primaryKey({ columns: [table.transactionId, table.lineIndex] })],
+)
+
 // ============================================================================
 // Relations (Drizzle Relations v2 - for query builder with eager loading)
 // ============================================================================
@@ -235,6 +258,7 @@ export const relations = defineRelations(
 		productModifierGroups,
 		productModifiers,
 		products,
+		queueItemStates,
 		transactionProductModifiers,
 		transactions,
 	},
@@ -286,8 +310,22 @@ export const relations = defineRelations(
 				from: r.orderLines.productId,
 				to: r.products.id,
 			}),
+			queueState: r.one.queueItemStates({
+				from: [r.orderLines.transactionId, r.orderLines.lineIndex],
+				to: [r.queueItemStates.transactionId, r.queueItemStates.lineIndex],
+			}),
 			transaction: r.one.transactions({
 				from: r.orderLines.transactionId,
+				to: r.transactions.id,
+			}),
+		},
+		queueItemStates: {
+			orderLine: r.one.orderLines({
+				from: [r.queueItemStates.transactionId, r.queueItemStates.lineIndex],
+				to: [r.orderLines.transactionId, r.orderLines.lineIndex],
+			}),
+			transaction: r.one.transactions({
+				from: r.queueItemStates.transactionId,
 				to: r.transactions.id,
 			}),
 		},
