@@ -29,12 +29,17 @@ export type OrderDetailResponse = {
 	payed_sum: string
 	processing_status: number
 	products?: {
+		modificator_name?: string
 		num: string
 		product_id: string
 		product_price: string
 	}[]
 	round_sum: string
+	/** 1: Open, 2: Closed, 3: Removed, 4: Declined */
+	status?: string
 	sum: string
+	table_id?: string
+	table_name?: string
 	tax_sum: string
 	tip_sum: string
 }

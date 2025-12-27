@@ -251,9 +251,9 @@ export default function MenuDetail() {
 							source={{
 								cacheKey: `${imageSourceId}-image`,
 								uri: getImageUrl(imageSourceId, {
-									quality: 95,
+									quality: 98,
 									source: 'sanity',
-									width: 900,
+									width: 1000,
 								}),
 							}}
 							style={styles.image}

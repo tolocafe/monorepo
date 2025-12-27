@@ -49,7 +49,12 @@ export type AnalyticsEvent =
 	// Legacy Firebase events (keep for backward compatibility)
 	| 'store:visit_us_view'
 	| 'table:bill_view'
+	| 'table:order_start'
 	| 'table:payment_start'
+	// Order payment events
+	| 'order:payment_start'
+	// Dine-in checkout events
+	| 'checkout:dine_in_start'
 	| 'view_cart'
 	| 'view_item'
 	| 'wallet:amount_select'

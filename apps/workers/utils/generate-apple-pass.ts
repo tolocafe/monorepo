@@ -6,7 +6,7 @@ import type { Context } from 'hono'
 import type { ClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
 
-import { api } from './poster'
+import { api, EntityType, TransactionStatus } from '~workers/utils/poster'
 import { getCustomerStamps } from './stamps'
 
 const PASS_TYPE_IDENTIFIER = 'pass.cafe.tolo.app'
@@ -72,8 +72,8 @@ export default async function createApplePass(
 		.getTransactions(context.env.POSTER_TOKEN, {
 			date_from: '2025-01-01',
 			id: client.client_id,
-			status: '2',
-			type: 'clients',
+			status: TransactionStatus.Closed,
+			type: EntityType.Clients,
 		})
 		.then((transactions) => transactions.length)
 

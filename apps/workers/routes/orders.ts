@@ -2,12 +2,17 @@ import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
-import { CreateOrderSchema } from '~common/schemas'
+import {
+	CreateDineInOrderSchema,
+	CreateOrderSchema,
+	PayOrderSchema,
+} from '~common/schemas'
 import { getProductTotalCost } from '~common/utils'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { authenticate } from '~workers/utils/jwt'
-import { api } from '~workers/utils/poster'
+import { api, EntityType } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
+import { getStripe } from '~workers/utils/stripe'
 
 import type { Product } from '~common/api'
 import type { Bindings } from '~workers/types'
@@ -74,7 +79,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 		const orders = await api.dash.getTransactions(c.env.POSTER_TOKEN, {
 			id: clientId.toString(),
-			type: 'clients',
+			type: EntityType.Clients,
 		})
 
 		return c.json(orders)
@@ -179,6 +184,280 @@ const orders = new Hono<{ Bindings: Bindings }>()
 			captureException(error)
 			throw new HTTPException(500, {
 				message: 'Failed to fetch order details',
+			})
+		}
+	})
+	/**
+	 * POST /orders/:id/payment-intent
+	 * Create a Stripe payment intent for paying an order
+	 */
+	.post('/:id/payment-intent', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+		const orderId = c.req.param('id')
+
+		try {
+			// Get the order/transaction
+			const order = await api.dash.getTransaction(c.env.POSTER_TOKEN, orderId, {
+				include_products: 'true',
+			})
+
+			if (!order) {
+				throw new HTTPException(404, { message: 'Order not found' })
+			}
+
+			// Verify the order belongs to the authenticated client
+			if (order.client_id !== clientId.toString()) {
+				throw new HTTPException(403, { message: 'Access denied' })
+			}
+
+			// Check if order is open/unpaid
+			if (order.status !== '1') {
+				throw new HTTPException(400, {
+					message: 'Order is already paid or closed',
+				})
+			}
+
+			const total = Number(order.payed_sum) || Number(order.sum)
+			const amountInCents = Math.round(total * 100)
+
+			// Create Stripe payment intent
+			const stripe = getStripe(c.env.STRIPE_SECRET_KEY)
+
+			const paymentIntent = await stripe.paymentIntents.create({
+				amount: amountInCents,
+				currency: 'mxn',
+				metadata: {
+					clientId: clientId.toString(),
+					orderId,
+					type: 'order_payment',
+				},
+			})
+
+			return c.json({
+				paymentIntent: {
+					client_secret: paymentIntent.client_secret,
+				},
+			})
+		} catch (error) {
+			if (error instanceof HTTPException) {
+				throw error
+			}
+
+			captureException(error)
+			throw new HTTPException(500, {
+				message: 'Failed to create payment intent',
+			})
+		}
+	})
+	/**
+	 * POST /orders/:id/pay
+	 * Pay for an order using e-wallet or Stripe
+	 */
+	.post('/:id/pay', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+		const orderId = c.req.param('id')
+
+		const body = (await c.req.json()) as unknown
+		const parsedBody = PayOrderSchema.parse(body)
+
+		try {
+			// Get the order/transaction
+			const order = await api.dash.getTransaction(c.env.POSTER_TOKEN, orderId, {
+				include_products: 'true',
+			})
+
+			if (!order) {
+				throw new HTTPException(404, { message: 'Order not found' })
+			}
+
+			// Verify the order belongs to the authenticated client
+			if (order.client_id !== clientId.toString()) {
+				throw new HTTPException(403, { message: 'Access denied' })
+			}
+
+			// Check if order is open/unpaid
+			if (order.status !== '1') {
+				throw new HTTPException(400, {
+					message: 'Order is already paid or closed',
+				})
+			}
+
+			const total = Number(order.payed_sum) || Number(order.sum)
+			const amountInCents = Math.round(total * 100)
+
+			if (parsedBody.paymentMethod === 'ewallet') {
+				// Deduct from e-wallet
+				await api.clients.addEWalletTransaction(c.env.POSTER_TOKEN, {
+					amount: amountInCents,
+					client_id: clientId,
+				})
+
+				// Close the transaction
+				await api.transactions.closeTransaction(c.env.POSTER_TOKEN, {
+					clientId,
+					payed_third_party: total,
+					paymentIntentId: `ewallet_${Date.now()}`,
+					transaction_id: Number(orderId),
+				})
+
+				// Track e-wallet payment
+				await trackEvent(c, {
+					distinctId: clientId.toString(),
+					event: 'order:payment_complete',
+					properties: {
+						amount: amountInCents,
+						currency: 'MXN',
+						order_id: orderId,
+						payment_method: 'ewallet',
+					},
+				})
+			} else if (parsedBody.paymentMethod === 'stripe') {
+				if (!parsedBody.paymentIntentId) {
+					throw new HTTPException(400, {
+						message: 'Payment intent ID required for Stripe payments',
+					})
+				}
+
+				// Close the transaction with Stripe payment
+				await api.transactions.closeTransaction(c.env.POSTER_TOKEN, {
+					clientId,
+					payed_third_party: total,
+					paymentIntentId: parsedBody.paymentIntentId,
+					transaction_id: Number(orderId),
+				})
+
+				// Track Stripe payment
+				await trackEvent(c, {
+					distinctId: clientId.toString(),
+					event: 'order:payment_complete',
+					properties: {
+						amount: amountInCents,
+						currency: 'MXN',
+						order_id: orderId,
+						payment_method: 'stripe',
+					},
+				})
+			}
+
+			return c.json({ success: true })
+		} catch (error) {
+			if (error instanceof HTTPException) {
+				throw error
+			}
+
+			captureException(error)
+			throw new HTTPException(500, {
+				message:
+					error instanceof Error ? error.message : 'Failed to process payment',
+			})
+		}
+	})
+	/**
+	 * POST /orders/dine-in
+	 * Create a dine-in order linked to a table without upfront payment
+	 * Customer will pay later when ready
+	 */
+	.post('/dine-in', async (context) => {
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
+
+		const body = (await context.req.json()) as unknown
+
+		if (typeof body !== 'object' || body == null) {
+			throw new HTTPException(400, { message: 'Invalid body' })
+		}
+
+		try {
+			const parsedBody = CreateDineInOrderSchema.parse({
+				...body,
+				client_id: clientId,
+			})
+
+			// Fetch product details to calculate prices
+			const products = await Promise.all(
+				parsedBody.products.map((product) =>
+					api.menu.getProduct(context.env.POSTER_TOKEN, product.product_id),
+				),
+			)
+
+			const order = await api.incomingOrders.createDineInOrder(
+				context.env.POSTER_TOKEN,
+				{
+					comment: parsedBody.comment,
+					products: parsedBody.products.map((product) => {
+						const productData = products.find(
+							(p) => p.product_id === product.product_id,
+						) as Product
+
+						return {
+							count: product.count,
+							modification: product.modification,
+							price: getProductTotalCost({
+								modifications:
+									product.modification?.reduce(
+										(accumulator, current) => {
+											accumulator[current.m] = current.a
+											return accumulator
+										},
+										{} as Record<string, number>,
+									) ?? {},
+								product: productData,
+							}),
+							product_id: product.product_id,
+						}
+					}),
+					tableId: parsedBody.tableId,
+				},
+				clientId,
+			)
+
+			// Calculate total for analytics
+			const orderTotal = parsedBody.products.reduce((sum, product) => {
+				const productData = products.find(
+					(p) => p.product_id === product.product_id,
+				) as Product
+
+				return (
+					sum +
+					getProductTotalCost({
+						modifications:
+							product.modification?.reduce(
+								(accumulator, current) => {
+									accumulator[current.m] = current.a
+									return accumulator
+								},
+								{} as Record<string, number>,
+							) ?? {},
+						product: productData,
+						quantity: product.count,
+					})
+				)
+			}, 0)
+
+			// Track dine-in order creation
+			await trackEvent(context, {
+				distinctId: clientId.toString(),
+				event: 'order:dine_in_created',
+				properties: {
+					currency: 'MXN',
+					item_count: parsedBody.products.reduce(
+						(sum, p) => sum + (p.count || 1),
+						0,
+					),
+					order_id: order.incoming_order_id,
+					order_total: orderTotal,
+					table_id: parsedBody.tableId,
+				},
+			})
+
+			return context.json(order)
+		} catch (error) {
+			captureException(error)
+
+			throw new HTTPException(500, {
+				message:
+					error instanceof Error
+						? error.message
+						: 'Failed to create dine-in order',
 			})
 		}
 	})

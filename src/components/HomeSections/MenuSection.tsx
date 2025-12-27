@@ -6,13 +6,13 @@ import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
 import { StyleSheet, useUnistyles, withUnistyles } from 'react-native-unistyles'
 
-import Button from '@/components/Button'
 import MenuListItem, { getItemSize } from '@/components/MenuListItem'
 import { H2, H3, Paragraph } from '@/components/Text'
 import {
 	categoriesQueryOptions,
 	productsQueryOptions,
 } from '@/lib/queries/menu'
+import { useLocationId } from '@/lib/stores/order-store'
 
 import type { Product } from '@/lib/api'
 
@@ -38,6 +38,7 @@ export function MenuSection() {
 	const productsQuery = useQuery(productsQueryOptions)
 	const categoriesQuery = useQuery(categoriesQueryOptions)
 	const { rt } = useUnistyles()
+	const locationId = useLocationId()
 
 	const menu = productsQuery.data
 	const categories = categoriesQuery.data
@@ -55,11 +56,26 @@ export function MenuSection() {
 			categories
 				.map((category) => ({
 					...category,
-					items: menu.filter(
-						(item: Product) =>
-							item.menu_category_id === category.category_id &&
-							item.hidden !== '1',
-					),
+					items: menu.filter((item: Product) => {
+						// Check if product is hidden globally
+						if (item.hidden === '1') return false
+
+						// Check category match
+						if (item.menu_category_id !== category.category_id) return false
+
+						// Filter by location visibility if spots data is available
+						if (item.spots && item.spots.length > 0) {
+							const spotForLocation = item.spots.find(
+								(spot) => spot.spot_id === locationId,
+							)
+							// Product is not available at this location if not found or not visible
+							if (!spotForLocation || spotForLocation.visible === '0') {
+								return false
+							}
+						}
+
+						return true
+					}),
 				}))
 				// eslint-disable-next-line unicorn/no-array-sort
 				.sort((a, b) => {
@@ -73,7 +89,7 @@ export function MenuSection() {
 				})
 				.filter((category) => category.items.length > 0)
 		)
-	}, [categories, menu])
+	}, [categories, menu, locationId])
 
 	if (categoriesWithItems.length === 0) {
 		if (productsQuery.isFetching) {
@@ -93,9 +109,6 @@ export function MenuSection() {
 					<Paragraph style={styles.errorText}>
 						<Trans>Failed to load menu. Please try again.</Trans>
 					</Paragraph>
-					<Button>
-						<Trans>Retry</Trans>
-					</Button>
 				</View>
 			)
 		}

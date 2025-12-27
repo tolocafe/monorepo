@@ -15,6 +15,20 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		edgeToEdgeEnabled: true,
 		googleServicesFile: './google-services.json',
 		package: 'cafe.tolo.app',
+		intentFilters: [
+			{
+				action: 'VIEW',
+				autoVerify: true,
+				data: [
+					{
+						scheme: 'https',
+						host: 'tolo.godetour.link',
+						pathPrefix: '/DQYXhnyTyQ',
+					},
+				],
+				category: ['BROWSABLE', 'DEFAULT'],
+			},
+		],
 	},
 	experiments: {
 		reactCompiler: true,

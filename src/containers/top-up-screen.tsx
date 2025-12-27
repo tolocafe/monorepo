@@ -2,15 +2,6 @@ import { useEffect, useState } from 'react'
 import { Alert, Platform, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
-import {
-	confirmPlatformPayPayment,
-	isPlatformPaySupported as getIsPlatformPaySupported,
-	initStripe,
-	PaymentSheetError,
-	PlatformPay,
-	PlatformPayButton,
-	useStripe,
-} from '@stripe/stripe-react-native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import * as Linking from 'expo-linking'
@@ -24,6 +15,16 @@ import { CheckedButton } from '@/components/CheckedButton'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
+import {
+	confirmPlatformPayPayment,
+	createApplePayConfig,
+	createGooglePayConfig,
+	initStripe,
+	PaymentSheetError,
+	PlatformPay,
+	PlatformPayButton,
+	useStripe,
+} from '@/lib/hooks/use-stripe'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { privateClient } from '@/lib/services/http-client'
 import { formatPrice } from '@/lib/utils/price'
@@ -36,20 +37,15 @@ void initStripe({
 
 const TOP_UP_AMOUNTS = [10_000, 20_000, 50_000] as const
 
-const commonPlatformPayOptions = {
-	currencyCode: 'MXN',
-	merchantCountryCode: 'MX',
-}
-
 export default function TopUpScreen() {
 	const { t } = useLingui()
-	const { initPaymentSheet, presentPaymentSheet } = useStripe()
+	const { initPaymentSheet, isPlatformPaySupported, presentPaymentSheet } =
+		useStripe()
 	const queryClient = useQueryClient()
 	const [selectedAmount, setSelectedAmount] = useState<null | number>(
 		TOP_UP_AMOUNTS[1],
 	)
 	const [isLoading, setIsLoading] = useState(false)
-	const [isPlatformPaySupported, setIsPlatformPaySupported] = useState(false)
 
 	const { data: user } = useQuery(selfQueryOptions)
 
@@ -65,10 +61,6 @@ export default function TopUpScreen() {
 			return response
 		},
 	})
-
-	useEffect(() => {
-		void getIsPlatformPaySupported().then(setIsPlatformPaySupported)
-	}, [])
 
 	// Track wallet screen view
 	useEffect(() => {
@@ -132,26 +124,8 @@ export default function TopUpScreen() {
 				const { error: presentError } = await confirmPlatformPayPayment(
 					paymentData.paymentIntent.client_secret,
 					Platform.OS === 'ios'
-						? {
-								applePay: {
-									cartItems: [
-										{
-											amount: (selectedAmount / 100).toString(),
-											label: 'TOLO',
-											paymentType: PlatformPay.PaymentType.Immediate,
-										},
-									],
-									...commonPlatformPayOptions,
-								},
-							}
-						: {
-								googlePay: {
-									amount: selectedAmount,
-									label: 'TOLO',
-									testEnv: false,
-									...commonPlatformPayOptions,
-								},
-							},
+						? createApplePayConfig(selectedAmount, 'TOLO')
+						: createGooglePayConfig(selectedAmount, 'TOLO', false),
 				)
 
 				if (presentError) {

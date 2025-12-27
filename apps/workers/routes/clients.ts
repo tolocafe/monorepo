@@ -6,7 +6,7 @@ import { notifyApplePassUpdate } from '~workers/utils/apns'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { notifyGooglePassUpdate } from '~workers/utils/generate-google-pass'
 import { authenticate } from '~workers/utils/jwt'
-import { api } from '~workers/utils/poster'
+import { api, EntityType, TransactionStatus } from '~workers/utils/poster'
 import { notifyRedemption } from '~workers/utils/push-notifications'
 import {
 	canRedeemBirthdayDrink,
@@ -65,7 +65,12 @@ const clients = new Hono<{ Bindings: Bindings }>()
 
 		const clientTransactions = await api.dash.getTransactions(
 			c.env.POSTER_TOKEN,
-			{ date_from: '2025-01-01', id, status: '2', type: 'clients' },
+			{
+				date_from: '2025-01-01',
+				id,
+				status: TransactionStatus.Closed,
+				type: EntityType.Clients,
+			},
 		)
 
 		const pointsData = await getCustomerStamps(
@@ -143,7 +148,12 @@ const clients = new Hono<{ Bindings: Bindings }>()
 		} else {
 			const clientTransactions = await api.dash.getTransactions(
 				c.env.POSTER_TOKEN,
-				{ date_from: '2025-01-01', id, status: '2', type: 'clients' },
+				{
+					date_from: '2025-01-01',
+					id,
+					status: TransactionStatus.Closed,
+					type: EntityType.Clients,
+				},
 			)
 			const pointsData = await getCustomerStamps(
 				c.env.D1_TOLO,

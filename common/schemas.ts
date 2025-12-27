@@ -68,3 +68,20 @@ export const CreateStripeTransactionSchema = z.strictObject({
 export type CreateStripeTransaction = z.infer<
 	typeof CreateStripeTransactionSchema
 >
+
+export const CreateDineInOrderSchema = z.strictObject({
+	client_id: z.int().positive(),
+	comment: z.string().max(2000, 'errors.max-length').optional(),
+	locationId: z.string().min(1, 'errors.required'),
+	products: z.array(CreateOrderProductSchema).min(1, 'errors.min-count'),
+	tableId: z.string().min(1, 'errors.required'),
+})
+
+export type CreateDineInOrder = z.infer<typeof CreateDineInOrderSchema>
+
+export const PayOrderSchema = z.strictObject({
+	paymentIntentId: z.string().optional(),
+	paymentMethod: z.enum(['ewallet', 'stripe']),
+})
+
+export type PayOrder = z.infer<typeof PayOrderSchema>

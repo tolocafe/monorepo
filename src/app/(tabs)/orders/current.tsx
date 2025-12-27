@@ -27,9 +27,12 @@ import {
 } from '@/lib/queries/order'
 import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
+import { api } from '@/lib/services/api-service'
 import {
 	useClearOrder,
 	useCurrentOrder,
+	useIsDineIn,
+	useTableContext,
 	useUpdateItem,
 } from '@/lib/stores/order-store'
 import { sortModifiers } from '@/lib/utils/modifier-tags'
@@ -55,6 +58,41 @@ export default function OrderDetail() {
 
 	const clearOrder = useClearOrder()
 	const { data: user } = useQuery(selfQueryOptions)
+	const tableContext = useTableContext()
+	const isDineIn = useIsDineIn()
+
+	// Dine-in order mutation (no payment)
+	const { mutateAsync: createDineInOrder } = useMutation({
+		mutationFn: api.orders.createDineIn,
+		onError() {
+			Burnt.toast({
+				duration: 3,
+				haptic: 'error',
+				message: t`Failed to submit order. Please try again.`,
+				preset: 'error',
+				title: t`Error`,
+			})
+		},
+		onSuccess() {
+			Burnt.toast({
+				duration: 3,
+				haptic: 'success',
+				message: t`Your order has been placed. Enjoy your meal!`,
+				preset: 'done',
+				title: t`Order placed`,
+			})
+
+			void registerForPushNotifications()
+			clearOrder()
+			void queryClient.invalidateQueries(orderQueryOptions)
+
+			if (Platform.OS !== 'web') {
+				StoreReview.requestReview().catch(() => null)
+			}
+
+			router.back()
+		},
+	})
 
 	// Fetch missing product details
 	const productIds = useMemo(
@@ -129,14 +167,44 @@ export default function OrderDetail() {
 					modifications: product.modifications,
 					product_id: product.id,
 				})) ?? [],
-			serviceMode: 2,
+			serviceMode: isDineIn ? 1 : 2, // 1 = dine-in, 2 = takeaway
 		},
 		async onSubmit({ value }) {
-			const hasInsufficientBalance =
-				!user || Number(user.ewallet ?? '0') < orderTotal
-
 			const itemCount =
 				order?.products.reduce((sum, product) => sum + product.quantity, 0) ?? 0
+
+			// Handle dine-in order (pay later)
+			if (isDineIn && tableContext) {
+				void trackEvent('checkout:dine_in_start', {
+					cart_total: orderTotal,
+					currency: 'MXN',
+					item_count: itemCount,
+					table_id: tableContext.tableId,
+				})
+
+				const products = value.products.map(
+					({ modifications, ...product }) => ({
+						...product,
+						modification: Object.entries(modifications ?? {}).map(
+							([, modificationId]) => ({
+								a: 1,
+								m: modificationId.toString(),
+							}),
+						),
+					}),
+				)
+
+				return createDineInOrder({
+					comment: value.comment,
+					locationId: tableContext.locationId,
+					products,
+					tableId: tableContext.tableId,
+				})
+			}
+
+			// Handle takeaway order (pay with e-wallet)
+			const hasInsufficientBalance =
+				!user || Number(user.ewallet ?? '0') < orderTotal
 
 			// Require explicit action if funds are insufficient
 			if (hasInsufficientBalance) {
@@ -349,18 +417,38 @@ export default function OrderDetail() {
 				withHeaderPadding
 				withTopGradient={Platform.OS !== 'ios'}
 			>
-				{user && (
+				{isDineIn && tableContext ? (
 					<>
 						<H2>
-							<Trans>Payment</Trans>
+							<Trans>Dine-In Order</Trans>
 						</H2>
 						<Card style={styles.walletCard}>
 							<Text>
-								<Trans>Wallet Balance</Trans>
+								<Trans>Table</Trans>
 							</Text>
-							<Text weight="bold">{formatPrice(user.ewallet ?? '0')}</Text>
+							<Text weight="bold">#{tableContext.tableId}</Text>
 						</Card>
+						<Paragraph style={styles.dineInHint}>
+							<Trans>
+								You'll pay at the end of your meal. Just show this order to your
+								server.
+							</Trans>
+						</Paragraph>
 					</>
+				) : (
+					user && (
+						<>
+							<H2>
+								<Trans>Payment</Trans>
+							</H2>
+							<Card style={styles.walletCard}>
+								<Text>
+									<Trans>Wallet Balance</Trans>
+								</Text>
+								<Text weight="bold">{formatPrice(user.ewallet ?? '0')}</Text>
+							</Card>
+						</>
+					)
 				)}
 
 				<H2>
@@ -414,8 +502,9 @@ export default function OrderDetail() {
 					selector={(state) => [state.canSubmit, state.isSubmitting] as const}
 				>
 					{([canSubmit, isSubmitting]) => {
+						// Dine-in orders don't require balance check
 						const hasInsufficientBalance =
-							!user || Number(user.ewallet ?? '0') < orderTotal
+							!isDineIn && (!user || Number(user.ewallet ?? '0') < orderTotal)
 
 						return (
 							<Button
@@ -424,6 +513,8 @@ export default function OrderDetail() {
 							>
 								{isSubmitting ? (
 									<Trans>Sending Order...</Trans>
+								) : isDineIn ? (
+									<Trans>Place Dine-In Order</Trans>
 								) : (
 									<Trans>Send Order</Trans>
 								)}
@@ -489,6 +580,10 @@ function getOrderTotal(products: OrderProduct[]) {
 const styles = StyleSheet.create((theme) => ({
 	container: {
 		gap: theme.spacing.md,
+	},
+	dineInHint: {
+		color: theme.colors.crema.solid,
+		textAlign: 'center',
 	},
 	emptyContainer: {
 		alignItems: 'center',

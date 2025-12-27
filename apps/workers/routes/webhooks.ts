@@ -16,7 +16,7 @@ import type { Context } from 'hono'
 import { trackServerEvent } from '~workers/utils/analytics'
 import { notifyApplePassUpdate } from '~workers/utils/apns'
 import createApplePass from '~workers/utils/generate-apple-pass'
-import { api, sendSms } from '~workers/utils/poster'
+import { api, EntityType, sendSms } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 import { sendPushNotifications } from '~workers/utils/push-notifications'
 import { getStripe } from '~workers/utils/stripe'
@@ -840,7 +840,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				const transactions = await api.dash.getTransactions(
 					context.env.POSTER_TOKEN,
-					{ id: client.client_id, type: 'clients' },
+					{ id: client.client_id, type: EntityType.Clients },
 				)
 
 				if (transactions.length === 1) {

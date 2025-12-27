@@ -6,7 +6,7 @@ import type {
 	Event,
 	Product,
 	Promotion,
-	TableBill,
+	TableStatus,
 } from '@/lib/api'
 import type { RequestOtpMutationOptions } from '@/lib/queries/auth'
 import type {
@@ -14,9 +14,11 @@ import type {
 	OrderDetailResponse,
 } from '@/lib/queries/order'
 import type {
+	CreateDineInOrder,
 	CreateEWalletTransaction,
 	CreateOrder,
 	CreateStripeTransaction,
+	PayOrder,
 } from '~common/schemas'
 
 import { privateClient, publicClient } from './http-client'
@@ -103,11 +105,29 @@ export const api = {
 			privateClient
 				.post<CreateOrderResponse>('orders', { json: orderData })
 				.json(),
+		createDineIn: (orderData: Omit<CreateDineInOrder, 'client_id'>) =>
+			privateClient
+				.post<{
+					incoming_order_id: number
+					status: number
+					transaction_id: number
+				}>('orders/dine-in', { json: orderData })
+				.json(),
+		createPaymentIntent: (orderId: string) =>
+			privateClient
+				.post<{
+					paymentIntent: { client_secret: string }
+				}>(`orders/${orderId}/payment-intent`)
+				.json(),
 		downloadReceipt: (orderId: string) =>
 			privateClient.get(`receipts/${orderId}`, { timeout: 30_000 }).blob(),
 		get: (orderId: string) =>
 			privateClient.get<OrderDetailResponse>(`orders/${orderId}`).json(),
 		list: () => privateClient.get<CreateOrderResponse>('orders').json(),
+		pay: (orderId: string, data: PayOrder) =>
+			privateClient
+				.post<{ success: true }>(`orders/${orderId}/pay`, { json: data })
+				.json(),
 	},
 
 	// Generic methods for other endpoints
@@ -122,11 +142,15 @@ export const api = {
 				}>(`tables/${locationId}/${tableId}/payment-intent`)
 				.json(),
 		get: (locationId: string, tableId: string) =>
-			publicClient.get<TableBill>(`tables/${locationId}/${tableId}`).json(),
+			publicClient.get<TableStatus>(`tables/${locationId}/${tableId}`).json(),
 		pay: async (
 			locationId: string,
 			tableId: string,
-			data: { paymentIntentId: string; phone?: string },
+			data: {
+				paymentIntentId?: string
+				paymentMethod?: 'ewallet' | 'stripe'
+				phone?: string
+			},
 		) => {
 			// Try to get auth token for authenticated requests
 			const token = await import('./http-client').then((m) => m.getAuthToken())
@@ -136,7 +160,7 @@ export const api = {
 					`tables/${locationId}/${tableId}/pay`,
 					{
 						headers: token ? { Authorization: `Bearer ${token}` } : {},
-						json: data,
+						json: { paymentMethod: 'stripe', ...data },
 					},
 				)
 				.json()

@@ -570,21 +570,12 @@ export type SanityImageReference = {
 	sourceId: string
 }
 
-export type TableBill = {
-	items: {
-		name: string
-		/** Unit price in cents */
-		price: number
-		productId: string
-		quantity: number
-	}[]
-	locationId: string
-	subtotal: number
-	tableId: string
-	tableName: string
-	tax: number
-	total: number
-	transactionId: string
+/**
+ * Response from checking if a table has an active order
+ */
+export type TableStatus = {
+	/** Transaction ID if there's an active order, null otherwise */
+	transactionId: null | string
 }
 
 export type UpdateClientBody = Partial<{

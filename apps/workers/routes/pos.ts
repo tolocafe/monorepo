@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 
 import { defaultJsonHeaders } from '~workers/utils/headers'
-import { api } from '~workers/utils/poster'
+import { api, EntityType } from '~workers/utils/poster'
 import {
 	canRedeemBirthdayDrink,
 	getCustomerStamps,
@@ -54,14 +54,19 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 				date_from: last90Days.toISOString().split('T')[0],
 				id: customerId,
 				include_products: 'true',
-				type: 'clients',
+				type: EntityType.Clients,
 			}),
 		])
 
 		// Get closed transactions for 2025 to calculate stamps
 		const closedTransactions2025 = await api.dash.getTransactions(
 			context.env.POSTER_TOKEN,
-			{ date_from: '2025-01-01', id: customerId, status: '2', type: 'clients' },
+			{
+				date_from: '2025-01-01',
+				id: customerId,
+				status: '2',
+				type: EntityType.Clients,
+			},
 		)
 
 		const stampsData = await getCustomerStamps(

@@ -11,6 +11,22 @@ import { zustandStore } from '.'
 
 export type Modifications = Record<string, number>
 
+export type Location = {
+	id: string
+	name: string
+}
+
+/** Available locations for the app */
+export const LOCATIONS: Location[] = [{ id: '1', name: 'Toluca' }]
+
+/** Default location ID */
+export const DEFAULT_LOCATION_ID = LOCATIONS[0].id
+
+export type TableContext = {
+	locationId: string
+	tableId: string
+}
+
 export type Order = {
 	apiOrderId?: string
 	createdAt?: Date
@@ -18,6 +34,8 @@ export type Order = {
 	id: string
 	products: OrderProduct[]
 	status: 'cancelled' | 'completed' | 'confirmed' | 'draft' | 'submitted'
+	/** Table context for dine-in orders */
+	tableContext?: TableContext
 }
 
 export type OrderProduct = {
@@ -37,10 +55,14 @@ type OrderStore = {
 		item: Pick<OrderProduct, 'id' | 'modifications' | 'quantity'>,
 	) => void
 	clearOrder: () => void
+	clearTableContext: () => void
 	createOrder: () => void
 	currentOrder: null | Order
 	getTotalItems: () => number
+	locationId: string
 	removeItem: (productId: string) => void
+	setLocationId: (locationId: string) => void
+	setTableContext: (context: TableContext) => void
 	updateItem: (
 		productId: string,
 		modifications: Modifications | undefined,
@@ -94,6 +116,13 @@ export const useOrderStore = create<OrderStore>()(
 			clearOrder() {
 				set({ currentOrder: null })
 			},
+			clearTableContext() {
+				const { currentOrder } = get()
+				if (!currentOrder) return
+
+				const { tableContext: _, ...orderWithoutTable } = currentOrder
+				set({ currentOrder: orderWithoutTable as Order })
+			},
 			createOrder() {
 				const nextOrder: Order = {
 					createdAt: new Date(),
@@ -107,6 +136,7 @@ export const useOrderStore = create<OrderStore>()(
 			getTotalItems() {
 				return getOrderTotalItems(get().currentOrder)
 			},
+			locationId: DEFAULT_LOCATION_ID,
 			removeItem(productId) {
 				const { currentOrder } = get()
 				if (!currentOrder) return
@@ -123,6 +153,21 @@ export const useOrderStore = create<OrderStore>()(
 				} else {
 					set({ currentOrder: updatedOrder })
 				}
+			},
+			setLocationId(locationId) {
+				set({ locationId })
+			},
+			setTableContext(context) {
+				const { currentOrder } = get()
+
+				if (!currentOrder) {
+					get().createOrder()
+					return get().setTableContext(context)
+				}
+
+				set({
+					currentOrder: { ...currentOrder, tableContext: context },
+				})
 			},
 			updateItem(productId, modifications, quantity) {
 				const { currentOrder } = get()
@@ -155,7 +200,10 @@ export const useOrderStore = create<OrderStore>()(
 		}),
 		{
 			name: 'tolo-order-storage',
-			partialize: (state) => ({ currentOrder: state.currentOrder }),
+			partialize: (state) => ({
+				currentOrder: state.currentOrder,
+				locationId: state.locationId,
+			}),
 			storage: createJSONStorage(() => zustandJsonStorage),
 		},
 	),
@@ -167,6 +215,29 @@ export const useCurrentOrder = () =>
 	useOrderStore(useShallow((state) => state.currentOrder))
 export const useUpdateItem = () => useOrderStore((state) => state.updateItem)
 export const useClearOrder = () => useOrderStore((state) => state.clearOrder)
+export const useTableContext = () =>
+	useOrderStore(useShallow((state) => state.currentOrder?.tableContext))
+export const useSetTableContext = () =>
+	useOrderStore((state) => state.setTableContext)
+export const useClearTableContext = () =>
+	useOrderStore((state) => state.clearTableContext)
+export const useIsDineIn = () =>
+	useOrderStore(
+		useShallow((state) => Boolean(state.currentOrder?.tableContext)),
+	)
+
+export const useLocationId = () =>
+	useOrderStore(useShallow((state) => state.locationId))
+
+export const useSelectedLocation = () =>
+	useOrderStore(
+		useShallow((state) =>
+			LOCATIONS.find((location) => location.id === state.locationId),
+		),
+	)
+
+export const useSetLocationId = () =>
+	useOrderStore((state) => state.setLocationId)
 
 export const useAddItemGuarded = () => {
 	const addItem = useOrderStore((state) => state.addItem)

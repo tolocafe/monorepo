@@ -3,14 +3,20 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 import { extractToken, verifyJwt } from '~workers/utils/jwt'
-import { api as posterApi } from '~workers/utils/poster'
+import {
+	EntityType,
+	api as posterApi,
+	ServiceMode,
+	TransactionStatus,
+} from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 import { getStripe } from '~workers/utils/stripe'
 
 import type { Bindings } from '~workers/types'
 
 const PayTableSchema = z.object({
-	paymentIntentId: z.string(),
+	paymentIntentId: z.string().optional(),
+	paymentMethod: z.enum(['ewallet', 'stripe']).default('stripe'),
 	phone: z.string().optional(),
 })
 
@@ -18,62 +24,35 @@ const tables = new Hono<{ Bindings: Bindings }>()
 
 /**
  * GET /tables/:locationId/:tableId
- * Fetch specific table bill data from Poster by location and table ID
+ * Check if there's an active order at a table
+ * Returns the transaction ID if found, 404 otherwise
  * Public endpoint - no authentication required
  */
 tables.get('/:locationId/:tableId', async (c) => {
-	const locationId = c.req.param('locationId')
 	const tableId = c.req.param('tableId')
 	const token = c.env.POSTER_TOKEN
 
 	try {
-		// Get open transactions for this specific table (spot)
+		// Get open transactions for this specific table
 		const transactions = await posterApi.dash.getTransactions(token, {
-			include_products: 'true',
-			status: '1',
+			status: TransactionStatus.Open,
 			table_id: tableId,
+			service_mode: ServiceMode.DineIn,
 		})
 
 		const currentTransaction = transactions.at(0)
 
 		if (!currentTransaction) {
-			return c.json({ error: 'No active bill found for this table' }, 404)
+			return c.json({ transactionId: null })
 		}
 
-		// Calculate totals (tax is included in sum in Poster)
-		// For open transactions: sum = subtotal, payed_sum = total (what's owed)
-		const subtotal = Number(currentTransaction.sum)
-		const total = Number(currentTransaction.payed_sum) || subtotal
-
-		// Format items - use product_sum (total for item) divided by quantity to get unit price
-		const items =
-			currentTransaction.products?.map((product) => {
-				const quantity = Math.round(Number(product.num))
-				const totalSum = Number(product.product_sum)
-				const unitPrice = quantity > 0 ? totalSum / quantity : 0
-
-				return {
-					name: product.product_name ?? `Product #${product.product_id}`,
-					price: Math.round(unitPrice * 100), // Convert unit price to cents
-					productId: product.product_id,
-					quantity,
-				}
-			}) ?? []
-
 		return c.json({
-			items,
-			locationId,
-			subtotal: Math.round(subtotal * 100), // Convert to cents
-			tableId,
-			tableName: currentTransaction.table_name ?? `Table ${tableId}`,
-			tax: 0, // Tax is included in total for Poster
-			total: Math.round(total * 100), // Convert to cents
 			transactionId: currentTransaction.transaction_id,
 		})
 	} catch (error) {
 		captureException(error)
 
-		return c.json({ error: 'Failed to fetch table bill' }, 500)
+		return c.json({ error: 'Failed to check table status' }, 500)
 	}
 })
 
@@ -91,8 +70,8 @@ tables.post('/:locationId/:tableId/payment-intent', async (c) => {
 		// Get the transaction for this table
 		const transactions = await posterApi.dash.getTransactions(token, {
 			include_products: 'true',
-			status: '1', // 1 = open transactions
-			type: 'spots',
+			status: TransactionStatus.Open,
+			type: EntityType.Spots,
 		})
 
 		const tableTransaction = transactions.find(
@@ -132,14 +111,15 @@ tables.post('/:locationId/:tableId/payment-intent', async (c) => {
 /**
  * POST /tables/:locationId/:tableId/pay
  * Mark a table's transaction as paid in Poster
- * Optional authentication - if auth provided, assigns customer to order
- * If no auth but phone provided, creates guest client
+ * Supports both Stripe and e-wallet payments
+ * Optional authentication - required for e-wallet, optional for Stripe
+ * If no auth but phone provided (Stripe only), creates guest client
  */
 tables.post('/:locationId/:tableId/pay', async (c) => {
 	c.req.param('locationId') // Reserved for future multi-location support
 	const tableId = c.req.param('tableId')
 	const body = PayTableSchema.parse(await c.req.json())
-	const { paymentIntentId, phone } = body
+	const { paymentIntentId, paymentMethod, phone } = body
 	const token = c.env.POSTER_TOKEN
 
 	try {
@@ -155,10 +135,26 @@ tables.post('/:locationId/:tableId/pay', async (c) => {
 			}
 		}
 
+		// E-wallet payments require authentication
+		if (paymentMethod === 'ewallet' && !authenticatedClientId) {
+			return c.json(
+				{ error: 'Authentication required for e-wallet payments' },
+				401,
+			)
+		}
+
+		// Stripe payments require a payment intent ID
+		if (paymentMethod === 'stripe' && !paymentIntentId) {
+			return c.json(
+				{ error: 'Payment intent ID required for Stripe payments' },
+				400,
+			)
+		}
+
 		// Get the transaction for this table
 		const transactions = await posterApi.dash.getTransactions(token, {
-			status: '1', // 1 = open transactions
-			type: 'spots',
+			status: TransactionStatus.Open,
+			type: EntityType.Spots,
 		})
 
 		const tableTransaction = transactions.find(
@@ -196,12 +192,27 @@ tables.post('/:locationId/:tableId/pay', async (c) => {
 		// Close the transaction with the payment
 		const transactionId = Number(tableTransaction.transaction_id)
 		const amountInPesos = Number(tableTransaction.payed_sum)
+		const amountInCents = Math.round(amountInPesos * 100)
+
+		// Handle e-wallet payment
+		if (paymentMethod === 'ewallet' && authenticatedClientId) {
+			// Deduct from e-wallet
+			await posterApi.clients.addEWalletTransaction(token, {
+				amount: amountInCents,
+				client_id: authenticatedClientId,
+			})
+		}
 
 		// Close transaction as paid with client assignment if available
+		const paymentReference =
+			paymentMethod === 'ewallet'
+				? `ewallet_${Date.now()}`
+				: (paymentIntentId as string)
+
 		await posterApi.transactions.closeTransaction(token, {
 			clientId: assignedClientId ?? undefined,
 			payed_third_party: amountInPesos,
-			paymentIntentId,
+			paymentIntentId: paymentReference,
 			transaction_id: transactionId,
 		})
 
@@ -225,9 +236,9 @@ tables.post('/:locationId/:tableId/pay', async (c) => {
 				currency: 'MXN',
 				is_guest: !authenticatedClientId,
 				item_count: itemCount,
-				payment_method: 'card',
+				payment_method: paymentMethod,
 				table_id: tableId,
-				transaction_id: paymentIntentId,
+				transaction_id: paymentReference,
 			},
 		})
 

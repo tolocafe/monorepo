@@ -46,6 +46,244 @@ const BASE_URL = 'https://joinposter.com/api'
 const defaultGetMenuProductsOptions = { type: 'products' } as const
 
 /**
+ * Payment method types for e-Wallet transactions
+ */
+export enum PaymentMethod {
+	/** Cash payment */
+	Cash = 1,
+	/** Card payment */
+	Card = 2,
+}
+
+/**
+ * Gender values for customer profiles
+ */
+export enum Gender {
+	/** Gender not specified */
+	NotSpecified = 0,
+	/** Male */
+	Male = 1,
+	/** Female */
+	Female = 2,
+}
+
+/**
+ * Service mode for orders
+ */
+export enum ServiceMode {
+	/** At the table / Dine-in */
+	DineIn = '1',
+	/** Takeaway */
+	Takeout = '2',
+	/** Delivery */
+	Delivery = '3',
+}
+
+/**
+ * Transaction status
+ */
+export enum TransactionStatus {
+	/** All transactions */
+	All = 0,
+	/** Open / In progress */
+	Open = 1,
+	/** Closed */
+	Closed = 2,
+	/** Removed / Deleted */
+	Removed = 3,
+}
+
+/**
+ * Incoming order status
+ */
+export enum IncomingOrderStatus {
+	/** New order awaiting acceptance */
+	New = 0,
+	/** Accepted order being prepared */
+	Accepted = 1,
+	/** Canceled order */
+	Canceled = 7,
+}
+
+/**
+ * Financial transaction type
+ */
+export enum FinanceTransactionType {
+	/** Expenditure - money out */
+	Expenditure = 0,
+	/** Income - money in */
+	Income = 1,
+	/** Transfer between accounts */
+	Transfer = 2,
+}
+
+/**
+ * Payment type for transactions
+ */
+export enum PayType {
+	/** Closed without payment */
+	NoPayment = 0,
+	/** Payment by cash */
+	Cash = 1,
+	/** Payment by bank transfer */
+	BankTransfer = 2,
+	/** Mixed payment (combination of methods) */
+	Mixed = 3,
+}
+
+/**
+ * Processing status of transaction
+ */
+export enum ProcessingStatus {
+	/** Open */
+	Open = 10,
+	/** Preparing */
+	Preparing = 20,
+	/** Ready */
+	Ready = 30,
+	/** En route */
+	EnRoute = 40,
+	/** Delivered */
+	Delivered = 50,
+	/** Closed */
+	Closed = 60,
+	/** Deleted */
+	Deleted = 70,
+}
+
+/**
+ * Entity type for filtering transactions
+ */
+export enum EntityType {
+	/** Filter by client */
+	Clients = 'clients',
+	/** Filter by location/spot */
+	Spots = 'spots',
+	/** Filter by waiter */
+	Waiters = 'waiters',
+}
+
+/**
+ * E-Wallet payment options for adding funds to a customer's wallet
+ */
+type AddEWalletPaymentOptions = {
+	amount: number
+	client_id: number
+	spot_id?: number
+	transaction_id?: number
+	type: PaymentMethod
+}
+
+/**
+ * E-Wallet transaction options for withdrawing funds from a customer's wallet
+ */
+type AddEWalletTransactionOptions = {
+	amount: number
+	client_id: number
+}
+
+/**
+ * Customer creation options for registering new customers
+ */
+type CreateClientOptions = {
+	birthday?: string
+	bonus?: number
+	client_groups_id_client: number
+	client_name?: string
+	client_sex?: Gender
+	email?: string
+	phone: string
+}
+
+/**
+ * Pagination options for fetching paginated customer lists
+ */
+type GetClientsOptions = {
+	num?: number
+	offset?: number
+}
+
+/**
+ * Transaction retrieval options for fetching a single transaction
+ */
+type GetTransactionOptions = {
+	include_history?: 'true'
+	include_products?: 'true'
+}
+
+/**
+ * Transactions filter options for fetching multiple transactions with comprehensive filtering
+ */
+type GetTransactionsOptions = {
+	date_from?: string
+	date_to?: string
+	id?: string
+	include_history?: 'true'
+	include_products?: 'true'
+	service_mode?: `${ServiceMode}`
+	status?: TransactionStatus
+	table_id?: string
+	type?: EntityType
+}
+
+/**
+ * Financial transaction creation options for recording income transactions
+ */
+type CreateFinanceTransactionOptions = {
+	account_to: 1
+	amount_to: number
+	category: number
+	comment?: string
+	date: string
+	id: number
+	type: FinanceTransactionType.Income
+	user_id: number
+}
+
+/**
+ * Incoming order status filter for fetching orders
+ */
+type GetIncomingOrdersOptions = {
+	status?: `${IncomingOrderStatus}`
+}
+
+/**
+ * Close transaction options for finalizing an order with third-party payment
+ */
+type CloseTransactionOptions = {
+	clientId?: number
+	payed_third_party: number
+	paymentIntentId: string
+	transaction_id: number
+}
+
+/**
+ * Update transaction options for recording e-Wallet payment associations
+ */
+type UpdateTransactionOptions = {
+	orderId: number
+	transactionId: number
+	userId: number
+}
+
+/**
+ * Close order options for gift card payment
+ */
+type ClosePosterOrderOptions = {
+	payed_cert: number
+	transaction_id: number
+}
+
+/**
+ * Incoming order response from Poster API
+ */
+type IncomingOrderResponse = {
+	incoming_order_id: number
+	status: number
+	transaction_id: number
+}
+
+/**
  * Custom error class for Poster API errors
  */
 class PosterError extends Error {
@@ -58,11 +296,26 @@ class PosterError extends Error {
 /**
  * Generic fetch wrapper for Poster API requests with error handling and Sentry context
  *
- * @template TResponse - Expected response data type
- * @param url - API endpoint path (will be appended to BASE_URL)
- * @param options - Fetch options with optional defaultErrorMessage
- * @returns Promise resolving to the response data
- * @throws {PosterError} When API returns an error or response is null
+ * Wraps the Poster API fetch call to provide:
+ * - Automatic error handling with custom error messages
+ * - Sentry context logging for debugging
+ * - Type-safe response parsing
+ *
+ * @template TResponse - Expected response data type from Poster API
+ * @param url - API endpoint path relative to BASE_URL (e.g., '/clients.getClient')
+ * @param options - Standard fetch options with optional defaultErrorMessage for error context
+ * @param options.defaultErrorMessage - Custom error message to use if API returns an error
+ * @returns Promise resolving to the typed response data from `response` field
+ * @throws {PosterError} When API returns an error or response field is null
+ *
+ * @example
+ * ```ts
+ * const clients = await posterFetch<ClientData[]>('/clients.getClients?token=abc', {
+ *   defaultErrorMessage: 'Failed to fetch clients',
+ *   headers: { 'Content-Type': 'application/json' },
+ *   method: 'GET',
+ * })
+ * ```
  */
 export async function posterFetch<TResponse = unknown>(
 	url: string,
@@ -145,23 +398,12 @@ export const api = {
 		/**
 		 * Top up a customer's e-Wallet balance
 		 *
-		 * Adds funds to a customer's electronic wallet. Can be linked to a transaction
-		 * and specifies the payment method (cash or card).
+		 * Adds funds to a customer's electronic wallet for loyalty programs.
+		 * Amount is automatically converted from cents to currency units.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/clients/addEWalletPayment
 		 */
-		addEWalletPayment(
-			token: string,
-			body: {
-				/** Amount in cents (converted to currency units) */
-				amount: number
-				client_id: number
-				spot_id?: number
-				transaction_id?: number
-				/** Top up method: 1=cash, 2=card */
-				type: 1 | 2
-			},
-		) {
+		addEWalletPayment(token: string, body: AddEWalletPaymentOptions) {
 			const finalBody = { ...body, amount: body.amount / 100 }
 
 			return posterFetch<string>(`/clients.addEWalletPayment?token=${token}`, {
@@ -175,19 +417,12 @@ export const api = {
 		/**
 		 * Withdraw funds from a customer's e-Wallet
 		 *
-		 * Deducts funds from a customer's electronic wallet balance.
-		 * Typically used when customer pays for an order using e-Wallet balance.
+		 * Deducts funds when customer pays for an order using their e-Wallet balance.
+		 * Amount is automatically converted from cents to currency units.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/clients/addEWalletTransaction
 		 */
-		addEWalletTransaction(
-			token: string,
-			body: {
-				/** Amount in cents (converted to currency units) */
-				amount: number
-				client_id: number
-			},
-		) {
+		addEWalletTransaction(token: string, body: AddEWalletTransactionOptions) {
 			const parsedBody = {
 				amount: body.amount / 100,
 				client_id: body.client_id,
@@ -207,28 +442,11 @@ export const api = {
 		/**
 		 * Create a new customer in Poster
 		 *
-		 * Registers a new customer with the provided details. Phone numbers must be
-		 * unique - duplicate phones will cause an error.
+		 * Phone numbers must be unique - duplicates will cause an error.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/clients/createClient
 		 */
-		createClient(
-			token: string,
-			body: {
-				/** Format: "Y-m-d" */
-				birthday?: string
-				/** Initial bonus points */
-				bonus?: number
-				/** Customer group ID for loyalty */
-				client_groups_id_client: number
-				client_name?: string
-				/** 0=not specified, 1=male, 2=female */
-				client_sex?: number
-				email?: string
-				/** Unique, international format */
-				phone: string
-			},
-		) {
+		createClient(token: string, body: CreateClientOptions) {
 			return posterFetch<number>(`/clients.createClient?token=${token}`, {
 				body: JSON.stringify(body),
 				defaultErrorMessage: 'Failed to create client',
@@ -240,8 +458,7 @@ export const api = {
 		/**
 		 * Find a customer by phone number
 		 *
-		 * Searches for a customer using their phone number. Returns the first match
-		 * or null if no customer is found. Uses the getClients endpoint with phone filter.
+		 * Returns null if not found or on error.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/clients/getClients
 		 */
@@ -259,9 +476,7 @@ export const api = {
 		},
 
 		/**
-		 * Get customer properties by ID
-		 *
-		 * Retrieves detailed customer information using their Poster customer ID.
+		 * Get customer by ID. Returns null if not found.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/clients/getClient
 		 */
@@ -279,22 +494,13 @@ export const api = {
 		},
 
 		/**
-		 * Get a paginated list of customers
-		 *
-		 * Retrieves customers with pagination support. Returns customer data including:
-		 * - Basic info (name, phone, email, birthday)
-		 * - Loyalty data (bonus points, total purchases, discount percentage)
-		 * - Group membership and e-Wallet balance
+		 * Get paginated list of customers with loyalty data and e-Wallet balance.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/clients/getClients
 		 */
-		getClients(
-			token: string,
-			{
-				num: number_ = 100,
-				offset = 0,
-			}: { num?: number; offset?: number } = {},
-		) {
+		getClients(token: string, options: GetClientsOptions = {}) {
+			const { num: number_ = 100, offset = 0 } = options
+
 			return posterFetch<ClientData[]>(
 				`/clients.getClients?${new URLSearchParams({ num: number_.toString(), offset: offset.toString(), token })}`,
 				{
@@ -306,9 +512,7 @@ export const api = {
 		},
 
 		/**
-		 * Get available promotions
-		 *
-		 * Retrieves all active promotions configured in Poster.
+		 * Get all active promotions configured in Poster.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/clients/getPromotions
 		 */
@@ -319,9 +523,7 @@ export const api = {
 		},
 
 		/**
-		 * Update customer properties
-		 *
-		 * Updates an existing customer's information. Only provided fields will be updated.
+		 * Update customer information. Only provided fields will be updated.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/clients/updateClient
 		 */
@@ -349,16 +551,23 @@ export const api = {
 		/**
 		 * Get a single transaction by ID
 		 *
-		 * Retrieves detailed information about a specific transaction including
-		 * payment amounts, taxes, tips, and optionally products and history.
+		 * Retrieves detailed information about a specific transaction including:
+		 * - Payment amounts by method (cash, card, third-party, certificate)
+		 * - Tax and tip amounts
+		 * - Rounding adjustments
+		 * - Customer association
+		 * - Optionally: transaction history and product list
+		 *
+		 * Use `include_products` and `include_history` to get additional transaction details.
+		 *
+		 * @param token - Poster API access token for authentication
+		 * @param id - Transaction ID to retrieve
+		 * @param options - Optional flags to include additional data
+		 * @returns Promise resolving to transaction data or null if not found
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/dash/getTransaction
 		 */
-		getTransaction(
-			token: string,
-			id: string,
-			options?: { include_history?: 'true'; include_products?: 'true' },
-		) {
+		getTransaction(token: string, id: string, options?: GetTransactionOptions) {
 			return posterFetch<
 				{
 					client_id: string
@@ -369,9 +578,17 @@ export const api = {
 						product_price: string
 					}[]
 					round_sum: string
+					/**
+					 * Transaction status
+					 * - 0: Deleted
+					 * - 1: In progress/Open
+					 * - 2: Closed
+					 */
+					status: string
 					sum: string
 					tax_sum: string
 					tip_sum: string
+					transaction_id: string
 				}[]
 			>(
 				`/dash.getTransaction?${new URLSearchParams({
@@ -390,8 +607,17 @@ export const api = {
 		/**
 		 * Get products for a specific transaction with modification names
 		 *
-		 * Retrieves the list of products included in a transaction along with
-		 * their modifications and quantities. Useful for generating receipts.
+		 * Retrieves the complete list of products included in a transaction along with
+		 * their modifications (customizations) and quantities. This is particularly useful for:
+		 * - Generating detailed receipts
+		 * - Displaying order items with customizations
+		 * - Kitchen/barista order displays
+		 *
+		 * Returns empty array on error instead of throwing for graceful degradation.
+		 *
+		 * @param token - Poster API access token for authentication
+		 * @param transactionId - Transaction ID to get products for
+		 * @returns Promise resolving to array of transaction products with modifications
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/dash/getTransactionProducts
 		 */
@@ -400,11 +626,17 @@ export const api = {
 			transactionId: string,
 		): Promise<
 			{
+				/** Category ID this product belongs to */
 				category_id: string
+				/** Modification/variant ID applied */
 				modification_id: string
+				/** Name of the modification (null if none) */
 				modificator_name: null | string
+				/** Quantity ordered */
 				num: string
+				/** Product ID */
 				product_id: string
+				/** Product name */
 				product_name: string
 			}[]
 		> {
@@ -429,32 +661,31 @@ export const api = {
 		/**
 		 * Get a list of transactions with filtering options
 		 *
-		 * Retrieves transactions with comprehensive filtering by date range, status,
-		 * service mode, table, and more. Returns payment details, customer info, and
-		 * optionally products and history for each transaction.
+		 * Retrieves transactions with comprehensive filtering capabilities. Use this endpoint for:
+		 * - Sales reports and analytics
+		 * - Customer purchase history
+		 * - Transaction reconciliation
+		 * - Order tracking by table, waiter, or location
+		 *
+		 * **Filtering Options:**
+		 * - **Date Range**: Filter by creation date (defaults to last 30 days)
+		 * - **Status**: Open, closed, or removed transactions
+		 * - **Service Mode**: Dine-in, takeout, or delivery orders
+		 * - **Entity**: Filter by customer, location, or waiter
+		 * - **Table**: Specific table transactions
+		 * - **Additional Data**: Include product lists and operation history
+		 *
+		 * **Performance Note:** Including products/history increases response size significantly.
+		 * Use these flags only when needed.
+		 *
+		 * @param token - Poster API access token for authentication
+		 * @param options - Comprehensive filtering options
+		 * @returns Promise resolving to array of DashTransaction objects
+		 * @throws {PosterError} If the request fails
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/dash/getTransactions
 		 */
-		getTransactions(
-			token: string,
-			options?: {
-				/** Y-m-d format, e.g. '2023-12-01'. Default: one month ago */
-				date_from?: string
-				/** Y-m-d format, e.g. '2023-12-31'. Default: current date */
-				date_to?: string
-				/** Entity ID. Requires `type` to be set */
-				id?: string
-				include_history?: 'true'
-				include_products?: 'true'
-				/** 1=dine-in, 2=takeout, 3=delivery */
-				service_mode?: '1' | '2' | '3'
-				/** 0=all, 1=open, 2=closed, 3=removed */
-				status?: '0' | '1' | '2' | '3'
-				table_id?: string
-				/** Requires `id` to be set */
-				type?: 'clients' | 'spots' | 'waiters'
-			},
-		) {
+		getTransactions(token: string, options?: GetTransactionsOptions) {
 			return posterFetch<DashTransaction[]>(
 				`/dash.getTransactions?${getSearchParameters({ token, ...options })}`,
 				{ defaultErrorMessage: 'Failed to get transactions' },
@@ -464,13 +695,19 @@ export const api = {
 	/**
 	 * Finance - Financial Transactions API
 	 *
-	 * Methods for creating and retrieving financial transactions (income, expenses, transfers).
-	 * These are accounting transactions separate from POS order transactions.
+	 * Methods for creating and retrieving financial transactions separate from POS sales.
+	 * These are accounting transactions for tracking income, expenses, and transfers between accounts.
 	 *
-	 * Transaction types:
-	 * - 0: Expenditure (money out)
-	 * - 1: Income (money in)
-	 * - 2: Transfer (between accounts)
+	 * **Transaction Types:**
+	 * - **0**: Expenditure (money out) - Record expenses like supplies, rent, utilities
+	 * - **1**: Income (money in) - Record revenue from sources other than POS sales
+	 * - **2**: Transfer - Move funds between accounts (e.g., bank to cash register)
+	 *
+	 * **Common Use Cases:**
+	 * - Recording non-POS income (wholesale, catering, tips)
+	 * - Tracking business expenses and overhead
+	 * - Managing cash flow between accounts
+	 * - Financial reporting and reconciliation
 	 *
 	 * @see https://dev.joinposter.com/en/docs/v3/web/finance/index
 	 */
@@ -479,29 +716,11 @@ export const api = {
 		 * Create a new financial transaction
 		 *
 		 * Records an income transaction in Poster's financial system.
-		 * Used for tracking revenue outside of regular POS transactions.
+		 * Amount is automatically converted from cents to currency units.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/finance/createTransactions
 		 */
-		createTransaction(
-			token: string,
-			body: {
-				/** Account ID to credit */
-				account_to: 1
-				/** Amount in cents (converted to currency units) */
-				amount_to: number
-				/** Financial category ID */
-				category: number
-				comment?: string
-				/** Format: 'dmY' or 'Y-m-d H:i:s' */
-				date: string
-				/** Group ID */
-				id: number
-				/** 0=expenditure, 1=income, 2=transfer */
-				type: 1
-				user_id: number
-			},
-		) {
+		createTransaction(token: string, body: CreateFinanceTransactionOptions) {
 			return posterFetch<number>(
 				`/finance.createTransactions?${new URLSearchParams({ token })}`,
 				{
@@ -516,8 +735,12 @@ export const api = {
 		/**
 		 * Get a financial transaction by ID
 		 *
-		 * Retrieves details of a specific financial transaction including
-		 * amount, associated client, and user who created it.
+		 * Retrieves details of a specific financial transaction including amount, associated
+		 * client, and user who created it. Returns null if transaction not found.
+		 *
+		 * @param token - Poster API access token for authentication
+		 * @param id - Financial transaction ID to retrieve
+		 * @returns Promise resolving to transaction data or null if not found
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/finance/getTransaction
 		 */
@@ -560,11 +783,50 @@ export const api = {
 	 */
 	incomingOrders: {
 		/**
+		 * Create a dine-in order without prepayment
+		 *
+		 * Creates an incoming order for dine-in customers that will be paid later.
+		 *
+		 * @see https://dev.joinposter.com/en/docs/v3/web/incomingOrders/createIncomingOrder
+		 */
+		createDineInOrder(
+			token: string,
+			body: {
+				comment?: string
+				products: {
+					count: number
+					modification?: { a: number; m: string }[]
+					price: number
+					product_id: string
+				}[]
+				tableId: string
+			},
+			clientId: number,
+		) {
+			const finalOrderData = {
+				client_id: clientId,
+				comment: body.comment ?? '',
+				products: body.products,
+				service_mode: ServiceMode.DineIn,
+				spot_id: 1,
+				table_id: Number(body.tableId),
+			}
+
+			return posterFetch<IncomingOrderResponse>(
+				`/incomingOrders.createIncomingOrder?${getSearchParameters({ token })}`,
+				{
+					body: JSON.stringify(finalOrderData),
+					defaultErrorMessage: 'Failed to create dine-in order',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			)
+		},
+
+		/**
 		 * Create a new online order
 		 *
 		 * Creates an incoming order that appears in the Poster dashboard.
-		 * Staff must accept the order before it becomes a regular transaction.
-		 * The order can include prepayment information if already paid online.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/incomingOrders/createIncomingOrder
 		 */
@@ -585,14 +847,7 @@ export const api = {
 				spot_id: 1,
 			}
 
-			return posterFetch<{
-				/** Online order ID */
-				incoming_order_id: number
-				/** 0=new, 1=accepted, 7=canceled */
-				status: number
-				/** Associated POS transaction ID (null until accepted) */
-				transaction_id: number
-			}>(
+			return posterFetch<IncomingOrderResponse>(
 				`/incomingOrders.createIncomingOrder?${getSearchParameters({ token })}`,
 				{
 					body: JSON.stringify(finalOrderData),
@@ -606,8 +861,13 @@ export const api = {
 		/**
 		 * Get a specific incoming order by ID
 		 *
-		 * Retrieves detailed information about an incoming order including
-		 * customer info and ordered products.
+		 * Retrieves detailed information about an incoming order including customer info
+		 * and ordered products.
+		 *
+		 * @param token - Poster API access token for authentication
+		 * @param id - Incoming order ID to retrieve
+		 * @returns Promise resolving to incoming order data
+		 * @throws {Error} If order not found or request fails
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/incomingOrders/getIncomingOrder
 		 */
@@ -632,15 +892,14 @@ export const api = {
 		 * Retrieves a list of incoming (online) orders. Can be filtered by status
 		 * to show only new, accepted, or canceled orders.
 		 *
+		 * @param token - Poster API access token for authentication
+		 * @param options - Optional status filter
+		 * @returns Promise resolving to array of IncomingOrder objects
+		 * @throws {Error} If request fails
+		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/incomingOrders/getIncomingOrders
 		 */
-		async getIncomingOrders(
-			token: string,
-			options?: {
-				/** '0'=new, '1'=accepted, '7'=canceled */
-				status?: '0' | '1' | '7'
-			},
-		) {
+		async getIncomingOrders(token: string, options?: GetIncomingOrdersOptions) {
 			const data = (await fetch(
 				`${BASE_URL}/incomingOrders.getIncomingOrders?${getSearchParameters({ token, ...options })}`,
 			).then((response) => response.json())) as PosterResponse<IncomingOrder[]>
@@ -673,6 +932,10 @@ export const api = {
 		 * Retrieves the list of menu categories. Categories organize products
 		 * and can have their own tax settings and visibility per location.
 		 *
+		 * @param token - Poster API access token for authentication
+		 * @returns Promise resolving to array of Category objects
+		 * @throws {Error} If request fails
+		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/menu/getCategories
 		 */
 		async getMenuCategories(token: string) {
@@ -694,6 +957,11 @@ export const api = {
 		 * - Ingredients (for dishes)
 		 * - Photos and barcodes
 		 * - Visibility settings
+		 *
+		 * @param token - Poster API access token for authentication
+		 * @param _options - Reserved for future use (currently unused)
+		 * @returns Promise resolving to array of Product objects
+		 * @throws {PosterError} If request fails
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/menu/getProducts
 		 */
@@ -718,6 +986,11 @@ export const api = {
 		 *
 		 * Retrieves detailed information about a specific product including
 		 * all modifications, ingredients, and location-specific pricing.
+		 *
+		 * @param token - Poster API access token for authentication
+		 * @param id - Product ID to retrieve
+		 * @returns Promise resolving to Product object
+		 * @throws {PosterError} If product not found or request fails
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/menu/getProduct
 		 */
@@ -750,30 +1023,12 @@ export const api = {
 		/**
 		 * Close a transaction (mark as paid)
 		 *
-		 * Finalizes an order by recording payment information and closing
-		 * the transaction. Supports multiple payment types including
-		 * third-party payments like Stripe.
-		 *
-		 * Payment types can be combined (mixed payment):
-		 * - payed_cash: Amount paid in cash
-		 * - payed_card: Amount paid by card
-		 * - payed_cert: Amount paid by gift card
-		 * - payed_third_party: Amount paid via third-party (Stripe)
+		 * Finalizes an order by recording payment information and closing the transaction.
+		 * Supports third-party payments like Stripe.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/transactions/closeTransaction
 		 */
-		async closeTransaction(
-			token: string,
-			body: {
-				/** Customer ID to associate with transaction */
-				clientId?: number
-				/** Amount paid via third-party (Stripe) in cents */
-				payed_third_party: number
-				/** Stripe payment intent ID for tracking */
-				paymentIntentId: string
-				transaction_id: number
-			},
-		) {
+		async closeTransaction(token: string, body: CloseTransactionOptions) {
 			const parsedBody = {
 				...(body.clientId ? { client_id: body.clientId } : {}),
 				comment: `Stripe Payment: ${body.paymentIntentId}`,
@@ -797,21 +1052,11 @@ export const api = {
 		/**
 		 * Update a financial transaction (for e-Wallet payments)
 		 *
-		 * Updates a financial transaction record. Used internally for
-		 * recording e-Wallet payment associations with orders.
-		 *
-		 * Note: This actually calls finance.updateTransactions endpoint.
+		 * Updates a financial transaction record for e-Wallet payment associations.
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/finance/updateTransactions
 		 */
-		async updateTransaction(
-			token: string,
-			body: {
-				orderId: number
-				transactionId: number
-				userId: number
-			},
-		) {
+		async updateTransaction(token: string, body: UpdateTransactionOptions) {
 			const parsedBody = {
 				account_from: body.orderId,
 				amount_to: 0,
@@ -839,17 +1084,12 @@ export const api = {
  * Close a Poster order using gift card payment
  *
  * Simplified function to close a transaction using gift card (certificate) payment.
- * Uses the transactions.closeTransaction endpoint.
  *
  * @see https://dev.joinposter.com/en/docs/v3/web/transactions/closeTransaction
  */
 export async function closePosterOrder(
 	token: string,
-	body: {
-		/** Amount paid via gift card in cents */
-		payed_cert: number
-		transaction_id: number
-	},
+	body: ClosePosterOrderOptions,
 ) {
 	return posterFetch<number>(
 		`/transactions.closeTransaction?${new URLSearchParams({ token })}`,
@@ -865,18 +1105,10 @@ export async function closePosterOrder(
 /**
  * Send an SMS message via AWS SNS
  *
- * Sends a text message to the specified phone number using AWS Simple
- * Notification Service. Used for OTP verification and notifications.
- *
- * Note: This is NOT the Poster API sendSms endpoint, but uses AWS SNS directly.
+ * Sends a text message using AWS Simple Notification Service.
+ * Used for OTP verification and notifications.
  */
-export async function sendSms(
-	/** Unused (kept for API consistency) */
-	_token: string,
-	/** International format, e.g. "+1234567890" */
-	phone: string,
-	message: string,
-) {
+export async function sendSms(_token: string, phone: string, message: string) {
 	return snsClient.send(
 		new AWS.PublishCommand({ Message: message, PhoneNumber: phone }),
 	)

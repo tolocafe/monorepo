@@ -51,6 +51,10 @@ export default function Orders() {
 	const { data: orders, isRefetching } = useQuery(orderQueryOptions)
 	const itemsCount = useCurrentOrderItemsCount()
 
+	// Filter orders by payment status (status 1 = Open/Unpaid, status 2 = Closed/Paid)
+	const unpaidOrders = orders?.filter((order) => order.status === '1') ?? []
+	const paidOrders = orders?.filter((order) => order.status !== '1') ?? []
+
 	useFocusEffect(
 		useCallback(() => {
 			void resetBadgeCount()
@@ -161,14 +165,48 @@ export default function Orders() {
 					</>
 				)}
 
+				{/* Unpaid Orders */}
+				{unpaidOrders.length > 0 && (
+					<>
+						<H2>
+							<Trans>Unpaid</Trans>
+						</H2>
+						<View style={styles.ordersList}>
+							{unpaidOrders.map((order) => (
+								<Pressable
+									key={order.transaction_id}
+									onPress={() =>
+										router.push(`/(tabs)/orders/pay/${order.transaction_id}`)
+									}
+								>
+									<Card style={styles.unpaidOrderCard}>
+										<View style={styles.orderHeader}>
+											<Text weight="bold">
+												<Trans>Order #{order.transaction_id}</Trans>
+											</Text>
+											<Text style={styles.unpaidLabel}>
+												<Trans>Payment Required</Trans>
+											</Text>
+										</View>
+										<View style={styles.orderDetails}>
+											<Text weight="bold">{formatPrice(order.sum)}</Text>
+											<Feather color="#666666" name="chevron-right" size={24} />
+										</View>
+									</Card>
+								</Pressable>
+							))}
+						</View>
+					</>
+				)}
+
 				{/* Order History */}
-				{orders?.length ? (
+				{paidOrders.length > 0 ? (
 					<>
 						<H2>
 							<Trans>History</Trans>
 						</H2>
 						<View style={styles.ordersList}>
-							{orders.map((order) => (
+							{paidOrders.map((order) => (
 								<Pressable
 									key={order.transaction_id}
 									onPress={() => handleOrderPress(order.transaction_id)}
@@ -288,6 +326,17 @@ const styles = StyleSheet.create((theme) => ({
 		justifyContent: 'center',
 		paddingHorizontal: theme.spacing.lg,
 		paddingVertical: theme.spacing.xxl,
+	},
+	unpaidLabel: {
+		color: theme.colors.rojo.solid ?? '#e53e3e',
+		fontSize: 12,
+	},
+	unpaidOrderCard: {
+		borderColor: theme.colors.rojo.solid ?? '#e53e3e',
+		borderWidth: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		width: '100%',
 	},
 	signInSubtitle: {
 		color: theme.colors.crema.solid,
