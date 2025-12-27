@@ -14,6 +14,7 @@ Modern React Native coffee shop app with focus on simplicity, performance, and e
 - **Stack**: React Native, Expo, TypeScript, React Native Unistyles, Lingui, TanStack Query
 - **Architecture**: File-based routing with Expo Router, functional components, modern React patterns
 - **Deployment**: EAS Build with OTA updates using fingerprint runtime policy
+- **Content Management**: Sanity.io CMS (Project ID: `m1zo6pvi`, Dataset: `production`)
 
 ## Core Features
 
@@ -57,6 +58,16 @@ These priorities guide all technical decisions and ensure the codebase remains m
 - **Navigation**: Expo Router with typed routes
 - **Package Manager**: bun (never npm or yarn)
 - **React Imports**: Never import React default - import specific APIs only
+- **React Compiler**: This project uses React Compiler (babel-plugin-react-compiler) for automatic optimization
+  - **No Manual Memoization**: NEVER use `React.memo`, `useMemo`, or `useCallback` for performance optimization - React Compiler handles this automatically
+  - **Let the Compiler Work**: Write clean, straightforward code and trust the compiler to optimize it
+  - **Only Use Hooks for Logic**: Use `useMemo` and `useCallback` only when the semantics of your code require it (e.g., preserving identity for refs), not for performance
+  - **Simpler Code**: This means less boilerplate, fewer manual optimizations, and more readable components
+- **Content Management**: Sanity.io for content management
+  - **Project ID**: `m1zo6pvi`
+  - **Dataset**: `production`
+  - **ALWAYS use Sanity MCP Tool**: When asked to read, query, create, update, or manipulate Sanity content, use the Sanity MCP server tools directly (e.g., `mcp_Sanity_query_documents`, `mcp_Sanity_patch_document`, `mcp_Sanity_get_document`, etc.) instead of writing custom scripts or using the Sanity CLI
+  - **Portable Text Rendering**: Use `@/components/BlockText` component to render Sanity Portable Text content in the app
 
 ### File Naming Conventions
 
@@ -97,10 +108,11 @@ These priorities guide all technical decisions and ensure the codebase remains m
 
 #### Rendering Optimization
 
-- **Memoization**: Use React.memo for expensive components
+- **React Compiler Handles Optimization**: No manual memoization needed - the compiler automatically optimizes re-renders
 - **Virtualization**: FlatList for any lists with >10 items
 - **Code Splitting**: Lazy load non-critical screens
 - **Image Optimization**: Use Expo Image with proper sizing and formats
+- **Write Clear Code**: Focus on clean, readable code rather than manual performance tweaks
 
 #### Bundle Optimization
 
@@ -202,7 +214,7 @@ These priorities guide all technical decisions and ensure the codebase remains m
 
 ### Import Patterns
 
-- **React Hooks**: `import { useState, useEffect, useCallback } from 'react'`
+- **React Hooks**: `import { useState, useEffect } from 'react'` (no need to import useMemo/useCallback for performance)
 - **React Native**: `import { View, Text, Pressable } from 'react-native'`
 - **Lingui**: `import { Trans } from '@lingui/react/macro'` and `import { t } from '@lingui/core/macro'`
 - **Never**: `import React from 'react'` (not needed in modern React Native)

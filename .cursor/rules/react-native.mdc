@@ -48,19 +48,17 @@ alwaysApply: false
 ## React Compiler
 
 - **React Compiler Enabled**: This project uses the React Compiler for automatic optimization
-- **Automatic Memoization**: Components and values are automatically memoized by the compiler
-- **Reduced Manual Optimization**: Less need for manual React.memo, useMemo, and useCallback
+- **No Manual Memoization**: NEVER use `React.memo`, `useMemo`, or `useCallback` for performance - the compiler handles this
+- **Write Clean Code**: Focus on readable, straightforward code and trust the compiler to optimize
+- **Only Use Hooks for Semantics**: Use `useMemo`/`useCallback` only when semantics require it (e.g., preserving identity), not for performance
 - **Rules of React**: Follow React's rules strictly - the compiler enforces them at build time
 - **Pure Components**: Ensure components are pure and side-effect-free for optimal compilation
-- **Hook Dependencies**: The compiler tracks dependencies automatically, but still use proper arrays
 - **Build-Time Optimization**: Performance optimizations happen at compile time, not runtime
 
 ## Performance Optimization
 
 - Minimize useState and useEffect; prefer context and reducers for state management
-- React Compiler handles most memoization automatically, but React.memo() can still be useful for expensive components
-- Use useMemo and useCallback sparingly - the compiler optimizes most cases automatically
-- Avoid unnecessary re-renders with proper dependency arrays
+- Trust React Compiler for all memoization - do not add manual performance optimizations
 - Use FlatList for long lists with proper optimization props
 - Implement code splitting with React.lazy and Suspense
 - Optimize images: use WebP format, include size data, implement lazy loading
@@ -88,7 +86,6 @@ alwaysApply: false
 - Use React Context and useReducer for global state
 - Leverage TanStack Query for data fetching and caching
 - Implement proper error states and loading states
-- Use Zustand for complex state management when needed
 - Handle optimistic updates appropriately
 - Implement proper cache invalidation strategies
 

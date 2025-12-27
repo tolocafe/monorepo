@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 
 import { defaultJsonHeaders } from '~workers/utils/headers'
-import { api, EntityType } from '~workers/utils/poster'
+import { api, EntityType, TransactionStatus } from '~workers/utils/poster'
 import {
 	canRedeemBirthdayDrink,
 	getCustomerStamps,
@@ -64,7 +64,7 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 			{
 				date_from: '2025-01-01',
 				id: customerId,
-				status: '2',
+				status: TransactionStatus.Closed,
 				type: EntityType.Clients,
 			},
 		)

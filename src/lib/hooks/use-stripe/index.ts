@@ -58,7 +58,7 @@ export function createApplePayConfig(amount: number, label: string) {
 			],
 			...PLATFORM_PAY_OPTIONS,
 		},
-	} as const
+	} satisfies PlatformPay.ConfirmParams
 }
 
 /** Google Pay configuration */
@@ -74,7 +74,7 @@ export function createGooglePayConfig(
 			testEnv,
 			...PLATFORM_PAY_OPTIONS,
 		},
-	} as const
+	} satisfies PlatformPay.ConfirmParams
 }
 
 /**

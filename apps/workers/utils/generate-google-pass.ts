@@ -7,7 +7,7 @@ import type { Context } from 'hono'
 
 import type { ClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
-import { api, EntityType } from '~workers/utils/poster'
+import { api, EntityType, TransactionStatus } from '~workers/utils/poster'
 import { getCustomerStamps } from '~workers/utils/stamps'
 
 const GOOGLE_WALLET_BASE_URL =
@@ -67,7 +67,7 @@ export async function notifyGooglePassUpdate(
 			.getTransactions(environment.POSTER_TOKEN, {
 				date_from: '2025-01-01',
 				id: clientId.toString(),
-				status: '2',
+				status: TransactionStatus.Closed,
 				type: EntityType.Clients,
 			})
 			.then((transactions) => transactions.length)
@@ -135,7 +135,7 @@ async function createLoyaltyObject({
 		.getTransactions(context.env.POSTER_TOKEN, {
 			date_from: '2025-01-01',
 			id: client.client_id,
-			status: '2',
+			status: TransactionStatus.Closed,
 			type: EntityType.Clients,
 		})
 		.then((transactions) => transactions.length)

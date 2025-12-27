@@ -25,7 +25,6 @@ import Animated, {
 import {
 	StyleSheet,
 	UnistylesRuntime,
-	useUnistyles,
 	withUnistyles,
 } from 'react-native-unistyles'
 
@@ -37,7 +36,6 @@ import { LevelIndicator } from '@/components/LevelIndicator'
 import { LinearGradient } from '@/components/LinearGradient'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
-import WebContent from '@/components/WebContent'
 import { trackEvent } from '@/lib/analytics'
 import { getImageUrl } from '@/lib/image'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -146,8 +144,6 @@ export default function MenuDetail() {
 			}
 		}
 	}, [product?.group_modifications, setFieldValue])
-
-	const htmlRecipeSource = useGetFormattedHTMLContent(product?.recipe)
 
 	const incrementQuantity = useCallback(
 		() => setFieldValue('quantity', (previous) => previous + 1),
@@ -315,14 +311,14 @@ export default function MenuDetail() {
 						)}
 					</View>
 
-					{htmlRecipeSource &&
+					{product.recipe &&
 					RECIPE_GROUPS.has(Number(selfData?.client_groups_id)) ? (
 						<View style={styles.section}>
 							<H2>
 								<Trans>Recipe</Trans>
 							</H2>
 							<View style={styles.recipeSection}>
-								<WebContent source={htmlRecipeSource} />
+								<BlockText value={product.recipe} />
 							</View>
 						</View>
 					) : null}
@@ -520,47 +516,6 @@ function AnimatedPrice({ children }: { children: string }) {
 			</Button.Text>
 		</Animated.View>
 	)
-}
-
-function useGetFormattedHTMLContent(description: string | undefined) {
-	const { theme } = useUnistyles()
-
-	if (!description) return
-
-	return {
-		html: `
-			<style>
-				* {
-					margin: 0;
-					padding: 0;
-					font-size: 16px;
-					line-height: 1.4;
-					font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-					color: var(--colors-gray-text);
-				}
-				html {
-					color: ${theme.colors.gray.text};
-				}
-				p {
-					margin: 0;
-				}
-				ul, ol {
-					padding-left: 1em;
-				}
-				h1,h2,h3,h4,h5,h6 {
-					margin-bottom: 0.5em;
-				}
-				li::marker {
-					display: block;
-					width: 1em;
-					height: 1em;
-				}
-			</style>
-			<body>
-				${description}
-			</body>
-		`,
-	}
 }
 
 const styles = StyleSheet.create((theme, runtime) => ({

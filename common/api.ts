@@ -486,7 +486,7 @@ export type Product = {
 	product_production_description: string
 	product_tax_id: string
 	profit: Record<string, string>
-	recipe?: string
+	recipe?: PortableTextBlock[]
 	'small-description'?: string
 	sort_order: string
 	sources: unknown[]

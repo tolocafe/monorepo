@@ -84,13 +84,13 @@ export enum ServiceMode {
  */
 export enum TransactionStatus {
 	/** All transactions */
-	All = 0,
+	All = '0',
 	/** Open / In progress */
-	Open = 1,
+	Open = '1',
 	/** Closed */
-	Closed = 2,
+	Closed = '2',
 	/** Removed / Deleted */
-	Removed = 3,
+	Removed = '3',
 }
 
 /**

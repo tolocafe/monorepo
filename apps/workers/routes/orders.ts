@@ -10,7 +10,7 @@ import {
 import { getProductTotalCost } from '~common/utils'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { authenticate } from '~workers/utils/jwt'
-import { api, EntityType } from '~workers/utils/poster'
+import { api, EntityType, TransactionStatus } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 import { getStripe } from '~workers/utils/stripe'
 
@@ -101,7 +101,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		const [orders, allProducts] = await Promise.all([
 			api.dash.getTransactions(c.env.POSTER_TOKEN, {
 				include_products: 'true',
-				status: '0',
+				status: TransactionStatus.All,
 			}),
 			api.menu.getMenuProducts(c.env.POSTER_TOKEN),
 		])
@@ -172,7 +172,13 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 			// Verify the order belongs to the authenticated client
 			if (order.client_id !== clientId.toString()) {
-				throw new HTTPException(403, { message: 'Access denied' })
+				if (order.status === TransactionStatus.Open) {
+					throw new HTTPException(403, { message: 'Access denied' })
+				}
+
+				const { client_id, ...rest } = order
+
+				return c.json(rest)
 			}
 
 			return c.json(order)

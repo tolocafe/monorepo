@@ -20,6 +20,7 @@ Comprehensive styling guidelines using react-native-unistyles for scalable, perf
 ## Theme Architecture
 
 ### Theme Structure
+
 - Define semantic colors (primary, secondary, accent)
 - Include neutral colors (background, surface, card)
 - Organize text colors by hierarchy (primary, secondary, tertiary, inverse)
@@ -28,30 +29,35 @@ Comprehensive styling guidelines using react-native-unistyles for scalable, perf
 - Define border colors for different states
 
 ### Spacing System
+
 - Use consistent spacing scale (xs, sm, md, lg, xl, xxl, xxxl)
 - Base spacing on 4px or 8px grid system
 - Apply spacing consistently across all components
 - Use semantic spacing names rather than pixel values
 
 ### Typography Scale
+
 - Define font families (regular, medium, semiBold, bold)
 - Create consistent font size scale
 - Match line heights to font sizes appropriately
 - Use system fonts for better performance
 
 ### Border Radius System
+
 - Create consistent border radius scale
 - Use semantic names (xs, sm, md, lg, xl, full)
 - Apply consistently across components
 - Consider platform-specific preferences
 
 ### Shadow System
+
 - Define shadow levels (sm, md, lg)
 - Include both iOS and Android shadow properties
 - Use elevation for Android, shadow properties for iOS
 - Maintain visual consistency across platforms
 
 ### Theme Configuration
+
 - Register themes with UnistylesRegistry
 - Support adaptive themes for system preference
 - Set appropriate initial theme
@@ -60,6 +66,7 @@ Comprehensive styling guidelines using react-native-unistyles for scalable, perf
 ## Styling Patterns
 
 ### Component Styling Structure
+
 - Use createStyleSheet for component styles
 - Access theme and runtime parameters
 - Support component variants through style variants
@@ -67,6 +74,7 @@ Comprehensive styling guidelines using react-native-unistyles for scalable, perf
 - Use TypeScript interfaces for component props
 
 ### Layout Components
+
 - Create reusable layout utilities (flex, alignment, containers)
 - Use semantic layout patterns (container, safeContainer, card, section)
 - Apply consistent spacing and sizing
@@ -75,18 +83,21 @@ Comprehensive styling guidelines using react-native-unistyles for scalable, perf
 ## Advanced Patterns
 
 ### Responsive Design
+
 - Use runtime screen width for breakpoint-based styling
 - Implement adaptive containers for different screen sizes
 - Create responsive grid systems
 - Handle orientation changes appropriately
 
 ### Animation Support
+
 - Prepare styles for animations with transform and opacity
 - Support hover states for web platforms
 - Handle pressed states for touch interactions
 - Use appropriate animation-ready properties
 
 ### Complex Component Styling
+
 - Structure styles for complex components logically
 - Use variants for different component states
 - Handle interactive states consistently
@@ -94,13 +105,15 @@ Comprehensive styling guidelines using react-native-unistyles for scalable, perf
 
 ## Performance Optimization
 
-### Style Memoization
-- Memoize expensive style calculations
-- Use runtime conditions efficiently
-- Avoid unnecessary style recalculations
-- Cache complex style computations
+### Efficient Style Patterns
+
+- Use Unistyles variants for conditional styling (not inline conditionals)
+- Leverage runtime conditions efficiently within createStyleSheet
+- Avoid recalculating styles outside of Unistyles patterns
+- Group related style variations together
 
 ### Conditional Styling
+
 - Use variants instead of inline conditionals
 - Group related style variations together
 - Minimize runtime style calculations
@@ -109,18 +122,21 @@ Comprehensive styling guidelines using react-native-unistyles for scalable, perf
 ## Best Practices
 
 ### Theme Token Usage
+
 - Always use theme tokens instead of hardcoded values
 - Reference theme colors, spacing, and typography consistently
 - Avoid magic numbers in styles
 - Use semantic naming for theme values
 
 ### Component Composition
+
 - Create reusable style utilities
 - Use utility classes for common patterns
 - Compose styles efficiently
 - Avoid style duplication
 
 ### Platform-Specific Styling
+
 - Handle iOS-specific shadow properties
 - Use Android elevation appropriately
 - Apply web-specific styles when needed
@@ -129,12 +145,14 @@ Comprehensive styling guidelines using react-native-unistyles for scalable, perf
 ## Testing Styles
 
 ### Style Testing Utilities
+
 - Test theme color application
 - Verify responsive behavior
 - Test theme switching functionality
 - Validate accessibility properties
 
 ### Testing Strategy
+
 - Unit test style calculations
 - Integration test theme changes
 - Visual regression testing
