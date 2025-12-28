@@ -11,18 +11,12 @@ import { identifyPostHogUser } from '../utils/posthog'
 import type { Bindings } from '../types'
 
 export type JwtUserVariables = {
-	jwt?: {
-		payload: JWTPayload
-		token: string
-		userId: number
-	}
-}
-
-export type AuthenticatedJwtVariables = {
 	jwt: {
-		payload: JWTPayload
-		token: string
-		userId: number
+		verify: () => Promise<{
+			payload: JWTPayload
+			token: string
+			userId: number
+		}>
 	}
 }
 
@@ -40,61 +34,62 @@ export function jwtUserMiddleware() {
 			getCookie(context, 'tolo_session') ||
 			null
 
-		if (!token) {
-			return next()
-		}
+		let authResult:
+			| { payload: JWTPayload; token: string; userId: number }
+			| null
+			| undefined = undefined
 
-		const [clientId, payload] = await verifyJwt(token, context.env.JWT_SECRET)
+		const verifyAuth = async () => {
+			if (authResult !== undefined) {
+				if (authResult === null) {
+					throw new HTTPException(401, { message: 'Unauthorized' })
+				}
+				return authResult
+			}
 
-		if (!clientId || !payload) {
-			return next()
-		}
+			if (!token) {
+				authResult = null
+				throw new HTTPException(401, { message: 'Unauthorized' })
+			}
 
-		const userId = Number.parseInt(clientId, 10)
-		const userEmail = 'email' in payload ? (payload.email as string) : undefined
-		const userName = 'name' in payload ? (payload.name as string) : undefined
-		const userPhone = 'phone' in payload ? (payload.phone as string) : undefined
+			const [clientId, payload] = await verifyJwt(token, context.env.JWT_SECRET)
 
-		Sentry.setUser({
-			email: userEmail,
-			id: userId.toString(),
-			name: userName,
-			phone: userPhone,
-		})
+			if (!clientId || !payload) {
+				authResult = null
+				throw new HTTPException(401, { message: 'Unauthorized' })
+			}
 
-		identifyPostHogUser(
-			context as unknown as Context<{ Bindings: Bindings }>,
-			userId.toString(),
-			{
+			const userId = Number.parseInt(clientId, 10)
+			const userEmail =
+				'email' in payload ? (payload.email as string) : undefined
+			const userName = 'name' in payload ? (payload.name as string) : undefined
+			const userPhone =
+				'phone' in payload ? (payload.phone as string) : undefined
+
+			Sentry.setUser({
 				email: userEmail,
+				id: userId.toString(),
 				name: userName,
 				phone: userPhone,
-			},
-		)
+			})
+
+			identifyPostHogUser(
+				context as unknown as Context<{ Bindings: Bindings }>,
+				userId.toString(),
+				{
+					email: userEmail,
+					name: userName,
+					phone: userPhone,
+				},
+			)
+
+			authResult = { payload, token, userId }
+			return authResult
+		}
 
 		context.set('jwt', {
-			payload,
-			token,
-			userId,
+			verify: verifyAuth,
 		})
-
-		return next()
-	})
-}
-
-/**
- * Middleware to require authentication
- */
-export function requireAuth() {
-	return createMiddleware<{
-		Bindings: Bindings
-		Variables: AuthenticatedJwtVariables
-	}>(async (context, next) => {
-		const jwt = context.get('jwt')
-
-		if (!jwt) {
-			throw new HTTPException(401, { message: 'Unauthorized' })
-		}
 
 		return next()
 	})
