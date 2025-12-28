@@ -84,3 +84,20 @@ jest.mock('zustand', () => ({
 	// eslint-disable-next-line unicorn/consistent-function-scoping
 	create: jest.fn(() => () => null),
 }))
+
+// Mock PostHog
+jest.mock('posthog-react-native', () => {
+	const mockPostHog = {
+		capture: jest.fn(),
+		flush: jest.fn(() => Promise.resolve()),
+		identify: jest.fn(),
+		reset: jest.fn(() => Promise.resolve()),
+	}
+
+	return {
+		__esModule: true,
+		default: jest.fn(() => mockPostHog),
+		PostHogProvider: ({ children }) => children,
+		usePostHog: jest.fn(() => mockPostHog),
+	}
+})
