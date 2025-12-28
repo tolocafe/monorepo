@@ -9,7 +9,7 @@ import { authenticate } from '~workers/utils/jwt'
 import { api } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 
-import type { Product, QueueItemState } from '~common/api'
+import type { Product } from '~common/api'
 import type { Bindings } from '~workers/types'
 
 /** KV key prefix for queue item states */
@@ -18,9 +18,23 @@ const QUEUE_STATE_PREFIX = 'queue:state:'
 /** TTL for queue states (24 hours - orders should be completed by then) */
 const QUEUE_STATE_TTL = 60 * 60 * 24
 
-/** Generate KV key for a queue item state */
-function getQueueStateKey(transactionId: number, lineIndex: number): string {
-	return `${QUEUE_STATE_PREFIX}${transactionId}:${lineIndex}`
+/** Generate KV key for a transaction's queue states */
+function getQueueStateKey(transactionId: number): string {
+	return `${QUEUE_STATE_PREFIX}${transactionId}`
+}
+
+/** State for a single line item */
+type LineState = {
+	status: 'delivered' | 'unselected' | 'working'
+	updatedAt: string
+	updatedBy: string
+	updatedByClientId: number
+}
+
+/** All line states for a transaction */
+type TransactionQueueState = {
+	lines: Record<number, LineState>
+	transactionId: number
 }
 
 // Modifiers to ignore (not displayed in barista queue)
@@ -90,7 +104,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 		return c.json(orders)
 	})
-	.get('/barista/queue/states', async (c) => {
+	.post('/barista/queue/states', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		// Verify user is a barista
@@ -103,18 +117,32 @@ const orders = new Hono<{ Bindings: Bindings }>()
 			throw new HTTPException(403, { message: 'Access denied' })
 		}
 
-		// List all keys with the queue state prefix and fetch their values
-		const listResult = await c.env.KV_CMS.list({ prefix: QUEUE_STATE_PREFIX })
-		const states: QueueItemState[] = []
+		// Get transaction IDs from request body
+		const body = (await c.req.json()) as { transactionIds?: number[] }
+		const transactionIds = body.transactionIds ?? []
 
-		for (const key of listResult.keys) {
-			const value = await c.env.KV_CMS.get<QueueItemState>(key.name, 'json')
-			if (value) {
-				states.push(value)
+		if (transactionIds.length === 0) {
+			return c.json({})
+		}
+
+		// Fetch states for all requested transactions in parallel
+		const results = await Promise.all(
+			transactionIds.map(async (txId) => {
+				const key = getQueueStateKey(txId)
+				const state = await c.env.KV_CMS.get<TransactionQueueState>(key, 'json')
+				return [txId, state] as const
+			}),
+		)
+
+		// Build response map: transactionId -> lines
+		const statesMap: Record<number, TransactionQueueState['lines']> = {}
+		for (const [txId, state] of results) {
+			if (state?.lines) {
+				statesMap[txId] = state.lines
 			}
 		}
 
-		return c.json(states)
+		return c.json(statesMap)
 	})
 	.put('/barista/queue/state', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
@@ -140,24 +168,37 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		const updatedBy =
 			`${client.firstname ?? ''} ${client.lastname ?? ''}`.trim() || 'Unknown'
 
-		const key = getQueueStateKey(transactionId, lineIndex)
-		const state: QueueItemState = {
-			lineIndex,
+		const key = getQueueStateKey(transactionId)
+
+		// Get existing state for this transaction
+		const existing = await c.env.KV_CMS.get<TransactionQueueState>(key, 'json')
+
+		const lineState: LineState = {
 			status,
-			transactionId,
 			updatedAt: new Date().toISOString(),
 			updatedBy,
 			updatedByClientId: clientId,
 		}
 
+		const newState: TransactionQueueState = {
+			lines: {
+				...(existing?.lines ?? {}),
+				[lineIndex]: lineState,
+			},
+			transactionId,
+		}
+
 		// Store in KV with TTL
-		await c.env.KV_CMS.put(key, JSON.stringify(state), {
+		await c.env.KV_CMS.put(key, JSON.stringify(newState), {
 			expirationTtl: QUEUE_STATE_TTL,
 		})
 
 		return c.json({
-			...state,
+			lineIndex,
+			status,
 			success: true,
+			transactionId,
+			updatedBy,
 		})
 	})
 	.get('/barista/queue', async (c) => {

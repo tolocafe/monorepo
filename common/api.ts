@@ -601,20 +601,21 @@ export type UpdateClientBody = Partial<{
 }>
 
 /**
- * Queue item state for barista queue management
- * Tracks the preparation status of individual order line items
+ * State for a single line item in the queue
  */
-export type QueueItemState = {
-	/** Line index within the transaction */
-	lineIndex: number
+export type QueueLineState = {
 	/** Status: 'unselected' | 'working' | 'delivered' */
 	status: 'delivered' | 'unselected' | 'working'
-	/** Transaction ID from Poster */
-	transactionId: number
 	/** Timestamp of last update */
-	updatedAt?: string
+	updatedAt: string
 	/** Name of the team member who last updated this item */
-	updatedBy?: string
+	updatedBy: string
 	/** Client ID of the team member who last updated */
-	updatedByClientId?: number
+	updatedByClientId: number
 }
+
+/**
+ * Map of transaction ID to line states
+ * Line states are keyed by line index (as string due to JSON)
+ */
+export type QueueStatesMap = Record<number, Record<string, QueueLineState>>

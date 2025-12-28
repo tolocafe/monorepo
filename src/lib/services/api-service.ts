@@ -100,8 +100,12 @@ export const api = {
 	orders: {
 		baristaQueue: () =>
 			privateClient.get<DashTransaction[]>('orders/barista/queue').json(),
-		baristaQueueStates: () =>
-			privateClient.get<QueueItemState[]>('orders/barista/queue/states').json(),
+		baristaQueueStates: (transactionIds: number[]) =>
+			privateClient
+				.post<QueueStatesMap>('orders/barista/queue/states', {
+					json: { transactionIds },
+				})
+				.json(),
 		create: (orderData: CreateOrder) =>
 			privateClient
 				.post<CreateOrderResponse>('orders', { json: orderData })
