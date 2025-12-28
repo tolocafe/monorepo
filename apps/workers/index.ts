@@ -6,6 +6,8 @@ import { HTTPException } from 'hono/http-exception'
 
 import type { SupportedLocale } from '~common/locales'
 
+import { jwtUserMiddleware } from './lib/jwt-user-middleware'
+import type { JwtUserVariables } from './lib/jwt-user-middleware'
 import { languageDetector } from './lib/language-detector'
 import auth from './routes/auth'
 import broadcast from './routes/broadcast'
@@ -22,11 +24,10 @@ import transactionsRouter from './routes/transactions'
 import webhooks from './routes/webhooks'
 import scheduledHandler from './scheduled'
 import { defaultJsonHeaders } from './utils/headers'
-import { authenticate } from './utils/jwt'
 
 import type { Bindings } from './types'
 
-type Variables = {
+type Variables = JwtUserVariables & {
 	language: SupportedLocale
 }
 
@@ -38,6 +39,7 @@ const TOLO_DOMAIN = 'tolo.cafe'
 
 app
 	.use(languageDetector)
+	.use(jwtUserMiddleware())
 	.use(
 		'*',
 		cors({
@@ -56,26 +58,6 @@ app
 			},
 		}),
 	)
-	.use(async (context, next) => {
-		try {
-			const [clientId, payload] = await authenticate(
-				context,
-				context.env.JWT_SECRET,
-			)
-
-			if (clientId) {
-				Sentry.setUser({
-					email: 'email' in payload ? (payload.email as string) : undefined,
-					id: clientId.toString(),
-					name: 'name' in payload ? (payload.name as string) : undefined,
-					phone: 'phone' in payload ? (payload.phone as string) : undefined,
-				})
-			}
-		} catch {
-			//
-		}
-		return next()
-	})
 
 app
 	.get('/', (context) =>
