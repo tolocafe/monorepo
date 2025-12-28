@@ -187,7 +187,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 		const body = (await context.req.json()) as unknown
 
-		if (typeof body !== 'object' || body == null) {
+		if (typeof body !== 'object' || body === null) {
 			throw new HTTPException(400, { message: 'Invalid body' })
 		}
 

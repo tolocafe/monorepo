@@ -30,7 +30,7 @@ export const persistMaxAge = ONE_MONTH
 
 function retryDelay(attemptIndex: number, error: unknown) {
 	if (error instanceof HTTPError && error.response.headers.get('Retry-After')) {
-		return Number.parseInt(error.response.headers.get('Retry-After') ?? '0', 10)
+		return Number(error.response.headers.get('Retry-After') ?? '0')
 	}
 
 	return Math.min(1000 * 2 ** attemptIndex, 10_000)

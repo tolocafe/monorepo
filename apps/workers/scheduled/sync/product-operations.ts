@@ -65,7 +65,7 @@ export async function ensureProduct(
 		await ensureCategory(
 			database,
 			token,
-			Number.parseInt(product.menu_category_id, 10),
+			Number(product.menu_category_id),
 			cache,
 		)
 	}
@@ -87,7 +87,7 @@ export async function ensureProduct(
  * Upsert a dish for a product
  */
 export async function upsertDish(database: Database, product: PosterProduct) {
-	const id = Number.parseInt(product.product_id, 10)
+	const id = Number(product.product_id)
 	const payload = {
 		cookingTime: product.cooking_time || null,
 		id,
@@ -117,8 +117,8 @@ export async function upsertProductIngredients(
 		await database
 			.insert(productIngredients)
 			.values({
-				ingredientId: Number.parseInt(ingredient.ingredient_id, 10),
-				productId: Number.parseInt(product.product_id, 10),
+				ingredientId: Number(ingredient.ingredient_id),
+				productId: Number(product.product_id),
 				quantity: ingredient.ingredient_weight || null,
 			})
 			.onConflictDoUpdate({

@@ -209,6 +209,7 @@ async function generateAPNsJWT(environment: Bindings): Promise<string> {
 		captureException(error)
 		throw new Error(
 			`Failed to generate APNs JWT: ${error instanceof Error ? error.message : 'Unknown error'}`,
+			{ cause: error },
 		)
 	}
 }

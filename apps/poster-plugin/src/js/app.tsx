@@ -25,7 +25,7 @@ export default function App() {
 
 			if (place === 'order') {
 				void Poster.interface.scanBarcode().then(({ barcode }) => {
-					const customerId = Number.parseInt(barcode.replace('TOLO-', ''))
+					const customerId = Number(barcode.replace('TOLO-', ''))
 					void Poster.orders.setOrderClient(order.id, customerId)
 
 					Poster.interface.popup({

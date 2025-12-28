@@ -17,10 +17,10 @@ import { toCents } from './utils'
 export function mapClient(client: ClientData | null, id: number) {
 	return {
 		birthday: client?.birthday ?? null,
-		bonus: client?.bonus ? Number.parseInt(client.bonus, 10) : null,
+		bonus: client?.bonus ? Number(client.bonus) : null,
 		city: client?.city ?? null,
 		clientGroupId: client?.client_groups_id
-			? Number.parseInt(client.client_groups_id, 10)
+			? Number(client.client_groups_id)
 			: null,
 		clientGroupName: client?.client_groups_name ?? null,
 		comment: client?.comment ?? null,
@@ -54,7 +54,7 @@ export function mapModifierGroup(
 		name: group.name,
 		numMax: group.num_max,
 		numMin: group.num_min,
-		productId: Number.parseInt(productId, 10),
+		productId: Number(productId),
 		type: group.type,
 	} satisfies typeof productModifierGroups.$inferInsert
 }
@@ -79,11 +79,11 @@ export function mapProduct(product: PosterProduct) {
 				: (product['small-description'] ?? null),
 		differentSpotRaw: product.different_spots_prices || null,
 		hidden: product.hidden === '1',
-		id: Number.parseInt(product.product_id, 10),
+		id: Number(product.product_id),
 		intensity: product.intensity || null,
-		masterId: product.master_id ? Number.parseInt(product.master_id, 10) : null,
+		masterId: product.master_id ? Number(product.master_id) : null,
 		menuCategoryId: product.menu_category_id
-			? Number.parseInt(product.menu_category_id, 10)
+			? Number(product.menu_category_id)
 			: null,
 		name: product.product_name,
 		noDiscount: product.nodiscount === '1',
@@ -97,8 +97,8 @@ export function mapProduct(product: PosterProduct) {
 		smallDescription: product['small-description'] || null,
 		sourcesRaw: JSON.stringify(product.sources),
 		spotsRaw: JSON.stringify(product.spots),
-		taxId: product.tax_id ? Number.parseInt(product.tax_id, 10) : null,
-		type: product.type ? Number.parseInt(product.type, 10) : null,
+		taxId: product.tax_id ? Number(product.tax_id) : null,
+		type: product.type ? Number(product.type) : null,
 		unit: product.unit || null,
 		volume: product.volume || null,
 		weightFlag: product.weight_flag === '1',

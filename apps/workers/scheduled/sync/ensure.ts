@@ -70,7 +70,7 @@ export async function ensureCategory(
 	try {
 		const categories = await api.menu.getMenuCategories(token)
 		foundCategory = categories.find(
-			(category) => Number.parseInt(category.category_id, 10) === id,
+			(category) => Number(category.category_id) === id,
 		)
 	} catch (error) {
 		Sentry.captureException(error, {
@@ -88,11 +88,11 @@ export async function ensureCategory(
 			id,
 			name: foundCategory.category_name,
 			parentId: foundCategory.parent_category
-				? Number.parseInt(foundCategory.parent_category, 10)
+				? Number(foundCategory.parent_category)
 				: null,
-			sortOrder: Number.parseInt(foundCategory.sort_order, 10),
+			sortOrder: Number(foundCategory.sort_order),
 			tag: foundCategory.category_tag ?? null,
-			taxId: Number.parseInt(foundCategory.tax_id, 10),
+			taxId: Number(foundCategory.tax_id),
 			visibleRaw: JSON.stringify(foundCategory.visible ?? []),
 		} satisfies typeof menuCategories.$inferInsert)
 
@@ -168,7 +168,7 @@ export async function ensureCustomer(
 	const payload = await api.clients.getClientById(token, id)
 	const clientGroupId =
 		payload?.client_groups_id && payload.client_groups_id !== '0'
-			? Number.parseInt(payload.client_groups_id, 10)
+			? Number(payload.client_groups_id)
 			: null
 	const clientGroupName = payload?.client_groups_name ?? null
 
@@ -194,7 +194,7 @@ export async function ensureIngredient(
 	ingredient: PosterIngredient,
 	cache: Cache,
 ) {
-	const id = Number.parseInt(ingredient.ingredient_id, 10)
+	const id = Number(ingredient.ingredient_id)
 	if (cache.ingredients.has(id)) return
 
 	const payload = {

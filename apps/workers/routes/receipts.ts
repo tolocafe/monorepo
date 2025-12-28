@@ -19,7 +19,9 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 			const order = await api.dash.getTransaction(
 				context.env.POSTER_TOKEN,
 				orderId,
-				{ include_products: 'true' },
+				{
+					include_products: 'true',
+				},
 			)
 
 			// Check if order exists
@@ -57,8 +59,7 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 			// Calculate totals
 			let subtotal = 0
 			const products = order.products?.map((item) => {
-				const total =
-					Number.parseInt(item.product_price) * Number.parseInt(item.num)
+				const total = Number(item.product_price) * Number(item.num)
 
 				subtotal += total
 
@@ -69,8 +70,8 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 
 				return {
 					name: productName,
-					price: Number.parseInt(item.product_price),
-					quantity: Number.parseInt(item.num),
+					price: Number(item.product_price),
+					quantity: Number(item.num),
 					total,
 				}
 			})
@@ -81,15 +82,14 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 						? `${client.firstname} ${client.lastname}`.trim()
 						: undefined,
 					date: new Date().toISOString(),
-					discount:
-						Number.parseInt(order.sum) - Number.parseInt(order.payed_sum),
+					discount: Number(order.sum) - Number(order.payed_sum),
 					orderId,
 					products: products ?? [],
 					subtotal,
-					tax: Number.parseInt(order.tax_sum),
-					tip: Number.parseInt(order.tip_sum),
+					tax: Number(order.tax_sum),
+					tip: Number(order.tip_sum),
 					title: 'Recibo de Compra',
-					total: Number.parseInt(order.payed_sum),
+					total: Number(order.payed_sum),
 				},
 				context.env.BROWSER,
 			)

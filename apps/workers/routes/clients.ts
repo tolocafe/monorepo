@@ -56,7 +56,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 
 		const client = await api.clients.getClientById(
 			c.env.POSTER_TOKEN,
-			Number.parseInt(id, 10),
+			Number(id),
 		)
 
 		if (!client) {
@@ -65,19 +65,24 @@ const clients = new Hono<{ Bindings: Bindings }>()
 
 		const clientTransactions = await api.dash.getTransactions(
 			c.env.POSTER_TOKEN,
-			{ date_from: '2025-01-01', id, status: '2', type: 'clients' },
+			{
+				date_from: '2025-01-01',
+				id,
+				status: '2',
+				type: 'clients',
+			},
 		)
 
 		const pointsData = await getCustomerStamps(
 			c.env.D1_TOLO,
-			Number.parseInt(id, 10),
+			Number(id),
 			clientTransactions.length,
 		)
 
 		// Check if customer can redeem birthday drink
 		const canRedeemBirthday = await canRedeemBirthdayDrink(
 			c.env.D1_TOLO,
-			Number.parseInt(id, 10),
+			Number(id),
 			client.birthday,
 		)
 
@@ -122,7 +127,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			})
 			.parse(bodyUnknown)
 
-		const clientId = Number.parseInt(id, 10)
+		const clientId = Number(id)
 
 		// Validate the redemption is allowed
 		if (body.type === 'birthday') {
@@ -143,7 +148,12 @@ const clients = new Hono<{ Bindings: Bindings }>()
 		} else {
 			const clientTransactions = await api.dash.getTransactions(
 				c.env.POSTER_TOKEN,
-				{ date_from: '2025-01-01', id, status: '2', type: 'clients' },
+				{
+					date_from: '2025-01-01',
+					id,
+					status: '2',
+					type: 'clients',
+				},
 			)
 			const pointsData = await getCustomerStamps(
 				c.env.D1_TOLO,
@@ -198,7 +208,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 
 		const posterClient = await api.clients.updateClient(
 			c.env.POSTER_TOKEN,
-			Number.parseInt(id, 10),
+			Number(id),
 			parsedBody,
 		)
 

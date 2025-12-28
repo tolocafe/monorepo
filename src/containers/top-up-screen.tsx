@@ -280,8 +280,7 @@ export default function TopUpScreen() {
 				<Paragraph style={styles.infoText}>
 					<Trans>
 						💳 Secure payments powered by Stripe
-						{'\n'}
-						🔒 Your payment information is encrypted and secure
+						{'\n'}🔒 Your payment information is encrypted and secure
 					</Trans>
 				</Paragraph>
 			</TabScreenContainer>

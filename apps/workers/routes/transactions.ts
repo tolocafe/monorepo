@@ -33,7 +33,10 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 			clientId.toString(),
 		)
 
-		if (posterCustomer?.ewallet == null) {
+		if (
+			posterCustomer?.ewallet === null ||
+			posterCustomer?.ewallet === undefined
+		) {
 			throw new HTTPException(400, { message: 'Client has no e-wallet' })
 		}
 
@@ -69,7 +72,10 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 
 		const transactionId = await api.clients.addEWalletTransaction(
 			c.env.POSTER_TOKEN,
-			{ amount: body.amount, client_id: clientId },
+			{
+				amount: body.amount,
+				client_id: clientId,
+			},
 		)
 
 		return c.json({ id: transactionId })

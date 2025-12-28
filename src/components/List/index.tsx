@@ -56,7 +56,7 @@ export function List({ children, style, testID }: ListProps) {
 		<Card style={style} testID={testID}>
 			{items.map((child, index, items) => {
 				const key =
-					isValidElement(child) && child.key != null ? child.key : index
+					isValidElement(child) && child.key !== null ? child.key : index
 
 				const showDivider = index < items.length - 1
 

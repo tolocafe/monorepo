@@ -364,9 +364,7 @@ export default function MenuDetail() {
 																}
 																right={
 																	modification.price
-																		? `+${formatPrice(
-																				modification.price * 100,
-																			)}`
+																		? `+${formatPrice(modification.price * 100)}`
 																		: null
 																}
 															>

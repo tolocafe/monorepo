@@ -2,15 +2,13 @@
 	"name": "@tolo/poster-plugin",
 	"version": "1.0.0",
 	"description": "",
+	"license": "MIT",
+	"author": "",
 	"scripts": {
 		"dev": "vite build --watch & vite --host",
 		"build": "vite build",
-		"deploy": "node upload.mjs",
-		"lint": "eslint . --ext .js,.jsx",
-		"format": "prettier --write ."
+		"deploy": "node upload.mjs"
 	},
-	"author": "",
-	"license": "MIT",
 	"dependencies": {
 		"caniuse-lite": "^1.0.30001755",
 		"os-browserify": "^0.3.0",
@@ -38,7 +36,6 @@
 		"eslint-plugin-unicorn": "~62.0.0",
 		"globals": "~16.5.0",
 		"md5": "~2.2.1",
-		"prettier": "~3.6.2",
 		"request": "~2.88.0",
 		"sass": "^1.97.1",
 		"shelljs": "~0.8.5",

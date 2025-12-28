@@ -33,7 +33,7 @@ export async function upsertLineModifiers(
 
 	if (product.modification) {
 		for (const module_ of product.modification) {
-			const modifierId = Number.parseInt(module_.m, 10)
+			const modifierId = Number(module_.m)
 			if (!Number.isFinite(modifierId)) continue
 			await ensureModifier(database, modifierId, cache)
 			modifiersToPersist.push({
@@ -104,7 +104,7 @@ export async function upsertModifier(
 		isDeleted: false,
 		name: safeName,
 		priceDiff: module_.price ? toCents(module_.price) : null,
-		productId: Number.parseInt(productId, 10),
+		productId: Number(productId),
 	} satisfies typeof productModifiers.$inferInsert
 
 	await database.insert(productModifiers).values(payload).onConflictDoUpdate({
@@ -132,17 +132,13 @@ export async function upsertOrderLines(
 
 	let lineIndex = 0
 	for (const product of tx.products) {
-		const productId = product.product_id
-			? Number.parseInt(product.product_id, 10)
-			: null
+		const productId = product.product_id ? Number(product.product_id) : null
 
 		if (productId) {
 			await ensureProduct(database, token, productId, cache)
 		}
 
-		const categoryId = product.category_id
-			? Number.parseInt(product.category_id, 10)
-			: null
+		const categoryId = product.category_id ? Number(product.category_id) : null
 
 		if (categoryId) {
 			await ensureCategory(database, token, categoryId, cache)
@@ -159,8 +155,8 @@ export async function upsertOrderLines(
 			productId,
 			productName: product.product_name ?? null,
 			productSum: product.product_sum ? toCents(product.product_sum) : null,
-			quantity: product.num ? Number.parseInt(product.num, 10) : null,
-			transactionId: Number.parseInt(tx.transaction_id, 10),
+			quantity: product.num ? Number(product.num) : null,
+			transactionId: Number(tx.transaction_id),
 		}
 
 		await database

@@ -80,7 +80,7 @@ export default async function createApplePass(
 	// Calculate stamps based on transactions and redemptions
 	const stampsData = await getCustomerStamps(
 		context.env.D1_TOLO,
-		Number.parseInt(client.client_id, 10),
+		Number(client.client_id),
 		transactionsCount,
 	)
 
@@ -117,6 +117,7 @@ export default async function createApplePass(
 
 	const discountPercentage = Number.parseInt(
 		client.discount_per || client.client_groups_discount || '0',
+		10,
 	)
 	if (discountPercentage) {
 		pass.auxiliaryFields.push({

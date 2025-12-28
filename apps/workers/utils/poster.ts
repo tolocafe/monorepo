@@ -82,7 +82,7 @@ export async function posterFetch<TResponse = unknown>(
 
 	currentScope.setContext('Fetch Response', { Data: data })
 
-	if (data.response != null) {
+	if (data.response) {
 		return data.response
 	}
 
@@ -99,7 +99,7 @@ function getCleanedParameters(
 	parameters?: Record<string, boolean | number | string | undefined>,
 ) {
 	const filteredParameters = Object.entries(parameters ?? {}).filter(
-		([_, value]) => value != null,
+		([_, value]) => value !== null && value !== undefined,
 	)
 
 	const stringParameters = filteredParameters.map(([key, value]) => [
@@ -421,7 +421,7 @@ export const api = {
 				}[]
 			>
 
-			if (data.response != null) return data.response
+			if (data.response) return data.response
 
 			return []
 		},
@@ -619,7 +619,7 @@ export const api = {
 				products: unknown[]
 			}>
 
-			if (data.response != null) return data.response
+			if (data.response) return data.response
 
 			getCurrentScope().setExtra('Fetch Data', data)
 
@@ -645,7 +645,7 @@ export const api = {
 				`${BASE_URL}/incomingOrders.getIncomingOrders?${getSearchParameters({ token, ...options })}`,
 			).then((response) => response.json())) as PosterResponse<IncomingOrder[]>
 
-			if (data.response != null) return data.response
+			if (data.response) return data.response
 
 			getCurrentScope().setExtra('Fetch Data', data)
 
@@ -680,7 +680,8 @@ export const api = {
 				`${BASE_URL}/menu.getCategories?${getSearchParameters({ token })}`,
 			).then((response) => response.json())) as PosterResponse<Category[]>
 
-			if (data.response != null) return data.response
+			if (data.response !== null && data.response !== undefined)
+				return data.response
 
 			throw new Error('Failed to get menu categories')
 		},

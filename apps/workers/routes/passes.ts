@@ -16,7 +16,7 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 	async (context) => {
 		try {
 			const platform = context.req.query('platform')
-			const clientId = Number.parseInt(context.req.param('clientId'), 10)
+			const clientId = Number(context.req.param('clientId'))
 			const [authenticatedClientId] = await authenticate(
 				context,
 				context.env.JWT_SECRET,

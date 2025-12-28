@@ -45,9 +45,7 @@ export async function syncDateRange(
 
 	// Sort by ID to process oldest first
 	const toProcess = [...fetched].toSorted(
-		(a, b) =>
-			Number.parseInt(a.transaction_id, 10) -
-			Number.parseInt(b.transaction_id, 10),
+		(a, b) => Number(a.transaction_id) - Number(b.transaction_id),
 	)
 
 	const created: DashTransaction[] = []
@@ -104,7 +102,7 @@ export async function syncDateRange(
 
 	const lastProcessed = toProcess.at(-1)
 	const lastProcessedId = lastProcessed
-		? Number.parseInt(lastProcessed.transaction_id, 10)
+		? Number(lastProcessed.transaction_id)
 		: undefined
 
 	return {

@@ -18,8 +18,7 @@ import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
-import { enableAnalytics, identify } from '@/lib/analytics'
-import { trackEvent } from '@/lib/analytics'
+import { enableAnalytics, identify, trackEvent } from '@/lib/analytics'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import {
 	requestOtpMutationOptions,

@@ -46,10 +46,7 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 
 		const [products, customer, transactions] = await Promise.all([
 			api.menu.getMenuProducts(context.env.POSTER_TOKEN),
-			api.clients.getClientById(
-				context.env.POSTER_TOKEN,
-				Number.parseInt(customerId),
-			),
+			api.clients.getClientById(context.env.POSTER_TOKEN, Number(customerId)),
 			api.dash.getTransactions(context.env.POSTER_TOKEN, {
 				date_from: last90Days.toISOString().split('T')[0],
 				id: customerId,
@@ -61,18 +58,23 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 		// Get closed transactions for 2025 to calculate stamps
 		const closedTransactions2025 = await api.dash.getTransactions(
 			context.env.POSTER_TOKEN,
-			{ date_from: '2025-01-01', id: customerId, status: '2', type: 'clients' },
+			{
+				date_from: '2025-01-01',
+				id: customerId,
+				status: '2',
+				type: 'clients',
+			},
 		)
 
 		const stampsData = await getCustomerStamps(
 			context.env.D1_TOLO,
-			Number.parseInt(customerId),
+			Number(customerId),
 			closedTransactions2025.length,
 		)
 
 		const canRedeemBirthday = await canRedeemBirthdayDrink(
 			context.env.D1_TOLO,
-			Number.parseInt(customerId),
+			Number(customerId),
 			customer?.birthday,
 		)
 
@@ -103,8 +105,8 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 
 		const customerTransactions = transactions.map((transaction) => ({
 			amount: formatAmount(transaction.sum),
-			date: new Date(Number.parseInt(transaction.date_start)).toISOString(),
-			guestCount: Number.parseInt(transaction.guests_count ?? '1'),
+			date: new Date(Number(transaction.date_start)).toISOString(),
+			guestCount: Number(transaction.guests_count ?? '1'),
 			products: transaction.products?.map((transactionProduct) => {
 				const menuProduct = products.find(
 					(p) => p.product_id === transactionProduct.product_id,
@@ -114,7 +116,7 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 					category: menuProduct?.category_name,
 					// modifications: [], // add modifications for this product order
 					name: menuProduct?.product_name,
-					number: Number.parseInt(transactionProduct.num),
+					number: Number(transactionProduct.num),
 				}
 			}),
 			serviceMode: getServiceMode(transaction.service_mode),

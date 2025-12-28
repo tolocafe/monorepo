@@ -80,6 +80,8 @@ export function Text({ align, style, weight, ...rest }: BaseTextProps) {
 	return <RNText {...rest} style={[styles.text, style]} />
 }
 
+export default Text
+
 const styles = StyleSheet.create((theme) => ({
 	h1: {
 		fontSize: theme.typography.h1.fontSize,

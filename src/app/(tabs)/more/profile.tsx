@@ -11,7 +11,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import Button from '@/components/Button'
-import { Input } from '@/components/Input'
+import Input from '@/components/Input'
 import { List, ListItem } from '@/components/List'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label } from '@/components/Text'
@@ -30,10 +30,7 @@ export default function ProfileScreen() {
 
 	const { data: user } = useQuery(selfQueryOptions)
 
-	const nameSchema = z
-		.string()
-		.trim()
-		.min(1, t`Please enter your name`)
+	const nameSchema = z.string().trim().min(1, t`Please enter your name`)
 
 	const emailSchema = z.email(t`Enter a valid email`).trim()
 

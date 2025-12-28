@@ -23,65 +23,62 @@ export type JwtUserVariables = {
 /**
  * Middleware for JWT authentication with Sentry and PostHog integration
  */
-export function jwtUserMiddleware() {
-	return createMiddleware<{
-		Bindings: Bindings
-		Variables: JwtUserVariables
-	}>(async (context, next) => {
-		const token =
-			context.req.query('authenticationToken') ||
-			extractToken(context.req.header('Authorization')) ||
-			getCookie(context, 'tolo_session') ||
-			null
+export const jwtUserMiddleware = createMiddleware<{
+	Bindings: Bindings
+	Variables: JwtUserVariables
+}>(async (context, next) => {
+	const token =
+		context.req.query('authenticationToken') ||
+		extractToken(context.req.header('Authorization')) ||
+		getCookie(context, 'tolo_session') ||
+		null
 
-		let authResult: {
-			payload: JWTPayload
-			token: string
-			userId: number
-		} | null = null
+	let authResult: {
+		payload: JWTPayload
+		token: string
+		userId: number
+	} | null = null
 
-		if (token) {
-			const [clientId, payload] = await verifyJwt(token, context.env.JWT_SECRET)
+	if (token) {
+		const [clientId, payload] = await verifyJwt(token, context.env.JWT_SECRET)
 
-			if (clientId && payload) {
-				const userId = Number.parseInt(clientId, 10)
-				const userEmail =
-					'email' in payload ? (payload.email as string) : undefined
-				const userName =
-					'name' in payload ? (payload.name as string) : undefined
-				const userPhone =
-					'phone' in payload ? (payload.phone as string) : undefined
+		if (clientId && payload) {
+			const userId = Number(clientId)
+			const userEmail =
+				'email' in payload ? (payload.email as string) : undefined
+			const userName = 'name' in payload ? (payload.name as string) : undefined
+			const userPhone =
+				'phone' in payload ? (payload.phone as string) : undefined
 
-				Sentry.setUser({
+			Sentry.setUser({
+				email: userEmail,
+				id: userId.toString(),
+				name: userName,
+				phone: userPhone,
+			})
+
+			identifyPostHogUser(
+				context as unknown as Context<{ Bindings: Bindings }>,
+				userId.toString(),
+				{
 					email: userEmail,
-					id: userId.toString(),
 					name: userName,
 					phone: userPhone,
-				})
+				},
+			)
 
-				identifyPostHogUser(
-					context as unknown as Context<{ Bindings: Bindings }>,
-					userId.toString(),
-					{
-						email: userEmail,
-						name: userName,
-						phone: userPhone,
-					},
-				)
-
-				authResult = { payload, token, userId }
-			}
+			authResult = { payload, token, userId }
 		}
+	}
 
-		context.set('jwt', {
-			verify: () => {
-				if (!authResult) {
-					throw new HTTPException(401, { message: 'Unauthorized' })
-				}
-				return authResult
-			},
-		})
-
-		return next()
+	context.set('jwt', {
+		verify: () => {
+			if (!authResult) {
+				throw new HTTPException(401, { message: 'Unauthorized' })
+			}
+			return authResult
+		},
 	})
-}
+
+	return next()
+})

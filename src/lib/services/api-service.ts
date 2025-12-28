@@ -36,9 +36,9 @@ export const api = {
 		self: () => privateClient.get<ClientData>('auth/self').json(),
 		sessions: () =>
 			privateClient
-				.get<
-					{ createdAt: number; name: string; token: string }[]
-				>('auth/self/sessions')
+				.get<{ createdAt: number; name: string; token: string }[]>(
+					'auth/self/sessions',
+				)
 				.json(),
 		signOut: () =>
 			privateClient.post<{ success: true }>('auth/sign-out').json(),

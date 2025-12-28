@@ -1,47 +1,22 @@
-import crypto from 'node:crypto'
-
 import {
 	addBreadcrumb,
 	captureEvent,
 	captureException,
-	getCurrentScope,
 } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
-import { z } from 'zod/v4'
 
-import type { ExpoPushMessage } from 'expo-server-sdk'
 import type { Context } from 'hono'
 
 import { trackServerEvent } from '~workers/utils/analytics'
 import { notifyApplePassUpdate } from '~workers/utils/apns'
 import createApplePass from '~workers/utils/generate-apple-pass'
-import { api, sendSms } from '~workers/utils/poster'
+import { api } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
-import { sendPushNotifications } from '~workers/utils/push-notifications'
+
 import { getStripe } from '~workers/utils/stripe'
 
 import type { Bindings } from '../types'
-
-type EventData =
-	| undefined
-	| {
-			transactions_history?: { type_history: 'changedeliveryinfo' | 'comment' }
-	  }
-	| { transactions_history?: { value: number } }
-
-const posterWebhookDataSchema = z.object({
-	account: z.string().optional(),
-	account_number: z.string().optional(),
-	action: z
-		.enum(['changed', 'closed', 'added', 'removed', 'transformed', 'test'])
-		.optional(),
-	data: z.string().optional(),
-	object: z.string().optional(),
-	object_id: z.union([z.string(), z.number()]).optional(),
-	time: z.string().optional(),
-	verify: z.string(),
-})
 
 /** Helper function to create required D1 tables */
 async function ensurePassTables(database: D1Database) {
@@ -87,7 +62,7 @@ function extractClientIdFromPassId(passId: string): null | number {
 	const regex = /^TOLO-(\d+)$/
 	const match = regex.exec(passId)
 	if (!match) return null
-	return Number.parseInt(match[1], 10)
+	return Number(match[1])
 }
 
 function getApplePassAuthToken(context: Context) {
@@ -329,7 +304,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				if (passesUpdatedSince) {
 					const sinceDate = new Date(
-						Number.parseInt(passesUpdatedSince) * 1000,
+						Number(passesUpdatedSince) * 1000,
 					).toISOString()
 					query += ' AND COALESCE(pu.last_updated, pr.created_at) > ?'
 					parameters.push(sinceDate)
@@ -685,284 +660,6 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			{ message: 'Webhook disabled. Using polling instead.' },
 			410,
 		)
-	})
-
-	/**
-	 * @deprecated - Poster webhook implementation (disabled)
-	 * This code is preserved for reference but no longer executed.
-	 */
-	.post('/poster-disabled', async (context) => {
-		const body = (await context.req.json()) as unknown
-
-		const parsedBody = posterWebhookDataSchema.parse(body)
-		const { account, action, data, object, object_id, time } = parsedBody
-
-		const verifyHash = crypto
-			.createHash('md5')
-			.update(
-				[
-					account,
-					object,
-					object_id,
-					action,
-					...(data ? [data] : []),
-					time,
-					context.env.POSTER_APPLICATION_SECRET,
-				].join(';'),
-			)
-			.digest('hex')
-
-		if (parsedBody.verify !== verifyHash) {
-			if (parsedBody.action === 'test') {
-				return context.json({ message: 'Ok' }, 200)
-			}
-
-			return context.json({ message: 'Invalid signature' }, 401)
-		}
-
-		let parsedData = null as EventData | null
-		if (data) {
-			try {
-				parsedData = (JSON.parse(data) || null) as unknown as EventData
-			} catch {
-				//
-			}
-		}
-
-		const messages: ExpoPushMessage[] = []
-
-		captureEvent({
-			extra: { body, parsedData },
-			level: 'debug',
-			message: `Poster webhook received (${object})`,
-		})
-
-		switch (object) {
-			case 'client': {
-				switch (action) {
-					case 'changed': {
-						const client = await api.clients.getClient(
-							context.env.POSTER_TOKEN,
-							object_id as string,
-						)
-
-						if (!client) break
-
-						const stripe = getStripe(context.env.STRIPE_SECRET_KEY)
-						const stripeCustomer = await stripe.customers
-							.search({
-								query: `metadata['poster_client_id']:'${object_id}'`,
-							})
-							.then((response) => response.data.at(0))
-
-						if (stripeCustomer) {
-							await stripe.customers.update(stripeCustomer.id, {
-								email: client.email,
-								name: client.name,
-								phone: client.phone,
-							})
-						}
-
-						break
-					}
-				}
-
-				break
-			}
-			case 'client_payed_sum': {
-				const client = await api.clients.getClient(
-					context.env.POSTER_TOKEN,
-					object_id as string,
-				)
-
-				if (!client) {
-					captureEvent({
-						extra: { client },
-						level: 'warning',
-						message: 'Client not found',
-					})
-					break
-				}
-
-				const purchaseValue =
-					parsedData && 'value_absolute' in parsedData
-						? (parsedData.value_absolute as number)
-						: undefined
-
-				await Promise.all([
-					// GA4 tracking (keeping for backward compatibility)
-					trackServerEvent(context, {
-						eventName: 'purchase',
-						eventParams: {
-							currency: 'MXN',
-							transaction_id: object_id as string,
-							value: purchaseValue,
-						},
-						userData: {
-							emailAddress: client.email,
-							firstName: client.firstname,
-							lastName: client.lastname,
-							phoneNumber: client.phone,
-						},
-						userId: client.client_id,
-					}),
-					// PostHog tracking for actual purchase
-					trackEvent(context, {
-						distinctId: client.client_id,
-						event: 'purchase',
-						properties: {
-							amount: purchaseValue,
-							currency: 'MXN',
-							transaction_id: object_id as string,
-						},
-					}),
-				])
-
-				// Send review prompt
-
-				const transactions = await api.dash.getTransactions(
-					context.env.POSTER_TOKEN,
-					{ id: client.client_id, type: 'clients' },
-				)
-
-				if (transactions.length === 1) {
-					await sendSms(
-						context.env.POSTER_TOKEN,
-						client.phone,
-						'[TOLO] Nos regalas un minuto? Deja tu reseña sobre nosotros en https://l.tolo.cafe/resena',
-					)
-				}
-
-				break
-			}
-			case 'incoming_order': {
-				const { client_id } = await api.incomingOrders.getIncomingOrder(
-					context.env.POSTER_TOKEN,
-					object_id as string,
-				)
-
-				const { results: pushTokens } = await context.env.D1_TOLO.prepare(
-					'SELECT * FROM push_tokens WHERE client_id = ?',
-				)
-					.bind(client_id)
-					.all()
-
-				switch (action) {
-					case 'closed': {
-						messages.push(
-							...pushTokens.map(
-								(destination) =>
-									({
-										body: 'Disfruta tu pedido ☕️🥐, esperamos que lo disfrutes!',
-										title: 'Pedido entregado',
-										to: destination.token as string,
-									}) satisfies ExpoPushMessage,
-							),
-						)
-						break
-					}
-					case 'changed': {
-						const incomingOrder = await api.incomingOrders.getIncomingOrder(
-							context.env.POSTER_TOKEN,
-							object_id as string,
-						)
-
-						captureEvent({
-							extra: { incomingOrder },
-							level: 'debug',
-							message: 'Incoming order changed',
-						})
-					}
-				}
-
-				break
-			}
-			case 'transaction': {
-				if (action === 'changed') {
-					const transaction = await api.dash.getTransaction(
-						context.env.POSTER_TOKEN,
-						object_id as string,
-					)
-
-					if (!transaction)
-						throw new HTTPException(404, { message: 'Transaction not found' })
-
-					const { client_id } = transaction
-
-					const { results: pushTokens } = await context.env.D1_TOLO.prepare(
-						'SELECT * FROM push_tokens WHERE client_id = ?',
-					)
-						.bind(client_id)
-						.all()
-
-					if (
-						parsedData?.transactions_history &&
-						'value' in parsedData.transactions_history &&
-						parsedData.transactions_history.value === 4
-					) {
-						messages.push(
-							...pushTokens.map(
-								(destination) =>
-									({
-										body: '🚨 Comunícate con nosotros para resolverlo cuanto antes',
-										title: 'Pedido no aceptado',
-										to: destination.token as string,
-									}) satisfies ExpoPushMessage,
-							),
-						)
-					} else if (
-						parsedData?.transactions_history &&
-						'type_history' in parsedData.transactions_history &&
-						parsedData.transactions_history.type_history === 'comment'
-					) {
-						messages.push(
-							...pushTokens.map(
-								(destination) =>
-									({
-										body: '✅ Tu pedido ya está listo, te esperamos!',
-										title: 'Pedido listo',
-										to: destination.token as string,
-									}) satisfies ExpoPushMessage,
-							),
-						)
-						break
-					} else if (
-						parsedData?.transactions_history &&
-						'type_history' in parsedData.transactions_history &&
-						parsedData.transactions_history.type_history ===
-							'changedeliveryinfo'
-					) {
-						// TODO: send eta
-					} else {
-						messages.push(
-							...pushTokens.map(
-								(destination) =>
-									({
-										body: '🧑🏽‍🍳 Ahora estamos trabajando en tu pedido, te avisaremos cuando esté listo',
-										title: 'Pedido aceptado',
-										to: destination.token as string,
-									}) satisfies ExpoPushMessage,
-							),
-						)
-						break
-					}
-				}
-
-				break
-			}
-			default: {
-				break
-			}
-		}
-
-		if (messages.length > 0) {
-			const tickets = await sendPushNotifications(messages)
-			getCurrentScope().setExtra('Tickets', tickets)
-		}
-
-		getCurrentScope().setExtra('ParsedData', parsedData)
-
-		return context.json({ message: 'Ok' }, 200)
 	})
 
 export default webhooks

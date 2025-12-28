@@ -7,7 +7,7 @@ import * as DropdownMenu from 'zeego/dropdown-menu'
 
 import { TextColorIcon } from '@/components/Icons'
 import Input from '@/components/Input'
-import { Text } from '@/components/Text'
+import Text from '@/components/Text'
 
 type PhoneCountry = {
 	flag: string
@@ -30,7 +30,7 @@ const phoneCountries: readonly PhoneCountry[] = [
 	{ flag: '🇺🇸', id: 'US', prefix: '+1' },
 ] as const
 
-export function PhoneNumberInput({
+export default function PhoneNumberInput({
 	disabled = false,
 	onChange,
 	testID,
@@ -174,5 +174,3 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.sm,
 	},
 }))
-
-export default PhoneNumberInput

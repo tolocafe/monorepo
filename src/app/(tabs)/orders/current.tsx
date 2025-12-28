@@ -120,7 +120,7 @@ export default function OrderDetail() {
 	const { Field, handleSubmit, Subscribe } = useForm({
 		defaultValues: {
 			// This will be set by the server
-			client_id: Number.parseInt(user?.client_id as string, 10),
+			client_id: Number(user?.client_id as string),
 			comment: '',
 			payment: { id: '', type: 'E_WALLET' as const },
 			products:
@@ -400,7 +400,7 @@ export default function OrderDetail() {
 								<Input
 									multiline
 									numberOfLines={3}
-									onChangeText={(text) => field.handleChange(text)}
+									onChangeText={(text: string) => field.handleChange(text)}
 									placeholder={t`Add any special instructions or requests...`}
 									style={styles.notesInput}
 									value={field.state.value}

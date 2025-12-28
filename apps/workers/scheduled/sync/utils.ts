@@ -49,7 +49,7 @@ export function toISO(dateString: string): null | string {
 	if (!dateString.trim()) return null
 
 	// Try parsing as Unix timestamp first
-	const timestamp = Number.parseInt(dateString, 10)
+	const timestamp = Number(dateString)
 	if (
 		!Number.isNaN(timestamp) &&
 		timestamp > 0 && // If it's a reasonable timestamp (after 2000-01-01 and before 2100-01-01)

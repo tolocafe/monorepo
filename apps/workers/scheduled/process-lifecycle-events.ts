@@ -103,8 +103,8 @@ export default async function processCustomerLifecycleEvents(
 				continue
 			}
 
-			const clientId = Number.parseInt(transaction.client_id, 10)
-			const transactionId = Number.parseInt(transaction.transaction_id, 10)
+			const clientId = Number(transaction.client_id)
+			const transactionId = Number(transaction.transaction_id)
 
 			// Check if this is a new customer or a revival
 			const customerHistory = await getCustomerHistory(clientId, database)
@@ -218,8 +218,8 @@ export default async function processCustomerLifecycleEvents(
 				continue
 			}
 
-			const clientId = Number.parseInt(transaction.client_id, 10)
-			const transactionId = Number.parseInt(transaction.transaction_id, 10)
+			const clientId = Number(transaction.client_id)
+			const transactionId = Number(transaction.transaction_id)
 
 			// Find the previous version to compare
 			const previousVersion = await database
@@ -237,7 +237,7 @@ export default async function processCustomerLifecycleEvents(
 					customer_id: clientId,
 					data: {
 						date_close: transaction.date_close,
-						payed_sum: Number.parseInt(transaction.payed_sum, 10),
+						payed_sum: Number(transaction.payed_sum),
 					},
 					transaction_id: transactionId,
 					type: 'payment_completion',
@@ -339,7 +339,7 @@ async function findDiscoveredProducts(
 	const previousProductIds = new Set<string>(
 		previousProducts
 			.map((row) => row.productId)
-			.filter((id): id is number => id != null)
+			.filter((id): id is number => id !== null && id !== undefined)
 			.map((id) => id.toString()),
 	)
 

@@ -39,7 +39,7 @@ const TOLO_DOMAIN = 'tolo.cafe'
 
 app
 	.use(languageDetector)
-	.use(jwtUserMiddleware())
+	.use(jwtUserMiddleware)
 	.use(
 		'*',
 		cors({

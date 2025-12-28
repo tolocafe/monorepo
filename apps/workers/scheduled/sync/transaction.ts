@@ -37,7 +37,7 @@ export async function upsertTransaction(
 	tx: DashTransaction,
 ): Promise<TransactionChange> {
 	const { cache, database, token } = context
-	const txId = Number.parseInt(tx.transaction_id, 10)
+	const txId = Number(tx.transaction_id)
 
 	const existing = await database
 		.select()
@@ -46,14 +46,12 @@ export async function upsertTransaction(
 		.then((rows) => rows.at(0))
 
 	const customerId =
-		tx.client_id && tx.client_id !== '0'
-			? Number.parseInt(tx.client_id, 10)
-			: null
+		tx.client_id && tx.client_id !== '0' ? Number(tx.client_id) : null
 	if (customerId) {
 		await ensureCustomer(database, token, customerId, cache)
 	}
 
-	const locationId = tx.spot_id ? Number.parseInt(tx.spot_id, 10) : null
+	const locationId = tx.spot_id ? Number(tx.spot_id) : null
 	if (locationId) {
 		await ensureLocation(database, locationId, cache)
 	}
@@ -83,18 +81,18 @@ export async function upsertTransaction(
 		payedThirdParty: tx.payed_third_party
 			? toCents(tx.payed_third_party)
 			: null,
-		payType: tx.pay_type ? Number.parseInt(tx.pay_type, 10) : null,
-		processingStatus: Number.parseInt(tx.processing_status, 10),
-		reason: tx.reason ? Number.parseInt(tx.reason, 10) : null,
+		payType: tx.pay_type ? Number(tx.pay_type) : null,
+		processingStatus: Number(tx.processing_status),
+		reason: tx.reason ? Number(tx.reason) : null,
 		roundSum: tx.round_sum ? toCents(tx.round_sum) : null,
-		serviceMode: tx.service_mode ? Number.parseInt(tx.service_mode, 10) : null,
-		status: Number.parseInt(tx.status, 10),
+		serviceMode: tx.service_mode ? Number(tx.service_mode) : null,
+		status: Number(tx.status),
 		sum: tx.sum ? toCents(tx.sum) : null,
 		syncedAt: new Date().toISOString(),
-		tableId: tx.table_id ? Number.parseInt(tx.table_id, 10) : null,
+		tableId: tx.table_id ? Number(tx.table_id) : null,
 		tipSum: tx.tip_sum ? toCents(tx.tip_sum) : null,
 		// type: 0 = Sale, 1 = Return. Default to 0 (Sale) if undefined
-		type: tx.type === undefined ? 0 : Number.parseInt(String(tx.type), 10),
+		type: tx.type === undefined ? 0 : Number(tx.type),
 		updatedAt: new Date().toISOString(),
 		userId: tx.user_id ?? null,
 	}

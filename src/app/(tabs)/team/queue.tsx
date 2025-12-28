@@ -251,7 +251,7 @@ export default function BaristaQueue() {
 							const minutesElapsed = getMinutesElapsed(orderDate)
 							const timeColor = getTimeColor(minutesElapsed)
 							// Number of guests/clients in the order
-							const guestsCount = Number.parseInt(order.guests_count ?? '0', 10)
+							const guestsCount = Number(order.guests_count ?? '0')
 
 							return (
 								<Card key={order.transaction_id} style={styles.orderCard}>

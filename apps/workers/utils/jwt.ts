@@ -21,7 +21,7 @@ export async function authenticate(context: Context, secret: string) {
 
 	if (!clientId) throw new HTTPException(403, { message: 'Unauthorized' })
 
-	return [Number.parseInt(clientId, 10), payload, token] as const
+	return [Number(clientId), payload, token] as const
 }
 
 export function extractToken(

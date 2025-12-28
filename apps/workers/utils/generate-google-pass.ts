@@ -145,7 +145,7 @@ async function createLoyaltyObject({
 	// Calculate stamps based on transactions and redemptions
 	const stampsData = await getCustomerStamps(
 		context.env.D1_TOLO,
-		Number.parseInt(client.client_id, 10),
+		Number(client.client_id),
 		transactionsCount,
 	)
 
@@ -273,6 +273,7 @@ function getLoyaltyObject({
 	const stripIndex = Math.min(stamps, 10)
 	const discountPercentage = Number.parseInt(
 		client.discount_per || client.client_groups_discount || '0',
+		10,
 	)
 
 	const balanceAmount = Number.parseFloat(client.ewallet ?? '0') / 100

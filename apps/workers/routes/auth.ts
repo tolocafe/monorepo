@@ -216,11 +216,9 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				),
 			),
 			posterClient.client_groups_id === UNVERIFIED_CLIENT_GROUP_ID
-				? api.clients.updateClient(
-						context.env.POSTER_TOKEN,
-						Number.parseInt(clientId, 10),
-						{ client_groups_id_client: VERIFIED_CLIENT_GROUP_ID },
-					)
+				? api.clients.updateClient(context.env.POSTER_TOKEN, Number(clientId), {
+						client_groups_id_client: VERIFIED_CLIENT_GROUP_ID,
+					})
 				: Promise.resolve(),
 		])
 
@@ -257,7 +255,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			? parsedUnknown.filter((record) => isSessionRecord(record))
 			: []
 
-		const sessions = fullSessions.map(({ token, ...session }) => ({
+		const sessions = fullSessions.map(({ token: _token, ...session }) => ({
 			...session,
 		}))
 

@@ -7,7 +7,6 @@ Sentry.init({
 	integrations: [
 		Sentry.mobileReplayIntegration(),
 		Sentry.feedbackIntegration(),
-		Sentry.httpClientIntegration(),
 		Sentry.screenshotIntegration(),
 	],
 	replaysOnErrorSampleRate: 1,

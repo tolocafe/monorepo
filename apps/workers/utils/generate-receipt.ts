@@ -369,6 +369,6 @@ export async function generateReceiptPDF(
 	} catch (error) {
 		// eslint-disable-next-line no-console
 		console.error('Error generating PDF:', error)
-		throw new Error('Failed to generate PDF')
+		throw new Error('Failed to generate PDF', { cause: error })
 	}
 }

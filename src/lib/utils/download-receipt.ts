@@ -48,9 +48,11 @@ export async function downloadReceipt(orderId: string): Promise<void> {
 		}
 
 		if (error instanceof Error) {
-			throw new Error(`Failed to download receipt: ${error.message}`)
+			throw new Error(`Failed to download receipt: ${error.message}`, {
+				cause: error,
+			})
 		}
-		throw new Error('Failed to download receipt')
+		throw new Error('Failed to download receipt', { cause: error })
 	}
 }
 
