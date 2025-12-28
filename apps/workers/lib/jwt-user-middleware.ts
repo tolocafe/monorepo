@@ -11,7 +11,7 @@ import { identifyPostHogUser } from '../utils/posthog'
 import type { Bindings } from '../types'
 
 export type JwtUserVariables = {
-	jwt: {
+	jwt?: {
 		payload: JWTPayload
 		token: string
 		userId: number
@@ -24,32 +24,21 @@ export type JwtUserVariables = {
  * Extracts JWT token from query params, Authorization header, or cookies,
  * verifies the token, and sets user context in Sentry and PostHog.
  *
- * @param options.required - If true, throws 401 when token is missing/invalid. Default: false
- * @returns Hono middleware
+ * Use globally to enable optional authentication across all routes.
+ * For routes requiring authentication, use the `requireAuth` helper.
  *
  * @example
- * // Global usage (optional auth for public/private routes)
+ * // Global usage (optional auth for all routes)
  * app.use(jwtUserMiddleware())
  *
  * @example
- * // Route-specific usage (required auth)
- * const protectedRoute = new Hono<{ Bindings: Bindings; Variables: JwtUserVariables }>()
- *   .use(jwtUserMiddleware({ required: true }))
- *   .get('/', (c) => {
- *     const userId = c.get('jwt').userId
- *     return c.json({ userId })
- *   })
- *
- * @example
- * // Access user data in route handlers
+ * // Protected route requiring authentication
  * app.get('/profile', (c) => {
- *   const { userId, payload, token } = c.get('jwt')
- *   return c.json({ userId, email: payload.email })
+ *   const { userId } = requireAuth(c)
+ *   return c.json({ userId })
  * })
  */
-export function jwtUserMiddleware(options?: { required?: boolean }) {
-	const required = options?.required ?? false
-
+export function jwtUserMiddleware() {
 	return createMiddleware<{
 		Bindings: Bindings
 		Variables: JwtUserVariables
@@ -61,18 +50,12 @@ export function jwtUserMiddleware(options?: { required?: boolean }) {
 			null
 
 		if (!token) {
-			if (required) {
-				throw new HTTPException(401, { message: 'Unauthorized' })
-			}
 			return next()
 		}
 
 		const [clientId, payload] = await verifyJwt(token, context.env.JWT_SECRET)
 
 		if (!clientId || !payload) {
-			if (required) {
-				throw new HTTPException(403, { message: 'Unauthorized' })
-			}
 			return next()
 		}
 
@@ -107,4 +90,27 @@ export function jwtUserMiddleware(options?: { required?: boolean }) {
 
 		return next()
 	})
+}
+
+/**
+ * Helper to require authentication in a route handler
+ *
+ * Throws 401 Unauthorized if user is not authenticated
+ *
+ * @example
+ * app.get('/profile', (c) => {
+ *   const { userId, payload } = requireAuth(c)
+ *   return c.json({ userId })
+ * })
+ */
+export function requireAuth(
+	context: Context<{ Bindings: Bindings; Variables: JwtUserVariables }>,
+) {
+	const jwt = context.get('jwt')
+
+	if (!jwt) {
+		throw new HTTPException(401, { message: 'Unauthorized' })
+	}
+
+	return jwt
 }
