@@ -2,9 +2,11 @@ import * as Sentry from '@sentry/cloudflare'
 import { getCookie } from 'hono/cookie'
 import { createMiddleware } from 'hono/factory'
 import { HTTPException } from 'hono/http-exception'
+import type { Context } from 'hono'
 import type { JWTPayload } from 'jose'
 
 import { extractToken, verifyJwt } from '../utils/jwt'
+import { identifyPostHogUser } from '../utils/posthog'
 
 import type { Bindings } from '../types'
 
@@ -17,22 +19,22 @@ export type JwtUserVariables = {
 }
 
 /**
- * Middleware for JWT authentication with Sentry integration
+ * Middleware for JWT authentication with Sentry and PostHog integration
  *
  * Extracts JWT token from query params, Authorization header, or cookies,
- * verifies the token, and sets user context in Sentry.
+ * verifies the token, and sets user context in Sentry and PostHog.
  *
- * @param options.required - If true, throws 401 when token is missing/invalid. Default: true
+ * @param options.required - If true, throws 401 when token is missing/invalid. Default: false
  * @returns Hono middleware
  *
  * @example
- * // Global usage (optional auth)
- * app.use(jwtUserMiddleware({ required: false }))
+ * // Global usage (optional auth for public/private routes)
+ * app.use(jwtUserMiddleware())
  *
  * @example
  * // Route-specific usage (required auth)
  * const protectedRoute = new Hono<{ Bindings: Bindings; Variables: JwtUserVariables }>()
- *   .use(jwtUserMiddleware())
+ *   .use(jwtUserMiddleware({ required: true }))
  *   .get('/', (c) => {
  *     const userId = c.get('jwt').userId
  *     return c.json({ userId })
@@ -42,12 +44,11 @@ export type JwtUserVariables = {
  * // Access user data in route handlers
  * app.get('/profile', (c) => {
  *   const { userId, payload, token } = c.get('jwt')
- *   // User is already authenticated and Sentry context is set
  *   return c.json({ userId, email: payload.email })
  * })
  */
 export function jwtUserMiddleware(options?: { required?: boolean }) {
-	const required = options?.required ?? true
+	const required = options?.required ?? false
 
 	return createMiddleware<{
 		Bindings: Bindings
@@ -77,12 +78,26 @@ export function jwtUserMiddleware(options?: { required?: boolean }) {
 
 		const userId = Number.parseInt(clientId, 10)
 
+		const userEmail = 'email' in payload ? (payload.email as string) : undefined
+		const userName = 'name' in payload ? (payload.name as string) : undefined
+		const userPhone = 'phone' in payload ? (payload.phone as string) : undefined
+
 		Sentry.setUser({
-			email: 'email' in payload ? (payload.email as string) : undefined,
+			email: userEmail,
 			id: userId.toString(),
-			name: 'name' in payload ? (payload.name as string) : undefined,
-			phone: 'phone' in payload ? (payload.phone as string) : undefined,
+			name: userName,
+			phone: userPhone,
 		})
+
+		identifyPostHogUser(
+			context as unknown as Context<{ Bindings: Bindings }>,
+			userId.toString(),
+			{
+				email: userEmail,
+				name: userName,
+				phone: userPhone,
+			},
+		)
 
 		context.set('jwt', {
 			payload,
