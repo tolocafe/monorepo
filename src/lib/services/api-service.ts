@@ -6,6 +6,7 @@ import type {
 	Event,
 	Product,
 	Promotion,
+	QueueStatesMap,
 	TableBill,
 } from '@/lib/api'
 import type { RequestOtpMutationOptions } from '@/lib/queries/auth'
@@ -99,6 +100,12 @@ export const api = {
 	orders: {
 		baristaQueue: () =>
 			privateClient.get<DashTransaction[]>('orders/barista/queue').json(),
+		baristaQueueStates: (transactionIds: number[]) =>
+			privateClient
+				.post<QueueStatesMap>('orders/barista/queue/states', {
+					json: { transactionIds },
+				})
+				.json(),
 		create: (orderData: CreateOrder) =>
 			privateClient
 				.post<CreateOrderResponse>('orders', { json: orderData })
@@ -108,6 +115,20 @@ export const api = {
 		get: (orderId: string) =>
 			privateClient.get<OrderDetailResponse>(`orders/${orderId}`).json(),
 		list: () => privateClient.get<CreateOrderResponse>('orders').json(),
+		updateQueueItemState: (data: {
+			lineIndex: number
+			status: 'delivered' | 'unselected' | 'working'
+			transactionId: number
+		}) =>
+			privateClient
+				.put<{
+					lineIndex: number
+					status: string
+					success: true
+					transactionId: number
+					updatedBy: string
+				}>('orders/barista/queue/state', { json: data })
+				.json(),
 	},
 
 	// Generic methods for other endpoints

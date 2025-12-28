@@ -2,7 +2,7 @@ import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
-import { CreateOrderSchema } from '~common/schemas'
+import { CreateOrderSchema, UpdateQueueItemStateSchema } from '~common/schemas'
 import { getProductTotalCost } from '~common/utils'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { authenticate } from '~workers/utils/jwt'
@@ -11,6 +11,31 @@ import { trackEvent } from '~workers/utils/posthog'
 
 import type { Product } from '~common/api'
 import type { Bindings } from '~workers/types'
+
+/** KV key prefix for queue item states */
+const QUEUE_STATE_PREFIX = 'queue:state:'
+
+/** TTL for queue states (24 hours - orders should be completed by then) */
+const QUEUE_STATE_TTL = 60 * 60 * 24
+
+/** Generate KV key for a transaction's queue states */
+function getQueueStateKey(transactionId: number): string {
+	return `${QUEUE_STATE_PREFIX}${transactionId}`
+}
+
+/** State for a single line item */
+type LineState = {
+	status: 'delivered' | 'unselected' | 'working'
+	updatedAt: string
+	updatedBy: string
+	updatedByClientId: number
+}
+
+/** All line states for a transaction */
+type TransactionQueueState = {
+	lines: Record<number, LineState>
+	transactionId: number
+}
 
 // Modifiers to ignore (not displayed in barista queue)
 const IGNORED_MODIFIERS = new Set([
@@ -78,6 +103,103 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		})
 
 		return c.json(orders)
+	})
+	.post('/barista/queue/states', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+
+		// Verify user is a barista
+		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
+
+		if (
+			!client?.client_groups_id ||
+			!TEAM_GROUP_IDS.has(client.client_groups_id)
+		) {
+			throw new HTTPException(403, { message: 'Access denied' })
+		}
+
+		// Get transaction IDs from request body
+		const body = (await c.req.json()) as { transactionIds?: number[] }
+		const transactionIds = body.transactionIds ?? []
+
+		if (transactionIds.length === 0) {
+			return c.json({})
+		}
+
+		// Fetch states for all requested transactions in parallel
+		const results = await Promise.all(
+			transactionIds.map(async (txId) => {
+				const key = getQueueStateKey(txId)
+				const state = await c.env.KV_CMS.get<TransactionQueueState>(key, 'json')
+				return [txId, state] as const
+			}),
+		)
+
+		// Build response map: transactionId -> lines
+		const statesMap: Record<number, TransactionQueueState['lines']> = {}
+		for (const [txId, state] of results) {
+			if (state?.lines) {
+				statesMap[txId] = state.lines
+			}
+		}
+
+		return c.json(statesMap)
+	})
+	.put('/barista/queue/state', async (c) => {
+		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+
+		// Verify user is a barista
+		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
+
+		if (
+			!client?.client_groups_id ||
+			!TEAM_GROUP_IDS.has(client.client_groups_id)
+		) {
+			throw new HTTPException(403, { message: 'Access denied' })
+		}
+
+		const body = await c.req.json()
+		const parsed = UpdateQueueItemStateSchema.safeParse(body)
+
+		if (!parsed.success) {
+			throw new HTTPException(400, { message: 'Invalid request body' })
+		}
+
+		const { transactionId, lineIndex, status } = parsed.data
+		const updatedBy =
+			`${client.firstname ?? ''} ${client.lastname ?? ''}`.trim() || 'Unknown'
+
+		const key = getQueueStateKey(transactionId)
+
+		// Get existing state for this transaction
+		const existing = await c.env.KV_CMS.get<TransactionQueueState>(key, 'json')
+
+		const lineState: LineState = {
+			status,
+			updatedAt: new Date().toISOString(),
+			updatedBy,
+			updatedByClientId: clientId,
+		}
+
+		const newState: TransactionQueueState = {
+			lines: {
+				...(existing?.lines ?? {}),
+				[lineIndex]: lineState,
+			},
+			transactionId,
+		}
+
+		// Store in KV with TTL
+		await c.env.KV_CMS.put(key, JSON.stringify(newState), {
+			expirationTtl: QUEUE_STATE_TTL,
+		})
+
+		return c.json({
+			lineIndex,
+			status,
+			success: true,
+			transactionId,
+			updatedBy,
+		})
 	})
 	.get('/barista/queue', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)

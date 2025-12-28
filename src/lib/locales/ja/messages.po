@@ -14,7 +14,7 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. placeholder {0}: `Status${order.processing_status}`
-#: src/app/(tabs)/orders/index.tsx:179
+#: src/app/(tabs)/orders/index.tsx:182
 msgid "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Closed} Status70 {Deleted} other {Unknown}}"
 msgstr "{0, select, Status10 {開始} Status20 {準備中} Status30 {準備完了} Status40 {配送中} Status50 {配送完了} Status60 {閉店} Status70 {削除済み} other {不明}}"
 
@@ -100,7 +100,7 @@ msgstr "注文に追加"
 msgid "Additional"
 msgstr "追加"
 
-#: src/app/(tabs)/team/queue.tsx:209
+#: src/app/(tabs)/team/queue.tsx:300
 msgid "All"
 msgstr "すべて"
 
@@ -285,7 +285,12 @@ msgstr "DD/MM/YYYY"
 msgid "Delete"
 msgstr "削除"
 
-#: src/app/(tabs)/team/queue.tsx:295
+#: src/app/(tabs)/team/queue.tsx:496
+#: src/app/(tabs)/team/queue.tsx:598
+msgid "Delivered"
+msgstr ""
+
+#: src/app/(tabs)/team/queue.tsx:386
 msgid "Delivery"
 msgstr "配達"
 
@@ -305,7 +310,7 @@ msgstr "エスプレッソ、ラテ、カプチーノ、おいしいサイドメ
 msgid "Download PDF"
 msgstr "PDFをダウンロード"
 
-#: src/app/(tabs)/orders/[id].tsx:233
+#: src/app/(tabs)/orders/[id].tsx:234
 msgid "Download Receipt"
 msgstr "レシートをダウンロード"
 
@@ -313,7 +318,7 @@ msgstr "レシートをダウンロード"
 msgid "Download Ticket"
 msgstr "チケットをダウンロード"
 
-#: src/app/(tabs)/orders/[id].tsx:231
+#: src/app/(tabs)/orders/[id].tsx:232
 #: src/app/(tabs)/team/ticket.tsx:92
 msgid "Downloading..."
 msgstr "ダウンロード中..."
@@ -590,7 +595,7 @@ msgstr "name@example.com"
 msgid "New"
 msgstr "新着"
 
-#: src/app/(tabs)/team/queue.tsx:430
+#: src/app/(tabs)/team/queue.tsx:464
 msgid "New orders will appear here"
 msgstr "新しい注文はここに表示されます"
 
@@ -611,11 +616,11 @@ msgstr "誕生日が登録されていません。"
 msgid "No events scheduled at the moment"
 msgstr ""
 
-#: src/app/(tabs)/team/queue.tsx:427
+#: src/app/(tabs)/team/queue.tsx:461
 msgid "No orders in queue"
 msgstr "キューに注文はありません"
 
-#: src/app/(tabs)/orders/index.tsx:216
+#: src/app/(tabs)/orders/index.tsx:220
 msgid "No orders yet"
 msgstr "まだ注文がありません"
 
@@ -724,6 +729,11 @@ msgstr "決済成功"
 msgid "Payment successful!"
 msgstr "支払いが完了しました！"
 
+#: src/app/(tabs)/team/queue.tsx:497
+#: src/app/(tabs)/team/queue.tsx:570
+msgid "Pending"
+msgstr ""
+
 #: src/app/(tabs)/more/index.tsx:211
 msgid "Phone"
 msgstr "電話"
@@ -785,7 +795,7 @@ msgstr "数量: {0}"
 
 #: src/app/(tabs)/team/_layout.tsx:23
 #: src/app/(tabs)/team/index.tsx:51
-#: src/app/(tabs)/team/queue.tsx:176
+#: src/app/(tabs)/team/queue.tsx:267
 msgid "Queue"
 msgstr "キュー"
 
@@ -1002,7 +1012,7 @@ msgstr "チケット"
 msgid "Tip"
 msgstr "チップ"
 
-#: src/app/(tabs)/team/queue.tsx:286
+#: src/app/(tabs)/team/queue.tsx:377
 msgid "To Go"
 msgstr "お持ち帰り"
 
@@ -1133,6 +1143,11 @@ msgstr "ウェブサイト"
 msgid "Welcome"
 msgstr "ようこそ"
 
+#: src/app/(tabs)/team/queue.tsx:494
+#: src/app/(tabs)/team/queue.tsx:584
+msgid "Working"
+msgstr ""
+
 #: src/app/(tabs)/orders/current.tsx:150
 msgid "You don't have enough balance in your wallet. Please top up your wallet first."
 msgstr "Walletの残高が不足です。まずWalletをチャージしてください。"
@@ -1142,7 +1157,7 @@ msgstr "Walletの残高が不足です。まずWalletをチャージしてくだ
 msgid "You need barista or owner access to use this tool."
 msgstr "このツールを使用するには、バリスタまたはオーナーのアクセス権が必要です。"
 
-#: src/app/(tabs)/orders/index.tsx:219
+#: src/app/(tabs)/orders/index.tsx:223
 msgid "Your order history will appear here"
 msgstr "ご注文履歴がここに表示されます"
 

@@ -599,3 +599,23 @@ export type UpdateClientBody = Partial<{
 	phone: string
 	total_payed_sum: number
 }>
+
+/**
+ * State for a single line item in the queue
+ */
+export type QueueLineState = {
+	/** Status: 'unselected' | 'working' | 'delivered' */
+	status: 'delivered' | 'unselected' | 'working'
+	/** Timestamp of last update */
+	updatedAt: string
+	/** Name of the team member who last updated this item */
+	updatedBy: string
+	/** Client ID of the team member who last updated */
+	updatedByClientId: number
+}
+
+/**
+ * Map of transaction ID to line states
+ * Line states are keyed by line index (as string due to JSON)
+ */
+export type QueueStatesMap = Record<number, Record<string, QueueLineState>>
