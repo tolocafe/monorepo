@@ -6,7 +6,7 @@ import type {
 	Event,
 	Product,
 	Promotion,
-	QueueItemState,
+	QueueStatesMap,
 	TableBill,
 } from '@/lib/api'
 import type { RequestOtpMutationOptions } from '@/lib/queries/auth'

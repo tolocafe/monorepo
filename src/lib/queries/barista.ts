@@ -2,7 +2,7 @@ import { mutationOptions, queryOptions } from '@tanstack/react-query'
 
 import { api } from '@/lib/services/api-service'
 
-import type { DashTransaction, QueueItemState } from '@/lib/api'
+import type { DashTransaction, QueueStatesMap } from '@/lib/api'
 
 export const baristaQueueQueryOptions = queryOptions<DashTransaction[]>({
 	initialData: [],
@@ -12,13 +12,16 @@ export const baristaQueueQueryOptions = queryOptions<DashTransaction[]>({
 	staleTime: 0, // Always consider data stale to ensure fresh data
 })
 
-export const baristaQueueStatesQueryOptions = queryOptions<QueueItemState[]>({
-	initialData: [],
-	queryFn: () => api.orders.baristaQueueStates(),
-	queryKey: ['barista', 'queue', 'states'] as const,
-	refetchOnWindowFocus: true,
-	staleTime: 0,
-})
+export function baristaQueueStatesQueryOptions(transactionIds: number[]) {
+	return queryOptions<QueueStatesMap>({
+		enabled: transactionIds.length > 0,
+		initialData: {},
+		queryFn: () => api.orders.baristaQueueStates(transactionIds),
+		queryKey: ['barista', 'queue', 'states', transactionIds] as const,
+		refetchOnWindowFocus: true,
+		staleTime: 0,
+	})
+}
 
 export const updateQueueItemStateMutationOptions = mutationOptions({
 	mutationFn: (data: {

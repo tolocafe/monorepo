@@ -33,7 +33,7 @@ import {
 import { queryClient } from '@/lib/query-client'
 import { sortModifiers } from '@/lib/utils/modifier-tags'
 
-import type { DashTransaction, Product, QueueItemState } from '@/lib/api'
+import type { DashTransaction, Product, QueueLineState } from '@/lib/api'
 
 const POLLING_INTERVAL = 5000 // 5 seconds
 
@@ -71,7 +71,7 @@ type QueueProduct = {
 	modifiers?: { group: string; name: string }[]
 	productId: string
 	productName: string
-	state?: QueueItemState
+	state?: QueueLineState
 	transactionId: string
 }
 
@@ -95,11 +95,18 @@ export default function BaristaQueue() {
 		isLoading,
 		refetch: refetchOrders,
 	} = useQuery(baristaQueueQueryOptions)
-	const { data: queueStates, refetch: refetchStates } = useQuery(
-		baristaQueueStatesQueryOptions,
-	)
 	const { data: products } = useQuery(productsQueryOptions)
 	const { data: categories } = useQuery(categoriesQueryOptions)
+
+	// Get transaction IDs from orders for fetching states
+	const transactionIds = useMemo(
+		() => orders.map((order) => Number(order.transaction_id)),
+		[orders],
+	)
+
+	const { data: queueStates, refetch: refetchStates } = useQuery(
+		baristaQueueStatesQueryOptions(transactionIds),
+	)
 
 	const updateStateMutation = useMutation({
 		...updateQueueItemStateMutationOptions,
@@ -108,12 +115,14 @@ export default function BaristaQueue() {
 		},
 	})
 
-	// Create a map for queue states lookup
+	// Create a map for queue states lookup: "transactionId:lineIndex" -> state
 	const statesMap = useMemo(() => {
-		const map = new Map<string, QueueItemState>()
-		for (const state of queueStates) {
-			const key = `${state.transactionId}:${state.lineIndex}`
-			map.set(key, state)
+		const map = new Map<string, QueueLineState>()
+		for (const [txId, lines] of Object.entries(queueStates)) {
+			for (const [lineIndex, state] of Object.entries(lines)) {
+				const key = `${txId}:${lineIndex}`
+				map.set(key, state)
+			}
 		}
 		return map
 	}, [queueStates])
@@ -182,7 +191,9 @@ export default function BaristaQueue() {
 
 	const handleRefresh = useCallback(() => {
 		void queryClient.invalidateQueries(baristaQueueQueryOptions)
-		void queryClient.invalidateQueries(baristaQueueStatesQueryOptions)
+		void queryClient.invalidateQueries({
+			queryKey: ['barista', 'queue', 'states'],
+		})
 	}, [])
 
 	const handleStatusChange = useCallback(
