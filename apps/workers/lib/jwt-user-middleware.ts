@@ -28,14 +28,6 @@ export type AuthenticatedJwtVariables = {
 
 /**
  * Middleware for JWT authentication with Sentry and PostHog integration
- *
- * @example
- * app.use(jwtUserMiddleware())
- *
- * app.get('/profile', requireAuth(), (c) => {
- *   const { userId } = c.get('jwt')
- *   return c.json({ userId })
- * })
  */
 export function jwtUserMiddleware() {
 	return createMiddleware<{
@@ -92,12 +84,6 @@ export function jwtUserMiddleware() {
 
 /**
  * Middleware to require authentication
- *
- * @example
- * app.get('/profile', requireAuth(), (c) => {
- *   const { userId } = c.get('jwt')
- *   return c.json({ userId })
- * })
  */
 export function requireAuth() {
 	return createMiddleware<{
