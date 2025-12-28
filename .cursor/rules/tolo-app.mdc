@@ -133,7 +133,8 @@ These priorities guide all technical decisions and ensure the codebase remains m
 #### Code Review Standards
 
 - **Self Review**: Check your own code before submission
-- **Documentation**: JSDoc for complex functions only (avoid trivial docs)
+- **Clear Naming**: Use descriptive names for functions, variables, and constants - avoid comments
+- **Minimal Comments**: Only comment complex code blocks or external API integrations
 - **Commit Messages**: Follow Conventional Commits v1.0.0 specification
 - **PR Size**: Keep changes focused and reviewable
 
@@ -182,6 +183,7 @@ These priorities guide all technical decisions and ensure the codebase remains m
 - **Context Awareness**: Understand existing patterns before suggesting changes
 - **Token Efficiency**: Provide concise, actionable guidance
 - **No Task Summaries**: NEVER output summaries of changes after completing tasks unless explicitly requested
+- **No Documentation Files**: NEVER create README files or documentation files - code should be self-documenting
 
 ### Code Generation Preferences
 
@@ -193,10 +195,14 @@ These priorities guide all technical decisions and ensure the codebase remains m
 
 ### Documentation Standards
 
-- **Minimal JSDoc**: Only document complex or non-obvious functions
-- **Self-Documenting Code**: Prefer clear naming over extensive comments
-- **README Updates**: Keep project documentation current
-- **API Documentation**: Document public interfaces and hooks
+- **Self-Documenting Code**: Code should be simple, clear, and readable without comments
+- **Better Naming Over Comments**: Use descriptive function, variable, and constant names instead of comments
+- **Minimal Comments**: ONLY add comments for:
+  - Complex code blocks that cannot be simplified
+  - Code that references external APIs or third-party behavior
+  - Non-obvious business logic that requires explanation
+- **Minimal JSDoc**: Only for public APIs where usage examples add value
+- **No READMEs**: NEVER create README files or documentation files
 
 ## Common Patterns
 
