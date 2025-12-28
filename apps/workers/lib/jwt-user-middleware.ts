@@ -53,14 +53,12 @@ export function jwtUserMiddleware(options?: { required?: boolean }) {
 		Bindings: Bindings
 		Variables: JwtUserVariables
 	}>(async (context, next) => {
-		// Extract token from multiple sources (query > header > cookie)
 		const token =
 			context.req.query('authenticationToken') ||
 			extractToken(context.req.header('Authorization')) ||
 			getCookie(context, 'tolo_session') ||
 			null
 
-		// Handle missing token
 		if (!token) {
 			if (required) {
 				throw new HTTPException(401, { message: 'Unauthorized' })
@@ -68,10 +66,8 @@ export function jwtUserMiddleware(options?: { required?: boolean }) {
 			return next()
 		}
 
-		// Verify JWT token
 		const [clientId, payload] = await verifyJwt(token, context.env.JWT_SECRET)
 
-		// Handle invalid token
 		if (!clientId || !payload) {
 			if (required) {
 				throw new HTTPException(403, { message: 'Unauthorized' })
@@ -81,7 +77,6 @@ export function jwtUserMiddleware(options?: { required?: boolean }) {
 
 		const userId = Number.parseInt(clientId, 10)
 
-		// Set user context in Sentry
 		Sentry.setUser({
 			email: 'email' in payload ? (payload.email as string) : undefined,
 			id: userId.toString(),
@@ -89,7 +84,6 @@ export function jwtUserMiddleware(options?: { required?: boolean }) {
 			phone: 'phone' in payload ? (payload.phone as string) : undefined,
 		})
 
-		// Store JWT data in context for downstream handlers
 		context.set('jwt', {
 			payload,
 			token,
