@@ -182,6 +182,7 @@ These priorities guide all technical decisions and ensure the codebase remains m
 - **Context Awareness**: Understand existing patterns before suggesting changes
 - **Token Efficiency**: Provide concise, actionable guidance
 - **No Task Summaries**: NEVER output summaries of changes after completing tasks unless explicitly requested
+- **No Documentation Files**: NEVER create README files or documentation files - code should be self-documenting
 
 ### Code Generation Preferences
 
@@ -194,9 +195,9 @@ These priorities guide all technical decisions and ensure the codebase remains m
 ### Documentation Standards
 
 - **Minimal JSDoc**: Only document complex or non-obvious functions
-- **Self-Documenting Code**: Prefer clear naming over extensive comments
-- **README Updates**: Keep project documentation current
-- **API Documentation**: Document public interfaces and hooks
+- **Self-Documenting Code**: Prefer clear naming over extensive comments - code should explain itself
+- **No READMEs**: NEVER create README files or documentation files - the code should be self-documenting through clear naming, proper structure, and minimal JSDoc where truly needed
+- **API Documentation**: Document public interfaces and hooks only when complexity requires it
 
 ## Common Patterns
 

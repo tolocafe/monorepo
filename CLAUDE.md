@@ -106,6 +106,8 @@ After completing any task:
 3. Run `bun run format` to format code
 4. Run tests if applicable: `bun run test`
 
+IMPORTANT: Do not create README files or documentation files. Code should be self-documenting through clear naming, proper structure, and minimal JSDoc where truly needed.
+
 ### Commit Messages
 
 Follow Conventional Commits v1.0.0:
