@@ -8,30 +8,20 @@ export const unstable_settings = {
 	initialRouteName: 'index',
 }
 
-export default function HomeLayout() {
+export default function AccountLayout() {
 	const { t } = useLingui()
 	const { theme } = useUnistyles()
 
 	return (
 		<Stack screenOptions={defaultStackScreenOptions(theme.colors.gray.text)}>
-			<Stack.Screen name="index" options={{ title: t`Home` }} />
 			<Stack.Screen
-				name="[id]"
-				options={{
-					headerTintColor: 'white',
-					headerTransparent: true,
-					presentation: 'modal',
-					title: '',
-				}}
+				name="index"
+				options={{ headerShown: false, title: t`Account` }}
 			/>
-			<Stack.Screen
-				name="coffees/[id]"
-				options={{
-					animation: 'none',
-					headerShown: false,
-					presentation: 'transparentModal',
-				}}
-			/>
+			<Stack.Screen name="orders" options={{ title: t`Orders` }} />
+			<Stack.Screen name="profile" options={{ title: t`Profile` }} />
+			<Stack.Screen name="sessions" options={{ title: t`Sessions` }} />
+			<Stack.Screen name="top-up" options={{ title: t`Top Up` }} />
 		</Stack>
 	)
 }

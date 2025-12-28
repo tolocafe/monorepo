@@ -7,7 +7,6 @@ import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import { router, Stack } from 'expo-router'
-import Head from 'expo-router/head'
 import * as StoreReview from 'expo-store-review'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -15,7 +14,7 @@ import Button from '@/components/Button'
 import Card from '@/components/Card'
 import { Input } from '@/components/Input'
 import { ModifierTag } from '@/components/ModifierTag'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
@@ -47,7 +46,7 @@ type ModificationTag = {
 	name: string
 }
 
-export default function OrderDetail() {
+export default function OngoingOrderDetail() {
 	const { t } = useLingui()
 	const order = useCurrentOrder()
 	const updateItem = useUpdateItem()
@@ -56,7 +55,6 @@ export default function OrderDetail() {
 	const clearOrder = useClearOrder()
 	const { data: user } = useQuery(selfQueryOptions)
 
-	// Fetch missing product details
 	const productIds = useMemo(
 		() => [...new Set((order?.products ?? []).map((product) => product.id))],
 		[order?.products],
@@ -75,8 +73,6 @@ export default function OrderDetail() {
 			})
 		},
 		onSuccess() {
-			// Note: order:purchase_complete is now tracked on the backend
-
 			Burnt.toast({
 				duration: 3,
 				haptic: 'success',
@@ -119,7 +115,6 @@ export default function OrderDetail() {
 
 	const { Field, handleSubmit, Subscribe } = useForm({
 		defaultValues: {
-			// This will be set by the server
 			client_id: Number.parseInt(user?.client_id as string, 10),
 			comment: '',
 			payment: { id: '', type: 'E_WALLET' as const },
@@ -138,7 +133,6 @@ export default function OrderDetail() {
 			const itemCount =
 				order?.products.reduce((sum, product) => sum + product.quantity, 0) ?? 0
 
-			// Require explicit action if funds are insufficient
 			if (hasInsufficientBalance) {
 				void trackEvent('checkout:insufficient_balance', {
 					available_balance: Number(user?.ewallet ?? '0'),
@@ -150,7 +144,7 @@ export default function OrderDetail() {
 					t`You don't have enough balance in your wallet. Please top up your wallet first.`,
 					[
 						{
-							onPress: () => router.push('/more/top-up'),
+							onPress: () => router.push('/account/top-up'),
 							text: t`Top Up`,
 						},
 						{
@@ -315,25 +309,16 @@ export default function OrderDetail() {
 
 	if (!order) {
 		return (
-			<>
-				<Head>
-					<title>{t`Order Not Found`}</title>
-				</Head>
-
-				<View style={styles.emptyContainer}>
-					<Paragraph style={styles.emptyText}>
-						<Trans>The requested order could not be found.</Trans>
-					</Paragraph>
-				</View>
-			</>
+			<View style={styles.emptyContainer}>
+				<Paragraph style={styles.emptyText}>
+					<Trans>The requested order could not be found.</Trans>
+				</Paragraph>
+			</View>
 		)
 	}
 
 	return (
 		<>
-			<Head>
-				<title>{t`Current Order`}</title>
-			</Head>
 			<Stack.Screen
 				options={{
 					headerRight: () => (
@@ -341,9 +326,10 @@ export default function OrderDetail() {
 							<Trans>Cancel</Trans>
 						</Button>
 					),
+					title: t`Current Order`,
 				}}
 			/>
-			<TabScreenContainer
+			<ScreenContainer
 				contentContainerStyle={styles.container}
 				keyboardAware
 				withHeaderPadding
@@ -431,7 +417,7 @@ export default function OrderDetail() {
 						)
 					}}
 				</Subscribe>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }

@@ -107,6 +107,16 @@ function RootLayout() {
 						<PostHogProvider client={posthog}>
 							<Stack initialRouteName="(tabs)">
 								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+								<Stack.Screen
+									name="orders"
+									options={{
+										headerShown: false,
+										presentation: Platform.select({
+											default: 'modal',
+											web: 'transparentModal',
+										}),
+									}}
+								/>
 								<Stack.Screen name="+not-found" />
 								<Stack.Screen
 									name="sign-in"
@@ -121,13 +131,19 @@ function RootLayout() {
 									name="tables/[table_id]"
 									options={{
 										headerShown: false,
-										presentation: 'modal',
+										presentation: Platform.select({
+											default: 'modal',
+											web: 'transparentModal',
+										}),
 									}}
 								/>
 								<Stack.Screen
 									name="tables/[location_id]/[table_id]"
 									options={{
-										presentation: 'modal',
+										presentation: Platform.select({
+											default: 'modal',
+											web: 'transparentModal',
+										}),
 									}}
 								/>
 							</Stack>

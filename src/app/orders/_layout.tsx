@@ -4,10 +4,6 @@ import { useUnistyles } from 'react-native-unistyles'
 
 import { defaultStackScreenOptions } from '@/lib/navigation'
 
-export const unstable_settings = {
-	initialRouteName: 'index',
-}
-
 export default function OrdersLayout() {
 	const { t } = useLingui()
 	const { theme } = useUnistyles()
@@ -15,11 +11,14 @@ export default function OrdersLayout() {
 	return (
 		<Stack screenOptions={defaultStackScreenOptions(theme.colors.gray.text)}>
 			<Stack.Screen
-				name="index"
-				options={{ headerShown: false, title: t`Orders` }}
+				name="[id]"
+				options={{
+					headerTintColor: 'white',
+					headerTransparent: true,
+					presentation: 'modal',
+					title: t`Order`,
+				}}
 			/>
-			<Stack.Screen name="current" options={{ title: t`Current Order` }} />
-			<Stack.Screen name="[id]" options={{ title: t`Order Detail` }} />
 		</Stack>
 	)
 }

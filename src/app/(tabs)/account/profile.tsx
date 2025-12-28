@@ -96,7 +96,7 @@ export default function ProfileScreen() {
 			if (router.canGoBack()) {
 				router.back()
 			} else {
-				router.navigate('/more', { withAnchor: false })
+				router.navigate('/account', { withAnchor: false })
 			}
 		}
 
@@ -247,7 +247,7 @@ export default function ProfileScreen() {
 						<ListItem
 							accessibilityRole="link"
 							chevron
-							onPress={() => router.push('/more/sessions')}
+							onPress={() => router.push('/account/sessions')}
 						>
 							<ListItem.Label>
 								<Trans>Sessions</Trans>

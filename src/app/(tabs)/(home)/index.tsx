@@ -92,7 +92,7 @@ export default function Menu() {
 					<RefreshControl onRefresh={handleRefresh} refreshing={false} />
 				}
 				withPaddingEdges={['top', 'bottom']}
-				withTopGradient
+				withHeaderPadding
 			>
 				<PromotionsSection />
 

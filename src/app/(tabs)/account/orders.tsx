@@ -33,7 +33,7 @@ const handleSignIn = () => {
 }
 
 const handleOrderPress = (orderId: string) => {
-	router.push(`/(tabs)/orders/${orderId}`)
+	router.push(`/orders/${orderId}`)
 }
 
 const UniImage = withUnistyles(Image)
@@ -78,7 +78,7 @@ export default function Orders() {
 
 	const handleCurrentOrderPress = () => {
 		if (currentOrder) {
-			router.push(`/(tabs)/orders/current`)
+			router.push('/orders/current')
 		}
 	}
 
@@ -129,6 +129,8 @@ export default function Orders() {
 						refreshing={isRefetching}
 					/>
 				}
+				withHeaderPadding
+				withPaddingEdges={['top', 'left', 'right']}
 				withTopGradient
 			>
 				{/* Current Order in Progress */}
