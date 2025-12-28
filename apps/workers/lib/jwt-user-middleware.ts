@@ -18,23 +18,22 @@ export type JwtUserVariables = {
 	}
 }
 
+export type AuthenticatedJwtVariables = {
+	jwt: {
+		payload: JWTPayload
+		token: string
+		userId: number
+	}
+}
+
 /**
  * Middleware for JWT authentication with Sentry and PostHog integration
  *
- * Extracts JWT token from query params, Authorization header, or cookies,
- * verifies the token, and sets user context in Sentry and PostHog.
- *
- * Use globally to enable optional authentication across all routes.
- * For routes requiring authentication, use the `requireAuth` helper.
- *
  * @example
- * // Global usage (optional auth for all routes)
  * app.use(jwtUserMiddleware())
  *
- * @example
- * // Protected route requiring authentication
- * app.get('/profile', (c) => {
- *   const { userId } = requireAuth(c)
+ * app.get('/profile', requireAuth(), (c) => {
+ *   const { userId } = c.get('jwt')
  *   return c.json({ userId })
  * })
  */
@@ -60,7 +59,6 @@ export function jwtUserMiddleware() {
 		}
 
 		const userId = Number.parseInt(clientId, 10)
-
 		const userEmail = 'email' in payload ? (payload.email as string) : undefined
 		const userName = 'name' in payload ? (payload.name as string) : undefined
 		const userPhone = 'phone' in payload ? (payload.phone as string) : undefined
@@ -93,24 +91,25 @@ export function jwtUserMiddleware() {
 }
 
 /**
- * Helper to require authentication in a route handler
- *
- * Throws 401 Unauthorized if user is not authenticated
+ * Middleware to require authentication
  *
  * @example
- * app.get('/profile', (c) => {
- *   const { userId, payload } = requireAuth(c)
+ * app.get('/profile', requireAuth(), (c) => {
+ *   const { userId } = c.get('jwt')
  *   return c.json({ userId })
  * })
  */
-export function requireAuth(
-	context: Context<{ Bindings: Bindings; Variables: JwtUserVariables }>,
-) {
-	const jwt = context.get('jwt')
+export function requireAuth() {
+	return createMiddleware<{
+		Bindings: Bindings
+		Variables: AuthenticatedJwtVariables
+	}>(async (context, next) => {
+		const jwt = context.get('jwt')
 
-	if (!jwt) {
-		throw new HTTPException(401, { message: 'Unauthorized' })
-	}
+		if (!jwt) {
+			throw new HTTPException(401, { message: 'Unauthorized' })
+		}
 
-	return jwt
+		return next()
+	})
 }
