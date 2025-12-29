@@ -20,7 +20,6 @@ export default function Root({ children }: PropsWithChildren) {
 					href="https://o4509792904151040.ingest.us.sentry.io"
 					rel="dns-prefetch"
 				/>
-				<link href="https://firebase.googleapis.com" rel="dns-prefetch" />
 				<link href="https://a.tolo.cafe" rel="dns-prefetch" />
 
 				{/* SEO and Performance Meta Tags */}

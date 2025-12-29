@@ -1,0 +1,5 @@
+# Run lint-staged for formatting and linting
+bunx lint-staged
+
+# Run typecheck on all files
+bun run typecheck

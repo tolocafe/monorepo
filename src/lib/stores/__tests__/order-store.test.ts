@@ -26,10 +26,6 @@ jest.mock('react-native-mmkv', () => {
 		MMKV: jest.fn(() => instance),
 	}
 })
-jest.mock('@/lib/analytics/firebase', () => ({
-	enableAnalytics: jest.fn(),
-	trackEvent: jest.fn(),
-}))
 jest.mock('@/lib/queries/auth', () => ({
 	selfQueryOptions: { queryFn: jest.fn(), queryKey: ['self'] },
 }))

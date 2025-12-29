@@ -18,7 +18,7 @@ import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
-import { enableAnalytics, identify, trackEvent } from '@/lib/analytics'
+import { identify, trackEvent } from '@/lib/analytics'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import {
 	requestOtpMutationOptions,
@@ -60,7 +60,6 @@ export default function SignIn() {
 			requestTrackingPermissionAsync()
 				.then((granted) => {
 					if (granted) {
-						void enableAnalytics()
 						void identify({
 							email: data.client.email,
 							firstName: data.client.firstname,

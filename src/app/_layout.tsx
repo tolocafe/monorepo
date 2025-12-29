@@ -15,11 +15,10 @@ import { Stack, useNavigationContainerRef } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
-import { FacebookPixel } from '@/lib/analytics/facebook-pixel'
+import { AnalyticsIdentifier } from '@/lib/analytics/components/analytics-identifier'
 import { posthog, PostHogProvider } from '@/lib/analytics/posthog'
 import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
-import '@/lib/analytics/firebase/init'
 import '@/lib/locales/init'
 import { useUpdates } from '@/lib/hooks/use-updates'
 import { QueryProvider } from '@/lib/providers/query-provider'
@@ -98,11 +97,11 @@ function RootLayout() {
 	return (
 		<KeyboardProvider>
 			<QueryProvider>
+				<AnalyticsIdentifier />
 				<ThemeProvider
 					value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
 				>
 					<StatusBar style="auto" />
-					<FacebookPixel />
 					<I18nProvider i18n={i18n}>
 						<PostHogProvider client={posthog}>
 							<Stack initialRouteName="(tabs)">

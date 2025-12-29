@@ -44,7 +44,9 @@ const UniImage = withUnistyles(Image)
 
 function DesktopSideTabs(props: Omit<BottomTabNavigatorProps, 'id'>) {
 	const { t } = useLingui()
-	const isBarista = useIsBarista()
+	const isBarista = useIsBarista({
+		staleTime: Number.POSITIVE_INFINITY,
+	})
 
 	return (
 		<UITabs {...props}>

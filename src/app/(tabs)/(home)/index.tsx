@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useRef } from 'react'
 import type { ScrollView } from 'react-native'
 import { RefreshControl } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
 import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -23,41 +22,14 @@ import {
 } from '@/components/HomeSections/queries'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { Paragraph } from '@/components/Text'
-import { identify } from '@/lib/analytics'
-import { enableAnalytics } from '@/lib/analytics/firebase'
-import { requestTrackingPermissionAsync } from '@/lib/notifications'
-import { selfQueryOptions } from '@/lib/queries/auth'
 import { queryClient } from '@/lib/query-client'
 
 export default function Menu() {
 	const { t } = useLingui()
 
-	const { data: selfData } = useQuery(selfQueryOptions)
-
 	const screenRef = useRef<ScrollView>(null)
 
 	useScrollToTop(screenRef)
-
-	useEffect(() => {
-		if (!selfData) return
-
-		async function requestEnableAnalytics() {
-			const granted = await requestTrackingPermissionAsync()
-
-			if (!granted) return
-
-			void enableAnalytics()
-			void identify({
-				email: selfData?.email,
-				firstName: selfData?.firstname,
-				lastName: selfData?.lastname,
-				phoneNumber: selfData?.phone_number,
-				userId: selfData?.client_id,
-			})
-		}
-
-		void requestEnableAnalytics()
-	}, [selfData])
 
 	const handleRefresh = useCallback(() => {
 		void queryClient.invalidateQueries(productsQueryOptions)
