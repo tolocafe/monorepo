@@ -153,6 +153,11 @@ export default function Root({ children }: PropsWithChildren) {
 				body {
 					color-scheme: light dark;
 				}
+				/* Remove top border from tab bar on web */
+				div:has(> [role="tablist"]) {
+					border-top: none !important;
+					box-shadow: none !important;
+				}
 				`}</style>
 
 				{/* Disable body scrolling on web for native-like experience */}

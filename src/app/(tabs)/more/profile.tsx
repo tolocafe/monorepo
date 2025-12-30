@@ -15,6 +15,7 @@ import Input from '@/components/Input'
 import { List, ListItem } from '@/components/List'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import {
 	selfQueryOptions,
 	signOutMutationOptions,
@@ -28,9 +29,14 @@ export default function ProfileScreen() {
 	const { t } = useLingui()
 	const queryClient = useQueryClient()
 
+	useTrackScreenView({ screenName: 'profile' }, [])
+
 	const { data: user } = useQuery(selfQueryOptions)
 
-	const nameSchema = z.string().trim().min(1, t`Please enter your name`)
+	const nameSchema = z
+		.string()
+		.trim()
+		.min(1, t`Please enter your name`)
 
 	const emailSchema = z.email(t`Enter a valid email`).trim()
 

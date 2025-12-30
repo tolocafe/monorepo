@@ -21,6 +21,8 @@ import { scheduleOnRN } from 'react-native-worklets'
 
 import { LinearGradient } from '@/components/LinearGradient'
 import { H1, Text } from '@/components/Text'
+import { trackEvent } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import {
 	COFFEE_STORY_GRADIENT_COLORS,
 	getCoffeeGradientIndex,
@@ -48,7 +50,7 @@ type DetailRowProps = {
 	value: string
 }
 
-export default function CoffeeStories() {
+export default function CoffeeStoryScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const { data: coffees = [] } = useQuery(coffeesQueryOptions)
 	const { data: currentCoffee } = useQuery(coffeeQueryOptions(id))
@@ -88,6 +90,16 @@ export default function CoffeeStories() {
 		}
 	}, [coffeeStories, id])
 
+	useTrackScreenView(
+		{
+			screenName: 'coffee-story',
+			skip: !currentCoffee,
+			coffee_id: currentCoffee?.slug ?? '',
+			coffee_name: currentCoffee?.name ?? '',
+		},
+		[currentCoffee],
+	)
+
 	const handleClose = useCallback(() => {
 		mountScale.value = withSpring(0, SPRING_CONFIG, (finished) => {
 			if (finished) {
@@ -102,6 +114,8 @@ export default function CoffeeStories() {
 			if (previous < totalPages - 1) {
 				return previous + 1
 			}
+			// User completed viewing all coffee stories
+			void trackEvent('menu:coffee_story_complete')
 			handleClose()
 			return previous
 		})

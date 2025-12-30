@@ -21,6 +21,7 @@ import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import Text, { H2, H3, Paragraph } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { tableQueryOptions } from '@/lib/queries/tables'
 import { api } from '@/lib/services/api-service'
@@ -60,16 +61,17 @@ export default function TableBillScreen() {
 		void getIsPlatformPaySupported().then(setIsPlatformPaySupported)
 	}, [])
 
-	// Track table bill view
-	useEffect(() => {
-		if (!tableBill) return
-
-		void trackEvent('table:bill_view', {
-			bill_total: tableBill.total / 100,
-			item_count: tableBill.items.reduce((sum, item) => sum + item.quantity, 0),
+	useTrackScreenView(
+		{
+			screenName: 'table-bill',
+			skip: !tableBill,
+			bill_total: tableBill?.total ? tableBill.total / 100 : 0,
+			item_count:
+				tableBill?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0,
 			table_id,
-		})
-	}, [tableBill, table_id])
+		},
+		[tableBill, table_id],
+	)
 
 	// Auto-dismiss after successful payment
 	useEffect(() => {

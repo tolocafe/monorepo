@@ -29,6 +29,7 @@ import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
 import WalletButton, { addPass } from '@/components/WalletButton'
 import { trackEvent } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { loadAndActivateLocale } from '@/lib/locales/load-and-activate-locale'
 import { LOCALE_NAMES } from '@/lib/locales/utils'
@@ -86,12 +87,14 @@ const createDropdownStyles = (isDark: boolean) => ({
 	},
 })
 
-export default function More() {
+export default function MoreScreen() {
 	const { i18n } = useLingui()
 	const { data: user, isPending: isUserPending } = useQuery(selfQueryOptions)
 	const screenRef = useRef<ScrollView>(null)
 	const colorScheme = useColorScheme()
 	const dropdownStyles = createDropdownStyles(colorScheme === 'dark')
+
+	useTrackScreenView({ screenName: 'more' }, [])
 	const [isAddingPass, setIsAddingPass] = useState(false)
 
 	const groupName = getGroupName(user?.client_groups_name)

@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { Linking, Platform, View } from 'react-native'
 
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -10,19 +9,17 @@ import Card from '@/components/Card'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Label, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 
 const APPLE_MAPS_URL = 'https://maps.apple/p/97fTAIvUnQ-uSU'
 const GOOGLE_MAPS_URL = 'https://maps.app.goo.gl/V9Uz531Jz94ziYDn9'
 const TRIPADVISOR_URL =
 	'https://www.tripadvisor.com/Restaurant_Review-g644384-d33287081-Reviews-Tolo_Buen_Cafe-Toluca_Central_Mexico_and_Gulf_Coast.html?m=69573'
 
-export default function VisitUs() {
+export default function VisitUsScreen() {
 	const { t } = useLingui()
 
-	// Track screen view
-	useEffect(() => {
-		void trackEvent('store:visit_us_view')
-	}, [])
+	useTrackScreenView({ screenName: 'visit-us' }, [])
 
 	return (
 		<>

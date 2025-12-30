@@ -4,56 +4,25 @@ import { posthog } from './posthog'
 
 export type AnalyticsEvent =
 	// Cart events
-	| 'add_payment_info'
-	| 'add_to_cart'
-	| 'auth:phone_submit'
-	| 'auth:signin_screen_view'
-	// Checkout events
-	| 'auth:signup_form_view'
-	| 'begin_checkout'
-	// Menu events
 	| 'cart:item_add'
 	| 'cart:item_quantity_update'
 	| 'cart:item_remove'
-	| 'cart:view'
+	// Checkout events
 	| 'checkout:insufficient_balance'
 	| 'checkout:start'
-	| 'generate_lead'
-	// Orders events
-	| 'login'
-	| 'menu:category_view'
+	// Menu events
 	| 'menu:coffee_story_complete'
-	// Profile events
-	| 'menu:coffee_view'
-	| 'menu:home_view'
-	// Auth events (frontend only - screen views)
-	| 'menu:product_customize'
-	| 'menu:product_view'
-	| 'menu:promotion_view'
 	// Settings events
-	| 'orders:detail_view'
-	| 'orders:history_view'
-	// Social/engagement events
-	| 'orders:receipt_download'
-	| 'profile:update'
-	| 'profile:view'
-	| 'purchase'
-	// Wallet events
-	| 'sessions:view'
 	| 'settings:language_change'
-	| 'signup'
+	// Social/engagement events
 	| 'social:link_click'
-	// Table events
 	| 'store:directions_click'
 	| 'store:tripadvisor_click'
-	| 'store:visit_us_view'
-	| 'table:bill_view'
+	// Table events
 	| 'table:payment_start'
-	| 'view_cart'
-	| 'view_item'
+	// Wallet events
 	| 'wallet:amount_select'
 	| 'wallet:pass_add'
-	| 'wallet:screen_view'
 	| 'wallet:topup_start'
 
 export type EventProperties = {

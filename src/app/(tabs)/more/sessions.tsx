@@ -8,6 +8,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import { List, ListItem } from '@/components/List'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { sessionsQueryOptions } from '@/lib/queries/auth'
 
 const formatSessionDate = (timestamp: number) =>
@@ -26,6 +27,8 @@ const formatSessionTime = (timestamp: number) =>
 export default function SessionsScreen() {
 	const { t } = useLingui()
 	const queryClient = useQueryClient()
+
+	useTrackScreenView({ screenName: 'sessions' }, [])
 
 	const { data: sessions, isPending } = useQuery(sessionsQueryOptions)
 

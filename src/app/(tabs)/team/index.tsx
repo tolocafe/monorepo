@@ -10,10 +10,13 @@ import { StyleSheet } from 'react-native-unistyles'
 import { List, ListItem } from '@/components/List'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2 } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { queryClient } from '@/lib/query-client'
 
-export default function TeamIndex() {
+export default function TeamScreen() {
 	const screenRef = useRef<ScrollView>(null)
+
+	useTrackScreenView({ screenName: 'team' }, [])
 
 	return (
 		<>

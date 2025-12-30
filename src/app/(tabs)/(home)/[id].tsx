@@ -38,7 +38,7 @@ import { LinearGradient } from '@/components/LinearGradient'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
 import WebContent from '@/components/WebContent'
-import { trackEvent } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { getImageUrl } from '@/lib/image'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { productQueryOptions } from '@/lib/queries/product'
@@ -84,7 +84,7 @@ const GrayIonIcon = withUnistyles(Ionicons, (theme) => ({
 	color: theme.colors.gray.text,
 }))
 
-export default function MenuDetail() {
+export default function ProductScreen() {
 	const { t } = useLingui()
 
 	const { id } = useLocalSearchParams<{ id: string }>()
@@ -116,21 +116,17 @@ export default function MenuDetail() {
 		},
 	})
 
-	/** Track product view event */
-	useEffect(() => {
-		if (!product?.product_id) return
-		void trackEvent('menu:product_view', {
-			category_id: product.menu_category_id,
-			product_id: product.product_id,
-			product_name: product.product_name,
-			product_price: Number(product.price?.['1']) || 0,
-		})
-	}, [
-		product?.product_id,
-		product?.menu_category_id,
-		product?.product_name,
-		product?.price,
-	])
+	useTrackScreenView(
+		{
+			screenName: 'product',
+			skip: !product?.product_id,
+			category_id: product?.menu_category_id ?? '',
+			product_id: product?.product_id ?? '',
+			product_name: product?.product_name ?? '',
+			product_price: Number(product?.price?.['1']) || 0,
+		},
+		[product],
+	)
 
 	/** Default each group to its first modification when product loads */
 	useEffect(() => {

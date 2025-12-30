@@ -18,15 +18,18 @@ import Button from '@/components/Button'
 import Card from '@/components/Card'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { orderDetailQueryOptions } from '@/lib/queries/order'
 import { downloadReceipt } from '@/lib/utils/download-receipt'
 import { formatPrice } from '@/lib/utils/price'
 
-export default function OrderDetail() {
+export default function OrderScreen() {
 	const { t } = useLingui()
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const [isDownloading, setIsDownloading] = useState(false)
+
+	useTrackScreenView({ screenName: 'order', order_id: id }, [id])
 
 	const {
 		data: order,

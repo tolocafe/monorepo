@@ -12,6 +12,7 @@ import Button from '@/components/Button'
 import Card from '@/components/Card'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { useUpdates } from '@/lib/hooks/use-updates'
 import { clearAllCache } from '@/lib/queries/cache-utils'
 
@@ -22,6 +23,8 @@ export default function AppInfoScreen() {
 	const { t } = useLingui()
 	const updates = useUpdates()
 	const [isClearingCache, setIsClearingCache] = useState(false)
+
+	useTrackScreenView({ screenName: 'app-info' }, [])
 
 	const appVersion = getStringOrFallback(nativeApplicationVersion, '0')
 	const buildVersion = getStringOrFallback(nativeBuildVersion, '0')

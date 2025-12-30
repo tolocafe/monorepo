@@ -19,6 +19,7 @@ import Card from '@/components/Card'
 import { ModifierTag } from '@/components/ModifierTag'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Paragraph, Text } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { baristaQueueQueryOptions } from '@/lib/queries/barista'
 import {
 	categoriesQueryOptions,
@@ -48,7 +49,7 @@ const UniScrollView = withUnistyles(ScrollView, (_theme, runtime) => ({
 	horizontal: runtime.breakpoint !== 'xs' && runtime.breakpoint !== 'sm',
 }))
 
-export default function BaristaQueue() {
+export default function OrdersQueue() {
 	const { t } = useLingui()
 	const screenRef = useRef<ScrollView>(null)
 
@@ -57,6 +58,7 @@ export default function BaristaQueue() {
 	)
 
 	useScrollToTop(screenRef)
+	useTrackScreenView({ screenName: 'orders-queue' }, [])
 
 	const {
 		data: orders,

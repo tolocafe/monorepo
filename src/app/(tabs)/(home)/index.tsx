@@ -22,14 +22,16 @@ import {
 } from '@/components/HomeSections/queries'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { Paragraph } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { queryClient } from '@/lib/query-client'
 
-export default function Menu() {
+export default function MenuScreen() {
 	const { t } = useLingui()
 
 	const screenRef = useRef<ScrollView>(null)
 
 	useScrollToTop(screenRef)
+	useTrackScreenView({ screenName: 'menu' }, [])
 
 	const handleRefresh = useCallback(() => {
 		void queryClient.invalidateQueries(productsQueryOptions)

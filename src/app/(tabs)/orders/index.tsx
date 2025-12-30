@@ -27,6 +27,7 @@ import {
 import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
 
 import type { Product } from '~common/api'
+import { useTrackScreenView } from 'src/lib/analytics/hooks'
 
 const handleSignIn = () => {
 	router.push('/sign-in')
@@ -38,7 +39,7 @@ const handleOrderPress = (orderId: string) => {
 
 const UniImage = withUnistyles(Image)
 
-export default function Orders() {
+export default function OrdersScreen() {
 	const { t } = useLingui()
 	const { data: user } = useQuery(selfQueryOptions)
 
@@ -56,6 +57,8 @@ export default function Orders() {
 			void resetBadgeCount()
 		}, []),
 	)
+
+	useTrackScreenView({ screenName: 'orders' }, [])
 
 	const currentOrderTotalCents = (() => {
 		if (!currentOrder) return 0

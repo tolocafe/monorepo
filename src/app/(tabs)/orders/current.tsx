@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Alert, Platform, Pressable, View } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
@@ -6,7 +6,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
-import { router, Stack } from 'expo-router'
+import { router, Stack, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import * as StoreReview from 'expo-store-review'
 import { StyleSheet } from 'react-native-unistyles'
@@ -18,6 +18,7 @@ import { ModifierTag } from '@/components/ModifierTag'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
+import { posthog } from '@/lib/analytics/posthog'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { useRegisterForPushNotifications } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -102,20 +103,22 @@ export default function OrderDetail() {
 		[order?.products],
 	)
 
-	useEffect(() => {
-		if (!order?.products) return
+	useFocusEffect(
+		useCallback(() => {
+			if (!order?.products) return
 
-		const itemCount = order.products.reduce(
-			(sum, product) => sum + product.quantity,
-			0,
-		)
+			const itemCount = order.products.reduce(
+				(sum, product) => sum + product.quantity,
+				0,
+			)
 
-		void trackEvent('cart:view', {
-			cart_total: orderTotal,
-			currency: 'MXN',
-			item_count: itemCount,
-		})
-	}, [order?.products, orderTotal])
+			posthog.screen('cart', {
+				cart_total: orderTotal,
+				currency: 'MXN',
+				item_count: itemCount,
+			})
+		}, [order?.products, orderTotal]),
+	)
 
 	const { Field, handleSubmit, Subscribe } = useForm({
 		defaultValues: {

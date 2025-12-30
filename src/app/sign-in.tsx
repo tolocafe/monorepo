@@ -18,7 +18,8 @@ import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
 import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
-import { identify, trackEvent } from '@/lib/analytics'
+import { identify } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import {
 	requestOtpMutationOptions,
@@ -42,7 +43,7 @@ const TextIonicons = withUnistyles(Ionicons, (theme) => ({
 	color: theme.colors.gray.text,
 }))
 
-export default function SignIn() {
+export default function SignInScreen() {
 	const { t } = useLingui()
 	const { itemName } = useLocalSearchParams<{ itemName?: string }>()
 	const [stage, setStage] = useState<'code' | 'phone' | 'signup'>('phone')
@@ -75,12 +76,10 @@ export default function SignIn() {
 		},
 	})
 
-	// Track sign-in screen view
-	useEffect(() => {
-		void trackEvent('auth:signin_screen_view', {
-			has_item_context: Boolean(itemName),
-		})
-	}, [itemName])
+	useTrackScreenView(
+		{ screenName: 'sign-in', has_item_context: Boolean(itemName) },
+		[itemName],
+	)
 
 	const { Field, handleSubmit, resetField, Subscribe } = useForm({
 		defaultValues: {

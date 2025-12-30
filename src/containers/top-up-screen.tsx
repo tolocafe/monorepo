@@ -24,6 +24,7 @@ import { CheckedButton } from '@/components/CheckedButton'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { privateClient } from '@/lib/services/http-client'
 import { formatPrice } from '@/lib/utils/price'
@@ -70,12 +71,10 @@ export default function TopUpScreen() {
 		void getIsPlatformPaySupported().then(setIsPlatformPaySupported)
 	}, [])
 
-	// Track wallet screen view
-	useEffect(() => {
-		void trackEvent('wallet:screen_view', {
-			current_balance: Number(user?.ewallet ?? '0'),
-		})
-	}, [user?.ewallet])
+	useTrackScreenView(
+		{ screenName: 'top-up', current_balance: Number(user?.ewallet ?? '0') },
+		[user?.ewallet],
+	)
 
 	const handleAmountSelect = (amount: number) => {
 		setSelectedAmount(amount)
