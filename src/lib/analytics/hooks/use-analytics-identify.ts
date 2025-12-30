@@ -21,6 +21,7 @@ export function useAnalyticsIdentify() {
 			if (!granted) return
 
 			void identify({
+				birthdate: selfData?.birthday,
 				email: selfData?.email,
 				firstName: selfData?.firstname,
 				lastName: selfData?.lastname,

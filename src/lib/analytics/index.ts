@@ -85,6 +85,7 @@ export type EventProperties = {
 }
 
 export type UserIdentity = {
+	birthdate?: string
 	email?: string
 	firstName?: string
 	lastName?: string
@@ -101,13 +102,15 @@ export async function flush() {
 }
 
 export async function identify(identity: UserIdentity) {
-	const { email, firstName, lastName, phoneNumber, userId } = identity
+	const { birthdate, email, firstName, lastName, phoneNumber, userId } =
+		identity
 
 	try {
 		const promises: Promise<unknown>[] = []
 
 		if (userId) {
 			const properties: Record<string, string> = {}
+			if (birthdate) properties.birthday = birthdate
 			if (email) properties.email = email
 			if (firstName) properties.first_name = firstName
 			if (lastName) properties.last_name = lastName

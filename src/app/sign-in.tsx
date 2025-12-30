@@ -62,6 +62,7 @@ export default function SignInScreen() {
 				.then((granted) => {
 					if (granted) {
 						void identify({
+							birthdate: data.client.birthday,
 							email: data.client.email,
 							firstName: data.client.firstname,
 							lastName: data.client.lastname,
