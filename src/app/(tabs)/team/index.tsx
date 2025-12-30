@@ -2,6 +2,7 @@ import { useRef } from 'react'
 import type { ScrollView } from 'react-native'
 import { RefreshControl } from 'react-native'
 
+import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
@@ -21,12 +22,12 @@ export default function TeamScreen() {
 	return (
 		<>
 			<Head>
-				<title>Team - TOLO</title>
+				<title>{t`Team - TOLO`}</title>
 				<meta
-					content="Team tools and operations for TOLO."
+					content={t`Team tools and operations for TOLO.`}
 					name="description"
 				/>
-				<meta content="Team - TOLO" property="og:title" />
+				<meta content={t`Team - TOLO`} property="og:title" />
 				<meta content="/team" property="og:url" />
 			</Head>
 			<TabScreenContainer

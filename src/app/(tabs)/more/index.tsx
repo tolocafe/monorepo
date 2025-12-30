@@ -10,6 +10,7 @@ import {
 } from 'react-native'
 
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { t } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { Trans } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
@@ -145,9 +146,12 @@ export default function MoreScreen() {
 	return (
 		<>
 			<Head>
-				<title>More - TOLO</title>
-				<meta content="Settings and information for TOLO." name="description" />
-				<meta content="More - TOLO" property="og:title" />
+				<title>{t`More - TOLO`}</title>
+				<meta
+					content={t`Settings and information for TOLO.`}
+					name="description"
+				/>
+				<meta content={t`More - TOLO`} property="og:title" />
 				<meta content="/more" property="og:url" />
 			</Head>
 			<TabScreenContainer

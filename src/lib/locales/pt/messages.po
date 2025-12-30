@@ -14,18 +14,18 @@ msgstr ""
 "Plural-Forms: \n"
 
 #. placeholder {0}: `Status${order.processing_status}`
-#: src/app/(tabs)/orders/index.tsx:179
+#: src/app/(tabs)/orders/index.tsx:185
 msgid "{0, select, Status10 {Open} Status20 {Preparing} Status30 {Ready} Status40 {En route} Status50 {Delivered} Status60 {Closed} Status70 {Deleted} other {Unknown}}"
 msgstr "{0, select, Status10 {Aberto} Status20 {Preparando} Status30 {Pronto} Status40 {A caminho} Status50 {Entregue} Status60 {Fechado} Status70 {Excluído} other {Desconhecido}}"
 
 #. placeholder {0}: tableBill.tableName
-#: src/containers/table-bill-screen.tsx:313
+#: src/containers/table-bill-screen.tsx:315
 #: src/containers/table-bill-screen.web.tsx:217
 msgid "{0} - Bill"
 msgstr "{0} - Conta"
 
 #. placeholder {0}: product.product_name
-#: src/app/(tabs)/(home)/[id].tsx:209
+#: src/app/(tabs)/(home)/[id].tsx:205
 msgid "{0} - TOLO Good Coffee"
 msgstr "{0} - TOLO Bom Café"
 
@@ -42,20 +42,20 @@ msgstr ""
 #. placeholder {5}: order.processing_status === 60 && 'Closed'
 #. placeholder {6}: order.processing_status === 70 && 'Deleted'
 #. placeholder {7}: !order.processing_status && 'Unknown'
-#: src/app/(tabs)/orders/[id].tsx:128
+#: src/app/(tabs)/orders/[id].tsx:131
 msgid "{0}{1}{2}{3}{4}{5}{6}{7}"
 msgstr "{0}{1}{2}{3}{4}{5}{6}{7}"
 
-#: src/app/(tabs)/orders/index.tsx:150
+#: src/app/(tabs)/orders/index.tsx:153
 msgid "{itemsCount} items"
 msgstr "{itemsCount} itens"
 
-#: src/containers/table-bill-screen.tsx:296
+#: src/containers/table-bill-screen.tsx:298
 #: src/containers/table-bill-screen.web.tsx:200
 msgid "✓ Payment Successful!"
 msgstr "✓ Pagamento bem-sucedido!"
 
-#: src/containers/top-up-screen.tsx:281
+#: src/containers/top-up-screen.tsx:280
 msgid ""
 "💳 Secure payments powered by Stripe\n"
 "🔒 Your payment information is encrypted and secure"
@@ -63,52 +63,52 @@ msgstr ""
 "💳 Pagamentos seguros com Stripe\n"
 "🔒 Suas informações de pagamento são criptografadas e seguras"
 
-#: src/app/sign-in.tsx:346
+#: src/app/sign-in.tsx:343
 msgid "0000000000"
 msgstr "0000000000"
 
-#: src/app/(tabs)/more/visit-us.tsx:61
+#: src/app/(tabs)/more/visit-us.tsx:58
 msgid "7:30 AM – 7:30 PM"
 msgstr "7:30 AM – 7:30 PM"
 
-#: src/app/(tabs)/more/visit-us.tsx:69
+#: src/app/(tabs)/more/visit-us.tsx:66
 msgid "9:00 AM – 4:00 PM"
 msgstr "9:00 AM – 4:00 PM"
 
-#: src/app/(tabs)/more/index.tsx:197
-#: src/app/(tabs)/more/profile.tsx:244
+#: src/app/(tabs)/more/index.tsx:204
+#: src/app/(tabs)/more/profile.tsx:247
 msgid "Account"
 msgstr "Conta"
 
-#: src/app/(tabs)/more/sessions.tsx:52
+#: src/app/(tabs)/more/sessions.tsx:55
 msgid "Active Sessions"
 msgstr "Sessões Ativas"
 
-#: src/app/(tabs)/orders/current.tsx:404
+#: src/app/(tabs)/orders/current.tsx:407
 msgid "Add any special instructions or requests..."
 msgstr "Adicione qualquer instrução ou pedido especial..."
 
-#: src/containers/top-up-screen.tsx:211
+#: src/containers/top-up-screen.tsx:210
 msgid "Add funds to your TOLO wallet for quick and easy payments."
 msgstr "Adicione fundos à sua carteira TOLO para pagamentos rápidos e fáceis."
 
-#: src/app/(tabs)/(home)/[id].tsx:472
+#: src/app/(tabs)/(home)/[id].tsx:466
 msgid "Add to Order"
 msgstr "Adicionar ao Pedido"
 
-#: src/app/(tabs)/orders/current.tsx:386
+#: src/app/(tabs)/orders/current.tsx:389
 msgid "Additional"
 msgstr "Adicional"
 
-#: src/app/(tabs)/team/queue.tsx:209
+#: src/app/(tabs)/team/queue.tsx:211
 msgid "All"
 msgstr "Todos"
 
-#: src/app/(tabs)/more/app.tsx:52
+#: src/app/(tabs)/more/app.tsx:55
 msgid "All cached data has been cleared successfully."
 msgstr "Todos os dados em cache foram limpos com sucesso."
 
-#: src/containers/top-up-screen.tsx:237
+#: src/containers/top-up-screen.tsx:236
 msgid "Amount"
 msgstr "Valor"
 
@@ -117,32 +117,32 @@ msgid "An error occurred"
 msgstr "Ocorreu um erro"
 
 #: src/app/(tabs)/more/_layout.tsx:21
-#: src/app/(tabs)/more/index.tsx:383
+#: src/app/(tabs)/more/index.tsx:390
 msgid "App"
 msgstr "App"
 
-#: src/app/(tabs)/more/app.tsx:80
-#: src/app/(tabs)/more/app.tsx:85
+#: src/app/(tabs)/more/app.tsx:83
+#: src/app/(tabs)/more/app.tsx:88
 msgid "App - TOLO"
 msgstr "App - TOLO"
 
-#: src/app/(tabs)/more/visit-us.tsx:87
+#: src/app/(tabs)/more/visit-us.tsx:84
 msgid "Apple Maps"
 msgstr "Apple Maps"
 
-#: src/app/(tabs)/orders/current.tsx:223
+#: src/app/(tabs)/orders/current.tsx:226
 msgid "Are you sure you want to clear this order? This action cannot be undone."
 msgstr "Tem certeza de que deseja limpar este pedido? Esta ação não pode ser desfeita."
 
-#: src/app/(tabs)/more/profile.tsx:106
+#: src/app/(tabs)/more/profile.tsx:109
 msgid "Are you sure you want to sign out?"
 msgstr "Tem certeza de que deseja sair?"
 
-#: src/app/(tabs)/more/index.tsx:169
+#: src/app/(tabs)/more/index.tsx:176
 msgid "Balance"
 msgstr "Saldo"
 
-#: src/app/(tabs)/more/profile.tsx:192
+#: src/app/(tabs)/more/profile.tsx:195
 msgid "Birthdate"
 msgstr "Data de nascimento"
 
@@ -160,54 +160,54 @@ msgstr "Bebida de aniversário já foi trocada este ano."
 msgid "Birthday drink redeemed for {0}."
 msgstr ""
 
-#: src/app/(tabs)/more/visit-us.tsx:48
+#: src/app/(tabs)/more/visit-us.tsx:45
 msgid "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
 msgstr "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, México"
 
-#: src/app/(tabs)/more/app.tsx:54
+#: src/app/(tabs)/more/app.tsx:57
 msgid "Cache cleared"
 msgstr "Cache limpo"
 
-#: src/app/(tabs)/(home)/[id].tsx:310
+#: src/app/(tabs)/(home)/[id].tsx:306
 msgid "Caffeine"
 msgstr "Cafeína"
 
-#: src/app/(tabs)/more/app.tsx:41
-#: src/app/(tabs)/more/profile.tsx:107
-#: src/app/(tabs)/orders/current.tsx:158
-#: src/app/(tabs)/orders/current.tsx:225
-#: src/app/(tabs)/orders/current.tsx:341
+#: src/app/(tabs)/more/app.tsx:44
+#: src/app/(tabs)/more/profile.tsx:110
+#: src/app/(tabs)/orders/current.tsx:161
+#: src/app/(tabs)/orders/current.tsx:228
+#: src/app/(tabs)/orders/current.tsx:344
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: src/app/sign-in.tsx:473
-#: src/app/sign-in.tsx:535
+#: src/app/sign-in.tsx:470
+#: src/app/sign-in.tsx:532
 msgid "Change phone number"
 msgstr "Alterar número de telefone"
 
-#: src/app/(tabs)/more/app.tsx:109
+#: src/app/(tabs)/more/app.tsx:112
 msgid "Channel"
 msgstr "Canal"
 
-#: src/app/(tabs)/orders/current.tsx:232
+#: src/app/(tabs)/orders/current.tsx:235
 msgid "Clear"
 msgstr "Limpar"
 
-#: src/app/(tabs)/more/app.tsx:36
-#: src/app/(tabs)/more/app.tsx:71
-#: src/app/(tabs)/more/app.tsx:163
+#: src/app/(tabs)/more/app.tsx:39
+#: src/app/(tabs)/more/app.tsx:74
+#: src/app/(tabs)/more/app.tsx:166
 msgid "Clear Cache"
 msgstr "Limpar Cache"
 
-#: src/app/(tabs)/orders/current.tsx:222
+#: src/app/(tabs)/orders/current.tsx:225
 msgid "Clear Order"
 msgstr "Limpar Pedido"
 
-#: src/app/(tabs)/more/app.tsx:153
+#: src/app/(tabs)/more/app.tsx:156
 msgid "Clear the app cache to remove stored data and reload fresh content on next use. Login credentials and language preferences will be preserved."
 msgstr "Limpe o cache do app para remover dados armazenados e recarregar conteúdo fresco no próximo uso. Credenciais de login e preferências de idioma serão preservadas."
 
-#: src/app/(tabs)/more/app.tsx:161
+#: src/app/(tabs)/more/app.tsx:164
 msgid "Clearing Cache..."
 msgstr "Limpando Cache..."
 
@@ -215,22 +215,22 @@ msgstr "Limpando Cache..."
 msgid "Client ID"
 msgstr "ID do Cliente"
 
-#: src/app/sign-in.tsx:285
-#: src/containers/table-bill-screen.tsx:272
+#: src/app/sign-in.tsx:282
+#: src/containers/table-bill-screen.tsx:274
 #: src/containers/table-bill-screen.web.tsx:176
 msgid "Close"
 msgstr "Fechar"
 
-#: src/app/(tabs)/more/visit-us.tsx:77
+#: src/app/(tabs)/more/visit-us.tsx:74
 msgid "Closed"
 msgstr "Fechado"
 
-#: src/app/sign-in.tsx:109
-#: src/app/sign-in.tsx:130
+#: src/app/sign-in.tsx:106
+#: src/app/sign-in.tsx:127
 msgid "Code sent"
 msgstr "Código enviado"
 
-#: src/app/(tabs)/more/visit-us.tsx:32
+#: src/app/(tabs)/more/visit-us.tsx:29
 msgid "Come visit TOLO. Find our hours, address and quick links to your preferred maps app."
 msgstr "Venha visitar a TOLO. Encontre nossos horários, endereço e links rápidos para seu app de mapas preferido."
 
@@ -238,11 +238,11 @@ msgstr "Venha visitar a TOLO. Encontre nossos horários, endereço e links rápi
 msgid "Confirm Redemption"
 msgstr "Confirmar Troca"
 
-#: src/app/(tabs)/more/index.tsx:250
+#: src/app/(tabs)/more/index.tsx:257
 msgid "Contact"
 msgstr "Contato"
 
-#: src/app/sign-in.tsx:359
+#: src/app/sign-in.tsx:356
 msgid "Continue"
 msgstr "Continuar"
 
@@ -250,17 +250,17 @@ msgstr "Continuar"
 msgid "Could not find a customer with this ID. Please try again."
 msgstr "Não foi possível encontrar um cliente com este ID. Tente novamente."
 
-#: src/app/sign-in.tsx:368
+#: src/app/sign-in.tsx:365
 msgid "Create account"
 msgstr "Criar conta"
 
-#: src/containers/top-up-screen.tsx:222
+#: src/containers/top-up-screen.tsx:221
 msgid "Current Balance"
 msgstr "Saldo Atual"
 
 #: src/app/(tabs)/orders/_layout.tsx:21
-#: src/app/(tabs)/orders/current.tsx:335
-#: src/app/(tabs)/orders/index.tsx:146
+#: src/app/(tabs)/orders/current.tsx:338
+#: src/app/(tabs)/orders/index.tsx:149
 msgid "Current Order"
 msgstr "Pedido Atual"
 
@@ -268,36 +268,36 @@ msgstr "Pedido Atual"
 msgid "Customer Not Found"
 msgstr "Cliente não encontrado"
 
-#: src/app/(tabs)/team/index.tsx:57
+#: src/app/(tabs)/team/index.tsx:61
 msgid "Customers"
 msgstr "Clientes"
 
-#: src/app/sign-in.tsx:418
+#: src/app/sign-in.tsx:415
 msgid "Date of birth (optional)"
 msgstr "Data de nascimento (opcional)"
 
-#: src/app/(tabs)/more/profile.tsx:213
-#: src/app/sign-in.tsx:434
+#: src/app/(tabs)/more/profile.tsx:216
+#: src/app/sign-in.tsx:431
 msgid "DD/MM/YYYY"
 msgstr "DD/MM/AAAA"
 
-#: src/app/(tabs)/more/profile.tsx:262
+#: src/app/(tabs)/more/profile.tsx:265
 msgid "Delete"
 msgstr "Excluir"
 
-#: src/app/(tabs)/team/queue.tsx:295
+#: src/app/(tabs)/team/queue.tsx:297
 msgid "Delivery"
 msgstr "Entrega"
 
-#: src/app/(tabs)/orders/[id].tsx:202
+#: src/app/(tabs)/orders/[id].tsx:205
 msgid "Discount"
 msgstr "Desconto"
 
-#: src/app/(tabs)/(home)/index.tsx:84
+#: src/app/(tabs)/(home)/index.tsx:58
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides."
 msgstr "Descubra nosso cardápio de café caseiro com espresso, lattes, cappuccinos e deliciosos acompanhamentos."
 
-#: src/app/(tabs)/(home)/index.tsx:75
+#: src/app/(tabs)/(home)/index.tsx:49
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides. TOLO - where good coffee meets you."
 msgstr "Descubra nosso cardápio de café caseiro com espresso, lattes, cappuccinos e deliciosos acompanhamentos. TOLO - onde o bom café encontra você."
 
@@ -305,7 +305,7 @@ msgstr "Descubra nosso cardápio de café caseiro com espresso, lattes, cappucci
 msgid "Download PDF"
 msgstr "Baixar PDF"
 
-#: src/app/(tabs)/orders/[id].tsx:233
+#: src/app/(tabs)/orders/[id].tsx:237
 msgid "Download Receipt"
 msgstr "Baixar Recibo"
 
@@ -313,16 +313,16 @@ msgstr "Baixar Recibo"
 msgid "Download Ticket"
 msgstr "Baixar Ticket"
 
-#: src/app/(tabs)/orders/[id].tsx:231
+#: src/app/(tabs)/orders/[id].tsx:235
 #: src/app/(tabs)/team/ticket.tsx:92
 msgid "Downloading..."
 msgstr "Baixando..."
 
-#: src/app/(tabs)/more/index.tsx:223
+#: src/app/(tabs)/more/index.tsx:230
 msgid "Edit Profile"
 msgstr "Editar Perfil"
 
-#: src/app/(tabs)/more/profile.tsx:165
+#: src/app/(tabs)/more/profile.tsx:168
 msgid "Email"
 msgstr "Email"
 
@@ -330,56 +330,56 @@ msgstr "Email"
 msgid "Enter a ticket number and download its receipt as PDF."
 msgstr "Digite um número de ticket e baixe seu recibo em PDF."
 
-#: src/app/(tabs)/more/profile.tsx:43
+#: src/app/(tabs)/more/profile.tsx:46
 msgid "Enter a valid date (YYYY-MM-DD)"
 msgstr "Digite uma data válida (AAAA-MM-DD)"
 
-#: src/app/(tabs)/more/profile.tsx:38
+#: src/app/(tabs)/more/profile.tsx:41
 msgid "Enter a valid email"
 msgstr "Digite um e-mail válido"
 
-#: src/app/sign-in.tsx:331
+#: src/app/sign-in.tsx:328
 msgid "Enter to your account or create a new one using your phone number"
 msgstr "Entre na sua conta ou crie uma nova usando seu número de telefone"
 
-#: src/app/sign-in.tsx:481
+#: src/app/sign-in.tsx:478
 msgid "Enter verification code"
 msgstr "Digite o código de verificação"
 
-#: src/app/(tabs)/more/profile.tsx:156
+#: src/app/(tabs)/more/profile.tsx:159
 msgid "Enter your first name"
 msgstr "Digite seu primeiro nome"
 
-#: src/app/sign-in.tsx:400
+#: src/app/sign-in.tsx:397
 msgid "Enter your full name"
 msgstr "Digite seu nome completo"
 
-#: src/app/(tabs)/more/app.tsx:64
-#: src/app/(tabs)/more/profile.tsx:90
-#: src/app/(tabs)/orders/[id].tsx:51
-#: src/app/(tabs)/orders/current.tsx:74
+#: src/app/(tabs)/more/app.tsx:67
+#: src/app/(tabs)/more/profile.tsx:93
+#: src/app/(tabs)/orders/[id].tsx:54
+#: src/app/(tabs)/orders/current.tsx:75
 #: src/app/(tabs)/team/ticket.tsx:29
-#: src/app/sign-in.tsx:226
-#: src/app/sign-in.tsx:237
-#: src/containers/table-bill-screen.tsx:93
-#: src/containers/table-bill-screen.tsx:139
-#: src/containers/table-bill-screen.tsx:163
-#: src/containers/table-bill-screen.tsx:172
-#: src/containers/table-bill-screen.tsx:192
-#: src/containers/table-bill-screen.tsx:216
+#: src/app/sign-in.tsx:223
+#: src/app/sign-in.tsx:234
+#: src/containers/table-bill-screen.tsx:95
+#: src/containers/table-bill-screen.tsx:141
+#: src/containers/table-bill-screen.tsx:165
+#: src/containers/table-bill-screen.tsx:174
+#: src/containers/table-bill-screen.tsx:194
+#: src/containers/table-bill-screen.tsx:218
 #: src/containers/table-bill-screen.web.tsx:63
 #: src/containers/table-bill-screen.web.tsx:77
 #: src/containers/table-bill-screen.web.tsx:86
 #: src/containers/table-bill-screen.web.tsx:104
 #: src/containers/table-bill-screen.web.tsx:120
-#: src/containers/top-up-screen.tsx:91
-#: src/containers/top-up-screen.tsx:127
-#: src/containers/top-up-screen.tsx:158
-#: src/containers/top-up-screen.tsx:193
+#: src/containers/top-up-screen.tsx:90
+#: src/containers/top-up-screen.tsx:126
+#: src/containers/top-up-screen.tsx:157
+#: src/containers/top-up-screen.tsx:192
 msgid "Error"
 msgstr "Erro"
 
-#: src/app/(tabs)/more/profile.tsx:88
+#: src/app/(tabs)/more/profile.tsx:91
 msgid "Error signing out. Please try again."
 msgstr "Erro ao sair. Tente novamente."
 
@@ -387,11 +387,11 @@ msgstr "Erro ao sair. Tente novamente."
 msgid "Events"
 msgstr "Eventos"
 
-#: src/app/(tabs)/more/app.tsx:62
+#: src/app/(tabs)/more/app.tsx:65
 msgid "Failed to clear cache. Please try again."
 msgstr "Falha ao limpar cache. Tente novamente."
 
-#: src/app/(tabs)/orders/[id].tsx:51
+#: src/app/(tabs)/orders/[id].tsx:54
 #: src/app/(tabs)/team/ticket.tsx:29
 msgid "Failed to download receipt. Please try again."
 msgstr "Falha ao baixar recibo. Tente novamente."
@@ -408,18 +408,18 @@ msgstr "Falha ao carregar menu. Tente novamente."
 msgid "Failed to load Stripe"
 msgstr "Falha ao carregar o Stripe"
 
-#: src/containers/table-bill-screen.tsx:163
-#: src/containers/table-bill-screen.tsx:216
+#: src/containers/table-bill-screen.tsx:165
+#: src/containers/table-bill-screen.tsx:218
 #: src/containers/table-bill-screen.web.tsx:120
-#: src/containers/top-up-screen.tsx:196
+#: src/containers/top-up-screen.tsx:195
 msgid "Failed to process payment. Please try again."
 msgstr "Falha ao processar pagamento. Tente novamente."
 
-#: src/app/sign-in.tsx:235
+#: src/app/sign-in.tsx:232
 msgid "Failed to send code"
 msgstr "Falha ao enviar código"
 
-#: src/app/(tabs)/orders/current.tsx:72
+#: src/app/(tabs)/orders/current.tsx:73
 msgid "Failed to submit order. Please try again."
 msgstr "Falha ao enviar pedido. Tente novamente."
 
@@ -427,7 +427,7 @@ msgstr "Falha ao enviar pedido. Tente novamente."
 msgid "Favorite"
 msgstr "Favorito"
 
-#: src/app/(tabs)/more/profile.tsx:140
+#: src/app/(tabs)/more/profile.tsx:143
 msgid "First name"
 msgstr "Primeiro nome"
 
@@ -435,7 +435,7 @@ msgstr "Primeiro nome"
 msgid "From {cost}"
 msgstr "A partir de {cost}"
 
-#: src/app/(tabs)/orders/[id].tsx:91
+#: src/app/(tabs)/orders/[id].tsx:94
 msgid "Go Back"
 msgstr "Voltar"
 
@@ -443,62 +443,62 @@ msgstr "Voltar"
 msgid "Go to home screen!"
 msgstr "Ir para a tela inicial!"
 
-#: src/app/(tabs)/more/visit-us.tsx:94
+#: src/app/(tabs)/more/visit-us.tsx:91
 msgid "Google Maps"
 msgstr "Google Maps"
 
-#: src/app/(tabs)/orders/index.tsx:168
+#: src/app/(tabs)/orders/index.tsx:171
 msgid "History"
 msgstr "Histórico"
 
 #: src/app/(tabs)/_layout.tsx:81
 #: src/app/(tabs)/(home)/_layout.tsx:19
-#: src/components/Tabs/index.web.tsx:69
+#: src/components/Tabs/index.web.tsx:71
 msgid "Home"
 msgstr "Início"
 
-#: src/app/(tabs)/more/visit-us.tsx:54
+#: src/app/(tabs)/more/visit-us.tsx:51
 msgid "Hours"
 msgstr "Horários"
 
-#: src/app/(tabs)/orders/index.tsx:138
+#: src/app/(tabs)/orders/index.tsx:141
 msgid "In Progress"
 msgstr "Em andamento"
 
-#: src/app/(tabs)/more/app.tsx:95
-#: src/app/(tabs)/more/profile.tsx:135
+#: src/app/(tabs)/more/app.tsx:98
+#: src/app/(tabs)/more/profile.tsx:138
 msgid "Information"
 msgstr "Informações"
 
-#: src/app/(tabs)/orders/current.tsx:149
+#: src/app/(tabs)/orders/current.tsx:152
 msgid "Insufficient Balance"
 msgstr "Saldo Insuficiente"
 
-#: src/app/(tabs)/(home)/[id].tsx:304
+#: src/app/(tabs)/(home)/[id].tsx:300
 msgid "Intensity"
 msgstr "Intensidade"
 
-#: src/app/sign-in.tsx:224
+#: src/app/sign-in.tsx:221
 msgid "Invalid verification code"
 msgstr "Código de verificação inválido"
 
-#: src/app/(tabs)/orders/[id].tsx:147
-#: src/app/(tabs)/orders/current.tsx:367
-#: src/containers/table-bill-screen.tsx:330
+#: src/app/(tabs)/orders/[id].tsx:150
+#: src/app/(tabs)/orders/current.tsx:370
+#: src/containers/table-bill-screen.tsx:332
 #: src/containers/table-bill-screen.web.tsx:234
 msgid "Items"
 msgstr "Itens"
 
-#: src/app/(tabs)/more/index.tsx:343
+#: src/app/(tabs)/more/index.tsx:350
 msgid "Language"
 msgstr "Idioma"
 
 #. placeholder {0}: formatPhoneNumber(phoneNumber)
-#: src/app/sign-in.tsx:373
+#: src/app/sign-in.tsx:370
 msgid "Let's create your account with the phone number <0>{0}</0>"
 msgstr "Vamos criar sua conta com o número de telefone <0>{0}</0>"
 
-#: src/containers/table-bill-screen.tsx:239
+#: src/containers/table-bill-screen.tsx:241
 #: src/containers/table-bill-screen.web.tsx:143
 msgid "Loading bill..."
 msgstr "Carregando conta..."
@@ -511,37 +511,37 @@ msgstr "Carregando cliente..."
 msgid "Loading menu..."
 msgstr "Carregando menu..."
 
-#: src/app/(tabs)/orders/[id].tsx:63
+#: src/app/(tabs)/orders/[id].tsx:66
 msgid "Loading Order"
 msgstr "Carregando Pedido"
 
-#: src/app/(tabs)/orders/[id].tsx:68
+#: src/app/(tabs)/orders/[id].tsx:71
 msgid "Loading Order..."
 msgstr "Carregando Pedido..."
 
-#: src/app/(tabs)/more/sessions.tsx:64
+#: src/app/(tabs)/more/sessions.tsx:67
 msgid "Loading sessions..."
 msgstr "Carregando sessões..."
 
-#: src/containers/table-bill-screen.tsx:227
+#: src/containers/table-bill-screen.tsx:229
 #: src/containers/table-bill-screen.web.tsx:131
 msgid "Loading Table Bill"
 msgstr "Carregando conta da mesa"
 
-#: src/app/(tabs)/more/index.tsx:230
+#: src/app/(tabs)/more/index.tsx:237
 msgid "Loading user information..."
 msgstr "Carregando informações do usuário..."
 
-#: src/app/sign-in.tsx:357
-#: src/app/sign-in.tsx:457
+#: src/app/sign-in.tsx:354
+#: src/app/sign-in.tsx:454
 msgid "Loading..."
 msgstr "Carregando..."
 
-#: src/app/(tabs)/more/app.tsx:149
+#: src/app/(tabs)/more/app.tsx:152
 msgid "Maintenance"
 msgstr "Manutenção"
 
-#: src/app/(tabs)/orders/current.tsx:394
+#: src/app/(tabs)/orders/current.tsx:397
 msgid "Maximum length is 2000 characters"
 msgstr "O comprimento máximo é de 2000 caracteres"
 
@@ -549,12 +549,12 @@ msgstr "O comprimento máximo é de 2000 caracteres"
 msgid "Menu"
 msgstr "Menu"
 
-#: src/app/(tabs)/(home)/index.tsx:73
-#: src/app/(tabs)/(home)/index.tsx:82
+#: src/app/(tabs)/(home)/index.tsx:47
+#: src/app/(tabs)/(home)/index.tsx:56
 msgid "Menu - TOLO Good Coffee"
 msgstr "Menu - TOLO Bom Café"
 
-#: src/containers/top-up-screen.tsx:257
+#: src/containers/top-up-screen.tsx:256
 msgid "Method"
 msgstr "Método"
 
@@ -562,27 +562,32 @@ msgstr "Método"
 msgid "Mexico (+52)"
 msgstr "México (+52)"
 
-#: src/app/(tabs)/(home)/[id].tsx:334
-#: src/app/(tabs)/(home)/[id].tsx:389
+#: src/app/(tabs)/(home)/[id].tsx:330
+#: src/app/(tabs)/(home)/[id].tsx:383
 msgid "Modifications"
 msgstr "Modificações"
 
-#: src/app/(tabs)/more/visit-us.tsx:58
+#: src/app/(tabs)/more/visit-us.tsx:55
 msgid "Monday – Friday"
 msgstr "Segunda – sexta"
 
 #: src/app/(tabs)/_layout.tsx:173
 #: src/app/(tabs)/more/_layout.tsx:19
-#: src/components/Tabs/index.web.tsx:82
+#: src/components/Tabs/index.web.tsx:84
 msgid "More"
 msgstr "Mais"
 
-#: src/app/(tabs)/more/index.tsx:204
-#: src/app/sign-in.tsx:385
+#: src/app/(tabs)/more/index.tsx:149
+#: src/app/(tabs)/more/index.tsx:154
+msgid "More - TOLO"
+msgstr ""
+
+#: src/app/(tabs)/more/index.tsx:211
+#: src/app/sign-in.tsx:382
 msgid "Name"
 msgstr "Nome"
 
-#: src/app/(tabs)/more/profile.tsx:183
+#: src/app/(tabs)/more/profile.tsx:186
 msgid "name@example.com"
 msgstr "nome@exemplo.com"
 
@@ -590,16 +595,16 @@ msgstr "nome@exemplo.com"
 msgid "New"
 msgstr "Novo"
 
-#: src/app/(tabs)/team/queue.tsx:430
+#: src/app/(tabs)/team/queue.tsx:432
 msgid "New orders will appear here"
 msgstr "Novos pedidos aparecerão aqui"
 
-#: src/containers/table-bill-screen.tsx:266
+#: src/containers/table-bill-screen.tsx:268
 #: src/containers/table-bill-screen.web.tsx:170
 msgid "No active bill was found for this table. Please check with staff."
 msgstr "Nenhuma conta ativa foi encontrada para esta mesa. Por favor, verifique com a equipe."
 
-#: src/app/(tabs)/more/sessions.tsx:84
+#: src/app/(tabs)/more/sessions.tsx:87
 msgid "No active sessions found."
 msgstr "Nenhuma sessão ativa encontrada."
 
@@ -611,11 +616,11 @@ msgstr "Sem data de aniversário registrada."
 msgid "No events scheduled at the moment"
 msgstr ""
 
-#: src/app/(tabs)/team/queue.tsx:427
+#: src/app/(tabs)/team/queue.tsx:429
 msgid "No orders in queue"
 msgstr "Nenhum pedido na fila"
 
-#: src/app/(tabs)/orders/index.tsx:216
+#: src/app/(tabs)/orders/index.tsx:223
 msgid "No orders yet"
 msgstr "Nenhum pedido ainda"
 
@@ -630,11 +635,11 @@ msgstr "Não Autorizado"
 msgid "Not enough stamps. Need {STAMPS_PER_REDEMPTION} stamps for a free drink."
 msgstr ""
 
-#: src/app/(tabs)/more/index.tsx:214
+#: src/app/(tabs)/more/index.tsx:221
 msgid "Not provided"
 msgstr "Não fornecido"
 
-#: src/app/(tabs)/orders/[id].tsx:52
+#: src/app/(tabs)/orders/[id].tsx:55
 #: src/app/(tabs)/team/ticket.tsx:30
 msgid "OK"
 msgstr "OK"
@@ -647,11 +652,11 @@ msgstr "Ops, esta página não existe. Volte para a TOLO para aproveitar nosso b
 msgid "Oops!"
 msgstr "Ops!"
 
-#: src/app/(tabs)/more/visit-us.tsx:84
+#: src/app/(tabs)/more/visit-us.tsx:81
 msgid "Open location in Apple Maps"
 msgstr "Abrir localização no Apple Maps"
 
-#: src/app/(tabs)/more/visit-us.tsx:90
+#: src/app/(tabs)/more/visit-us.tsx:87
 msgid "Open location in Google Maps"
 msgstr "Abrir localização no Google Maps"
 
@@ -659,7 +664,7 @@ msgstr "Abrir localização no Google Maps"
 msgid "or enter manually"
 msgstr "ou digite manualmente"
 
-#: src/app/(tabs)/orders/[id].tsx:102
+#: src/app/(tabs)/orders/[id].tsx:105
 msgid "Order {id}"
 msgstr "Pedido {id}"
 
@@ -667,21 +672,21 @@ msgstr "Pedido {id}"
 msgid "Order Detail"
 msgstr "Detalhe do Pedido"
 
-#: src/app/(tabs)/orders/[id].tsx:80
-#: src/app/(tabs)/orders/[id].tsx:85
-#: src/app/(tabs)/orders/current.tsx:320
+#: src/app/(tabs)/orders/[id].tsx:83
+#: src/app/(tabs)/orders/[id].tsx:88
+#: src/app/(tabs)/orders/current.tsx:323
 msgid "Order Not Found"
 msgstr "Pedido Não Encontrado"
 
-#: src/app/(tabs)/orders/current.tsx:85
+#: src/app/(tabs)/orders/current.tsx:86
 msgid "Order placed"
 msgstr "Pedido realizado"
 
 #: src/app/(tabs)/_layout.tsx:113
 #: src/app/(tabs)/orders/_layout.tsx:19
-#: src/app/(tabs)/orders/index.tsx:91
-#: src/app/(tabs)/orders/index.tsx:120
-#: src/components/Tabs/index.web.tsx:72
+#: src/app/(tabs)/orders/index.tsx:94
+#: src/app/(tabs)/orders/index.tsx:123
+#: src/components/Tabs/index.web.tsx:74
 msgid "Orders"
 msgstr "Pedidos"
 
@@ -694,12 +699,12 @@ msgid "Page Not Found - TOLO"
 msgstr "Página não encontrada - TOLO"
 
 #. placeholder {0}: formatPrice(tableBill.total)
-#: src/containers/table-bill-screen.tsx:406
+#: src/containers/table-bill-screen.tsx:408
 #: src/containers/table-bill-screen.web.tsx:302
 msgid "Pay {0}"
 msgstr "Pagar {0}"
 
-#: src/app/(tabs)/orders/current.tsx:355
+#: src/app/(tabs)/orders/current.tsx:358
 msgid "Payment"
 msgstr "Pagamento"
 
@@ -707,50 +712,50 @@ msgstr "Pagamento"
 msgid "Payment failed"
 msgstr "Falha no pagamento"
 
-#: src/containers/top-up-screen.tsx:167
+#: src/containers/top-up-screen.tsx:166
 msgid "Payment Failed"
 msgstr "Pagamento Falhado"
 
-#: src/containers/table-bill-screen.tsx:285
-#: src/containers/table-bill-screen.tsx:290
+#: src/containers/table-bill-screen.tsx:287
+#: src/containers/table-bill-screen.tsx:292
 #: src/containers/table-bill-screen.web.tsx:189
 #: src/containers/table-bill-screen.web.tsx:194
-#: src/containers/top-up-screen.tsx:179
+#: src/containers/top-up-screen.tsx:178
 msgid "Payment Successful"
 msgstr "Pagamento Bem-sucedido"
 
-#: src/containers/table-bill-screen.tsx:159
-#: src/containers/table-bill-screen.tsx:212
+#: src/containers/table-bill-screen.tsx:161
+#: src/containers/table-bill-screen.tsx:214
 msgid "Payment successful!"
 msgstr "Pagamento realizado com sucesso!"
 
-#: src/app/(tabs)/more/index.tsx:211
+#: src/app/(tabs)/more/index.tsx:218
 msgid "Phone"
 msgstr "Telefone"
 
-#: src/app/sign-in.tsx:339
+#: src/app/sign-in.tsx:336
 msgid "Phone number"
 msgstr "Número de telefone"
 
-#: src/app/(tabs)/more/profile.tsx:36
+#: src/app/(tabs)/more/profile.tsx:39
 msgid "Please enter your name"
 msgstr "Por favor, digite seu nome"
 
-#: src/containers/table-bill-screen.tsx:93
-#: src/containers/table-bill-screen.tsx:172
+#: src/containers/table-bill-screen.tsx:95
+#: src/containers/table-bill-screen.tsx:174
 #: src/containers/table-bill-screen.web.tsx:63
 msgid "Please provide your phone number to continue"
 msgstr "Forneça seu número de telefone para continuar"
 
-#: src/containers/top-up-screen.tsx:91
+#: src/containers/top-up-screen.tsx:90
 msgid "Please sign in to top up your wallet"
 msgstr "Por favor, entre para recarregar sua carteira"
 
-#: src/app/(tabs)/orders/index.tsx:106
+#: src/app/(tabs)/orders/index.tsx:109
 msgid "Please sign in to view your order history"
 msgstr "Por favor, entre para ver seu histórico de pedidos"
 
-#: src/app/(tabs)/(home)/index.tsx:106
+#: src/app/(tabs)/(home)/index.tsx:80
 msgid ""
 "Prices are subject to change without notice.\n"
 "Calories and volume are approximate and may vary between preparations."
@@ -758,16 +763,16 @@ msgstr ""
 "Os preços estão sujeitos a alterações sem aviso prévio.\n"
 "As calorias e o volume são aproximados e podem variar entre as preparações."
 
-#: src/containers/top-up-screen.tsx:276
+#: src/containers/top-up-screen.tsx:275
 msgid "Processing Payment..."
 msgstr "Processando Pagamento..."
 
-#: src/app/(tabs)/(home)/[id].tsx:180
+#: src/app/(tabs)/(home)/[id].tsx:176
 msgid "Product not found"
 msgstr "Produto não encontrado"
 
 #: src/app/(tabs)/more/_layout.tsx:23
-#: src/app/(tabs)/more/profile.tsx:120
+#: src/app/(tabs)/more/profile.tsx:123
 msgid "Profile"
 msgstr "Perfil"
 
@@ -777,24 +782,24 @@ msgstr "Promoções"
 
 #. placeholder {0}: Math.round(Number(product.num))
 #. placeholder {0}: item.quantity
-#: src/app/(tabs)/orders/[id].tsx:157
-#: src/containers/table-bill-screen.tsx:338
+#: src/app/(tabs)/orders/[id].tsx:160
+#: src/containers/table-bill-screen.tsx:340
 #: src/containers/table-bill-screen.web.tsx:242
 msgid "Qty: {0}"
 msgstr "Qtd: {0}"
 
 #: src/app/(tabs)/team/_layout.tsx:23
-#: src/app/(tabs)/team/index.tsx:51
-#: src/app/(tabs)/team/queue.tsx:176
+#: src/app/(tabs)/team/index.tsx:55
+#: src/app/(tabs)/team/queue.tsx:178
 msgid "Queue"
 msgstr "Fila"
 
-#: src/app/(tabs)/(home)/[id].tsx:322
+#: src/app/(tabs)/(home)/[id].tsx:318
 msgid "Recipe"
 msgstr "Receita"
 
 #: src/app/(tabs)/team/_layout.tsx:31
-#: src/app/(tabs)/team/index.tsx:66
+#: src/app/(tabs)/team/index.tsx:70
 #: src/app/(tabs)/team/redeem.tsx:155
 #: src/app/(tabs)/team/redeem.tsx:157
 msgid "Redeem"
@@ -812,23 +817,23 @@ msgstr "Troca bem-sucedida!"
 msgid "Retry"
 msgstr "Tentar novamente"
 
-#: src/app/(tabs)/more/app.tsx:116
+#: src/app/(tabs)/more/app.tsx:119
 msgid "Runtime"
 msgstr "Runtime"
 
-#: src/app/(tabs)/more/visit-us.tsx:66
+#: src/app/(tabs)/more/visit-us.tsx:63
 msgid "Saturday"
 msgstr "Sábado"
 
-#: src/app/(tabs)/more/profile.tsx:234
+#: src/app/(tabs)/more/profile.tsx:237
 msgid "Save"
 msgstr "Salvar"
 
-#: src/app/(tabs)/more/profile.tsx:55
+#: src/app/(tabs)/more/profile.tsx:58
 msgid "Saved"
 msgstr "Salvo"
 
-#: src/app/(tabs)/more/profile.tsx:232
+#: src/app/(tabs)/more/profile.tsx:235
 msgid "Saving..."
 msgstr "Salvando..."
 
@@ -844,56 +849,60 @@ msgstr "Sazonal"
 msgid "Select Redemption"
 msgstr "Selecionar Troca"
 
-#: src/app/(tabs)/orders/current.tsx:428
+#: src/app/(tabs)/orders/current.tsx:431
 msgid "Send Order"
 msgstr "Enviar Pedido"
 
-#: src/app/(tabs)/orders/current.tsx:426
+#: src/app/(tabs)/orders/current.tsx:429
 msgid "Sending Order..."
 msgstr "Enviando Pedido..."
 
-#: src/app/sign-in.tsx:177
+#: src/app/sign-in.tsx:174
 msgid "Server Error"
 msgstr "Erro do Servidor"
 
-#: src/app/sign-in.tsx:188
+#: src/app/sign-in.tsx:185
 msgid "Service Unavailable"
 msgstr "Serviço Indisponível"
 
 #: src/app/(tabs)/more/_layout.tsx:24
-#: src/app/(tabs)/more/profile.tsx:253
-#: src/app/(tabs)/more/sessions.tsx:35
+#: src/app/(tabs)/more/profile.tsx:256
+#: src/app/(tabs)/more/sessions.tsx:38
 msgid "Sessions"
 msgstr "Sessões"
 
-#: src/app/(tabs)/more/index.tsx:337
+#: src/app/(tabs)/more/index.tsx:344
 msgid "Settings"
 msgstr "Configurações"
 
-#: src/app/(tabs)/more/index.tsx:242
-#: src/app/(tabs)/orders/index.tsx:109
+#: src/app/(tabs)/more/index.tsx:151
+msgid "Settings and information for TOLO."
+msgstr ""
+
+#: src/app/(tabs)/more/index.tsx:249
+#: src/app/(tabs)/orders/index.tsx:112
 msgid "Sign In"
 msgstr "Entrar"
 
-#: src/app/(tabs)/orders/index.tsx:103
+#: src/app/(tabs)/orders/index.tsx:106
 msgid "Sign In Required"
 msgstr "Login Necessário"
 
-#: src/app/sign-in.tsx:320
+#: src/app/sign-in.tsx:317
 msgid "Sign in to add “{itemName}” to your bag"
 msgstr "Entre para adicionar “{itemName}” ao seu carrinho"
 
-#: src/app/(tabs)/more/index.tsx:236
+#: src/app/(tabs)/more/index.tsx:243
 msgid "Sign in to view your account information and access personalized features."
 msgstr "Entre para ver as informações da sua conta e acessar recursos personalizados."
 
-#: src/app/(tabs)/more/profile.tsx:106
-#: src/app/(tabs)/more/profile.tsx:111
-#: src/app/(tabs)/more/profile.tsx:267
+#: src/app/(tabs)/more/profile.tsx:109
+#: src/app/(tabs)/more/profile.tsx:114
+#: src/app/(tabs)/more/profile.tsx:270
 msgid "Sign Out"
 msgstr "Sair"
 
-#: src/app/sign-in.tsx:175
+#: src/app/sign-in.tsx:172
 msgid "Something went wrong. Please try again."
 msgstr "Algo deu errado. Tente novamente."
 
@@ -906,7 +915,7 @@ msgstr "Especial"
 msgid "Stamps drink redeemed for {0}."
 msgstr ""
 
-#: src/app/(tabs)/more/index.tsx:260
+#: src/app/(tabs)/more/index.tsx:267
 msgid "Stores"
 msgstr "Lojas"
 
@@ -914,66 +923,75 @@ msgstr "Lojas"
 msgid "Submit"
 msgstr "Enviar"
 
-#: src/app/(tabs)/orders/[id].tsx:177
-#: src/containers/table-bill-screen.tsx:356
+#: src/app/(tabs)/orders/[id].tsx:180
+#: src/containers/table-bill-screen.tsx:358
 #: src/containers/table-bill-screen.web.tsx:260
 msgid "Subtotal"
 msgstr "Subtotal"
 
-#: src/app/(tabs)/orders/[id].tsx:173
-#: src/containers/table-bill-screen.tsx:352
+#: src/app/(tabs)/orders/[id].tsx:176
+#: src/containers/table-bill-screen.tsx:354
 #: src/containers/table-bill-screen.web.tsx:256
 msgid "Summary"
 msgstr "Resumo"
 
-#: src/app/(tabs)/more/visit-us.tsx:74
+#: src/app/(tabs)/more/visit-us.tsx:71
 msgid "Sunday"
 msgstr "Domingo"
 
-#: src/containers/table-bill-screen.tsx:232
-#: src/containers/table-bill-screen.tsx:257
+#: src/containers/table-bill-screen.tsx:234
+#: src/containers/table-bill-screen.tsx:259
 #: src/containers/table-bill-screen.web.tsx:136
 #: src/containers/table-bill-screen.web.tsx:161
 msgid "Table Bill"
 msgstr "Conta da Mesa"
 
-#: src/containers/table-bill-screen.tsx:252
-#: src/containers/table-bill-screen.tsx:263
+#: src/containers/table-bill-screen.tsx:254
+#: src/containers/table-bill-screen.tsx:265
 #: src/containers/table-bill-screen.web.tsx:156
 #: src/containers/table-bill-screen.web.tsx:167
 msgid "Table Not Found"
 msgstr "Mesa não encontrada"
 
-#: src/app/(tabs)/orders/[id].tsx:186
-#: src/containers/table-bill-screen.tsx:363
+#: src/app/(tabs)/orders/[id].tsx:189
+#: src/containers/table-bill-screen.tsx:365
 #: src/containers/table-bill-screen.web.tsx:267
 msgid "Tax"
 msgstr "Imposto"
 
 #: src/app/(tabs)/_layout.tsx:146
 #: src/app/(tabs)/team/_layout.tsx:19
-#: src/app/(tabs)/team/index.tsx:41
-#: src/components/Tabs/index.web.tsx:78
+#: src/app/(tabs)/team/index.tsx:45
+#: src/components/Tabs/index.web.tsx:80
 msgid "Team"
 msgstr "Equipe"
 
-#: src/app/(tabs)/orders/current.tsx:83
+#: src/app/(tabs)/team/index.tsx:25
+#: src/app/(tabs)/team/index.tsx:30
+msgid "Team - TOLO"
+msgstr ""
+
+#: src/app/(tabs)/team/index.tsx:27
+msgid "Team tools and operations for TOLO."
+msgstr ""
+
+#: src/app/(tabs)/orders/current.tsx:84
 msgid "Thanks! We'll start preparing it now."
 msgstr "Obrigado! Vamos começar a preparar agora."
 
-#: src/app/(tabs)/orders/[id].tsx:88
+#: src/app/(tabs)/orders/[id].tsx:91
 msgid "The order you're looking for doesn't exist."
 msgstr "O pedido que você está procurando não existe."
 
-#: src/app/(tabs)/orders/current.tsx:325
+#: src/app/(tabs)/orders/current.tsx:328
 msgid "The requested order could not be found."
 msgstr "O pedido solicitado não pôde ser encontrado."
 
-#: src/app/(tabs)/(home)/[id].tsx:183
+#: src/app/(tabs)/(home)/[id].tsx:179
 msgid "The requested product could not be loaded."
 msgstr "O produto solicitado não pôde ser carregado."
 
-#: src/app/(tabs)/more/sessions.tsx:55
+#: src/app/(tabs)/more/sessions.tsx:58
 msgid "These are the devices and browsers currently signed in to your account."
 msgstr "Estes são os dispositivos e navegadores atualmente conectados à sua conta."
 
@@ -981,7 +999,7 @@ msgstr "Estes são os dispositivos e navegadores atualmente conectados à sua co
 msgid "This screen does not exist."
 msgstr "Esta tela não existe."
 
-#: src/app/(tabs)/more/app.tsx:37
+#: src/app/(tabs)/more/app.tsx:40
 msgid "This will clear all cached data including menu items and orders. Your login credentials and language preference will be preserved. The app will reload fresh data from the server. Continue?"
 msgstr "Isso vai limpar todos os dados em cache incluindo itens do menu e pedidos. Suas credenciais de login e preferência de idioma serão preservadas. O app vai recarregar dados frescos do servidor. Continuar?"
 
@@ -994,52 +1012,52 @@ msgstr "Ticket"
 msgid "Ticket number"
 msgstr "Número do ticket"
 
-#: src/app/(tabs)/team/index.tsx:75
+#: src/app/(tabs)/team/index.tsx:79
 msgid "Tickets"
 msgstr "Tickets"
 
-#: src/app/(tabs)/orders/[id].tsx:194
+#: src/app/(tabs)/orders/[id].tsx:197
 msgid "Tip"
 msgstr "Gorjeta"
 
-#: src/app/(tabs)/team/queue.tsx:286
+#: src/app/(tabs)/team/queue.tsx:288
 msgid "To Go"
 msgstr "Para viagem"
 
-#: src/app/(tabs)/more/visit-us.tsx:45
+#: src/app/(tabs)/more/visit-us.tsx:42
 msgid "TOLO - Good Coffee"
 msgstr "TOLO - Bom Café"
 
-#: src/app/(tabs)/(home)/index.tsx:79
+#: src/app/(tabs)/(home)/index.tsx:53
 msgid "TOLO menu, good coffee, espresso, latte, cappuccino, coffee shop menu"
 msgstr "Menu TOLO, bom café, espresso, latte, cappuccino, menu de cafeteria"
 
 #: src/app/(tabs)/more/_layout.tsx:25
-#: src/app/(tabs)/orders/current.tsx:154
+#: src/app/(tabs)/orders/current.tsx:157
 msgid "Top Up"
 msgstr "Recarregar"
 
-#: src/containers/top-up-screen.tsx:209
-#: src/containers/top-up-screen.tsx:214
+#: src/containers/top-up-screen.tsx:208
+#: src/containers/top-up-screen.tsx:213
 msgid "Top Up - TOLO"
 msgstr "Recarregar - TOLO"
 
-#: src/app/(tabs)/more/index.tsx:181
+#: src/app/(tabs)/more/index.tsx:188
 msgid "Top Up Wallet"
 msgstr "Recarregar Wallet"
 
-#: src/containers/top-up-screen.tsx:276
+#: src/containers/top-up-screen.tsx:275
 msgid "Top Up With Card"
 msgstr "Recarregar com Cartão"
 
-#: src/app/(tabs)/orders/[id].tsx:209
-#: src/app/(tabs)/orders/current.tsx:376
-#: src/containers/table-bill-screen.tsx:370
+#: src/app/(tabs)/orders/[id].tsx:212
+#: src/app/(tabs)/orders/current.tsx:379
+#: src/containers/table-bill-screen.tsx:372
 #: src/containers/table-bill-screen.web.tsx:274
 msgid "Total"
 msgstr "Total"
 
-#: src/app/(tabs)/more/visit-us.tsx:101
+#: src/app/(tabs)/more/visit-us.tsx:98
 msgid "TripAdvisor"
 msgstr "TripAdvisor"
 
@@ -1051,36 +1069,36 @@ msgstr "Tentar Novamente"
 msgid "United States (+1)"
 msgstr "Estados Unidos (+1)"
 
-#: src/app/(tabs)/more/app.tsx:136
+#: src/app/(tabs)/more/app.tsx:139
 msgid "Update Created At"
 msgstr "Atualização Criada Em"
 
-#: src/app/(tabs)/more/app.tsx:125
+#: src/app/(tabs)/more/app.tsx:128
 msgid "Update ID"
 msgstr "ID da Atualização"
 
-#: src/app/sign-in.tsx:459
-#: src/app/sign-in.tsx:523
+#: src/app/sign-in.tsx:456
+#: src/app/sign-in.tsx:520
 msgid "Verify"
 msgstr "Verificar"
 
-#: src/app/sign-in.tsx:521
+#: src/app/sign-in.tsx:518
 msgid "Verifying..."
 msgstr "Verificando..."
 
-#: src/app/(tabs)/more/app.tsx:100
+#: src/app/(tabs)/more/app.tsx:103
 msgid "Version"
 msgstr "Versão"
 
-#: src/app/(tabs)/more/index.tsx:391
+#: src/app/(tabs)/more/index.tsx:398
 msgid "Version {appVersion} ({buildVersion})"
 msgstr "Versão {appVersion} ({buildVersion})"
 
-#: src/app/(tabs)/more/app.tsx:82
+#: src/app/(tabs)/more/app.tsx:85
 msgid "View app information like version and update channel, and clear cached data."
 msgstr "Veja informações do app como versão e canal de atualização, e limpe dados em cache."
 
-#: src/app/(tabs)/more/visit-us.tsx:97
+#: src/app/(tabs)/more/visit-us.tsx:94
 msgid "View on TripAdvisor"
 msgstr "Ver no TripAdvisor"
 
@@ -1088,8 +1106,8 @@ msgstr "Ver no TripAdvisor"
 msgid "Visit Us"
 msgstr "Visite-nos"
 
-#: src/app/(tabs)/more/visit-us.tsx:30
-#: src/app/(tabs)/more/visit-us.tsx:35
+#: src/app/(tabs)/more/visit-us.tsx:27
+#: src/app/(tabs)/more/visit-us.tsx:32
 msgid "Visit Us - TOLO Good Coffee"
 msgstr "Visite-nos - TOLO Bom Café"
 
@@ -1097,43 +1115,43 @@ msgstr "Visite-nos - TOLO Bom Café"
 msgid "Visits"
 msgstr "Visitas"
 
-#: src/app/(tabs)/more/index.tsx:163
+#: src/app/(tabs)/more/index.tsx:170
 msgid "Wallet"
 msgstr "Wallet"
 
-#: src/app/(tabs)/orders/current.tsx:359
-#: src/containers/top-up-screen.tsx:228
+#: src/app/(tabs)/orders/current.tsx:362
+#: src/containers/top-up-screen.tsx:227
 msgid "Wallet Balance"
 msgstr "Saldo Wallet"
 
-#: src/containers/table-bill-screen.tsx:383
+#: src/containers/table-bill-screen.tsx:385
 #: src/containers/table-bill-screen.web.tsx:287
 msgid "We need your phone number to process this payment."
 msgstr "Precisamos do seu número de telefone para processar este pagamento."
 
 #. placeholder {0}: formatPhoneNumber(phoneNumber)
-#: src/app/sign-in.tsx:487
+#: src/app/sign-in.tsx:484
 msgid "We sent a code to {0}"
 msgstr "Enviamos um código para {0}"
 
-#: src/app/sign-in.tsx:107
-#: src/app/sign-in.tsx:128
+#: src/app/sign-in.tsx:104
+#: src/app/sign-in.tsx:125
 msgid "We sent you a 6-digit code"
 msgstr "Enviamos um código de 6 dígitos para você"
 
-#: src/app/sign-in.tsx:186
+#: src/app/sign-in.tsx:183
 msgid "We're experiencing technical difficulties. Please try again later."
 msgstr "Estamos enfrentando dificuldades técnicas. Tente novamente mais tarde."
 
-#: src/app/(tabs)/more/index.tsx:269
+#: src/app/(tabs)/more/index.tsx:276
 msgid "Website"
 msgstr "Site"
 
-#: src/app/sign-in.tsx:328
+#: src/app/sign-in.tsx:325
 msgid "Welcome"
 msgstr "Bem-vindo"
 
-#: src/app/(tabs)/orders/current.tsx:150
+#: src/app/(tabs)/orders/current.tsx:153
 msgid "You don't have enough balance in your wallet. Please top up your wallet first."
 msgstr "Você não tem saldo suficiente na sua carteira. Por favor, recarregue sua carteira primeiro."
 
@@ -1142,24 +1160,24 @@ msgstr "Você não tem saldo suficiente na sua carteira. Por favor, recarregue s
 msgid "You need barista or owner access to use this tool."
 msgstr "Você precisa de acesso de barista ou proprietário para usar esta ferramenta."
 
-#: src/app/(tabs)/orders/index.tsx:219
+#: src/app/(tabs)/orders/index.tsx:226
 msgid "Your order history will appear here"
 msgstr "Seu histórico de pedidos aparecerá aqui"
 
-#: src/containers/table-bill-screen.tsx:299
+#: src/containers/table-bill-screen.tsx:301
 #: src/containers/table-bill-screen.web.tsx:203
 msgid "Your payment has been processed. Thank you for dining with us!"
 msgstr "Seu pagamento foi processado. Obrigado pela preferência!"
 
-#: src/containers/table-bill-screen.tsx:380
+#: src/containers/table-bill-screen.tsx:382
 #: src/containers/table-bill-screen.web.tsx:284
 msgid "Your Phone Number"
 msgstr "Seu Número de Telefone"
 
-#: src/app/(tabs)/more/profile.tsx:53
+#: src/app/(tabs)/more/profile.tsx:56
 msgid "Your profile has been updated."
 msgstr "Seu perfil foi atualizado."
 
-#: src/containers/top-up-screen.tsx:177
+#: src/containers/top-up-screen.tsx:176
 msgid "Your wallet has been topped up successfully!"
 msgstr "Sua carteira foi recarregada com sucesso!"
