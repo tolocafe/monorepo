@@ -1,5 +1,6 @@
 import { PostHog } from 'posthog-node'
 
+import { getConnInfo } from 'hono/cloudflare-workers'
 import { captureException, getCurrentScope } from '@sentry/cloudflare'
 
 import type { Context } from 'hono'
@@ -55,34 +56,12 @@ export function createPostHogClient(apiKey: string) {
 	})
 }
 
-/**
- * Identify a user with their properties in PostHog
- */
-export async function identifyPostHogUser(
-	context: Context<{ Bindings: Bindings }>,
-	distinctId: string,
-	properties: PostHogUserProperties,
-) {
-	const posthog = createPostHogClient(context.env.POSTHOG_API_KEY)
-
-	try {
-		posthog.identify({
-			distinctId,
-			properties,
-		})
-
-		getCurrentScope().setExtra('PostHog Identify', { distinctId, properties })
-
-		await posthog.shutdown()
-	} catch (error) {
-		captureException(error)
-	}
-}
-
 type TrackEventOptions = {
 	distinctId: string
 	event: string
-	properties?: PostHogEventProperties
+	properties?: Parameters<
+		ReturnType<typeof createPostHogClient>['capture']
+	>[0]['properties']
 	userProperties?: PostHogUserProperties
 }
 
@@ -96,47 +75,23 @@ export type BatchEventOptions = {
 
 /**
  * Track a PostHog event from the backend
- *
- * Accepts either a Hono context (for HTTP handlers) or environment bindings (for scheduled workers)
- *
- * @example HTTP handler
- * ```ts
- * await trackEvent(context, { distinctId: '123', event: 'order:created' })
- * ```
- *
- * @example Scheduled worker
- * ```ts
- * await trackEvent(env, { distinctId: '123', event: 'order:created' })
- * ```
  */
 export async function trackEvent(
-	contextOrEnv: Bindings | Context<{ Bindings: Bindings }>,
+	context: Context<{ Bindings: Bindings }>,
 	{ distinctId, event, properties = {}, userProperties }: TrackEventOptions,
 ) {
-	// Determine if we have a Hono context or just bindings
-	const isHonoContext = 'env' in contextOrEnv && 'req' in contextOrEnv
-	const env = isHonoContext
-		? (contextOrEnv as Context<{ Bindings: Bindings }>).env
-		: (contextOrEnv as Bindings)
-
-	const posthog = createPostHogClient(env.POSTHOG_API_KEY)
+	const posthog = createPostHogClient(context.env.POSTHOG_API_KEY)
 
 	try {
-		// Get IP from context if available
-		const ip = isHonoContext
-			? (contextOrEnv as Context<{ Bindings: Bindings }>).req.header(
-					'CF-Connecting-IP',
-				)
-			: undefined
-
-		// Capture event
 		posthog.capture({
 			distinctId,
 			event,
 			properties: {
 				...properties,
-				...(ip ? { $ip: ip } : {}),
-				...(isHonoContext ? {} : { source: 'scheduled_worker' }),
+				$pathname: context.req.path,
+				$ip: getConnInfo(context).remote.address,
+				$user_agent: context.req.header('User-Agent'),
+				$host: context.req.header('Host'),
 			},
 		})
 
@@ -144,7 +99,10 @@ export async function trackEvent(
 		if (userProperties && Object.keys(userProperties).length > 0) {
 			posthog.identify({
 				distinctId,
-				properties: userProperties,
+				properties: {
+					...userProperties,
+					$pathname: context.req.path,
+				},
 			})
 		}
 
@@ -166,13 +124,6 @@ export async function trackEvent(
  * This is more efficient than calling trackEvent multiple times,
  * as it uses a single HTTP request for all events.
  *
- * @example
- * ```ts
- * await trackEventsBatch(env, [
- *   { distinctId: '123', event: 'order:created', properties: { order_id: 1 } },
- *   { distinctId: '123', event: 'order:accepted', properties: { order_id: 1 } },
- * ])
- * ```
  */
 export async function trackEventsBatch(
 	env: Bindings,

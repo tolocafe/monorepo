@@ -4,11 +4,6 @@
  * This module provides decoupled event detection and processing that can be used
  * by both the polling-based sync and webhook handlers.
  *
- * @example
- * ```ts
- * const events = detectOrderEvents(transactionChange)
- * await processOrderEvents(events, passDatabase, env)
- * ```
  */
 import { count, eq } from 'drizzle-orm'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'

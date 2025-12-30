@@ -135,21 +135,22 @@ tables.post('/:locationId/:tableId/payment-intent', async (c) => {
  * Optional authentication - if auth provided, assigns customer to order
  * If no auth but phone provided, creates guest client
  */
-tables.post('/:locationId/:tableId/pay', async (c) => {
-	c.req.param('locationId') // Reserved for future multi-location support
-	const tableId = c.req.param('tableId')
-	const body = PayTableSchema.parse(await c.req.json())
+tables.post('/:locationId/:tableId/pay', async (context) => {
+	// const _locationId =
+	context.req.param('locationId') // Reserved for future multi-location support
+	const tableId = context.req.param('tableId')
+	const body = PayTableSchema.parse(await context.req.json())
 	const { paymentIntentId, phone } = body
-	const token = c.env.POSTER_TOKEN
+	const token = context.env.POSTER_TOKEN
 
 	try {
 		// Check for optional authentication
 		let authenticatedClientId: null | number = null
-		const authHeader = c.req.header('Authorization')
+		const authHeader = context.req.header('Authorization')
 		const jwtToken = extractToken(authHeader)
 
 		if (jwtToken) {
-			const [clientIdString] = await verifyJwt(jwtToken, c.env.JWT_SECRET)
+			const [clientIdString] = await verifyJwt(jwtToken, context.env.JWT_SECRET)
 			if (clientIdString) {
 				authenticatedClientId = Number(clientIdString)
 			}
@@ -166,7 +167,7 @@ tables.post('/:locationId/:tableId/pay', async (c) => {
 		)
 
 		if (!tableTransaction) {
-			return c.json({ error: 'No active bill found for this table' }, 404)
+			return context.json({ error: 'No active bill found for this table' }, 404)
 		}
 
 		let assignedClientId: null | number = null
@@ -217,7 +218,7 @@ tables.post('/:locationId/:tableId/pay', async (c) => {
 			? assignedClientId.toString()
 			: `guest_${tableId}_${transactionId}`
 
-		await trackEvent(c, {
+		await trackEvent(context, {
 			distinctId,
 			event: 'table:payment_complete',
 			properties: {
@@ -231,12 +232,12 @@ tables.post('/:locationId/:tableId/pay', async (c) => {
 			},
 		})
 
-		return c.json({
+		return context.json({
 			success: true,
 			transactionId: tableTransaction.transaction_id,
 		})
 	} catch {
-		return c.json({ error: 'Failed to process payment' }, 500)
+		return context.json({ error: 'Failed to process payment' }, 500)
 	}
 })
 

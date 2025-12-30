@@ -123,14 +123,6 @@ function getSearchParameters(
 /**
  * Poster API client organized by API sections
  *
- * @example
- * ```ts
- * // Get a client by phone
- * const client = await api.clients.getClient(token, '+1234567890')
- *
- * // Create an online order
- * const order = await api.incomingOrders.createIncomingOrder(token, orderData, clientId)
- * ```
  */
 export const api = {
 	/**

@@ -85,14 +85,7 @@ export type SendMessageOptions = {
  * Currently only push notifications are implemented.
  * WhatsApp and SMS channels are reserved for future Twilio integration.
  *
- * @example
- * ```ts
- * await sendMessage({
- *   customerId: 123,
- *   messageType: 'order:ready',
- *   database: env.D1_TOLO,
- * })
- * ```
+
  */
 export async function sendMessage(
 	options: SendMessageOptions,
