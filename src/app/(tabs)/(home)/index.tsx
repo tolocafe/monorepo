@@ -31,7 +31,7 @@ export default function MenuScreen() {
 	const screenRef = useRef<ScrollView>(null)
 
 	useScrollToTop(screenRef)
-	useTrackScreenView({ screenName: 'menu' }, [])
+	useTrackScreenView({ screenName: 'home' }, [])
 
 	const handleRefresh = useCallback(() => {
 		void queryClient.invalidateQueries(productsQueryOptions)
