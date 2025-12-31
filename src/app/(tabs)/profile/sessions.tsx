@@ -11,7 +11,6 @@ import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { sessionsQueryOptions } from '@/lib/queries/auth'
 
 const formatSessionDate = (timestamp: number) =>
-	// oxlint-disable-next-line no-undefined
 	new Date(timestamp).toLocaleDateString(undefined, {
 		day: 'numeric',
 		month: 'short',
@@ -19,7 +18,6 @@ const formatSessionDate = (timestamp: number) =>
 	})
 
 const formatSessionTime = (timestamp: number) =>
-	// oxlint-disable-next-line no-undefined
 	new Date(timestamp).toLocaleTimeString(undefined, {
 		hour: '2-digit',
 		minute: '2-digit',

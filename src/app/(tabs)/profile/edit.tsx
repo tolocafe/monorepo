@@ -23,11 +23,11 @@ import {
 } from '@/lib/queries/auth'
 import { clearAllCache } from '@/lib/queries/cache-utils'
 
-export default function ProfileScreen() {
+export default function EditProfileScreen() {
 	const { t } = useLingui()
 	const queryClient = useQueryClient()
 
-	useTrackScreenView({ screenName: 'profile' }, [])
+	useTrackScreenView({ screenName: 'edit-profile' }, [])
 
 	const { data: user } = useQuery(selfQueryOptions)
 
@@ -78,7 +78,6 @@ export default function ProfileScreen() {
 	})
 
 	const handleSignOut = async () => {
-		// eslint-disable-next-line unicorn/consistent-function-scoping
 		async function signOutPress() {
 			await signOut().catch((error: unknown) => {
 				captureException(error)
@@ -97,7 +96,7 @@ export default function ProfileScreen() {
 			if (router.canGoBack()) {
 				router.back()
 			} else {
-				router.navigate('/more', { withAnchor: false })
+				router.navigate('/(tabs)/profile', { withAnchor: false })
 			}
 		}
 
@@ -118,7 +117,7 @@ export default function ProfileScreen() {
 	return (
 		<>
 			<Head>
-				<title>{t`Profile`}</title>
+				<title>{t`Edit Profile`}</title>
 			</Head>
 			<TabScreenContainer
 				contentContainerStyle={styles.contentContainer}
@@ -248,7 +247,7 @@ export default function ProfileScreen() {
 						<ListItem
 							accessibilityRole="link"
 							chevron
-							onPress={() => router.push('/more/sessions')}
+							onPress={() => router.push('/(tabs)/profile/sessions')}
 						>
 							<ListItem.Label>
 								<Trans>Sessions</Trans>

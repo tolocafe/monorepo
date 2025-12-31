@@ -10,7 +10,6 @@ import { Pressable, RefreshControl, View } from 'react-native'
 import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import Button from '@/components/Button'
 import Card from '@/components/Card'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
@@ -27,12 +26,8 @@ import {
 import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
 import type { Product } from '~common/api'
 
-const handleSignIn = () => {
-	router.push('/sign-in')
-}
-
 const handleOrderPress = (orderId: string) => {
-	router.push(`/(tabs)/orders/${orderId}`)
+	router.push(`/(tabs)/profile/orders/${orderId}`)
 }
 
 const UniImage = withUnistyles(Image)
@@ -79,11 +74,9 @@ export default function OrdersScreen() {
 
 	const handleCurrentOrderPress = () => {
 		if (currentOrder) {
-			router.push(`/(tabs)/orders/current`)
+			router.push('/(tabs)/profile/orders/current')
 		}
 	}
-
-	// removed renderOrderItem as current order should not appear in history
 
 	if (!isAuthenticated) {
 		return (
@@ -91,7 +84,7 @@ export default function OrdersScreen() {
 				<Head>
 					<title>{t`Orders`}</title>
 				</Head>
-				<TabScreenContainer noScroll>
+				<TabScreenContainer noScroll withHeaderPadding>
 					<View style={styles.signInContainer}>
 						<UniImage
 							contentFit="contain"
@@ -106,9 +99,6 @@ export default function OrdersScreen() {
 						<Paragraph style={styles.signInSubtitle}>
 							<Trans>Please sign in to view your order history</Trans>
 						</Paragraph>
-						<Button onPress={handleSignIn}>
-							<Trans>Sign In</Trans>
-						</Button>
 					</View>
 				</TabScreenContainer>
 			</>
@@ -130,9 +120,9 @@ export default function OrdersScreen() {
 						refreshing={isRefetching}
 					/>
 				}
+				withHeaderPadding
 				withTopGradient
 			>
-				{/* Current Order in Progress */}
 				{currentOrder && (
 					<>
 						<H2>
@@ -162,7 +152,6 @@ export default function OrdersScreen() {
 					</>
 				)}
 
-				{/* Order History */}
 				{orders?.length ? (
 					<>
 						<H2>

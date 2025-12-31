@@ -55,7 +55,6 @@ export default function OrderDetail() {
 	const clearOrder = useClearOrder()
 	const { data: user } = useQuery(selfQueryOptions)
 
-	// Fetch missing product details
 	const productIds = useMemo(
 		() => [...new Set((order?.products ?? []).map((product) => product.id))],
 		[order?.products],
@@ -74,8 +73,6 @@ export default function OrderDetail() {
 			})
 		},
 		onSuccess() {
-			// Note: order:purchase_complete is now tracked on the backend
-
 			Burnt.toast({
 				duration: 3,
 				haptic: 'success',
@@ -120,7 +117,6 @@ export default function OrderDetail() {
 
 	const { Field, handleSubmit, Subscribe } = useForm({
 		defaultValues: {
-			// This will be set by the server
 			client_id: Number(user?.client_id as string),
 			comment: '',
 			payment: { id: '', type: 'E_WALLET' as const },
@@ -139,7 +135,6 @@ export default function OrderDetail() {
 			const itemCount =
 				order?.products.reduce((sum, product) => sum + product.quantity, 0) ?? 0
 
-			// Require explicit action if funds are insufficient
 			if (hasInsufficientBalance) {
 				trackEvent('checkout:insufficient_balance', {
 					available_balance: Number(user?.ewallet ?? '0'),

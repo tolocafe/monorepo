@@ -36,7 +36,6 @@ export default function OrderScreen() {
 		isLoading,
 	} = useQuery(orderDetailQueryOptions(id))
 
-	// Fetch missing product details
 	const productIds = useMemo(
 		() => [...new Set((order?.products ?? []).map((p) => p.product_id))],
 		[order?.products],
@@ -64,7 +63,7 @@ export default function OrderScreen() {
 				<Head>
 					<title>{t`Loading Order`}</title>
 				</Head>
-				<TabScreenContainer>
+				<TabScreenContainer withHeaderPadding>
 					<View style={styles.loadingContainer}>
 						<H2>
 							<Trans>Loading Order...</Trans>
@@ -81,7 +80,7 @@ export default function OrderScreen() {
 				<Head>
 					<title>{t`Order Not Found`}</title>
 				</Head>
-				<TabScreenContainer>
+				<TabScreenContainer withHeaderPadding>
 					<View style={styles.errorContainer}>
 						<H2>
 							<Trans>Order Not Found</Trans>
@@ -116,7 +115,6 @@ export default function OrderScreen() {
 				withHeaderPadding
 				withTopGradient
 			>
-				{/* Order Header */}
 				<Card style={styles.orderHeaderCard}>
 					<View style={styles.orderHeader}>
 						<View>
@@ -142,7 +140,6 @@ export default function OrderScreen() {
 					</View>
 				</Card>
 
-				{/* Order Items */}
 				{order.products && order.products.length > 0 && (
 					<Card style={styles.itemsCard}>
 						<H3>

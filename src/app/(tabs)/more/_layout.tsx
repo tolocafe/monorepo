@@ -20,8 +20,6 @@ export default function MoreLayout() {
 			/>
 			<Stack.Screen name="app" options={{ title: t`App` }} />
 			<Stack.Screen name="visit-us" options={{ title: t`Visit Us` }} />
-			<Stack.Screen name="profile" options={{ title: t`Profile` }} />
-			<Stack.Screen name="sessions" options={{ title: t`Sessions` }} />
 			<Stack.Screen name="top-up" options={{ title: t`Top Up` }} />
 		</Stack>
 	)

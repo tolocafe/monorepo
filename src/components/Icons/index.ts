@@ -4,7 +4,10 @@ import { withUnistyles } from 'react-native-unistyles'
 
 export const TextColorIcon = withUnistyles(Ionicons, (theme) => ({
 	color: theme.colors.gray.text,
-	padding: theme.spacing.xs,
+}))
+
+export const GrayColorIcon = withUnistyles(Ionicons, (theme) => ({
+	color: theme.colors.gray.solid,
 }))
 
 export const HeaderIconIonicons = withUnistyles(Ionicons, (theme) => ({

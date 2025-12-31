@@ -98,8 +98,6 @@ export default function ProductScreen() {
 			quantity: 1,
 		},
 		onSubmit({ value }) {
-			if (Platform.OS !== 'web') return null
-
 			const success = addItem({
 				id: value.productId,
 				modifications: value.modifications,

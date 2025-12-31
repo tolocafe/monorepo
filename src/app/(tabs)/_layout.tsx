@@ -81,39 +81,6 @@ export default function TabLayout() {
 					}}
 				/>
 				<Tabs.Screen
-					name="orders"
-					options={{
-						// oxlint-disable-next-line no-undefined
-						tabBarBadge: itemsCount > 0 ? itemsCount.toString() : undefined,
-						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-						// @ts-ignore - bottom-tabs library has incomplete type definitions
-						tabBarIcon({ focused }: { focused: boolean }) {
-							if (Platform.OS === 'ios') {
-								return { sfSymbol: focused ? 'bag.fill' : 'bag' }
-							}
-
-							if (Platform.OS === 'android') {
-								return (
-									focused
-										? require('@/assets/icons/receipt.svg')
-										: require('@/assets/icons/receipt-outline.svg')
-								) as ImageSourcePropType
-							}
-
-							return (
-								<Ionicons
-									color={
-										focused ? theme.colors.verde.solid : theme.colors.gray.solid
-									}
-									name={focused ? 'receipt' : 'receipt-outline'}
-									size={24}
-								/>
-							)
-						},
-						title: t`Orders`,
-					}}
-				/>
-				<Tabs.Screen
 					name="team"
 					options={{
 						href: isBarista ? '/(tabs)/team' : null,
@@ -123,7 +90,7 @@ export default function TabLayout() {
 						tabBarIcon({ focused }: { focused: boolean }) {
 							if (Platform.OS === 'ios') {
 								return {
-									sfSymbol: focused ? 'list.clipboard.fill' : 'list.clipboard',
+									sfSymbol: focused ? 'person.3.fill' : 'person.3',
 								}
 							}
 
@@ -144,6 +111,39 @@ export default function TabLayout() {
 						tabBarItemHidden: !isBarista,
 						tabBarItemStyle: isBarista ? null : { display: 'none' }, // custom routers
 						title: t`Team`,
+					}}
+				/>
+				<Tabs.Screen
+					name="profile"
+					options={{
+						// oxlint-disable-next-line no-undefined
+						tabBarBadge: itemsCount > 0 ? itemsCount.toString() : undefined,
+						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+						// @ts-ignore - bottom-tabs library has incomplete type definitions
+						tabBarIcon({ focused }: { focused: boolean }) {
+							if (Platform.OS === 'ios') {
+								return { sfSymbol: focused ? 'person.fill' : 'person' }
+							}
+
+							if (Platform.OS === 'android') {
+								return (
+									focused
+										? require('@/assets/icons/receipt.svg')
+										: require('@/assets/icons/receipt-outline.svg')
+								) as ImageSourcePropType
+							}
+
+							return (
+								<Ionicons
+									color={
+										focused ? theme.colors.verde.solid : theme.colors.gray.solid
+									}
+									name={focused ? 'person' : 'person-outline'}
+									size={24}
+								/>
+							)
+						},
+						title: t`Profile`,
 					}}
 				/>
 				<Tabs.Screen

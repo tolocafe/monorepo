@@ -24,6 +24,8 @@ import { Paragraph } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { queryClient } from '@/lib/query-client'
 
+const PADDING_EDGES = ['top', 'bottom'] as const
+
 export default function MenuScreen() {
 	const { t } = useLingui()
 
@@ -68,8 +70,9 @@ export default function MenuScreen() {
 				refreshControl={
 					<RefreshControl onRefresh={handleRefresh} refreshing={false} />
 				}
-				withPaddingEdges={['top', 'bottom']}
+				withPaddingEdges={PADDING_EDGES}
 				withTopGradient
+				withHeaderPadding
 			>
 				<PromotionsSection />
 
