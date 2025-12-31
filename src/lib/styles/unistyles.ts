@@ -2,15 +2,14 @@ import { Platform } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 const lightTheme = {
+	// oxlint-disable-next-line sort-keys
 	borderRadius: {
 		full: 9999,
-		/* eslint-disable perfectionist/sort-objects  */
 		xl: Platform.select({ android: 16, default: 24 }),
 		lg: Platform.select({ android: 10, default: 16 }),
 		md: Platform.select({ android: 8, default: 12 }),
 		sm: Platform.select({ android: 5, default: 8 }),
 		xs: Platform.select({ android: 2, default: 4 }),
-		/* eslint-enable perfectionist/sort-objects  */
 	} as const,
 	colors: {
 		// Warning - Amarillo (Yellow)
@@ -65,11 +64,11 @@ const lightTheme = {
 	fontSizes: {
 		/** body, p, text input  */
 		/* eslint-disable perfectionist/sort-objects */
-		xs: 14,
-		sm: 15,
-		md: 16,
 		lg: 18,
+		md: 16,
+		sm: 15,
 		xl: 20,
+		xs: 14,
 		xxl: 24,
 		xxxl: 32,
 		/* eslint-enable perfectionist/sort-objects */
@@ -183,8 +182,8 @@ const darkTheme = {
 	} satisfies (typeof lightTheme)['colors'],
 }
 
+// oxlint-disable-next-line sort-keys
 export const breakpoints = {
-	/* eslint-disable perfectionist/sort-objects */
 	/** default */
 	xs: 0,
 	/** phone */
@@ -197,7 +196,6 @@ export const breakpoints = {
 	xl: 1200,
 	/** tv */
 	xxl: 4000,
-	/* eslint-enable perfectionist/sort-objects */
 } as const
 
 const themes = {

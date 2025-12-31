@@ -64,11 +64,11 @@ export default function TableBillScreen() {
 
 	useTrackScreenView(
 		{
-			screenName: 'table-bill',
-			skip: !tableBill,
 			bill_total: tableBill?.total ? tableBill.total / 100 : 0,
 			item_count:
 				tableBill?.items.reduce((sum, item) => sum + item.quantity, 0) ?? 0,
+			screenName: 'table-bill',
+			skip: !tableBill,
 			table_id,
 		},
 		[tableBill, table_id],

@@ -35,6 +35,7 @@ export function LinearGradient({
 
 	if (Platform.OS === 'web') {
 		const flattenedStyle = StyleSheet.flatten(style)
+		// oxlint-disable-next-line jsx-props-no-spreading
 		return <View {...props} ref={ref} style={flattenedStyle} />
 	}
 
@@ -44,6 +45,7 @@ export function LinearGradient({
 			end={end}
 			start={start}
 			style={style}
+			// oxlint-disable-next-line jsx-props-no-spreading
 			{...props}
 		/>
 	)

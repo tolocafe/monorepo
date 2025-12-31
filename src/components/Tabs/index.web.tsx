@@ -48,6 +48,7 @@ function DesktopSideTabs(props: Omit<BottomTabNavigatorProps, 'id'>) {
 	})
 
 	return (
+		// oxlint-disable-next-line jsx-props-no-spreading
 		<UITabs {...props}>
 			{/* Main content area */}
 			<View style={styles.contentArea}>
@@ -103,6 +104,7 @@ function SideTabButton({
 
 	return (
 		<Pressable
+			// oxlint-disable-next-line jsx-props-no-spreading
 			{...rest}
 			accessibilityRole="tab"
 			accessibilityState={{ selected: Boolean(isFocused) }}
@@ -240,9 +242,11 @@ function ResponsiveTabs(config: Omit<BottomTabNavigatorProps, 'id'>) {
 	const isDesktop = useIsDesktop()
 
 	if (isDesktop) {
+		// oxlint-disable-next-line jsx-props-no-spreading
 		return <DesktopSideTabs {...config} />
 	}
 
+	// oxlint-disable-next-line jsx-props-no-spreading
 	return <ExpoDefaultBottomTabs {...config} />
 }
 

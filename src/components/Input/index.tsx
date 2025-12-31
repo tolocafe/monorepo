@@ -51,12 +51,14 @@ export function Input({
 		return (
 			<UniMaskedTextInput
 				mask={mask}
+				// oxlint-disable-next-line jsx-props-no-spreading
 				{...rest}
 				onChangeText={handleMaskTextChange}
 			/>
 		)
 	}
 
+	// oxlint-disable-next-line jsx-props-no-spreading
 	return <GrayRNTextInput {...rest} style={[styles.base, style]} />
 }
 

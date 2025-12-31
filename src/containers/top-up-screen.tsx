@@ -73,7 +73,7 @@ export default function TopUpScreen() {
 	}, [])
 
 	useTrackScreenView(
-		{ screenName: 'top-up', current_balance: Number(user?.ewallet ?? '0') },
+		{ current_balance: Number(user?.ewallet ?? '0'), screenName: 'top-up' },
 		[user?.ewallet],
 	)
 

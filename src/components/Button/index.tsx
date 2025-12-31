@@ -56,6 +56,7 @@ function Button({
 				state.pressed && !disabled && styles.buttonPressed,
 				typeof style === 'function' ? style(state) : style,
 			]}
+			// oxlint-disable-next-line jsx-props-no-spreading
 			{...props}
 		>
 			{asChild ? (

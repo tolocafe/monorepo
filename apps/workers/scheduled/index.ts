@@ -51,10 +51,11 @@ async function syncData(
 				// case 'revival':
 				//   await sendRevivalNotification(event.customer_id, event.data.days_since_last_order)
 				//   break
-				default:
+				default: {
 					// eslint-disable-next-line no-console
 					console.log(`Should handle ${event.type} event`)
 					break
+				}
 			}
 		}
 

@@ -43,9 +43,10 @@ export async function loadAndActivateLocale(locale: Locale): Promise<void> {
 				i18n.loadAndActivate({ locale, messages })
 				break
 			}
-			default:
+			default: {
 				i18n.loadAndActivate({ locale: 'es', messages: esMessages })
 				break
+			}
 		}
 
 		languageStorage.set(LOCALE_KEY, locale)

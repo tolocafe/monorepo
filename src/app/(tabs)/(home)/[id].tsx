@@ -114,12 +114,12 @@ export default function ProductScreen() {
 
 	useTrackScreenView(
 		{
-			screenName: 'product',
-			skip: !product?.product_id,
 			category_id: product?.menu_category_id ?? '',
 			product_id: product?.product_id ?? '',
 			product_name: product?.product_name ?? '',
 			product_price: Number(product?.price?.['1']) || 0,
+			screenName: 'product',
+			skip: !product?.product_id,
 		},
 		[product],
 	)
@@ -566,15 +566,15 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		paddingHorizontal: theme.spacing.md,
 		paddingVertical: theme.spacing.xs,
 	},
-	badges: {
-		flexDirection: 'row',
-		gap: theme.spacing.sm,
-		marginBottom: theme.spacing.xl,
-	},
 	badgeText: {
 		color: '#FFFFFF',
 		fontSize: theme.fontSizes.sm,
 		fontWeight: theme.fontWeights.semibold,
+	},
+	badges: {
+		flexDirection: 'row',
+		gap: theme.spacing.sm,
+		marginBottom: theme.spacing.xl,
 	},
 	bottomButton: {
 		alignItems: 'center',
@@ -688,12 +688,12 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		justifyContent: 'center',
 		width: 45,
 	},
-	quantityButtons: {
-		flexDirection: 'row',
-	},
 	quantityButtonSingle: {
 		borderBottomLeftRadius: theme.borderRadius.full,
 		borderTopLeftRadius: theme.borderRadius.full,
+	},
+	quantityButtons: {
+		flexDirection: 'row',
 	},
 	quantityText: {
 		backgroundColor: theme.colors.verde.interactive,

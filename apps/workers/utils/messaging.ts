@@ -24,6 +24,10 @@ export const messageTemplates: Record<
 		body: '🧑🏽‍🍳 Ahora estamos trabajando en tu pedido, te avisaremos cuando esté listo',
 		title: 'Pedido aceptado',
 	},
+	'order:closed': {
+		body: '☕️ Tu pedido ha sido entregado. ¡Gracias por tu visita!',
+		title: 'Pago confirmado',
+	},
 	'order:created': {
 		body: '📝 Tu pedido ha sido recibido. Te notificaremos cuando sea aceptado.',
 		title: 'Pedido recibido',
@@ -35,10 +39,6 @@ export const messageTemplates: Record<
 	'order:delivered': {
 		body: 'Disfruta tu pedido ☕️🥐, esperamos que lo disfrutes!',
 		title: 'Pedido entregado',
-	},
-	'order:closed': {
-		body: '☕️ Tu pedido ha sido entregado. ¡Gracias por tu visita!',
-		title: 'Pago confirmado',
 	},
 	'order:ready': {
 		body: '✅ Tu pedido ya está listo, te esperamos!',
@@ -162,17 +162,28 @@ export function getMessageTypeFromProcessingStatus(
 	processingStatus: number,
 ): MessageType | null {
 	switch (processingStatus) {
-		case 10: // Open
+		case 10: {
+			// Open
 			return 'order:created'
-		case 20: // Preparing
+		}
+		case 20: {
+			// Preparing
 			return 'order:accepted'
-		case 30: // Ready
+		}
+		case 30: {
+			// Ready
 			return 'order:ready'
-		case 50: // Delivered
+		}
+		case 50: {
+			// Delivered
 			return 'order:delivered'
-		case 70: // Deleted/Cancelled
+		}
+		case 70: {
+			// Deleted/Cancelled
 			return 'order:declined'
-		default:
+		}
+		default: {
 			return null
+		}
 	}
 }

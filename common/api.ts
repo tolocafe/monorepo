@@ -1,7 +1,7 @@
+import type { PortableTextBlock } from '@portabletext/types'
+
 export const BASE_URL = process.env.EXPO_PUBLIC_API_URL
 export const POSTER_BASE_URL = process.env.EXPO_PUBLIC_POSTER_API_URL
-
-import type { PortableTextBlock } from '@portabletext/types'
 
 export type Category = {
 	category_color: string

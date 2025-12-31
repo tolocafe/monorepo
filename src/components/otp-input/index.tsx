@@ -94,6 +94,7 @@ export function OtpInput({
 				style={styles.overlayInput}
 				textContentType="oneTimeCode"
 				value={value}
+				// oxlint-disable-next-line jsx-props-no-spreading
 				{...props}
 			/>
 		</View>
@@ -115,16 +116,16 @@ const styles = StyleSheet.create((theme) => ({
 		borderColor: theme.colors.verde.solid,
 		borderWidth: 2,
 	},
-	boxesRow: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		width: '100%',
-	},
 	boxText: {
 		color: theme.colors.gray.text,
 		textAlign: 'center',
 		width: '100%',
 		...theme.typography.input,
+	},
+	boxesRow: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		width: '100%',
 	},
 	container: {
 		alignItems: 'center',

@@ -37,5 +37,6 @@ export default function WalletButton({ disabled, style, ...props }: Props) {
 
 	if (Platform.OS === 'macos') return null
 
+	// oxlint-disable-next-line jsx-props-no-spreading
 	return <UniWalletView {...props} style={[style, styles.button]} />
 }

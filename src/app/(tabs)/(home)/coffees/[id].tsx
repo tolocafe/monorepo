@@ -95,10 +95,10 @@ export default function CoffeeStoryScreen() {
 
 	useTrackScreenView(
 		{
-			screenName: 'coffee-story',
-			skip: !currentCoffee,
 			coffee_id: currentCoffee?.slug ?? '',
 			coffee_name: currentCoffee?.name ?? '',
+			screenName: 'coffee-story',
+			skip: !currentCoffee,
 		},
 		[currentCoffee],
 	)

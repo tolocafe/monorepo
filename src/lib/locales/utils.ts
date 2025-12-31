@@ -11,12 +11,12 @@ export const languageStorage = createMMKV({
 export const LOCALE_KEY = 'tolo_language'
 
 export const LOCALE_NAMES = {
+	de: 'Deutsch',
 	en: 'English',
 	es: 'Español',
 	fr: 'Français',
 	ja: '日本語',
 	pt: 'Português',
-	de: 'Deutsch',
 } as const satisfies Record<SupportedLocale, string>
 
 export type Locale = SupportedLocale

@@ -26,11 +26,11 @@ type SessionRecord = { createdAt: number; name: string; token: string }
 function buildUserProperties(client: ClientData) {
 	return {
 		birthday: client.birthday,
-		group_id: client.client_groups_id,
-		group_name: client.client_groups_name,
 		created_at: client.date_activale,
 		email: client.email,
 		first_name: client.firstname,
+		group_id: client.client_groups_id,
+		group_name: client.client_groups_name,
 		last_name: client.lastname,
 		name: client.name,
 		phone: client.phone,

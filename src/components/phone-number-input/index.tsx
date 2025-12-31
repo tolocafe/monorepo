@@ -94,6 +94,7 @@ export default function PhoneNumberInput({
 				style={styles.input}
 				textContentType="telephoneNumber"
 				value={nsn}
+				// oxlint-disable-next-line jsx-props-no-spreading
 				{...props}
 				maxLength={PHONE_NUMBER_MAX_LENGTH - 3}
 			/>

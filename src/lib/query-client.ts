@@ -45,7 +45,7 @@ function shouldRetry(failureCount: number, error: unknown): boolean {
 			return false
 		}
 
-		const status = error.response.status
+		const { status } = error.response
 		if (status >= 400 && status < 500) {
 			return false
 		}

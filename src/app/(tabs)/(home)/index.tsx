@@ -32,15 +32,17 @@ export default function MenuScreen() {
 	useScrollToTop(screenRef)
 	useTrackScreenView({ screenName: 'home' }, [])
 
-	const handleRefresh = useCallback(() => {
-		return Promise.allSettled([
-			queryClient.invalidateQueries(productsQueryOptions),
-			queryClient.invalidateQueries(categoriesQueryOptions),
-			queryClient.invalidateQueries(promotionsQueryOptions),
-			queryClient.invalidateQueries(coffeesQueryOptions),
-			queryClient.invalidateQueries(eventsQueryOptions),
-		])
-	}, [])
+	const handleRefresh = useCallback(
+		() =>
+			void Promise.allSettled([
+				queryClient.invalidateQueries(productsQueryOptions),
+				queryClient.invalidateQueries(categoriesQueryOptions),
+				queryClient.invalidateQueries(promotionsQueryOptions),
+				queryClient.invalidateQueries(coffeesQueryOptions),
+				queryClient.invalidateQueries(eventsQueryOptions),
+			]),
+		[],
+	)
 
 	return (
 		<>

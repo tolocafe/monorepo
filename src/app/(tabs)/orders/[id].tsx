@@ -28,7 +28,7 @@ export default function OrderScreen() {
 	const { id } = useLocalSearchParams<{ id: string }>()
 	const [isDownloading, setIsDownloading] = useState(false)
 
-	useTrackScreenView({ screenName: 'order', order_id: id }, [id])
+	useTrackScreenView({ order_id: id, screenName: 'order' }, [id])
 
 	const {
 		data: order,

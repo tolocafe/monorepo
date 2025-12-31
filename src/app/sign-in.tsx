@@ -79,7 +79,7 @@ export default function SignInScreen() {
 	})
 
 	useTrackScreenView(
-		{ screenName: 'sign-in', has_item_context: Boolean(itemName) },
+		{ has_item_context: Boolean(itemName), screenName: 'sign-in' },
 		[itemName],
 	)
 

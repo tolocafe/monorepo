@@ -159,19 +159,15 @@ export const transactions = pgTable('transactions', {
 	dateStart: text('date_start'),
 	discount: integer('discount'),
 	id: integer('id').primaryKey().notNull(),
-	/**
-	 * Whether the order has been accepted via Poster POS "accept order" action.
-	 * Detected from transaction history changeorderstatus with value: 1.
-	 */
 	isAccepted: boolean('is_accepted').default(false),
 	locationId: integer('location_id'),
+	payType: integer('pay_type'),
 	payedBonus: integer('payed_bonus'),
 	payedCard: integer('payed_card'),
 	payedCash: integer('payed_cash'),
 	payedCert: integer('payed_cert'),
 	payedSum: integer('payed_sum').notNull(),
 	payedThirdParty: integer('payed_third_party'),
-	payType: integer('pay_type'),
 	processingStatus: integer('processing_status').notNull(),
 	reason: integer('reason'),
 	roundSum: integer('round_sum'),

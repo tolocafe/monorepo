@@ -1,6 +1,7 @@
+// oxlint-disable jsx-props-no-spreading
 import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
-import type { CSSProperties } from 'react'
+import type { CSSProperties, ReactNode } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 
 import { H1, H2, H3, H4, Paragraph, Text } from '@/components/Text'
@@ -27,16 +28,14 @@ export default function BlockText({ style, value }: BlockTextProps) {
 	 */
 	const components = {
 		block: {
-			h1: (props: { children?: React.ReactNode }) => <H1 {...props} />,
-			h2: (props: { children?: React.ReactNode }) => <H2 {...props} />,
-			h3: (props: { children?: React.ReactNode }) => <H3 {...props} />,
-			h4: (props: { children?: React.ReactNode }) => <H4 {...props} />,
-			normal: (props: { children?: React.ReactNode }) => (
-				<Paragraph {...props} />
-			),
+			h1: (props: { children?: ReactNode }) => <H1 {...props} />,
+			h2: (props: { children?: ReactNode }) => <H2 {...props} />,
+			h3: (props: { children?: ReactNode }) => <H3 {...props} />,
+			h4: (props: { children?: ReactNode }) => <H4 {...props} />,
+			normal: (props: { children?: ReactNode }) => <Paragraph {...props} />,
 		},
 		list: {
-			bullet: ({ children }: { children?: React.ReactNode }) => (
+			bullet: ({ children }: { children?: ReactNode }) => (
 				<ul
 					style={{
 						marginBottom: theme.spacing.md,
@@ -47,7 +46,7 @@ export default function BlockText({ style, value }: BlockTextProps) {
 					{children}
 				</ul>
 			),
-			number: ({ children }: { children?: React.ReactNode }) => (
+			number: ({ children }: { children?: ReactNode }) => (
 				<ol
 					style={{
 						marginBottom: theme.spacing.md,
@@ -60,15 +59,15 @@ export default function BlockText({ style, value }: BlockTextProps) {
 			),
 		},
 		listItem: {
-			bullet: ({ children }: { children?: React.ReactNode }) => (
+			bullet: ({ children }: { children?: ReactNode }) => (
 				<li style={{ marginBottom: theme.spacing.xs }}>{children}</li>
 			),
-			number: ({ children }: { children?: React.ReactNode }) => (
+			number: ({ children }: { children?: ReactNode }) => (
 				<li style={{ marginBottom: theme.spacing.xs }}>{children}</li>
 			),
 		},
 		marks: {
-			em: ({ children }: { children?: React.ReactNode }) => (
+			em: ({ children }: { children?: ReactNode }) => (
 				<em style={{ fontStyle: 'italic' }}>{children}</em>
 			),
 			strong: (props: { children?: React.ReactNode }) => (

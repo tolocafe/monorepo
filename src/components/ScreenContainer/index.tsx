@@ -60,6 +60,7 @@ export default function ScreenContainer({
 			<>
 				{topAccessory}
 				<View
+					// oxlint-disable-next-line jsx-props-no-spreading
 					{...rest}
 					style={[
 						styles.scrollViewContainer,
@@ -87,6 +88,7 @@ export default function ScreenContainer({
 					keyboardShouldPersistTaps="handled"
 					ref={ref}
 					style={[styles.scrollViewContainer, style]}
+					// oxlint-disable-next-line jsx-props-no-spreading
 					{...rest}
 				>
 					{children}
@@ -105,6 +107,7 @@ export default function ScreenContainer({
 				]}
 				ref={ref}
 				style={[styles.scrollViewContainer, style]}
+				// oxlint-disable-next-line jsx-props-no-spreading
 				{...rest}
 			>
 				{children}
@@ -122,6 +125,7 @@ export function TabScreenContainer(
 	const navigationTabBarHeight = useBottomTabBarHeight()
 	const tabBarHeight = Platform.OS === 'ios' ? navigationTabBarHeight : 0
 
+	// oxlint-disable-next-line jsx-props-no-spreading
 	return <ScreenContainer {...props} tabBarHeight={tabBarHeight} />
 }
 

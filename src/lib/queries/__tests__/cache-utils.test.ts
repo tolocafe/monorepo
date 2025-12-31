@@ -21,9 +21,9 @@ jest.mock('react-native-mmkv', () => {
 	}
 
 	return {
+		MMKV: jest.fn(() => instance),
 		__esModule: true,
 		createMMKV: jest.fn(() => instance),
-		MMKV: jest.fn(() => instance),
 	}
 })
 

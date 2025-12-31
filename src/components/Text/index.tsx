@@ -1,3 +1,4 @@
+// oxlint-disable jsx-props-no-spreading
 import type { ReactNode } from 'react'
 import { Text as RNText } from 'react-native'
 import type { TextProps as RNTextProps } from 'react-native'

@@ -71,6 +71,7 @@ export async function upsertTransaction(
 		id: txId,
 		isAccepted,
 		locationId,
+		payType: tx.pay_type ? Number(tx.pay_type) : null,
 		payedBonus: tx.payed_bonus ? toCents(tx.payed_bonus) : null,
 		payedCard: tx.payed_card ? toCents(tx.payed_card) : null,
 		payedCash: tx.payed_cash ? toCents(tx.payed_cash) : null,
@@ -79,7 +80,6 @@ export async function upsertTransaction(
 		payedThirdParty: tx.payed_third_party
 			? toCents(tx.payed_third_party)
 			: null,
-		payType: tx.pay_type ? Number(tx.pay_type) : null,
 		processingStatus: Number(tx.processing_status),
 		reason: tx.reason ? Number(tx.reason) : null,
 		roundSum: tx.round_sum ? toCents(tx.round_sum) : null,
@@ -89,8 +89,7 @@ export async function upsertTransaction(
 		syncedAt: new Date().toISOString(),
 		tableId: tx.table_id ? Number(tx.table_id) : null,
 		tipSum: tx.tip_sum ? toCents(tx.tip_sum) : null,
-		// type: 0 = Sale, 1 = Return. Default to 0 (Sale) if undefined
-		type: tx.type === undefined ? 0 : Number(tx.type),
+		type: tx.type === undefined ? 0 : Number(tx.type), // type: 0 = Sale, 1 = Return. Default to 0 (Sale) if undefined
 		updatedAt: new Date().toISOString(),
 		userId: tx.user_id ?? null,
 	}

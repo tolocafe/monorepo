@@ -106,8 +106,8 @@ export async function syncDateRange(
 
 	return {
 		created,
-		errors,
 		errorSamples,
+		errors,
 		fetchedCount: fetched.length,
 		lastProcessedId,
 		toProcessCount: toProcess.length,

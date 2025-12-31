@@ -86,10 +86,10 @@ export async function trackEvent(
 			event,
 			properties: {
 				...properties,
-				$pathname: context.req.path,
-				$ip: getConnInfo(context).remote.address,
-				$user_agent: context.req.header('User-Agent'),
 				$host: context.req.header('Host'),
+				$ip: getConnInfo(context).remote.address,
+				$pathname: context.req.path,
+				$user_agent: context.req.header('User-Agent'),
 			},
 		})
 

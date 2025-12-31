@@ -130,8 +130,8 @@ export default async function syncTransactions(
 
 		return {
 			created: allCreated,
-			errors: totalErrors,
 			errorSamples,
+			errors: totalErrors,
 			fetchedCount: todayResult.fetchedCount ?? 0,
 			startCursor: state?.lastTransactionId ?? null,
 			synced: allCreated.length + allUpdated.length,
@@ -148,8 +148,8 @@ export default async function syncTransactions(
 
 		return {
 			created: [],
-			errors: 1,
 			errorSamples: [errorMessage],
+			errors: 1,
 			synced: 0,
 			updated: [],
 		}

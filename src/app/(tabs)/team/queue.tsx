@@ -90,9 +90,7 @@ export default function OrdersQueue() {
 
 	useFocusEffect(
 		useCallback(() => {
-			const interval = setInterval(() => {
-				return refetch()
-			}, POLLING_INTERVAL)
+			const interval = setInterval(() => refetch(), POLLING_INTERVAL)
 
 			return () => {
 				clearInterval(interval)
@@ -151,9 +149,10 @@ export default function OrdersQueue() {
 		return map
 	}, [products])
 
-	const handleRefresh = useCallback(() => {
-		return queryClient.invalidateQueries(baristaQueueQueryOptions)
-	}, [])
+	const handleRefresh = useCallback(
+		() => queryClient.invalidateQueries(baristaQueueQueryOptions),
+		[],
+	)
 
 	// Filter orders based on selected category
 	const filteredOrders = useMemo(() => {
@@ -336,7 +335,7 @@ export default function OrdersQueue() {
 														`Product ${orderProduct.product_id}`
 
 													// Get modifiers array (new API format) or fall back to legacy
-													const modifiers = orderProduct.modifiers
+													const { modifiers } = orderProduct
 													const legacyModifications = orderProduct.modification
 
 													// Parse quantity - it's a string like "1" or "2"
@@ -650,16 +649,16 @@ const styles = StyleSheet.create((theme) => ({
 		flexWrap: 'wrap',
 		gap: theme.spacing.sm,
 	},
+	orderTime: {
+		color: theme.colors.gray.text,
+		fontSize: 13,
+	},
 	ordersList: {
 		alignContent: 'flex-start',
 		alignItems: 'flex-start',
 		flex: 1,
 		gap: theme.spacing.md,
 		justifyContent: 'flex-start',
-	},
-	orderTime: {
-		color: theme.colors.gray.text,
-		fontSize: 13,
 	},
 	productItem: {
 		alignItems: 'center',

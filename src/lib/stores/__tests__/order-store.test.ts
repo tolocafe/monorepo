@@ -7,6 +7,8 @@ import {
 	jest,
 } from '@jest/globals'
 
+import { useOrderStore } from '@/lib/stores/order-store'
+
 jest.mock('expo-router', () => ({
 	router: {
 		push: jest.fn(),
@@ -22,15 +24,13 @@ jest.mock('react-native-mmkv', () => {
 	}
 
 	return {
-		createMMKV: jest.fn(() => instance),
 		MMKV: jest.fn(() => instance),
+		createMMKV: jest.fn(() => instance),
 	}
 })
 jest.mock('@/lib/queries/auth', () => ({
 	selfQueryOptions: { queryFn: jest.fn(), queryKey: ['self'] },
 }))
-
-import { useOrderStore } from '@/lib/stores/order-store'
 
 const createMockOrder = () => ({
 	createdAt: new Date('2025-01-01T00:00:00.000Z'),

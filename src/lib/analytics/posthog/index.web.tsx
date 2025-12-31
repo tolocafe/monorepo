@@ -13,8 +13,8 @@ const POSTHOG_HOST = 'https://a.tolo.cafe'
 
 posthog.init(POSTHOG_API_KEY, {
 	api_host: POSTHOG_HOST,
-	capture_pageview: true,
 	capture_pageleave: true,
+	capture_pageview: true,
 	loaded(posthog) {
 		if (__DEV__) {
 			posthog.opt_out_capturing()

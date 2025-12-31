@@ -304,7 +304,7 @@ export async function processOrderEvents(
 						// Actual income (card + cash + third-party, excludes eWallet)
 						...(event.incomeAmount !== undefined
 							? {
-									amount: Math.floor(event.incomeAmount / 10000),
+									amount: Math.floor(event.incomeAmount / 10_000),
 									currency: 'MXN',
 								}
 							: {}),
@@ -389,17 +389,23 @@ export function getEventTypeFromStatus(
 	processingStatus: number,
 ): MessageType | null {
 	switch (processingStatus) {
-		case 10:
+		case 10: {
 			return 'order:created'
-		case 20:
+		}
+		case 20: {
 			return 'order:accepted'
-		case 30:
+		}
+		case 30: {
 			return 'order:ready'
-		case 50:
+		}
+		case 50: {
 			return 'order:delivered'
-		case 70:
+		}
+		case 70: {
 			return 'order:declined'
-		default:
+		}
+		default: {
 			return null
+		}
 	}
 }

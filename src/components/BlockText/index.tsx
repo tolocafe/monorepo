@@ -1,5 +1,7 @@
+// oxlint-disable jsx-props-no-spreading
 import { PortableText } from '@portabletext/react-native'
 import type { PortableTextComponents } from '@portabletext/react-native'
+import { ReactNode } from 'react'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
@@ -54,7 +56,8 @@ const components = {
 		em: ({ children }: { children: React.ReactNode }) => (
 			<Paragraph style={styles.italic}>{children}</Paragraph>
 		),
-		strong: (props: { children: React.ReactNode }) => (
+		strong: (props: { children: ReactNode }) => (
+			// oxlint-disable-next-line jsx-props-no-spreading
 			<Text weight="bold" {...props} />
 		),
 	},

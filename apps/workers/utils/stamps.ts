@@ -61,7 +61,7 @@ export async function canRedeemBirthdayDrink(
 	await ensureRedemptionsTable(database)
 
 	const lastBirthday = getLastBirthdayDate(birthday)
-	const lastBirthdayISO = lastBirthday.toISOString().split('T')[0]
+	const [lastBirthdayISO] = lastBirthday.toISOString().split('T')
 
 	// Check if there's a birthday redemption since the last birthday
 	const result = await database

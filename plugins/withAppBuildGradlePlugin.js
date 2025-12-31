@@ -3,7 +3,7 @@ const { withAppBuildGradle } = require('expo/config-plugins')
 
 // oxlint-disable-next-line no-commonjs
 module.exports = function withAppBuildGradlePlugin(appConfig) {
-	return withAppBuildGradle(appConfig, function (decoratedAppConfig) {
+	return withAppBuildGradle(appConfig, function exports(decoratedAppConfig) {
 		// HACK
 		// Workaround for https://github.com/facebook/react-native/issues/42024
 		// Remove when React Native resolves this issue
