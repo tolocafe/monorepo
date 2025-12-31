@@ -101,7 +101,7 @@ export async function flush() {
 	}
 }
 
-export async function identify(identity: UserIdentity) {
+export function identify(identity: UserIdentity) {
 	const { birthdate, email, firstName, lastName, phoneNumber, userId } =
 		identity
 

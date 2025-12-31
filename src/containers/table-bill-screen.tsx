@@ -1,6 +1,3 @@
-import { useEffect, useState } from 'react'
-import { ActivityIndicator, Alert, Platform, View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import {
 	confirmPlatformPayPayment,
@@ -13,6 +10,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 import Head from 'expo-router/head'
+import { useEffect, useState } from 'react'
+import { ActivityIndicator, Alert, Platform, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
@@ -58,7 +57,9 @@ export default function TableBillScreen() {
 	})
 
 	useEffect(() => {
-		void getIsPlatformPaySupported().then(setIsPlatformPaySupported)
+		getIsPlatformPaySupported()
+			.then(setIsPlatformPaySupported)
+			.catch(() => setIsPlatformPaySupported(false))
 	}, [])
 
 	useTrackScreenView(
@@ -84,9 +85,7 @@ export default function TableBillScreen() {
 	}, [paymentSuccess])
 
 	const { mutateAsync: createPaymentIntent } = useMutation({
-		async mutationFn() {
-			return api.tables.createPaymentIntent(location_id, table_id)
-		},
+		mutationFn: () => api.tables.createPaymentIntent(location_id, table_id),
 	})
 
 	const handlePlatformPayment = async () => {
@@ -97,7 +96,7 @@ export default function TableBillScreen() {
 		}
 
 		// Track table payment start
-		void trackEvent('table:payment_start', {
+		trackEvent('table:payment_start', {
 			bill_total: tableBill.total / 100,
 			payment_method: Platform.OS === 'ios' ? 'apple_pay' : 'google_pay',
 			table_id,
@@ -145,6 +144,7 @@ export default function TableBillScreen() {
 			// Mark transaction as paid in Poster
 			await api.tables.pay(location_id, table_id, {
 				paymentIntentId: paymentIntent.client_secret,
+				// oxlint-disable-next-line no-undefined
 				phone: !user && phoneNumber ? phoneNumber : undefined,
 			})
 
@@ -155,7 +155,7 @@ export default function TableBillScreen() {
 			setPaymentSuccess(true)
 
 			if (Platform.OS !== 'web') {
-				void Burnt.toast({
+				Burnt.toast({
 					from: 'top',
 					preset: 'done',
 					title: t`Payment successful!`,
@@ -176,7 +176,7 @@ export default function TableBillScreen() {
 		}
 
 		// Track table payment start
-		void trackEvent('table:payment_start', {
+		trackEvent('table:payment_start', {
 			bill_total: tableBill.total / 100,
 			payment_method: 'card',
 			table_id,
@@ -198,6 +198,7 @@ export default function TableBillScreen() {
 			// Mark transaction as paid in Poster
 			await api.tables.pay('1', table_id, {
 				paymentIntentId: response.paymentIntent.client_secret,
+				// oxlint-disable-next-line no-undefined
 				phone: !user && phoneNumber ? phoneNumber : undefined,
 			})
 
@@ -208,7 +209,7 @@ export default function TableBillScreen() {
 			setPaymentSuccess(true)
 
 			if (Platform.OS !== 'web') {
-				void Burnt.toast({
+				Burnt.toast({
 					from: 'top',
 					preset: 'done',
 					title: t`Payment successful!`,

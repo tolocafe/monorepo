@@ -2,7 +2,6 @@ import { mutationOptions, queryOptions } from '@tanstack/react-query'
 
 import { queryClient } from '@/lib/query-client'
 import { api } from '@/lib/services/api-service'
-
 import type {
 	CreateEWalletTransaction,
 	CreateOrder,
@@ -60,7 +59,7 @@ export const orderQueryOptions = queryOptions({
 
 export const orderDetailQueryOptions = (orderId: string) =>
 	queryOptions({
-		initialData: () => {
+		initialData() {
 			const orders = queryClient.getQueryData(orderQueryOptions.queryKey)
 			const order = orders?.find((order) => order.transaction_id === orderId)
 
@@ -78,8 +77,6 @@ export const orderDetailQueryOptions = (orderId: string) =>
 					tip_sum: '0',
 				} as OrderDetailResponse
 			}
-
-			return
 		},
 		queryFn: () => api.orders.get(orderId),
 		queryKey: ['orders', orderId] as const,

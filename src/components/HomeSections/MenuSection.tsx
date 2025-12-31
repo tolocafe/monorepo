@@ -1,20 +1,18 @@
-import { Fragment, useMemo } from 'react'
-import { ActivityIndicator, FlatList, View } from 'react-native'
-
 import { Trans } from '@lingui/react/macro'
 import { ErrorBoundary } from '@sentry/react-native'
 import { useQuery } from '@tanstack/react-query'
+import { Fragment, useMemo } from 'react'
+import { ActivityIndicator, FlatList, View } from 'react-native'
 import { StyleSheet, useUnistyles, withUnistyles } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
 import MenuListItem, { getItemSize } from '@/components/MenuListItem'
 import { H2, H3, Paragraph } from '@/components/Text'
+import type { Product } from '@/lib/api'
 import {
 	categoriesQueryOptions,
 	productsQueryOptions,
 } from '@/lib/queries/menu'
-
-import type { Product } from '@/lib/api'
 
 const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
 	color: theme.colors.gray.solid,

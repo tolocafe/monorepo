@@ -1,8 +1,10 @@
 import { i18n } from '@lingui/core'
-import { Locale, LOCALE_KEY, languageStorage } from './utils'
 import * as Sentry from '@sentry/react-native'
+
 import { messages as esMessages } from '@/lib/locales/es/messages.po'
 import { queryClient } from '@/lib/query-client'
+
+import { Locale, LOCALE_KEY, languageStorage } from './utils'
 
 let isLoadingLocale = false
 

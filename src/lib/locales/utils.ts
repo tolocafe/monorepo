@@ -1,6 +1,8 @@
 import { createMMKV } from 'react-native-mmkv'
+
 import { STORAGE_KEYS } from '@/lib/constants/storage'
-import { SUPPORTED_LOCALES, type SupportedLocale } from '~common/locales'
+import { SUPPORTED_LOCALES } from '~common/locales'
+import type { SupportedLocale } from '~common/locales'
 
 export const languageStorage = createMMKV({
 	id: STORAGE_KEYS.SETTINGS,

@@ -1,11 +1,10 @@
-import { useCallback } from 'react'
-import { Platform } from 'react-native'
-
 import { useMutation, useQuery } from '@tanstack/react-query'
 import Constants from 'expo-constants'
 import * as Device from 'expo-device'
 import * as Notifications from 'expo-notifications'
 import * as TrackingTransparency from 'expo-tracking-transparency'
+import { useCallback } from 'react'
+import { Platform } from 'react-native'
 
 import {
 	selfQueryOptions,

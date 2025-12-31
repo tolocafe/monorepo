@@ -1,11 +1,10 @@
-import { useState } from 'react'
-import { Alert, Platform, View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import * as Burnt from 'burnt'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
+import { useState } from 'react'
+import { Alert, Platform, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'

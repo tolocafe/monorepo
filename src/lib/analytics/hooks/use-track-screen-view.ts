@@ -1,6 +1,5 @@
-import { useCallback } from 'react'
-
 import { useFocusEffect } from 'expo-router'
+import { useCallback } from 'react'
 
 import * as posthog from '@/lib/analytics/posthog'
 

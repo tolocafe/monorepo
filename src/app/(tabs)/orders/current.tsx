@@ -1,6 +1,3 @@
-import { useCallback, useMemo } from 'react'
-import { Alert, Platform, Pressable, View } from 'react-native'
-
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
@@ -9,6 +6,8 @@ import * as Burnt from 'burnt'
 import { router, Stack, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import * as StoreReview from 'expo-store-review'
+import { useCallback, useMemo } from 'react'
+import { Alert, Platform, Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
@@ -33,10 +32,9 @@ import {
 	useCurrentOrder,
 	useUpdateItem,
 } from '@/lib/stores/order-store'
+import type { OrderProduct } from '@/lib/stores/order-store'
 import { sortModifiers } from '@/lib/utils/modifier-tags'
 import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
-
-import type { OrderProduct } from '@/lib/stores/order-store'
 import type { Product } from '~common/api'
 import type { CreateOrder } from '~common/schemas'
 
@@ -134,7 +132,7 @@ export default function OrderDetail() {
 				})) ?? [],
 			serviceMode: 2,
 		},
-		async onSubmit({ value }) {
+		onSubmit({ value }) {
 			const hasInsufficientBalance =
 				!user || Number(user.ewallet ?? '0') < orderTotal
 
@@ -143,7 +141,7 @@ export default function OrderDetail() {
 
 			// Require explicit action if funds are insufficient
 			if (hasInsufficientBalance) {
-				void trackEvent('checkout:insufficient_balance', {
+				trackEvent('checkout:insufficient_balance', {
 					available_balance: Number(user?.ewallet ?? '0'),
 					required_amount: orderTotal,
 				})
@@ -166,7 +164,7 @@ export default function OrderDetail() {
 				return
 			}
 
-			void trackEvent('checkout:start', {
+			trackEvent('checkout:start', {
 				cart_total: orderTotal,
 				currency: 'MXN',
 				item_count: itemCount,
@@ -200,11 +198,11 @@ export default function OrderDetail() {
 		const previousQuantity = product.quantity
 
 		if (nextQuantity <= 0) {
-			void trackEvent('cart:item_remove', {
+			trackEvent('cart:item_remove', {
 				product_id: product.id,
 			})
 		} else if (nextQuantity !== previousQuantity) {
-			void trackEvent('cart:item_quantity_update', {
+			trackEvent('cart:item_quantity_update', {
 				new_quantity: nextQuantity,
 				old_quantity: previousQuantity,
 				product_id: product.id,

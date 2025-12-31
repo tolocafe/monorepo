@@ -1,8 +1,7 @@
-import { RefreshControl, View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import Head from 'expo-router/head'
+import { RefreshControl, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { List, ListItem } from '@/components/List'
@@ -12,6 +11,7 @@ import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { sessionsQueryOptions } from '@/lib/queries/auth'
 
 const formatSessionDate = (timestamp: number) =>
+	// oxlint-disable-next-line no-undefined
 	new Date(timestamp).toLocaleDateString(undefined, {
 		day: 'numeric',
 		month: 'short',
@@ -19,6 +19,7 @@ const formatSessionDate = (timestamp: number) =>
 	})
 
 const formatSessionTime = (timestamp: number) =>
+	// oxlint-disable-next-line no-undefined
 	new Date(timestamp).toLocaleTimeString(undefined, {
 		hour: '2-digit',
 		minute: '2-digit',

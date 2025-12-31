@@ -1,6 +1,5 @@
-import type { PropsWithChildren } from 'react'
-
 import { ScrollViewStyleReset } from 'expo-router/html'
+import type { PropsWithChildren } from 'react'
 
 // Initialize Unistyles for web static rendering
 import '@/lib/styles/unistyles'
@@ -106,6 +105,7 @@ export default function Root({ children }: PropsWithChildren) {
 
 				{/* Structured Data for SEO */}
 				<script
+					// oxlint-disable-next-line no-danger
 					dangerouslySetInnerHTML={{
 						__html: JSON.stringify({
 							'@context': 'https://schema.org',

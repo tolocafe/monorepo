@@ -3,6 +3,7 @@ import type { ExpoConfig } from 'expo/config'
 
 const projectId = '25e3751a-b837-480a-b9fc-ee67327f46e9'
 
+// oxlint-disable-next-line no-commonjs
 const packageVersion = require('./package.json') as { version: string }
 
 export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({

@@ -1,18 +1,14 @@
+import type Ionicons from '@expo/vector-icons/Ionicons'
 import {
 	Children,
 	cloneElement,
-	type ComponentProps,
 	createContext,
 	isValidElement,
-	type ReactElement,
-	type ReactNode,
 	useContext,
 } from 'react'
+import type { ComponentProps, ReactElement, ReactNode } from 'react'
 import { Pressable, View } from 'react-native'
-
 import { StyleSheet } from 'react-native-unistyles'
-
-import type Ionicons from '@expo/vector-icons/Ionicons'
 
 import { TextColorIcon } from '@/components/Icons'
 import { Text } from '@/components/Text'

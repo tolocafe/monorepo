@@ -1,7 +1,7 @@
-/* eslint-disable no-undef */
-//withAppBuildGradlePlugin.js
+// oxlint-disable-next-line no-commonjs
 const { withAppBuildGradle } = require('expo/config-plugins')
 
+// oxlint-disable-next-line no-commonjs
 module.exports = function withAppBuildGradlePlugin(appConfig) {
 	return withAppBuildGradle(appConfig, function (decoratedAppConfig) {
 		// HACK

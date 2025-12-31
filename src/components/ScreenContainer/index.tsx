@@ -1,7 +1,6 @@
+import { useHeaderHeight } from '@react-navigation/elements'
 import type { ComponentProps, RefObject } from 'react'
 import { Platform, ScrollView, View } from 'react-native'
-
-import { useHeaderHeight } from '@react-navigation/elements'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 

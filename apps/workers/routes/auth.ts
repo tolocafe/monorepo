@@ -4,11 +4,11 @@ import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 import type { CookieOptions } from 'hono/utils/cookie'
 
-import { RequestOtpSchema, VerifyOtpSchema } from '~common/schemas'
-import { defaultJsonHeaders } from '~workers/utils/headers'
 import type { ClientData } from '~common/api'
-
+import { RequestOtpSchema, VerifyOtpSchema } from '~common/schemas'
+import type { Bindings } from '~workers/types'
 import { trackServerEvent } from '~workers/utils/analytics'
+import { defaultJsonHeaders } from '~workers/utils/headers'
 import {
 	authenticate,
 	DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
@@ -17,8 +17,6 @@ import {
 import { generateOtp, storeOtp, verifyOtp } from '~workers/utils/otp'
 import { api, sendSms } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
-
-import type { Bindings } from '~workers/types'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
 

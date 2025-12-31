@@ -1,6 +1,3 @@
-import { useCallback, useEffect, useState } from 'react'
-import { Platform, Pressable, View } from 'react-native'
-
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { captureException } from '@sentry/react-native'
@@ -8,6 +5,8 @@ import { useForm } from '@tanstack/react-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
+import { useCallback, useEffect, useState } from 'react'
+import { Platform, Pressable, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
@@ -61,7 +60,7 @@ export default function SignInScreen() {
 			requestTrackingPermissionAsync()
 				.then((granted) => {
 					if (granted) {
-						void identify({
+						return identify({
 							birthdate: data.client.birthday,
 							email: data.client.email,
 							firstName: data.client.firstname,
@@ -70,6 +69,8 @@ export default function SignInScreen() {
 							userId: data.client.client_id,
 						})
 					}
+
+					return null
 				})
 				.catch(captureException)
 
@@ -111,8 +112,8 @@ export default function SignInScreen() {
 
 				if (stage === 'signup') {
 					await requestOtpMutation.mutateAsync({
-						birthdate: value.birthdate.trim() || undefined,
-						name: value.name.trim() || undefined,
+						birthdate: value.birthdate.trim(),
+						name: value.name.trim(),
 						phone: value.phoneNumber.trim(),
 					})
 
@@ -273,10 +274,7 @@ export default function SignInScreen() {
 		<>
 			<Stack.Screen
 				options={{
-					animation: Platform.select({
-						default: undefined,
-						web: 'fade',
-					}),
+					animation: Platform.select({ web: 'fade' }),
 					headerBackVisible: false,
 					headerRight: () => (
 						<Pressable

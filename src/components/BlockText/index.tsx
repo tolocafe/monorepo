@@ -1,9 +1,7 @@
-import { View } from 'react-native'
-
 import { PortableText } from '@portabletext/react-native'
-import { StyleSheet } from 'react-native-unistyles'
-
 import type { PortableTextComponents } from '@portabletext/react-native'
+import { View } from 'react-native'
+import { StyleSheet } from 'react-native-unistyles'
 
 import { H1, H2, H3, H4, Paragraph, Text } from '@/components/Text'
 

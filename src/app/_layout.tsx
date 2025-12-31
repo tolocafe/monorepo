@@ -1,6 +1,3 @@
-import { useEffect } from 'react'
-import { Platform } from 'react-native'
-
 import { i18n } from '@lingui/core'
 import { I18nProvider } from '@lingui/react'
 import {
@@ -13,6 +10,8 @@ import { Toaster } from 'burnt/web'
 import * as Notifications from 'expo-notifications'
 import { Stack, useNavigationContainerRef } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
+import { useEffect } from 'react'
+import { Platform } from 'react-native'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { AnalyticsIdentifier } from '@/lib/analytics/components/analytics-identifier'

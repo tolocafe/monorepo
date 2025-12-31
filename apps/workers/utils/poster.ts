@@ -17,7 +17,7 @@
  *
  * @module poster
  */
-import * as AWS from '@aws-sdk/client-sns'
+import { PublishCommand, SNS } from '@aws-sdk/client-sns'
 import { getCurrentScope } from '@sentry/cloudflare'
 
 import type {
@@ -32,7 +32,7 @@ import type {
 } from '~common/api'
 import type { CreateOrder } from '~common/schemas'
 
-const snsClient = new AWS.SNS({
+const snsClient = new SNS({
 	credentials: {
 		accessKeyId: process.env.AWS_ACCESS_KEY_ID,
 		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
@@ -53,6 +53,35 @@ class PosterError extends Error {
 		super(message)
 		this.name = 'PosterError'
 	}
+}
+
+/**
+ * Filters out null/undefined values and converts all values to strings
+ * @internal
+ */
+function getCleanedParameters(
+	parameters?: Record<string, boolean | number | string | undefined>,
+) {
+	const filteredParameters = Object.entries(parameters ?? {}).filter(
+		([_, value]) => value !== null && value !== undefined,
+	)
+
+	const stringParameters = filteredParameters.map(([key, value]) => [
+		key,
+		(value as boolean | number | string).toString(),
+	])
+
+	return Object.fromEntries(stringParameters) as Record<string, string>
+}
+
+/**
+ * Creates URLSearchParams from a parameters object, filtering nulls
+ * @internal
+ */
+function getSearchParameters(
+	parameters?: Record<string, boolean | number | string | undefined>,
+) {
+	return new URLSearchParams(getCleanedParameters(parameters))
 }
 
 /**
@@ -89,35 +118,6 @@ export async function posterFetch<TResponse = unknown>(
 	throw new PosterError(
 		data.error || options.defaultErrorMessage || 'Failed to fetch data',
 	)
-}
-
-/**
- * Filters out null/undefined values and converts all values to strings
- * @internal
- */
-function getCleanedParameters(
-	parameters?: Record<string, boolean | number | string | undefined>,
-) {
-	const filteredParameters = Object.entries(parameters ?? {}).filter(
-		([_, value]) => value !== null && value !== undefined,
-	)
-
-	const stringParameters = filteredParameters.map(([key, value]) => [
-		key,
-		(value as boolean | number | string).toString(),
-	])
-
-	return Object.fromEntries(stringParameters) as Record<string, string>
-}
-
-/**
- * Creates URLSearchParams from a parameters object, filtering nulls
- * @internal
- */
-function getSearchParameters(
-	parameters?: Record<string, boolean | number | string | undefined>,
-) {
-	return new URLSearchParams(getCleanedParameters(parameters))
 }
 
 /**
@@ -690,7 +690,7 @@ export const api = {
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/menu/getProducts
 		 */
-		async getMenuProducts(
+		getMenuProducts(
 			token: string,
 			_options: {
 				type: 'categories' | 'products'
@@ -714,7 +714,7 @@ export const api = {
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/menu/getProduct
 		 */
-		async getProduct(token: string, id: string) {
+		getProduct(token: string, id: string) {
 			return posterFetch<Product>(
 				`/menu.getProduct?${getSearchParameters({ product_id: id, token })}`,
 				{
@@ -755,7 +755,7 @@ export const api = {
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/transactions/closeTransaction
 		 */
-		async closeTransaction(
+		closeTransaction(
 			token: string,
 			body: {
 				/** Customer ID to associate with transaction */
@@ -797,7 +797,7 @@ export const api = {
 		 *
 		 * @see https://dev.joinposter.com/en/docs/v3/web/finance/updateTransactions
 		 */
-		async updateTransaction(
+		updateTransaction(
 			token: string,
 			body: {
 				orderId: number
@@ -836,7 +836,7 @@ export const api = {
  *
  * @see https://dev.joinposter.com/en/docs/v3/web/transactions/closeTransaction
  */
-export async function closePosterOrder(
+export function closePosterOrder(
 	token: string,
 	body: {
 		/** Amount paid via gift card in cents */
@@ -863,7 +863,7 @@ export async function closePosterOrder(
  *
  * Note: This is NOT the Poster API sendSms endpoint, but uses AWS SNS directly.
  */
-export async function sendSms(
+export function sendSms(
 	/** Unused (kept for API consistency) */
 	_token: string,
 	/** International format, e.g. "+1234567890" */
@@ -871,6 +871,6 @@ export async function sendSms(
 	message: string,
 ) {
 	return snsClient.send(
-		new AWS.PublishCommand({ Message: message, PhoneNumber: phone }),
+		new PublishCommand({ Message: message, PhoneNumber: phone }),
 	)
 }

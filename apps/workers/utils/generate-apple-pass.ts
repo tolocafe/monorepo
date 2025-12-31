@@ -1,7 +1,6 @@
 import { captureException } from '@sentry/cloudflare'
-import { PKPass } from 'passkit-generator'
-
 import type { Context } from 'hono'
+import { PKPass } from 'passkit-generator'
 
 import type { ClientData } from '~common/api'
 import type { Bindings } from '~workers/types'

@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/cloudflare'
 import { eq } from 'drizzle-orm'
 
+import type { Product as PosterProduct } from '~common/api'
 import {
 	dishes,
 	productIngredients,
@@ -9,14 +10,11 @@ import {
 } from '~workers/db/schema'
 import { api } from '~workers/utils/poster'
 
-import type { Product as PosterProduct } from '~common/api'
-
 import { ensureCategory, ensureIngredient } from './ensure'
-import { mapModifierGroup, mapProduct } from './maps'
-import { upsertModifier } from './upsert'
-
 import type { Cache } from './ensure'
+import { mapModifierGroup, mapProduct } from './maps'
 import type { Database } from './transactions'
+import { upsertModifier } from './upsert'
 
 /**
  * Ensure a product exists in the database and sync all related entities

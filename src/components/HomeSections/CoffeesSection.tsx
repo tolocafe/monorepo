@@ -1,14 +1,12 @@
-import { FlatList, View } from 'react-native'
-
 import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { FlatList, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import CoffeeStoryBubble, { BUBBLE_SIZE } from '@/components/CoffeeStoryBubble'
 import { H2 } from '@/components/Text'
-import { coffeesQueryOptions } from '@/lib/queries/coffees'
-
 import type { Coffee } from '@/lib/api'
+import { coffeesQueryOptions } from '@/lib/queries/coffees'
 
 const UniFlatList = withUnistyles(FlatList)
 

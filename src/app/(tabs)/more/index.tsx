@@ -1,14 +1,3 @@
-import { useRef, useState } from 'react'
-import type { ScrollView } from 'react-native'
-import {
-	Alert,
-	Linking,
-	Platform,
-	Pressable,
-	RefreshControl,
-	View,
-} from 'react-native'
-
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { t } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
@@ -19,6 +8,16 @@ import { useQuery } from '@tanstack/react-query'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
+import { useRef, useState } from 'react'
+import {
+	Alert,
+	Linking,
+	Platform,
+	Pressable,
+	RefreshControl,
+	View,
+} from 'react-native'
+import type { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
@@ -34,12 +33,11 @@ import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { loadAndActivateLocale } from '@/lib/locales/load-and-activate-locale'
 import { LOCALE_NAMES } from '@/lib/locales/utils'
+import type { Locale } from '@/lib/locales/utils'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { queryClient } from '@/lib/query-client'
 import { getAuthToken } from '@/lib/services/http-client'
 import { formatPrice } from '@/lib/utils/price'
-
-import type { Locale } from '@/lib/locales/utils'
 
 const AVAILABLE_LANGUAGES = Object.keys(LOCALE_NAMES) as Locale[]
 
@@ -419,8 +417,6 @@ function getGroupName(groupName: string | undefined) {
 	if (/^súper clientes?$/i.test(groupName ?? ''))
 		return 'SUPER_CUSTOMER' as const
 	if (/^vecinos?$/i.test(groupName ?? '')) return 'NEIGHBOR' as const
-
-	return
 }
 
 const styles = StyleSheet.create((theme) => ({

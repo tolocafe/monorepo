@@ -1,10 +1,9 @@
-import { useEffect, useMemo, useState } from 'react'
-import { ActivityIndicator, Alert, View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 import Head from 'expo-router/head'
+import { useEffect, useMemo, useState } from 'react'
+import { ActivityIndicator, Alert, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'

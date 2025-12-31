@@ -1,13 +1,11 @@
-import { FlatList, View } from 'react-native'
-
 import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { FlatList, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import PromotionCard from '@/components/PromotionCard'
 import { H2 } from '@/components/Text'
 import { promotionsQueryOptions } from '@/lib/queries/menu'
-
 import type { Promotion } from '~common/api'
 
 const UniFlatList = withUnistyles(FlatList)

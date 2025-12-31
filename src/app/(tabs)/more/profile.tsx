@@ -1,5 +1,3 @@
-import { Alert, Linking, Platform, RefreshControl, View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import { captureException } from '@sentry/react-native'
 import { useForm } from '@tanstack/react-form'
@@ -7,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
+import { Alert, Linking, Platform, RefreshControl, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
@@ -16,14 +15,13 @@ import { List, ListItem } from '@/components/List'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Label } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
+import type { ClientData } from '@/lib/api'
 import {
 	selfQueryOptions,
 	signOutMutationOptions,
 	updateClientMutationOptions,
 } from '@/lib/queries/auth'
 import { clearAllCache } from '@/lib/queries/cache-utils'
-
-import type { ClientData } from '@/lib/api'
 
 export default function ProfileScreen() {
 	const { t } = useLingui()

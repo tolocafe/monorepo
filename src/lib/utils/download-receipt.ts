@@ -1,7 +1,6 @@
-import { Platform } from 'react-native'
-
 import { File, Paths } from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
+import { Platform } from 'react-native'
 
 import { api } from '@/lib/services/api-service'
 
@@ -48,7 +47,7 @@ export async function downloadReceipt(orderId: string): Promise<void> {
 		}
 
 		if (error instanceof Error) {
-			throw new Error(`Failed to download receipt: ${error.message}`, {
+			throw new TypeError(`Failed to download receipt: ${error.message}`, {
 				cause: error,
 			})
 		}
@@ -59,7 +58,7 @@ export async function downloadReceipt(orderId: string): Promise<void> {
 /**
  * Converts a blob to base64 string
  */
-async function blobToBase64(blob: Blob): Promise<string> {
+function blobToBase64(blob: Blob): Promise<string> {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader()
 		reader.addEventListener('load', () => {

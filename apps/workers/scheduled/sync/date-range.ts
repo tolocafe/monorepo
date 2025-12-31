@@ -5,10 +5,9 @@ import type { Bindings } from '~workers/types'
 
 import { createCaches } from './ensure'
 import { processTransactionEvents } from './events'
+import type { TransactionChange } from './events'
 import { fetchTransactionsPaginated } from './fetch'
 import { upsertTransaction } from './transaction'
-
-import type { TransactionChange } from './events'
 import type { Database } from './transactions'
 
 type SyncDateRangeOptions = {
@@ -70,7 +69,7 @@ export async function syncDateRange(
 				updated.push(tx)
 			}
 		} catch (error) {
-			errors++
+			errors += 1
 			const message = error instanceof Error ? error.message : String(error)
 			if (errorSamples.length < 5) {
 				errorSamples.push(message)

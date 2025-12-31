@@ -1,8 +1,7 @@
-import type { ImageSourcePropType } from 'react-native'
-import { Pressable, View } from 'react-native'
-
 import { Image } from 'expo-image'
 import { Link } from 'expo-router'
+import { Pressable, View } from 'react-native'
+import type { ImageSourcePropType } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -12,12 +11,11 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import { LinearGradient } from '@/components/LinearGradient'
 import { Text } from '@/components/Text'
+import type { Coffee } from '@/lib/api'
 import {
 	COFFEE_GRADIENT_COLORS,
 	getCoffeeGradientIndex,
 } from '@/lib/constants/coffee-gradients'
-
-import type { Coffee } from '@/lib/api'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 

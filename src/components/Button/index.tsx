@@ -1,7 +1,6 @@
 import type { ComponentProps, ReactNode } from 'react'
 import { Platform, Pressable } from 'react-native'
 import type { GestureResponderEvent, StyleProp, TextStyle } from 'react-native'
-
 import { StyleSheet } from 'react-native-unistyles'
 
 import Text from '@/components/Text'

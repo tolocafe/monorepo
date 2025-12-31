@@ -16,7 +16,7 @@ export function formatApiDate(date: Date): string {
  */
 export function parsePosterDate(dateString: string): Date {
 	// Convert "Y-m-d H:i:s" to ISO format with Mexico City offset
-	const isoString = dateString.replace(' ', 'T') + '-06:00'
+	const isoString = `${dateString.replace(' ', 'T')}-06:00`
 	const date = new Date(isoString)
 
 	// Validate the parsed date
@@ -60,7 +60,7 @@ export function toISO(dateString: string): null | string {
 	}
 
 	// Fall back to "Y-m-d H:i:s" format parsing
-	const parsed = new Date(dateString.replace(' ', 'T') + 'Z')
+	const parsed = new Date(`${dateString.replace(' ', 'T')}Z`)
 	if (Number.isNaN(parsed.getTime())) return null
 	return parsed.toISOString()
 }

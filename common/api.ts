@@ -273,16 +273,16 @@ export type DashTransaction = {
 }
 
 export type Event = {
-	dates?: string[]
-	description?: string
+	dates?: string[] | null
+	description?: string | null
 	/** Legacy image field, use images array for Sanity images */
 	image?: { url: string }
 	/** Array of Sanity image references */
 	images?: SanityImageReference[]
-	location?: string
+	location?: string | null
 	name: string
 	slug: string
-	summary?: string
+	summary?: string | null
 }
 
 /**

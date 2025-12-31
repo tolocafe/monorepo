@@ -1,10 +1,7 @@
-import { type ComponentProps, useEffect, useMemo, useState } from 'react'
-import type { ImageSourcePropType } from 'react-native'
-import { Pressable, Text, View } from 'react-native'
-
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLingui } from '@lingui/react/macro'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import type { BottomTabNavigatorProps } from '@react-navigation/bottom-tabs'
 import { Image } from 'expo-image'
 import { Link, withLayoutContext } from 'expo-router'
 import {
@@ -13,10 +10,12 @@ import {
 	TabSlot as UITabSlot,
 	TabTrigger as UITabTrigger,
 } from 'expo-router/ui'
-import { StyleSheet, withUnistyles } from 'react-native-unistyles'
-
-import type { BottomTabNavigatorProps } from '@react-navigation/bottom-tabs'
 import type { TabTriggerSlotProps } from 'expo-router/ui'
+import { useEffect, useMemo, useState } from 'react'
+import type { ComponentProps } from 'react'
+import { Pressable, Text, View } from 'react-native'
+import type { ImageSourcePropType } from 'react-native'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { useIsBarista } from '@/lib/hooks/use-is-barista'

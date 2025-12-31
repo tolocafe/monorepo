@@ -154,13 +154,13 @@ export async function sendBatchAPNsNotifications(
 			processedResults.push({ error, success, token })
 
 			if (success) {
-				successful++
+				successful += 1
 			} else {
-				failed++
+				failed += 1
 			}
 		} else {
 			// Promise was rejected
-			failed++
+			failed += 1
 			processedResults.push({
 				error:
 					result.reason instanceof Error
@@ -227,7 +227,7 @@ function pemToBytes(pem: string): Uint8Array {
 	// Convert base64 to bytes
 	const binaryString = atob(base64)
 	const bytes = new Uint8Array(binaryString.length)
-	for (let index = 0; index < binaryString.length; index++) {
+	for (let index = 0; index < binaryString.length; index += 1) {
 		bytes[index] = binaryString.codePointAt(index) as number
 	}
 	return bytes

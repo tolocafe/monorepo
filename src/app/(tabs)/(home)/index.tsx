@@ -1,10 +1,9 @@
-import { useCallback, useRef } from 'react'
-import type { ScrollView } from 'react-native'
-import { RefreshControl } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import Head from 'expo-router/head'
+import { useCallback, useRef } from 'react'
+import { RefreshControl } from 'react-native'
+import type { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import {
@@ -34,11 +33,13 @@ export default function MenuScreen() {
 	useTrackScreenView({ screenName: 'home' }, [])
 
 	const handleRefresh = useCallback(() => {
-		void queryClient.invalidateQueries(productsQueryOptions)
-		void queryClient.invalidateQueries(categoriesQueryOptions)
-		void queryClient.invalidateQueries(promotionsQueryOptions)
-		void queryClient.invalidateQueries(coffeesQueryOptions)
-		void queryClient.invalidateQueries(eventsQueryOptions)
+		return Promise.allSettled([
+			queryClient.invalidateQueries(productsQueryOptions),
+			queryClient.invalidateQueries(categoriesQueryOptions),
+			queryClient.invalidateQueries(promotionsQueryOptions),
+			queryClient.invalidateQueries(coffeesQueryOptions),
+			queryClient.invalidateQueries(eventsQueryOptions),
+		])
 	}, [])
 
 	return (

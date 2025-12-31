@@ -1,7 +1,6 @@
+import { Ionicons } from '@expo/vector-icons'
 import type { ReactNode } from 'react'
 import { View } from 'react-native'
-
-import { Ionicons } from '@expo/vector-icons'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { Text } from '@/components/Text'

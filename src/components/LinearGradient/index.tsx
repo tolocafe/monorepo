@@ -1,9 +1,7 @@
+import { LinearGradient as ExpoLinearGradient } from 'expo-linear-gradient'
+import type { LinearGradientProps as ExpoLinearGradientProps } from 'expo-linear-gradient'
 import { useEffect, useRef } from 'react'
 import { Platform, StyleSheet, View } from 'react-native'
-
-import { LinearGradient as ExpoLinearGradient } from 'expo-linear-gradient'
-
-import type { LinearGradientProps as ExpoLinearGradientProps } from 'expo-linear-gradient'
 
 type LinearGradientProps = ExpoLinearGradientProps
 

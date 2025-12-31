@@ -5,23 +5,17 @@
  * by both the polling-based sync and webhook handlers.
  *
  */
+import * as Sentry from '@sentry/cloudflare'
 import { count, eq } from 'drizzle-orm'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
-import * as Sentry from '@sentry/cloudflare'
-
 import { transactions } from '~workers/db/schema'
-
-import type { MessageType } from '~workers/utils/messaging'
-import {
-	trackEventsBatch,
-	type BatchEventOptions,
-} from '~workers/utils/posthog'
-import { sendPushNotificationToClient } from '~workers/utils/push-notifications'
-
-import type { Bindings } from '~workers/types'
-
 import type * as schema from '~workers/db/schema'
+import type { Bindings } from '~workers/types'
+import type { MessageType } from '~workers/utils/messaging'
+import { trackEventsBatch } from '~workers/utils/posthog'
+import type { BatchEventOptions } from '~workers/utils/posthog'
+import { sendPushNotificationToClient } from '~workers/utils/push-notifications'
 
 /**
  * Maximum age for orders to receive notifications (10 minutes in milliseconds)
@@ -178,54 +172,63 @@ export function getServiceModeName(
 	serviceMode: null | number,
 ): 'delivery' | 'dine_in' | 'takeaway' | 'unknown' {
 	switch (serviceMode) {
-		case 1:
+		case 1: {
 			return 'dine_in'
-		case 2:
+		}
+		case 2: {
 			return 'takeaway'
-		case 3:
+		}
+		case 3: {
 			return 'delivery'
-		default:
+		}
+		default: {
 			return 'unknown'
+		}
 	}
 }
 
 /**
  * Get notification message for order status
  */
-export function getOrderStatusNotification(
-	messageType: MessageType,
-): null | { body: string; title: string } {
+export function getOrderStatusNotification(messageType: MessageType) {
 	switch (messageType) {
-		case 'order:created':
+		case 'order:created': {
 			// Usually sent when order is first created, handled separately
 			return null
-		case 'order:accepted':
+		}
+		case 'order:accepted': {
 			return {
 				body: '🧑🏽‍🍳 Ahora estamos trabajando en tu pedido, te avisaremos cuando esté listo',
 				title: 'Pedido aceptado',
 			}
-		case 'order:ready':
+		}
+		case 'order:ready': {
 			return {
 				body: '✅ Tu pedido ya está listo, te esperamos!',
 				title: 'Pedido listo',
 			}
-		case 'order:delivered':
+		}
+		case 'order:delivered': {
 			return {
 				body: 'Disfruta tu pedido ☕️🥐, esperamos que lo disfrutes!',
 				title: 'Pedido entregado',
 			}
-		case 'order:closed':
+		}
+		case 'order:closed': {
 			return {
 				body: '☕️ Tu pedido ha sido entregado. ¡Gracias por tu visita!',
 				title: 'Pedido completado',
 			}
-		case 'order:declined':
+		}
+		case 'order:declined': {
 			return {
 				body: '🚨 Comunícate con nosotros para resolverlo cuanto antes',
 				title: 'Pedido no aceptado',
 			}
-		default:
+		}
+		default: {
 			return null
+		}
 	}
 }
 
@@ -338,9 +341,7 @@ export async function processOrderEvents(
 			const notification = getOrderStatusNotification(event.eventType)
 			if (!notification) continue
 
-			const customerId = event.customerId
-			const eventType = event.eventType
-			const transactionId = event.transactionId
+			const { customerId, eventType, transactionId } = event
 
 			notificationPromises.push(
 				(async () => {

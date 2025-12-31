@@ -1,5 +1,4 @@
 import { Platform } from 'react-native'
-
 import { StyleSheet, useUnistyles, withUnistyles } from 'react-native-unistyles'
 
 import { LinearGradient } from '@/components/LinearGradient'

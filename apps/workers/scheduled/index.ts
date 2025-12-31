@@ -2,7 +2,6 @@ import * as Sentry from '@sentry/cloudflare'
 
 import { getDatabase } from '~workers/db/client'
 import processCustomerLifecycleEvents from '~workers/scheduled/process-lifecycle-events'
-
 import type { Bindings } from '~workers/types'
 
 import syncTransactions from './sync/transactions'
@@ -73,7 +72,7 @@ async function syncData(
 	}
 }
 
-export default ((controller, environment, context) => {
+const scheduledHandler = ((controller, environment, context) => {
 	// Sentry.captureEvent({ message: 'Starting scheduled data sync' })
 	Sentry.captureCheckIn({
 		monitorSlug: 'scheduled-data-sync',
@@ -82,3 +81,5 @@ export default ((controller, environment, context) => {
 
 	context.waitUntil(syncData(controller, environment, context))
 }) satisfies ExportedHandlerScheduledHandler<Bindings>
+
+export default scheduledHandler

@@ -1,5 +1,4 @@
 import puppeteer from '@cloudflare/puppeteer'
-
 import type { BrowserWorker } from '@cloudflare/puppeteer'
 
 type ReceiptData = {

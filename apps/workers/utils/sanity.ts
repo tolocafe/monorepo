@@ -115,13 +115,13 @@ type SanitySchema<
  * Build a direct Sanity API image URL (bypasses CDN)
  * Format: https://PROJECT_ID.api.sanity.io/v2021-06-07/assets/images/DATASET/ASSET_ID.EXTENSION
  */
-function buildDirectImageUrl(
+export function buildDirectImageUrl(
 	projectId: string,
 	dataset: string,
 	assetId: string | undefined,
 	extension: string | undefined,
-): string | undefined {
-	if (!assetId || !extension) return undefined
+) {
+	if (!assetId || !extension) return null
 
 	// Remove "image-" prefix if present
 	const cleanAssetId = assetId.replace(/^image-/, '')
@@ -153,14 +153,14 @@ function fetchSanity<TResponse = unknown>(
  * Get localized block content from a LocaleBlockContent object
  * Falls back to English if the requested language is not available
  */
-function getLocalizedBlockContent(
+export function getLocalizedBlockContent(
 	content: LocaleBlockContent | undefined,
 	language: SupportedLocale,
-): PortableTextBlock[] | undefined {
-	if (!content) return undefined
+) {
+	if (!content) return null
 	const value = content[language as keyof typeof content] as
 		| PortableTextBlock[]
-		| undefined
+		| null
 	return value ?? (content.en as PortableTextBlock[] | undefined)
 }
 
@@ -168,29 +168,30 @@ function getLocalizedBlockContent(
  * Get localized slug from a LocaleSlug object
  * Falls back to English if the requested language is not available
  */
-function getLocalizedSlug(
+export function getLocalizedSlug(
 	slug: LocaleSlug | undefined,
 	language: SupportedLocale,
-): string | undefined {
-	if (!slug) return undefined
-	const localeSlug = slug[language as keyof typeof slug] as
-		| undefined
-		| { _type: 'slug'; current: string }
-	const enSlug = slug.en as undefined | { _type: 'slug'; current: string }
-	return localeSlug?.current || enSlug?.current
+) {
+	if (!slug) return null
+	const localeSlug = slug[language as keyof typeof slug] as null | {
+		_type: 'slug'
+		current: string
+	}
+	const enSlug = slug.en as null | { _type: 'slug'; current: string }
+	return (localeSlug?.current || enSlug?.current) ?? null
 }
 
 /**
  * Get localized string from a LocaleText object
  * Falls back to English if the requested language is not available
  */
-function getLocalizedString(
-	text: LocaleText | undefined,
+export function getLocalizedString(
+	text: LocaleText | null | undefined,
 	language: SupportedLocale,
-): string | undefined {
-	if (!text) return undefined
+) {
+	if (!text) return null
 	const value = text[language as keyof typeof text]
-	return value || text.en
+	return (value || text.en) ?? null
 }
 
 const sanity = {
@@ -297,10 +298,4 @@ const sanity = {
 	},
 }
 
-export {
-	buildDirectImageUrl,
-	getLocalizedBlockContent,
-	getLocalizedSlug,
-	getLocalizedString,
-}
 export default sanity

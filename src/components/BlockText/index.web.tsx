@@ -1,9 +1,7 @@
-import type { CSSProperties } from 'react'
-
 import { PortableText } from '@portabletext/react'
-import { useUnistyles } from 'react-native-unistyles'
-
 import type { PortableTextComponents } from '@portabletext/react'
+import type { CSSProperties } from 'react'
+import { useUnistyles } from 'react-native-unistyles'
 
 import { H1, H2, H3, H4, Paragraph, Text } from '@/components/Text'
 

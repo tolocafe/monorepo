@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
-
 import { Redirect, useLocalSearchParams } from 'expo-router'
+import { useEffect } from 'react'
 
 /**
  * Legacy redirect from /tables/[table_id] to /tables/1/[table_id]

@@ -1,8 +1,7 @@
-import type { ComponentProps } from 'react'
 import { useMemo, useRef, useState } from 'react'
-import type { BlurEvent } from 'react-native'
+import type { ComponentProps } from 'react'
 import { Pressable, TextInput, View } from 'react-native'
-
+import type { BlurEvent } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { Text } from '@/components/Text'

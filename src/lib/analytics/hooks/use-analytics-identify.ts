@@ -1,6 +1,5 @@
-import { useEffect } from 'react'
-
 import { useQuery } from '@tanstack/react-query'
+import { useEffect } from 'react'
 
 import { identify } from '@/lib/analytics'
 import { requestTrackingPermissionAsync } from '@/lib/notifications'
@@ -20,7 +19,7 @@ export function useAnalyticsIdentify() {
 
 			if (!granted) return
 
-			void identify({
+			identify({
 				birthdate: selfData?.birthday,
 				email: selfData?.email,
 				firstName: selfData?.firstname,
@@ -30,6 +29,6 @@ export function useAnalyticsIdentify() {
 			})
 		}
 
-		void requestIdentify()
+		requestIdentify()
 	}, [selfData])
 }

@@ -1,6 +1,5 @@
 import { captureException } from '@sentry/cloudflare'
 import { Expo } from 'expo-server-sdk'
-
 import type { ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk'
 
 export const expo = new Expo()
@@ -96,9 +95,9 @@ export async function sendPushNotificationToClient(
 
 		for (const ticket of tickets) {
 			if (ticket.status === 'ok') {
-				sent++
+				sent += 1
 			} else {
-				failed++
+				failed += 1
 			}
 		}
 

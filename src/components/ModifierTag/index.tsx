@@ -1,7 +1,6 @@
+import Ionicons from '@expo/vector-icons/Ionicons'
 import type { ComponentProps } from 'react'
 import { View } from 'react-native'
-
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { Text } from '@/components/Text'

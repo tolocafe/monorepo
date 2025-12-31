@@ -1,18 +1,16 @@
 import { desc, eq } from 'drizzle-orm'
 
+import type { DashTransaction, PosterModification } from '~common/api'
 import {
 	orderLines,
 	productModifiers,
 	transactionProductModifiers,
 } from '~workers/db/schema'
 
-import type { DashTransaction, PosterModification } from '~common/api'
-
 import { ensureCategory, ensureModifier, ensureProduct } from './ensure'
-import { toCents } from './utils'
-
 import type { Cache } from './ensure'
 import type { Database } from './transactions'
+import { toCents } from './utils'
 
 /**
  * Upsert line modifiers for a transaction order line
@@ -175,7 +173,7 @@ export async function upsertOrderLines(
 			cache,
 		)
 
-		lineIndex++
+		lineIndex += 1
 	}
 }
 

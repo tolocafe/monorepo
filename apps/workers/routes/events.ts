@@ -1,15 +1,14 @@
 import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 
+import type { Event } from '~common/api'
+import type { SupportedLocale } from '~common/locales'
+import type { Bindings } from '~workers/types'
 import { defaultJsonHeaders } from '~workers/utils/headers'
 import sanity, {
 	getLocalizedSlug,
 	getLocalizedString,
 } from '~workers/utils/sanity'
-
-import type { Event } from '~common/api'
-import type { SupportedLocale } from '~common/locales'
-import type { Bindings } from '~workers/types'
 
 type Variables = {
 	language: SupportedLocale
@@ -34,10 +33,10 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 					.filter((img): img is { sourceId: string } => img !== null)
 
 				return {
-					dates: event.startDate ? [event.startDate] : undefined,
+					dates: event.startDate ? [event.startDate] : null,
 					description: getLocalizedString(event.excerpt, language),
 					images,
-					location: undefined, // Location is a reference, would need separate query
+					location: null, // Location is a reference, would need separate query
 					name: getLocalizedString(event.name, language) || '',
 					slug: getLocalizedSlug(event.slug, language) || '',
 					summary: getLocalizedString(event.excerpt, language),
@@ -70,10 +69,10 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			.filter((img): img is { sourceId: string } => img !== null)
 
 		const localized = {
-			dates: event.startDate ? [event.startDate] : undefined,
+			dates: event.startDate ? [event.startDate] : null,
 			description: getLocalizedString(event.excerpt, language),
 			images,
-			location: undefined, // Location is a reference, would need separate query
+			location: null, // Location is a reference, would need separate query
 			name: getLocalizedString(event.name, language) || '',
 			slug: getLocalizedSlug(event.slug, language) || '',
 			summary: getLocalizedString(event.excerpt, language),

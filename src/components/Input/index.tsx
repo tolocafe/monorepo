@@ -1,6 +1,6 @@
-import { type ComponentProps, useCallback } from 'react'
+import { useCallback } from 'react'
+import type { ComponentProps } from 'react'
 import { TextInput as RNTextInput } from 'react-native'
-
 import { MaskedTextInput } from 'react-native-mask-text'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 

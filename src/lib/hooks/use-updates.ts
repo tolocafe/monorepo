@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react'
-
 import NetInfo from '@react-native-community/netinfo'
 import * as Sentry from '@sentry/react-native'
 import * as Updates from 'expo-updates'
+import { useEffect, useState } from 'react'
 
 export type UpdateState = {
 	error: null | string
@@ -108,7 +107,6 @@ export function useUpdates() {
 
 	// Check for updates on mount
 	useEffect(() => {
-		// eslint-disable-next-line react-hooks/set-state-in-effect
 		void checkForUpdates()
 	}, [])
 

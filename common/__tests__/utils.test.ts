@@ -1,32 +1,35 @@
 import { describe, expect, it } from '@jest/globals'
 
-import { getProductBaseCost, getProductTotalCost } from '../utils'
-
-import type { Product } from '../api'
+import type { Product } from '~common/api'
+import { getProductBaseCost, getProductTotalCost } from '~common/utils'
 
 describe('getProductBaseCost', () => {
 	it('should return cost from modifications when product has modifications', () => {
+		const COST = 500
+
 		const product: Product = {
 			modifications: [
 				{
-					spots: [{ price: '500' }],
+					spots: [{ price: `${COST}` }],
 				},
 			],
 		} as Product
 
 		const cost = getProductBaseCost(product)
 
-		expect(cost).toBe(500)
+		expect(cost).toBe(COST)
 	})
 
 	it('should return cost from price object when product has no modifications', () => {
+		const COST = 450
+
 		const product = {
-			price: { large: '450', small: '350' },
+			price: { large: `${COST}`, small: '350' },
 		} as unknown as Product
 
 		const cost = getProductBaseCost(product)
 
-		expect(cost).toBe(450)
+		expect(cost).toBe(COST)
 	})
 
 	it('should return NaN when product has no price or modifications', () => {

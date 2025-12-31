@@ -1,16 +1,14 @@
 import { eq } from 'drizzle-orm'
 
+import type { DashTransaction } from '~common/api'
 import { transactions } from '~workers/db/schema'
 
-import type { DashTransaction } from '~common/api'
-
 import { ensureCustomer, ensureLocation } from './ensure'
-import { upsertOrderLines } from './upsert'
-import { toCents, toISO } from './utils'
-
 import type { Cache } from './ensure'
 import type { TransactionChange } from './events'
 import type { Database } from './transactions'
+import { upsertOrderLines } from './upsert'
+import { toCents, toISO } from './utils'
 
 /**
  * Check if transaction history contains "order accepted" event

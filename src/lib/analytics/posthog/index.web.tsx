@@ -1,6 +1,5 @@
 import { PostHogProvider as BasePostHogProvider } from '@posthog/react'
 import { posthog } from 'posthog-js'
-
 import type { ReactNode } from 'react'
 
 import type {

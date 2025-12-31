@@ -1,3 +1,10 @@
+import Ionicons from '@expo/vector-icons/Ionicons'
+import { Trans, useLingui } from '@lingui/react/macro'
+import { useForm } from '@tanstack/react-form'
+import { useQuery } from '@tanstack/react-query'
+import { Image } from 'expo-image'
+import { router, Stack, useLocalSearchParams } from 'expo-router'
+import Head from 'expo-router/head'
 import { useCallback, useEffect } from 'react'
 import {
 	ActivityIndicator,
@@ -6,15 +13,6 @@ import {
 	RefreshControl,
 	View,
 } from 'react-native'
-
-import Ionicons from '@expo/vector-icons/Ionicons'
-import { Trans, useLingui } from '@lingui/react/macro'
-import { useForm } from '@tanstack/react-form'
-import { useQuery } from '@tanstack/react-query'
-import * as Haptics from 'expo-haptics'
-import { Image } from 'expo-image'
-import { router, Stack, useLocalSearchParams } from 'expo-router'
-import Head from 'expo-router/head'
 import Animated, {
 	cancelAnimation,
 	useAnimatedStyle,
@@ -63,7 +61,7 @@ const linearGradientColors = [
 
 const UniImage = withUnistyles(Image)
 
-// eslint-disable-next-line unicorn/prevent-abbreviations
+// oxlint-disable-next-line only-export-components
 export async function generateStaticParams() {
 	const products = await api.menu.getProducts()
 
@@ -100,9 +98,7 @@ export default function ProductScreen() {
 			quantity: 1,
 		},
 		onSubmit({ value }) {
-			if (Platform.OS !== 'web') {
-				void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
-			}
+			if (Platform.OS !== 'web') return null
 
 			const success = addItem({
 				id: value.productId,
@@ -207,7 +203,7 @@ export default function ProductScreen() {
 			<Stack.Screen
 				options={{
 					headerRight: Platform.select({
-						default: undefined,
+						default: null as unknown as undefined,
 						ios: () => (
 							<Pressable onPress={handleClose}>
 								<HeaderIconIonicons name="close-outline" size={35} />

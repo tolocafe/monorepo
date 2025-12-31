@@ -1,7 +1,6 @@
 import type { Context, MiddlewareHandler } from 'hono'
 
 import { SUPPORTED_LOCALES } from '~common/locales'
-
 import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
 

@@ -5,5 +5,23 @@
 	"jsxSingleQuote": false,
 	"semi": false,
 	"trailingComma": "all",
-	"printWidth": 80
+	"printWidth": 80,
+	"arrowParens": "always",
+	"experimentalSortImports": {
+		"internalPattern": ["@/", "~common", "~workers"],
+		"order": "asc",
+		"groups": [
+			["value-builtin", "type-builtin"],
+			["value-external", "type-external"],
+			["value-internal", "type-internal"],
+			["value-parent", "type-parent"],
+			["value-sibling", "value-index", "type-sibling", "type-index"],
+			["type-import", "ts-equals-import"],
+			["unknown"]
+		],
+		"newlinesBetween": true
+	},
+	"yaml": {
+		"singleQuote": true
+	}
 }

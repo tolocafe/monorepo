@@ -1,11 +1,10 @@
-import { useRef } from 'react'
-import type { ScrollView } from 'react-native'
-import { RefreshControl } from 'react-native'
-
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
+import { useRef } from 'react'
+import { RefreshControl } from 'react-native'
+import type { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { List, ListItem } from '@/components/List'

@@ -138,6 +138,9 @@ export async function sendMessage(
 					})
 					break
 				}
+				default: {
+					void 0
+				}
 			}
 		} catch (error) {
 			captureException(error)

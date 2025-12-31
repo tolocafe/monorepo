@@ -4,19 +4,17 @@ import {
 	captureException,
 } from '@sentry/cloudflare'
 import { Hono } from 'hono'
+import type { Context } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
-import type { Context } from 'hono'
-
+import type { Bindings } from '~workers/types'
 import { trackServerEvent } from '~workers/utils/analytics'
 import { notifyApplePassUpdate } from '~workers/utils/apns'
 import createApplePass from '~workers/utils/generate-apple-pass'
+import HttpStatusCode from '~workers/utils/http-codes'
 import { api } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
-
 import { getStripe } from '~workers/utils/stripe'
-
-import type { Bindings } from '../types'
 
 /** Helper function to create required D1 tables */
 async function ensurePassTables(database: D1Database) {
@@ -133,7 +131,9 @@ async function sendPassUpdateNotification(
 }
 
 const webhooks = new Hono<{ Bindings: Bindings }>()
-	.get('/poster', (context) => context.json({ message: 'Ok' }, 200))
+	.get('/poster', (context) =>
+		context.json({ message: 'Ok' }, HttpStatusCode.OK),
+	)
 	.post('/passes/v1/log', (context) => {
 		captureEvent({
 			extra: { log: context.req.text() },
@@ -141,7 +141,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			message: 'Passes log webhook received',
 		})
 
-		return context.json({ message: 'Ok' }, 200)
+		return context.json({ message: 'Ok' }, HttpStatusCode.OK)
 	})
 	.delete(
 		'/passes/v1/devices/:deviceLibraryId/registrations/:passTypeIdentifier/:passId',
@@ -150,12 +150,12 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			const authToken = getApplePassAuthToken(context)
 
 			if (!authToken) {
-				return context.json({}, 401)
+				return context.json(null, HttpStatusCode.UNAUTHORIZED)
 			}
 
 			const clientId = extractClientIdFromPassId(passId)
 			if (!clientId) {
-				return context.json({}, 401)
+				return context.json(null, HttpStatusCode.UNAUTHORIZED)
 			}
 
 			try {
@@ -170,7 +170,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					.first()
 
 				if (!authResult) {
-					return context.json({}, 401)
+					return context.json(null, HttpStatusCode.UNAUTHORIZED)
 				}
 
 				// Delete registration
@@ -186,10 +186,10 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					message: 'Pass registration deleted',
 				})
 
-				return context.json({}, 200)
+				return context.json({}, HttpStatusCode.OK)
 			} catch (error) {
 				captureException(error)
-				return context.json({}, 500)
+				return context.json({}, HttpStatusCode.INTERNAL_SERVER_ERROR)
 			}
 		},
 	)
@@ -201,12 +201,12 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			const authToken = getApplePassAuthToken(context)
 
 			if (!authToken) {
-				return context.json({}, 401)
+				return context.json({}, HttpStatusCode.UNAUTHORIZED)
 			}
 
 			const clientId = extractClientIdFromPassId(passId)
 			if (!clientId) {
-				return context.json({}, 401)
+				return context.json({}, HttpStatusCode.UNAUTHORIZED)
 			}
 
 			try {
@@ -221,7 +221,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					.first()
 
 				if (!authResult) {
-					return context.json({}, 401)
+					return context.json({}, HttpStatusCode.UNAUTHORIZED)
 				}
 
 				const { pushToken } = await context.req.json<{ pushToken: string }>()
@@ -247,7 +247,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 						message: 'Pass registration updated',
 					})
 
-					return context.json({}, 200)
+					return context.json({}, HttpStatusCode.OK)
 				}
 
 				// New registration
@@ -276,10 +276,10 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					message: 'Pass registration created',
 				})
 
-				return context.json({}, 201)
+				return context.json({}, HttpStatusCode.CREATED)
 			} catch (error) {
 				captureException(error)
-				return context.json({}, 500)
+				return context.json({}, HttpStatusCode.INTERNAL_SERVER_ERROR)
 			}
 		},
 	)
@@ -315,10 +315,11 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					.all<{ serial_number: string }>()
 
 				if (results.length === 0) {
-					return new Response(null, { status: 204 }) // No content
+					// No content
+					return new Response(null, { status: HttpStatusCode.NO_CONTENT })
 				}
 
-				const serialNumbers = results.map((r) => r.serial_number)
+				const serialNumbers = results.map((result) => result.serial_number)
 				const lastUpdated = Math.floor(Date.now() / 1000).toString()
 
 				captureEvent({
@@ -338,7 +339,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				})
 			} catch (error) {
 				captureException(error)
-				return context.json({}, 500)
+				return context.json(null, HttpStatusCode.INTERNAL_SERVER_ERROR)
 			}
 		},
 	)
@@ -350,12 +351,12 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 			const authToken = getApplePassAuthToken(context)
 
 			if (!authToken) {
-				return context.json({}, 401)
+				return context.json(null, HttpStatusCode.UNAUTHORIZED)
 			}
 
 			const clientId = extractClientIdFromPassId(serialNumber)
 			if (!clientId) {
-				return context.json({}, 401)
+				return context.json(null, HttpStatusCode.UNAUTHORIZED)
 			}
 
 			try {
@@ -370,7 +371,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					.first()
 
 				if (authResult?.auth_token !== authToken) {
-					return context.json({}, 401)
+					return context.json(null, HttpStatusCode.UNAUTHORIZED)
 				}
 
 				// Get client data
@@ -380,7 +381,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				)
 
 				if (!client) {
-					return context.json({}, 404)
+					return context.json(null, HttpStatusCode.NOT_FOUND)
 				}
 
 				// Generate updated pass with the SAME auth token from database
@@ -416,7 +417,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				})
 			} catch (error) {
 				captureException(error)
-				return context.json({}, 500)
+				return context.json(null, HttpStatusCode.INTERNAL_SERVER_ERROR)
 			}
 		},
 	)
@@ -424,12 +425,14 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		const signature = context.req.header('stripe-signature')
 
 		if (!signature) {
-			throw new HTTPException(400, { message: 'Missing signature' })
+			throw new HTTPException(HttpStatusCode.BAD_REQUEST, {
+				message: 'Missing signature',
+			})
 		}
 
 		const stripe = getStripe(context.env.STRIPE_SECRET_KEY)
 
-		let event
+		let event = null
 		try {
 			const body = await context.req.text()
 
@@ -447,7 +450,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 		} catch (error) {
 			captureException(error)
 
-			throw new HTTPException(400, {
+			throw new HTTPException(HttpStatusCode.BAD_REQUEST, {
 				message: `Webhook signature verification failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
 			})
 		}
@@ -495,13 +498,15 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				)
 
 				if (customer.deleted) {
-					throw new HTTPException(400, { message: 'Customer was deleted' })
+					throw new HTTPException(HttpStatusCode.BAD_REQUEST, {
+						message: 'Customer was deleted',
+					})
 				}
 
 				const posterClientId = Number(customer.metadata.poster_client_id)
 
 				if (!posterClientId || Number.isNaN(posterClientId)) {
-					throw new HTTPException(400, {
+					throw new HTTPException(HttpStatusCode.BAD_REQUEST, {
 						message: 'No Poster client ID found in customer metadata',
 					})
 				}
@@ -563,7 +568,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 							amount: paymentIntent.amount,
 							client_id: posterClientId,
 							spot_id: 1,
-							// transaction_id: transactionId,
+							// Transaction_id: transactionId,
 							type: 2,
 						},
 					)
@@ -644,9 +649,10 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 
 				break
 			}
-			default:
+			default: {
 				// Unhandled event type
 				break
+			}
 		}
 
 		return context.json({ received: true })
@@ -655,11 +661,11 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 	 * Poster webhook is disabled. We now use polling via `scheduled/sync-transactions.ts`.
 	 * Keeping route for backwards compatibility - returns 410 Gone.
 	 */
-	.post('/poster', (context) => {
-		return context.json(
+	.post('/poster', (context) =>
+		context.json(
 			{ message: 'Webhook disabled. Using polling instead.' },
-			410,
-		)
-	})
+			HttpStatusCode.GONE,
+		),
+	)
 
 export default webhooks

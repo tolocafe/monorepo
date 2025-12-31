@@ -1,6 +1,5 @@
-import { Pressable, View } from 'react-native'
-
 import { Image } from 'expo-image'
+import { Pressable, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
 	useSharedValue,
@@ -10,9 +9,8 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import Card from '@/components/Card'
 import { H4, Text } from '@/components/Text'
-import { getImageUrl } from '@/lib/image'
-
 import type { Promotion } from '@/lib/api'
+import { getImageUrl } from '@/lib/image'
 
 const UniImage = withUnistyles(Image)
 

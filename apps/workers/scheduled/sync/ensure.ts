@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unnecessary-condition -- API data types may not reflect runtime nullability */
-import * as Sentry from '@sentry/cloudflare'
+import { captureException } from '@sentry/cloudflare'
 import { eq } from 'drizzle-orm'
 
+import type { PosterIngredient } from '~common/api'
 import {
 	clientGroups,
 	customers,
@@ -12,10 +12,7 @@ import {
 } from '~workers/db/schema'
 import { api } from '~workers/utils/poster'
 
-import type { PosterIngredient } from '~common/api'
-
 import { mapClient } from './maps'
-
 import type { Database } from './transactions'
 
 export type Cache = {
@@ -73,7 +70,7 @@ export async function ensureCategory(
 			(category) => Number(category.category_id) === id,
 		)
 	} catch (error) {
-		Sentry.captureException(error, {
+		captureException(error, {
 			extra: { categoryId: id },
 			level: 'warning',
 			tags: { operation: 'category_fetch' },

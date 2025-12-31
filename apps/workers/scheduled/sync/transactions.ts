@@ -1,8 +1,7 @@
 import * as Sentry from '@sentry/cloudflare'
 
-import { getDatabase } from '~workers/db/client'
-
 import type { DashTransaction } from '~common/api'
+import { getDatabase } from '~workers/db/client'
 import type { Bindings } from '~workers/types'
 
 import { syncDateRange } from './date-range'

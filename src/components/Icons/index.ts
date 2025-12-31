@@ -1,6 +1,5 @@
-import { Platform } from 'react-native'
-
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { Platform } from 'react-native'
 import { withUnistyles } from 'react-native-unistyles'
 
 export const TextColorIcon = withUnistyles(Ionicons, (theme) => ({

@@ -1,5 +1,7 @@
 import { Hono } from 'hono'
 
+import type { PosClientData } from '~common/api'
+import type { Bindings } from '~workers/types'
 import { defaultJsonHeaders } from '~workers/utils/headers'
 import { api } from '~workers/utils/poster'
 import {
@@ -7,24 +9,25 @@ import {
 	getCustomerStamps,
 } from '~workers/utils/stamps'
 
-import type { PosClientData } from '~common/api'
-import type { Bindings } from '~workers/types'
-
 function formatAmount(amount: number | string | undefined) {
 	if (!amount) return '$0 MXN'
 	return `$${(Number(amount) / 100).toFixed(2)} MXN`
 }
 
 function getServiceMode(serviceMode: string | undefined) {
-	if (!serviceMode) return 'Unknown'
-
 	switch (serviceMode) {
-		case '1':
+		case '1': {
 			return 'At the table'
-		case '2':
+		}
+		case '2': {
 			return 'Takeaway'
-		case '3':
+		}
+		case '3': {
 			return 'Delivery'
+		}
+		default: {
+			return 'Unknown'
+		}
 	}
 }
 

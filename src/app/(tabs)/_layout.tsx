@@ -1,15 +1,15 @@
-import type { ImageSourcePropType } from 'react-native'
-import { Platform } from 'react-native'
-
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLingui } from '@lingui/react/macro'
 import Head from 'expo-router/head'
+import { Platform } from 'react-native'
+import type { ImageSourcePropType } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import Tabs from '@/components/Tabs'
 import { useIsBarista } from '@/lib/hooks/use-is-barista'
 import { useCurrentOrderItemsCount } from '@/lib/stores/order-store'
 
+// oxlint-disable-next-line only-export-components
 export const unstable_settings = {
 	initialRouteName: '(home)',
 }
@@ -43,10 +43,9 @@ export default function TabLayout() {
 				}}
 				tabBarInactiveTintColor={theme.colors.gray.text}
 				tabBarStyle={{
-					backgroundColor:
-						Platform.OS === 'android'
-							? theme.colors.gray.background
-							: undefined,
+					backgroundColor: Platform.select({
+						android: theme.colors.gray.background,
+					}),
 				}}
 				translucent
 			>
@@ -84,6 +83,7 @@ export default function TabLayout() {
 				<Tabs.Screen
 					name="orders"
 					options={{
+						// oxlint-disable-next-line no-undefined
 						tabBarBadge: itemsCount > 0 ? itemsCount.toString() : undefined,
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
@@ -117,7 +117,7 @@ export default function TabLayout() {
 					name="team"
 					options={{
 						href: isBarista ? '/(tabs)/team' : null,
-						sceneStyle: isBarista ? undefined : { display: 'none' },
+						sceneStyle: isBarista ? null : { display: 'none' },
 						// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 						// @ts-ignore - bottom-tabs library has incomplete type definitions
 						tabBarIcon({ focused }: { focused: boolean }) {
@@ -142,7 +142,7 @@ export default function TabLayout() {
 							)
 						},
 						tabBarItemHidden: !isBarista,
-						tabBarItemStyle: isBarista ? undefined : { display: 'none' }, // custom routers
+						tabBarItemStyle: isBarista ? null : { display: 'none' }, // custom routers
 						title: t`Team`,
 					}}
 				/>

@@ -1,8 +1,7 @@
-import { useCallback, useState } from 'react'
-import { Alert, Platform, View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import Head from 'expo-router/head'
+import { useCallback, useState } from 'react'
+import { Alert, Platform, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'

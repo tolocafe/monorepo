@@ -180,7 +180,7 @@ export const useAddItemGuarded = () => {
 			return false
 		}
 
-		void trackEvent('cart:item_add', {
+		trackEvent('cart:item_add', {
 			has_modifications: Boolean(
 				item.modifications && Object.keys(item.modifications).length > 0,
 			),

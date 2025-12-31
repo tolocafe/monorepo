@@ -1,12 +1,11 @@
 import { Hono } from 'hono'
 
+import type { SupportedLocale } from '~common/locales'
 import { defaultJsonHeaders } from '~workers/utils/headers'
 import sanity, {
 	getLocalizedSlug,
 	getLocalizedString,
 } from '~workers/utils/sanity'
-
-import type { SupportedLocale } from '~common/locales'
 
 import type { Bindings } from '../types'
 

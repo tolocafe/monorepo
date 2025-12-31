@@ -1,7 +1,3 @@
-import { useCallback, useRef } from 'react'
-import type { ImageSourcePropType, ScrollView } from 'react-native'
-import { Pressable, RefreshControl, View } from 'react-native'
-
 import { Feather } from '@expo/vector-icons'
 import { Select, Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
@@ -9,7 +5,11 @@ import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
 import { router, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
+import { useCallback, useRef } from 'react'
+import { Pressable, RefreshControl, View } from 'react-native'
+import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
+import { useTrackScreenView } from 'src/lib/analytics/hooks'
 
 import Button from '@/components/Button'
 import Card from '@/components/Card'
@@ -25,9 +25,7 @@ import {
 	useCurrentOrderItemsCount,
 } from '@/lib/stores/order-store'
 import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
-
 import type { Product } from '~common/api'
-import { useTrackScreenView } from 'src/lib/analytics/hooks'
 
 const handleSignIn = () => {
 	router.push('/sign-in')

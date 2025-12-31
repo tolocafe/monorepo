@@ -1,8 +1,7 @@
+import Ionicons from '@expo/vector-icons/Ionicons'
 import type { ComponentProps, ReactNode } from 'react'
 import { Platform, Pressable, View } from 'react-native'
 import type { GestureResponderEvent, StyleProp, TextStyle } from 'react-native'
-
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { Text } from '@/components/Text'
@@ -30,6 +29,7 @@ export function CheckedButton({
 	textStyle,
 	...props
 }: Props) {
+	// oxlint-disable-next-line no-undefined
 	const buttonState = disabled ? 'disabled' : undefined
 	const layoutVariant = right ? 'withRight' : 'center'
 
@@ -79,7 +79,7 @@ const styles = StyleSheet.create((theme) => ({
 		alignItems: 'center',
 		backgroundColor: theme.colors.gray.background,
 		borderColor: theme.colors.gray.border,
-		borderCurve: Platform.OS === 'ios' ? 'continuous' : undefined,
+		borderCurve: Platform.select({ ios: 'continuous' }),
 		borderRadius: theme.borderRadius.full,
 		borderWidth: 1,
 		justifyContent: 'center',

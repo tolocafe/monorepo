@@ -1,3 +1,8 @@
+import { Feather } from '@expo/vector-icons'
+import { Trans, useLingui } from '@lingui/react/macro'
+import { useQuery } from '@tanstack/react-query'
+import { router, useLocalSearchParams } from 'expo-router'
+import Head from 'expo-router/head'
 import { useMemo, useState } from 'react'
 import {
 	ActivityIndicator,
@@ -6,12 +11,6 @@ import {
 	RefreshControl,
 	View,
 } from 'react-native'
-
-import { Feather } from '@expo/vector-icons'
-import { Trans, useLingui } from '@lingui/react/macro'
-import { useQuery } from '@tanstack/react-query'
-import { router, useLocalSearchParams } from 'expo-router'
-import Head from 'expo-router/head'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'

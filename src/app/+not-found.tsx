@@ -1,10 +1,8 @@
 import '@/lib/styles/unistyles'
-
-import { View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import { Link, Stack } from 'expo-router'
 import Head from 'expo-router/head'
+import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { H1, Text } from '@/components/Text'

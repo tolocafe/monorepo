@@ -2,6 +2,8 @@ import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { z } from 'zod/v4'
 
+import type { RedeemClientData } from '~common/api'
+import type { Bindings } from '~workers/types'
 import { notifyApplePassUpdate } from '~workers/utils/apns'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { notifyGooglePassUpdate } from '~workers/utils/generate-google-pass'
@@ -14,9 +16,6 @@ import {
 	getCustomerStamps,
 	STAMPS_PER_REDEMPTION,
 } from '~workers/utils/stamps'
-
-import type { RedeemClientData } from '~common/api'
-import type { Bindings } from '~workers/types'
 
 const updateClientSchema = z.object({
 	birthday: z.string().optional(),

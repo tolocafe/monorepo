@@ -1,16 +1,14 @@
 import PostHog, {
 	PostHogProvider as BasePostHogProvider,
 } from 'posthog-react-native'
-
 import type { ReactNode } from 'react'
 
+import { posthogStorage } from './storage'
 import type {
 	CaptureProperties,
 	IdentifyProperties,
 	ScreenProperties,
 } from './types'
-
-import { posthogStorage } from './storage'
 
 const POSTHOG_API_KEY = process.env.EXPO_PUBLIC_POSTHOG_API_KEY as string
 const POSTHOG_HOST = 'https://a.tolo.cafe'

@@ -6,11 +6,10 @@ import {
 	CreateStripeTransactionSchema,
 } from '~common/schemas'
 
+import type { Bindings } from '../types'
 import { authenticate } from '../utils/jwt'
 import { api } from '../utils/poster'
 import { getStripe } from '../utils/stripe'
-
-import type { Bindings } from '../types'
 
 const transactions = new Hono<{ Bindings: Bindings }>()
 	.post('/payment-intent', async (c) => {

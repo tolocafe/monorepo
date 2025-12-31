@@ -23,9 +23,8 @@ import tables from './routes/tables'
 import transactionsRouter from './routes/transactions'
 import webhooks from './routes/webhooks'
 import scheduledHandler from './scheduled'
-import { defaultJsonHeaders } from './utils/headers'
-
 import type { Bindings } from './types'
+import { defaultJsonHeaders } from './utils/headers'
 
 type Variables = JwtUserVariables & {
 	language: SupportedLocale

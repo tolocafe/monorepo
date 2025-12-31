@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { Dimensions, Pressable, View } from 'react-native'
-
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
 import { router, useLocalSearchParams } from 'expo-router'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { Dimensions, Pressable, View } from 'react-native'
 import {
 	Gesture,
 	GestureDetector,
@@ -23,13 +22,12 @@ import { LinearGradient } from '@/components/LinearGradient'
 import { H1, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
+import type { Coffee } from '@/lib/api'
 import {
 	COFFEE_STORY_GRADIENT_COLORS,
 	getCoffeeGradientIndex,
 } from '@/lib/constants/coffee-gradients'
 import { coffeeQueryOptions, coffeesQueryOptions } from '@/lib/queries/coffees'
-
-import type { Coffee } from '@/lib/api'
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window')
 const STORY_DURATION = 10_000
@@ -55,10 +53,15 @@ export default function CoffeeStoryScreen() {
 	const { data: coffees = [] } = useQuery(coffeesQueryOptions)
 	const { data: currentCoffee } = useQuery(coffeeQueryOptions(id))
 
-	const coffeeStories = useMemo(
-		() => (coffees.length > 0 ? coffees : currentCoffee ? [currentCoffee] : []),
-		[coffees, currentCoffee],
-	)
+	const coffeeStories = useMemo(() => {
+		if (coffees.length > 0) {
+			return coffees
+		}
+		if (currentCoffee) {
+			return [currentCoffee]
+		}
+		return []
+	}, [coffees, currentCoffee])
 
 	const [currentPageIndex, setCurrentPageIndex] = useState(0)
 	const [previousCoffeeIndex, setPreviousCoffeeIndex] = useState(0)
@@ -115,7 +118,7 @@ export default function CoffeeStoryScreen() {
 				return previous + 1
 			}
 			// User completed viewing all coffee stories
-			void trackEvent('menu:coffee_story_complete')
+			trackEvent('menu:coffee_story_complete')
 			handleClose()
 			return previous
 		})
@@ -510,6 +513,11 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		marginHorizontal: -theme.spacing.xs,
 		width: 120,
 	},
+	tastingNoteText: {
+		color: WHITE_COLOR,
+		fontSize: theme.fontSizes.md,
+		fontWeight: theme.fontWeights.semibold,
+	},
 	tastingNotesContainer: {
 		alignContent: 'center',
 		alignItems: 'center',
@@ -519,10 +527,5 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		justifyContent: 'center',
 		paddingHorizontal: theme.layout.screenPadding,
 		width: '100%',
-	},
-	tastingNoteText: {
-		color: WHITE_COLOR,
-		fontSize: theme.fontSizes.md,
-		fontWeight: theme.fontWeights.semibold,
 	},
 }))

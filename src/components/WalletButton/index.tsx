@@ -1,11 +1,10 @@
-import type { ComponentProps } from 'react'
-import { Platform } from 'react-native'
-
 import {
 	addPassWithSignedJwt,
 	addPass as rnWalletAddPass,
 	RNWalletView,
 } from '@premieroctet/react-native-wallet'
+import type { ComponentProps } from 'react'
+import { Platform } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 type Props = ComponentProps<typeof RNWalletView> & { disabled?: boolean }

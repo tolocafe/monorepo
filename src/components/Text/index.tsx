@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import { Text as RNText } from 'react-native'
 import type { TextProps as RNTextProps } from 'react-native'
-
 import { StyleSheet } from 'react-native-unistyles'
 
 export type BaseTextProps = RNTextProps & {

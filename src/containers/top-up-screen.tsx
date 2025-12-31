@@ -1,6 +1,3 @@
-import { useEffect, useState } from 'react'
-import { Alert, Platform, View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import {
 	confirmPlatformPayPayment,
@@ -16,6 +13,8 @@ import * as Burnt from 'burnt'
 import * as Linking from 'expo-linking'
 import { router } from 'expo-router'
 import Head from 'expo-router/head'
+import { useEffect, useState } from 'react'
+import { Alert, Platform, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
@@ -68,7 +67,9 @@ export default function TopUpScreen() {
 	})
 
 	useEffect(() => {
-		void getIsPlatformPaySupported().then(setIsPlatformPaySupported)
+		getIsPlatformPaySupported()
+			.then(setIsPlatformPaySupported)
+			.catch(() => setIsPlatformPaySupported(false))
 	}, [])
 
 	useTrackScreenView(
@@ -78,7 +79,7 @@ export default function TopUpScreen() {
 
 	const handleAmountSelect = (amount: number) => {
 		setSelectedAmount(amount)
-		void trackEvent('wallet:amount_select', {
+		trackEvent('wallet:amount_select', {
 			selected_amount: amount / 100,
 		})
 	}
@@ -98,7 +99,7 @@ export default function TopUpScreen() {
 				: 'google_pay'
 			: 'card'
 
-		void trackEvent('wallet:topup_start', {
+		trackEvent('wallet:topup_start', {
 			payment_method: paymentMethod,
 			topup_amount: selectedAmount / 100,
 		})

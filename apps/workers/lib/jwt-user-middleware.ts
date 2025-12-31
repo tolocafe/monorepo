@@ -4,9 +4,8 @@ import { createMiddleware } from 'hono/factory'
 import { HTTPException } from 'hono/http-exception'
 import type { JWTPayload } from 'jose'
 
-import { extractToken, verifyJwt } from '../utils/jwt'
-
-import type { Bindings } from '../types'
+import type { Bindings } from '~workers/types'
+import { extractToken, verifyJwt } from '~workers/utils/jwt'
 
 export type JwtUserVariables = {
 	jwt: {
@@ -42,14 +41,13 @@ export const jwtUserMiddleware = createMiddleware<{
 
 		if (clientId && payload) {
 			const userId = Number(clientId)
-			const userEmail =
-				'email' in payload ? (payload.email as string) : undefined
-			const userName = 'name' in payload ? (payload.name as string) : undefined
-			const userPhone =
-				'phone' in payload ? (payload.phone as string) : undefined
+			const userEmail = 'email' in payload ? (payload.email as string) : null
+			const userName = 'name' in payload ? (payload.name as string) : null
+			const userPhone = 'phone' in payload ? (payload.phone as string) : null
 
 			Sentry.setUser({
-				email: userEmail,
+				// oxlint-disable-next-line no-undefined
+				email: userEmail ?? undefined,
 				id: userId.toString(),
 				name: userName,
 				phone: userPhone,

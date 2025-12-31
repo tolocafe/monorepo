@@ -1,7 +1,6 @@
+import { useLingui } from '@lingui/react/macro'
 import type { ComponentProps } from 'react'
 import { View } from 'react-native'
-
-import { useLingui } from '@lingui/react/macro'
 import { StyleSheet } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 

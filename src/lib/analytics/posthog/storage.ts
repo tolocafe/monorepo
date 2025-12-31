@@ -1,6 +1,5 @@
-import { createMMKV } from 'react-native-mmkv'
-
 import type { PostHogCustomStorage } from 'posthog-react-native'
+import { createMMKV } from 'react-native-mmkv'
 
 import { STORAGE_KEYS } from '@/lib/constants/storage'
 import { canUseDOM, isDevice } from '@/lib/utils/device'

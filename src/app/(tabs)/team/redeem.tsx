@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useState } from 'react'
-import { ActivityIndicator, Alert, Platform, View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import { usePreventRemove } from '@react-navigation/native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { CameraView } from 'expo-camera'
 import { Stack } from 'expo-router'
 import Head from 'expo-router/head'
+import { useCallback, useEffect, useState } from 'react'
+import { ActivityIndicator, Alert, Platform, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Admonition from '@/components/Admonition'
@@ -56,8 +55,8 @@ export default function RedeemDrink() {
 		},
 		onSuccess() {
 			setRedemptionSuccess(true)
-			// Invalidate the client query to refresh the data
-			void queryClient.invalidateQueries({
+
+			return queryClient.invalidateQueries({
 				queryKey: ['redeem-client', scannedClientId],
 			})
 		},
@@ -97,7 +96,7 @@ export default function RedeemDrink() {
 				setScannedClientId(customerId)
 			}
 			// Dismiss the scanner on iOS (Android auto-dismisses)
-			void CameraView.dismissScanner()
+			return CameraView.dismissScanner()
 		})
 
 		return () => subscription.remove()

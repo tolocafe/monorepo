@@ -3,13 +3,12 @@ import { randomUUID } from 'node:crypto'
 import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 
+import type { Bindings } from '~workers/types'
 import createApplePass from '~workers/utils/generate-apple-pass'
 import createGooglePass from '~workers/utils/generate-google-pass'
 import { authenticate } from '~workers/utils/jwt'
 import { api } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
-
-import type { Bindings } from '~workers/types'
 
 const pass = new Hono<{ Bindings: Bindings }>().get(
 	'/:clientId',

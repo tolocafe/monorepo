@@ -1,6 +1,5 @@
 import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
-
 import type { Product } from '~common/api'
 
 const formatter = new Intl.NumberFormat('en-US', {

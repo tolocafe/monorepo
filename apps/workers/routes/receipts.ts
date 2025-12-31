@@ -1,12 +1,11 @@
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
+import type { Bindings } from '../types'
 import { TEAM_GROUP_IDS } from '../utils/constants'
 import { generateReceiptPDF } from '../utils/generate-receipt'
 import { authenticate } from '../utils/jwt'
 import { api } from '../utils/poster'
-
-import type { Bindings } from '../types'
 
 const receipts = new Hono<{ Bindings: Bindings }>().get(
 	'/:orderId',

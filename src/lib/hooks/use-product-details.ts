@@ -1,9 +1,7 @@
+import { useQueries, useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
-import { useQueries, useQueryClient } from '@tanstack/react-query'
-
 import { productQueryOptions } from '@/lib/queries/product'
-
 import type { Product } from '~common/api'
 
 /**

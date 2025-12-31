@@ -1,3 +1,9 @@
+import { Feather, Ionicons } from '@expo/vector-icons'
+import { Trans, useLingui } from '@lingui/react/macro'
+import { useScrollToTop } from '@react-navigation/native'
+import { useQuery } from '@tanstack/react-query'
+import { useFocusEffect } from 'expo-router'
+import Head from 'expo-router/head'
 import { useCallback, useMemo, useRef, useState } from 'react'
 import {
 	Platform,
@@ -6,13 +12,6 @@ import {
 	ScrollView,
 	View,
 } from 'react-native'
-
-import { Feather, Ionicons } from '@expo/vector-icons'
-import { Trans, useLingui } from '@lingui/react/macro'
-import { useScrollToTop } from '@react-navigation/native'
-import { useQuery } from '@tanstack/react-query'
-import { useFocusEffect } from 'expo-router'
-import Head from 'expo-router/head'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import Card from '@/components/Card'
@@ -20,6 +19,7 @@ import { ModifierTag } from '@/components/ModifierTag'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H3, Paragraph, Text } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
+import type { Product } from '@/lib/api'
 import { baristaQueueQueryOptions } from '@/lib/queries/barista'
 import {
 	categoriesQueryOptions,
@@ -27,8 +27,6 @@ import {
 } from '@/lib/queries/menu'
 import { queryClient } from '@/lib/query-client'
 import { sortModifiers } from '@/lib/utils/modifier-tags'
-
-import type { Product } from '@/lib/api'
 
 const POLLING_INTERVAL = 5000 // 5 seconds
 
@@ -93,7 +91,7 @@ export default function OrdersQueue() {
 	useFocusEffect(
 		useCallback(() => {
 			const interval = setInterval(() => {
-				void refetch()
+				return refetch()
 			}, POLLING_INTERVAL)
 
 			return () => {
@@ -154,7 +152,7 @@ export default function OrdersQueue() {
 	}, [products])
 
 	const handleRefresh = useCallback(() => {
-		void queryClient.invalidateQueries(baristaQueueQueryOptions)
+		return queryClient.invalidateQueries(baristaQueueQueryOptions)
 	}, [])
 
 	// Filter orders based on selected category
@@ -330,7 +328,7 @@ export default function OrdersQueue() {
 														productDetails?.menu_category_id
 													const categoryName = categoryId
 														? categoryMap.get(categoryId)
-														: undefined
+														: null
 													const productColor = getCategoryColor(categoryName)
 													const productName =
 														orderProduct.product_name ||
@@ -441,7 +439,7 @@ export default function OrdersQueue() {
 /**
  * Get color based on category name
  */
-function getCategoryColor(categoryName: string | undefined): string {
+function getCategoryColor(categoryName: string | null | undefined): string {
 	if (!categoryName) return DEFAULT_CATEGORY_COLOR
 	return CATEGORY_COLORS[categoryName] || DEFAULT_CATEGORY_COLOR
 }

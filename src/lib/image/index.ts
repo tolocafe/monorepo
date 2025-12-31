@@ -1,7 +1,6 @@
 import { createImageUrlBuilder } from '@sanity/image-url'
 
 import { POSTER_BASE_URL } from '@/lib/api'
-
 import type { SanityImageReference } from '~common/api'
 
 // Sanity project configuration

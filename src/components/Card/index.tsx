@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
-import type { StyleProp, ViewStyle } from 'react-native'
 import { View } from 'react-native'
-
+import type { StyleProp, ViewStyle } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 type Props = {
@@ -19,6 +18,7 @@ function Card({
 	style,
 	testID,
 }: Props) {
+	// oxlint-disable-next-line no-undefined
 	const padding = padded ? 'padded' : undefined
 
 	styles.useVariants({ padding })

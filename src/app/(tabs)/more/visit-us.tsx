@@ -1,7 +1,6 @@
-import { Linking, Platform, View } from 'react-native'
-
 import { Trans, useLingui } from '@lingui/react/macro'
 import Head from 'expo-router/head'
+import { Linking, Platform, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
@@ -106,17 +105,17 @@ export default function VisitUsScreen() {
 }
 
 function handleOpenAppleMaps() {
-	void trackEvent('store:directions_click', { map_provider: 'apple' })
+	trackEvent('store:directions_click', { map_provider: 'apple' })
 	void Linking.openURL(APPLE_MAPS_URL)
 }
 
 function handleOpenGoogleMaps() {
-	void trackEvent('store:directions_click', { map_provider: 'google' })
+	trackEvent('store:directions_click', { map_provider: 'google' })
 	void Linking.openURL(GOOGLE_MAPS_URL)
 }
 
 function handleOpenTripAdvisor() {
-	void trackEvent('store:tripadvisor_click')
+	trackEvent('store:tripadvisor_click')
 	void Linking.openURL(TRIPADVISOR_URL)
 }
 

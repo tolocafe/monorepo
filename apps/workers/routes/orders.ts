@@ -2,15 +2,15 @@ import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
+import type { Product } from '~common/api'
 import { CreateOrderSchema } from '~common/schemas'
 import { getProductTotalCost } from '~common/utils'
+import type { Bindings } from '~workers/types'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
+import HttpStatusCode from '~workers/utils/http-codes'
 import { authenticate } from '~workers/utils/jwt'
 import { api } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
-
-import type { Product } from '~common/api'
-import type { Bindings } from '~workers/types'
 
 // Modifiers to ignore (not displayed in barista queue)
 const IGNORED_MODIFIERS = new Set([
@@ -60,8 +60,8 @@ function parseModifiers(
 
 	return modifierString
 		.split(',')
-		.map((m) => m.trim())
-		.filter((m) => m && !IGNORED_MODIFIERS.has(m))
+		.map((modifier) => modifier.trim())
+		.filter((modifier) => modifier && !IGNORED_MODIFIERS.has(modifier))
 		.map((name) => ({
 			group: modifierGroupMap.get(name) || 'Other',
 			name,
@@ -69,36 +69,41 @@ function parseModifiers(
 }
 
 const orders = new Hono<{ Bindings: Bindings }>()
-	.get('/', async (c) => {
-		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+	.get('/', async (context) => {
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
-		const orders = await api.dash.getTransactions(c.env.POSTER_TOKEN, {
+		const orders = await api.dash.getTransactions(context.env.POSTER_TOKEN, {
 			id: clientId.toString(),
 			type: 'clients',
 		})
 
-		return c.json(orders)
+		return context.json(orders)
 	})
-	.get('/barista/queue', async (c) => {
-		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+	.get('/barista/queue', async (context) => {
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
 		// Verify user is a barista
-		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
+		const client = await api.clients.getClientById(
+			context.env.POSTER_TOKEN,
+			clientId,
+		)
 
 		if (
 			!client?.client_groups_id ||
 			!TEAM_GROUP_IDS.has(client.client_groups_id)
 		) {
-			throw new HTTPException(403, { message: 'Access denied' })
+			throw new HTTPException(HttpStatusCode.FORBIDDEN, {
+				message: 'Access denied',
+			})
 		}
 
 		// Fetch products and orders in parallel
 		const [orders, allProducts] = await Promise.all([
-			api.dash.getTransactions(c.env.POSTER_TOKEN, {
+			api.dash.getTransactions(context.env.POSTER_TOKEN, {
 				include_products: 'true',
 				status: '0',
 			}),
-			api.menu.getMenuProducts(c.env.POSTER_TOKEN),
+			api.menu.getMenuProducts(context.env.POSTER_TOKEN),
 		])
 
 		// Build modifier → group map from all products
@@ -115,7 +120,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 			activeOrders.map(async (order) => {
 				try {
 					const detailedProducts = await api.dash.getTransactionProducts(
-						c.env.POSTER_TOKEN,
+						context.env.POSTER_TOKEN,
 						order.transaction_id,
 					)
 
@@ -144,40 +149,48 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		)
 
 		// Sort by date (oldest first - FIFO for barista queue)
-		augmentedOrders.sort((a, b) => {
-			const dateA = new Date(a.date_start).getTime()
-			const dateB = new Date(b.date_start).getTime()
+		augmentedOrders.sort((orderA, orderB) => {
+			const dateA = new Date(orderA.date_start).getTime()
+			const dateB = new Date(orderB.date_start).getTime()
 			return dateA - dateB
 		})
 
-		return c.json(augmentedOrders)
+		return context.json(augmentedOrders)
 	})
-	.get('/:id', async (c) => {
-		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
-		const orderId = c.req.param('id')
+	.get('/:id', async (context) => {
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
+		const orderId = context.req.param('id')
 
 		try {
-			const order = await api.dash.getTransaction(c.env.POSTER_TOKEN, orderId, {
-				include_products: 'true',
-			})
+			const order = await api.dash.getTransaction(
+				context.env.POSTER_TOKEN,
+				orderId,
+				{
+					include_products: 'true',
+				},
+			)
 
 			if (!order) {
-				throw new HTTPException(404, { message: 'Order not found' })
+				throw new HTTPException(HttpStatusCode.NOT_FOUND, {
+					message: 'Order not found',
+				})
 			}
 
 			// Verify the order belongs to the authenticated client
 			if (order.client_id !== clientId.toString()) {
-				throw new HTTPException(403, { message: 'Access denied' })
+				throw new HTTPException(HttpStatusCode.FORBIDDEN, {
+					message: 'Access denied',
+				})
 			}
 
-			return c.json(order)
+			return context.json(order)
 		} catch (error) {
 			if (error instanceof HTTPException) {
 				throw error
 			}
 
 			captureException(error)
-			throw new HTTPException(500, {
+			throw new HTTPException(HttpStatusCode.INTERNAL_SERVER_ERROR, {
 				message: 'Failed to fetch order details',
 			})
 		}
@@ -188,7 +201,9 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		const body = (await context.req.json()) as unknown
 
 		if (typeof body !== 'object' || body === null) {
-			throw new HTTPException(400, { message: 'Invalid body' })
+			throw new HTTPException(HttpStatusCode.BAD_REQUEST, {
+				message: 'Invalid body',
+			})
 		}
 
 		try {
@@ -219,7 +234,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 					payment: { sum: paymentAmount.toString(), type: 1 },
 					products: parsedBody.products.map((product) => {
 						const productData = products.find(
-							(p) => p.product_id === product.product_id,
+							(productData) => productData.product_id === product.product_id,
 						) as Product
 
 						return {
@@ -259,7 +274,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 						amount: paymentAmount,
 						currency: 'MXN',
 						item_count: parsedBody.products.reduce(
-							(sum, p) => sum + (p.count || 1),
+							(sum, product) => sum + (product.count || 1),
 							0,
 						),
 						order_id: order.incoming_order_id,
@@ -288,7 +303,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		} catch (error) {
 			captureException(error)
 
-			throw new HTTPException(500, {
+			throw new HTTPException(HttpStatusCode.INTERNAL_SERVER_ERROR, {
 				message:
 					error instanceof Error ? error.message : 'Failed to create order',
 			})

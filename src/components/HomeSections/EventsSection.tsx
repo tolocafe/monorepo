@@ -1,13 +1,11 @@
-import { FlatList, View } from 'react-native'
-
 import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
+import { FlatList, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import EventCard from '@/components/EventCard'
 import { H2, Paragraph } from '@/components/Text'
 import { eventsQueryOptions } from '@/lib/queries/events'
-
 import type { Event } from '~common/api'
 
 const UniFlatList = withUnistyles(FlatList)

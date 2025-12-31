@@ -1,12 +1,11 @@
 import { Hono } from 'hono'
 
-import { defaultJsonHeaders } from '~workers/utils/headers'
-import { api } from '~workers/utils/poster'
-import sanity from '~workers/utils/sanity'
-
 import type { Product, Promotion } from '~common/api'
 import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
+import { defaultJsonHeaders } from '~workers/utils/headers'
+import { api } from '~workers/utils/poster'
+import sanity from '~workers/utils/sanity'
 
 type Variables = {
 	language: SupportedLocale

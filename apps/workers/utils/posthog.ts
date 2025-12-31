@@ -1,9 +1,7 @@
-import { PostHog } from 'posthog-node'
-
-import { getConnInfo } from 'hono/cloudflare-workers'
 import { captureException, getCurrentScope } from '@sentry/cloudflare'
-
 import type { Context } from 'hono'
+import { getConnInfo } from 'hono/cloudflare-workers'
+import { PostHog } from 'posthog-node'
 
 import type { Bindings } from '~workers/types'
 

@@ -1,11 +1,10 @@
-import type { ReactNode } from 'react'
-import { useEffect } from 'react'
-import type { AppStateStatus } from 'react-native'
-import { AppState } from 'react-native'
-
 import NetInfo from '@react-native-community/netinfo'
 import { focusManager, onlineManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { useEffect } from 'react'
+import type { ReactNode } from 'react'
+import { AppState } from 'react-native'
+import type { AppStateStatus } from 'react-native'
 
 import { persister, persistMaxAge, queryClient } from '@/lib/query-client'
 
@@ -42,9 +41,9 @@ type Props = {
 export function QueryProvider({ children }: Props) {
 	// Initialize online status on mount
 	useEffect(() => {
-		void NetInfo.fetch().then((state) => {
-			onlineManager.setOnline(Boolean(state.isConnected))
-		})
+		void NetInfo.fetch().then((state) =>
+			onlineManager.setOnline(Boolean(state.isConnected)),
+		)
 	}, [])
 
 	return (
