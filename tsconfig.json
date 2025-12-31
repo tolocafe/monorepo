@@ -8,24 +8,15 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"paths": {
-			"@/*": [
-				"./src/*"
-			],
-			"~common/*": [
-				"./common/*"
-			],
-			"~workers/*": [
-				"./apps/workers/*"
-			]
+			"@/*": ["./src/*"],
+			"~common/*": ["./common/*"],
+			"~workers/*": ["./apps/workers/*"]
 		},
 		"removeComments": true,
 		"skipLibCheck": true,
 		"strict": true,
 		"strictNullChecks": true,
-		"types": [
-			"jest",
-			"node"
-		]
+		"types": ["jest", "node"]
 	},
 	"extends": "expo/tsconfig.base",
 	"include": [
@@ -43,8 +34,5 @@
 		".expo/types/**/*.ts",
 		"worker-configuration.d.ts"
 	],
-	"files": [
-		"src/index.ts",
-		"apps/workers/index.ts"
-	]
+	"files": ["src/index.ts", "apps/workers/index.ts"]
 }

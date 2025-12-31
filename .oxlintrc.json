@@ -24,23 +24,10 @@
 		"jest.setup.js",
 		"apps/poster-plugin"
 	],
-	"plugins": [
-		"unicorn",
-		"react",
-		"import",
-		"react-perf",
-		"jsdoc",
-		"promise"
-	],
+	"plugins": ["unicorn", "react", "import", "react-perf", "jsdoc", "promise"],
 	"rules": {
-		"eqeqeq": [
-			"warn",
-			"smart"
-		],
-		"import/consistent-type-specifier-style": [
-			"warn",
-			"prefer-top-level"
-		],
+		"eqeqeq": ["warn", "smart"],
+		"import/consistent-type-specifier-style": ["warn", "prefer-top-level"],
 		"no-magic-numbers": [
 			"off"
 			// {
@@ -106,9 +93,7 @@
 		"react/jsx-filename-extension": [
 			1,
 			{
-				"extensions": [
-					".tsx"
-				]
+				"extensions": [".tsx"]
 			}
 		],
 		"no-warning-comments": "off",
