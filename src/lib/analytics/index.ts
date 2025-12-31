@@ -106,16 +106,16 @@ export async function identify(identity: UserIdentity) {
 		identity
 
 	try {
-		if (userId) {
-			const properties: Record<string, string> = {}
-			if (birthdate) properties.birthday = birthdate
-			if (email) properties.email = email
-			if (firstName) properties.first_name = firstName
-			if (lastName) properties.last_name = lastName
-			if (phoneNumber) properties.phone = phoneNumber
+		if (!userId) return
 
-			posthog.identify(userId, properties)
-		}
+		const properties: Record<string, string> = {}
+		if (birthdate) properties.birthday = birthdate
+		if (email) properties.email = email
+		if (firstName) properties.first_name = firstName
+		if (lastName) properties.last_name = lastName
+		if (phoneNumber) properties.phone = phoneNumber
+
+		posthog.identify(userId, properties)
 
 		Sentry.setUser({
 			email: email ?? undefined,
