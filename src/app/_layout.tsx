@@ -16,7 +16,7 @@ import { StatusBar } from 'expo-status-bar'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { AnalyticsIdentifier } from '@/lib/analytics/components/analytics-identifier'
-import { posthog, PostHogProvider } from '@/lib/analytics/posthog'
+import { PostHogProvider } from '@/lib/analytics/posthog'
 import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import '@/lib/locales/init'
@@ -103,7 +103,7 @@ function RootLayout() {
 				>
 					<StatusBar style="auto" />
 					<I18nProvider i18n={i18n}>
-						<PostHogProvider client={posthog}>
+						<PostHogProvider>
 							<Stack initialRouteName="(tabs)">
 								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 								<Stack.Screen name="+not-found" />

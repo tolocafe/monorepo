@@ -1,6 +1,6 @@
 import * as Sentry from '@sentry/react-native'
 
-import { posthog } from './posthog'
+import * as posthog from './posthog'
 
 export type AnalyticsEvent =
 	// Cart events
@@ -106,8 +106,6 @@ export async function identify(identity: UserIdentity) {
 		identity
 
 	try {
-		const promises: Promise<unknown>[] = []
-
 		if (userId) {
 			const properties: Record<string, string> = {}
 			if (birthdate) properties.birthday = birthdate
@@ -116,44 +114,36 @@ export async function identify(identity: UserIdentity) {
 			if (lastName) properties.last_name = lastName
 			if (phoneNumber) properties.phone = phoneNumber
 
-			promises.push(Promise.resolve(posthog.identify(userId, properties)))
+			posthog.identify(userId, properties)
 		}
 
-		promises.push(
-			Promise.resolve(
-				Sentry.setUser({
-					email: email ?? undefined,
-					id: userId ?? undefined,
-					username: firstName
-						? `${firstName}${lastName ? ` ${lastName}` : ''}`
-						: undefined,
-				}),
-			),
-		)
-
-		await Promise.allSettled(promises)
+		Sentry.setUser({
+			email: email ?? undefined,
+			id: userId ?? undefined,
+			username: firstName
+				? `${firstName}${lastName ? ` ${lastName}` : ''}`
+				: undefined,
+		})
 	} catch (error) {
 		Sentry.captureException(error)
 	}
 }
 
-export async function reset() {
+export function reset() {
 	try {
-		await Promise.allSettled([
-			Promise.resolve(posthog.reset()),
-			Promise.resolve(Sentry.setUser(null)),
-		])
+		posthog.reset()
+		Sentry.setUser(null)
 	} catch (error) {
 		Sentry.captureException(error)
 	}
 }
 
-export async function trackEvent(
+export function trackEvent(
 	event: AnalyticsEvent,
 	properties?: EventProperties,
 ) {
 	try {
-		await Promise.resolve(posthog.capture(event, properties ?? {}))
+		posthog.capture(event, properties ?? {})
 	} catch (error) {
 		Sentry.captureException(error)
 	}

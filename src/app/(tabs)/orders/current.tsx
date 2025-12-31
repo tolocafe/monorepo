@@ -18,7 +18,7 @@ import { ModifierTag } from '@/components/ModifierTag'
 import { TabScreenContainer } from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
-import { posthog } from '@/lib/analytics/posthog'
+import { screen } from '@/lib/analytics/posthog'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { useRegisterForPushNotifications } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -112,7 +112,7 @@ export default function OrderDetail() {
 				0,
 			)
 
-			posthog.screen('cart', {
+			screen('cart', {
 				cart_total: orderTotal,
 				currency: 'MXN',
 				item_count: itemCount,

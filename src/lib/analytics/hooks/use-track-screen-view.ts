@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 
 import { useFocusEffect } from 'expo-router'
 
-import { posthog } from '@/lib/analytics/posthog'
+import * as posthog from '@/lib/analytics/posthog'
 
 /** Tracks a screen view using PostHog's $screen event when the screen gains focus */
 export function useTrackScreenView(
