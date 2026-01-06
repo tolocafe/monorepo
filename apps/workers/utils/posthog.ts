@@ -140,10 +140,19 @@ export async function trackEventsBatch(
 				properties: {
 					...event.properties,
 					source: 'scheduled_worker',
-					// Include $set for user properties if provided
-					...(event.userProperties ? { $set: event.userProperties } : {}),
 				},
 			})
+
+			// Update person properties if provided (must be separate from capture)
+			if (
+				event.userProperties &&
+				Object.keys(event.userProperties).length > 0
+			) {
+				posthog.identify({
+					distinctId: event.distinctId,
+					properties: event.userProperties,
+				})
+			}
 		}
 
 		getCurrentScope().setExtra('PostHog Batch', {
