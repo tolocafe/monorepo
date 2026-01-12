@@ -157,12 +157,12 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	},
 	loadingContainer: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.crema.background,
+		backgroundColor: theme.colors.gray.background,
 		flex: 1,
 		gap: theme.spacing.md,
 		justifyContent: 'center',
 	},
 	loadingText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 	},
 }))

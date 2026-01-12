@@ -25,7 +25,7 @@ const UniMaskedTextInput = withUnistyles(MaskedTextInput, (theme) => ({
 }))
 
 const GrayRNTextInput = withUnistyles(RNTextInput, (theme) => ({
-	placeholderTextColor: theme.colors.crema.solid,
+	placeholderTextColor: theme.colors.gray.solid,
 }))
 
 export function Input({

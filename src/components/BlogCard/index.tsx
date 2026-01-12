@@ -1,5 +1,4 @@
 import { Image } from 'expo-image'
-import { router } from 'expo-router'
 import { Pressable, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
@@ -10,28 +9,29 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import Card from '@/components/Card'
 import { H4, Text } from '@/components/Text'
-import type { Event } from '@/lib/api'
 import { getImageUrl } from '@/lib/image'
+import type { BlogPost } from '@/lib/queries/blog'
 
 const MAX_IMAGE_HEIGHT = 150
 
 const UniImage = withUnistyles(Image)
 
 type Props = {
-	event: Event
+	post: BlogPost
 }
 
-export default function EventCard({ event }: Props) {
+export default function BlogCard({ post }: Props) {
 	const scaleValue = useSharedValue(1)
 
 	const animatedStyle = useAnimatedStyle(() => ({
 		transform: [{ scale: scaleValue.get() }],
 	}))
 
-	const imageSourceId = event.images?.[0]?.sourceId
+	const imageSourceId = post.images?.[0]?.sourceId
 
 	const handlePress = () => {
-		router.push(`/events/${event.id}`)
+		// TODO: Navigate to blog post detail when route is created
+		// router.push(`/blog/${post.id}`)
 	}
 
 	return (
@@ -44,7 +44,7 @@ export default function EventCard({ event }: Props) {
 			>
 				<Card padded={false} style={styles.card}>
 					<View style={styles.imageContainer}>
-						{event.images?.[0]?.sourceId ? (
+						{post.images?.[0]?.sourceId ? (
 							<UniImage
 								contentFit="cover"
 								placeholder={{
@@ -73,20 +73,15 @@ export default function EventCard({ event }: Props) {
 						)}
 					</View>
 					<View style={styles.content}>
-						<H4 numberOfLines={2}>{event.name}</H4>
-						{event.summary || event.description ? (
+						<H4 numberOfLines={2}>{post.name}</H4>
+						{post.summary || post.description ? (
 							<Text numberOfLines={2} style={styles.description}>
-								{event.summary ?? event.description}
+								{post.summary ?? post.description}
 							</Text>
 						) : null}
-						{event.location ? (
+						{post.createdAt ? (
 							<Text numberOfLines={1} style={styles.meta}>
-								{event.location}
-							</Text>
-						) : null}
-						{event.dates?.[0] ? (
-							<Text numberOfLines={1} style={styles.meta}>
-								{event.dates[0]}
+								{new Date(post.createdAt).toLocaleDateString()}
 							</Text>
 						) : null}
 					</View>

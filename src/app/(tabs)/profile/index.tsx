@@ -1,32 +1,32 @@
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import { captureException } from '@sentry/react-native'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
+import * as Burnt from 'burnt'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 import { Image } from 'expo-image'
-import { router, useFocusEffect } from 'expo-router'
+import { router, Stack, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import { useCallback, useRef, useState } from 'react'
-import { Alert, Platform, Pressable, RefreshControl, View } from 'react-native'
+import { Alert, Linking, Platform, RefreshControl, View } from 'react-native'
 import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
 import Card from '@/components/Card'
 import { List, ListItem } from '@/components/List'
-import { TabScreenContainer } from '@/components/ScreenContainer'
-import { H2, Paragraph, Text } from '@/components/Text'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H2, Paragraph } from '@/components/Text'
 import WalletButton, { addPass } from '@/components/WalletButton'
 import { trackEvent } from '@/lib/analytics'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { resetBadgeCount } from '@/lib/notifications'
-import { selfQueryOptions } from '@/lib/queries/auth'
+import { selfQueryOptions, signOutMutationOptions } from '@/lib/queries/auth'
+import { clearAllCache } from '@/lib/queries/cache-utils'
 import { orderQueryOptions } from '@/lib/queries/order'
 import { queryClient } from '@/lib/query-client'
 import { getAuthToken } from '@/lib/services/http-client'
-import { useCurrentOrderItemsCount } from '@/lib/stores/order-store'
 import { formatPrice } from '@/lib/utils/price'
 
 const handleSignIn = () => {
@@ -42,7 +42,6 @@ export default function ProfileScreen() {
 	const { data: user, isPending: isUserPending } = useQuery(selfQueryOptions)
 	const { data: orders } = useQuery(orderQueryOptions)
 	const screenRef = useRef<ScrollView>(null)
-	const itemsCount = useCurrentOrderItemsCount()
 
 	useTrackScreenView({ screenName: 'profile' }, [])
 	const [isAddingPass, setIsAddingPass] = useState(false)
@@ -98,13 +97,52 @@ export default function ProfileScreen() {
 
 	const recentOrders = orders?.slice(0, 3)
 
+	const { mutateAsync: signOut } = useMutation(signOutMutationOptions)
+
+	const handleSignOut = async () => {
+		async function signOutPress() {
+			await signOut().catch((error: unknown) => {
+				captureException(error)
+
+				Burnt.toast({
+					duration: 3,
+					haptic: 'error',
+					message: t`Error signing out. Please try again.`,
+					preset: 'error',
+					title: t`Error`,
+				})
+			})
+
+			await clearAllCache()
+
+			if (router.canGoBack()) {
+				router.back()
+			} else {
+				router.navigate('/(tabs)/profile', { withAnchor: false })
+			}
+		}
+
+		if (Platform.OS === 'web') {
+			await signOutPress()
+		} else {
+			Alert.alert(t`Sign Out`, t`Are you sure you want to sign out?`, [
+				{ style: 'cancel', text: t`Cancel` },
+				{
+					onPress: signOutPress,
+					style: 'destructive',
+					text: t`Sign Out`,
+				},
+			])
+		}
+	}
+
 	if (!user && !isUserPending) {
 		return (
 			<>
 				<Head>
 					<title>{t`Profile - TOLO`}</title>
 				</Head>
-				<TabScreenContainer noScroll>
+				<ScreenContainer noScroll>
 					<View style={styles.signInContainer}>
 						<UniImage
 							contentFit="contain"
@@ -123,7 +161,7 @@ export default function ProfileScreen() {
 							<Trans>Sign In</Trans>
 						</Button>
 					</View>
-				</TabScreenContainer>
+				</ScreenContainer>
 			</>
 		)
 	}
@@ -136,8 +174,12 @@ export default function ProfileScreen() {
 				<meta content={t`Profile - TOLO`} property="og:title" />
 				<meta content="/profile" property="og:url" />
 			</Head>
-			<TabScreenContainer
-				ref={screenRef}
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`Profile`}</Stack.Header.Title>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => {
@@ -147,7 +189,6 @@ export default function ProfileScreen() {
 						refreshing={false}
 					/>
 				}
-				withTopGradient
 			>
 				{user && (
 					<View style={styles.section}>
@@ -167,7 +208,7 @@ export default function ProfileScreen() {
 							<ListItem
 								accessibilityRole="link"
 								centered
-								onPress={() => router.push('/more/top-up')}
+								onPress={() => router.push('/profile/top-up')}
 							>
 								<ListItem.Label style={styles.topUpWalletLabel}>
 									<Trans>Top Up Wallet</Trans>
@@ -188,24 +229,6 @@ export default function ProfileScreen() {
 					<H2 style={styles.sectionTitle}>
 						<Trans>Orders</Trans>
 					</H2>
-					{itemsCount > 0 && (
-						<Pressable
-							onPress={() => router.push('/(tabs)/profile/orders/current')}
-							style={styles.currentOrderCard}
-						>
-							<View style={styles.orderHeader}>
-								<Text style={styles.currentOrderText} weight="bold">
-									<Trans>Current Order</Trans>
-								</Text>
-								<Text style={styles.currentOrderText}>
-									<Trans>{itemsCount} items</Trans>
-								</Text>
-							</View>
-							<Text style={styles.currentOrderText}>
-								<Ionicons name="chevron-forward" size={24} />
-							</Text>
-						</Pressable>
-					)}
 					<List>
 						{recentOrders?.map((order) => (
 							<ListItem
@@ -265,6 +288,31 @@ export default function ProfileScreen() {
 									<Trans>Edit Profile</Trans>
 								</ListItem.Label>
 							</ListItem>
+							<ListItem
+								accessibilityRole="link"
+								chevron
+								onPress={() => router.push('/(tabs)/profile/sessions')}
+							>
+								<ListItem.Label>
+									<Trans>Sessions</Trans>
+								</ListItem.Label>
+							</ListItem>
+							<ListItem
+								accessibilityRole="link"
+								chevron
+								onPress={() =>
+									Linking.openURL('https://www.tolo.cafe/eliminar')
+								}
+							>
+								<ListItem.Label>
+									<Trans>Delete</Trans>
+								</ListItem.Label>
+							</ListItem>
+							<ListItem chevron onPress={handleSignOut}>
+								<ListItem.Label>
+									<Trans>Sign Out</Trans>
+								</ListItem.Label>
+							</ListItem>
 						</List>
 					) : isUserPending ? (
 						<Card style={styles.pendingCard}>
@@ -282,7 +330,7 @@ export default function ProfileScreen() {
 						</Trans>
 					</Paragraph>
 				</View>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }
@@ -304,19 +352,6 @@ function getGroupName(groupName: string | undefined) {
 }
 
 const styles = StyleSheet.create((theme) => ({
-	currentOrderCard: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.verde.solid,
-		borderCurve: 'continuous',
-		borderRadius: theme.borderRadius.md,
-		flexDirection: 'row',
-		gap: theme.spacing.sm,
-		marginBottom: theme.spacing.sm,
-		padding: theme.spacing.lg,
-	},
-	currentOrderText: {
-		color: 'white',
-	},
 	footer: {
 		alignItems: 'center',
 		paddingVertical: theme.spacing.md,
@@ -329,10 +364,6 @@ const styles = StyleSheet.create((theme) => ({
 	image: {
 		height: 250,
 		width: 250,
-	},
-	orderHeader: {
-		flex: 1,
-		gap: theme.spacing.xs,
 	},
 	pendingCard: {
 		paddingVertical: theme.spacing.lg,
@@ -352,7 +383,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.xxl,
 	},
 	signInSubtitle: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		textAlign: 'center',
 	},
 	signInTitle: {

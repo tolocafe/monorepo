@@ -2,22 +2,24 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import * as Burnt from 'burnt'
+import { toast } from 'burnt'
 import { router, Stack, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
-import * as StoreReview from 'expo-store-review'
+import { requestReview } from 'expo-store-review'
 import { useCallback, useMemo } from 'react'
 import { Alert, Platform, Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
 import Card from '@/components/Card'
+import { HeaderIconIonicons, RedColorIcon } from '@/components/Icons'
 import { Input } from '@/components/Input'
 import { ModifierTag } from '@/components/ModifierTag'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
 import { screen } from '@/lib/analytics/posthog'
+import { ORDER_BUTTON_HEIGHT } from '@/lib/constants/ui'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
 import { useRegisterForPushNotifications } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -64,7 +66,7 @@ export default function OrderDetail() {
 	const { mutateAsync: createOrder } = useMutation({
 		...createOrderMutationOptions,
 		onError() {
-			Burnt.toast({
+			toast({
 				duration: 3,
 				haptic: 'error',
 				message: t`Failed to submit order. Please try again.`,
@@ -73,7 +75,7 @@ export default function OrderDetail() {
 			})
 		},
 		onSuccess() {
-			Burnt.toast({
+			toast({
 				duration: 3,
 				haptic: 'success',
 				message: t`Thanks! We'll start preparing it now.`,
@@ -86,7 +88,7 @@ export default function OrderDetail() {
 			void queryClient.invalidateQueries(orderQueryOptions)
 
 			if (Platform.OS !== 'web') {
-				StoreReview.requestReview().catch(() => null)
+				requestReview().catch(() => null)
 			}
 
 			router.back()
@@ -126,7 +128,7 @@ export default function OrderDetail() {
 					modifications: product.modifications,
 					product_id: product.id,
 				})) ?? [],
-			serviceMode: 2,
+			serviceMode: order?.tableId ? 1 : 2,
 		},
 		onSubmit({ value }) {
 			const hasInsufficientBalance =
@@ -146,7 +148,7 @@ export default function OrderDetail() {
 					t`You don't have enough balance in your wallet. Please top up your wallet first.`,
 					[
 						{
-							onPress: () => router.push('/more/top-up'),
+							onPress: () => router.push('/profile/top-up'),
 							text: t`Top Up`,
 						},
 						{
@@ -180,6 +182,7 @@ export default function OrderDetail() {
 							),
 						}) satisfies CreateOrder['products'][number],
 				),
+				table_id: order?.tableId ?? null,
 			} satisfies CreateOrder
 
 			return createOrder(orderApiFormat)
@@ -325,6 +328,10 @@ export default function OrderDetail() {
 		)
 	}
 
+	const handleClose = () => {
+		router.back()
+	}
+
 	return (
 		<>
 			<Head>
@@ -332,19 +339,22 @@ export default function OrderDetail() {
 			</Head>
 			<Stack.Screen
 				options={{
+					headerLeft: Platform.select({
+						ios: () => (
+							<Pressable onPress={handleClose}>
+								<HeaderIconIonicons name="close-outline" size={35} />
+							</Pressable>
+						),
+					}),
 					headerRight: () => (
-						<Button onPress={handleClearOrder} variant="transparent">
-							<Trans>Cancel</Trans>
-						</Button>
+						<Pressable onPress={handleClearOrder}>
+							<RedColorIcon name="trash-outline" size={28} />
+						</Pressable>
 					),
+					headerTitle: t`Current Order`,
 				}}
 			/>
-			<TabScreenContainer
-				contentContainerStyle={styles.container}
-				keyboardAware
-				withHeaderPadding
-				withTopGradient={Platform.OS !== 'ios'}
-			>
+			<ScreenContainer contentContainerStyle={styles.container} keyboardAware>
 				{user && (
 					<>
 						<H2>
@@ -382,6 +392,9 @@ export default function OrderDetail() {
 						<Trans>Additional</Trans>
 					</H2>
 					<Card>
+						<Text weight="bold">
+							<Trans>Comments</Trans>
+						</Text>
 						<Field
 							name="comment"
 							validators={{
@@ -405,29 +418,33 @@ export default function OrderDetail() {
 						</Field>
 					</Card>
 				</View>
+			</ScreenContainer>
+			<Subscribe
+				selector={(state) => [state.canSubmit, state.isSubmitting] as const}
+			>
+				{([canSubmit, isSubmitting]) => {
+					const hasInsufficientBalance =
+						!user || Number(user.ewallet ?? '0') < orderTotal
 
-				<Subscribe
-					selector={(state) => [state.canSubmit, state.isSubmitting] as const}
-				>
-					{([canSubmit, isSubmitting]) => {
-						const hasInsufficientBalance =
-							!user || Number(user.ewallet ?? '0') < orderTotal
-
-						return (
+					return (
+						<View style={styles.bottomButton}>
 							<Button
 								disabled={!canSubmit || hasInsufficientBalance}
 								onPress={handleSubmit}
+								style={styles.sendButton}
 							>
-								{isSubmitting ? (
-									<Trans>Sending Order...</Trans>
-								) : (
-									<Trans>Send Order</Trans>
-								)}
+								<Button.Text style={styles.whiteText}>
+									{isSubmitting ? (
+										<Trans>Sending Order...</Trans>
+									) : (
+										<Trans>Send Order</Trans>
+									)}
+								</Button.Text>
 							</Button>
-						)
-					}}
-				</Subscribe>
-			</TabScreenContainer>
+						</View>
+					)
+				}}
+			</Subscribe>
 		</>
 	)
 }
@@ -482,7 +499,15 @@ function getOrderTotal(products: OrderProduct[]) {
 	}, 0)
 }
 
-const styles = StyleSheet.create((theme) => ({
+const styles = StyleSheet.create((theme, runtime) => ({
+	bottomButton: {
+		alignItems: 'center',
+		bottom: Math.max(runtime.insets.bottom, theme.layout.screenPadding),
+		flexDirection: 'row',
+		left: theme.layout.screenPadding,
+		position: 'absolute',
+		right: theme.layout.screenPadding,
+	},
 	container: {
 		gap: theme.spacing.md,
 	},
@@ -493,7 +518,7 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.spacing.xl,
 	},
 	emptyText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		textAlign: 'center',
 	},
 	itemDetails: {
@@ -548,6 +573,12 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		gap: theme.spacing.sm,
 	},
+	sendButton: {
+		backgroundColor: theme.colors.verde.solid,
+		borderRadius: theme.borderRadius.full,
+		height: ORDER_BUTTON_HEIGHT,
+		width: '100%',
+	},
 	totalAmount: {
 		color: theme.colors.verde.solid,
 	},
@@ -561,5 +592,8 @@ const styles = StyleSheet.create((theme) => ({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		paddingVertical: theme.spacing.md,
+	},
+	whiteText: {
+		color: '#FFFFFF',
 	},
 }))

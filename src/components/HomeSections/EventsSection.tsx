@@ -16,7 +16,7 @@ export function EventsSection() {
 	const hasEvents = data && data.length > 0
 
 	return (
-		<View style={styles.eventsSection}>
+		<>
 			<H2 style={styles.eventsTitle}>
 				<Trans>Events</Trans>
 			</H2>
@@ -36,7 +36,7 @@ export function EventsSection() {
 					</Paragraph>
 				</View>
 			)}
-		</View>
+		</>
 	)
 }
 
@@ -50,7 +50,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		paddingVertical: theme.spacing.xl,
 	},
 	emptyText: {
-		color: theme.colors.crema.text,
+		color: theme.colors.gray.text,
 		textAlign: 'center',
 	},
 	eventsContainer: {
@@ -58,10 +58,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
 		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 		paddingVertical: theme.spacing.md,
-	},
-	eventsSection: {
-		borderBottomColor: theme.colors.gray.border,
-		borderBottomWidth: 1,
 	},
 	eventsTitle: {
 		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),

@@ -300,7 +300,6 @@ export default function SignInScreen() {
 				contentContainerStyle={styles.contentContainer}
 				keyboardAware
 				style={styles.container}
-				withHeaderPadding
 			>
 				{Platform.OS === 'web' && (
 					<View style={styles.header}>
@@ -592,7 +591,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginBottom: theme.spacing.xs,
 	},
 	message: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 	},
 	messageContainer: {
 		marginBottom: theme.spacing.md,

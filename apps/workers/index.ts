@@ -10,6 +10,7 @@ import { jwtUserMiddleware } from './lib/jwt-user-middleware'
 import type { JwtUserVariables } from './lib/jwt-user-middleware'
 import { languageDetector } from './lib/language-detector'
 import auth from './routes/auth'
+import blog from './routes/blog'
 import broadcast from './routes/broadcast'
 import clients from './routes/clients'
 import coffees from './routes/coffees'
@@ -73,6 +74,7 @@ app
 	.route('/orders', orders)
 	.route('/receipts', receipts)
 	.route('/webhooks', webhooks)
+	.route('/blog', blog)
 	.route('/coffees', coffees)
 	.route('/events', events)
 	.route('/pos', pos)

@@ -1,12 +1,12 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import Head from 'expo-router/head'
 import { useCallback, useState } from 'react'
-import { Alert, Platform, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
 import Input from '@/components/Input'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Paragraph } from '@/components/Text'
 import { useIsBarista } from '@/lib/hooks/use-is-barista'
 import { downloadReceipt } from '@/lib/utils/download-receipt'
@@ -39,10 +39,7 @@ export default function TeamTicketDownload() {
 				<Head>
 					<title>{t`Not Authorized`}</title>
 				</Head>
-				<TabScreenContainer
-					withHeaderPadding
-					withTopGradient={Platform.OS !== 'ios'}
-				>
+				<ScreenContainer>
 					<View style={styles.centered}>
 						<H2>
 							<Trans>Not Authorized</Trans>
@@ -51,7 +48,7 @@ export default function TeamTicketDownload() {
 							<Trans>You need barista or owner access to use this tool.</Trans>
 						</Paragraph>
 					</View>
-				</TabScreenContainer>
+				</ScreenContainer>
 			</>
 		)
 	}
@@ -61,11 +58,7 @@ export default function TeamTicketDownload() {
 			<Head>
 				<title>{t`Ticket`}</title>
 			</Head>
-			<TabScreenContainer
-				contentContainerStyle={styles.contentContainerStyle}
-				withHeaderPadding
-				withTopGradient={Platform.OS !== 'ios'}
-			>
+			<ScreenContainer contentContainerStyle={styles.contentContainerStyle}>
 				<H2 style={styles.title}>
 					<Trans>Ticket</Trans>
 				</H2>
@@ -94,7 +87,7 @@ export default function TeamTicketDownload() {
 						)}
 					</Button>
 				</View>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }
@@ -115,7 +108,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginTop: theme.spacing.md,
 	},
 	helperText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 	},
 	title: {
 		marginBottom: theme.spacing.xs,

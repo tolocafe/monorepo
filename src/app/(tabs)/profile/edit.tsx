@@ -1,27 +1,24 @@
 import { Trans, useLingui } from '@lingui/react/macro'
-import { captureException } from '@sentry/react-native'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import * as Burnt from 'burnt'
-import { router } from 'expo-router'
+import { Stack } from 'expo-router'
 import Head from 'expo-router/head'
-import { Alert, Linking, Platform, RefreshControl, View } from 'react-native'
+import { RefreshControl, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import Button from '@/components/Button'
 import Input from '@/components/Input'
 import { List, ListItem } from '@/components/List'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import type { ClientData } from '@/lib/api'
 import {
 	selfQueryOptions,
-	signOutMutationOptions,
 	updateClientMutationOptions,
 } from '@/lib/queries/auth'
-import { clearAllCache } from '@/lib/queries/cache-utils'
 
 export default function EditProfileScreen() {
 	const { t } = useLingui()
@@ -58,8 +55,6 @@ export default function EditProfileScreen() {
 		},
 	})
 
-	const { mutateAsync: signOut } = useMutation(signOutMutationOptions)
-
 	const { Field, handleSubmit, Subscribe } = useForm({
 		defaultValues: {
 			birthdate: user?.birthday || '',
@@ -77,49 +72,18 @@ export default function EditProfileScreen() {
 		},
 	})
 
-	const handleSignOut = async () => {
-		async function signOutPress() {
-			await signOut().catch((error: unknown) => {
-				captureException(error)
-
-				Burnt.toast({
-					duration: 3,
-					haptic: 'error',
-					message: t`Error signing out. Please try again.`,
-					preset: 'error',
-					title: t`Error`,
-				})
-			})
-
-			await clearAllCache()
-
-			if (router.canGoBack()) {
-				router.back()
-			} else {
-				router.navigate('/(tabs)/profile', { withAnchor: false })
-			}
-		}
-
-		if (Platform.OS === 'web') {
-			await signOutPress()
-		} else {
-			Alert.alert(t`Sign Out`, t`Are you sure you want to sign out?`, [
-				{ style: 'cancel', text: t`Cancel` },
-				{
-					onPress: signOutPress,
-					style: 'destructive',
-					text: t`Sign Out`,
-				},
-			])
-		}
-	}
-
 	return (
 		<>
 			<Head>
 				<title>{t`Edit Profile`}</title>
 			</Head>
-			<TabScreenContainer
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`Edit Profile`}</Stack.Header.Title>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer
+				keyboardAware
 				contentContainerStyle={styles.contentContainer}
 				refreshControl={
 					<RefreshControl
@@ -127,8 +91,6 @@ export default function EditProfileScreen() {
 						refreshing={false}
 					/>
 				}
-				withHeaderPadding
-				withTopGradient={Platform.OS !== 'ios'}
 			>
 				<View style={styles.section}>
 					<H2>
@@ -238,38 +200,7 @@ export default function EditProfileScreen() {
 						</Subscribe>
 					</List>
 				</View>
-
-				<View style={styles.section}>
-					<H2>
-						<Trans>Account</Trans>
-					</H2>
-					<List>
-						<ListItem
-							accessibilityRole="link"
-							chevron
-							onPress={() => router.push('/(tabs)/profile/sessions')}
-						>
-							<ListItem.Label>
-								<Trans>Sessions</Trans>
-							</ListItem.Label>
-						</ListItem>
-						<ListItem
-							accessibilityRole="link"
-							chevron
-							onPress={() => Linking.openURL('https://www.tolo.cafe/eliminar')}
-						>
-							<ListItem.Label>
-								<Trans>Delete</Trans>
-							</ListItem.Label>
-						</ListItem>
-						<ListItem chevron onPress={handleSignOut}>
-							<ListItem.Label>
-								<Trans>Sign Out</Trans>
-							</ListItem.Label>
-						</ListItem>
-					</List>
-				</View>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }

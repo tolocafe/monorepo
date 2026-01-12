@@ -2,11 +2,7 @@ import { Image } from 'expo-image'
 import { Link } from 'expo-router'
 import { Pressable, View } from 'react-native'
 import type { ImageSourcePropType } from 'react-native'
-import Animated, {
-	useAnimatedStyle,
-	useSharedValue,
-	withSpring,
-} from 'react-native-reanimated'
+import Animated from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { LinearGradient } from '@/components/LinearGradient'
@@ -30,22 +26,12 @@ type Props = {
 }
 
 export default function CoffeeStoryBubble({ coffee }: Props) {
-	const scale = useSharedValue(1)
-
-	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scale.value }],
-	}))
-
 	const gradientIndex = getCoffeeGradientIndex(coffee.name)
 	const gradientColors = COFFEE_GRADIENT_COLORS[gradientIndex]
 
 	return (
-		<Link asChild href={`/(tabs)/(home)/coffees/${coffee.slug}`}>
-			<AnimatedPressable
-				onPressIn={() => scale.set(withSpring(0.9))}
-				onPressOut={() => scale.set(withSpring(1))}
-				style={animatedStyle}
-			>
+		<Link asChild href={`/coffees/${coffee.slug}`}>
+			<AnimatedPressable>
 				<View style={styles.storyBubble}>
 					<View style={styles.storyBubbleRing}>
 						<View style={styles.storyBubbleImageContainer}>

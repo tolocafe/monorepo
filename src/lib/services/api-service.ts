@@ -1,4 +1,5 @@
 import type {
+	BlogPost,
 	Category,
 	ClientData,
 	Coffee,
@@ -49,6 +50,12 @@ export const api = {
 				})
 				.json(),
 	},
+	blog: {
+		getBlogPost: (id: string) =>
+			publicClient.get<BlogPost>(`blog/${id}`).json(),
+		getBlogPosts: () => publicClient.get<BlogPost[]>('blog').json(),
+	},
+
 	client: {
 		get: (clientId: string) =>
 			privateClient.get<ClientData>(`clients/${clientId}`).json(),
@@ -80,8 +87,7 @@ export const api = {
 	},
 
 	events: {
-		getEvent: (slug: string) =>
-			publicClient.get<Event>(`events/${slug}`).json(),
+		getEvent: (id: string) => publicClient.get<Event>(`events/${id}`).json(),
 		getEvents: () => publicClient.get<Event[]>('events').json(),
 	},
 
@@ -92,6 +98,8 @@ export const api = {
 		getProduct: (productId: string) =>
 			publicClient.get<Product>(`menu/products/${productId}`).json(),
 		getProducts: () => publicClient.get<Product[]>('menu/products').json(),
+		getPromotion: (promotionId: string) =>
+			publicClient.get<Promotion>(`menu/promotions/${promotionId}`).json(),
 		getPromotions: () =>
 			publicClient.get<Promotion[]>('menu/promotions').json(),
 	},
@@ -110,7 +118,6 @@ export const api = {
 		list: () => privateClient.get<CreateOrderResponse>('orders').json(),
 	},
 
-	// Generic methods for other endpoints
 	post: (endpoint: string, data: unknown) =>
 		privateClient.post(endpoint, { json: data }).json(),
 

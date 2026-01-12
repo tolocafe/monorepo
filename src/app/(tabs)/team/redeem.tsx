@@ -12,7 +12,7 @@ import Admonition from '@/components/Admonition'
 import Button from '@/components/Button'
 import { GreenColorIcon, RedColorIcon } from '@/components/Icons'
 import Input from '@/components/Input'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import SegmentedControl from '@/components/SegmentedControl'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { useIsBarista } from '@/lib/hooks/use-is-barista'
@@ -132,10 +132,7 @@ export default function RedeemDrink() {
 				<Head>
 					<title>{t`Not Authorized`}</title>
 				</Head>
-				<TabScreenContainer
-					withHeaderPadding
-					withTopGradient={Platform.OS !== 'ios'}
-				>
+				<ScreenContainer>
 					<View style={styles.centered}>
 						<H2>
 							<Trans>Not Authorized</Trans>
@@ -144,7 +141,7 @@ export default function RedeemDrink() {
 							<Trans>You need barista or owner access to use this tool.</Trans>
 						</Paragraph>
 					</View>
-				</TabScreenContainer>
+				</ScreenContainer>
 			</>
 		)
 	}
@@ -155,11 +152,7 @@ export default function RedeemDrink() {
 			<Head>
 				<title>{clientName || t`Redeem`}</title>
 			</Head>
-			<TabScreenContainer
-				contentContainerStyle={styles.contentContainer}
-				withHeaderPadding
-				withTopGradient={Platform.OS !== 'ios'}
-			>
+			<ScreenContainer contentContainerStyle={styles.contentContainer}>
 				{scannedClientId ? (
 					isLoadingClient ? (
 						<View style={styles.loadingContainer}>
@@ -314,7 +307,7 @@ export default function RedeemDrink() {
 						)}
 					</View>
 				)}
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }
@@ -340,7 +333,7 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.spacing.lg,
 	},
 	clientMeta: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		fontSize: theme.fontSizes.sm,
 	},
 	contentContainer: {
@@ -357,11 +350,11 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: theme.spacing.lg,
 	},
 	errorText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		textAlign: 'center',
 	},
 	helperText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 	},
 	loadingContainer: {
 		alignItems: 'center',
@@ -369,14 +362,14 @@ const styles = StyleSheet.create((theme) => ({
 		marginTop: theme.spacing.xxl,
 	},
 	loadingText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 	},
 	manualInputContainer: {
 		gap: theme.spacing.md,
 		marginTop: theme.spacing.lg,
 	},
 	orText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		textAlign: 'center',
 	},
 	redeemContainer: {
@@ -389,7 +382,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: theme.spacing.lg,
 	},
 	sectionLabel: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		fontSize: theme.fontSizes.sm,
 	},
 	successContainer: {
@@ -403,7 +396,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginBottom: theme.spacing.md,
 	},
 	successText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		textAlign: 'center',
 	},
 }))

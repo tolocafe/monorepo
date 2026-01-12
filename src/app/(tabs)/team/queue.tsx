@@ -5,18 +5,12 @@ import { useQuery } from '@tanstack/react-query'
 import { useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import { useCallback, useMemo, useRef, useState } from 'react'
-import {
-	Platform,
-	Pressable,
-	RefreshControl,
-	ScrollView,
-	View,
-} from 'react-native'
+import { Pressable, RefreshControl, ScrollView, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import Card from '@/components/Card'
 import { ModifierTag } from '@/components/ModifierTag'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H3, Paragraph, Text } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import type { Product } from '@/lib/api'
@@ -174,15 +168,12 @@ export default function OrdersQueue() {
 			<Head>
 				<title>{t`Queue`}</title>
 			</Head>
-			<TabScreenContainer
+			<ScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				noScroll={orders.length === 0}
-				ref={screenRef}
 				refreshControl={
 					<RefreshControl onRefresh={handleRefresh} refreshing={isLoading} />
 				}
-				withHeaderPadding
-				withTopGradient={Platform.OS !== 'ios'}
 			>
 				{/* Category filter pills */}
 				{availableCategories?.length ? (
@@ -430,7 +421,7 @@ export default function OrdersQueue() {
 						</Paragraph>
 					</View>
 				)}
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }

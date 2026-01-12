@@ -42,6 +42,7 @@
 			// 	]
 			// }
 		],
+		"complexity": "off",
 		"react/jsx-max-depth": "off",
 		"capitalized-comments": "off",
 		"import/exports-last": "off",

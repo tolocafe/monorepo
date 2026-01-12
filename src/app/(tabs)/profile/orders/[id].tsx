@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router, Stack, useLocalSearchParams } from 'expo-router'
 import Head from 'expo-router/head'
 import { useMemo, useState } from 'react'
 import {
@@ -15,7 +15,7 @@ import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
 import Card from '@/components/Card'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { useProductDetails } from '@/lib/hooks/use-product-details'
@@ -63,13 +63,13 @@ export default function OrderScreen() {
 				<Head>
 					<title>{t`Loading Order`}</title>
 				</Head>
-				<TabScreenContainer withHeaderPadding>
+				<ScreenContainer>
 					<View style={styles.loadingContainer}>
 						<H2>
 							<Trans>Loading Order...</Trans>
 						</H2>
 					</View>
-				</TabScreenContainer>
+				</ScreenContainer>
 			</>
 		)
 	}
@@ -80,7 +80,7 @@ export default function OrderScreen() {
 				<Head>
 					<title>{t`Order Not Found`}</title>
 				</Head>
-				<TabScreenContainer withHeaderPadding>
+				<ScreenContainer>
 					<View style={styles.errorContainer}>
 						<H2>
 							<Trans>Order Not Found</Trans>
@@ -92,7 +92,7 @@ export default function OrderScreen() {
 							<Trans>Go Back</Trans>
 						</Button>
 					</View>
-				</TabScreenContainer>
+				</ScreenContainer>
 			</>
 		)
 	}
@@ -102,7 +102,12 @@ export default function OrderScreen() {
 			<Head>
 				<title>{t`Order ${id}`}</title>
 			</Head>
-			<TabScreenContainer
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`Order ${id}`}</Stack.Header.Title>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer
 				contentContainerStyle={styles.container}
 				refreshControl={
 					<RefreshControl
@@ -112,8 +117,6 @@ export default function OrderScreen() {
 						refreshing={false}
 					/>
 				}
-				withHeaderPadding
-				withTopGradient
 			>
 				<Card style={styles.orderHeaderCard}>
 					<View style={styles.orderHeader}>
@@ -235,7 +238,7 @@ export default function OrderScreen() {
 						</Text>
 					</View>
 				</Pressable>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }
@@ -279,7 +282,7 @@ const styles = StyleSheet.create((theme) => ({
 		flex: 1,
 	},
 	itemQuantity: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		fontSize: 12,
 		marginTop: theme.spacing.xs,
 	},
@@ -303,7 +306,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingHorizontal: theme.spacing.lg,
 	},
 	orderDate: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		marginTop: theme.spacing.xs,
 	},
 	orderHeader: {

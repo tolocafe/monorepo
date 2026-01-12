@@ -14,7 +14,7 @@ type Props = {
 }
 
 const InfoIcon = withUnistyles(Ionicons, (theme) => ({
-	color: theme.colors.crema.solid,
+	color: theme.colors.gray.solid,
 }))
 
 const TipIcon = withUnistyles(Ionicons, (theme) => ({
@@ -80,7 +80,7 @@ const styles = StyleSheet.create((theme) => ({
 		variants: {
 			variant: {
 				info: {
-					color: theme.colors.crema.text,
+					color: theme.colors.gray.text,
 				},
 				tip: {
 					color: theme.colors.verde.text,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create((theme) => ({
 		variants: {
 			variant: {
 				info: {
-					color: theme.colors.crema.solid,
+					color: theme.colors.gray.solid,
 				},
 				tip: {
 					color: theme.colors.verde.solid,

@@ -152,4 +152,62 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		}
 	})
 
+	.get('/promotions/:id', async (context) => {
+		const language = context.get('language')
+
+		const promotionId = context.req.param('id')
+
+		if (!promotionId) {
+			return context.json(
+				{ error: 'Promotion ID is required' },
+				400,
+				defaultJsonHeaders,
+			)
+		}
+
+		try {
+			const [posterPromotions, sanityPromotion] = await Promise.all([
+				api.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
+				sanity
+					.getPromotion(context.env, promotionId, language)
+					.catch(() => null),
+			])
+
+			const posterPromotion = posterPromotions.find(
+				(p) => p.promotion_id === promotionId,
+			)
+
+			if (!posterPromotion) {
+				return context.json(
+					{ error: 'Promotion not found' },
+					404,
+					defaultJsonHeaders,
+				)
+			}
+
+			const body = {
+				...posterPromotion,
+				// Sanity fields are already localized from the query
+				description: sanityPromotion?.body
+					? JSON.stringify(sanityPromotion.body)
+					: undefined,
+				excerpt: sanityPromotion?.excerpt,
+				images: sanityPromotion?.images,
+				name: sanityPromotion?.name ?? posterPromotion.name,
+				slug: sanityPromotion?.slug?.current,
+			} satisfies Promotion
+
+			return context.json(body, 200, {
+				...defaultJsonHeaders,
+				'Content-Language': language,
+			})
+		} catch {
+			return context.json(
+				{ error: 'Failed to fetch promotion details' },
+				500,
+				defaultJsonHeaders,
+			)
+		}
+	})
+
 export default menu

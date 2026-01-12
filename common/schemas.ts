@@ -49,6 +49,7 @@ export const CreateOrderSchema = z.strictObject({
 	}),
 	products: z.array(CreateOrderProductSchema).min(1, 'errors.min-count'),
 	serviceMode: z.int().positive().max(3, 'errors.invalid'),
+	table_id: z.string().nullable().optional(),
 })
 
 export type CreateOrder = z.infer<typeof CreateOrderSchema>

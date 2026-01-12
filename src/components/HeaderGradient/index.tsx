@@ -1,16 +1,15 @@
-import { Platform } from 'react-native'
-import { StyleSheet, useUnistyles, withUnistyles } from 'react-native-unistyles'
+import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import { LinearGradient } from '@/components/LinearGradient'
 
 const styles = StyleSheet.create({
-	gradient: (height: number | undefined) => ({
+	gradient: {
 		...StyleSheet.absoluteFillObject,
 		bottom: 'auto',
-		height: height || Platform.select({ default: 50, web: 25 }),
+		height: 90,
 		width: '100%',
 		zIndex: 999_999,
-	}),
+	},
 })
 
 const UniLinearGradient = withUnistyles(LinearGradient, (_theme, rt) => ({
@@ -28,12 +27,6 @@ const UniLinearGradient = withUnistyles(LinearGradient, (_theme, rt) => ({
 				] as const),
 }))
 
-export default function HeaderGradient({ height }: { height?: number }) {
-	const unistyles = useUnistyles()
-
-	if (Platform.OS !== 'web' && unistyles.rt.insets.top === 0 && !height) {
-		return null
-	}
-
-	return <UniLinearGradient style={styles.gradient(height)} />
+export default function HeaderGradient() {
+	return <UniLinearGradient style={styles.gradient} />
 }

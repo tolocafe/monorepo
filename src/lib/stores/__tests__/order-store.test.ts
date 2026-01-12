@@ -35,11 +35,13 @@ jest.mock('@/lib/queries/auth', () => ({
 const createMockOrder = () => ({
 	createdAt: new Date('2025-01-01T00:00:00.000Z'),
 	id: 'order-mock',
+	locationId: '1',
 	products: [
 		{ id: 'espresso', modifications: undefined, quantity: 1 },
 		{ id: 'latte', modifications: undefined, quantity: 2 },
 	],
 	status: 'draft' as const,
+	tableId: null,
 })
 
 describe('useOrderStore removeItem', () => {
@@ -65,6 +67,7 @@ describe('useOrderStore removeItem', () => {
 		useOrderStore.setState({
 			currentOrder: {
 				...createMockOrder(),
+
 				products: [{ id: 'espresso', modifications: undefined, quantity: 1 }],
 			},
 		})

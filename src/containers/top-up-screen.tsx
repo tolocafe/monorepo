@@ -9,9 +9,9 @@ import {
 	useStripe,
 } from '@stripe/stripe-react-native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import * as Burnt from 'burnt'
+import { toast } from 'burnt'
 import * as Linking from 'expo-linking'
-import { router } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { useEffect, useState } from 'react'
 import { Alert, Platform, View } from 'react-native'
@@ -20,7 +20,7 @@ import { StyleSheet } from 'react-native-unistyles'
 import Button from '@/components/Button'
 import Card from '@/components/Card'
 import { CheckedButton } from '@/components/CheckedButton'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
@@ -171,7 +171,7 @@ export default function TopUpScreen() {
 			}
 
 			// Payment succeeded
-			Burnt.toast({
+			toast({
 				duration: 3,
 				haptic: 'success',
 				message: t`Your wallet has been topped up successfully!`,
@@ -214,10 +214,12 @@ export default function TopUpScreen() {
 				<meta content={t`Top Up - TOLO`} property="og:title" />
 				<meta content="/more/top-up" property="og:url" />
 			</Head>
-			<TabScreenContainer
-				contentContainerStyle={styles.contentContainer}
-				withHeaderPadding
-			>
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`Top Up`}</Stack.Header.Title>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer contentContainerStyle={styles.contentContainer}>
 				<H2>
 					<Trans>Current Balance</Trans>
 				</H2>
@@ -283,7 +285,7 @@ export default function TopUpScreen() {
 						{'\n'}🔒 Your payment information is encrypted and secure
 					</Trans>
 				</Paragraph>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }

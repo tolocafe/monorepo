@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { FlatList, View } from 'react-native'
+import { FlatList } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import CoffeeStoryBubble, { BUBBLE_SIZE } from '@/components/CoffeeStoryBubble'
@@ -30,7 +30,7 @@ export function CoffeesSection() {
 	}
 
 	return (
-		<View style={styles.storiesSection}>
+		<>
 			<H2 style={styles.storiesTitle}>
 				<Trans>Our Beans</Trans>
 			</H2>
@@ -43,7 +43,7 @@ export function CoffeesSection() {
 				renderItem={handleRenderItem}
 				showsHorizontalScrollIndicator={false}
 			/>
-		</View>
+		</>
 	)
 }
 
@@ -53,10 +53,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
 		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 		paddingVertical: theme.spacing.md,
-	},
-	storiesSection: {
-		borderBottomColor: theme.colors.gray.border,
-		borderBottomWidth: 1,
 	},
 	storiesTitle: {
 		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),

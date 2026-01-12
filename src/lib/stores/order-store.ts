@@ -16,8 +16,10 @@ export type Order = {
 	createdAt?: Date
 	customerNote?: string
 	id: string
+	locationId: string
 	products: OrderProduct[]
 	status: 'cancelled' | 'completed' | 'confirmed' | 'draft' | 'submitted'
+	tableId: null | string
 }
 
 export type OrderProduct = {
@@ -41,6 +43,7 @@ type OrderStore = {
 	currentOrder: null | Order
 	getTotalItems: () => number
 	removeItem: (productId: string) => void
+	setLocationAndTable: (locationId: string, tableId: null | string) => void
 	updateItem: (
 		productId: string,
 		modifications: Modifications | undefined,
@@ -98,8 +101,10 @@ export const useOrderStore = create<OrderStore>()(
 				const nextOrder: Order = {
 					createdAt: new Date(),
 					id: `order-${Date.now()}`,
+					locationId: '1',
 					products: [],
 					status: 'draft',
+					tableId: null,
 				}
 				set({ currentOrder: nextOrder })
 			},
@@ -123,6 +128,22 @@ export const useOrderStore = create<OrderStore>()(
 				} else {
 					set({ currentOrder: updatedOrder })
 				}
+			},
+			setLocationAndTable(locationId, tableId) {
+				const { currentOrder } = get()
+
+				if (!currentOrder) {
+					get().createOrder()
+					return get().setLocationAndTable(locationId, tableId)
+				}
+
+				set({
+					currentOrder: {
+						...currentOrder,
+						locationId,
+						tableId,
+					},
+				})
 			},
 			updateItem(productId, modifications, quantity) {
 				const { currentOrder } = get()

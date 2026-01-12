@@ -1,21 +1,17 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
-import { router } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
-import { useRef } from 'react'
 import { RefreshControl } from 'react-native'
-import type { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { List, ListItem } from '@/components/List'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2 } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { queryClient } from '@/lib/query-client'
 
 export default function TeamScreen() {
-	const screenRef = useRef<ScrollView>(null)
-
 	useTrackScreenView({ screenName: 'team' }, [])
 
 	return (
@@ -29,19 +25,22 @@ export default function TeamScreen() {
 				<meta content={t`Team - TOLO`} property="og:title" />
 				<meta content="/team" property="og:url" />
 			</Head>
-			<TabScreenContainer
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`Team`}</Stack.Header.Title>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer
 				contentContainerStyle={styles.contentContainer}
-				ref={screenRef}
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries()}
 						refreshing={false}
 					/>
 				}
-				withTopGradient
 			>
 				<H2 style={styles.sectionTitle}>
-					<Trans>Team</Trans>
+					<Trans>Orders</Trans>
 				</H2>
 
 				<List>
@@ -79,7 +78,7 @@ export default function TeamScreen() {
 						</ListItem.Label>
 					</ListItem>
 				</List>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }

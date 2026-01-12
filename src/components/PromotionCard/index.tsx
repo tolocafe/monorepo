@@ -1,4 +1,5 @@
 import { Image } from 'expo-image'
+import { router } from 'expo-router'
 import { Pressable, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
@@ -27,9 +28,14 @@ export default function PromotionCard({ promotion }: Props) {
 
 	const imageSourceId = promotion.images?.[0]?.sourceId
 
+	const handlePress = () => {
+		router.push(`/promotions/${promotion.promotion_id}`)
+	}
+
 	return (
 		<Animated.View style={[animatedStyle, styles.container]}>
 			<Pressable
+				onPress={handlePress}
 				onPressIn={() => scaleValue.set(withSpring(0.96))}
 				onPressOut={() => scaleValue.set(withSpring(1))}
 				style={styles.pressable}

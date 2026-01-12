@@ -201,7 +201,7 @@ const styles = StyleSheet.create((theme) => ({
 					color: theme.colors.verde.solid,
 				},
 				secondary: {
-					color: theme.colors.crema.solid,
+					color: theme.colors.gray.solid,
 				},
 			},
 		},
@@ -218,7 +218,7 @@ const styles = StyleSheet.create((theme) => ({
 					color: theme.colors.verde.solid,
 				},
 				secondary: {
-					color: theme.colors.crema.solid,
+					color: theme.colors.gray.solid,
 				},
 			},
 		},

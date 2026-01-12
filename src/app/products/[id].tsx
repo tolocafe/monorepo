@@ -30,13 +30,13 @@ import {
 import BlockText from '@/components/BlockText'
 import Button from '@/components/Button'
 import { CheckedButton } from '@/components/CheckedButton'
-import { HeaderIconIonicons } from '@/components/Icons'
 import { LevelIndicator } from '@/components/LevelIndicator'
 import { LinearGradient } from '@/components/LinearGradient'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
 import WebContent from '@/components/WebContent'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { ORDER_BUTTON_HEIGHT } from '@/lib/constants/ui'
 import { getImageUrl } from '@/lib/image'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { productQueryOptions } from '@/lib/queries/product'
@@ -152,14 +152,14 @@ export default function ProductScreen() {
 	if (!product) {
 		if (isPending) {
 			return (
-				<TabScreenContainer data-testid="loading">
+				<ScreenContainer data-testid="loading">
 					<ActivityIndicator size="large" />
-				</TabScreenContainer>
+				</ScreenContainer>
 			)
 		}
 
 		return (
-			<TabScreenContainer>
+			<ScreenContainer>
 				<View style={styles.header}>
 					<Pressable onPress={handleClose} style={styles.closeButton}>
 						<GrayIonIcon name="close" size={20} />
@@ -173,7 +173,7 @@ export default function ProductScreen() {
 						<Trans>The requested product could not be loaded.</Trans>
 					</Paragraph>
 				</View>
-			</TabScreenContainer>
+			</ScreenContainer>
 		)
 	}
 
@@ -198,19 +198,28 @@ export default function ProductScreen() {
 			<Head>
 				<title>{t`${product.product_name} - TOLO Good Coffee`}</title>
 			</Head>
-			<Stack.Screen
+			{/* <Stack.Screen
 				options={{
-					headerRight: Platform.select({
-						default: null as unknown as undefined,
+					headerBackVisible: true,
+					headerLeft: Platform.select({
 						ios: () => (
 							<Pressable onPress={handleClose}>
 								<HeaderIconIonicons name="close-outline" size={35} />
 							</Pressable>
 						),
 					}),
+					headerTransparent: true,
 				}}
-			/>
-			<TabScreenContainer
+			/> */}
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{product.product_name}</Stack.Header.Title>
+					<Stack.Header.Left>
+						<Stack.Header.Button onPress={handleClose} icon="xmark" />
+					</Stack.Header.Left>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer
 				refreshControl={
 					<RefreshControl
 						onRefresh={() =>
@@ -219,9 +228,8 @@ export default function ProductScreen() {
 						refreshing={false}
 					/>
 				}
-				withHeaderPadding
+				contentInsetAdjustmentBehavior="never"
 				withPaddingEdges={PADDING_EDGES}
-				withTopGradient={Platform.OS !== 'ios'}
 			>
 				<View style={styles.heroImageContainer}>
 					{hasImage ? (
@@ -411,7 +419,7 @@ export default function ProductScreen() {
 						</>
 					)}
 				</View>
-			</TabScreenContainer>
+			</ScreenContainer>
 			<Subscribe
 				selector={({ values }) =>
 					[values.quantity, values.modifications] as const
@@ -433,7 +441,7 @@ export default function ProductScreen() {
 										style={styles.quantityButtonMinus}
 									>
 										<Text style={styles.whiteText}>
-											<Ionicons name="remove" size={26} />
+											<Ionicons name="remove" size={30} />
 										</Text>
 									</Pressable>
 								)}
@@ -445,7 +453,7 @@ export default function ProductScreen() {
 									]}
 								>
 									<Text style={styles.whiteText}>
-										<Ionicons name="add" size={26} />
+										<Ionicons name="add" size={30} />
 									</Text>
 								</Pressable>
 							</View>
@@ -555,7 +563,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	addButton: {
 		flex: 1,
 		flexDirection: 'row',
-		height: 45,
+		height: ORDER_BUTTON_HEIGHT,
 		justifyContent: 'space-between',
 	},
 	badge: {
@@ -577,7 +585,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	bottomButton: {
 		alignItems: 'center',
 		bottom: Platform.select({
-			default: theme.spacing.md,
+			default: theme.layout.screenPadding,
 			ios: runtime.insets.bottom,
 		}),
 		flexDirection: 'row',
@@ -611,12 +619,10 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		_web: {
 			paddingBottom: 50,
 		},
+		backgroundColor: theme.colors.gray.background,
 		gap: theme.spacing.xxl,
 		padding: theme.layout.screenPadding,
-		paddingBottom: Platform.select({
-			android: 40,
-			default: theme.layout.screenPadding,
-		}),
+		paddingBottom: 80,
 	},
 	header: {
 		alignItems: 'center',
@@ -673,18 +679,18 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		backgroundColor: theme.colors.verde.solid,
 		borderBottomRightRadius: theme.borderRadius.full,
 		borderTopRightRadius: theme.borderRadius.full,
-		height: 45,
+		height: ORDER_BUTTON_HEIGHT,
 		justifyContent: 'center',
-		width: 45,
+		width: ORDER_BUTTON_HEIGHT,
 	},
 	quantityButtonMinus: {
 		alignItems: 'center',
 		backgroundColor: theme.colors.verde.solid,
 		borderBottomLeftRadius: theme.borderRadius.full,
 		borderTopLeftRadius: theme.borderRadius.full,
-		height: 45,
+		height: ORDER_BUTTON_HEIGHT,
 		justifyContent: 'center',
-		width: 45,
+		width: ORDER_BUTTON_HEIGHT,
 	},
 	quantityButtonSingle: {
 		borderBottomLeftRadius: theme.borderRadius.full,

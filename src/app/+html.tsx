@@ -158,6 +158,10 @@ export default function Root({ children }: PropsWithChildren) {
 					border-top: none !important;
 					box-shadow: none !important;
 				}
+				[class$='_navigationMenuRoot'] {
+					bottom: 5px !important;
+					top: auto !important;
+				}
 				`}</style>
 
 				{/* Disable body scrolling on web for native-like experience */}

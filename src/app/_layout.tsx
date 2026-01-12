@@ -15,10 +15,10 @@ import { Platform } from 'react-native'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
 import { AnalyticsIdentifier } from '@/lib/analytics/components/analytics-identifier'
+import '@/lib/locales/init'
 import { PostHogProvider } from '@/lib/analytics/posthog'
 import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
-import '@/lib/locales/init'
 import { useUpdates } from '@/lib/hooks/use-updates'
 import { QueryProvider } from '@/lib/providers/query-provider'
 import { selfQueryOptions } from '@/lib/queries/auth'
@@ -49,6 +49,17 @@ if (Platform.OS !== 'web') {
 		}),
 	})
 }
+
+const modalOptions = {
+	headerShown: true,
+	headerTransparent: Platform.select({ android: false, default: true }),
+	presentation: Platform.select({
+		default: 'modal' as const,
+		web: 'transparentModal' as const,
+	}),
+} as const
+
+const defaultStackScreenOptions = { headerShown: false } as const
 
 function RootLayout() {
 	const colorScheme = useColorScheme()
@@ -96,36 +107,38 @@ function RootLayout() {
 	return (
 		<KeyboardProvider>
 			<QueryProvider>
-				<AnalyticsIdentifier />
 				<ThemeProvider
 					value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}
 				>
+					<AnalyticsIdentifier />
 					<StatusBar style="auto" />
 					<I18nProvider i18n={i18n}>
 						<PostHogProvider>
-							<Stack initialRouteName="(tabs)">
-								<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+							<Stack
+								screenOptions={defaultStackScreenOptions}
+								initialRouteName="(tabs)"
+							>
+								<Stack.Screen name="(tabs)" />
 								<Stack.Screen name="+not-found" />
 								<Stack.Screen
-									name="sign-in"
-									options={{
-										presentation: Platform.select({
-											default: 'modal',
-											web: 'transparentModal',
-										}),
-									}}
-								/>
-								<Stack.Screen
-									name="tables/[table_id]"
-									options={{
-										headerShown: false,
-										presentation: 'modal',
-									}}
+									name="products/[id]"
+									options={{ ...modalOptions, headerTitle: '' }}
 								/>
 								<Stack.Screen
 									name="tables/[location_id]/[table_id]"
+									options={modalOptions}
+								/>
+								<Stack.Screen name="sign-in" options={modalOptions} />
+								<Stack.Screen name="orders/current" options={modalOptions} />
+								<Stack.Screen name="promotions/[id]" options={modalOptions} />
+								<Stack.Screen name="events/[id]" options={modalOptions} />
+								<Stack.Screen
+									name="coffees/[id]"
 									options={{
-										presentation: 'modal',
+										...modalOptions,
+										animation: 'none',
+										header: () => null,
+										presentation: 'transparentModal',
 									}}
 								/>
 							</Stack>

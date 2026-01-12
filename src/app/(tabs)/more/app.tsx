@@ -1,15 +1,15 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import * as Burnt from 'burnt'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
-import { router } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { useState } from 'react'
-import { Alert, Platform, View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
 import Card from '@/components/Card'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph, Text } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { useUpdates } from '@/lib/hooks/use-updates'
@@ -87,11 +87,12 @@ export default function AppInfoScreen() {
 				<meta content={t`App - TOLO`} property="og:title" />
 				<meta content="/more/app" property="og:url" />
 			</Head>
-			<TabScreenContainer
-				contentContainerStyle={styles.contentContainer}
-				withHeaderPadding
-				withTopGradient={Platform.OS !== 'ios'}
-			>
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`App`}</Stack.Header.Title>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer contentContainerStyle={styles.contentContainer}>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
 						<Trans>Information</Trans>
@@ -167,7 +168,7 @@ export default function AppInfoScreen() {
 						</Button>
 					</Card>
 				</View>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }
@@ -177,7 +178,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.md,
 	},
 	description: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		marginBottom: theme.spacing.sm,
 	},
 	divider: {
@@ -202,7 +203,7 @@ const styles = StyleSheet.create((theme) => ({
 		color: theme.colors.gray.text,
 	},
 	value: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		flex: 2,
 		fontSize: theme.typography.body.fontSize,
 		textAlign: 'right',

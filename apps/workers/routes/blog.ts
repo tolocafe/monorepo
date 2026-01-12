@@ -1,7 +1,7 @@
 import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 
-import type { Event } from '~common/api'
+import type { BlogPost } from '~common/api'
 import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
 import { defaultJsonHeaders } from '~workers/utils/headers'
@@ -15,16 +15,16 @@ type Variables = {
 	language: SupportedLocale
 }
 
-const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
+const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 	.get('/', async (context) => {
 		const language = context.get('language')
 
 		try {
-			const sanityEvents = await sanity.listEvents(context.env)
+			const sanityPosts = await sanity.listBlogPosts(context.env)
 
-			const localized = sanityEvents.map((event): Event => {
+			const localized = sanityPosts.map((post): BlogPost => {
 				// Extract asset IDs from images array
-				const images = event.images
+				const images = post.images
 					?.map((img) => {
 						if (!img.asset?._ref) return null
 						return {
@@ -34,14 +34,15 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 					.filter((img): img is { sourceId: string } => img !== null)
 
 				return {
-					dates: event.startDate ? [event.startDate] : null,
-					description: getLocalizedString(event.excerpt, language),
-					id: event._id,
+					createdAt: post._createdAt,
+					description: getLocalizedBlockContent(post.body, language)
+						? JSON.stringify(getLocalizedBlockContent(post.body, language))
+						: getLocalizedString(post.excerpt, language),
+					id: post._id,
 					images,
-					location: null, // Location is a reference, would need separate query
-					name: getLocalizedString(event.name, language) || '',
-					slug: getLocalizedSlug(event.slug, language) || '',
-					summary: getLocalizedString(event.excerpt, language),
+					name: getLocalizedString(post.name, language) || '',
+					slug: getLocalizedSlug(post.slug, language) || '',
+					summary: getLocalizedString(post.excerpt, language),
 				}
 			})
 
@@ -50,7 +51,7 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			captureException(error)
 
 			return context.json(
-				{ error: 'Failed to fetch events' },
+				{ error: 'Failed to fetch blog posts' },
 				500,
 				defaultJsonHeaders,
 			)
@@ -62,25 +63,25 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 		if (!id) {
 			return context.json(
-				{ error: 'Event ID is required' },
+				{ error: 'Blog post ID is required' },
 				400,
 				defaultJsonHeaders,
 			)
 		}
 
 		try {
-			const event = await sanity.getEvent(context.env, id)
+			const post = await sanity.getBlogPost(context.env, id)
 
-			if (!event) {
+			if (!post) {
 				return context.json(
-					{ error: 'Event not found' },
+					{ error: 'Blog post not found' },
 					404,
 					defaultJsonHeaders,
 				)
 			}
 
 			// Extract asset IDs from images array
-			const images = event.images
+			const images = post.images
 				?.map((img) => {
 					if (!img.asset?._ref) return null
 					return {
@@ -89,18 +90,17 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				})
 				.filter((img): img is { sourceId: string } => img !== null)
 
-			const bodyContent = getLocalizedBlockContent(event.body, language)
-			const localized: Event = {
-				dates: event.startDate ? [event.startDate] : null,
+			const bodyContent = getLocalizedBlockContent(post.body, language)
+			const localized: BlogPost = {
+				createdAt: post._createdAt,
 				description: bodyContent
 					? JSON.stringify(bodyContent)
-					: getLocalizedString(event.excerpt, language),
-				id: event._id,
+					: getLocalizedString(post.excerpt, language),
+				id: post._id,
 				images,
-				location: null, // Location is a reference, would need separate query
-				name: getLocalizedString(event.name, language) || '',
-				slug: getLocalizedSlug(event.slug, language) || '',
-				summary: getLocalizedString(event.excerpt, language),
+				name: getLocalizedString(post.name, language) || '',
+				slug: getLocalizedSlug(post.slug, language) || '',
+				summary: getLocalizedString(post.excerpt, language),
 			}
 
 			return context.json(localized, 200, {
@@ -111,11 +111,11 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			captureException(error)
 
 			return context.json(
-				{ error: 'Failed to fetch event details' },
+				{ error: 'Failed to fetch blog post details' },
 				500,
 				defaultJsonHeaders,
 			)
 		}
 	})
 
-export default events
+export default blog

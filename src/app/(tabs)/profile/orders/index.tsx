@@ -3,7 +3,7 @@ import { Select, Trans, useLingui } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { router, useFocusEffect } from 'expo-router'
+import { router, Stack, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
 import { useCallback, useRef } from 'react'
 import { Pressable, RefreshControl, View } from 'react-native'
@@ -11,20 +11,14 @@ import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import Card from '@/components/Card'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { resetBadgeCount } from '@/lib/notifications'
 import { selfQueryOptions } from '@/lib/queries/auth'
 import { orderQueryOptions } from '@/lib/queries/order'
-import { productQueryOptions } from '@/lib/queries/product'
 import { queryClient } from '@/lib/query-client'
-import {
-	useCurrentOrder,
-	useCurrentOrderItemsCount,
-} from '@/lib/stores/order-store'
-import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
-import type { Product } from '~common/api'
+import { formatPrice } from '@/lib/utils/price'
 
 const handleOrderPress = (orderId: string) => {
 	router.push(`/(tabs)/profile/orders/${orderId}`)
@@ -41,9 +35,7 @@ export default function OrdersScreen() {
 
 	useScrollToTop(screenRef)
 
-	const currentOrder = useCurrentOrder()
 	const { data: orders, isRefetching } = useQuery(orderQueryOptions)
-	const itemsCount = useCurrentOrderItemsCount()
 
 	useFocusEffect(
 		useCallback(() => {
@@ -53,38 +45,18 @@ export default function OrdersScreen() {
 
 	useTrackScreenView({ screenName: 'orders' }, [])
 
-	const currentOrderTotalCents = (() => {
-		if (!currentOrder) return 0
-
-		return currentOrder.products.reduce((sum, item) => {
-			const productData = queryClient.getQueryData<Product>(
-				productQueryOptions(item.id).queryKey,
-			)
-
-			return (
-				sum +
-				getProductTotalCost({
-					modifications: item.modifications ?? {},
-					product: productData,
-					quantity: item.quantity,
-				})
-			)
-		}, 0)
-	})()
-
-	const handleCurrentOrderPress = () => {
-		if (currentOrder) {
-			router.push('/(tabs)/profile/orders/current')
-		}
-	}
-
 	if (!isAuthenticated) {
 		return (
 			<>
 				<Head>
 					<title>{t`Orders`}</title>
 				</Head>
-				<TabScreenContainer noScroll withHeaderPadding>
+				<Stack.Screen>
+					<Stack.Header>
+						<Stack.Header.Title>{t`Orders`}</Stack.Header.Title>
+					</Stack.Header>
+				</Stack.Screen>
+				<ScreenContainer noScroll>
 					<View style={styles.signInContainer}>
 						<UniImage
 							contentFit="contain"
@@ -100,7 +72,7 @@ export default function OrdersScreen() {
 							<Trans>Please sign in to view your order history</Trans>
 						</Paragraph>
 					</View>
-				</TabScreenContainer>
+				</ScreenContainer>
 			</>
 		)
 	}
@@ -110,48 +82,21 @@ export default function OrdersScreen() {
 			<Head>
 				<title>{t`Orders`}</title>
 			</Head>
-			<TabScreenContainer
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`Orders`}</Stack.Header.Title>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				noScroll={!orders?.length}
-				ref={screenRef}
 				refreshControl={
 					<RefreshControl
 						onRefresh={() => queryClient.invalidateQueries(orderQueryOptions)}
 						refreshing={isRefetching}
 					/>
 				}
-				withHeaderPadding
-				withTopGradient
 			>
-				{currentOrder && (
-					<>
-						<H2>
-							<Trans>In Progress</Trans>
-						</H2>
-						<Pressable
-							onPress={handleCurrentOrderPress}
-							style={styles.currentOrderCard}
-						>
-							<View style={styles.orderHeader}>
-								<Text style={styles.currentOrderText} weight="bold">
-									<Trans>Current Order</Trans>
-								</Text>
-								<View style={styles.currentOrderBottomText}>
-									<Text style={styles.currentOrderText}>
-										<Trans>{itemsCount} items</Trans>
-									</Text>
-									<Text style={styles.currentOrderText}>
-										{formatPrice(currentOrderTotalCents)}
-									</Text>
-								</View>
-							</View>
-							<Text style={styles.currentOrderText}>
-								<Feather name="chevron-right" size={24} />
-							</Text>
-						</Pressable>
-					</>
-				)}
-
 				{orders?.length ? (
 					<>
 						<H2>
@@ -214,7 +159,7 @@ export default function OrdersScreen() {
 						</Paragraph>
 					</View>
 				)}
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }
@@ -222,22 +167,6 @@ export default function OrdersScreen() {
 const styles = StyleSheet.create((theme) => ({
 	contentContainer: {
 		gap: theme.spacing.md,
-	},
-	currentOrderBottomText: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-	},
-	currentOrderCard: {
-		alignItems: 'center',
-		backgroundColor: theme.colors.verde.solid,
-		borderCurve: 'continuous',
-		borderRadius: theme.borderRadius.md,
-		flexDirection: 'row',
-		gap: theme.spacing.sm,
-		padding: theme.spacing.lg,
-	},
-	currentOrderText: {
-		color: 'white',
 	},
 	emptyOrderContainer: {
 		alignItems: 'center',
@@ -263,10 +192,6 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.sm,
 		justifyContent: 'space-between',
 	},
-	orderHeader: {
-		flex: 1,
-		gap: theme.spacing.xs,
-	},
 	ordersList: {
 		gap: theme.spacing.sm,
 		width: '100%',
@@ -280,7 +205,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.xxl,
 	},
 	signInSubtitle: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		textAlign: 'center',
 	},
 	signInTitle: {

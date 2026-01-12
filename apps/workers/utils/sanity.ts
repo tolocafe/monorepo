@@ -19,6 +19,22 @@ type Bean = SanitySchema<
 	}
 >
 
+type BlogPost = SanitySchema<
+	'post',
+	{
+		body?: LocaleBlockContent
+		excerpt?: LocaleText
+		images?: {
+			_key: string
+			_type: 'image'
+			alt?: LocaleText
+			asset?: { _ref: string; _type: 'reference' }
+		}[]
+		name: LocaleText
+		slug: LocaleSlug
+	}
+>
+
 type Event = SanitySchema<
 	'event',
 	{
@@ -200,9 +216,63 @@ const sanity = {
 			query: `*[_type == "bean" && _id == "${itemId}"][0]`,
 		})
 	},
-	getEvent(environment: Bindings, itemId: string) {
-		return fetchSanity<Event>(environment, {
-			query: `*[_type == "event" && _id == "${itemId}"][0]`,
+	getBlogPost(environment: Bindings, itemId: string): Promise<null | BlogPost> {
+		type BlogPostQueryResult = Omit<BlogPost, 'images' | 'id'> & {
+			_id: string
+			images?: string[]
+		}
+
+		return fetchSanity<null | BlogPostQueryResult>(environment, {
+			query: `*[_type == "post" && _id == "${itemId}"][0]{
+				_id,
+				body,
+				excerpt,
+				"images": images[].asset->_id,
+				name,
+				slug
+			}`,
+		}).then((post): null | BlogPost => {
+			if (!post) return null
+			return {
+				...post,
+				id: post._id,
+				images: post.images?.map((sourceId) => ({
+					sourceId,
+				})),
+			} as BlogPost
+		})
+	},
+	getEvent(environment: Bindings, itemId: string): Promise<null | Event> {
+		type EventQueryResult = Omit<Event, 'images' | 'id'> & {
+			_id: string
+			images?: string[]
+		}
+
+		return fetchSanity<null | EventQueryResult>(environment, {
+			query: `*[_type == "event" && _id == "${itemId}"][0]{
+				_id,
+				body,
+				endDate,
+				excerpt,
+				"images": images[].asset->_id,
+				isFeatured,
+				location,
+				maxAttendees,
+				name,
+				registrationUrl,
+				slug,
+				startDate,
+				status
+			}`,
+		}).then((event): null | Event => {
+			if (!event) return null
+			return {
+				...event,
+				id: event._id,
+				images: event.images?.map((sourceId) => ({
+					sourceId,
+				})),
+			} as Event
 		})
 	},
 	getProduct(
@@ -233,14 +303,77 @@ const sanity = {
 			}
 		})
 	},
+	getPromotion(
+		environment: Bindings,
+		itemId: string,
+		language: SupportedLocale,
+	): Promise<null | SanityLocalizedPromotion> {
+		type PromotionQueryResult = Omit<SanityLocalizedPromotion, 'images'> & {
+			images?: string[]
+		}
+
+		return fetchSanity<null | PromotionQueryResult>(environment, {
+			query: `*[_type == "promotion" && posterId == "${itemId}"][0]{
+				_createdAt,
+				_id,
+				_type,
+				"body": body.${language},
+				"excerpt": excerpt.${language},
+				"images": images[].asset->_id,
+				"name": name.${language},
+				posterId,
+				"slug": slug.${language}
+			}`,
+		}).then((promotion): null | SanityLocalizedPromotion => {
+			if (!promotion) return null
+			return {
+				...promotion,
+				images: promotion.images?.map((sourceId) => ({ sourceId })),
+			}
+		})
+	},
 	listBeans(environment: Bindings) {
 		return fetchSanity<Bean[]>(environment, {
 			query: `*[_type == "bean"]`,
 		})
 	},
+	listBlogPosts(environment: Bindings) {
+		type BlogPostQueryResult = BlogPost & {
+			_id: string
+		}
+
+		return fetchSanity<BlogPostQueryResult[]>(environment, {
+			query: `*[_type == "post"]{
+				_id,
+				body,
+				excerpt,
+				images,
+				name,
+				slug
+			} | order(_createdAt desc)`,
+		})
+	},
 	listEvents(environment: Bindings) {
-		return fetchSanity<Event[]>(environment, {
-			query: `*[_type == "event"]`,
+		type EventQueryResult = Event & {
+			_id: string
+		}
+
+		return fetchSanity<EventQueryResult[]>(environment, {
+			query: `*[_type == "event"]{
+				_id,
+				body,
+				endDate,
+				excerpt,
+				images,
+				isFeatured,
+				location,
+				maxAttendees,
+				name,
+				registrationUrl,
+				slug,
+				startDate,
+				status
+			}`,
 		})
 	},
 	listProducts(

@@ -1,56 +1,49 @@
-import { useHeaderHeight } from '@react-navigation/elements'
-import type { ComponentProps, RefObject } from 'react'
-import { Platform, ScrollView, View } from 'react-native'
+import type { ComponentProps } from 'react'
+import { View, Platform, ScrollView } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import HeaderGradient from '@/components/HeaderGradient'
-import { useBottomTabBarHeight } from '@/components/Tabs'
+import { ORDER_BUTTON_HEIGHT } from '@/lib/constants/ui'
+import { useCurrentOrder } from '@/lib/stores/order-store'
 
-const DEFAULT_PADDING_EDGES = ['bottom', 'left', 'right', 'top'] as const
+import HeaderGradient from '../HeaderGradient'
 
-export type Props = Omit<
-	ComponentProps<typeof ScrollView>,
-	'contentInsetAdjustmentBehavior'
-> & {
+const DEFAULT_PADDING_EDGES =
+	Platform.OS === 'ios'
+		? (['bottom', 'left', 'right'] as const)
+		: (['bottom', 'left', 'right', 'top'] as const)
+
+export type Props = ComponentProps<typeof ScrollView> & {
 	keyboardAware?: boolean
 	noScroll?: boolean
-	ref?: RefObject<null | ScrollView>
-	tabBarHeight?: number
-	withHeaderPadding?: boolean
 	/**
 	 * The edges to apply padding to.
 	 * @default ['bottom', 'left', 'right', 'top']
 	 */
 	withPaddingEdges?: readonly (typeof DEFAULT_PADDING_EDGES)[number][]
-	withTopGradient?: boolean
 }
 
 const UniScrollView = withUnistyles(ScrollView)
 const UniKeyboardAwareScrollView = withUnistyles(KeyboardAwareScrollView)
 
+const topAccessory = Platform.OS === 'web' ? <HeaderGradient /> : null
+
 export default function ScreenContainer({
+	contentInsetAdjustmentBehavior = 'automatic',
 	children,
 	contentContainerStyle,
 	keyboardAware = false,
 	noScroll = false,
-	ref,
 	style,
-	tabBarHeight,
-	withHeaderPadding,
 	withPaddingEdges = DEFAULT_PADDING_EDGES,
-	withTopGradient,
 	...rest
 }: Props) {
-	const navigationHeaderHeight = useHeaderHeight()
-	const headerHeight = withHeaderPadding ? navigationHeaderHeight : 0
-	const topAccessory = withTopGradient ? (
-		<HeaderGradient height={headerHeight} />
-	) : null
+	const currentOrder = useCurrentOrder()
 
 	styles.useVariants({
 		withBottomPadding: withPaddingEdges.includes('bottom'),
 		withLeftPadding: withPaddingEdges.includes('left'),
+		withOrderPadding: Boolean(currentOrder && Platform.OS !== 'ios'),
 		withRightPadding: withPaddingEdges.includes('right'),
 		withTopPadding: withPaddingEdges.includes('top'),
 	})
@@ -64,7 +57,7 @@ export default function ScreenContainer({
 					{...rest}
 					style={[
 						styles.scrollViewContainer,
-						styles.contentContainer(tabBarHeight, headerHeight),
+						styles.contentContainer,
 						contentContainerStyle,
 					]}
 				>
@@ -79,14 +72,13 @@ export default function ScreenContainer({
 			<>
 				{topAccessory}
 				<UniKeyboardAwareScrollView
-					automaticallyAdjustsScrollIndicatorInsets
+					contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
 					contentContainerStyle={[
-						styles.contentContainer(tabBarHeight, headerHeight),
+						styles.contentContainer,
 						contentContainerStyle,
 					]}
 					keyboardDismissMode="interactive"
 					keyboardShouldPersistTaps="handled"
-					ref={ref}
 					style={[styles.scrollViewContainer, style]}
 					// oxlint-disable-next-line jsx-props-no-spreading
 					{...rest}
@@ -101,11 +93,8 @@ export default function ScreenContainer({
 		<>
 			{topAccessory}
 			<UniScrollView
-				contentContainerStyle={[
-					styles.contentContainer(tabBarHeight, headerHeight),
-					contentContainerStyle,
-				]}
-				ref={ref}
+				contentInsetAdjustmentBehavior={contentInsetAdjustmentBehavior}
+				contentContainerStyle={[styles.contentContainer, contentContainerStyle]}
 				style={[styles.scrollViewContainer, style]}
 				// oxlint-disable-next-line jsx-props-no-spreading
 				{...rest}
@@ -116,32 +105,13 @@ export default function ScreenContainer({
 	)
 }
 
-/**
- * Should be used inside a tab screen. Component specialized for tab screens.
- */
-export function TabScreenContainer(
-	props: Omit<ComponentProps<typeof ScreenContainer>, 'tabBarHeight'>,
-) {
-	const navigationTabBarHeight = useBottomTabBarHeight()
-	const tabBarHeight = Platform.OS === 'ios' ? navigationTabBarHeight : 0
-
-	// oxlint-disable-next-line jsx-props-no-spreading
-	return <ScreenContainer {...props} tabBarHeight={tabBarHeight} />
-}
-
-const styles = StyleSheet.create((theme, runtime) => ({
-	contentContainer: (bottomTabBarHeight?: number, headerHeight?: number) => ({
-		flexGrow: 1,
-		paddingBottom:
-			(bottomTabBarHeight ?? 0) +
-			Math.max(runtime.insets.bottom, theme.layout.screenPadding),
-		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
-		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
-		paddingTop: Math.max(
-			runtime.insets.top,
-			theme.layout.screenPadding,
-			headerHeight ?? 0,
-		),
+const styles = StyleSheet.create((theme) => ({
+	contentContainer: {
+		// flexGrow: 1,
+		paddingBottom: theme.layout.screenPadding,
+		paddingLeft: theme.layout.screenPadding,
+		paddingRight: theme.layout.screenPadding,
+		paddingTop: Platform.OS === 'web' ? 80 : theme.layout.screenPadding,
 		variants: {
 			withBottomPadding: {
 				false: {
@@ -151,6 +121,11 @@ const styles = StyleSheet.create((theme, runtime) => ({
 			withLeftPadding: {
 				false: {
 					paddingLeft: 0,
+				},
+			},
+			withOrderPadding: {
+				true: {
+					paddingBottom: theme.layout.screenPadding + ORDER_BUTTON_HEIGHT,
 				},
 			},
 			withRightPadding: {
@@ -164,8 +139,8 @@ const styles = StyleSheet.create((theme, runtime) => ({
 				},
 			},
 		},
-	}),
+	},
 	scrollViewContainer: {
-		backgroundColor: theme.colors.crema.background,
+		backgroundColor: theme.colors.gray.border,
 	},
 }))

@@ -1,6 +1,4 @@
-import { useLingui } from '@lingui/react/macro'
 import { Stack } from 'expo-router'
-import { useUnistyles } from 'react-native-unistyles'
 
 import { defaultStackScreenOptions } from '@/lib/navigation'
 
@@ -9,27 +7,12 @@ export const unstable_settings = {
 }
 
 export default function Layout() {
-	const { t } = useLingui()
-	const { theme } = useUnistyles()
-
 	return (
-		<Stack screenOptions={defaultStackScreenOptions(theme.colors.gray.text)}>
-			<Stack.Screen
-				name="index"
-				options={{ headerShown: false, title: t`Team` }}
-			/>
-			<Stack.Screen
-				name="queue"
-				options={{ headerLargeTitle: false, title: t`Queue` }}
-			/>
-			<Stack.Screen
-				name="ticket"
-				options={{ headerLargeTitle: false, title: t`Download Ticket` }}
-			/>
-			<Stack.Screen
-				name="redeem"
-				options={{ headerLargeTitle: false, title: t`Redeem` }}
-			/>
+		<Stack screenOptions={defaultStackScreenOptions}>
+			<Stack.Screen name="index" />
+			<Stack.Screen name="queue" />
+			<Stack.Screen name="ticket" />
+			<Stack.Screen name="redeem" />
 		</Stack>
 	)
 }

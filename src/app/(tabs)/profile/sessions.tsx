@@ -5,7 +5,7 @@ import { RefreshControl, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import { List, ListItem } from '@/components/List'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Paragraph } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { sessionsQueryOptions } from '@/lib/queries/auth'
@@ -36,7 +36,7 @@ export default function SessionsScreen() {
 			<Head>
 				<title>{t`Sessions`}</title>
 			</Head>
-			<TabScreenContainer
+			<ScreenContainer
 				contentContainerStyle={styles.container}
 				refreshControl={
 					<RefreshControl
@@ -46,8 +46,6 @@ export default function SessionsScreen() {
 						refreshing={isPending}
 					/>
 				}
-				withHeaderPadding
-				withTopGradient
 			>
 				<View style={styles.section}>
 					<H2>
@@ -88,7 +86,7 @@ export default function SessionsScreen() {
 						</View>
 					)}
 				</View>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }
@@ -98,7 +96,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.md,
 	},
 	description: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		marginBottom: theme.spacing.md,
 	},
 	emptyContainer: {

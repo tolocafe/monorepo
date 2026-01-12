@@ -1,9 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useScrollToTop } from '@react-navigation/native'
+import { Stack, router } from 'expo-router'
 import Head from 'expo-router/head'
-import { useCallback, useRef } from 'react'
-import { RefreshControl } from 'react-native'
-import type { ScrollView } from 'react-native'
+import { useCallback } from 'react'
+import { Platform, RefreshControl } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import {
@@ -19,19 +18,14 @@ import {
 	productsQueryOptions,
 	promotionsQueryOptions,
 } from '@/components/HomeSections/queries'
-import { TabScreenContainer } from '@/components/ScreenContainer'
-import { Paragraph } from '@/components/Text'
+import ScreenContainer from '@/components/ScreenContainer'
+import Text, { Paragraph } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { queryClient } from '@/lib/query-client'
-
-const PADDING_EDGES = ['top', 'bottom'] as const
 
 export default function MenuScreen() {
 	const { t } = useLingui()
 
-	const screenRef = useRef<ScrollView>(null)
-
-	useScrollToTop(screenRef)
 	useTrackScreenView({ screenName: 'home' }, [])
 
 	const handleRefresh = useCallback(
@@ -65,14 +59,30 @@ export default function MenuScreen() {
 				/>
 				<meta content="/" property="og:url" />
 			</Head>
-			<TabScreenContainer
-				ref={screenRef}
+
+			<Stack.Header>
+				<Stack.Header.Title>{t`Home`}</Stack.Header.Title>
+				<Stack.Header.Right>
+					{Platform.OS === 'ios' ? (
+						<Stack.Header.Button
+							onPress={() => router.navigate('/orders/current')}
+							icon="storefront"
+						/>
+					) : (
+						<Stack.Header.View>
+							<Text>Hello</Text>
+						</Stack.Header.View>
+					)}
+				</Stack.Header.Right>
+			</Stack.Header>
+
+			<ScreenContainer
+				withPaddingEdges={
+					Platform.OS === 'ios' ? ['bottom'] : ['bottom', 'top']
+				}
 				refreshControl={
 					<RefreshControl onRefresh={handleRefresh} refreshing={false} />
 				}
-				withPaddingEdges={PADDING_EDGES}
-				withTopGradient
-				withHeaderPadding
 			>
 				<PromotionsSection />
 
@@ -88,7 +98,7 @@ export default function MenuScreen() {
 						volume are approximate and may vary between preparations.
 					</Trans>
 				</Paragraph>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }

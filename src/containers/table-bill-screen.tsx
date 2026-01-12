@@ -7,7 +7,7 @@ import {
 	useStripe,
 } from '@stripe/stripe-react-native'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import * as Burnt from 'burnt'
+import { toast } from 'burnt'
 import { router, Stack, useLocalSearchParams } from 'expo-router'
 import Head from 'expo-router/head'
 import { useEffect, useState } from 'react'
@@ -155,7 +155,7 @@ export default function TableBillScreen() {
 			setPaymentSuccess(true)
 
 			if (Platform.OS !== 'web') {
-				Burnt.toast({
+				toast({
 					from: 'top',
 					preset: 'done',
 					title: t`Payment successful!`,
@@ -209,7 +209,7 @@ export default function TableBillScreen() {
 			setPaymentSuccess(true)
 
 			if (Platform.OS !== 'web') {
-				Burnt.toast({
+				toast({
 					from: 'top',
 					preset: 'done',
 					title: t`Payment successful!`,
@@ -431,7 +431,7 @@ const styles = StyleSheet.create((theme) => ({
 		flex: 1,
 	},
 	itemQuantity: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		fontSize: 12,
 		marginTop: theme.spacing.xs,
 	},

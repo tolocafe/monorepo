@@ -4,17 +4,18 @@ import { useLingui } from '@lingui/react'
 import { Trans } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
-import { router } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { useRef } from 'react'
-import { Linking, Pressable, RefreshControl, View } from 'react-native'
+import { Linking, Pressable, View } from 'react-native'
 import type { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
+import { BlogSection } from '@/components/HomeSections/BlogSection'
 import { TextColorIcon } from '@/components/Icons'
 import { List, ListItem } from '@/components/List'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
@@ -22,8 +23,6 @@ import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { loadAndActivateLocale } from '@/lib/locales/load-and-activate-locale'
 import { LOCALE_NAMES } from '@/lib/locales/utils'
 import type { Locale } from '@/lib/locales/utils'
-import { selfQueryOptions } from '@/lib/queries/auth'
-import { queryClient } from '@/lib/query-client'
 
 const AVAILABLE_LANGUAGES = Object.keys(LOCALE_NAMES) as Locale[]
 
@@ -91,16 +90,12 @@ export default function MoreScreen() {
 				<meta content={t`More - TOLO`} property="og:title" />
 				<meta content="/more" property="og:url" />
 			</Head>
-			<TabScreenContainer
-				ref={screenRef}
-				refreshControl={
-					<RefreshControl
-						onRefresh={() => queryClient.invalidateQueries(selfQueryOptions)}
-						refreshing={false}
-					/>
-				}
-				withTopGradient
-			>
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`More`}</Stack.Header.Title>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer noScroll>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
 						<Trans>Contact</Trans>
@@ -113,7 +108,7 @@ export default function MoreScreen() {
 							onPress={() => router.push('/more/visit-us')}
 						>
 							<ListItem.Label>
-								<Trans>Stores</Trans>
+								<Trans>Shops</Trans>
 							</ListItem.Label>
 						</ListItem>
 						<ListItem
@@ -242,6 +237,8 @@ export default function MoreScreen() {
 					</List>
 				</View>
 
+				<BlogSection />
+
 				<View style={styles.footer}>
 					<Paragraph style={styles.footerText}>
 						<Trans>
@@ -249,7 +246,7 @@ export default function MoreScreen() {
 						</Trans>
 					</Paragraph>
 				</View>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }

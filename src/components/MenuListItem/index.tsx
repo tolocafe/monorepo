@@ -41,7 +41,7 @@ export default function MenuListItem(props: Props) {
 	const scaleValue = useSharedValue(1)
 
 	const animatedStyle = useAnimatedStyle(() => ({
-		transform: [{ scale: scaleValue.get() }],
+		transform: [{ scale: scaleValue.value }],
 	}))
 
 	const cost = getProductBaseCost(item, true)
@@ -49,62 +49,69 @@ export default function MenuListItem(props: Props) {
 
 	return (
 		<Animated.View style={[animatedStyle, styles.menuItemContainer]}>
-			<Link asChild href={`/(tabs)/(home)/${item.product_id}`}>
-				<Pressable
-					onPressIn={() => scaleValue.set(withSpring(0.96))}
-					onPressOut={() => scaleValue.set(withSpring(1))}
-					style={styles.link}
-				>
-					<Card padded={false} style={styles.menuItem}>
-						<View style={styles.menuItemImageContainer}>
-							{item.photo ? (
-								<UniImage
-									contentFit="cover"
-									placeholder={{
-										cacheKey: `${item.photo}-placeholder`,
-										uri: getImageUrl(item.photo, {
-											blur: 100,
-											quality: 20,
-											source: 'sanity',
-											width: 300,
-										}),
-									}}
-									placeholderContentFit="cover"
-									source={{
-										cacheKey: `${item.photo}-image`,
-										uri: getImageUrl(item.photo, {
-											quality: 90,
-											source: 'sanity',
-											width: 300,
-										}),
-									}}
-									style={styles.image}
-									transition={200}
-								/>
-							) : (
-								<View aria-hidden />
-							)}
-							{item.tag && item.tag in tagLabels ? (
-								<View style={styles.tag}>
-									<Text style={styles.tagText}>{_(tagLabels[item.tag])}</Text>
-								</View>
-							) : null}
-						</View>
-						<View style={styles.menuItemContent}>
-							<H4 numberOfLines={2}>{item.name}</H4>
-							{item.excerpt ? (
-								<Text numberOfLines={2} style={styles.excerpt}>
-									{item.excerpt}
-								</Text>
-							) : null}
-							<View style={styles.menuItemFooter}>
-								<Text>
-									{hasModifications ? <Trans>From {cost}</Trans> : cost}
-								</Text>
+			<Link href={`/products/${item.product_id}`} asChild>
+				{/* TODO: maybe add a preview and menu */}
+				<Link.Trigger>
+					<Pressable
+						onPressIn={() => {
+							scaleValue.value = withSpring(1.07)
+						}}
+						onPressOut={() => {
+							scaleValue.value = withSpring(1)
+						}}
+						style={styles.link}
+					>
+						<Card padded={false} style={styles.menuItem}>
+							<View style={styles.menuItemImageContainer}>
+								{item.photo ? (
+									<UniImage
+										contentFit="cover"
+										placeholder={{
+											cacheKey: `${item.photo}-placeholder`,
+											uri: getImageUrl(item.photo, {
+												blur: 100,
+												quality: 20,
+												source: 'sanity',
+												width: 300,
+											}),
+										}}
+										placeholderContentFit="cover"
+										source={{
+											cacheKey: `${item.photo}-image`,
+											uri: getImageUrl(item.photo, {
+												quality: 90,
+												source: 'sanity',
+												width: 300,
+											}),
+										}}
+										style={styles.image}
+										transition={200}
+									/>
+								) : (
+									<View aria-hidden />
+								)}
+								{item.tag && item.tag in tagLabels ? (
+									<View style={styles.tag}>
+										<Text style={styles.tagText}>{_(tagLabels[item.tag])}</Text>
+									</View>
+								) : null}
 							</View>
-						</View>
-					</Card>
-				</Pressable>
+							<View style={styles.menuItemContent}>
+								<H4 numberOfLines={2}>{item.name}</H4>
+								{item.excerpt ? (
+									<Text numberOfLines={2} style={styles.excerpt}>
+										{item.excerpt}
+									</Text>
+								) : null}
+								<View style={styles.menuItemFooter}>
+									<Text>
+										{hasModifications ? <Trans>From {cost}</Trans> : cost}
+									</Text>
+								</View>
+							</View>
+						</Card>
+					</Pressable>
+				</Link.Trigger>
 			</Link>
 		</Animated.View>
 	)

@@ -1,11 +1,12 @@
 import { Trans, useLingui } from '@lingui/react/macro'
+import { Stack } from 'expo-router'
 import Head from 'expo-router/head'
-import { Linking, Platform, View } from 'react-native'
+import { Linking, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
 import Button from '@/components/Button'
 import Card from '@/components/Card'
-import { TabScreenContainer } from '@/components/ScreenContainer'
+import ScreenContainer from '@/components/ScreenContainer'
 import { H3, Label, Text } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
@@ -31,10 +32,12 @@ export default function VisitUsScreen() {
 				<meta content={t`Visit Us - TOLO Good Coffee`} property="og:title" />
 				<meta content="/more/visit-us" property="og:url" />
 			</Head>
-			<TabScreenContainer
-				withHeaderPadding
-				withTopGradient={Platform.OS !== 'ios'}
-			>
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`Visit Us`}</Stack.Header.Title>
+				</Stack.Header>
+			</Stack.Screen>
+			<ScreenContainer>
 				<View style={styles.section}>
 					<Card>
 						<Text style={styles.cardTitle}>
@@ -99,7 +102,7 @@ export default function VisitUsScreen() {
 						</View>
 					</Card>
 				</View>
-			</TabScreenContainer>
+			</ScreenContainer>
 		</>
 	)
 }
@@ -125,7 +128,7 @@ const styles = StyleSheet.create((theme) => ({
 		marginTop: theme.spacing.md,
 	},
 	cardText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 		marginBottom: theme.spacing.xs,
 	},
 	cardTitle: {
@@ -141,7 +144,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.xs,
 	},
 	hoursText: {
-		color: theme.colors.crema.solid,
+		color: theme.colors.gray.solid,
 	},
 	hoursTitle: {
 		...theme.typography.h4,

@@ -272,9 +272,26 @@ export type DashTransaction = {
 	user_id?: number
 }
 
+export type BlogPost = {
+	/** Creation date in ISO format */
+	createdAt: string
+	/** Rich text content as JSON string */
+	description?: string | null
+	/** Unique blog post ID from Sanity */
+	id: string
+	/** Array of Sanity image references */
+	images?: SanityImageReference[]
+	name: string
+	slug: string
+	/** Brief summary/excerpt */
+	summary?: string | null
+}
+
 export type Event = {
 	dates?: string[] | null
 	description?: string | null
+	/** Unique event ID from Sanity */
+	id: string
 	/** Legacy image field, use images array for Sanity images */
 	image?: { url: string }
 	/** Array of Sanity image references */

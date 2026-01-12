@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { useQuery } from '@tanstack/react-query'
-import { FlatList, View } from 'react-native'
+import { FlatList } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
 import PromotionCard from '@/components/PromotionCard'
@@ -24,7 +24,7 @@ export function PromotionsSection() {
 	}
 
 	return (
-		<View style={styles.promotionsSection}>
+		<>
 			<H2 style={styles.promotionsTitle}>
 				<Trans>Promotions</Trans>
 			</H2>
@@ -36,7 +36,7 @@ export function PromotionsSection() {
 				renderItem={handleRenderItem}
 				showsHorizontalScrollIndicator={false}
 			/>
-		</View>
+		</>
 	)
 }
 
@@ -46,10 +46,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),
 		paddingRight: Math.max(runtime.insets.right, theme.layout.screenPadding),
 		paddingVertical: theme.spacing.md,
-	},
-	promotionsSection: {
-		borderBottomColor: theme.colors.gray.border,
-		borderBottomWidth: 1,
 	},
 	promotionsTitle: {
 		paddingLeft: Math.max(runtime.insets.left, theme.layout.screenPadding),

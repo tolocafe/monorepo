@@ -20,14 +20,6 @@ const lightTheme = {
 			solid: '#F5D90A',
 			text: '#000000',
 		},
-		// Secondary text and backgrounds - Crema (Sand)
-		crema: {
-			background: '#F8F8F1',
-			border: '#F2F1F0',
-			interactive: '#E9E8E6',
-			solid: '#908E87',
-			text: '#333333',
-		},
 		// Text and backgrounds - Gray
 		gray: {
 			background: '#ffffff',
@@ -106,11 +98,11 @@ const lightTheme = {
 			fontWeight: '400',
 		},
 		h1: {
-			fontSize: 32,
+			fontSize: 28,
 			fontWeight: '900',
 		},
 		h2: {
-			fontSize: 24,
+			fontSize: 23,
 			fontWeight: '800',
 		},
 		h3: {
@@ -138,14 +130,6 @@ const darkTheme = {
 			interactive: '#5C4600',
 			solid: '#F5D90A',
 			text: '#000000',
-		},
-		// Secondary text and backgrounds - Crema (Sand)
-		crema: {
-			background: '#191915',
-			border: '#494840',
-			interactive: '#2A2A23',
-			solid: '#989891',
-			text: '#EEEEE7',
 		},
 		// Text and backgrounds - Gray
 		gray: {
