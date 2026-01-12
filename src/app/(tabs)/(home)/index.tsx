@@ -21,6 +21,7 @@ import {
 import ScreenContainer from '@/components/ScreenContainer'
 import Text, { Paragraph } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { isIOS20 } from '@/lib/constants/ui'
 import { queryClient } from '@/lib/query-client'
 
 export default function MenuScreen() {
@@ -77,9 +78,7 @@ export default function MenuScreen() {
 			</Stack.Header>
 
 			<ScreenContainer
-				withPaddingEdges={
-					Platform.OS === 'ios' ? ['bottom'] : ['bottom', 'top']
-				}
+				withPaddingEdges={isIOS20 ? ['bottom'] : ['bottom', 'top']}
 				refreshControl={
 					<RefreshControl onRefresh={handleRefresh} refreshing={false} />
 				}

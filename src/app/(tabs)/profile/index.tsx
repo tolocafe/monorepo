@@ -147,7 +147,7 @@ export default function ProfileScreen() {
 						<UniImage
 							contentFit="contain"
 							source={
-								require('@/assets/images/beverages.png') as ImageSourcePropType
+								require('@/assets/images/surprise.png') as ImageSourcePropType
 							}
 							style={styles.image}
 						/>

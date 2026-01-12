@@ -1,6 +1,8 @@
 import { Platform } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
+export const TINT_COLOR = '#3D6039'
+
 const lightTheme = {
 	// oxlint-disable-next-line sort-keys
 	borderRadius: {
@@ -49,7 +51,7 @@ const lightTheme = {
 			background: '#F6FBF5',
 			border: '#B0D1AB',
 			interactive: '#DCEFD9',
-			solid: '#3D6039',
+			solid: TINT_COLOR,
 			text: '#20311E',
 		},
 	},

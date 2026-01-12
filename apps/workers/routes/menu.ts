@@ -174,7 +174,7 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			])
 
 			const posterPromotion = posterPromotions.find(
-				(p) => p.promotion_id === promotionId,
+				(p) => String(p.promotion_id) === promotionId,
 			)
 
 			if (!posterPromotion) {

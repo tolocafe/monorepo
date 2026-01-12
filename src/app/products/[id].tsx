@@ -198,19 +198,6 @@ export default function ProductScreen() {
 			<Head>
 				<title>{t`${product.product_name} - TOLO Good Coffee`}</title>
 			</Head>
-			{/* <Stack.Screen
-				options={{
-					headerBackVisible: true,
-					headerLeft: Platform.select({
-						ios: () => (
-							<Pressable onPress={handleClose}>
-								<HeaderIconIonicons name="close-outline" size={35} />
-							</Pressable>
-						),
-					}),
-					headerTransparent: true,
-				}}
-			/> */}
 			<Stack.Screen>
 				<Stack.Header>
 					<Stack.Header.Title>{product.product_name}</Stack.Header.Title>

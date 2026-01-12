@@ -95,7 +95,7 @@ export default function MoreScreen() {
 					<Stack.Header.Title>{t`More`}</Stack.Header.Title>
 				</Stack.Header>
 			</Stack.Screen>
-			<ScreenContainer noScroll>
+			<ScreenContainer>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
 						<Trans>Contact</Trans>

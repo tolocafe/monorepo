@@ -33,8 +33,8 @@ export default function TableScreen() {
 
 const styles = StyleSheet.create({
 	contentContainer: {
+		alignItems: 'center',
 		flex: 1,
 		justifyContent: 'center',
-		alignItems: 'center',
 	},
 })

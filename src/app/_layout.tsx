@@ -59,7 +59,8 @@ const modalOptions = {
 	}),
 } as const
 
-const defaultStackScreenOptions = { headerShown: false } as const
+const defaultStackScreenOptions: Parameters<typeof Stack.Screen>[0]['options'] =
+	{ headerShown: false }
 
 function RootLayout() {
 	const colorScheme = useColorScheme()
