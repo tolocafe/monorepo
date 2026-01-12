@@ -55,11 +55,11 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		'expo-image',
 		'expo-updates',
 		'expo-notifications',
-		'@sentry/react-native',
 		'expo-color-space-plugin',
 		'@react-native-firebase/app',
 		'./plugins/withAppBuildGradlePlugin',
 		['expo-router', { headOrigin: 'https://app.tolo.cafe' }],
+		['@sentry/react-native', { organization: 'tolo-cafe', project: 'app' }],
 		['react-native-edge-to-edge', { android: { parentTheme: 'Material3' } }],
 		[
 			'expo-localization',
