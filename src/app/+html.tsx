@@ -1,3 +1,5 @@
+// Initialize Unistyles for web static rendering
+import '@/lib/styles/unistyles'
 import { ScrollViewStyleReset } from 'expo-router/html'
 import type { PropsWithChildren } from 'react'
 

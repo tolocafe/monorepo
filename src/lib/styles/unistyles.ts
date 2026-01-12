@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-export const TINT_COLOR = '#3D6039'
+const TINT_COLOR = '#3D6039'
 
 const lightTheme = {
 	// oxlint-disable-next-line sort-keys

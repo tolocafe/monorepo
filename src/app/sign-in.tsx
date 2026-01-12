@@ -1,3 +1,4 @@
+import '@/lib/styles/unistyles'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { captureException } from '@sentry/react-native'

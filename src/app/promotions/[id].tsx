@@ -118,6 +118,7 @@ export default function PromotionScreen() {
 							</Pressable>
 						),
 					}),
+					title: '',
 				}}
 			/>
 			<ScreenContainer

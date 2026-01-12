@@ -1,6 +1,7 @@
 // Ensure unistyles is configured before any usage
 import '@/lib/styles/unistyles'
 //
+import Ionicons from '@expo/vector-icons/Ionicons'
 import { useLingui } from '@lingui/react/macro'
 import {
 	NativeTabs,
@@ -47,6 +48,7 @@ export default function TabsLayout() {
 					<NativeTabsTriggerLabel>{t`Home`}</NativeTabsTriggerLabel>
 					<NativeTabsTriggerIcon
 						drawable="home"
+						src={<Ionicons name="home-outline" />}
 						sf={{
 							default: 'house',
 							selected: 'house.fill',
@@ -58,6 +60,7 @@ export default function TabsLayout() {
 						<NativeTabsTriggerLabel>{t`Team`}</NativeTabsTriggerLabel>
 						<NativeTabsTriggerIcon
 							drawable="user"
+							src={<Ionicons name="person-outline" />}
 							sf={{
 								default: 'person.3.sequence',
 								selected: 'person.3.sequence.fill',
@@ -69,6 +72,7 @@ export default function TabsLayout() {
 					<NativeTabsTriggerLabel>{t`Profile`}</NativeTabsTriggerLabel>
 					<NativeTabsTriggerIcon
 						drawable="user"
+						src={<Ionicons name="person-outline" />}
 						sf={{
 							default: 'person',
 							selected: 'person.fill',
@@ -77,7 +81,10 @@ export default function TabsLayout() {
 				</NativeTabs.Trigger>
 				<NativeTabs.Trigger role="more" name="more">
 					<NativeTabsTriggerLabel>{t`More`}</NativeTabsTriggerLabel>
-					<NativeTabsTriggerIcon drawable="photos" />
+					<NativeTabsTriggerIcon
+						drawable="photos"
+						src={<Ionicons name="ellipse-outline" />}
+					/>
 				</NativeTabs.Trigger>
 			</NativeTabs>
 		</>
