@@ -1,3 +1,6 @@
+// Ensure unistyles is configured before any usage
+import '@/lib/styles/unistyles'
+//
 import { useLingui } from '@lingui/react/macro'
 import {
 	NativeTabs,
