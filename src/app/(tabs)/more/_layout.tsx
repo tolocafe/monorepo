@@ -12,7 +12,6 @@ export default function MoreLayout() {
 			<Stack.Screen name="index" />
 			<Stack.Screen name="app" />
 			<Stack.Screen name="visit-us" />
-			<Stack.Screen name="top-up" />
 		</Stack>
 	)
 }
