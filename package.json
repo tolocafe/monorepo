@@ -8,7 +8,7 @@
 		"android": "expo run:android",
 		"ios": "expo run:ios",
 		"web": "expo start --web",
-		"web:build": "expo export --platform web",
+		"web:build": "echo '🚀 Starting web build with 5-minute timeout...' && expo export --platform web & pid=$! && (sleep 300 && kill $pid 2>/dev/null && echo '❌ Build timed out after 5 minutes' && exit 1) & wait $pid && echo '✅ Web build completed successfully'",
 		"test": "jest --watchAll=false",
 		"test:watch": "jest --watchAll",
 		"test:coverage": "jest --coverage --watchAll=false",
