@@ -71,14 +71,6 @@ jest.mock('@lingui/react/macro', () => ({
 	}),
 }))
 
-// Mock @bottom-tabs/react-navigation
-jest.mock('@bottom-tabs/react-navigation', () => ({
-	createNativeBottomTabNavigator: () => ({
-		Navigator: 'Navigator',
-		Screen: 'Screen',
-	}),
-}))
-
 // Mock Zustand
 jest.mock('zustand', () => ({
 	// eslint-disable-next-line unicorn/consistent-function-scoping

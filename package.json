@@ -145,7 +145,7 @@
 		"oxfmt": "~0.24.0",
 		"oxlint": "~1.39.0",
 		"oxlint-tsgolint": "^0.11.0",
-		"react-test-renderer": "19.1.0",
+		"react-test-renderer": "19.2.0",
 		"typescript": "~5.9.3",
 		"wrangler": "4.58.0"
 	},
