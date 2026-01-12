@@ -1,9 +1,10 @@
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { useRoute } from '@react-navigation/native'
 import { useForm } from '@tanstack/react-form'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { router, Stack, useLocalSearchParams } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { useCallback, useEffect } from 'react'
 import {
@@ -85,7 +86,8 @@ const GrayIonIcon = withUnistyles(Ionicons, (theme) => ({
 export default function ProductScreen() {
 	const { t } = useLingui()
 
-	const { id } = useLocalSearchParams<{ id: string }>()
+	const { params } = useRoute()
+	const { id } = params as { id: string }
 	const { data: selfData } = useQuery(selfQueryOptions)
 
 	const addItem = useAddItemGuarded()

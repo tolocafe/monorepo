@@ -1,7 +1,8 @@
 import { Trans, useLingui } from '@lingui/react/macro'
+import { useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { router, Stack, useLocalSearchParams } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import {
 	ActivityIndicator,
@@ -60,7 +61,8 @@ function parseDescription(description: string | undefined | null) {
 export default function EventScreen() {
 	const { t } = useLingui()
 
-	const { id } = useLocalSearchParams<{ id: string }>()
+	const { params } = useRoute()
+	const { id } = params as { id: string }
 	const { data: event, isPending } = useQuery(eventQueryOptions(id))
 
 	useTrackScreenView(

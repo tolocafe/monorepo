@@ -1,7 +1,8 @@
 import Ionicons from '@expo/vector-icons/Ionicons'
+import { useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
 import { Image } from 'expo-image'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router } from 'expo-router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Dimensions, Pressable, View } from 'react-native'
 import {
@@ -49,7 +50,8 @@ type DetailRowProps = {
 }
 
 export default function CoffeeStoryScreen() {
-	const { id } = useLocalSearchParams<{ id: string }>()
+	const { params } = useRoute()
+	const { id } = params as { id: string }
 	const { data: coffees = [] } = useQuery(coffeesQueryOptions)
 	const { data: currentCoffee } = useQuery(coffeeQueryOptions(id))
 

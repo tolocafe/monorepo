@@ -1,7 +1,8 @@
 import { Feather } from '@expo/vector-icons'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { useRoute } from '@react-navigation/native'
 import { useQuery } from '@tanstack/react-query'
-import { router, Stack, useLocalSearchParams } from 'expo-router'
+import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { useMemo, useState } from 'react'
 import {
@@ -25,7 +26,8 @@ import { formatPrice } from '@/lib/utils/price'
 
 export default function OrderScreen() {
 	const { t } = useLingui()
-	const { id } = useLocalSearchParams<{ id: string }>()
+	const { params } = useRoute()
+	const { id } = params as { id: string }
 	const [isDownloading, setIsDownloading] = useState(false)
 
 	useTrackScreenView({ order_id: id, screenName: 'order' }, [id])
