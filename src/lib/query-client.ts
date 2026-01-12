@@ -7,7 +7,8 @@ import { STORAGE_KEYS } from '@/lib/constants/storage'
 
 // Cache time constants - gcTime must be >= maxAge for persistence to work correctly
 const FIVE_MINUTES = 1000 * 60 * 5
-const ONE_MONTH = 1000 * 60 * 60 * 24 * 30
+// Reduced from 30 days to 7 days to avoid timeout overflow issues during web builds
+const CACHE_DURATION = 1000 * 60 * 60 * 24 * 7 // 7 days
 
 export const queryStore = createMMKV({
 	id: STORAGE_KEYS.QUERY,
@@ -26,7 +27,7 @@ export const persister = createAsyncStoragePersister({
 })
 
 // Max age for persisted cache - must be <= gcTime
-export const persistMaxAge = ONE_MONTH
+export const persistMaxAge = CACHE_DURATION
 
 function retryDelay(attemptIndex: number, error: unknown) {
 	if (error instanceof HTTPError && error.response.headers.get('Retry-After')) {
@@ -70,7 +71,7 @@ export const queryClient = new QueryClient({
 		},
 		queries: {
 			// gcTime must be >= staleTime and >= persistMaxAge for proper caching
-			gcTime: ONE_MONTH,
+			gcTime: CACHE_DURATION,
 			networkMode: 'offlineFirst',
 			refetchOnReconnect: true,
 			refetchOnWindowFocus: true,

@@ -14,6 +14,7 @@ import ScreenContainer from '@/components/ScreenContainer'
 import { H3, Paragraph, Text } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import type { Product } from '@/lib/api'
+import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { baristaQueueQueryOptions } from '@/lib/queries/barista'
 import {
 	categoriesQueryOptions,
@@ -84,6 +85,11 @@ export default function OrdersQueue() {
 
 	useFocusEffect(
 		useCallback(() => {
+			// Skip polling during static rendering (web build process)
+			if (isStaticWeb) {
+				return
+			}
+
 			const interval = setInterval(() => refetch(), POLLING_INTERVAL)
 
 			return () => {
