@@ -32,7 +32,8 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 		const body = posterProducts
 			.filter(
-				(product) => product.hidden !== '1' && !product.name.startsWith('_'),
+				(product) =>
+					product.hidden !== '1' && !product.product_name.startsWith('_'),
 			)
 			.map((product) => {
 				const sanityProduct = sanityProducts?.find(
