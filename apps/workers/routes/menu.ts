@@ -30,30 +30,32 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			sanity.listProducts(context.env, language).catch(() => null),
 		])
 
-		const body = posterProducts.map((product) => {
-			const sanityProduct = sanityProducts?.find(
-				(sanityProduct) => sanityProduct.posterId === product.product_id,
-			)
+		const body = posterProducts
+			.filter((product) => product.hidden !== '1')
+			.map((product) => {
+				const sanityProduct = sanityProducts?.find(
+					(sanityProduct) => sanityProduct.posterId === product.product_id,
+				)
 
-			const name = sanityProduct?.name ?? product.product_name
-			// Use first Sanity image as photo, fallback to Poster photo
-			const photo = sanityProduct?.images?.[0]?.sourceId ?? product.photo
+				const name = sanityProduct?.name ?? product.product_name
+				// Use first Sanity image as photo, fallback to Poster photo
+				const photo = sanityProduct?.images?.[0]?.sourceId ?? product.photo
 
-			return {
-				...product,
-				// Map Sanity 'body' to API 'blockContent' and 'description'
-				blockContent: sanityProduct?.body,
-				caffeine: sanityProduct?.caffeine,
-				description: sanityProduct?.body,
-				excerpt: sanityProduct?.excerpt,
-				images: sanityProduct?.images,
-				intensity: sanityProduct?.intensity,
-				name,
-				photo,
-				product_name: name,
-				tag: sanityProduct?.tag,
-			} satisfies Product
-		})
+				return {
+					...product,
+					// Map Sanity 'body' to API 'blockContent' and 'description'
+					blockContent: sanityProduct?.body,
+					caffeine: sanityProduct?.caffeine,
+					description: sanityProduct?.body,
+					excerpt: sanityProduct?.excerpt,
+					images: sanityProduct?.images,
+					intensity: sanityProduct?.intensity,
+					name,
+					photo,
+					product_name: name,
+					tag: sanityProduct?.tag,
+				} satisfies Product
+			})
 
 		return context.json(body, 200, {
 			...defaultJsonHeaders,
