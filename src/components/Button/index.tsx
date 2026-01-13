@@ -75,7 +75,6 @@ export default Object.assign(Button, { Text: ButtonText })
 const styles = StyleSheet.create((theme) => ({
 	button: {
 		alignItems: 'center',
-		backgroundColor: 'green',
 		borderCurve: Platform.OS === 'ios' ? 'continuous' : undefined,
 		borderRadius: theme.borderRadius.lg,
 		justifyContent: 'center',

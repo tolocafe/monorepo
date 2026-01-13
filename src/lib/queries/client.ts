@@ -8,7 +8,7 @@ export const redeemClientQueryOptions = (clientId: null | string) =>
 		enabled: Boolean(clientId),
 		gcTime: 0,
 		queryFn: () =>
-			clientId ? (api.client.get(clientId) as Promise<RedeemClientData>) : null,
+			api.client.get(clientId as string) as Promise<RedeemClientData>,
 		queryKey: ['redeem-client', clientId],
 		retry: false,
 		staleTime: 0,

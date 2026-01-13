@@ -48,6 +48,15 @@ export function canRedeem(stamps: number): boolean {
 }
 
 /**
+ * Check if a birthday string represents a valid date
+ */
+function isValidBirthday(birthday: string): boolean {
+	if (!birthday || birthday === '0000-00-00') return false
+	const date = new Date(birthday)
+	return !Number.isNaN(date.getTime())
+}
+
+/**
  * Check if customer can redeem a birthday drink
  * Returns true if they have a birthday on file and haven't redeemed since their last birthday
  */
@@ -55,8 +64,8 @@ export async function canRedeemBirthdayDrink(
 	database: D1Database,
 	clientId: number,
 	birthday: null | string | undefined,
-): Promise<boolean> {
-	if (!birthday) return false
+) {
+	if (!birthday || !isValidBirthday(birthday)) return false
 
 	await ensureRedemptionsTable(database)
 

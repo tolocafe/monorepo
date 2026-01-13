@@ -61,6 +61,15 @@ This is a **dual-platform codebase** with both React Native mobile app and Cloud
 - `apps/workers/` - Cloudflare Workers API
 - `apps/workers/routes/` - API route handlers
 
+## Code Priorities
+
+The codebase prioritizes these qualities in order:
+
+1. **Simplicity**: Straightforward, easy to understand. Avoid over-engineering.
+2. **Modernity**: Current best practices, modern APIs, up-to-date patterns.
+3. **Legibility**: Self-documenting with clear naming and logical organization.
+4. **Elegance**: Clean, efficient implementations that feel natural.
+
 ## Important Development Rules
 
 ### Code Standards
@@ -72,7 +81,9 @@ This is a **dual-platform codebase** with both React Native mobile app and Cloud
 - **Lingui .po files only**: Never compile translations, use .po files directly
 - **TanStack Query patterns**: Use queryOptions/mutationOptions, avoid custom query hooks
 - **TypeScript strict**: No `any` types, proper interfaces required
-- **File naming**: kebab-case files, PascalCase component exports
+- **File naming**: kebab-case for utilities/hooks, PascalCase allowed for React component files/directories
+- **Avoid classes**: Prefer simple objects and functions over classes
+- **React Compiler**: Enabled for automatic memoization; less manual React.memo/useMemo/useCallback needed
 
 ### Import Patterns
 
@@ -80,6 +91,12 @@ This is a **dual-platform codebase** with both React Native mobile app and Cloud
 - **React**: `import { useState, useEffect } from 'react'`
 - **React Native**: `import { View, Text } from 'react-native'`
 - **Never**: `import React from 'react'` or `import { t } from '@lingui/macro'`
+
+### Internationalization
+
+- **Supported languages**: English (en, source), Spanish (es), French (fr), Portuguese (pt), Japanese (ja), German (de)
+- **Extract translations**: `bun run lingui:extract` (never use lingui:compile)
+- **Provide context**: Add context for ambiguous terms (e.g., "menu" navigation vs food)
 
 ### TypeScript Patterns
 
@@ -107,10 +124,27 @@ IMPORTANT: Do not create README files or documentation files. Code should be sel
 
 Follow Conventional Commits v1.0.0:
 
-- `feat(scope): description` for new features
-- `fix(scope): description` for bug fixes
-- `refactor(scope): description` for code improvements
-- Use scopes like: `ui`, `api`, `menu`, `navigation`, `i18n`
+**Types:**
+
+- `feat`: New features (minor version bump)
+- `fix`: Bug fixes (patch version bump)
+- `refactor`: Code changes that don't fix bugs or add features
+- `perf`: Performance improvements
+- `style`: Formatting, whitespace (not CSS)
+- `docs`: Documentation only
+- `test`: Adding/updating tests
+- `build`: Build system or dependencies
+- `chore`: Maintenance tasks
+- `ci`: CI/CD changes
+
+**Scopes:** `ui`, `api`, `menu`, `navigation`, `i18n`, `auth`, `workers`
+
+**Rules:**
+
+- Use imperative mood: "add" not "added" or "adds"
+- Lowercase, no period at end
+- Max 50 characters for subject line
+- Example: `feat(menu): add coffee item filtering`
 
 ## Security Notes
 

@@ -19,7 +19,7 @@ import {
 	promotionsQueryOptions,
 } from '@/components/HomeSections/queries'
 import ScreenContainer from '@/components/ScreenContainer'
-import Text, { Paragraph } from '@/components/Text'
+import { Paragraph } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { isIOS20 } from '@/lib/constants/ui'
 import { queryClient } from '@/lib/query-client'
@@ -73,11 +73,7 @@ export default function MenuScreen() {
 							onPress={() => router.navigate('/orders/current')}
 							icon="storefront"
 						/>
-					) : (
-						<Stack.Header.View>
-							<Text>Hello</Text>
-						</Stack.Header.View>
-					)}
+					) : null}
 				</Stack.Header.Right>
 			</Stack.Header>
 
