@@ -51,6 +51,8 @@ export async function loadAndActivateLocale(locale: Locale): Promise<void> {
 
 		languageStorage.set(LOCALE_KEY, locale)
 		queryClient.invalidateQueries({ queryKey: ['menu'] })
+		queryClient.invalidateQueries({ queryKey: ['blog-posts'] })
+		queryClient.invalidateQueries({ queryKey: ['events'] })
 	} catch (error) {
 		Sentry.captureException(error, {
 			extra: { currentLocale: i18n.locale, language: locale },
