@@ -262,58 +262,63 @@ export default function ProfileScreen() {
 						<Trans>Account</Trans>
 					</H2>
 					{user ? (
-						<List>
-							{fullName ? (
+						<>
+							<List>
+								{fullName ? (
+									<ListItem>
+										<ListItem.Label>
+											<Trans>Name</Trans>
+										</ListItem.Label>
+										<ListItem.Text>{fullName}</ListItem.Text>
+									</ListItem>
+								) : null}
 								<ListItem>
 									<ListItem.Label>
-										<Trans>Name</Trans>
+										<Trans>Phone</Trans>
 									</ListItem.Label>
-									<ListItem.Text>{fullName}</ListItem.Text>
+									<ListItem.Text>
+										{user.phone || <Trans>Not provided</Trans>}
+									</ListItem.Text>
 								</ListItem>
-							) : null}
-							<ListItem>
-								<ListItem.Label>
-									<Trans>Phone</Trans>
-								</ListItem.Label>
-								<ListItem.Text>
-									{user.phone || <Trans>Not provided</Trans>}
-								</ListItem.Text>
-							</ListItem>
-							<ListItem
-								accessibilityRole="link"
-								centered
-								onPress={() => router.push('/(tabs)/profile/edit')}
-							>
-								<ListItem.Label color="primary">
-									<Trans>Edit Profile</Trans>
-								</ListItem.Label>
-							</ListItem>
-							<ListItem
-								accessibilityRole="link"
-								chevron
-								onPress={() => router.push('/(tabs)/profile/sessions')}
-							>
-								<ListItem.Label>
-									<Trans>Sessions</Trans>
-								</ListItem.Label>
-							</ListItem>
-							<ListItem
-								accessibilityRole="link"
-								chevron
-								onPress={() =>
-									Linking.openURL('https://www.tolo.cafe/eliminar')
-								}
-							>
-								<ListItem.Label>
-									<Trans>Delete</Trans>
-								</ListItem.Label>
-							</ListItem>
-							<ListItem chevron onPress={handleSignOut}>
-								<ListItem.Label>
-									<Trans>Sign Out</Trans>
-								</ListItem.Label>
-							</ListItem>
-						</List>
+								<ListItem
+									accessibilityRole="link"
+									centered
+									onPress={() => router.push('/(tabs)/profile/edit')}
+								>
+									<ListItem.Label color="primary">
+										<Trans>Edit Profile</Trans>
+									</ListItem.Label>
+								</ListItem>
+							</List>
+							<View style={styles.separator} />
+							<List>
+								<ListItem
+									accessibilityRole="link"
+									chevron
+									onPress={() => router.push('/(tabs)/profile/sessions')}
+								>
+									<ListItem.Label>
+										<Trans>Sessions</Trans>
+									</ListItem.Label>
+								</ListItem>
+								<ListItem
+									accessibilityRole="link"
+									chevron
+									onPress={() =>
+										Linking.openURL('https://www.tolo.cafe/eliminar')
+									}
+								>
+									<ListItem.Label>
+										<Trans>Delete</Trans>
+									</ListItem.Label>
+								</ListItem>
+								<ListItem chevron onPress={handleSignOut}>
+									<ListItem.Label>
+										<Trans>Sign Out</Trans>
+									</ListItem.Label>
+								</ListItem>
+							</List>
+						</>
 					) : isUserPending ? (
 						<Card style={styles.pendingCard}>
 							<Paragraph style={styles.userInfoText}>
@@ -373,6 +378,9 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	sectionTitle: {
 		marginBottom: theme.spacing.sm,
+	},
+	separator: {
+		height: theme.spacing.md,
 	},
 	signInContainer: {
 		alignItems: 'center',

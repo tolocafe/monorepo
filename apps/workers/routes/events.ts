@@ -20,7 +20,7 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		const language = context.get('language')
 
 		try {
-			const sanityEvents = await sanity.listEvents(context.env)
+			const sanityEvents = await sanity.listEvents(context.env, language)
 
 			const localized = sanityEvents.map((event): Event => {
 				// Extract asset IDs from images array

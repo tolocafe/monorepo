@@ -335,7 +335,7 @@ const sanity = {
 			query: `*[_type == "bean"]`,
 		})
 	},
-	listBlogPosts(environment: Bindings) {
+	listBlogPosts(environment: Bindings, language: SupportedLocale) {
 		type BlogPostQueryResult = BlogPost & {
 			_id: string
 		}
@@ -343,15 +343,15 @@ const sanity = {
 		return fetchSanity<BlogPostQueryResult[]>(environment, {
 			query: `*[_type == "post"]{
 				_id,
-				body,
-				excerpt,
+				"body": body.${language},
+				"excerpt": excerpt.${language},
 				images,
-				name,
+				"name": name.${language},
 				slug
 			} | order(_createdAt desc)`,
 		})
 	},
-	listEvents(environment: Bindings) {
+	listEvents(environment: Bindings, language: SupportedLocale) {
 		type EventQueryResult = Event & {
 			_id: string
 		}
@@ -359,14 +359,14 @@ const sanity = {
 		return fetchSanity<EventQueryResult[]>(environment, {
 			query: `*[_type == "event"]{
 				_id,
-				body,
+				"body": body.${language},
 				endDate,
-				excerpt,
+				"excerpt": excerpt.${language},
 				images,
 				isFeatured,
 				location,
 				maxAttendees,
-				name,
+				"name": name.${language},
 				registrationUrl,
 				slug,
 				startDate,

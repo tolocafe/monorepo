@@ -22,12 +22,11 @@ import type { BlockTextContent } from '@/components/BlockText/types'
 import { HeaderIconIonicons } from '@/components/Icons'
 import { LinearGradient } from '@/components/LinearGradient'
 import ScreenContainer from '@/components/ScreenContainer'
-import { H1, H2, Paragraph } from '@/components/Text'
+import { H1, Paragraph } from '@/components/Text'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { getImageUrl } from '@/lib/image'
 import { promotionQueryOptions } from '@/lib/queries/promotion'
 import { queryClient } from '@/lib/query-client'
-import { formatDate } from '@/lib/utils/format-date'
 
 const handleClose = () => {
 	router.back()
@@ -131,6 +130,7 @@ export default function PromotionScreen() {
 					/>
 				}
 				withPaddingEdges={PADDING_EDGES}
+				style={styles.container}
 				contentInsetAdjustmentBehavior="never"
 			>
 				<View style={styles.heroImageContainer}>
@@ -183,42 +183,6 @@ export default function PromotionScreen() {
 								<BlockText value={descriptionContent} />
 							</View>
 						) : null}
-
-						{(promotion.date_start || promotion.date_end) && (
-							<View style={styles.datesSection}>
-								<H2>
-									<Trans>Valid Period</Trans>
-								</H2>
-								{promotion.date_start ? (
-									<Paragraph>
-										<Trans>Start: {formatDate(promotion.date_start)}</Trans>
-									</Paragraph>
-								) : null}
-								{promotion.date_end ? (
-									<Paragraph>
-										<Trans>End: {formatDate(promotion.date_end)}</Trans>
-									</Paragraph>
-								) : null}
-							</View>
-						)}
-
-						{(promotion.discount_percent || promotion.bonus) && (
-							<View style={styles.detailsSection}>
-								<H2>
-									<Trans>Details</Trans>
-								</H2>
-								{promotion.discount_percent ? (
-									<Paragraph>
-										<Trans>Discount: {promotion.discount_percent}%</Trans>
-									</Paragraph>
-								) : null}
-								{promotion.bonus ? (
-									<Paragraph>
-										<Trans>Bonus: {promotion.bonus}</Trans>
-									</Paragraph>
-								) : null}
-							</View>
-						)}
 					</View>
 				</View>
 			</ScreenContainer>
@@ -242,6 +206,9 @@ const styles = StyleSheet.create((theme) => ({
 		shadowOpacity: 0.25,
 		shadowRadius: 3.84,
 		width: theme.spacing.xl,
+	},
+	container: {
+		backgroundColor: theme.colors.gray.background,
 	},
 	content: {
 		_web: {

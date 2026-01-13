@@ -2,13 +2,10 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import { t } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { Trans } from '@lingui/react/macro'
-import { useScrollToTop } from '@react-navigation/native'
 import { nativeApplicationVersion, nativeBuildVersion } from 'expo-application'
 import { router, Stack } from 'expo-router'
 import Head from 'expo-router/head'
-import { useRef } from 'react'
 import { Linking, Pressable, View } from 'react-native'
-import type { ScrollView } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
@@ -68,7 +65,6 @@ const createDropdownStyles = (isDark: boolean) => ({
 
 export default function MoreScreen() {
 	const { i18n } = useLingui()
-	const screenRef = useRef<ScrollView>(null)
 	const colorScheme = useColorScheme()
 	const dropdownStyles = createDropdownStyles(colorScheme === 'dark')
 
@@ -76,8 +72,6 @@ export default function MoreScreen() {
 
 	const appVersion = getStringOrFallback(nativeApplicationVersion, '0')
 	const buildVersion = getStringOrFallback(nativeBuildVersion, '0')
-
-	useScrollToTop(screenRef)
 
 	return (
 		<>

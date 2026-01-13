@@ -10,6 +10,10 @@ import type { BlogPost } from '@/lib/queries/blog'
 
 const UniFlatList = withUnistyles(FlatList)
 
+function handleRenderItem({ item }: { item: unknown }) {
+	return <BlogCard post={item as BlogPost} />
+}
+
 export function BlogSection() {
 	const { data } = useQuery(blogPostsQueryOptions)
 
@@ -26,7 +30,7 @@ export function BlogSection() {
 					data={data}
 					horizontal
 					keyExtractor={(item) => (item as BlogPost).slug}
-					renderItem={({ item }) => <BlogCard post={item as BlogPost} />}
+					renderItem={handleRenderItem}
 					showsHorizontalScrollIndicator={false}
 				/>
 			) : (

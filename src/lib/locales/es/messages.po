@@ -801,9 +801,7 @@ msgid ""
 "Prices are subject to change without notice.\n"
 "Calories and volume are approximate and may vary between preparations."
 msgstr ""
-"Los precios están sujetos a cambios sin previo aviso.\n"
 "Las calorías y el volumen son aproximados y pueden variar según la preparación.Los precios están sujetos a cambios sin previo aviso.\n"
-"Las calorías y el volumen son aproximados y pueden variar según la preparación."
 
 #: src/containers/top-up-screen.tsx:278
 msgid "Processing Payment..."

@@ -20,7 +20,7 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		const language = context.get('language')
 
 		try {
-			const sanityPosts = await sanity.listBlogPosts(context.env)
+			const sanityPosts = await sanity.listBlogPosts(context.env, language)
 
 			const localized = sanityPosts.map((post): BlogPost => {
 				// Extract asset IDs from images array
