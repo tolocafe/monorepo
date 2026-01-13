@@ -4,7 +4,7 @@ import { z } from 'zod'
 
 import type { Bindings } from '~workers/types'
 import { extractToken, verifyJwt } from '~workers/utils/jwt'
-import { api as posterApi } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 import { getStripe } from '~workers/utils/stripe'
 

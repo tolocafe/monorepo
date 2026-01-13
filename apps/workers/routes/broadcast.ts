@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 import type { Bindings } from '~workers/types'
-import { api, sendSms } from '~workers/utils/poster'
+import { posterApi, sendSms } from '~workers/utils/poster'
 
 const broadcastBodySchema = z.strictObject({
 	message: z.string().max(255).min(1),
@@ -21,7 +21,7 @@ const broadcast = new Hono<{ Bindings: Bindings }>().post(
 			return context.json({ message: 'Forbidden' }, 403)
 		}
 
-		const clients = await api.clients.getClients(context.env.POSTER_TOKEN)
+		const clients = await posterApi.clients.getClients(context.env.POSTER_TOKEN)
 
 		if (type === 'sms') {
 			const clientsWithPhoneNumbers = clients.filter((client) =>

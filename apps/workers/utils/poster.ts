@@ -124,7 +124,7 @@ export async function posterFetch<TResponse = unknown>(
  * Poster API client organized by API sections
  *
  */
-export const api = {
+export const posterApi = {
 	/**
 	 * Marketing - Customer Management API
 	 *

@@ -3,7 +3,7 @@ import { Hono } from 'hono'
 import type { PosClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
 import { defaultJsonHeaders } from '~workers/utils/headers'
-import { api } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 import {
 	canRedeemBirthdayDrink,
 	getCustomerStamps,
@@ -48,9 +48,12 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 		const last90Days = new Date(new Date().setDate(new Date().getDate() - 90))
 
 		const [products, customer, transactions] = await Promise.all([
-			api.menu.getMenuProducts(context.env.POSTER_TOKEN),
-			api.clients.getClientById(context.env.POSTER_TOKEN, Number(customerId)),
-			api.dash.getTransactions(context.env.POSTER_TOKEN, {
+			posterApi.menu.getMenuProducts(context.env.POSTER_TOKEN),
+			posterApi.clients.getClientById(
+				context.env.POSTER_TOKEN,
+				Number(customerId),
+			),
+			posterApi.dash.getTransactions(context.env.POSTER_TOKEN, {
 				date_from: last90Days.toISOString().split('T')[0],
 				id: customerId,
 				include_products: 'true',
@@ -59,7 +62,7 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 		])
 
 		// Get closed transactions for 2025 to calculate stamps
-		const closedTransactions2025 = await api.dash.getTransactions(
+		const closedTransactions2025 = await posterApi.dash.getTransactions(
 			context.env.POSTER_TOKEN,
 			{
 				date_from: '2025-01-01',

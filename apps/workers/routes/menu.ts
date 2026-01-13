@@ -4,7 +4,7 @@ import type { Product, Promotion } from '~common/api'
 import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
 import { defaultJsonHeaders } from '~workers/utils/headers'
-import { api } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 import sanity from '~workers/utils/sanity'
 
 type Variables = {
@@ -13,7 +13,7 @@ type Variables = {
 
 const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 	.get('/categories', async (context) => {
-		const categories = await api.menu.getMenuCategories(
+		const categories = await posterApi.menu.getMenuCategories(
 			context.env.POSTER_TOKEN,
 		)
 
@@ -24,7 +24,7 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		const language = context.get('language')
 
 		const [posterProducts, sanityProducts] = await Promise.all([
-			api.menu.getMenuProducts(context.env.POSTER_TOKEN, {
+			posterApi.menu.getMenuProducts(context.env.POSTER_TOKEN, {
 				type: 'products',
 			}),
 			sanity.listProducts(context.env, language).catch(() => null),
@@ -32,7 +32,7 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 		const body = posterProducts
 			.filter(
-				(product) => product.hidden !== '1' || product.name.startsWith('_'),
+				(product) => product.hidden !== '1' && !product.name.startsWith('_'),
 			)
 			.map((product) => {
 				const sanityProduct = sanityProducts?.find(
@@ -40,12 +40,10 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				)
 
 				const name = sanityProduct?.name ?? product.product_name
-				// Use first Sanity image as photo, fallback to Poster photo
 				const photo = sanityProduct?.images?.[0]?.sourceId ?? product.photo
 
-				return {
+				const productData = {
 					...product,
-					// Map Sanity 'body' to API 'blockContent' and 'description'
 					blockContent: sanityProduct?.body,
 					caffeine: sanityProduct?.caffeine,
 					description: sanityProduct?.body,
@@ -55,8 +53,11 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 					name,
 					photo,
 					product_name: name,
+					recipe: sanityProduct?.body,
 					tag: sanityProduct?.tag,
 				} satisfies Product
+
+				return productData
 			})
 
 		return context.json(body, 200, {
@@ -69,7 +70,7 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		const language = context.get('language')
 
 		const [posterPromotions, sanityPromotions] = await Promise.all([
-			api.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
+			posterApi.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
 			sanity.listPromotions(context.env, language).catch(() => []),
 		])
 
@@ -120,7 +121,7 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 		try {
 			const [posterProduct, sanityProduct] = await Promise.all([
-				api.menu.getProduct(context.env.POSTER_TOKEN, productId),
+				posterApi.menu.getProduct(context.env.POSTER_TOKEN, productId),
 				sanity.getProduct(context.env, productId, language).catch(() => null),
 			])
 
@@ -171,7 +172,9 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 		try {
 			const [posterPromotions, sanityPromotion] = await Promise.all([
-				api.clients.getPromotions(context.env.POSTER_TOKEN).catch(() => []),
+				posterApi.clients
+					.getPromotions(context.env.POSTER_TOKEN)
+					.catch(() => []),
 				sanity
 					.getPromotion(context.env, promotionId, language)
 					.catch(() => null),

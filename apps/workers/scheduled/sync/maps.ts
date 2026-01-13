@@ -93,7 +93,7 @@ export function mapProduct(product: PosterProduct) {
 		priceCents: primaryPrice ? toCents(primaryPrice) : null,
 		productionNote: product.product_production_description || null,
 		profitRaw: JSON.stringify(product.profit),
-		recipe: product.recipe || null,
+		recipe: (product.recipe as unknown as string) || null,
 		smallDescription: product['small-description'] || null,
 		sourcesRaw: JSON.stringify(product.sources),
 		spotsRaw: JSON.stringify(product.spots),

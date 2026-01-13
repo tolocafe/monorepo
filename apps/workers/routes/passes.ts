@@ -7,7 +7,7 @@ import type { Bindings } from '~workers/types'
 import createApplePass from '~workers/utils/generate-apple-pass'
 import createGooglePass from '~workers/utils/generate-google-pass'
 import { authenticate } from '~workers/utils/jwt'
-import { api } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 
 const pass = new Hono<{ Bindings: Bindings }>().get(
@@ -25,7 +25,7 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 				return context.json({ message: 'Forbidden' }, 403)
 			}
 
-			const client = await api.clients.getClientById(
+			const client = await posterApi.clients.getClientById(
 				context.env.POSTER_TOKEN,
 				clientId,
 			)

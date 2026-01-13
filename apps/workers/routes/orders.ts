@@ -9,7 +9,7 @@ import type { Bindings } from '~workers/types'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import HttpStatusCode from '~workers/utils/http-codes'
 import { authenticate } from '~workers/utils/jwt'
-import { api } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 
 // Modifiers to ignore (not displayed in barista queue)
@@ -72,10 +72,13 @@ const orders = new Hono<{ Bindings: Bindings }>()
 	.get('/', async (context) => {
 		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
-		const orders = await api.dash.getTransactions(context.env.POSTER_TOKEN, {
-			id: clientId.toString(),
-			type: 'clients',
-		})
+		const orders = await posterApi.dash.getTransactions(
+			context.env.POSTER_TOKEN,
+			{
+				id: clientId.toString(),
+				type: 'clients',
+			},
+		)
 
 		return context.json(orders)
 	})
@@ -83,7 +86,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
 		// Verify user is a barista
-		const client = await api.clients.getClientById(
+		const client = await posterApi.clients.getClientById(
 			context.env.POSTER_TOKEN,
 			clientId,
 		)
@@ -99,11 +102,11 @@ const orders = new Hono<{ Bindings: Bindings }>()
 
 		// Fetch products and orders in parallel
 		const [orders, allProducts] = await Promise.all([
-			api.dash.getTransactions(context.env.POSTER_TOKEN, {
+			posterApi.dash.getTransactions(context.env.POSTER_TOKEN, {
 				include_products: 'true',
 				status: '0',
 			}),
-			api.menu.getMenuProducts(context.env.POSTER_TOKEN),
+			posterApi.menu.getMenuProducts(context.env.POSTER_TOKEN),
 		])
 
 		// Build modifier → group map from all products
@@ -119,7 +122,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		const augmentedOrders = await Promise.all(
 			activeOrders.map(async (order) => {
 				try {
-					const detailedProducts = await api.dash.getTransactionProducts(
+					const detailedProducts = await posterApi.dash.getTransactionProducts(
 						context.env.POSTER_TOKEN,
 						order.transaction_id,
 					)
@@ -162,7 +165,7 @@ const orders = new Hono<{ Bindings: Bindings }>()
 		const orderId = context.req.param('id')
 
 		try {
-			const order = await api.dash.getTransaction(
+			const order = await posterApi.dash.getTransaction(
 				context.env.POSTER_TOKEN,
 				orderId,
 				{
@@ -218,16 +221,19 @@ const orders = new Hono<{ Bindings: Bindings }>()
 			 * the transaction will fail and the order will not be created
 			 */
 			const [transactionId, ...products] = await Promise.all([
-				api.clients.addEWalletTransaction(context.env.POSTER_TOKEN, {
+				posterApi.clients.addEWalletTransaction(context.env.POSTER_TOKEN, {
 					amount: paymentAmount,
 					client_id: clientId,
 				}),
 				...parsedBody.products.map((product) =>
-					api.menu.getProduct(context.env.POSTER_TOKEN, product.product_id),
+					posterApi.menu.getProduct(
+						context.env.POSTER_TOKEN,
+						product.product_id,
+					),
 				),
 			])
 
-			const order = await api.incomingOrders.createIncomingOrder(
+			const order = await posterApi.incomingOrders.createIncomingOrder(
 				context.env.POSTER_TOKEN,
 				{
 					...parsedBody,

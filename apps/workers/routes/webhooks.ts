@@ -12,7 +12,7 @@ import { trackServerEvent } from '~workers/utils/analytics'
 import { notifyApplePassUpdate } from '~workers/utils/apns'
 import createApplePass from '~workers/utils/generate-apple-pass'
 import HttpStatusCode from '~workers/utils/http-codes'
-import { api } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 import { getStripe } from '~workers/utils/stripe'
 
@@ -375,7 +375,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				}
 
 				// Get client data
-				const client = await api.clients.getClientById(
+				const client = await posterApi.clients.getClientById(
 					context.env.POSTER_TOKEN,
 					clientId,
 				)
@@ -533,7 +533,7 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 				}
 
 				try {
-					const transactionId = await api.finance.createTransaction(
+					const transactionId = await posterApi.finance.createTransaction(
 						context.env.POSTER_TOKEN,
 						{
 							account_to: 1,
@@ -562,16 +562,17 @@ const webhooks = new Hono<{ Bindings: Bindings }>()
 					})
 
 					// eslint-disable-next-line unicorn/prevent-abbreviations
-					const eWalletTransactionId = await api.clients.addEWalletPayment(
-						context.env.POSTER_TOKEN,
-						{
-							amount: paymentIntent.amount,
-							client_id: posterClientId,
-							spot_id: 1,
-							// Transaction_id: transactionId,
-							type: 2,
-						},
-					)
+					const eWalletTransactionId =
+						await posterApi.clients.addEWalletPayment(
+							context.env.POSTER_TOKEN,
+							{
+								amount: paymentIntent.amount,
+								client_id: posterClientId,
+								spot_id: 1,
+								// Transaction_id: transactionId,
+								type: 2,
+							},
+						)
 
 					addBreadcrumb({
 						data: { eWalletTransactionId, posterClientId, transactionId },

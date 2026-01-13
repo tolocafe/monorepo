@@ -8,7 +8,7 @@ import { notifyApplePassUpdate } from '~workers/utils/apns'
 import { TEAM_GROUP_IDS } from '~workers/utils/constants'
 import { notifyGooglePassUpdate } from '~workers/utils/generate-google-pass'
 import { authenticate } from '~workers/utils/jwt'
-import { api } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 import { notifyRedemption } from '~workers/utils/push-notifications'
 import {
 	canRedeemBirthdayDrink,
@@ -36,7 +36,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 		const [authClientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		// Verify user is a team member or owner
-		const authClient = await api.clients.getClientById(
+		const authClient = await posterApi.clients.getClientById(
 			c.env.POSTER_TOKEN,
 			authClientId,
 		)
@@ -53,7 +53,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			throw new HTTPException(400, { message: 'Client ID required' })
 		}
 
-		const client = await api.clients.getClientById(
+		const client = await posterApi.clients.getClientById(
 			c.env.POSTER_TOKEN,
 			Number(id),
 		)
@@ -62,7 +62,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			throw new HTTPException(404, { message: 'Client not found' })
 		}
 
-		const clientTransactions = await api.dash.getTransactions(
+		const clientTransactions = await posterApi.dash.getTransactions(
 			c.env.POSTER_TOKEN,
 			{
 				date_from: '2025-01-01',
@@ -102,7 +102,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 		const [authClientId] = await authenticate(c, c.env.JWT_SECRET)
 
 		// Verify user is a team member or owner
-		const authClient = await api.clients.getClientById(
+		const authClient = await posterApi.clients.getClientById(
 			c.env.POSTER_TOKEN,
 			authClientId,
 		)
@@ -130,7 +130,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 
 		// Validate the redemption is allowed
 		if (body.type === 'birthday') {
-			const client = await api.clients.getClientById(
+			const client = await posterApi.clients.getClientById(
 				c.env.POSTER_TOKEN,
 				clientId,
 			)
@@ -145,7 +145,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 				})
 			}
 		} else {
-			const clientTransactions = await api.dash.getTransactions(
+			const clientTransactions = await posterApi.dash.getTransactions(
 				c.env.POSTER_TOKEN,
 				{
 					date_from: '2025-01-01',
@@ -205,7 +205,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 
 		const parsedBody = updateClientSchema.parse(body)
 
-		const posterClient = await api.clients.updateClient(
+		const posterClient = await posterApi.clients.updateClient(
 			c.env.POSTER_TOKEN,
 			Number(id),
 			parsedBody,

@@ -8,7 +8,7 @@ import {
 
 import type { Bindings } from '../types'
 import { authenticate } from '../utils/jwt'
-import { api } from '../utils/poster'
+import { posterApi } from '../utils/poster'
 import { getStripe } from '../utils/stripe'
 
 const transactions = new Hono<{ Bindings: Bindings }>()
@@ -27,7 +27,7 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 			})
 			.then((response) => response.data.at(0))
 
-		const posterCustomer = await api.clients.getClient(
+		const posterCustomer = await posterApi.clients.getClient(
 			c.env.POSTER_TOKEN,
 			clientId.toString(),
 		)
@@ -69,7 +69,7 @@ const transactions = new Hono<{ Bindings: Bindings }>()
 			(await c.req.json()) as unknown,
 		)
 
-		const transactionId = await api.clients.addEWalletTransaction(
+		const transactionId = await posterApi.clients.addEWalletTransaction(
 			c.env.POSTER_TOKEN,
 			{
 				amount: body.amount,

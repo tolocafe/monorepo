@@ -7,7 +7,7 @@ import jwt from 'jsonwebtoken'
 import type { ClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
 
-import { api } from './poster'
+import { posterApi } from './poster'
 import { getCustomerStamps } from './stamps'
 
 const GOOGLE_WALLET_BASE_URL =
@@ -54,7 +54,7 @@ export async function notifyGooglePassUpdate(
 	const objectId = `${ISSUER_ID}.0.${passId}`
 
 	try {
-		const client = await api.clients.getClientById(
+		const client = await posterApi.clients.getClientById(
 			environment.POSTER_TOKEN,
 			clientId,
 		)
@@ -63,7 +63,7 @@ export async function notifyGooglePassUpdate(
 			return { error: 'Client not found', success: false }
 		}
 
-		const transactionsCount = await api.dash
+		const transactionsCount = await posterApi.dash
 			.getTransactions(environment.POSTER_TOKEN, {
 				date_from: '2025-01-01',
 				id: clientId.toString(),
@@ -131,7 +131,7 @@ async function createLoyaltyObject({
 	const passId = `TOLO-${client.client_id.padStart(8, '0')}`
 
 	// Count only closed transactions (status: '2') from all time
-	const transactionsCount = await api.dash
+	const transactionsCount = await posterApi.dash
 		.getTransactions(context.env.POSTER_TOKEN, {
 			date_from: '2025-01-01',
 			id: client.client_id,

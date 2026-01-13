@@ -15,7 +15,7 @@ import {
 	signJwt,
 } from '~workers/utils/jwt'
 import { generateOtp, storeOtp, verifyOtp } from '~workers/utils/otp'
-import { api, sendSms } from '~workers/utils/poster'
+import { posterApi, sendSms } from '~workers/utils/poster'
 import { trackEvent } from '~workers/utils/posthog'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
@@ -76,7 +76,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 			await context.req.json(),
 		)
 
-		const existingClient = await api.clients.getClient(
+		const existingClient = await posterApi.clients.getClient(
 			context.env.POSTER_TOKEN,
 			phone,
 		)
@@ -89,7 +89,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				)
 			}
 
-			const nextClientId = await api.clients.createClient(
+			const nextClientId = await posterApi.clients.createClient(
 				context.env.POSTER_TOKEN,
 				{
 					birthday: birthdate,
@@ -149,7 +149,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		const { isTest } = await verifyOtp(context.env.KV_OTP, phone, code)
 
-		const posterClient = await api.clients.getClient(
+		const posterClient = await posterApi.clients.getClient(
 			context.env.POSTER_TOKEN,
 			phone,
 		)
@@ -214,9 +214,13 @@ const auth = new Hono<{ Bindings: Bindings }>()
 				),
 			),
 			posterClient.client_groups_id === UNVERIFIED_CLIENT_GROUP_ID
-				? api.clients.updateClient(context.env.POSTER_TOKEN, Number(clientId), {
-						client_groups_id_client: VERIFIED_CLIENT_GROUP_ID,
-					})
+				? posterApi.clients.updateClient(
+						context.env.POSTER_TOKEN,
+						Number(clientId),
+						{
+							client_groups_id_client: VERIFIED_CLIENT_GROUP_ID,
+						},
+					)
 				: Promise.resolve(),
 		])
 
@@ -262,7 +266,10 @@ const auth = new Hono<{ Bindings: Bindings }>()
 	.get('/self', async (c) => {
 		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
 
-		const client = await api.clients.getClientById(c.env.POSTER_TOKEN, clientId)
+		const client = await posterApi.clients.getClientById(
+			c.env.POSTER_TOKEN,
+			clientId,
+		)
 
 		if (!client) throw new HTTPException(404, { message: 'Client not found' })
 

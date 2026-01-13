@@ -5,7 +5,7 @@ import type { Bindings } from '../types'
 import { TEAM_GROUP_IDS } from '../utils/constants'
 import { generateReceiptPDF } from '../utils/generate-receipt'
 import { authenticate } from '../utils/jwt'
-import { api } from '../utils/poster'
+import { posterApi } from '../utils/poster'
 
 const receipts = new Hono<{ Bindings: Bindings }>().get(
 	'/:orderId',
@@ -15,7 +15,7 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 
 		try {
 			// Fetch order data from Poster API
-			const order = await api.dash.getTransaction(
+			const order = await posterApi.dash.getTransaction(
 				context.env.POSTER_TOKEN,
 				orderId,
 				{
@@ -29,7 +29,7 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 			}
 
 			// Determine if requester is a barista/owner (allowed to download any ticket)
-			const requester = await api.clients.getClientById(
+			const requester = await posterApi.clients.getClientById(
 				context.env.POSTER_TOKEN,
 				clientId,
 			)
@@ -44,14 +44,14 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 			}
 
 			// Fetch client data
-			const client = await api.clients.getClientById(
+			const client = await posterApi.clients.getClientById(
 				context.env.POSTER_TOKEN,
 				order.client_id as unknown as number,
 			)
 
 			const productsDetails = await Promise.all(
 				order.products?.map((item) =>
-					api.menu.getProduct(context.env.POSTER_TOKEN, item.product_id),
+					posterApi.menu.getProduct(context.env.POSTER_TOKEN, item.product_id),
 				) ?? [],
 			)
 

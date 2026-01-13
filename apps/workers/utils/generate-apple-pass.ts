@@ -5,7 +5,7 @@ import { PKPass } from 'passkit-generator'
 import type { ClientData } from '~common/api'
 import type { Bindings } from '~workers/types'
 
-import { api } from './poster'
+import { posterApi } from './poster'
 import { getCustomerStamps } from './stamps'
 
 const PASS_TYPE_IDENTIFIER = 'pass.cafe.tolo.app'
@@ -67,7 +67,7 @@ export default async function createApplePass(
 	pass.type = 'storeCard'
 
 	// Count only closed transactions (status: '2') from all time
-	const transactionsCount = await api.dash
+	const transactionsCount = await posterApi.dash
 		.getTransactions(context.env.POSTER_TOKEN, {
 			date_from: '2025-01-01',
 			id: client.client_id,

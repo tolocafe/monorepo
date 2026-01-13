@@ -8,7 +8,7 @@ import {
 	productModifierGroups,
 	products,
 } from '~workers/db/schema'
-import { api } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 
 import { ensureCategory, ensureIngredient } from './ensure'
 import type { Cache } from './ensure'
@@ -39,7 +39,7 @@ export async function ensureProduct(
 
 	let product: null | PosterProduct = null
 	try {
-		product = await api.menu.getProduct(token, id.toString())
+		product = await posterApi.menu.getProduct(token, id.toString())
 	} catch (error) {
 		Sentry.captureException(error, {
 			extra: { productId: id },

@@ -10,7 +10,7 @@ import {
 	menuCategories,
 	productModifiers,
 } from '~workers/db/schema'
-import { api } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 
 import { mapClient } from './maps'
 import type { Database } from './transactions'
@@ -65,7 +65,7 @@ export async function ensureCategory(
 
 	let foundCategory = null
 	try {
-		const categories = await api.menu.getMenuCategories(token)
+		const categories = await posterApi.menu.getMenuCategories(token)
 		foundCategory = categories.find(
 			(category) => Number(category.category_id) === id,
 		)
@@ -162,7 +162,7 @@ export async function ensureCustomer(
 		return
 	}
 
-	const payload = await api.clients.getClientById(token, id)
+	const payload = await posterApi.clients.getClientById(token, id)
 	const clientGroupId =
 		payload?.client_groups_id && payload.client_groups_id !== '0'
 			? Number(payload.client_groups_id)

@@ -1,5 +1,5 @@
 import type { DashTransaction } from '~common/api'
-import { api } from '~workers/utils/poster'
+import { posterApi } from '~workers/utils/poster'
 
 import { formatApiDate } from './utils'
 
@@ -27,7 +27,7 @@ export async function fetchTransactionsPaginated(
 
 	// If range is small enough, fetch directly
 	if (totalDays <= chunkDays) {
-		const fetched = await api.dash.getTransactions(token, {
+		const fetched = await posterApi.dash.getTransactions(token, {
 			date_from: formatApiDate(dateFrom),
 			date_to: formatApiDate(dateTo),
 			include_history: 'true',
