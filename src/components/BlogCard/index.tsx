@@ -1,4 +1,5 @@
 import { Image } from 'expo-image'
+import { router } from 'expo-router'
 import { Pressable, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
@@ -27,11 +28,10 @@ export default function BlogCard({ post }: Props) {
 		transform: [{ scale: scaleValue.get() }],
 	}))
 
-	const imageSourceId = post.images?.[0]?.sourceId
+	const imageSourceId = post.image?.sourceId
 
 	const handlePress = () => {
-		// TODO: Navigate to blog post detail when route is created
-		// router.push(`/blog/${post.id}`)
+		router.push(`/blog/${post.id}`)
 	}
 
 	return (
@@ -44,7 +44,7 @@ export default function BlogCard({ post }: Props) {
 			>
 				<Card padded={false} style={styles.card}>
 					<View style={styles.imageContainer}>
-						{post.images?.[0]?.sourceId ? (
+						{post.image?.sourceId ? (
 							<UniImage
 								contentFit="cover"
 								placeholder={{

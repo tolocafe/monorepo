@@ -104,7 +104,7 @@ msgstr "Agregar al Pedido"
 msgid "Additional"
 msgstr "Adicional"
 
-#: src/app/(tabs)/team/queue.tsx:199
+#: src/app/(tabs)/team/queue.tsx:205
 msgid "All"
 msgstr "Todos"
 
@@ -301,7 +301,7 @@ msgstr "DD/MM/AAAA"
 msgid "Delete"
 msgstr "Eliminar"
 
-#: src/app/(tabs)/team/queue.tsx:285
+#: src/app/(tabs)/team/queue.tsx:291
 msgid "Delivery"
 msgstr "Entrega"
 
@@ -487,7 +487,7 @@ msgstr "Google Maps"
 msgid "History"
 msgstr "Historial"
 
-#: src/app/(tabs)/_layout.tsx:48
+#: src/app/(tabs)/_layout.tsx:47
 #: src/app/(tabs)/(home)/index.tsx:65
 msgid "Home"
 msgstr "Inicio"
@@ -607,7 +607,7 @@ msgstr "Modificaciones"
 msgid "Monday – Friday"
 msgstr "Lunes – viernes"
 
-#: src/app/(tabs)/_layout.tsx:83
+#: src/app/(tabs)/_layout.tsx:79
 #: src/app/(tabs)/more/index.tsx:95
 msgid "More"
 msgstr "Más"
@@ -630,7 +630,7 @@ msgstr "name@example.com"
 msgid "New"
 msgstr "Nuevo"
 
-#: src/app/(tabs)/team/queue.tsx:420
+#: src/app/(tabs)/team/queue.tsx:426
 msgid "New orders will appear here"
 msgstr "Los nuevos pedidos aparecerán aquí"
 
@@ -655,7 +655,7 @@ msgstr "No hay publicaciones de blog disponibles en este momento"
 msgid "No events scheduled at the moment"
 msgstr "No hay eventos programados en este momento"
 
-#: src/app/(tabs)/team/queue.tsx:417
+#: src/app/(tabs)/team/queue.tsx:423
 msgid "No orders in queue"
 msgstr "No hay pedidos en cola"
 
@@ -813,7 +813,7 @@ msgstr "Procesando Pago..."
 msgid "Product not found"
 msgstr "Producto no encontrado"
 
-#: src/app/(tabs)/_layout.tsx:72
+#: src/app/(tabs)/_layout.tsx:69
 #: src/app/(tabs)/profile/index.tsx:179
 msgid "Profile"
 msgstr "Perfil"
@@ -841,7 +841,7 @@ msgid "Qty: {0}"
 msgstr "Cant: {0}"
 
 #: src/app/(tabs)/team/index.tsx:53
-#: src/app/(tabs)/team/queue.tsx:169
+#: src/app/(tabs)/team/queue.tsx:175
 msgid "Queue"
 msgstr "Cola"
 
@@ -1014,7 +1014,7 @@ msgstr "Para llevar - Mesa {0}"
 msgid "Tax"
 msgstr "Impuesto"
 
-#: src/app/(tabs)/_layout.tsx:60
+#: src/app/(tabs)/_layout.tsx:58
 #: src/app/(tabs)/team/index.tsx:30
 msgid "Team"
 msgstr "Equipo"
@@ -1081,7 +1081,7 @@ msgstr "Tickets"
 msgid "Tip"
 msgstr "Propina"
 
-#: src/app/(tabs)/team/queue.tsx:276
+#: src/app/(tabs)/team/queue.tsx:282
 msgid "To Go"
 msgstr "Para Llevar"
 

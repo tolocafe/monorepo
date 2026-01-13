@@ -8,9 +8,7 @@ export type BlogPost = {
 	createdAt: string
 	description?: string
 	id: string
-	images?: Array<{
-		sourceId: string
-	}>
+	image?: { sourceId: string }
 	name: string
 	slug: string
 	summary?: string
@@ -19,7 +17,7 @@ export type BlogPost = {
 export const blogPostsQueryOptions = queryOptions({
 	placeholderData: [],
 	queryFn: api.blog.getBlogPosts,
-	queryKey: ['blog-posts'] as const,
+	queryKey: ['posts'] as const,
 })
 
 export const blogPostQueryOptions = (id: string) =>
@@ -33,5 +31,5 @@ export const blogPostQueryOptions = (id: string) =>
 			return post
 		},
 		queryFn: () => api.blog.getBlogPost(id),
-		queryKey: ['blog-posts', id] as const,
+		queryKey: ['posts', id] as const,
 	})

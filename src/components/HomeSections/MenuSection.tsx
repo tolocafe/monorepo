@@ -54,9 +54,7 @@ export function MenuSection() {
 				.map((category) => ({
 					...category,
 					items: menu.filter(
-						(item: Product) =>
-							item.menu_category_id === category.category_id &&
-							item.hidden !== '1',
+						(item) => item.menu_category_id === category.category_id,
 					),
 				}))
 				// eslint-disable-next-line unicorn/no-array-sort

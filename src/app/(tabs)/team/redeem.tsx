@@ -15,7 +15,7 @@ import Input from '@/components/Input'
 import ScreenContainer from '@/components/ScreenContainer'
 import SegmentedControl from '@/components/SegmentedControl'
 import { H2, H3, Paragraph, Text } from '@/components/Text'
-import { useIsBarista } from '@/lib/hooks/use-is-barista'
+import { useIsTeamMember } from '@/lib/hooks/use-is-barista'
 import {
 	redeemClientQueryOptions,
 	redeemDrinkMutationOptions,
@@ -30,7 +30,7 @@ const STAMPS_PER_REDEMPTION = 10
 
 export default function RedeemDrink() {
 	const { t } = useLingui()
-	const isBarista = useIsBarista()
+	const isTeamMember = useIsTeamMember()
 	const queryClient = useQueryClient()
 
 	const [scannedClientId, setScannedClientId] = useState<null | string>(null)
@@ -126,7 +126,7 @@ export default function RedeemDrink() {
 		? `${clientData.firstname} ${clientData.lastname}`.trim()
 		: ''
 
-	if (!isBarista) {
+	if (!isTeamMember) {
 		return (
 			<>
 				<Head>

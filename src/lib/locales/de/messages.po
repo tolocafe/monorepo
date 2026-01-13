@@ -21,7 +21,7 @@ msgstr "{0, select, Status10 {Offen} Status20 {Wird zubereitet} Status30 {Bereit
 #. placeholder {0}: formatDate(date)
 #: src/app/events/[id].tsx:195
 msgid "{0}"
-msgstr ""
+msgstr "{0}"
 
 #. placeholder {0}: tableBill.tableName
 #: src/containers/table-bill-screen.tsx:316
@@ -41,7 +41,7 @@ msgstr "{0} - TOLO Guter Kaffee"
 #. placeholder {0}: clientData.stamps
 #: src/app/(tabs)/team/redeem.tsx:204
 msgid "{0} stamps ({STAMPS_PER_REDEMPTION} = ☕️)"
-msgstr ""
+msgstr "{0} Stempel ({STAMPS_PER_REDEMPTION} = ☕️)"
 
 #. placeholder {0}: order.processing_status === 10 && 'Open'
 #. placeholder {1}: order.processing_status === 20 && 'Preparing'
@@ -104,7 +104,7 @@ msgstr "Zu Bestellung hinzufügen"
 msgid "Additional"
 msgstr "Zusätzlich"
 
-#: src/app/(tabs)/team/queue.tsx:199
+#: src/app/(tabs)/team/queue.tsx:205
 msgid "All"
 msgstr "Alle"
 
@@ -162,16 +162,16 @@ msgstr "Geburtstagsgetränk wurde dieses Jahr bereits eingelöst."
 #. placeholder {0}: clientName || 'customer'
 #: src/app/(tabs)/team/redeem.tsx:189
 msgid "Birthday drink redeemed for {0}."
-msgstr ""
+msgstr "Geburtstagsgetränk für {0} eingelöst."
 
 #: src/components/HomeSections/BlogSection.tsx:21
 msgid "Blog"
-msgstr ""
+msgstr "Blog"
 
 #. placeholder {0}: promotion.bonus
 #: src/app/promotions/[id].tsx:217
 msgid "Bonus: {0}"
-msgstr ""
+msgstr "Bonus: {0}"
 
 #: src/app/(tabs)/more/visit-us.tsx:47
 msgid "Boulevard José María Pino Suárez 800, 50130 Toluca, MEX, Mexico"
@@ -301,7 +301,7 @@ msgstr "TT/MM/JJJJ"
 msgid "Delete"
 msgstr "Löschen"
 
-#: src/app/(tabs)/team/queue.tsx:285
+#: src/app/(tabs)/team/queue.tsx:291
 msgid "Delivery"
 msgstr "Lieferung"
 
@@ -487,7 +487,7 @@ msgstr "Google Maps"
 msgid "History"
 msgstr "Verlauf"
 
-#: src/app/(tabs)/_layout.tsx:48
+#: src/app/(tabs)/_layout.tsx:47
 #: src/app/(tabs)/(home)/index.tsx:65
 msgid "Home"
 msgstr "Startseite"
@@ -607,7 +607,7 @@ msgstr "Änderungen"
 msgid "Monday – Friday"
 msgstr "Montag – Freitag"
 
-#: src/app/(tabs)/_layout.tsx:83
+#: src/app/(tabs)/_layout.tsx:79
 #: src/app/(tabs)/more/index.tsx:95
 msgid "More"
 msgstr "Mehr"
@@ -630,7 +630,7 @@ msgstr "name@beispiel.com"
 msgid "New"
 msgstr "Neu"
 
-#: src/app/(tabs)/team/queue.tsx:420
+#: src/app/(tabs)/team/queue.tsx:426
 msgid "New orders will appear here"
 msgstr "Neue Bestellungen werden hier angezeigt"
 
@@ -655,7 +655,7 @@ msgstr ""
 msgid "No events scheduled at the moment"
 msgstr ""
 
-#: src/app/(tabs)/team/queue.tsx:417
+#: src/app/(tabs)/team/queue.tsx:423
 msgid "No orders in queue"
 msgstr "Keine Bestellungen in der Warteschlange"
 
@@ -812,7 +812,7 @@ msgstr "Zahlung wird verarbeitet..."
 msgid "Product not found"
 msgstr "Produkt nicht gefunden"
 
-#: src/app/(tabs)/_layout.tsx:72
+#: src/app/(tabs)/_layout.tsx:69
 #: src/app/(tabs)/profile/index.tsx:179
 msgid "Profile"
 msgstr "Profil"
@@ -840,7 +840,7 @@ msgid "Qty: {0}"
 msgstr "Anz: {0}"
 
 #: src/app/(tabs)/team/index.tsx:53
-#: src/app/(tabs)/team/queue.tsx:169
+#: src/app/(tabs)/team/queue.tsx:175
 msgid "Queue"
 msgstr "Warteschlange"
 
@@ -1013,7 +1013,7 @@ msgstr ""
 msgid "Tax"
 msgstr "Steuer"
 
-#: src/app/(tabs)/_layout.tsx:60
+#: src/app/(tabs)/_layout.tsx:58
 #: src/app/(tabs)/team/index.tsx:30
 msgid "Team"
 msgstr "Team"
@@ -1080,7 +1080,7 @@ msgstr "Tickets"
 msgid "Tip"
 msgstr "Trinkgeld"
 
-#: src/app/(tabs)/team/queue.tsx:276
+#: src/app/(tabs)/team/queue.tsx:282
 msgid "To Go"
 msgstr "Zum Mitnehmen"
 

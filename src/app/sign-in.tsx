@@ -12,7 +12,6 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
 import Button from '@/components/Button'
-import { TextColorIcon } from '@/components/Icons'
 import Input from '@/components/Input'
 import OtpInput from '@/components/otp-input'
 import PhoneNumberInput from '@/components/phone-number-input'
@@ -273,7 +272,7 @@ export default function SignInScreen() {
 
 	return (
 		<>
-			<Stack.Screen
+			{/* <Stack.Screen
 				options={{
 					animation: Platform.select({ web: 'fade' }),
 					headerBackVisible: false,
@@ -295,7 +294,15 @@ export default function SignInScreen() {
 						web: 'transparentModal',
 					}),
 				}}
-			/>
+			/> */}
+			<Stack.Screen>
+				<Stack.Header>
+					<Stack.Header.Title>{t`Sign in`}</Stack.Header.Title>
+					<Stack.Header.Left>
+						<Stack.Header.Button icon="xmark" onPress={() => router.back()} />
+					</Stack.Header.Left>
+				</Stack.Header>
+			</Stack.Screen>
 			<ScreenContainer
 				bounces={false}
 				contentContainerStyle={styles.contentContainer}

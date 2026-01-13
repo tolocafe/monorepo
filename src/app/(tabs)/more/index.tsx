@@ -95,12 +95,11 @@ export default function MoreScreen() {
 					<Stack.Header.Title>{t`More`}</Stack.Header.Title>
 				</Stack.Header>
 			</Stack.Screen>
-			<ScreenContainer>
+			<ScreenContainer withPaddingEdges={[]}>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
 						<Trans>Contact</Trans>
 					</H2>
-
 					<List>
 						<ListItem
 							accessibilityRole="link"
@@ -272,6 +271,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	section: {
 		marginBottom: theme.spacing.lg,
+		paddingHorizontal: theme.layout.screenPadding,
 	},
 	sectionTitle: {
 		marginBottom: theme.spacing.sm,

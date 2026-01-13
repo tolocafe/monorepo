@@ -104,7 +104,7 @@ msgstr "注文に追加"
 msgid "Additional"
 msgstr "追加"
 
-#: src/app/(tabs)/team/queue.tsx:199
+#: src/app/(tabs)/team/queue.tsx:205
 msgid "All"
 msgstr "すべて"
 
@@ -301,7 +301,7 @@ msgstr "DD/MM/YYYY"
 msgid "Delete"
 msgstr "削除"
 
-#: src/app/(tabs)/team/queue.tsx:285
+#: src/app/(tabs)/team/queue.tsx:291
 msgid "Delivery"
 msgstr "配達"
 
@@ -487,7 +487,7 @@ msgstr "Google Maps"
 msgid "History"
 msgstr "履歴"
 
-#: src/app/(tabs)/_layout.tsx:48
+#: src/app/(tabs)/_layout.tsx:47
 #: src/app/(tabs)/(home)/index.tsx:65
 msgid "Home"
 msgstr "ホーム"
@@ -607,7 +607,7 @@ msgstr "カスタマイズ"
 msgid "Monday – Friday"
 msgstr "月曜日 – 金曜日"
 
-#: src/app/(tabs)/_layout.tsx:83
+#: src/app/(tabs)/_layout.tsx:79
 #: src/app/(tabs)/more/index.tsx:95
 msgid "More"
 msgstr "その他"
@@ -630,7 +630,7 @@ msgstr "name@example.com"
 msgid "New"
 msgstr "新着"
 
-#: src/app/(tabs)/team/queue.tsx:420
+#: src/app/(tabs)/team/queue.tsx:426
 msgid "New orders will appear here"
 msgstr "新しい注文はここに表示されます"
 
@@ -655,7 +655,7 @@ msgstr ""
 msgid "No events scheduled at the moment"
 msgstr ""
 
-#: src/app/(tabs)/team/queue.tsx:417
+#: src/app/(tabs)/team/queue.tsx:423
 msgid "No orders in queue"
 msgstr "キューに注文はありません"
 
@@ -812,7 +812,7 @@ msgstr "決済処理中..."
 msgid "Product not found"
 msgstr "商品が見つかりません"
 
-#: src/app/(tabs)/_layout.tsx:72
+#: src/app/(tabs)/_layout.tsx:69
 #: src/app/(tabs)/profile/index.tsx:179
 msgid "Profile"
 msgstr "プロフィール"
@@ -840,7 +840,7 @@ msgid "Qty: {0}"
 msgstr "数量: {0}"
 
 #: src/app/(tabs)/team/index.tsx:53
-#: src/app/(tabs)/team/queue.tsx:169
+#: src/app/(tabs)/team/queue.tsx:175
 msgid "Queue"
 msgstr "キュー"
 
@@ -1013,7 +1013,7 @@ msgstr ""
 msgid "Tax"
 msgstr "税"
 
-#: src/app/(tabs)/_layout.tsx:60
+#: src/app/(tabs)/_layout.tsx:58
 #: src/app/(tabs)/team/index.tsx:30
 msgid "Team"
 msgstr "チーム"
@@ -1080,7 +1080,7 @@ msgstr "チケット"
 msgid "Tip"
 msgstr "チップ"
 
-#: src/app/(tabs)/team/queue.tsx:276
+#: src/app/(tabs)/team/queue.tsx:282
 msgid "To Go"
 msgstr "お持ち帰り"
 

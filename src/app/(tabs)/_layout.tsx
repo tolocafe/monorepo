@@ -11,7 +11,7 @@ import { Platform } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
 import { FloatingOrderCard } from '@/components/FloatingOrderCard'
-import { useIsBarista } from '@/lib/hooks/use-is-barista'
+import { useIsTeamMember } from '@/lib/hooks/use-is-barista'
 import { useCurrentOrder } from '@/lib/stores/order-store'
 
 export const unstable_settings = {
@@ -21,7 +21,7 @@ export const unstable_settings = {
 export default function TabsLayout() {
 	const { t } = useLingui()
 	const { theme } = useUnistyles()
-	const isBarista = useIsBarista()
+	const isTeamMember = useIsTeamMember()
 
 	const currentOrder = useCurrentOrder()
 
@@ -53,7 +53,7 @@ export default function TabsLayout() {
 						}}
 					/>
 				</NativeTabs.Trigger>
-				{isBarista && (
+				{isTeamMember && (
 					<NativeTabs.Trigger name="team">
 						<NativeTabsTriggerLabel>{t`Team`}</NativeTabsTriggerLabel>
 						<NativeTabsTriggerIcon

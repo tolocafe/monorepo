@@ -67,8 +67,6 @@ msgid ""
 msgstr ""
 "💳 Paiements sécurisés par Stripe\n"
 "🔒 Vos informations de paiement sont chiffrées et sécurisées"
-"💳 Paiements sécurisés par Stripe\n"
-"🔒 Vos informations de paiement sont chiffrées et sécurisées"
 
 #: src/app/sign-in.tsx:342
 msgid "0000000000"
@@ -106,7 +104,7 @@ msgstr "Ajouter à la commande"
 msgid "Additional"
 msgstr "Supplémentaire"
 
-#: src/app/(tabs)/team/queue.tsx:199
+#: src/app/(tabs)/team/queue.tsx:205
 msgid "All"
 msgstr "Tous"
 
@@ -164,7 +162,7 @@ msgstr "La boisson d'anniversaire a déjà été échangée cette année."
 #. placeholder {0}: clientName || 'customer'
 #: src/app/(tabs)/team/redeem.tsx:189
 msgid "Birthday drink redeemed for {0}."
-msgstr ""
+msgstr "Boisson d'anniversaire échangée pour {0}."
 
 #: src/components/HomeSections/BlogSection.tsx:21
 msgid "Blog"
@@ -303,7 +301,7 @@ msgstr "JJ/MM/AAAA"
 msgid "Delete"
 msgstr "Supprimer"
 
-#: src/app/(tabs)/team/queue.tsx:285
+#: src/app/(tabs)/team/queue.tsx:291
 msgid "Delivery"
 msgstr "Livraison"
 
@@ -489,7 +487,7 @@ msgstr "Google Maps"
 msgid "History"
 msgstr "Historique"
 
-#: src/app/(tabs)/_layout.tsx:48
+#: src/app/(tabs)/_layout.tsx:47
 #: src/app/(tabs)/(home)/index.tsx:65
 msgid "Home"
 msgstr "Accueil"
@@ -609,7 +607,7 @@ msgstr "Modifications"
 msgid "Monday – Friday"
 msgstr "Lundi – vendredi"
 
-#: src/app/(tabs)/_layout.tsx:83
+#: src/app/(tabs)/_layout.tsx:79
 #: src/app/(tabs)/more/index.tsx:95
 msgid "More"
 msgstr "Plus"
@@ -632,7 +630,7 @@ msgstr "nom@exemple.com"
 msgid "New"
 msgstr "Nouveau"
 
-#: src/app/(tabs)/team/queue.tsx:420
+#: src/app/(tabs)/team/queue.tsx:426
 msgid "New orders will appear here"
 msgstr "Les nouvelles commandes apparaîtront ici"
 
@@ -657,7 +655,7 @@ msgstr "Aucun article de blog disponible pour le moment"
 msgid "No events scheduled at the moment"
 msgstr "Aucun événement prévu pour le moment"
 
-#: src/app/(tabs)/team/queue.tsx:417
+#: src/app/(tabs)/team/queue.tsx:423
 msgid "No orders in queue"
 msgstr "Aucune commande dans la file d'attente"
 
@@ -805,8 +803,6 @@ msgid ""
 msgstr ""
 "Les prix sont susceptibles de changer sans préavis.\n"
 "Les calories et le volume sont approximatifs et peuvent varier selon les préparations."
-"Les prix sont susceptibles de changer sans préavis.\n"
-"Les calories et le volume sont approximatifs et peuvent varier selon la préparation."
 
 #: src/containers/top-up-screen.tsx:278
 msgid "Processing Payment..."
@@ -816,7 +812,7 @@ msgstr "Traitement du paiement..."
 msgid "Product not found"
 msgstr "Produit introuvable"
 
-#: src/app/(tabs)/_layout.tsx:72
+#: src/app/(tabs)/_layout.tsx:69
 #: src/app/(tabs)/profile/index.tsx:179
 msgid "Profile"
 msgstr "Profil"
@@ -844,7 +840,7 @@ msgid "Qty: {0}"
 msgstr "Qté: {0}"
 
 #: src/app/(tabs)/team/index.tsx:53
-#: src/app/(tabs)/team/queue.tsx:169
+#: src/app/(tabs)/team/queue.tsx:175
 msgid "Queue"
 msgstr "File d'attente"
 
@@ -1017,7 +1013,7 @@ msgstr "À emporter - Table {0}"
 msgid "Tax"
 msgstr "Taxe"
 
-#: src/app/(tabs)/_layout.tsx:60
+#: src/app/(tabs)/_layout.tsx:58
 #: src/app/(tabs)/team/index.tsx:30
 msgid "Team"
 msgstr "Équipe"
@@ -1084,7 +1080,7 @@ msgstr "Tickets"
 msgid "Tip"
 msgstr "Tip"
 
-#: src/app/(tabs)/team/queue.tsx:276
+#: src/app/(tabs)/team/queue.tsx:282
 msgid "To Go"
 msgstr "À emporter"
 
@@ -1169,7 +1165,7 @@ msgstr "Version {appVersion} ({buildVersion})"
 
 #: src/app/(tabs)/profile/index.tsx:254
 msgid "View All Orders"
-msgstr ""
+msgstr "Voir Toutes les Commandes"
 
 #: src/app/(tabs)/more/app.tsx:84
 msgid "View app information like version and update channel, and clear cached data."
@@ -1253,7 +1249,7 @@ msgstr "Votre numéro de téléphone"
 
 #: src/app/(tabs)/profile/index.tsx:173
 msgid "Your profile and settings."
-msgstr ""
+msgstr "Votre profil et vos paramètres."
 
 #: src/app/(tabs)/profile/edit.tsx:51
 msgid "Your profile has been updated."
