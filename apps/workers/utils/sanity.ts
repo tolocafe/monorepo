@@ -4,6 +4,13 @@ import type { SanityImageReference } from '~common/api'
 import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
 
+type SanityImage = {
+	_key: string
+	_type: 'image'
+	alt?: LocaleText
+	asset?: { _ref: string; _type: 'reference' }
+}
+
 type Bean = SanitySchema<
 	'bean',
 	{
@@ -24,12 +31,7 @@ type BlogPost = SanitySchema<
 	{
 		body?: LocaleBlockContent
 		excerpt?: LocaleText
-		images?: {
-			_key: string
-			_type: 'image'
-			alt?: LocaleText
-			asset?: { _ref: string; _type: 'reference' }
-		}[]
+		image?: SanityImage
 		name: LocaleText
 		slug: LocaleSlug
 	}
@@ -41,12 +43,8 @@ type Event = SanitySchema<
 		body?: LocaleBlockContent
 		endDate?: string
 		excerpt?: LocaleText
-		images?: {
-			_key: string
-			_type: 'image'
-			alt?: LocaleText
-			asset?: { _ref: string; _type: 'reference' }
-		}[]
+		images?: SanityImage[]
+		image?: SanityImage
 		isFeatured?: boolean
 		location?: { _ref: string; _type: 'reference' }
 		maxAttendees?: number

@@ -24,14 +24,7 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 			const localized = sanityPosts.map((post): BlogPost => {
 				// Extract asset IDs from images array
-				const images = post.images
-					?.map((img) => {
-						if (!img.asset?._ref) return null
-						return {
-							sourceId: img.asset._ref,
-						}
-					})
-					.filter((img): img is { sourceId: string } => img !== null)
+				const image = { sourceId: post.image?.asset?._ref as string }
 
 				return {
 					createdAt: post._createdAt,
@@ -39,7 +32,7 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 						? JSON.stringify(getLocalizedBlockContent(post.body, language))
 						: getLocalizedString(post.excerpt, language),
 					id: post._id,
-					images,
+					image,
 					name: getLocalizedString(post.name, language) || '',
 					slug: getLocalizedSlug(post.slug, language) || '',
 					summary: getLocalizedString(post.excerpt, language),
@@ -81,14 +74,7 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			}
 
 			// Extract asset IDs from images array
-			const images = post.images
-				?.map((img) => {
-					if (!img.asset?._ref) return null
-					return {
-						sourceId: img.asset._ref,
-					}
-				})
-				.filter((img): img is { sourceId: string } => img !== null)
+			const image = { sourceId: post.image?.asset?._ref as string }
 
 			const bodyContent = getLocalizedBlockContent(post.body, language)
 			const localized: BlogPost = {
@@ -97,7 +83,7 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 					? JSON.stringify(bodyContent)
 					: getLocalizedString(post.excerpt, language),
 				id: post._id,
-				images,
+				image,
 				name: getLocalizedString(post.name, language) || '',
 				slug: getLocalizedSlug(post.slug, language) || '',
 				summary: getLocalizedString(post.excerpt, language),
