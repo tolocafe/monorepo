@@ -11,6 +11,7 @@ import {
 	productModifiers,
 } from '~workers/db/schema'
 import { posterApi } from '~workers/utils/poster'
+import { trackEventsBatch } from '~workers/utils/posthog'
 
 import { mapClient } from './maps'
 import type { Database } from './transactions'
@@ -141,6 +142,44 @@ export async function ensureClientGroup(
 }
 
 /**
+ * Sync customer data with PostHog using $set_once for name, email, and phone
+ */
+async function syncCustomerToPostHog(
+	customerId: number,
+	customerData: typeof customers.$inferInsert,
+	posthogApiKey: string,
+) {
+	try {
+		const name =
+			customerData.firstName || customerData.lastName
+				? `${customerData.firstName || ''} ${customerData.lastName || ''}`.trim()
+				: undefined
+
+		const userPropertiesOnce = {
+			...(name && { name }),
+			...(customerData.email && { email: customerData.email }),
+			...(customerData.phone && { phone: customerData.phone }),
+		}
+
+		if (Object.keys(userPropertiesOnce).length > 0) {
+			await trackEventsBatch({ POSTHOG_API_KEY: posthogApiKey }, [
+				{
+					distinctId: customerId.toString(),
+					event: '$identify',
+					userPropertiesOnce,
+				},
+			])
+		}
+	} catch (error) {
+		captureException(error, {
+			extra: { customerId },
+			level: 'warning',
+			tags: { operation: 'posthog_customer_sync' },
+		})
+	}
+}
+
+/**
  * Ensure a customer exists in the database
  */
 export async function ensureCustomer(
@@ -148,6 +187,7 @@ export async function ensureCustomer(
 	token: string,
 	id: number,
 	cache: Cache,
+	posthogApiKey?: string,
 ) {
 	if (cache.customers.has(id)) return
 
@@ -179,6 +219,11 @@ export async function ensureCustomer(
 		set: parsed,
 		target: customers.id,
 	})
+
+	// Sync customer data with PostHog using $set_once
+	if (posthogApiKey) {
+		await syncCustomerToPostHog(id, parsed, posthogApiKey)
+	}
 
 	cache.customers.add(id)
 }

@@ -69,6 +69,8 @@ export type BatchEventOptions = {
 	properties?: PostHogEventProperties
 	/** User properties to set via $set */
 	userProperties?: PostHogUserProperties
+	/** User properties to set via $set_once */
+	userPropertiesOnce?: PostHogUserProperties
 }
 
 /**
@@ -124,9 +126,9 @@ export async function trackEvent(
  *
  */
 export async function trackEventsBatch(
-	env: Bindings,
+	env: { POSTHOG_API_KEY: string },
 	events: BatchEventOptions[],
-): Promise<void> {
+) {
 	if (events.length === 0) return
 
 	const posthog = createPostHogClient(env.POSTHOG_API_KEY)
@@ -142,6 +144,10 @@ export async function trackEventsBatch(
 					source: 'scheduled_worker',
 					// Include $set for user properties if provided
 					...(event.userProperties ? { $set: event.userProperties } : {}),
+					// Include $set_once for one-time user properties if provided
+					...(event.userPropertiesOnce
+						? { $set_once: event.userPropertiesOnce }
+						: {}),
 				},
 			})
 		}

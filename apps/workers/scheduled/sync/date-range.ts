@@ -59,6 +59,7 @@ export async function syncDateRange(
 			const change = await upsertTransaction(
 				{ cache: caches, database, token },
 				tx,
+				environment.POSTHOG_API_KEY,
 			)
 
 			changes.push(change)

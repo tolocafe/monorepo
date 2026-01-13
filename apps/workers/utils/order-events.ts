@@ -6,7 +6,7 @@
  *
  */
 import * as Sentry from '@sentry/cloudflare'
-import { count, eq } from 'drizzle-orm'
+import { count, inArray } from 'drizzle-orm'
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js'
 
 import { transactions } from '~workers/db/schema'
@@ -261,26 +261,26 @@ export async function processOrderEvents(
 
 	// Query order counts for customers with order:closed events
 	const orderCountMap = new Map<number, number>()
-	if (database) {
-		const closedEvents = events.filter(
-			(e) => e.eventType === 'order:closed' && e.customerId !== null,
-		)
-		const customerIds = [...new Set(closedEvents.map((e) => e.customerId!))]
 
-		for (const customerId of customerIds) {
-			try {
-				const result = await database
-					.select({ count: count() })
-					.from(transactions)
-					.where(eq(transactions.customerId, customerId))
-				orderCountMap.set(customerId, result[0]?.count ?? 0)
-			} catch (error) {
-				Sentry.captureException(error, {
-					level: 'warning',
-					tags: { operation: 'order_count_query' },
-				})
-			}
-		}
+	const closedEvents = events.filter(
+		(e) => e.eventType === 'order:closed' && e.customerId !== null,
+	)
+	const customerIds = [
+		...new Set(closedEvents.map((e) => e.customerId as number)),
+	]
+
+	const results =
+		(await database
+			?.select({
+				count: count(),
+				customerId: transactions.customerId,
+			})
+			.from(transactions)
+			.where(inArray(transactions.customerId, customerIds))
+			.groupBy(transactions.customerId)) ?? ([] as never[])
+
+	for (const result of results) {
+		orderCountMap.set(result.customerId as number, result.count ?? 0)
 	}
 
 	// Prepare batch analytics events (filter out events without customers)

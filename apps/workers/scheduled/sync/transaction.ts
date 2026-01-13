@@ -33,6 +33,7 @@ export async function upsertTransaction(
 		token: string
 	},
 	tx: DashTransaction,
+	posthogApiKey?: string,
 ): Promise<TransactionChange> {
 	const { cache, database, token } = context
 	const txId = Number(tx.transaction_id)
@@ -46,7 +47,7 @@ export async function upsertTransaction(
 	const customerId =
 		tx.client_id && tx.client_id !== '0' ? Number(tx.client_id) : null
 	if (customerId) {
-		await ensureCustomer(database, token, customerId, cache)
+		await ensureCustomer(database, token, customerId, cache, posthogApiKey)
 	}
 
 	const locationId = tx.spot_id ? Number(tx.spot_id) : null
