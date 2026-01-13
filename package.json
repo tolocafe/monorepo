@@ -8,7 +8,7 @@
 		"android": "expo run:android",
 		"ios": "expo run:ios",
 		"web": "expo start --web",
-		"web:build": "bash -c 'echo \"🚀 Starting web build with 2-minute timeout...\"; expo export --platform web & pid=$!; (sleep 120 && echo \"❌ Build timed out after 2 minutes\" && kill $pid 2>/dev/null && exit 0) & timeout_pid=$!; wait $pid && kill $timeout_pid 2>/dev/null && [ -d dist ] && echo \"✅ Web build completed successfully\" || exit 1'",
+		"web:build": "bash -c 'echo \"🚀 Starting web build with 2-minute timeout...\"; expo export --platform web & pid=$!; (sleep 120 && echo \"❌ Build timed out after 2 minutes\" && kill $pid 2>/dev/null && exit 0) & timeout_pid=$!; if wait $pid; then kill $timeout_pid 2>/dev/null; if [ -d dist ]; then echo \"✅ Web build completed successfully\"; else echo \"❌ Build failed - dist directory not found\" && exit 1; fi; else kill $timeout_pid 2>/dev/null && echo \"❌ Build failed with exit code $?\" && exit 1; fi'",
 		"test": "jest --watchAll=false",
 		"test:watch": "jest --watchAll",
 		"test:coverage": "jest --coverage --watchAll=false",
