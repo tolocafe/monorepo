@@ -5,11 +5,7 @@ import type { BlogPost } from '~common/api'
 import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
 import { defaultJsonHeaders } from '~workers/utils/headers'
-import sanity, {
-	getLocalizedBlockContent,
-	getLocalizedSlug,
-	getLocalizedString,
-} from '~workers/utils/sanity'
+import sanity from '~workers/utils/sanity'
 
 type Variables = {
 	language: SupportedLocale
@@ -28,14 +24,12 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 				return {
 					createdAt: post._createdAt,
-					description: getLocalizedBlockContent(post.body, language)
-						? JSON.stringify(getLocalizedBlockContent(post.body, language))
-						: getLocalizedString(post.excerpt, language),
+					description: post.body ?? post.excerpt,
 					id: post._id,
 					image,
-					name: getLocalizedString(post.name, language) || '',
-					slug: getLocalizedSlug(post.slug, language) || '',
-					summary: getLocalizedString(post.excerpt, language),
+					name: post.name || '',
+					slug: post.slug?.current || '',
+					summary: post.excerpt,
 				}
 			})
 
@@ -63,7 +57,7 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		}
 
 		try {
-			const post = await sanity.getBlogPost(context.env, id)
+			const post = await sanity.getBlogPost(context.env, id, language)
 
 			if (!post) {
 				return context.json(
@@ -76,17 +70,14 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			// Extract asset IDs from images array
 			const image = { sourceId: post.image?.asset?._ref as string }
 
-			const bodyContent = getLocalizedBlockContent(post.body, language)
 			const localized: BlogPost = {
 				createdAt: post._createdAt,
-				description: bodyContent
-					? JSON.stringify(bodyContent)
-					: getLocalizedString(post.excerpt, language),
+				description: post.body ?? post.excerpt,
 				id: post._id,
 				image,
-				name: getLocalizedString(post.name, language) || '',
-				slug: getLocalizedSlug(post.slug, language) || '',
-				summary: getLocalizedString(post.excerpt, language),
+				name: post.name || '',
+				slug: post.slug?.current || '',
+				summary: post.excerpt,
 			}
 
 			return context.json(localized, 200, {

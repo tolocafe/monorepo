@@ -16,6 +16,7 @@ import ScreenContainer from '@/components/ScreenContainer'
 import { H2, Label, Paragraph } from '@/components/Text'
 import { trackEvent } from '@/lib/analytics'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { isIOS20 } from '@/lib/constants/ui'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { loadAndActivateLocale } from '@/lib/locales/load-and-activate-locale'
 import { LOCALE_NAMES } from '@/lib/locales/utils'
@@ -63,6 +64,10 @@ const createDropdownStyles = (isDark: boolean) => ({
 	},
 })
 
+const PADDING_EDGES = isIOS20
+	? (['bottom'] as const)
+	: (['bottom', 'top'] as const)
+
 export default function MoreScreen() {
 	const { i18n } = useLingui()
 	const colorScheme = useColorScheme()
@@ -89,7 +94,7 @@ export default function MoreScreen() {
 					<Stack.Header.Title>{t`More`}</Stack.Header.Title>
 				</Stack.Header>
 			</Stack.Screen>
-			<ScreenContainer withPaddingEdges={[]}>
+			<ScreenContainer withPaddingEdges={PADDING_EDGES}>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>
 						<Trans>Contact</Trans>

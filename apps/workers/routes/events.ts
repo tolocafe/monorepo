@@ -5,11 +5,7 @@ import type { Event } from '~common/api'
 import type { SupportedLocale } from '~common/locales'
 import type { Bindings } from '~workers/types'
 import { defaultJsonHeaders } from '~workers/utils/headers'
-import sanity, {
-	getLocalizedBlockContent,
-	getLocalizedSlug,
-	getLocalizedString,
-} from '~workers/utils/sanity'
+import sanity from '~workers/utils/sanity'
 
 type Variables = {
 	language: SupportedLocale
@@ -26,22 +22,25 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				// Extract asset IDs from images array
 				const images = event.images
 					?.map((img) => {
-						if (!img.asset?._ref) return null
-						return {
-							sourceId: img.asset._ref,
+						// Type guard: check if img is SanityImage
+						if ('asset' in img && img.asset?._ref) {
+							return {
+								sourceId: img.asset._ref,
+							}
 						}
+						return null
 					})
 					.filter((img): img is { sourceId: string } => img !== null)
 
 				return {
 					dates: event.startDate ? [event.startDate] : null,
-					description: getLocalizedString(event.excerpt, language),
+					description: event.excerpt,
 					id: event._id,
 					images,
 					location: null, // Location is a reference, would need separate query
-					name: getLocalizedString(event.name, language) || '',
-					slug: getLocalizedSlug(event.slug, language) || '',
-					summary: getLocalizedString(event.excerpt, language),
+					name: event.name || '',
+					slug: event.slug?.current || '',
+					summary: event.excerpt,
 				}
 			})
 
@@ -69,7 +68,7 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		}
 
 		try {
-			const event = await sanity.getEvent(context.env, id)
+			const event = await sanity.getEvent(context.env, id, language)
 
 			if (!event) {
 				return context.json(
@@ -82,25 +81,22 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			// Extract asset IDs from images array
 			const images = event.images
 				?.map((img) => {
-					if (!img.asset?._ref) return null
+					if (!img.sourceId) return null
 					return {
-						sourceId: img.asset._ref,
+						sourceId: img.sourceId,
 					}
 				})
 				.filter((img): img is { sourceId: string } => img !== null)
 
-			const bodyContent = getLocalizedBlockContent(event.body, language)
 			const localized: Event = {
 				dates: event.startDate ? [event.startDate] : null,
-				description: bodyContent
-					? JSON.stringify(bodyContent)
-					: getLocalizedString(event.excerpt, language),
+				description: event.body ?? event.excerpt,
 				id: event._id,
 				images,
 				location: null, // Location is a reference, would need separate query
-				name: getLocalizedString(event.name, language) || '',
-				slug: getLocalizedSlug(event.slug, language) || '',
-				summary: getLocalizedString(event.excerpt, language),
+				name: event.name || '',
+				slug: event.slug?.current || '',
+				summary: event.excerpt,
 			}
 
 			return context.json(localized, 200, {

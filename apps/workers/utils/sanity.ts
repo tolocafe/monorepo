@@ -11,51 +11,6 @@ type SanityImage = {
 	asset?: { _ref: string; _type: 'reference' }
 }
 
-type Bean = SanitySchema<
-	'bean',
-	{
-		agtron: number
-		excerpt: LocaleText
-		name: LocaleText
-		origin: LocaleText | undefined
-		process: LocaleText | undefined
-		region: LocaleText | undefined
-		slug: LocaleSlug
-		tastingNotes: LocaleText | undefined
-		varietal: LocaleText | undefined
-	}
->
-
-type BlogPost = SanitySchema<
-	'post',
-	{
-		body?: LocaleBlockContent
-		excerpt?: LocaleText
-		image?: SanityImage
-		name: LocaleText
-		slug: LocaleSlug
-	}
->
-
-type Event = SanitySchema<
-	'event',
-	{
-		body?: LocaleBlockContent
-		endDate?: string
-		excerpt?: LocaleText
-		images?: SanityImage[]
-		image?: SanityImage
-		isFeatured?: boolean
-		location?: { _ref: string; _type: 'reference' }
-		maxAttendees?: number
-		name: LocaleText
-		registrationUrl?: string
-		slug: LocaleSlug
-		startDate: string
-		status: 'cancelled' | 'completed' | 'ongoing' | 'upcoming'
-	}
->
-
 type LocaleBlockContent = Partial<
 	Record<SupportedLocale, PortableTextBlock[]>
 > & {
@@ -70,6 +25,59 @@ type LocaleSlug = Partial<
 
 type LocaleText = Partial<Record<SupportedLocale, string>> & {
 	_type: 'localeString' | 'localeText'
+}
+
+/**
+ * Localized Sanity bean (after language extraction in GROQ)
+ */
+type SanityLocalizedBean = {
+	_createdAt: string
+	_id: string
+	agtron: number
+	excerpt?: string
+	name?: string
+	origin?: string
+	process?: string
+	region?: string
+	slug?: { current: string }
+	tastingNotes?: string
+	varietal?: string
+}
+
+/**
+ * Localized Sanity blog post (after language extraction in GROQ)
+ */
+type SanityLocalizedBlogPost = {
+	_createdAt: string
+	_id: string
+	body?: string
+	excerpt?: string
+	image?: SanityImage
+	name?: string
+	slug?: { current: string }
+}
+
+/**
+ * Localized Sanity event (after language extraction in GROQ)
+ * Note: For single getEvent, images are transformed to { sourceId: string }[]
+ * For listEvents, images remain as SanityImage[]
+ */
+type SanityLocalizedEvent = {
+	_createdAt: string
+	_id: string
+	body?: string
+	endDate?: string
+	excerpt?: string
+	image?: SanityImage
+	images?: SanityImage[] | { sourceId: string }[]
+	isFeatured?: boolean
+	location?: { _ref: string; _type: 'reference' }
+	maxAttendees?: number
+	name?: string
+	registrationUrl?: string
+	slug?: { current: string }
+	startDate: string
+	status: 'cancelled' | 'completed' | 'ongoing' | 'upcoming'
 }
 
 /**
@@ -114,15 +122,6 @@ type SanityLocalizedPromotion = {
 	name?: string
 	posterId?: string
 	slug?: { current: string }
-}
-
-type SanitySchema<
-	TType = string,
-	TFields = Record<string, unknown>,
-> = TFields & {
-	_createdAt: string
-	_id: string
-	_type: TType
 }
 
 /**
@@ -209,75 +208,74 @@ export function getLocalizedString(
 }
 
 const sanity = {
-	getBean(environment: Bindings, itemId: string) {
-		return fetchSanity<Bean>(environment, {
-			query: `*[_type == "bean" && _id == "${itemId}"][0]`,
+	getBean(environment: Bindings, itemId: string, language: SupportedLocale) {
+		return fetchSanity<SanityLocalizedBean>(environment, {
+			query: `*[_type == "bean" && _id == "${itemId}"][0]{
+				_id,
+				_createdAt,
+				agtron,
+				"excerpt": excerpt.${language},
+				"name": name.${language},
+				"origin": origin.${language},
+				"process": process.${language},
+				"region": region.${language},
+				"slug": slug.${language},
+				"tastingNotes": tastingNotes.${language},
+				"varietal": varietal.${language}
+			}`,
 		})
 	},
-	getBlogPost(environment: Bindings, itemId: string): Promise<null | BlogPost> {
-		type BlogPostQueryResult = Omit<BlogPost, 'images' | 'id'> & {
-			_id: string
-			images?: string[]
-		}
-
-		return fetchSanity<null | BlogPostQueryResult>(environment, {
+	getBlogPost(
+		environment: Bindings,
+		itemId: string,
+		language: SupportedLocale,
+	) {
+		return fetchSanity<null | SanityLocalizedBlogPost>(environment, {
 			query: `*[_type == "post" && _id == "${itemId}"][0]{
 				_id,
-				body,
-				excerpt,
-				"images": images[].asset->_id,
-				name,
-				slug
+				_createdAt,
+				"body": body.${language},
+				"excerpt": excerpt.${language},
+				image,
+				"name": name.${language},
+				"slug": slug.${language}
 			}`,
-		}).then((post): null | BlogPost => {
-			if (!post) return null
-			return {
-				...post,
-				id: post._id,
-				images: post.images?.map((sourceId) => ({
-					sourceId,
-				})),
-			} as BlogPost
 		})
 	},
-	getEvent(environment: Bindings, itemId: string): Promise<null | Event> {
-		type EventQueryResult = Omit<Event, 'images' | 'id'> & {
-			_id: string
+	getEvent(environment: Bindings, itemId: string, language: SupportedLocale) {
+		type EventQueryResult = Omit<SanityLocalizedEvent, 'images'> & {
 			images?: string[]
 		}
 
 		return fetchSanity<null | EventQueryResult>(environment, {
 			query: `*[_type == "event" && _id == "${itemId}"][0]{
 				_id,
-				body,
+				_createdAt,
+				"body": body.${language},
 				endDate,
-				excerpt,
+				"excerpt": excerpt.${language},
+				image,
 				"images": images[].asset->_id,
 				isFeatured,
 				location,
 				maxAttendees,
-				name,
+				"name": name.${language},
 				registrationUrl,
-				slug,
+				"slug": slug.${language},
 				startDate,
 				status
 			}`,
-		}).then((event): null | Event => {
+		}).then((event) => {
 			if (!event) return null
 			return {
 				...event,
-				id: event._id,
 				images: event.images?.map((sourceId) => ({
 					sourceId,
 				})),
-			} as Event
+			}
 		})
 	},
-	getProduct(
-		environment: Bindings,
-		itemId: string,
-		language: SupportedLocale,
-	): Promise<null | SanityLocalizedProduct> {
+	getProduct(environment: Bindings, itemId: string, language: SupportedLocale) {
 		type ProductQueryResult = Omit<SanityLocalizedProduct, 'images'> & {
 			images?: string[]
 		}
@@ -305,7 +303,7 @@ const sanity = {
 		environment: Bindings,
 		itemId: string,
 		language: SupportedLocale,
-	): Promise<null | SanityLocalizedPromotion> {
+	) {
 		type PromotionQueryResult = Omit<SanityLocalizedPromotion, 'images'> & {
 			images?: string[]
 		}
@@ -330,54 +328,58 @@ const sanity = {
 			}
 		})
 	},
-	listBeans(environment: Bindings) {
-		return fetchSanity<Bean[]>(environment, {
-			query: `*[_type == "bean"]`,
+	listBeans(environment: Bindings, language: SupportedLocale) {
+		return fetchSanity<SanityLocalizedBean[]>(environment, {
+			query: `*[_type == "bean"]{
+				_id,
+				_createdAt,
+				agtron,
+				"excerpt": excerpt.${language},
+				"name": name.${language},
+				"origin": origin.${language},
+				"process": process.${language},
+				"region": region.${language},
+				"slug": slug.${language},
+				"tastingNotes": tastingNotes.${language},
+				"varietal": varietal.${language}
+			}`,
 		})
 	},
 	listBlogPosts(environment: Bindings, language: SupportedLocale) {
-		type BlogPostQueryResult = BlogPost & {
-			_id: string
-		}
-
-		return fetchSanity<BlogPostQueryResult[]>(environment, {
+		return fetchSanity<SanityLocalizedBlogPost[]>(environment, {
 			query: `*[_type == "post"]{
 				_id,
+				_createdAt,
 				"body": body.${language},
 				"excerpt": excerpt.${language},
-				images,
+				image,
 				"name": name.${language},
-				slug
+				"slug": slug.${language}
 			} | order(_createdAt desc)`,
 		})
 	},
 	listEvents(environment: Bindings, language: SupportedLocale) {
-		type EventQueryResult = Event & {
-			_id: string
-		}
-
-		return fetchSanity<EventQueryResult[]>(environment, {
+		return fetchSanity<SanityLocalizedEvent[]>(environment, {
 			query: `*[_type == "event"]{
 				_id,
+				_createdAt,
 				"body": body.${language},
 				endDate,
 				"excerpt": excerpt.${language},
+				image,
 				images,
 				isFeatured,
 				location,
 				maxAttendees,
 				"name": name.${language},
 				registrationUrl,
-				slug,
+				"slug": slug.${language},
 				startDate,
 				status
 			}`,
 		})
 	},
-	listProducts(
-		environment: Bindings,
-		language: SupportedLocale,
-	): Promise<SanityLocalizedProduct[]> {
+	listProducts(environment: Bindings, language: SupportedLocale) {
 		type ProductQueryResult = Omit<SanityLocalizedProduct, 'images'> & {
 			images?: string[]
 		}
@@ -400,10 +402,7 @@ const sanity = {
 			})),
 		)
 	},
-	listPromotions(
-		environment: Bindings,
-		language: SupportedLocale,
-	): Promise<SanityLocalizedPromotion[]> {
+	listPromotions(environment: Bindings, language: SupportedLocale) {
 		type PromotionQueryResult = Omit<SanityLocalizedPromotion, 'images'> & {
 			images?: string[]
 		}

@@ -24,6 +24,10 @@ import { useTrackScreenView } from '@/lib/analytics/hooks'
 import { isIOS20 } from '@/lib/constants/ui'
 import { queryClient } from '@/lib/query-client'
 
+const PADDING_EDGES = isIOS20
+	? (['bottom'] as const)
+	: (['bottom', 'top'] as const)
+
 export default function MenuScreen() {
 	const { t } = useLingui()
 
@@ -78,7 +82,7 @@ export default function MenuScreen() {
 			</Stack.Header>
 
 			<ScreenContainer
-				withPaddingEdges={isIOS20 ? ['bottom'] : ['bottom', 'top']}
+				withPaddingEdges={PADDING_EDGES}
 				refreshControl={
 					<RefreshControl onRefresh={handleRefresh} refreshing={false} />
 				}

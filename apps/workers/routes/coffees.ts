@@ -2,10 +2,7 @@ import { Hono } from 'hono'
 
 import type { SupportedLocale } from '~common/locales'
 import { defaultJsonHeaders } from '~workers/utils/headers'
-import sanity, {
-	getLocalizedSlug,
-	getLocalizedString,
-} from '~workers/utils/sanity'
+import sanity from '~workers/utils/sanity'
 
 import type { Bindings } from '../types'
 
@@ -18,15 +15,15 @@ const coffees = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 		const language = context.get('language')
 
 		try {
-			const beans = await sanity.listBeans(context.env)
+			const beans = await sanity.listBeans(context.env, language)
 
 			const localized = beans.map((bean) => ({
-				name: getLocalizedString(bean.name, language) || '',
-				origin: getLocalizedString(bean.origin, language) || '',
-				process: getLocalizedString(bean.process, language) || '',
-				region: getLocalizedString(bean.region, language) || '',
-				slug: getLocalizedSlug(bean.slug, language) || '',
-				'tasting-notes': getLocalizedString(bean.tastingNotes, language),
+				name: bean.name || '',
+				origin: bean.origin || '',
+				process: bean.process || '',
+				region: bean.region || '',
+				slug: bean.slug?.current || '',
+				'tasting-notes': bean.tastingNotes,
 			}))
 
 			return context.json(localized, 200, defaultJsonHeaders)
@@ -40,15 +37,19 @@ const coffees = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 	})
 	.get('/:id', async (context) => {
 		const language = context.get('language')
-		const bean = await sanity.getBean(context.env, context.req.param('id'))
+		const bean = await sanity.getBean(
+			context.env,
+			context.req.param('id'),
+			language,
+		)
 
 		const localized = {
-			name: getLocalizedString(bean.name, language) || '',
-			origin: getLocalizedString(bean.origin, language) || '',
-			process: getLocalizedString(bean.process, language) || '',
-			region: getLocalizedString(bean.region, language) || '',
-			slug: getLocalizedSlug(bean.slug, language) || '',
-			'tasting-notes': getLocalizedString(bean.tastingNotes, language),
+			name: bean.name || '',
+			origin: bean.origin || '',
+			process: bean.process || '',
+			region: bean.region || '',
+			slug: bean.slug?.current || '',
+			'tasting-notes': bean.tastingNotes,
 		}
 
 		return context.json(localized, 200, defaultJsonHeaders)
