@@ -88,6 +88,7 @@
 		"max-lines-per-function": "off",
 		"max-params": "off",
 		"max-statements": "off",
+		"consistent-type-imports": ["warn", { "prefer": "type-imports" }],
 		"new-cap": "off",
 		"no-console": "warn",
 		"no-continue": "off",
