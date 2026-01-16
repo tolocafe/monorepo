@@ -59,6 +59,7 @@
 	"rules": {
 		"capitalized-comments": "off",
 		"complexity": "off",
+		"consistent-type-imports": ["warn", { "prefer": "type-imports" }],
 		"curly": "off",
 		"eqeqeq": ["warn", "smart"],
 		"func-style": "off",
@@ -88,7 +89,6 @@
 		"max-lines-per-function": "off",
 		"max-params": "off",
 		"max-statements": "off",
-		"consistent-type-imports": ["warn", { "prefer": "type-imports" }],
 		"new-cap": "off",
 		"no-console": "warn",
 		"no-continue": "off",
