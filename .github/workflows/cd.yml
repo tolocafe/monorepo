@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   changes:
-    name: Detect Changes
+    name: 🔍 Detect Changes
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
@@ -52,7 +52,7 @@ jobs:
               - 'packages/**'
 
   deploy-app:
-    name: Deploy App
+    name: 📱 Deploy App
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
@@ -78,7 +78,7 @@ jobs:
           workingDirectory: apps/app
 
   deploy-workers:
-    name: Deploy Workers
+    name: ⚙️ Deploy Workers
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
@@ -108,7 +108,7 @@ jobs:
           command: deploy --upload-source-maps --var SENTRY_RELEASE:${{ steps.sentry.outputs.release }}
 
   deploy-website:
-    name: Deploy Website
+    name: 🌐 Deploy Website
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
@@ -130,7 +130,7 @@ jobs:
           workingDirectory: apps/website
 
   deploy-studio:
-    name: Deploy Studio
+    name: 📝 Deploy Studio
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
@@ -152,7 +152,7 @@ jobs:
         run: bun run deploy
 
   deploy-poster-plugin:
-    name: Deploy Poster Plugin
+    name: 🔌 Deploy Poster Plugin
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
@@ -170,6 +170,6 @@ jobs:
       - name: Deploy Poster Plugin
         working-directory: apps/poster-plugin
         env:
-          POSTER_APPLICATION_ID: ${{ secrets.POSTER_APPLICATION_ID }}
+          POSTER_APPLICATION_ID: ${{ vars.POSTER_APPLICATION_ID }}
           POSTER_APPLICATION_SECRET: ${{ secrets.POSTER_APPLICATION_SECRET }}
         run: bun run deploy
