@@ -1,36 +1,46 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "tolo-workers",
-	"main": "index.ts",
-	"compatibility_date": "2025-01-13",
+	"ai": {
+		"binding": "AI"
+	},
+	"compatibility_date": "2026-01-20",
 	"compatibility_flags": ["nodejs_compat"],
-	"vars": {
-		"APNS_KEY_ID": "test",
-		"APNS_PRIVATE_KEY": "test",
-		"APNS_TEAM_ID": "test",
-		"BROADCAST_SECRET": "test",
-		"EXPO_ACCESS_TOKEN": "test",
-		"GA4_API_SECRET": "test",
-		"GA4_MEASUREMENT_ID": "test",
-		"GOOGLE_SERVICE_WALLET_EMAIL": "test",
-		"GOOGLE_SERVICE_WALLET_PRIVATE_KEY": "test",
-		"GOOGLE_WALLET_SECRET_KEY": "test",
-		"JWT_PASS_SECRET": "test",
-		"JWT_SECRET": "test",
-		"POSTER_ACCOUNT_NUMBER": "test",
-		"POSTER_APPLICATION_SECRET": "test",
-		"POSTER_TOKEN": "test",
-		"POSTHOG_API_KEY": "test",
-		"SANITY_API_VERSION": "2024-01-01",
-		"SANITY_PROJECT_ID": "test",
-		"SENTRY_DSN": "",
-		"SIGNER_CERT": "test",
-		"SIGNER_KEY": "test",
-		"SIGNER_PASSPHRASE": "test",
-		"STRIPE_SECRET_KEY": "test",
-		"STRIPE_WEBHOOK_SECRET": "test",
-		"TEST_OTP_CODE": "123456",
-		"TEST_PHONE_NUMBERS": "+1234567890",
-		"WWDR": "test"
+	"d1_databases": [
+		{
+			"binding": "D1_TOLO",
+			"database_id": "a97cd459-12c3-4051-b718-7a0c9fa64cf5",
+			"database_name": "tolo"
+		}
+	],
+	"hyperdrive": [
+		{
+			"binding": "HYPERDRIVE",
+			"id": "b4c25cd838cb4c2cb2c97f557b36b36a"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "KV_OTP",
+			"id": "920da48543314b4cbfc552cef5b8b421"
+		},
+		{
+			"binding": "KV_SESSIONS",
+			"id": "58520d291d8f418f90b464ff0b3ea3df"
+		},
+		{
+			"binding": "KV_CMS",
+			"id": "560289852d1e4a7ea75deb24805481b1"
+		}
+	],
+	"main": "index.ts",
+	"name": "tolo-workers",
+	"observability": {
+		"enabled": true
+	},
+	"placement": {
+		"mode": "smart"
+	},
+	"triggers": {
+		"crons": ["* * * * *"]
 	}
 }
