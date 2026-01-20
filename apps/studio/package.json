@@ -32,6 +32,7 @@
 		"@tolo/oxlint-config": "workspace:*",
 		"@tolo/typescript-config": "workspace:*",
 		"@types/react": "catalog:",
+		"@types/react-dom": "catalog:",
 		"@typescript/native-preview": "catalog:",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",

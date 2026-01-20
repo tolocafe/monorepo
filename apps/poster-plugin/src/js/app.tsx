@@ -3,8 +3,8 @@ import { useEffect, useMemo, useState } from 'react'
 import ClientScreen from './containers/client'
 import SelectClientScreen from './containers/select-client'
 
-import '../css/reset.scss'
-import '../css/main.scss'
+import '../css/reset.css'
+import '../css/main.css'
 
 const initialState = {
 	clientId: null as null | string,

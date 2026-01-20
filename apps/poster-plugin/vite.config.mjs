@@ -22,14 +22,7 @@ export default defineConfig({
 				plugins: [
 					getBabelOutputPlugin({
 						presets: [
-							[
-								'@babel/preset-env',
-								{
-									targets: {
-										browsers: 'since 2017',
-									},
-								},
-							],
+							['@babel/preset-env', { targets: { browsers: 'since 2021' } }],
 						],
 					}),
 				],
@@ -42,13 +35,9 @@ export default defineConfig({
 	plugins: [
 		cssInjectedByJsPlugin(),
 		mkcert(),
-		react({
-			include: '**/*.{jsx}',
-		}),
+		react({ include: ['**/*.{jsx}', '**/*.{tsx}'] }),
 	],
 	resolve: {
-		alias: {
-			os: 'os-browserify/browser',
-		},
+		alias: { os: 'os-browserify/browser' },
 	},
 })
