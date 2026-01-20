@@ -31,7 +31,7 @@
 		"@types/react-dom": "catalog:",
 		"@typescript/native-preview": "catalog:",
 		"@vitejs/plugin-react": "^4.2.1",
-		"md5": "~2.2.1",
+		"md5": "~2.3.0",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
 		"request": "~2.88.0",
