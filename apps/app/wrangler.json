@@ -1,5 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
+	"account_id": "1b22f6fcae34f97236b9f22cc51cfb18",
 	"assets": {
 		"binding": "ASSETS",
 		"directory": "./dist",
