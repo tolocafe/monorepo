@@ -1,0 +1,35 @@
+{
+	"name": "@tolo/common",
+	"version": "0.0.0",
+	"private": true,
+	"license": "MIT",
+	"main": "./api.ts",
+	"types": "./api.ts",
+	"exports": {
+		".": "./api.ts",
+		"./api": "./api.ts",
+		"./analytics": "./analytics.ts",
+		"./locales": "./locales.ts",
+		"./schemas": "./schemas.ts",
+		"./utils": "./utils.ts"
+	},
+	"scripts": {
+		"lint": "oxlint --config node_modules/@tolo/oxlint-config/base.json",
+		"typecheck": "tsgo --noEmit",
+		"format": "oxfmt .",
+		"format:check": "oxfmt --check .",
+		"clean": "rm -rf node_modules dist"
+	},
+	"dependencies": {
+		"@portabletext/types": "catalog:",
+		"zod": "catalog:"
+	},
+	"devDependencies": {
+		"@tolo/oxfmt-config": "workspace:*",
+		"@tolo/oxlint-config": "workspace:*",
+		"@tolo/typescript-config": "workspace:*",
+		"@types/node": "catalog:",
+		"oxfmt": "catalog:",
+		"oxlint": "catalog:"
+	}
+}

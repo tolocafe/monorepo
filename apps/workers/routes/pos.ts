@@ -1,13 +1,10 @@
+import type { PosClientData } from '@tolo/common/api'
 import { Hono } from 'hono'
 
-import type { PosClientData } from '~common/api'
-import type { Bindings } from '~workers/types'
-import { defaultJsonHeaders } from '~workers/utils/headers'
-import { posterApi } from '~workers/utils/poster'
-import {
-	canRedeemBirthdayDrink,
-	getCustomerStamps,
-} from '~workers/utils/stamps'
+import type { Bindings } from '~/types'
+import { defaultJsonHeaders } from '~/utils/headers'
+import { posterApi } from '~/utils/poster'
+import { canRedeemBirthdayDrink, getCustomerStamps } from '~/utils/stamps'
 
 function formatAmount(amount: number | string | undefined) {
 	if (!amount) return '$0 MXN'

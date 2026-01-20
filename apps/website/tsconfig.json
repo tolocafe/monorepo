@@ -1,0 +1,12 @@
+{
+	"extends": "@tolo/typescript-config/react.json",
+	"compilerOptions": {
+		"types": ["@cloudflare/workers-types", "vite/client"],
+		"rootDirs": [".", "./.react-router/types"],
+		"paths": {
+			"~/*": ["./app/*"]
+		}
+	},
+	"include": ["**/*.ts", "**/*.tsx", ".react-router/types/**/*"],
+	"exclude": ["node_modules", "dist"]
+}

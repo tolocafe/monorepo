@@ -1,10 +1,9 @@
 import * as Sentry from '@sentry/cloudflare'
 import { captureEvent } from '@sentry/cloudflare'
+import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
-
-import type { SupportedLocale } from '~common/locales'
 
 import { jwtUserMiddleware } from './lib/jwt-user-middleware'
 import type { JwtUserVariables } from './lib/jwt-user-middleware'

@@ -1,0 +1,12 @@
+{
+	"$schema": "https://raw.githubusercontent.com/oxc-project/oxlint/main/npm/oxlint/configuration_schema.json",
+	"extends": ["node_modules/@tolo/oxlint-config/react.json"],
+	"env": {
+		"browser": true,
+		"node": true
+	},
+	"globals": {
+		"Poster": "readonly"
+	},
+	"ignorePatterns": ["node_modules", "dist", "bundle.js"]
+}

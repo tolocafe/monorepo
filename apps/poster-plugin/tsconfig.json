@@ -1,23 +1,10 @@
 {
+	"extends": "@tolo/typescript-config/react.json",
 	"compilerOptions": {
-		"allowSyntheticDefaultImports": true,
-		"allowUnreachableCode": false,
-		"alwaysStrict": true,
-		"incremental": true,
-		"noImplicitAny": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
 		"paths": {
-			"*": ["./*"],
-			"~common/*": ["../../common/*"]
-		},
-		"removeComments": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"strictNullChecks": true,
-		"jsx": "react-jsx",
-		"types": ["node"]
+			"~common/*": ["../../packages/common/*"]
+		}
 	},
-	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"],
-	"files": ["src/js/index.tsx"]
+	"include": ["src/**/*.ts", "src/**/*.tsx"],
+	"exclude": ["node_modules", "dist"]
 }

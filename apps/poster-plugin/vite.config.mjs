@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-import path from 'node:path'
-
 import { getBabelOutputPlugin } from '@rollup/plugin-babel'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
@@ -24,14 +22,7 @@ export default defineConfig({
 				plugins: [
 					getBabelOutputPlugin({
 						presets: [
-							[
-								'@babel/preset-env',
-								{
-									targets: {
-										browsers: 'since 2017',
-									},
-								},
-							],
+							['@babel/preset-env', { targets: { browsers: 'since 2021' } }],
 						],
 					}),
 				],
@@ -44,14 +35,9 @@ export default defineConfig({
 	plugins: [
 		cssInjectedByJsPlugin(),
 		mkcert(),
-		react({
-			include: '**/*.{jsx}',
-		}),
+		react({ include: ['**/*.{jsx}', '**/*.{tsx}'] }),
 	],
 	resolve: {
-		alias: {
-			os: 'os-browserify/browser',
-			'~common': path.resolve(__dirname, '../../common'),
-		},
+		alias: { os: 'os-browserify/browser' },
 	},
 })

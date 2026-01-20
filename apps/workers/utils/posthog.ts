@@ -3,7 +3,7 @@ import type { Context } from 'hono'
 import { getConnInfo } from 'hono/cloudflare-workers'
 import { PostHog } from 'posthog-node'
 
-import type { Bindings } from '~workers/types'
+import type { Bindings } from '~/types'
 
 export type PostHogEventProperties = {
 	[key: string]: unknown

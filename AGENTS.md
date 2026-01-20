@@ -4,28 +4,53 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Common Commands
 
-**Critical scripts:**
+**Root-level scripts (run from monorepo root):**
 
-- `bun install` - Install dependencies (always use bun, never npm/yarn)
-- `bun run start` - Start Expo development server
-- `bun run lint` - Lint code (required before commits)
-- `bun run typecheck` - TypeScript type checking (required before commits)
-- `bun run format` - Format code (required before commits)
-- `bun run test` - Run tests
+- `bun install` - Install all workspace dependencies (always use bun, never npm/yarn)
+- `bun run lint` - Lint all workspaces
+- `bun run typecheck` - TypeScript check all workspaces
+- `bun run format` - Format all workspaces
+- `bun run test` - Run tests in all workspaces
 
-**For all other commands** (ios, android, web, database, deployment, etc.), read `package.json` scripts section.
+**Workspace-specific commands:**
+
+- `bun run --filter @tolo/app <script>` - Run script in mobile app
+- `bun run --filter @tolo/workers <script>` - Run script in workers
+- `bun run --filter @tolo/studio <script>` - Run script in Sanity Studio
+- `bun run --filter @tolo/website <script>` - Run script in marketing website
+
+**For workspace-specific scripts**, check each workspace's `package.json`.
 
 ## Architecture Overview
 
-### Hybrid Architecture
+### Monorepo Structure
 
-This is a **dual-platform codebase** with both React Native mobile app and Cloudflare Workers API:
+This is a **bun workspaces monorepo** with multiple applications and shared packages:
 
-**Mobile App** (`src/`):
+```
+tolo.cafe/
+├── apps/
+│   ├── app/          # React Native mobile app (Expo)
+│   ├── workers/      # Cloudflare Workers API
+│   ├── studio/       # Sanity Studio CMS
+│   ├── website/      # Marketing website (React Router + Cloudflare)
+│   └── poster-plugin/# Poster POS integration plugin
+├── packages/
+│   ├── common/       # Shared utilities and types
+│   ├── oxlint-config/# Shared linting configuration
+│   ├── oxfmt-config/ # Shared formatting configuration
+│   └── typescript-config/ # Shared TypeScript configuration
+└── package.json      # Root workspace configuration with catalog
+```
+
+### Applications
+
+**Mobile App** (`apps/app/`):
 
 - React Native with Expo (cross-platform iOS/Android/Web)
 - File-based routing with Expo Router
-- TypeScript throughout with strict mode
+- TypeScript with strict mode
+- Source code in `apps/app/src/`
 
 **Workers API** (`apps/workers/`):
 
@@ -34,16 +59,41 @@ This is a **dual-platform codebase** with both React Native mobile app and Cloud
 - Uses D1 database, KV storage, and Stripe integration
 - **Rate limiting**: Configured via Cloudflare dashboard rules (not in application code)
 
+**Sanity Studio** (`apps/studio/`):
+
+- Sanity CMS for content management
+- Manages menu items, blog posts, events, promotions
+
+**Marketing Website** (`apps/website/`):
+
+- React Router v7 with Cloudflare Workers
+- Vanilla Extract for styling
+- Server-side rendering
+
+**Poster Plugin** (`apps/poster-plugin/`):
+
+- Integration plugin for Poster POS system
+- Vite-based build
+
+### Shared Packages
+
+- `@tolo/common` - Shared utilities, types, and schemas
+- `@tolo/oxlint-config` - oxlint configuration presets
+- `@tolo/oxfmt-config` - oxfmt configuration presets
+- `@tolo/typescript-config` - TypeScript configuration presets
+
 ### Key Technologies
 
-- **Frontend**: React Native, Expo Router, React Native Unistyles (styling), Lingui (i18n)
+- **Mobile**: React Native, Expo Router, React Native Unistyles, Lingui (i18n)
 - **State Management**: TanStack Query (server state), React Context (client state), Zustand (complex state)
 - **Backend**: Cloudflare Workers, Hono, D1 database, KV storage
-- **Styling**: React Native Unistyles only (never inline styles)
-- **Testing**: Jest with React Native Testing Library
-- **Linting**: oxlint (not ESLint)
-- **Formatting**: oxfmt (not Prettier)
-- **Package Manager**: bun (never npm/yarn)
+- **CMS**: Sanity
+- **Website**: React Router, Vanilla Extract
+- **Styling**: React Native Unistyles (mobile), Vanilla Extract (website)
+- **Testing**: Jest (mobile), Vitest (workers)
+- **Linting**: oxlint with type-aware mode
+- **Formatting**: oxfmt
+- **Package Manager**: bun with workspaces and catalog
 
 ### Data Flow
 
@@ -51,15 +101,20 @@ This is a **dual-platform codebase** with both React Native mobile app and Cloud
 - Workers handle authentication via JWT tokens stored in KV
 - Menu data cached in both KV and mobile app for offline support
 - Real-time updates via OTA (Over-The-Air) using Expo Updates
+- Content managed in Sanity, fetched by Workers and Website
 
-### Project Structure
+### Project Structure (Mobile App)
 
-- `src/app/` - Expo Router pages (file-based routing)
-- `src/components/` - Reusable UI components
-- `src/lib/` - Utilities, hooks, queries, contexts
-- `src/lib/queries/` - TanStack Query definitions
-- `apps/workers/` - Cloudflare Workers API
+- `apps/app/src/app/` - Expo Router pages (file-based routing)
+- `apps/app/src/components/` - Reusable UI components
+- `apps/app/src/lib/` - Utilities, hooks, queries, contexts
+- `apps/app/src/lib/queries/` - TanStack Query definitions
+
+### Project Structure (Workers API)
+
 - `apps/workers/routes/` - API route handlers
+- `apps/workers/utils/` - Utility functions
+- `apps/workers/types.ts` - Type definitions
 
 ## Code Priorities
 
@@ -75,9 +130,9 @@ The codebase prioritizes these qualities in order:
 ### Code Standards
 
 - **No React default import**: Use `import { useState } from 'react'` not `import React`
-- **Absolute imports**: Use `@/` instead of relative paths for src/ imports
-- **All styling via Unistyles**: Never use inline styles, always createStyleSheet
-- **All text via Lingui**: No hardcoded user-facing strings, use Trans/t macros
+- **Absolute imports**: Use `@/` instead of relative paths for src/ imports (in apps)
+- **All styling via Unistyles**: Never use inline styles in mobile app
+- **All text via Lingui**: No hardcoded user-facing strings in mobile app
 - **Lingui .po files only**: Never compile translations, use .po files directly
 - **TanStack Query patterns**: Use queryOptions/mutationOptions, avoid custom query hooks
 - **TypeScript strict**: No `any` types, proper interfaces required
@@ -92,10 +147,10 @@ The codebase prioritizes these qualities in order:
 - **React Native**: `import { View, Text } from 'react-native'`
 - **Never**: `import React from 'react'` or `import { t } from '@lingui/macro'`
 
-### Internationalization
+### Internationalization (Mobile App)
 
 - **Supported languages**: English (en, source), Spanish (es), French (fr), Portuguese (pt), Japanese (ja), German (de)
-- **Extract translations**: `bun run lingui:extract` (never use lingui:compile)
+- **Extract translations**: `bun run --filter @tolo/app lingui:extract` (never use lingui:compile)
 - **Provide context**: Add context for ambiguous terms (e.g., "menu" navigation vs food)
 
 ### TypeScript Patterns
@@ -137,14 +192,14 @@ Follow Conventional Commits v1.0.0:
 - `chore`: Maintenance tasks
 - `ci`: CI/CD changes
 
-**Scopes:** `ui`, `api`, `menu`, `navigation`, `i18n`, `auth`, `workers`
+**Scopes:** `app`, `workers`, `studio`, `website`, `common`, `ui`, `api`, `menu`, `navigation`, `i18n`, `auth`
 
 **Rules:**
 
 - Use imperative mood: "add" not "added" or "adds"
 - Lowercase, no period at end
 - Max 50 characters for subject line
-- Example: `feat(menu): add coffee item filtering`
+- Example: `feat(app): add coffee item filtering`
 
 ## Security Notes
 

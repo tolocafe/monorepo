@@ -1,0 +1,39 @@
+{
+	"$schema": "https://raw.githubusercontent.com/oxc-project/oxlint/main/npm/oxlint/configuration_schema.json",
+	"extends": ["node_modules/@tolo/oxlint-config/react.json"],
+	"globals": {
+		"__DEV__": "readonly",
+		"process": "readonly",
+		"require": "readonly",
+		"process.env": "readonly"
+	},
+	"overrides": [
+		{
+			"env": {
+				"jest": true
+			},
+			"files": ["**/__tests__/**/*"]
+		},
+		{
+			"files": ["metro.config.js"],
+			"rules": {
+				"no-commonjs": "off"
+			}
+		}
+	],
+	"ignorePatterns": [
+		"node_modules",
+		"dist",
+		"build",
+		".expo",
+		"ios",
+		"android",
+		"coverage",
+		"*.config.js",
+		"*.config.mjs",
+		"babel.config.js",
+		"metro.config.js",
+		"jest.config.js",
+		"jest.setup.js"
+	]
+}

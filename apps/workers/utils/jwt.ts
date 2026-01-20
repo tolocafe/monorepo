@@ -4,7 +4,7 @@ import { getCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 import { jwtVerify, SignJWT } from 'jose'
 
-import HttpStatusCode from '~workers/utils/http-codes'
+import HttpStatusCode from '~/utils/http-codes'
 
 const encoder = new TextEncoder()
 const secretKey = (secret: string) => encoder.encode(secret)

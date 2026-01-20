@@ -1,14 +1,14 @@
 import * as Sentry from '@sentry/cloudflare'
+import type { Product as PosterProduct } from '@tolo/common/api'
 import { eq } from 'drizzle-orm'
 
-import type { Product as PosterProduct } from '~common/api'
 import {
 	dishes,
 	productIngredients,
 	productModifierGroups,
 	products,
-} from '~workers/db/schema'
-import { posterApi } from '~workers/utils/poster'
+} from '~/db/schema'
+import { posterApi } from '~/utils/poster'
 
 import { ensureCategory, ensureIngredient } from './ensure'
 import type { Cache } from './ensure'

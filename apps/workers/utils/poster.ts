@@ -19,7 +19,6 @@
  */
 import { PublishCommand, SNS } from '@aws-sdk/client-sns'
 import { getCurrentScope } from '@sentry/cloudflare'
-
 import type {
 	Category,
 	ClientData,
@@ -29,8 +28,8 @@ import type {
 	Product,
 	Promotion,
 	UpdateClientBody,
-} from '~common/api'
-import type { CreateOrder } from '~common/schemas'
+} from '@tolo/common/api'
+import type { CreateOrder } from '@tolo/common/schemas'
 
 const snsClient = new SNS({
 	credentials: {
@@ -361,6 +360,8 @@ export const posterApi = {
 						product_price: string
 					}[]
 					round_sum: string
+					/** Location ID */
+					spot_id: string
 					sum: string
 					tax_sum: string
 					tip_sum: string
@@ -564,6 +565,7 @@ export const posterApi = {
 			token: string,
 			{
 				serviceMode,
+				table_id,
 				...body
 			}: Omit<CreateOrder, 'payment'> & {
 				payment: { sum: string; type: 1 }
@@ -575,6 +577,7 @@ export const posterApi = {
 				client_id: clientId,
 				service_mode: serviceMode,
 				spot_id: 1,
+				table_id: table_id ? Number(table_id) : null,
 			}
 
 			return posterFetch<{
@@ -741,6 +744,79 @@ export const posterApi = {
 	 */
 	transactions: {
 		/**
+		 * Add a product to an existing transaction
+		 *
+		 * Adds a product with optional modifiers to an open transaction.
+		 *
+		 * @see https://dev.joinposter.com/en/docs/v3/web/transactions/addTransactionProduct
+		 */
+		addTransactionProduct(
+			token: string,
+			body: {
+				/** Product count */
+				count: number
+				/** Array of modifier IDs */
+				modification?: string
+				/** Product price in cents */
+				price: number
+				/** Product ID */
+				product_id: string
+				/** Location ID */
+				spot_id: number
+				/** Register ID */
+				spot_tablet_id: number
+				/** Transaction ID to add product to */
+				transaction_id: number
+				/** Guest number */
+				guest_number: number
+			},
+		) {
+			return posterFetch<{
+				/** Created transaction product ID */
+				transaction_product_id: number
+			}>(
+				`/transactions.addTransactionProduct?${getSearchParameters({ token })}`,
+				{
+					body: JSON.stringify(body),
+					defaultErrorMessage: 'Failed to add product to transaction',
+					headers: { 'Content-Type': 'application/json' },
+					method: 'POST',
+				},
+			)
+		},
+
+		/**
+		 * Add a customer to an existing transaction
+		 *
+		 * Associates a customer with an open transaction. Must be called after
+		 * createTransaction since that endpoint doesn't support client assignment.
+		 *
+		 * @see https://dev.joinposter.com/en/docs/v3/web/transactions/changeClient
+		 */
+		changeClient(
+			token: string,
+			body: {
+				/** Customer ID to associate with the transaction */
+				client_id: number
+				location_id: number
+				spot_id: number
+				spot_tablet_id: number
+				/** Transaction ID to update */
+				transaction_id: number
+			},
+		) {
+			return posterFetch<{
+				/** Response (1 on success) */
+				response: number
+			}>(`/transactions.changeClient?${getSearchParameters({ token })}`, {
+				body: JSON.stringify(body),
+				defaultErrorMessage: 'Failed to change transaction client',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+			})
+		},
+
+		/**
 		 * Close a transaction (mark as paid)
 		 *
 		 * Finalizes an order by recording payment information and closing
@@ -785,6 +861,43 @@ export const posterApi = {
 					method: 'POST',
 				},
 			)
+		},
+
+		/**
+		 * Create a new transaction (order) directly at a table
+		 *
+		 * Creates an open transaction at a specific table. Use this for
+		 * dine-in orders where the customer is at a table and will pay later.
+		 * Returns the transaction ID which can be used to add products.
+		 *
+		 * Note: To associate a customer, call changeClient after this.
+		 *
+		 * @see https://dev.joinposter.com/en/docs/v3/web/transactions/createTransaction
+		 */
+		createTransaction(
+			token: string,
+			body: {
+				/** Number of guests at the table */
+				guests_count?: number
+				/** Establishment ID */
+				spot_id: number
+				/** Terminal ID */
+				spot_tablet_id: number
+				/** Table ID for dine-in orders */
+				table_id: number
+				/** Staff user ID creating the order */
+				user_id: number
+			},
+		) {
+			return posterFetch<{
+				/** Created transaction ID */
+				transaction_id: number
+			}>(`/transactions.createTransaction?${getSearchParameters({ token })}`, {
+				body: JSON.stringify(body),
+				defaultErrorMessage: 'Failed to create transaction',
+				headers: { 'Content-Type': 'application/json' },
+				method: 'POST',
+			})
 		},
 
 		/**

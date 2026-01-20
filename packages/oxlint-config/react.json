@@ -1,0 +1,30 @@
+{
+	"$schema": "https://raw.githubusercontent.com/oxc-project/oxlint/main/npm/oxlint/configuration_schema.json",
+	"extends": ["./base.json"],
+	"plugins": ["react", "react-perf"],
+	"env": {
+		"browser": true,
+		"es2024": true
+	},
+	"settings": {
+		"react": {
+			"version": "19.2.0"
+		}
+	},
+	"rules": {
+		"react/exhaustive-deps": "warn",
+		"react/jsx-filename-extension": [1, { "extensions": [".tsx"] }],
+		"react/jsx-key": "error",
+		"react/jsx-max-depth": "off",
+		"react/jsx-no-duplicate-props": "error",
+		"react/jsx-no-undef": "error",
+		"react/no-children-prop": "error",
+		"react/no-danger-with-children": "error",
+		"react/no-direct-mutation-state": "error",
+		"react/no-unescaped-entities": "error",
+		"react/only-export-components": "off",
+		"react/react-in-jsx-scope": "off",
+		"react/rules-of-hooks": "error",
+		"react/style-prop-object": "off"
+	}
+}

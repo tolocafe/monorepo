@@ -6,19 +6,16 @@
  */
 import * as Sentry from '@sentry/cloudflare'
 
-import type { Bindings } from '~workers/types'
-import { notifyApplePassUpdate } from '~workers/utils/apns'
-import {
-	detectOrderEvents,
-	processOrderEvents,
-} from '~workers/utils/order-events'
-import type { TransactionChange } from '~workers/utils/order-events'
+import type { Bindings } from '~/types'
+import { notifyApplePassUpdate } from '~/utils/apns'
+import { detectOrderEvents, processOrderEvents } from '~/utils/order-events'
+import type { TransactionChange } from '~/utils/order-events'
 
 import type { Database } from './transactions'
 import { parsePosterDate } from './utils'
 
 // Re-export types for convenience
-export type { OrderEvent, TransactionChange } from '~workers/utils/order-events'
+export type { OrderEvent, TransactionChange } from '~/utils/order-events'
 
 /**
  * Process transaction changes from the sync

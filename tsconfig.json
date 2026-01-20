@@ -1,38 +1,18 @@
 {
+	"extends": "./packages/typescript-config/base.json",
 	"compilerOptions": {
-		"allowSyntheticDefaultImports": true,
-		"allowUnreachableCode": false,
-		"alwaysStrict": true,
-		"incremental": true,
-		"noImplicitAny": true,
-		"noUnusedLocals": true,
-		"noUnusedParameters": true,
 		"paths": {
-			"@/*": ["./src/*"],
-			"~common/*": ["./common/*"],
-			"~workers/*": ["./apps/workers/*"]
-		},
-		"removeComments": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"strictNullChecks": true,
-		"types": ["jest", "node"]
+			"@tolo/*": ["./packages/*"]
+		}
 	},
-	"extends": "expo/tsconfig.base",
-	"include": [
-		"src/**/*.ts",
-		"src/**/*.tsx",
-		"app.config.ts",
-		"drizzle.config.ts",
-		"expo-env.d.ts",
-		"src/**/*.d.ts",
-		"common/**/*.ts",
-		"apps/workers/**/*.ts",
-		"prisma.config.ts",
-		"eslint.config.mjs",
-		"vitest.config.mts",
-		".expo/types/**/*.ts",
-		"worker-configuration.d.ts"
+	"references": [
+		{ "path": "apps/app" },
+		{ "path": "apps/workers" },
+		{ "path": "apps/website" },
+		{ "path": "apps/studio" },
+		{ "path": "apps/poster-plugin" },
+		{ "path": "packages/common" }
 	],
-	"files": ["src/index.ts", "apps/workers/index.ts"]
+	"include": [],
+	"exclude": ["node_modules"]
 }

@@ -1,11 +1,11 @@
 /* eslint-disable unicorn/no-keyword-prefix */
 import { captureException } from '@sentry/cloudflare'
+import type { ClientData } from '@tolo/common'
 import { JWT } from 'google-auth-library'
 import type { Context } from 'hono'
 import jwt from 'jsonwebtoken'
 
-import type { ClientData } from '~common/api'
-import type { Bindings } from '~workers/types'
+import type { Bindings } from '~/types'
 
 import { posterApi } from './poster'
 import { getCustomerStamps } from './stamps'
