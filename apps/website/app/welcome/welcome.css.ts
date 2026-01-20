@@ -6,7 +6,6 @@ import {
 	buttonLight,
 	buttonGhost,
 	card,
-	imagePlaceholder,
 	section,
 	container,
 } from '@/styles/global.css'
@@ -194,15 +193,13 @@ export const quickCard = style([
 	},
 ])
 
-export const quickCardImage = style([
-	imagePlaceholder,
-	{
-		aspectRatio: '16 / 10',
-		borderRadius: vars.radius.xl,
-		marginBottom: vars.space[4],
-		width: '100%',
-	},
-])
+export const quickCardImage = style({
+	aspectRatio: '16 / 10',
+	borderRadius: vars.radius.xl,
+	marginBottom: vars.space[4],
+	objectFit: 'cover',
+	width: '100%',
+})
 
 export const quickCardBody = style({
 	minWidth: 0,
@@ -301,18 +298,17 @@ export const aboutImageBlock = style({
 	order: 1,
 })
 
-export const aboutImage = style([
-	imagePlaceholder,
-	{
-		'@media': {
-			'(min-width: 768px)': {
-				aspectRatio: '1 / 1',
-			},
+export const aboutImage = style({
+	'@media': {
+		'(min-width: 768px)': {
+			aspectRatio: '1 / 1',
 		},
-		aspectRatio: '4 / 3',
-		width: '100%',
 	},
-])
+	aspectRatio: '4 / 3',
+	borderRadius: vars.radius['2xl'],
+	objectFit: 'cover',
+	width: '100%',
+})
 
 export const highlightsGrid = style({
 	'@media': {
@@ -441,15 +437,14 @@ export const bullet = style({
 	},
 })
 
-export const appImage = style([
-	imagePlaceholder,
-	{
-		aspectRatio: '9 / 16',
-		margin: '0 auto',
-		maxWidth: '280px',
-		width: '100%',
-	},
-])
+export const appImage = style({
+	aspectRatio: '9 / 16',
+	borderRadius: vars.radius['2xl'],
+	margin: '0 auto',
+	maxWidth: '280px',
+	objectFit: 'cover',
+	width: '100%',
+})
 
 export const appText = style({
 	'@media': {
@@ -480,14 +475,13 @@ export const visitCard = style({
 	backgroundColor: vars.color.background,
 })
 
-export const visitImage = style([
-	imagePlaceholder,
-	{
-		aspectRatio: '21 / 9',
-		marginBottom: vars.space[8],
-		width: '100%',
-	},
-])
+export const visitImage = style({
+	aspectRatio: '21 / 9',
+	borderRadius: vars.radius['2xl'],
+	marginBottom: vars.space[8],
+	objectFit: 'cover',
+	width: '100%',
+})
 
 export const addressCard = style([
 	card,

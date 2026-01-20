@@ -1,5 +1,11 @@
 import { Link } from 'react-router'
 
+import coffeeExtractionImg from '@/assets/images/coffee-extraction.png'
+import coffeeGroundsImg from '@/assets/images/coffee-grounds.png'
+import drinksImg from '@/assets/images/drinks.png'
+import icedLatteImg from '@/assets/images/iced-latte.png'
+import insideImg from '@/assets/images/inside.png'
+import outsideImg from '@/assets/images/outside.png'
 import type { Locale } from '@/lib/locale'
 import { vars } from '@/styles/tokens.css'
 
@@ -579,7 +585,11 @@ export function Welcome({ locale }: WelcomeProps) {
 
 					<div className={styles.quickLinksGrid}>
 						<Link to={beansTo} className={styles.quickCard}>
-							<div className={styles.quickCardImage} />
+							<img
+								src={coffeeGroundsImg}
+								alt=""
+								className={styles.quickCardImage}
+							/>
 							<div className={styles.quickCardBody}>
 								<h3 className={styles.quickCardTitle}>
 									{ui.quickCards.beans.title}
@@ -593,7 +603,7 @@ export function Welcome({ locale }: WelcomeProps) {
 							</div>
 						</Link>
 						<Link to={visitTo} className={styles.quickCard}>
-							<div className={styles.quickCardImage} />
+							<img src={drinksImg} alt="" className={styles.quickCardImage} />
 							<div className={styles.quickCardBody}>
 								<h3 className={styles.quickCardTitle}>
 									{ui.quickCards.visit.title}
@@ -607,7 +617,11 @@ export function Welcome({ locale }: WelcomeProps) {
 							</div>
 						</Link>
 						<Link to={appTo} className={styles.quickCard}>
-							<div className={styles.quickCardImage} />
+							<img
+								src={icedLatteImg}
+								alt=""
+								className={styles.quickCardImage}
+							/>
 							<div className={styles.quickCardBody}>
 								<h3 className={styles.quickCardTitle}>
 									{ui.quickCards.app.title}
@@ -631,7 +645,11 @@ export function Welcome({ locale }: WelcomeProps) {
 							<p className={styles.sectionText}>{t.aboutText}</p>
 						</div>
 						<div className={styles.aboutImageBlock}>
-							<div className={styles.aboutImage} />
+							<img
+								src={coffeeExtractionImg}
+								alt=""
+								className={styles.aboutImage}
+							/>
 						</div>
 					</div>
 
@@ -687,7 +705,7 @@ export function Welcome({ locale }: WelcomeProps) {
 								</a>
 							</div>
 						</div>
-						<div className={styles.appImage} />
+						<img src={insideImg} alt="" className={styles.appImage} />
 					</div>
 				</div>
 			</section>
@@ -695,7 +713,7 @@ export function Welcome({ locale }: WelcomeProps) {
 			{/* Visit Section */}
 			<section id="visit" className={styles.sectionAnchor}>
 				<div className={styles.container}>
-					<div className={styles.visitImage} />
+					<img src={outsideImg} alt="" className={styles.visitImage} />
 					<div className={styles.visitGrid}>
 						<div className={styles.visitCard}>
 							<h2 className={styles.sectionTitle}>{ui.visitTitle}</h2>
