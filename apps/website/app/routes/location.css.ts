@@ -138,6 +138,7 @@ export const mapWrapper = style({
 
 export const map = style({
 	border: 'none',
+	display: 'block',
 	height: '100%',
 	width: '100%',
 })
