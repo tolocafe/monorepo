@@ -3,7 +3,8 @@ import fs from 'node:fs/promises'
 
 import md5 from 'md5'
 
-import manifest from './manifest.json' with { type: 'json' }
+const APPLICATION_ID = process.env.POSTER_APPLICATION_ID
+const APPLICATION_SECRET = process.env.POSTER_APPLICATION_SECRET
 
 const URL =
 	'https://platform.joinposter.com/api/application.uploadPOSPlatformBundle?format=json'
@@ -24,15 +25,11 @@ async function init() {
 	try {
 		const fileBuffer = await fs.readFile(FILENAME)
 		const fileMd5 = md5(fileBuffer)
-		const signParts = [
-			manifest.applicationId,
-			fileMd5,
-			manifest.applicationSecret,
-		]
+		const signParts = [APPLICATION_ID, fileMd5, APPLICATION_SECRET]
 		const sign = md5(signParts.join(':'))
 
 		const formData = new FormData()
-		formData.append('application_id', manifest.applicationId)
+		formData.append('application_id', APPLICATION_ID)
 		formData.append('bundle', new Blob([fileBuffer]), FILENAME)
 		formData.append('sign', sign)
 
