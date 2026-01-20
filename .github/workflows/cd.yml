@@ -125,11 +125,14 @@ jobs:
       - name: 📦 Install dependencies
         run: bun install --frozen-lockfile --linker hoisted --filter @tolo/website
 
+      - name: 🔨 Build website
+        run: bun run --filter @tolo/website build
+
       - name: 🚀 Deploy Website
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: apps/website
+          workingDirectory: apps/website/build/server
 
   deploy-studio:
     name: 📝 Deploy Studio
