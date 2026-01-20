@@ -1,0 +1,175 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      deploy_all:
+        description: "Deploy all apps"
+        type: boolean
+        default: false
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  changes:
+    name: Detect Changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pull-requests: read
+    outputs:
+      app: ${{ steps.filter.outputs.app }}
+      workers: ${{ steps.filter.outputs.workers }}
+      website: ${{ steps.filter.outputs.website }}
+      studio: ${{ steps.filter.outputs.studio }}
+      poster-plugin: ${{ steps.filter.outputs.poster-plugin }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Detect changed paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            app:
+              - 'apps/app/**'
+              - 'packages/**'
+            workers:
+              - 'apps/workers/**'
+              - 'packages/**'
+            website:
+              - 'apps/website/**'
+              - 'packages/**'
+            studio:
+              - 'apps/studio/**'
+              - 'packages/**'
+            poster-plugin:
+              - 'apps/poster-plugin/**'
+              - 'packages/**'
+
+  deploy-app:
+    name: Deploy App
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: changes
+    if: needs.changes.outputs.app == 'true' || inputs.deploy_all
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/app
+
+      - name: Build web app
+        working-directory: apps/app
+        run: bunx expo export --platform web
+
+      - name: Deploy App
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: apps/app
+
+  deploy-workers:
+    name: Deploy Workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: changes
+    if: needs.changes.outputs.workers == 'true' || inputs.deploy_all
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/workers
+
+      - name: Get Sentry release version
+        id: sentry
+        working-directory: apps/workers
+        run: echo "release=$(bunx sentry-cli releases propose-version)" >> $GITHUB_OUTPUT
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+      - name: Deploy Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: apps/workers
+          command: deploy --upload-source-maps --var SENTRY_RELEASE:${{ steps.sentry.outputs.release }}
+
+  deploy-website:
+    name: Deploy Website
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: changes
+    if: needs.changes.outputs.website == 'true' || inputs.deploy_all
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/website
+
+      - name: Deploy Website
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: apps/website
+
+  deploy-studio:
+    name: Deploy Studio
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: changes
+    if: needs.changes.outputs.studio == 'true' || inputs.deploy_all
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/studio
+
+      - name: Deploy Studio
+        working-directory: apps/studio
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+        run: bun run deploy
+
+  deploy-poster-plugin:
+    name: Deploy Poster Plugin
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: changes
+    if: needs.changes.outputs.poster-plugin == 'true' || inputs.deploy_all
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/poster-plugin
+
+      - name: Deploy Poster Plugin
+        working-directory: apps/poster-plugin
+        env:
+          POSTER_APPLICATION_ID: ${{ secrets.POSTER_APPLICATION_ID }}
+          POSTER_APPLICATION_SECRET: ${{ secrets.POSTER_APPLICATION_SECRET }}
+        run: bun run deploy
