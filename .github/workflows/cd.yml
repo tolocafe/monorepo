@@ -66,15 +66,10 @@ jobs:
 
       - name: 📦 Install dependencies
         run: bun install --frozen-lockfile --linker hoisted --filter @tolo/app
-
-      - name: 🔨 Build web app
-        working-directory: apps/app
-        env:
-          EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
-        run: bun run web:build
-
       - name: 🚀 Deploy App
         uses: cloudflare/wrangler-action@v3
+        env:
+          EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           packageManager: bun
