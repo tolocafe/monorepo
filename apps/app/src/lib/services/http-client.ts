@@ -1,7 +1,7 @@
 import * as SecureStore from 'expo-secure-store'
 import ky from 'ky'
 
-import { BASE_URL } from '@/lib/api'
+import { API_BASE_URL } from '@/lib/api'
 import { STORAGE_KEYS } from '@/lib/constants/storage'
 import { getCurrentLocale } from '@/lib/locales/init'
 import { isWeb } from '@/lib/utils/device'
@@ -68,7 +68,7 @@ export const publicClient = ky.create({
 			},
 		],
 	},
-	prefixUrl: `${BASE_URL}/api`,
+	prefixUrl: API_BASE_URL,
 })
 
 /**
@@ -99,5 +99,5 @@ export const privateClient = ky.create({
 			},
 		],
 	},
-	prefixUrl: `${BASE_URL}/api`,
+	prefixUrl: API_BASE_URL,
 })
