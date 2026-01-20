@@ -52,7 +52,6 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	owner: 'tolo-cafe',
 	plugins: [
 		'expo-font',
-		'expo-image',
 		'expo-updates',
 		'expo-notifications',
 		'expo-color-space-plugin',
