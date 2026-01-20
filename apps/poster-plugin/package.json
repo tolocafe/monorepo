@@ -12,16 +12,16 @@
 		"typecheck": "tsgo --noEmit",
 		"format": "oxfmt .",
 		"format:check": "oxfmt --check .",
-		"clean": "rm -rf node_modules dist bundle.js"
+		"clean": "rm -rf node_modules dist bundle.js tsconfig.tsbuildinfo"
 	},
 	"dependencies": {
 		"react": "catalog:",
 		"react-dom": "catalog:"
 	},
 	"devDependencies": {
-		"@babel/core": "^7.24.7",
-		"@babel/preset-env": "^7.24.7",
-		"@rollup/plugin-babel": "^6.0.4",
+		"@babel/core": "~7.24.7",
+		"@babel/preset-env": "~7.24.7",
+		"@rollup/plugin-babel": "~6.0.4",
 		"@tolo/common": "workspace:*",
 		"@tolo/oxfmt-config": "workspace:*",
 		"@tolo/oxlint-config": "workspace:*",
@@ -30,12 +30,12 @@
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
 		"@typescript/native-preview": "catalog:",
-		"@vitejs/plugin-react": "^4.2.1",
+		"@vitejs/plugin-react": "~4.2.1",
 		"md5": "~2.3.0",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
 		"vite": "~7.3.0",
-		"vite-plugin-css-injected-by-js": "^3.5.0",
-		"vite-plugin-mkcert": "^1.17.5"
+		"vite-plugin-css-injected-by-js": "3.5.0",
+		"vite-plugin-mkcert": "~1.17.5"
 	}
 }

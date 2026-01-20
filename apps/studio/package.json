@@ -20,12 +20,11 @@
 		"clean": "rm -rf node_modules dist"
 	},
 	"dependencies": {
-		"@sanity/icons": "^3.5.7",
-		"@sanity/vision": "^5.1.0",
+		"@sanity/icons": "3.5.7",
+		"@sanity/vision": "5.1.0",
 		"react": "catalog:",
 		"react-dom": "catalog:",
-		"sanity": "^5.1.0",
-		"styled-components": "^6.1.18"
+		"sanity": "5.1.0"
 	},
 	"devDependencies": {
 		"@tolo/oxfmt-config": "workspace:*",
