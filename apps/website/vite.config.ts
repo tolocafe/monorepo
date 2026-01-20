@@ -68,6 +68,9 @@ function vanillaExtractCloudflare(): Plugin[] {
 }
 
 export default defineConfig({
+	optimizeDeps: {
+		exclude: ['virtual:react-router/server-build'],
+	},
 	plugins: [
 		cloudflare({ viteEnvironment: { name: 'ssr' } }),
 		vanillaExtractCloudflare(),
