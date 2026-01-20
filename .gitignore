@@ -16,6 +16,7 @@ bundle.js
 .expo/
 dist/
 web-build/
+build/
 expo-env.d.ts
 
 .kotlin/

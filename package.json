@@ -18,6 +18,7 @@
 		"zod": "4.3.5"
 	},
 	"scripts": {
+		"build": "bun run --filter '*' build",
 		"lint": "bun run --filter '*' lint",
 		"typecheck": "bun run --filter '*' typecheck",
 		"format": "bun run --filter '*' format",
