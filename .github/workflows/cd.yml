@@ -113,6 +113,8 @@ jobs:
     timeout-minutes: 10
     needs: changes
     if: needs.changes.outputs.website == 'true' || inputs.deploy_all || true
+    env:
+      EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
