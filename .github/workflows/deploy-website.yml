@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
     paths:
-      - 'apps/website/**'
-      - 'packages/**'
-      - '.github/workflows/deploy-website.yml'
+      - "apps/website/**"
+      - "packages/**"
+      - ".github/workflows/deploy-website.yml"
 
 concurrency:
   group: deploy-website
@@ -23,8 +23,6 @@ jobs:
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
-        with:
-          bun-version: 1.2.23
 
       - name: Install dependencies
         run: bun install --frozen-lockfile
