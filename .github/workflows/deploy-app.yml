@@ -1,0 +1,39 @@
+name: Deploy App
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/app/**"
+      - "packages/**"
+      - ".github/workflows/deploy-app.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-app
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Cloudflare
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/app
+
+      - name: Build web app
+        working-directory: apps/app
+        run: bunx expo export --platform web
+
+      - name: Deploy App
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: apps/app
