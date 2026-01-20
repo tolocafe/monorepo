@@ -28,9 +28,9 @@ jobs:
       studio: ${{ steps.filter.outputs.studio }}
       poster-plugin: ${{ steps.filter.outputs.poster-plugin }}
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
-      - name: Detect changed paths
+      - name: 🔍 Detect changed paths
         uses: dorny/paths-filter@v3
         id: filter
         with:
@@ -58,20 +58,20 @@ jobs:
     needs: changes
     if: needs.changes.outputs.app == 'true' || inputs.deploy_all
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun
+      - name: 🍞 Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: bun install --frozen-lockfile --filter @tolo/app
 
-      - name: Build web app
+      - name: 🔨 Build web app
         working-directory: apps/app
         run: bunx expo export --platform web
 
-      - name: Deploy App
+      - name: 🚀 Deploy App
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -84,23 +84,23 @@ jobs:
     needs: changes
     if: needs.changes.outputs.workers == 'true' || inputs.deploy_all
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun
+      - name: 🍞 Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: bun install --frozen-lockfile --filter @tolo/workers
 
-      - name: Get Sentry release version
+      - name: 🏷️ Get Sentry release version
         id: sentry
         working-directory: apps/workers
         run: echo "release=$(bunx sentry-cli releases propose-version)" >> $GITHUB_OUTPUT
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
 
-      - name: Deploy Workers
+      - name: 🚀 Deploy Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -114,16 +114,16 @@ jobs:
     needs: changes
     if: needs.changes.outputs.website == 'true' || inputs.deploy_all
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun
+      - name: 🍞 Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: bun install --frozen-lockfile --filter @tolo/website
 
-      - name: Deploy Website
+      - name: 🚀 Deploy Website
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -136,16 +136,16 @@ jobs:
     needs: changes
     if: needs.changes.outputs.studio == 'true' || inputs.deploy_all
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun
+      - name: 🍞 Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: bun install --frozen-lockfile --filter @tolo/studio
 
-      - name: Deploy Studio
+      - name: 🚀 Deploy Studio
         working-directory: apps/studio
         env:
           SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
@@ -158,16 +158,16 @@ jobs:
     needs: changes
     if: needs.changes.outputs.poster-plugin == 'true' || inputs.deploy_all
     steps:
-      - name: Checkout code
+      - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun
+      - name: 🍞 Setup Bun
         uses: oven-sh/setup-bun@v2
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: bun install --frozen-lockfile --filter @tolo/poster-plugin
 
-      - name: Deploy Poster Plugin
+      - name: 🚀 Deploy Poster Plugin
         working-directory: apps/poster-plugin
         env:
           POSTER_APPLICATION_ID: ${{ vars.POSTER_APPLICATION_ID }}
