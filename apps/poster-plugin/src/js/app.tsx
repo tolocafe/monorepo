@@ -33,6 +33,8 @@ export default function App() {
 						title: 'Información',
 						width: 600,
 					})
+
+					return null
 				})
 			}
 

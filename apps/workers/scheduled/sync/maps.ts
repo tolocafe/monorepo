@@ -2,12 +2,9 @@ import type {
 	ClientData,
 	PosterModificationGroup,
 	Product as PosterProduct,
-} from '~common/api'
-import type {
-	customers,
-	productModifierGroups,
-	products,
-} from '~workers/db/schema'
+} from '@tolo/common/api'
+
+import type { customers, productModifierGroups, products } from '~/db/schema'
 
 import { toCents } from './utils'
 

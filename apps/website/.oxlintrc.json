@@ -1,0 +1,10 @@
+{
+	"$schema": "https://raw.githubusercontent.com/oxc-project/oxlint/main/npm/oxlint/configuration_schema.json",
+	"extends": ["node_modules/@tolo/oxlint-config/react.json"],
+	"ignorePatterns": [
+		"node_modules",
+		"dist",
+		".react-router",
+		"worker-configuration.d.ts"
+	]
+}

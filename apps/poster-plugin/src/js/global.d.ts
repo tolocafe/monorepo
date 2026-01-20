@@ -32,12 +32,14 @@ interface PosterAPI {
 	interface: PosterInterface
 	makeRequest: (
 		url: string,
-		options?: {
-			data?: unknown
-			headers?: string[]
-			method?: 'delete' | 'get' | 'post' | 'put'
-			timeout?: number
-		},
+		options:
+			| {
+					data?: unknown
+					headers?: string[]
+					method?: 'delete' | 'get' | 'post' | 'put'
+					timeout?: number
+			  }
+			| undefined,
 		callback: (response: { result: string }) => void,
 	) => Promise<unknown>
 	on: {

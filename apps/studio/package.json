@@ -1,0 +1,41 @@
+{
+	"name": "@tolo/studio",
+	"version": "1.0.0",
+	"private": true,
+	"keywords": [
+		"sanity"
+	],
+	"license": "MIT",
+	"main": "package.json",
+	"scripts": {
+		"dev": "sanity dev",
+		"start": "sanity start",
+		"build": "sanity build",
+		"deploy": "sanity deploy",
+		"deploy-graphql": "sanity graphql deploy",
+		"lint": "oxlint --type-aware",
+		"typecheck": "tsgo --noEmit",
+		"format": "oxfmt .",
+		"format:check": "oxfmt --check .",
+		"clean": "rm -rf node_modules dist"
+	},
+	"dependencies": {
+		"@sanity/icons": "^3.5.7",
+		"@sanity/vision": "^5.1.0",
+		"react": "catalog:",
+		"react-dom": "catalog:",
+		"sanity": "^5.1.0",
+		"styled-components": "^6.1.18"
+	},
+	"devDependencies": {
+		"@tolo/oxfmt-config": "workspace:*",
+		"@tolo/oxlint-config": "workspace:*",
+		"@tolo/typescript-config": "workspace:*",
+		"@types/react": "catalog:",
+		"@typescript/native-preview": "catalog:",
+		"oxfmt": "catalog:",
+		"oxlint": "catalog:",
+		"oxlint-tsgolint": "catalog:",
+		"typescript": "catalog:"
+	}
+}

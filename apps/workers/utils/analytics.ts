@@ -5,14 +5,13 @@ import {
 	captureException,
 	getCurrentScope,
 } from '@sentry/cloudflare'
-import type { Context } from 'hono'
-import { getConnInfo } from 'hono/cloudflare-workers'
-import z from 'zod/v4'
-
 import type {
 	ServerAnalyticsEvent,
 	ServerEventProperties,
-} from '~common/analytics'
+} from '@tolo/common/analytics'
+import type { Context } from 'hono'
+import { getConnInfo } from 'hono/cloudflare-workers'
+import z from 'zod/v4'
 
 import type { Bindings } from '../types'
 

@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/cloudflare'
+import type { DashTransaction } from '@tolo/common/api'
 import { and, eq, isNotNull, sql } from 'drizzle-orm'
 
-import type { DashTransaction } from '~common/api'
-import { orderLines, transactions } from '~workers/db/schema'
+import { orderLines, transactions } from '~/db/schema'
 
 import type { Database, SyncResult } from './sync/transactions'
 

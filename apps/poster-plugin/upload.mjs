@@ -12,7 +12,7 @@ const URL =
 	'https://platform.joinposter.com/api/application.uploadPOSPlatformBundle?format=json'
 const FILENAME = 'bundle.js'
 
-;(function () {
+;(function init() {
 	console.log('Started bundle build, you will see a message in a minute...')
 
 	if (!shell.exec('bun run build')) {
@@ -50,16 +50,16 @@ const FILENAME = 'bundle.js'
 						console.log(error)
 					} else {
 						try {
-							body = JSON.parse(body)
+							const parsedBody = JSON.parse(body)
 
-							if (body.error) {
-								throw new Error(JSON.stringify(body))
+							if (parsedBody.error) {
+								throw new Error(JSON.stringify(parsedBody))
 							}
 
 							console.log('Bundle successfully sent to Poster', body)
-						} catch (error__) {
+						} catch (error) {
 							console.log('Error while send bundle to Poster...')
-							console.log(error__)
+							console.log(error)
 						}
 					}
 				},

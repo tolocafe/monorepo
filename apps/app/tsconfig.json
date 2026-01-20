@@ -1,0 +1,23 @@
+{
+	"extends": "expo/tsconfig.base",
+	"compilerOptions": {
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"paths": {
+			"~/*": ["./src/*"]
+		},
+		"types": ["jest", "node"],
+		"lib": ["DOM", "ES2024"]
+	},
+	"include": [
+		"src/**/*.ts",
+		"src/**/*.tsx",
+		"app.config.ts",
+		"drizzle.config.ts",
+		"expo-env.d.ts",
+		"src/**/*.d.ts",
+		".expo/types/**/*.ts"
+	],
+	"files": ["src/index.ts"]
+}

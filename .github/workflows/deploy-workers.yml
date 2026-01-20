@@ -1,0 +1,37 @@
+name: Deploy Workers
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/workers/**'
+      - 'packages/**'
+      - '.github/workflows/deploy-workers.yml'
+
+concurrency:
+  group: deploy-workers
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Cloudflare
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.23
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Deploy Workers
+        working-directory: apps/workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+        run: bun run deploy

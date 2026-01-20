@@ -1,8 +1,8 @@
+import { SUPPORTED_LOCALES } from '@tolo/common/locales'
+import type { SupportedLocale } from '@tolo/common/locales'
 import type { Context, MiddlewareHandler } from 'hono'
 
-import { SUPPORTED_LOCALES } from '~common/locales'
-import type { SupportedLocale } from '~common/locales'
-import type { Bindings } from '~workers/types'
+import type { Bindings } from '~/types'
 
 type Variables = {
 	language: SupportedLocale

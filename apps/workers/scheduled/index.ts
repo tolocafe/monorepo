@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/cloudflare'
 
-import { getDatabase } from '~workers/db/client'
-import processCustomerLifecycleEvents from '~workers/scheduled/process-lifecycle-events'
-import type { Bindings } from '~workers/types'
+import { getDatabase } from '~/db/client'
+import processCustomerLifecycleEvents from '~/scheduled/process-lifecycle-events'
+import type { Bindings } from '~/types'
 
 import syncTransactions from './sync/transactions'
 

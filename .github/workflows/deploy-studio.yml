@@ -1,0 +1,36 @@
+name: Deploy Studio
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'apps/studio/**'
+      - 'packages/**'
+      - '.github/workflows/deploy-studio.yml'
+
+concurrency:
+  group: deploy-studio
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Sanity
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.2.23
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Deploy Studio
+        working-directory: apps/studio
+        env:
+          SANITY_AUTH_TOKEN: ${{ secrets.SANITY_AUTH_TOKEN }}
+        run: bun run deploy

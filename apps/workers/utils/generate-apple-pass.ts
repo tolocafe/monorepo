@@ -1,9 +1,9 @@
 import { captureException } from '@sentry/cloudflare'
+import type { ClientData } from '@tolo/common'
 import type { Context } from 'hono'
 import { PKPass } from 'passkit-generator'
 
-import type { ClientData } from '~common/api'
-import type { Bindings } from '~workers/types'
+import type { Bindings } from '~/types'
 
 import { posterApi } from './poster'
 import { getCustomerStamps } from './stamps'

@@ -1,0 +1,11 @@
+{
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"display": "React Native (Expo)",
+	"extends": "./react.json",
+	"compilerOptions": {
+		"jsx": "react-jsx",
+		"lib": ["DOM", "DOM.Iterable", "ES2024"],
+		"moduleResolution": "bundler",
+		"types": ["jest", "node"]
+	}
+}

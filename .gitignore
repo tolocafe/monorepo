@@ -1,10 +1,11 @@
 .cursor/mcp.json
 /ios
 /android
-/certs
+certs/
 .wrangler/
 .vscode/
 .playwright-mcp/
+.react-router
 
 /apps/poster-plugin/manifest.json
 

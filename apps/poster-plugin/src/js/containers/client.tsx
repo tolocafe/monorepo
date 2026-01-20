@@ -1,6 +1,5 @@
+import type { PosClientData } from '@tolo/common/api'
 import { useEffect, useState } from 'react'
-
-import type { PosClientData } from '~common/api'
 
 const BASE_URL = 'https://app.tolo.cafe/api/pos'
 

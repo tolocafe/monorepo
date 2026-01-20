@@ -1,0 +1,12 @@
+{
+	"extends": "@tolo/typescript-config/cloudflare-workers.json",
+	"compilerOptions": {
+		"paths": {
+			"~/*": ["./*"]
+		},
+		"types": ["node", "@cloudflare/workers-types"]
+	},
+	"include": ["./**/*.ts", "../../worker-configuration.d.ts"],
+	"exclude": ["node_modules"],
+	"files": ["index.ts"]
+}

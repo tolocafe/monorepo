@@ -1,8 +1,8 @@
 import type { PortableTextBlock } from '@portabletext/types'
+import type { SanityImageReference } from '@tolo/common/api'
+import type { SupportedLocale } from '@tolo/common/locales'
 
-import type { SanityImageReference } from '~common/api'
-import type { SupportedLocale } from '~common/locales'
-import type { Bindings } from '~workers/types'
+import type { Bindings } from '~/types'
 
 type SanityImage = {
 	_key: string
@@ -99,6 +99,8 @@ type SanityLocalizedProduct = {
 	/** In Sanity: `name.{lang}`, maps to API `product_name` */
 	name?: string
 	posterId: string
+	/** In Sanity: `recipe.{lang}`, barista recipe instructions */
+	recipe?: PortableTextBlock[]
 	tag?: 'FAVORITE' | 'NEW' | 'SEASONAL' | 'SPECIAL'
 }
 
@@ -289,6 +291,7 @@ const sanity = {
 				intensity,
 				"name": name.${language},
 				posterId,
+				"recipe": recipe.${language},
 				tag
 			}`,
 		}).then((product): null | SanityLocalizedProduct => {
@@ -393,6 +396,7 @@ const sanity = {
 				intensity,
 				"name": name.${language},
 				posterId,
+				"recipe": recipe.${language},
 				tag
 			}`,
 		}).then((products) =>

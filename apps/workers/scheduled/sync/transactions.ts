@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/cloudflare'
+import type { DashTransaction } from '@tolo/common/api'
 
-import type { DashTransaction } from '~common/api'
-import { getDatabase } from '~workers/db/client'
-import type { Bindings } from '~workers/types'
+import { getDatabase } from '~/db/client'
+import type { Bindings } from '~/types'
 
 import { syncDateRange } from './date-range'
 import { getTransactionCursor, updateSyncTimestamp } from './state'

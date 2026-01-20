@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-import path from 'node:path'
-
 import { getBabelOutputPlugin } from '@rollup/plugin-babel'
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vite'
@@ -51,7 +49,6 @@ export default defineConfig({
 	resolve: {
 		alias: {
 			os: 'os-browserify/browser',
-			'~common': path.resolve(__dirname, '../../common'),
 		},
 	},
 })

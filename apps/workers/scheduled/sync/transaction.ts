@@ -1,7 +1,7 @@
+import type { DashTransaction } from '@tolo/common/api'
 import { eq } from 'drizzle-orm'
 
-import type { DashTransaction } from '~common/api'
-import { transactions } from '~workers/db/schema'
+import { transactions } from '~/db/schema'
 
 import { ensureCustomer, ensureLocation } from './ensure'
 import type { Cache } from './ensure'
