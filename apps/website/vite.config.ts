@@ -68,19 +68,10 @@ function vanillaExtractCloudflare(): Plugin[] {
 }
 
 export default defineConfig({
-	environments: {
-		ssr: {
-			build: {
-				rollupOptions: {
-					external: ['virtual:react-router/server-build'],
-				},
-			},
-		},
-	},
 	plugins: [
+		reactRouter(),
 		cloudflare({ viteEnvironment: { name: 'ssr' } }),
 		vanillaExtractCloudflare(),
-		reactRouter(),
 		tsconfigPaths({ projects: ['./tsconfig.json'] }),
 	],
 	ssr: {
