@@ -69,6 +69,8 @@ jobs:
 
       - name: 🔨 Build web app
         working-directory: apps/app
+        env:
+          EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
         run: bunx expo export --platform web
 
       - name: 🚀 Deploy App
@@ -113,8 +115,6 @@ jobs:
     timeout-minutes: 10
     needs: changes
     if: needs.changes.outputs.website == 'true' || inputs.deploy_all || true
-    env:
-      EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
