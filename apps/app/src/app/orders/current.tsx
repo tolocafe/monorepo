@@ -624,13 +624,13 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		gap: theme.spacing.sm,
 	},
 	sendButton: {
-		backgroundColor: theme.colors.verde.solid,
+		backgroundColor: theme.colors.primary.solid,
 		borderRadius: theme.borderRadius.full,
 		height: ORDER_BUTTON_HEIGHT,
 		width: '100%',
 	},
 	totalAmount: {
-		color: theme.colors.verde.solid,
+		color: theme.colors.primary.solid,
 	},
 	totalRow: {
 		alignItems: 'center',

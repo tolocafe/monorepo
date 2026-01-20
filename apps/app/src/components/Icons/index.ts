@@ -14,9 +14,9 @@ export const HeaderIconIonicons = withUnistyles(Ionicons, (theme) => ({
 }))
 
 export const RedColorIcon = withUnistyles(Ionicons, (theme) => ({
-	color: theme.colors.rojo.solid,
+	color: theme.colors.error.solid,
 }))
 
 export const GreenColorIcon = withUnistyles(Ionicons, (theme) => ({
-	color: theme.colors.verde.solid,
+	color: theme.colors.primary.solid,
 }))

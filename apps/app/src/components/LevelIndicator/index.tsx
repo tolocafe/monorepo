@@ -47,8 +47,8 @@ const styles = StyleSheet.create((theme) => ({
 		variants: {
 			filled: {
 				true: {
-					backgroundColor: theme.colors.naranja.solid,
-					borderColor: theme.colors.naranja.solid,
+					backgroundColor: theme.colors.secondary.solid,
+					borderColor: theme.colors.secondary.solid,
 				},
 			},
 		},

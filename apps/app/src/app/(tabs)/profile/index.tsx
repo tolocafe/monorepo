@@ -402,13 +402,13 @@ const styles = StyleSheet.create((theme) => ({
 					backgroundColor: theme.colors.gray.interactive,
 				},
 				FRIEND_AND_FAMILY: {
-					backgroundColor: theme.colors.rojo.interactive,
+					backgroundColor: theme.colors.error.interactive,
 				},
 				NEIGHBOR: {
 					backgroundColor: theme.colors.amarillo.interactive,
 				},
 				SUPER_CUSTOMER: {
-					backgroundColor: theme.colors.verde.interactive,
+					backgroundColor: theme.colors.primary.interactive,
 				},
 			},
 		},

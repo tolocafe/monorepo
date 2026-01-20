@@ -86,7 +86,7 @@ const styles = StyleSheet.create((theme) => ({
 			},
 			hasError: {
 				true: {
-					borderColor: theme.colors.rojo.solid,
+					borderColor: theme.colors.error.solid,
 				},
 			},
 			isMultiline: {

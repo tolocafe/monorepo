@@ -100,7 +100,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: 64,
 	},
 	guestButtonSelected: {
-		borderColor: theme.colors.verde.solid,
+		borderColor: theme.colors.primary.solid,
 		borderWidth: 2,
 	},
 	guestsGrid: {

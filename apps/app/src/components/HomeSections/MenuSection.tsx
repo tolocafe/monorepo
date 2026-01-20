@@ -86,7 +86,7 @@ export function MenuSection() {
 		if (productsQuery.error) {
 			return (
 				<View style={styles.errorContainer}>
-					<Paragraph style={styles.errorText}>
+					<Paragraph weight="bold" style={styles.errorText}>
 						<Trans>Failed to load menu. Please try again.</Trans>
 					</Paragraph>
 					<Button>
@@ -150,7 +150,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		padding: theme.spacing.xl,
 	},
 	errorText: {
-		color: theme.colors.rojo.solid,
+		color: theme.colors.error.solid,
 		textAlign: 'center',
 	},
 	loadingContainer: {

@@ -101,7 +101,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	check: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.verde.solid,
+		backgroundColor: theme.colors.primary.solid,
 		borderRadius: theme.borderRadius.full,
 		height: 20,
 		justifyContent: 'center',
@@ -133,7 +133,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.sm,
 	},
 	rightText: {
-		color: theme.colors.verde.text,
+		color: theme.colors.primary.text,
 		fontSize: theme.typography.button.fontSize,
 		fontWeight: theme.fontWeights.semibold,
 	},

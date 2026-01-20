@@ -113,7 +113,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: 40,
 	},
 	boxActive: {
-		borderColor: theme.colors.verde.solid,
+		borderColor: theme.colors.primary.solid,
 		borderWidth: 2,
 	},
 	boxText: {

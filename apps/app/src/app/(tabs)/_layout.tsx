@@ -37,11 +37,11 @@ export default function TabsLayout() {
 				<FloatingOrderCard products={products} transactionId={transactionId} />
 			)}
 			<NativeTabs
-				tintColor={theme.colors.verde.solid}
+				tintColor={theme.colors.primary.solid}
 				minimizeBehavior={hasActiveOrder ? 'onScrollDown' : 'automatic'}
 				backgroundColor={theme.colors.gray.background}
-				rippleColor={theme.colors.verde.border}
-				indicatorColor={theme.colors.verde.border}
+				rippleColor={theme.colors.primary.border}
+				indicatorColor={theme.colors.primary.border}
 				labelVisibilityMode="labeled"
 			>
 				{hasActiveOrder && (

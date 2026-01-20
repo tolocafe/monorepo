@@ -198,7 +198,7 @@ const styles = StyleSheet.create((theme) => ({
 		variants: {
 			labelColor: {
 				primary: {
-					color: theme.colors.verde.solid,
+					color: theme.colors.primary.solid,
 				},
 				secondary: {
 					color: theme.colors.gray.solid,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create((theme) => ({
 		variants: {
 			textColor: {
 				primary: {
-					color: theme.colors.verde.solid,
+					color: theme.colors.primary.solid,
 				},
 				secondary: {
 					color: theme.colors.gray.solid,

@@ -595,7 +595,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.sm,
 	},
 	filterPillActive: {
-		backgroundColor: theme.colors.verde.solid,
+		backgroundColor: theme.colors.primary.solid,
 	},
 	filterPillText: {
 		color: theme.colors.gray.text,

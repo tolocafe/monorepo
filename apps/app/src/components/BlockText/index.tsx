@@ -139,7 +139,7 @@ const styles = StyleSheet.create((theme) => ({
 		fontStyle: 'italic',
 	},
 	link: {
-		color: theme.colors.verde.solid,
+		color: theme.colors.primary.solid,
 		textDecorationLine: 'underline',
 	},
 	list: {

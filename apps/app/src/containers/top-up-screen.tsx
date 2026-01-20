@@ -302,7 +302,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.xs,
 	},
 	balanceAmount: {
-		color: theme.colors.verde.solid,
+		color: theme.colors.primary.solid,
 		fontSize: theme.typography.h3.fontSize,
 		paddingVertical: theme.spacing.xs,
 	},

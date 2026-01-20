@@ -82,18 +82,59 @@ export const copyright = style({
 	margin: 0,
 })
 
-export const legalLinks = style({
-	display: 'flex',
-	gap: vars.space[4],
-})
-
 export const legalLink = style({
 	':hover': {
 		color: vars.color.white,
 	},
 	color: 'rgba(255, 255, 255, 0.7)',
 	fontSize: vars.fontSize.sm,
+	marginLeft: vars.space[4],
 	textDecoration: 'none',
+})
+
+export const socialLinks = style({
+	alignItems: 'center',
+	display: 'flex',
+	gap: vars.space[4],
+})
+
+export const socialLink = style({
+	':hover': {
+		color: vars.color.white,
+		opacity: 1,
+	},
+	color: 'rgba(255, 255, 255, 0.7)',
+	display: 'block',
+	opacity: 0.7,
+	transition: 'opacity 0.2s',
+})
+
+export const socialIcon = style({
+	color: vars.color.white,
+	display: 'block',
+	height: 28,
+	width: 28,
+})
+
+export const storeLinks = style({
+	display: 'flex',
+	flexDirection: 'column',
+	gap: vars.space[3],
+})
+
+export const storeLink = style({
+	':hover': {
+		opacity: 1,
+	},
+	display: 'block',
+	opacity: 0.85,
+	transition: 'opacity 0.2s',
+})
+
+export const storeBadge = style({
+	display: 'block',
+	height: 40,
+	width: 'auto',
 })
 
 export const brand = style({

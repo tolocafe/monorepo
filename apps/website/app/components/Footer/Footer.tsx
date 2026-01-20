@@ -1,5 +1,12 @@
+/// <reference types="vite-plugin-svgr/client" />
+
 import { Link, useParams } from 'react-router'
 
+import AppStoreBadge from '@/assets/logos/app-store.svg'
+import FacebookLogo from '@/assets/logos/facebook.svg?react'
+import GooglePlayBadge from '@/assets/logos/google-play.svg'
+import InstagramLogo from '@/assets/logos/instagram.svg?react'
+import TikTokLogo from '@/assets/logos/tiktok.svg?react'
 import { isValidLocale, DEFAULT_LOCALE } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { getLocalizedString, getLocalizedSlug } from '@/lib/sanity'
@@ -18,10 +25,10 @@ const TRANSLATIONS = {
 		blog: 'Blog',
 		brand: 'TOLO',
 		company: 'Unternehmen',
-		connect: 'Folgen Sie uns',
 		contact: 'Kontakt',
 		copyright: `© ${currentYear} TOLO. Alle Rechte vorbehalten.`,
 		explore: 'Erkunden',
+		getTheApp: 'App herunterladen',
 		home: 'Startseite',
 		legal: 'Rechtliches',
 		locations: 'Standorte',
@@ -39,10 +46,10 @@ const TRANSLATIONS = {
 		blog: 'Blog',
 		brand: 'TOLO',
 		company: 'Company',
-		connect: 'Follow Us',
 		contact: 'Contact',
 		copyright: `© ${currentYear} TOLO. All rights reserved.`,
 		explore: 'Explore',
+		getTheApp: 'Get the App',
 		home: 'Home',
 		legal: 'Legal',
 		locations: 'Locations',
@@ -60,10 +67,10 @@ const TRANSLATIONS = {
 		blog: 'Blog',
 		brand: 'TOLO',
 		company: 'Empresa',
-		connect: 'Síguenos',
 		contact: 'Contacto',
 		copyright: `© ${currentYear} TOLO. Todos los derechos reservados.`,
 		explore: 'Explorar',
+		getTheApp: 'Descarga la App',
 		home: 'Inicio',
 		legal: 'Legal',
 		locations: 'Ubicaciones',
@@ -81,10 +88,10 @@ const TRANSLATIONS = {
 		blog: 'Blog',
 		brand: 'TOLO',
 		company: 'Entreprise',
-		connect: 'Suivez-nous',
 		contact: 'Contact',
 		copyright: `© ${currentYear} TOLO. Tous droits réservés.`,
 		explore: 'Explorer',
+		getTheApp: "Télécharger l'App",
 		home: 'Accueil',
 		legal: 'Légal',
 		locations: 'Emplacements',
@@ -102,10 +109,10 @@ const TRANSLATIONS = {
 		blog: 'ブログ',
 		brand: 'TOLO',
 		company: '会社情報',
-		connect: 'フォロー',
 		contact: 'お問い合わせ',
 		copyright: `© ${currentYear} TOLO. 全著作権所有。`,
 		explore: '探索',
+		getTheApp: 'アプリをダウンロード',
 		home: 'ホーム',
 		legal: '法的情報',
 		locations: '店舗',
@@ -182,38 +189,65 @@ export function Footer({ locations = [] }: FooterProps) {
 					)}
 
 					<div className={styles.section}>
-						<h3 className={styles.sectionTitle}>{t.connect}</h3>
-						<a
-							href="https://instagram.com/tolo.cafe"
-							target="_blank"
-							rel="noreferrer"
-							className={styles.link}
-						>
-							Instagram
-						</a>
-						<a
-							href="https://facebook.com/tolo.cafe"
-							target="_blank"
-							rel="noreferrer"
-							className={styles.link}
-						>
-							Facebook
-						</a>
-						<a
-							href="https://tiktok.com/@tolo.cafe"
-							target="_blank"
-							rel="noreferrer"
-							className={styles.link}
-						>
-							TikTok
-						</a>
+						<h3 className={styles.sectionTitle}>{t.getTheApp}</h3>
+						<div className={styles.storeLinks}>
+							<a
+								href="https://apps.apple.com/app/tolo-cafe/id6503702880"
+								target="_blank"
+								rel="noreferrer"
+								className={styles.storeLink}
+							>
+								<img
+									src={AppStoreBadge}
+									alt="Download on the App Store"
+									className={styles.storeBadge}
+								/>
+							</a>
+							<a
+								href="https://play.google.com/store/apps/details?id=cafe.tolo.app"
+								target="_blank"
+								rel="noreferrer"
+								className={styles.storeLink}
+							>
+								<img
+									src={GooglePlayBadge}
+									alt="Get it on Google Play"
+									className={styles.storeBadge}
+								/>
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>
 
 			<div className={styles.bottomBar}>
 				<p className={styles.copyright}>{t.copyright}</p>
-				<div className={styles.legalLinks}>
+
+				<div className={styles.socialLinks}>
+					<a
+						href="https://instagram.com/tolo.cafe"
+						target="_blank"
+						rel="noreferrer"
+						className={styles.socialLink}
+					>
+						<InstagramLogo className={styles.socialIcon} title="Instagram" />
+					</a>
+					<a
+						href="https://facebook.com/tolo.cafe"
+						target="_blank"
+						rel="noreferrer"
+						className={styles.socialLink}
+					>
+						<FacebookLogo className={styles.socialIcon} title="Facebook" />
+					</a>
+					<a
+						href="https://tiktok.com/@tolo.cafe"
+						target="_blank"
+						rel="noreferrer"
+						className={styles.socialLink}
+					>
+						<TikTokLogo className={styles.socialIcon} title="TikTok" />
+					</a>
 					<Link to={`/${locale}/${t.privacyPath}`} className={styles.legalLink}>
 						{t.privacy}
 					</Link>

@@ -155,7 +155,7 @@ const styles = StyleSheet.create((theme, runtime) => {
 			minHeight: ADD_TO_BAG_BUTTON_SIZE,
 		},
 		menuItemImageContainer: {
-			backgroundColor: theme.colors.verde.interactive,
+			backgroundColor: theme.colors.primary.interactive,
 			borderCurve: 'continuous',
 			borderTopLeftRadius: theme.borderRadius.lg,
 			borderTopRightRadius: theme.borderRadius.lg,
@@ -164,7 +164,7 @@ const styles = StyleSheet.create((theme, runtime) => {
 			width: '100%',
 		},
 		tag: {
-			backgroundColor: theme.colors.naranja.solid,
+			backgroundColor: theme.colors.secondary.solid,
 			borderRadius: theme.borderRadius.full,
 			paddingHorizontal: theme.spacing.sm,
 			paddingVertical: theme.spacing.xxs,

@@ -234,11 +234,11 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.md,
 	},
 	discountText: {
-		color: theme.colors.verde.solid,
+		color: theme.colors.primary.solid,
 		fontWeight: '600',
 	},
 	downloadButton: {
-		backgroundColor: theme.colors.verde.solid,
+		backgroundColor: theme.colors.primary.solid,
 		borderCurve: 'continuous',
 		borderRadius: theme.borderRadius.md,
 		padding: theme.spacing.lg,

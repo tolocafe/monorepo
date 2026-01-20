@@ -1,7 +1,21 @@
+import { Color } from 'expo-router'
 import { Platform } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-const TINT_COLOR = '#3D6039'
+const PRIMARY_SOLID_COLOR = Platform.select({
+	android: Color.android.dynamic.primary,
+	default: '#3D6039',
+})
+
+const PRIMARY_INTERACTIVE_COLOR = Platform.select({
+	android: Color.android.dynamic.primaryContainer,
+	default: '#DCEFD9',
+})
+
+const PRIMARY_BORDER_COLOR = Platform.select({
+	android: Color.android.dynamic.primaryFixed,
+	default: '#B0D1AB',
+})
 
 const lightTheme = {
 	// oxlint-disable-next-line sort-keys
@@ -22,6 +36,17 @@ const lightTheme = {
 			solid: '#F5D90A',
 			text: '#000000',
 		},
+		// Error - Rojo (Red)
+		error: {
+			background: '#FFFCFC',
+			border: '#FFEFEF',
+			interactive: '#FFD5D9',
+			solid: Platform.select({
+				android: Color.android.dynamic.error,
+				default: '#E5484D',
+			}),
+			text: '#FFFFFF',
+		},
 		// Text and backgrounds - Gray
 		gray: {
 			background: '#ffffff',
@@ -30,29 +55,21 @@ const lightTheme = {
 			solid: '#666666',
 			text: '#111111',
 		},
+		// Primary accent - Verde (Green)
+		primary: {
+			background: '#F6FBF5',
+			border: PRIMARY_BORDER_COLOR,
+			interactive: PRIMARY_INTERACTIVE_COLOR,
+			solid: PRIMARY_SOLID_COLOR,
+			text: '#20311E',
+		},
 		// Secondary accent - Naranja (Orange)
-		naranja: {
+		secondary: {
 			background: '#FEFCFB',
 			border: '#FFEDE5',
 			interactive: '#FFD0A5',
 			solid: '#F76B15',
 			text: '#893C0C',
-		},
-		// Error - Rojo (Red)
-		rojo: {
-			background: '#FFFCFC',
-			border: '#FFEFEF',
-			interactive: '#FFD5D9',
-			solid: '#E5484D',
-			text: '#FFFFFF',
-		},
-		// Primary accent - Verde (Green)
-		verde: {
-			background: '#F6FBF5',
-			border: '#B0D1AB',
-			interactive: '#DCEFD9',
-			solid: TINT_COLOR,
-			text: '#20311E',
 		},
 	},
 	fontSizes: {
@@ -141,6 +158,14 @@ const darkTheme = {
 			solid: '#F5D90A',
 			text: '#000000',
 		},
+		// Error - Rojo (Red)
+		error: {
+			background: '#201312',
+			border: '#8C3434',
+			interactive: '#500F13',
+			solid: '#E5484D',
+			text: '#FFD2CE',
+		},
 		// Text and backgrounds - Gray
 		gray: {
 			background: '#111111',
@@ -149,29 +174,21 @@ const darkTheme = {
 			solid: '#6E6E6E',
 			text: '#FFFFFF',
 		},
-		// Secondary accent - Naranja (Orange)
-		naranja: {
-			background: '#1F1206',
-			border: '#2B1400',
-			interactive: '#5F1F00',
-			solid: '#F76B15',
-			text: '#FFFFFF',
-		},
-		// Error - Rojo (Red)
-		rojo: {
-			background: '#201312',
-			border: '#8C3434',
-			interactive: '#500F13',
-			solid: '#E5484D',
-			text: '#FFD2CE',
-		},
 		// Primary accent - Verde (Green)
-		verde: {
+		primary: {
 			background: '#141A13',
 			border: '#41643D',
 			interactive: '#253823',
 			solid: '#3D6039',
 			text: '#CEF5C9',
+		},
+		// Secondary accent - Naranja (Orange)
+		secondary: {
+			background: '#1F1206',
+			border: '#2B1400',
+			interactive: '#5F1F00',
+			solid: '#F76B15',
+			text: '#FFFFFF',
 		},
 	} satisfies (typeof lightTheme)['colors'],
 }

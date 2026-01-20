@@ -46,6 +46,7 @@
 		"oxlint": "catalog:",
 		"oxlint-tsgolint": "catalog:",
 		"vite": "~7.3.0",
+		"vite-plugin-svgr": "^4.5.0",
 		"vite-tsconfig-paths": "~6.0.4",
 		"wrangler": "catalog:"
 	},

@@ -3,6 +3,7 @@ import { reactRouter } from '@react-router/dev/vite'
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
 import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
+import svgr from 'vite-plugin-svgr'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 // Remove SSR externals from config to ensure compatibility with Cloudflare Workers
@@ -72,6 +73,7 @@ export default defineConfig({
 		cloudflare({ viteEnvironment: { name: 'ssr' } }),
 		vanillaExtractCloudflare(),
 		reactRouter(),
+		svgr(),
 		tsconfigPaths({ projects: ['./tsconfig.json'] }),
 	],
 	ssr: {

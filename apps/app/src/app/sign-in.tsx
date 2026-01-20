@@ -557,7 +557,7 @@ const styles = StyleSheet.create((theme) => ({
 		gap: theme.spacing.xs,
 	},
 	backButtonText: {
-		color: theme.colors.verde.solid,
+		color: theme.colors.primary.solid,
 	},
 	container: {
 		_web: {
@@ -583,7 +583,7 @@ const styles = StyleSheet.create((theme) => ({
 		padding: theme.layout.screenPadding,
 	},
 	errorText: {
-		color: theme.colors.rojo.solid,
+		color: theme.colors.error.solid,
 		marginTop: theme.spacing.xs,
 	},
 	header: {

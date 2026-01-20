@@ -170,7 +170,7 @@ const styles = StyleSheet.create((theme) => ({
 		width: '100%',
 	},
 	imageFallback: {
-		backgroundColor: theme.colors.verde.interactive,
+		backgroundColor: theme.colors.primary.interactive,
 		height: '100%',
 		width: '100%',
 	},

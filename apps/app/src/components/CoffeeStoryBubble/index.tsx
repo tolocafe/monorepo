@@ -90,7 +90,7 @@ const styles = StyleSheet.create((theme) => ({
 	},
 	storyBubbleRing: {
 		alignItems: 'center',
-		borderColor: theme.colors.verde.solid,
+		borderColor: theme.colors.primary.solid,
 		borderRadius: theme.borderRadius.full,
 		borderWidth: 3,
 		justifyContent: 'center',

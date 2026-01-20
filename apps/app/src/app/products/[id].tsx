@@ -598,7 +598,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		width: '100%',
 	},
 	imageFallback: {
-		backgroundColor: theme.colors.verde.interactive,
+		backgroundColor: theme.colors.primary.interactive,
 		height: '100%',
 		width: '100%',
 	},
@@ -618,7 +618,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		marginBottom: theme.spacing.xs,
 	},
 	price: {
-		color: theme.colors.verde.solid,
+		color: theme.colors.primary.solid,
 	},
 	priceText: {
 		paddingHorizontal: 5,
@@ -628,7 +628,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	},
 	quantityButton: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.verde.solid,
+		backgroundColor: theme.colors.primary.solid,
 		borderBottomRightRadius: theme.borderRadius.full,
 		borderTopRightRadius: theme.borderRadius.full,
 		height: ORDER_BUTTON_HEIGHT,
@@ -637,7 +637,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	},
 	quantityButtonMinus: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.verde.solid,
+		backgroundColor: theme.colors.primary.solid,
 		borderBottomLeftRadius: theme.borderRadius.full,
 		borderTopLeftRadius: theme.borderRadius.full,
 		height: ORDER_BUTTON_HEIGHT,
@@ -652,7 +652,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		flexDirection: 'row',
 	},
 	quantityText: {
-		backgroundColor: theme.colors.verde.interactive,
+		backgroundColor: theme.colors.primary.interactive,
 		borderRadius: theme.borderRadius.full,
 		paddingHorizontal: theme.spacing.sm,
 	},

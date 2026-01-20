@@ -78,7 +78,8 @@ export function FloatingOrderCard({
 const styles = StyleSheet.create((theme, runtime) => ({
 	badge: {
 		alignItems: 'center',
-		backgroundColor: Platform.OS === 'ios' ? theme.colors.verde.solid : 'white',
+		backgroundColor:
+			Platform.OS === 'ios' ? theme.colors.primary.solid : 'white',
 		borderRadius: theme.borderRadius.full,
 		height: 32,
 		justifyContent: 'center',
@@ -86,7 +87,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		paddingHorizontal: 8,
 	},
 	badgeText: {
-		color: Platform.OS === 'ios' ? 'white' : theme.colors.verde.solid,
+		color: Platform.OS === 'ios' ? 'white' : theme.colors.primary.solid,
 		fontSize: theme.fontSizes.lg,
 		fontWeight: theme.fontWeights.bold,
 	},
@@ -96,7 +97,7 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		},
 		alignItems: 'center',
 		backgroundColor:
-			Platform.OS === 'ios' ? 'transparent' : theme.colors.verde.solid,
+			Platform.OS === 'ios' ? 'transparent' : theme.colors.primary.solid,
 		borderCurve: 'continuous',
 		borderRadius: Platform.select({
 			android: 0,
@@ -137,6 +138,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 		flex: 1,
 	},
 	title: {
-		color: Platform.OS === 'ios' ? theme.colors.verde.solid : 'white',
+		color: Platform.OS === 'ios' ? theme.colors.primary.solid : 'white',
 	},
 }))

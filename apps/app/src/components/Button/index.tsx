@@ -90,10 +90,10 @@ const styles = StyleSheet.create((theme) => ({
 				primary: {
 					_web: {
 						_hover: {
-							backgroundColor: theme.colors.verde.text,
+							backgroundColor: theme.colors.primary.text,
 						},
 					},
-					backgroundColor: theme.colors.verde.solid,
+					backgroundColor: theme.colors.primary.solid,
 				},
 				surface: {
 					_web: {

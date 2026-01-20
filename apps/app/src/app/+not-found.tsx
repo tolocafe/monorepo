@@ -50,7 +50,7 @@ const styles = StyleSheet.create((theme) => ({
 		paddingVertical: theme.spacing.md,
 	},
 	linkText: {
-		color: theme.colors.verde.solid,
+		color: theme.colors.primary.solid,
 		fontSize: theme.fontSizes.md,
 	},
 	title: {

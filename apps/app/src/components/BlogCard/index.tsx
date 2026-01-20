@@ -131,7 +131,7 @@ const styles = StyleSheet.create((theme, runtime) => {
 			width: '100%',
 		},
 		imagePlaceholder: {
-			backgroundColor: theme.colors.verde.interactive,
+			backgroundColor: theme.colors.primary.interactive,
 			flex: 1,
 		},
 		meta: {

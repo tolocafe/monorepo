@@ -18,7 +18,7 @@ const InfoIcon = withUnistyles(Ionicons, (theme) => ({
 }))
 
 const TipIcon = withUnistyles(Ionicons, (theme) => ({
-	color: theme.colors.verde.solid,
+	color: theme.colors.primary.solid,
 }))
 
 const WarningIcon = withUnistyles(Ionicons, (theme) => ({
@@ -64,8 +64,8 @@ const styles = StyleSheet.create((theme) => ({
 					borderLeftColor: theme.colors.gray.solid,
 				},
 				tip: {
-					backgroundColor: theme.colors.verde.background,
-					borderLeftColor: theme.colors.verde.solid,
+					backgroundColor: theme.colors.primary.background,
+					borderLeftColor: theme.colors.primary.solid,
 				},
 				warning: {
 					backgroundColor: theme.colors.amarillo.background,
@@ -83,7 +83,7 @@ const styles = StyleSheet.create((theme) => ({
 					color: theme.colors.gray.text,
 				},
 				tip: {
-					color: theme.colors.verde.text,
+					color: theme.colors.primary.text,
 				},
 				warning: {
 					color: theme.colors.amarillo.text,
@@ -105,7 +105,7 @@ const styles = StyleSheet.create((theme) => ({
 					color: theme.colors.gray.solid,
 				},
 				tip: {
-					color: theme.colors.verde.solid,
+					color: theme.colors.primary.solid,
 				},
 				warning: {
 					color: theme.colors.amarillo.solid,
