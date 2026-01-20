@@ -66,7 +66,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: 📦 Install dependencies
-        run: bun install --frozen-lockfile --linker hoisted --filter @tolo/app
+        run: bun install --frozen-lockfile --filter @tolo/app
 
       - name: 💅 Check formatting
         run: bun run --filter @tolo/app format:check

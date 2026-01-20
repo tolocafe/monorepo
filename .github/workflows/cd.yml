@@ -71,7 +71,7 @@ jobs:
         working-directory: apps/app
         env:
           EXPO_PUBLIC_API_URL: ${{ vars.EXPO_PUBLIC_API_URL }}
-        run: bunx expo export --platform web
+        run: bun run web:build
 
       - name: 🚀 Deploy App
         uses: cloudflare/wrangler-action@v3
