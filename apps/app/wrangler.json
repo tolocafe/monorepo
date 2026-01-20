@@ -19,5 +19,11 @@
 	},
 	"placement": {
 		"mode": "smart"
-	}
+	},
+	"routes": [
+		{
+			"pattern": "app.tolo.cafe",
+			"custom_domain": true
+		}
+	]
 }

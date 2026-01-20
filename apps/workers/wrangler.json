@@ -35,12 +35,19 @@
 	],
 	"main": "index.ts",
 	"name": "tolo-workers",
+	"workers_dev": false,
 	"observability": {
 		"enabled": true
 	},
 	"placement": {
 		"mode": "smart"
 	},
+	"routes": [
+		{
+			"pattern": "workers.tolo.cafe",
+			"custom_domain": true
+		}
+	],
 	"triggers": {
 		"crons": ["* * * * *"]
 	}

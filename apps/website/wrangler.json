@@ -8,5 +8,11 @@
 	"observability": {
 		"enabled": true
 	},
+	"routes": [
+		{
+			"pattern": "www.tolo.cafe",
+			"custom_domain": true
+		}
+	],
 	"upload_source_maps": true
 }

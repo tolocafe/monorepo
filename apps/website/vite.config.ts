@@ -75,7 +75,7 @@ export default defineConfig({
 		cloudflare({ viteEnvironment: { name: 'ssr' } }),
 		vanillaExtractCloudflare(),
 		reactRouter(),
-		tsconfigPaths(),
+		tsconfigPaths({ projects: ['./tsconfig.json'] }),
 	],
 	ssr: {
 		noExternal: ['posthog-js', '@posthog/react'],
