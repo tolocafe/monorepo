@@ -92,7 +92,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --filter @tolo/app
 
       - name: Run tests
         run: bun run --filter @tolo/app test
@@ -111,7 +111,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --filter @tolo/workers
 
       - name: Run tests
         run: bun run --filter @tolo/workers test
@@ -130,7 +130,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --filter @tolo/website
 
       - name: Build
         run: bun run --filter @tolo/website build
@@ -149,7 +149,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --filter @tolo/studio
 
       - name: Build
         run: bun run --filter @tolo/studio build
@@ -168,7 +168,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --filter @tolo/poster-plugin
 
       - name: Build
         run: bun run --filter @tolo/poster-plugin build
