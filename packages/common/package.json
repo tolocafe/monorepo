@@ -29,7 +29,6 @@
 		"@tolo/typescript-config": "workspace:*",
 		"@types/node": "catalog:",
 		"oxfmt": "catalog:",
-		"oxlint": "catalog:",
-		"typescript": "catalog:"
+		"oxlint": "catalog:"
 	}
 }

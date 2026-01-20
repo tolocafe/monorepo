@@ -35,7 +35,6 @@
 		"@typescript/native-preview": "catalog:",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
-		"oxlint-tsgolint": "catalog:",
-		"typescript": "catalog:"
+		"oxlint-tsgolint": "catalog:"
 	}
 }

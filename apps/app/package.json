@@ -128,7 +128,6 @@
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
 		"oxlint-tsgolint": "catalog:",
-		"react-test-renderer": "19.2.0",
-		"typescript": "catalog:"
+		"react-test-renderer": "19.2.0"
 	}
 }
