@@ -68,9 +68,13 @@ function vanillaExtractCloudflare(): Plugin[] {
 }
 
 export default defineConfig({
-	build: {
-		rollupOptions: {
-			external: ['virtual:react-router/server-build'],
+	environments: {
+		ssr: {
+			build: {
+				rollupOptions: {
+					external: ['virtual:react-router/server-build'],
+				},
+			},
 		},
 	},
 	plugins: [

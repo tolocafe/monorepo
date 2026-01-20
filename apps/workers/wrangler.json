@@ -50,5 +50,8 @@
 	],
 	"triggers": {
 		"crons": ["* * * * *"]
+	},
+	"vars": {
+		"SANITY_PROJECT_ID": "l8johqhcfiuc31rvwsuv83za"
 	}
 }
