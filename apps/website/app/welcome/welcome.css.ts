@@ -511,6 +511,7 @@ export const mapWrapper = style({
 
 export const map = style({
 	border: 'none',
+	display: 'block',
 	height: '100%',
 	minHeight: '360px',
 	width: '100%',
