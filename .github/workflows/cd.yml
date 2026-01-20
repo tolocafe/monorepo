@@ -65,7 +65,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: 📦 Install dependencies
-        run: bun install --frozen-lockfile --filter @tolo/app
+        run: bun install --frozen-lockfile --linker hoisted --filter @tolo/app
 
       - name: 🔨 Build web app
         working-directory: apps/app
@@ -121,7 +121,7 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: 📦 Install dependencies
-        run: bun install --frozen-lockfile --filter @tolo/website
+        run: bun install --frozen-lockfile --linker hoisted --filter @tolo/website
 
       - name: 🚀 Deploy Website
         uses: cloudflare/wrangler-action@v3
