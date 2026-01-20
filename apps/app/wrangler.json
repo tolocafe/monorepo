@@ -1,15 +1,10 @@
-/**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
- */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "tolo-app",
-	"main": "./apps/workers/index.ts",
 	"compatibility_date": "2025-09-10",
 	"preview_urls": false,
 	"observability": {
-		"enabled": true,
+		"enabled": true
 	},
 	"compatibility_flags": ["nodejs_compat"],
 	"placement": { "mode": "smart" },
@@ -17,42 +12,42 @@
 		"binding": "ASSETS",
 		"directory": "./dist",
 		"not_found_handling": "single-page-application",
-		"run_worker_first": ["/api/*"],
+		"run_worker_first": ["/api/*"]
 	},
 	"triggers": {
-		"crons": ["* * * * *"],
+		"crons": ["* * * * *"]
 	},
 	"kv_namespaces": [
 		{
 			"binding": "KV_OTP",
-			"id": "920da48543314b4cbfc552cef5b8b421",
+			"id": "920da48543314b4cbfc552cef5b8b421"
 		},
 		{
 			"binding": "KV_SESSIONS",
-			"id": "58520d291d8f418f90b464ff0b3ea3df",
+			"id": "58520d291d8f418f90b464ff0b3ea3df"
 		},
 		{
 			"binding": "KV_CMS",
-			"id": "560289852d1e4a7ea75deb24805481b1",
-		},
+			"id": "560289852d1e4a7ea75deb24805481b1"
+		}
 	],
 	"ai": {
-		"binding": "AI",
+		"binding": "AI"
 	},
 	"d1_databases": [
 		{
 			"binding": "D1_TOLO",
 			"database_name": "tolo",
-			"database_id": "a97cd459-12c3-4051-b718-7a0c9fa64cf5",
-		},
+			"database_id": "a97cd459-12c3-4051-b718-7a0c9fa64cf5"
+		}
 	],
 	"browser": {
-		"binding": "BROWSER",
+		"binding": "BROWSER"
 	},
 	"hyperdrive": [
 		{
 			"binding": "HYPERDRIVE",
-			"id": "b4c25cd838cb4c2cb2c97f557b36b36a",
-		},
-	],
+			"id": "b4c25cd838cb4c2cb2c97f557b36b36a"
+		}
+	]
 }

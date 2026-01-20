@@ -4,7 +4,6 @@
 	"main": "index.ts",
 	"compatibility_date": "2025-01-13",
 	"compatibility_flags": ["nodejs_compat"],
-	// Test bindings - these are mocked during tests
 	"vars": {
 		"APNS_KEY_ID": "test",
 		"APNS_PRIVATE_KEY": "test",
@@ -32,6 +31,6 @@
 		"STRIPE_WEBHOOK_SECRET": "test",
 		"TEST_OTP_CODE": "123456",
 		"TEST_PHONE_NUMBERS": "+1234567890",
-		"WWDR": "test",
-	},
+		"WWDR": "test"
+	}
 }
