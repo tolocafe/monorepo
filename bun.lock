@@ -8,7 +8,6 @@
         "@typescript/native-preview": "catalog:",
         "oxfmt": "catalog:",
         "oxlint": "catalog:",
-        "typescript": "catalog:",
       },
     },
     "apps/app": {
@@ -122,7 +121,6 @@
         "oxlint": "catalog:",
         "oxlint-tsgolint": "catalog:",
         "react-test-renderer": "19.2.0",
-        "typescript": "catalog:",
       },
     },
     "apps/poster-plugin": {
@@ -151,7 +149,6 @@
         "request": "~2.88.0",
         "sass": "^1.97.1",
         "shelljs": "~0.8.5",
-        "typescript": "catalog:",
         "vite": "~7.3.0",
         "vite-plugin-css-injected-by-js": "^3.5.0",
         "vite-plugin-mkcert": "^1.17.5",
@@ -177,7 +174,6 @@
         "oxfmt": "catalog:",
         "oxlint": "catalog:",
         "oxlint-tsgolint": "catalog:",
-        "typescript": "catalog:",
       },
     },
     "apps/website": {
@@ -211,7 +207,6 @@
         "oxfmt": "catalog:",
         "oxlint": "catalog:",
         "oxlint-tsgolint": "catalog:",
-        "typescript": "catalog:",
         "vite": "~7.3.0",
         "vite-tsconfig-paths": "6.0.4",
         "wrangler": "4.59.2",
@@ -254,7 +249,6 @@
         "oxfmt": "catalog:",
         "oxlint": "catalog:",
         "oxlint-tsgolint": "catalog:",
-        "typescript": "catalog:",
         "vitest": "3.1.4",
         "wrangler": "4.59.2",
       },
@@ -273,7 +267,6 @@
         "@types/node": "catalog:",
         "oxfmt": "catalog:",
         "oxlint": "catalog:",
-        "typescript": "catalog:",
       },
     },
     "packages/oxfmt-config": {
@@ -300,7 +293,6 @@
     "oxlint-tsgolint": "0.11.1",
     "react": "^19.2.2",
     "react-dom": "^19.2.2",
-    "typescript": "~5.9.3",
     "zod": "4.3.5",
   },
   "packages": {
@@ -4669,6 +4661,8 @@
     "@testing-library/react-native/jest-matcher-utils": ["jest-matcher-utils@30.2.0", "", { "dependencies": { "@jest/get-type": "30.1.0", "chalk": "^4.1.2", "jest-diff": "30.2.0", "pretty-format": "30.2.0" } }, "sha512-dQ94Nq4dbzmUWkQ0ANAWS9tBRfqCrn0bV9AMYdOi/MHW726xn7eQmMeRTpX2ViC00bpNaWXq+7o4lIQ3AX13Hg=="],
 
     "@testing-library/react-native/pretty-format": ["pretty-format@30.2.0", "", { "dependencies": { "@jest/schemas": "30.0.5", "ansi-styles": "^5.2.0", "react-is": "^18.3.1" } }, "sha512-9uBdv/B4EefsuAL+pWqueZyZS2Ba+LxfFeQ9DN14HU4bN8bhaxKdkpjpB6fs9+pSjIBu+FXQHImEg8j/Lw0+vA=="],
+
+    "@tolo/poster-plugin/@babel/core": ["@babel/core@7.28.6", "", { "dependencies": { "@babel/code-frame": "^7.28.6", "@babel/generator": "^7.28.6", "@babel/helper-compilation-targets": "^7.28.6", "@babel/helper-module-transforms": "^7.28.6", "@babel/helpers": "^7.28.6", "@babel/parser": "^7.28.6", "@babel/template": "^7.28.6", "@babel/traverse": "^7.28.6", "@babel/types": "^7.28.6", "@jridgewell/remapping": "^2.3.5", "convert-source-map": "^2.0.0", "debug": "^4.1.0", "gensync": "^1.0.0-beta.2", "json5": "^2.2.3", "semver": "^6.3.1" } }, "sha512-H3mcG6ZDLTlYfaSNi0iOKkigqMFvkTKlGUYlD8GW7nNOYRrevuA46iTypPyv+06V3fEmvvazfntkBU34L0azAw=="],
 
     "@tolo/poster-plugin/react": ["react@19.2.3", "", {}, "sha512-Ku/hhYbVjOQnXDZFv2+RibmLFGwFdeeKHFcOTlrt7xplBnya5OGn/hIRDsqDiSUcfORsDC7MPxwork8jBwsIWA=="],
 
