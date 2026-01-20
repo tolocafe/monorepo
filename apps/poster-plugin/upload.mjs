@@ -24,7 +24,11 @@ async function init() {
 	try {
 		const fileBuffer = await fs.readFile(FILENAME)
 		const fileMd5 = md5(fileBuffer)
-		const signParts = [manifest.applicationId, fileMd5, manifest.applicationSecret]
+		const signParts = [
+			manifest.applicationId,
+			fileMd5,
+			manifest.applicationSecret,
+		]
 		const sign = md5(signParts.join(':'))
 
 		const formData = new FormData()

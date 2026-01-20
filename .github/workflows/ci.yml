@@ -27,7 +27,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
       - name: Detect changed paths
         uses: dorny/paths-filter@v3
         id: filter
@@ -82,7 +81,7 @@ jobs:
     name: Test App
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: changes
+    needs: [changes, quality]
     if: needs.changes.outputs.app == 'true' || needs.changes.outputs.packages == 'true'
     steps:
       - name: Checkout code
@@ -101,7 +100,7 @@ jobs:
     name: Test Workers
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: changes
+    needs: [changes, quality]
     if: needs.changes.outputs.workers == 'true' || needs.changes.outputs.packages == 'true'
     steps:
       - name: Checkout code
@@ -120,7 +119,7 @@ jobs:
     name: Build Website
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: changes
+    needs: [changes, quality]
     if: needs.changes.outputs.website == 'true' || needs.changes.outputs.packages == 'true'
     steps:
       - name: Checkout code
@@ -139,7 +138,7 @@ jobs:
     name: Build Studio
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: changes
+    needs: [changes, quality]
     if: needs.changes.outputs.studio == 'true' || needs.changes.outputs.packages == 'true'
     steps:
       - name: Checkout code
@@ -158,7 +157,7 @@ jobs:
     name: Build Poster Plugin
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: changes
+    needs: [changes, quality]
     if: needs.changes.outputs.poster-plugin == 'true' || needs.changes.outputs.packages == 'true'
     steps:
       - name: Checkout code
