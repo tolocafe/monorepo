@@ -16,7 +16,7 @@ expo-env.d.ts
 
 workers/
 worker-configuration.d.ts
-wrangler.jsonc
+wrangler.json
 
 .kotlin/
 *.orig.*
