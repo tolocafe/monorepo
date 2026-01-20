@@ -6,9 +6,6 @@
 		"directory": "./dist",
 		"not_found_handling": "single-page-application"
 	},
-	"browser": {
-		"binding": "BROWSER"
-	},
 	"build": {
 		"command": "bun run web:build"
 	},
