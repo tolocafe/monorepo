@@ -52,12 +52,12 @@ jobs:
               - '**/*.json'
               - 'bun.lock'
 
-  quality:
-    name: Quality Checks
+  quality-app:
+    name: Quality App
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
-    if: needs.changes.outputs.any == 'true'
+    if: needs.changes.outputs.app == 'true' || needs.changes.outputs.packages == 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -66,23 +66,22 @@ jobs:
         uses: oven-sh/setup-bun@v2
 
       - name: Install dependencies
-        run: bun install --frozen-lockfile
+        run: bun install --frozen-lockfile --filter @tolo/app
 
       - name: Check formatting
-        run: bun run format:check
+        run: bun run --filter @tolo/app format:check
 
       - name: Lint
-        run: bun run lint
+        run: bun run --filter @tolo/app lint
 
       - name: Typecheck
-        run: bun run typecheck
+        run: bun run --filter @tolo/app typecheck
 
   test-app:
     name: Test App
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [changes, quality]
-    if: needs.changes.outputs.app == 'true' || needs.changes.outputs.packages == 'true'
+    needs: quality-app
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -96,12 +95,36 @@ jobs:
       - name: Run tests
         run: bun run --filter @tolo/app test
 
+  quality-workers:
+    name: Quality Workers
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: changes
+    if: needs.changes.outputs.workers == 'true' || needs.changes.outputs.packages == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/workers
+
+      - name: Check formatting
+        run: bun run --filter @tolo/workers format:check
+
+      - name: Lint
+        run: bun run --filter @tolo/workers lint
+
+      - name: Typecheck
+        run: bun run --filter @tolo/workers typecheck
+
   test-workers:
     name: Test Workers
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    needs: [changes, quality]
-    if: needs.changes.outputs.workers == 'true' || needs.changes.outputs.packages == 'true'
+    needs: quality-workers
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -115,12 +138,36 @@ jobs:
       - name: Run tests
         run: bun run --filter @tolo/workers test
 
+  quality-website:
+    name: Quality Website
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: changes
+    if: needs.changes.outputs.website == 'true' || needs.changes.outputs.packages == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/website
+
+      - name: Check formatting
+        run: bun run --filter @tolo/website format:check
+
+      - name: Lint
+        run: bun run --filter @tolo/website lint
+
+      - name: Typecheck
+        run: bun run --filter @tolo/website typecheck
+
   build-website:
     name: Build Website
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [changes, quality]
-    if: needs.changes.outputs.website == 'true' || needs.changes.outputs.packages == 'true'
+    needs: quality-website
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -134,12 +181,36 @@ jobs:
       - name: Build
         run: bun run --filter @tolo/website build
 
+  quality-studio:
+    name: Quality Studio
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: changes
+    if: needs.changes.outputs.studio == 'true' || needs.changes.outputs.packages == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/studio
+
+      - name: Check formatting
+        run: bun run --filter @tolo/studio format:check
+
+      - name: Lint
+        run: bun run --filter @tolo/studio lint
+
+      - name: Typecheck
+        run: bun run --filter @tolo/studio typecheck
+
   build-studio:
     name: Build Studio
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [changes, quality]
-    if: needs.changes.outputs.studio == 'true' || needs.changes.outputs.packages == 'true'
+    needs: quality-studio
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -153,12 +224,36 @@ jobs:
       - name: Build
         run: bun run --filter @tolo/studio build
 
+  quality-poster-plugin:
+    name: Quality Poster Plugin
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: changes
+    if: needs.changes.outputs.poster-plugin == 'true' || needs.changes.outputs.packages == 'true'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile --filter @tolo/poster-plugin
+
+      - name: Check formatting
+        run: bun run --filter @tolo/poster-plugin format:check
+
+      - name: Lint
+        run: bun run --filter @tolo/poster-plugin lint
+
+      - name: Typecheck
+        run: bun run --filter @tolo/poster-plugin typecheck
+
   build-poster-plugin:
     name: Build Poster Plugin
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: [changes, quality]
-    if: needs.changes.outputs.poster-plugin == 'true' || needs.changes.outputs.packages == 'true'
+    needs: quality-poster-plugin
     steps:
       - name: Checkout code
         uses: actions/checkout@v4

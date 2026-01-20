@@ -15,7 +15,7 @@
 		"format": "oxfmt .",
 		"format:check": "oxfmt --check .",
 		"lint": "react-router typegen && oxlint --type-aware",
-		"clean": "rm -rf node_modules dist .wrangler .react-router"
+		"clean": "rm -rf node_modules dist .wrangler .react-router tsconfig.tsbuildinfo"
 	},
 	"dependencies": {
 		"@portabletext/react": "6.0.0",

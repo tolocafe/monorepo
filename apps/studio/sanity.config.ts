@@ -7,13 +7,10 @@ import { schemaTypes } from './schemaTypes'
 export default defineConfig({
 	dataset: 'production',
 	name: 'default',
-
 	plugins: [structureTool(), visionTool()],
 	projectId: 'm1zo6pvi',
-
 	schema: {
 		types: schemaTypes,
 	},
-
 	title: 'tolo',
 })

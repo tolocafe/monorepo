@@ -17,7 +17,7 @@
 		"typecheck": "tsgo --noEmit",
 		"format": "oxfmt .",
 		"format:check": "oxfmt --check .",
-		"clean": "rm -rf node_modules dist"
+		"clean": "rm -rf node_modules dist tsconfig.tsbuildinfo"
 	},
 	"dependencies": {
 		"@sanity/icons": "3.5.7",
