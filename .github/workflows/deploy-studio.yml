@@ -7,6 +7,7 @@ on:
       - "apps/studio/**"
       - "packages/**"
       - ".github/workflows/deploy-studio.yml"
+  workflow_dispatch:
 
 concurrency:
   group: deploy-studio

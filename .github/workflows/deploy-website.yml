@@ -7,6 +7,7 @@ on:
       - "apps/website/**"
       - "packages/**"
       - ".github/workflows/deploy-website.yml"
+  workflow_dispatch:
 
 concurrency:
   group: deploy-website
@@ -27,8 +28,8 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile --filter @tolo/website
 
-      - name: Build and Deploy
-        working-directory: apps/website
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: bun run deploy
+      - name: Deploy Website
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: apps/website

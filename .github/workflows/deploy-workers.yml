@@ -7,6 +7,7 @@ on:
       - "apps/workers/**"
       - "packages/**"
       - ".github/workflows/deploy-workers.yml"
+  workflow_dispatch:
 
 concurrency:
   group: deploy-workers
@@ -27,9 +28,16 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile --filter @tolo/workers
 
-      - name: Deploy Workers
+      - name: Get Sentry release version
+        id: sentry
         working-directory: apps/workers
+        run: echo "release=$(bunx sentry-cli releases propose-version)" >> $GITHUB_OUTPUT
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-        run: bun run deploy
+
+      - name: Deploy Workers
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: apps/workers
+          command: deploy --upload-source-maps --var SENTRY_RELEASE:${{ steps.sentry.outputs.release }}
