@@ -9,6 +9,9 @@
 	"browser": {
 		"binding": "BROWSER"
 	},
+	"build": {
+		"command": "bun run web:build"
+	},
 	"compatibility_date": "2026-01-20",
 	"name": "tolo-app",
 	"observability": {
