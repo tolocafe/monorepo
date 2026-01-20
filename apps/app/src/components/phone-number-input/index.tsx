@@ -4,9 +4,9 @@ import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import * as DropdownMenu from 'zeego/dropdown-menu'
 
-import { TextColorIcon } from '~/components/Icons'
-import Input from '~/components/Input'
-import { Text } from '~/components/Text'
+import { TextColorIcon } from '@/components/Icons'
+import Input from '@/components/Input'
+import { Text } from '@/components/Text'
 
 type PhoneCountry = {
 	flag: string

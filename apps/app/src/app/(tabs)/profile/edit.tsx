@@ -9,16 +9,16 @@ import { RefreshControl, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
-import Button from '~/components/Button'
-import Input from '~/components/Input'
-import { List, ListItem } from '~/components/List'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H2, Label } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
+import Button from '@/components/Button'
+import Input from '@/components/Input'
+import { List, ListItem } from '@/components/List'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H2, Label } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import {
 	selfQueryOptions,
 	updateClientMutationOptions,
-} from '~/lib/queries/auth'
+} from '@/lib/queries/auth'
 
 export default function EditProfileScreen() {
 	const { t } = useLingui()

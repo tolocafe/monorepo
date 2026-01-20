@@ -1,7 +1,7 @@
 import * as Sentry from '@sentry/cloudflare'
 import type { DashTransaction } from '@tolo/common/api'
 
-import type { Bindings } from '~/types'
+import type { Bindings } from '@/types'
 
 import { createCaches } from './ensure'
 import { processTransactionEvents } from './events'

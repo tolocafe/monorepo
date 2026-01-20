@@ -1,7 +1,7 @@
 import { useOutletContext } from 'react-router'
 
-import type { Locale } from '~/lib/locale'
-import { Welcome } from '~/welcome/welcome'
+import type { Locale } from '@/lib/locale'
+import { Welcome } from '@/welcome/welcome'
 
 import type { Route } from './+types/home'
 

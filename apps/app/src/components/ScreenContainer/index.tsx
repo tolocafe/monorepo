@@ -3,8 +3,8 @@ import { View, Platform, ScrollView } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import { isIOS20, ORDER_BUTTON_HEIGHT } from '~/lib/constants/ui'
-import { useHasActiveOrder } from '~/lib/stores/order-store'
+import { isIOS20, ORDER_BUTTON_HEIGHT } from '@/lib/constants/ui'
+import { useHasActiveOrder } from '@/lib/stores/order-store'
 
 import HeaderGradient from '../HeaderGradient'
 

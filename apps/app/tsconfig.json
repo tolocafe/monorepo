@@ -5,7 +5,7 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"paths": {
-			"~/*": ["./src/*"]
+			"@/*": ["./src/*"]
 		},
 		"types": ["jest", "node"],
 		"lib": ["DOM", "ES2024"]

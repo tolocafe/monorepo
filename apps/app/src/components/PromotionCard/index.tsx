@@ -9,9 +9,9 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import Card from '~/components/Card'
-import { H4, Text } from '~/components/Text'
-import { getImageUrl } from '~/lib/image'
+import Card from '@/components/Card'
+import { H4, Text } from '@/components/Text'
+import { getImageUrl } from '@/lib/image'
 
 const UniImage = withUnistyles(Image)
 

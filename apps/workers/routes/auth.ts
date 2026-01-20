@@ -6,17 +6,17 @@ import { deleteCookie, setCookie } from 'hono/cookie'
 import { HTTPException } from 'hono/http-exception'
 import type { CookieOptions } from 'hono/utils/cookie'
 
-import type { Bindings } from '~/types'
-import { trackServerEvent } from '~/utils/analytics'
-import { defaultJsonHeaders } from '~/utils/headers'
+import type { Bindings } from '@/types'
+import { trackServerEvent } from '@/utils/analytics'
+import { defaultJsonHeaders } from '@/utils/headers'
 import {
 	authenticate,
 	DEFAULT_AUTH_TOKEN_VALIDITY_IN_SECONDS,
 	signJwt,
-} from '~/utils/jwt'
-import { generateOtp, storeOtp, verifyOtp } from '~/utils/otp'
-import { posterApi, sendSms } from '~/utils/poster'
-import { trackEvent } from '~/utils/posthog'
+} from '@/utils/jwt'
+import { generateOtp, storeOtp, verifyOtp } from '@/utils/otp'
+import { posterApi, sendSms } from '@/utils/poster'
+import { trackEvent } from '@/utils/posthog'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
 

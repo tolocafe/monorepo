@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import { Text } from '~/components/Text'
+import { Text } from '@/components/Text'
 
 type AdmonitionVariant = 'info' | 'tip' | 'warning'
 

@@ -20,15 +20,15 @@ import Animated, {
 import { StyleSheet, UnistylesRuntime } from 'react-native-unistyles'
 import { scheduleOnRN } from 'react-native-worklets'
 
-import { LinearGradient } from '~/components/LinearGradient'
-import { H1, Text } from '~/components/Text'
-import { trackEvent } from '~/lib/analytics'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
+import { LinearGradient } from '@/components/LinearGradient'
+import { H1, Text } from '@/components/Text'
+import { trackEvent } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
 import {
 	COFFEE_STORY_GRADIENT_COLORS,
 	getCoffeeGradientIndex,
-} from '~/lib/constants/coffee-gradients'
-import { coffeeQueryOptions, coffeesQueryOptions } from '~/lib/queries/coffees'
+} from '@/lib/constants/coffee-gradients'
+import { coffeeQueryOptions, coffeesQueryOptions } from '@/lib/queries/coffees'
 
 const { height: SCREEN_HEIGHT } = Dimensions.get('window')
 const STORY_DURATION = 10_000

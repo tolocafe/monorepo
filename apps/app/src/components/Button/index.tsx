@@ -3,7 +3,7 @@ import { Platform, Pressable } from 'react-native'
 import type { GestureResponderEvent, StyleProp, TextStyle } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { Text } from '~/components/Text'
+import { Text } from '@/components/Text'
 
 type ButtonVariant = 'primary' | 'surface' | 'transparent'
 

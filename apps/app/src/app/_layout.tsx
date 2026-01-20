@@ -14,21 +14,21 @@ import { useEffect } from 'react'
 import { Platform } from 'react-native'
 import { KeyboardProvider } from 'react-native-keyboard-controller'
 
-import { AnalyticsIdentifier } from '~/lib/analytics/components/analytics-identifier'
-import '~/lib/locales/init'
-import { PostHogProvider } from '~/lib/analytics/posthog'
-import { isStaticWeb } from '~/lib/constants/is-static-web'
-import { useColorScheme } from '~/lib/hooks/use-color-scheme'
-import { useUpdates } from '~/lib/hooks/use-updates'
-import { QueryProvider } from '~/lib/providers/query-provider'
-import { selfQueryOptions } from '~/lib/queries/auth'
-import { coffeesQueryOptions } from '~/lib/queries/coffees'
+import { AnalyticsIdentifier } from '@/lib/analytics/components/analytics-identifier'
+import '@/lib/locales/init'
+import { PostHogProvider } from '@/lib/analytics/posthog'
+import { isStaticWeb } from '@/lib/constants/is-static-web'
+import { useColorScheme } from '@/lib/hooks/use-color-scheme'
+import { useUpdates } from '@/lib/hooks/use-updates'
+import { QueryProvider } from '@/lib/providers/query-provider'
+import { selfQueryOptions } from '@/lib/queries/auth'
+import { coffeesQueryOptions } from '@/lib/queries/coffees'
 import {
 	categoriesQueryOptions,
 	productsQueryOptions,
-} from '~/lib/queries/menu'
-import { orderQueryOptions } from '~/lib/queries/order'
-import { queryClient } from '~/lib/query-client'
+} from '@/lib/queries/menu'
+import { orderQueryOptions } from '@/lib/queries/order'
+import { queryClient } from '@/lib/query-client'
 
 const navigationIntegration = Sentry.reactNavigationIntegration({
 	enableTimeToInitialDisplay: true,

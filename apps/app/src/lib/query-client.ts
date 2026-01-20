@@ -3,7 +3,7 @@ import { QueryClient } from '@tanstack/react-query'
 import { HTTPError } from 'ky'
 import { createMMKV } from 'react-native-mmkv'
 
-import { STORAGE_KEYS } from '~/lib/constants/storage'
+import { STORAGE_KEYS } from '@/lib/constants/storage'
 
 // Cache time constants - gcTime must be >= maxAge for persistence to work correctly
 const FIVE_MINUTES = 1000 * 60 * 5

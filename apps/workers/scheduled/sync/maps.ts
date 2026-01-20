@@ -4,7 +4,7 @@ import type {
 	Product as PosterProduct,
 } from '@tolo/common/api'
 
-import type { customers, productModifierGroups, products } from '~/db/schema'
+import type { customers, productModifierGroups, products } from '@/db/schema'
 
 import { toCents } from './utils'
 

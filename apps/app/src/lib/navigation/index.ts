@@ -1,7 +1,7 @@
 import type { Stack } from 'expo-router'
 import { Platform } from 'react-native'
 
-import { isIOS20 } from '~/lib/constants/ui'
+import { isIOS20 } from '@/lib/constants/ui'
 
 export const defaultStackScreenOptions = Platform.select({
 	android: {

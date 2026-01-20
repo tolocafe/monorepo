@@ -1,8 +1,8 @@
 import { Link, useOutletContext } from 'react-router'
 
-import type { Locale } from '~/lib/locale'
-import { client, urlFor, getLocalizedString } from '~/lib/sanity'
-import type { Bean } from '~/lib/sanity'
+import type { Locale } from '@/lib/locale'
+import { client, urlFor, getLocalizedString } from '@/lib/sanity'
+import type { Bean } from '@/lib/sanity'
 
 import type { Route } from './+types/bean'
 import * as styles from './bean.css'

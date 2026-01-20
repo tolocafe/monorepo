@@ -7,8 +7,8 @@ import {
 	productIngredients,
 	productModifierGroups,
 	products,
-} from '~/db/schema'
-import { posterApi } from '~/utils/poster'
+} from '@/db/schema'
+import { posterApi } from '@/utils/poster'
 
 import { ensureCategory, ensureIngredient } from './ensure'
 import type { Cache } from './ensure'

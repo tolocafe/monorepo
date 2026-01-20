@@ -3,8 +3,8 @@ import type { ComponentProps } from 'react'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { Text } from '~/components/Text'
-import { getModifierColor, getModifierIcon } from '~/lib/utils/modifier-tags'
+import { Text } from '@/components/Text'
+import { getModifierColor, getModifierIcon } from '@/lib/utils/modifier-tags'
 
 type Props = Pick<ComponentProps<typeof View>, 'accessibilityLabel'> & {
 	group?: string

@@ -5,10 +5,10 @@ import { router } from 'expo-router'
 import { Platform, Pressable, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import { Text } from '~/components/Text'
-import { ORDER_BUTTON_HEIGHT } from '~/lib/constants/ui'
-import { transactionQueryOptions } from '~/lib/queries/order'
-import type { OrderProduct } from '~/lib/stores/order-store'
+import { Text } from '@/components/Text'
+import { ORDER_BUTTON_HEIGHT } from '@/lib/constants/ui'
+import { transactionQueryOptions } from '@/lib/queries/order'
+import type { OrderProduct } from '@/lib/stores/order-store'
 
 const TAB_BAR_HEIGHT = Platform.select({
 	android: 80,

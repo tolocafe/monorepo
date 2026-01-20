@@ -1,6 +1,6 @@
 import { redirect } from 'react-router'
 
-import { detectLocaleFromHeader } from '~/lib/locale'
+import { detectLocaleFromHeader } from '@/lib/locale'
 
 import type { Route } from './+types/index'
 

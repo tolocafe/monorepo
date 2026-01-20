@@ -12,35 +12,35 @@ import { useCallback, useMemo } from 'react'
 import { Alert, Platform, Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import Button from '~/components/Button'
-import Card from '~/components/Card'
-import { Input } from '~/components/Input'
-import { ModifierTag } from '~/components/ModifierTag'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H2, Paragraph, Text } from '~/components/Text'
-import { trackEvent } from '~/lib/analytics'
-import { screen } from '~/lib/analytics/posthog'
-import { ORDER_BUTTON_HEIGHT } from '~/lib/constants/ui'
-import { useProductDetails } from '~/lib/hooks/use-product-details'
-import { useRegisterForPushNotifications } from '~/lib/notifications'
-import { selfQueryOptions } from '~/lib/queries/auth'
+import Button from '@/components/Button'
+import Card from '@/components/Card'
+import { Input } from '@/components/Input'
+import { ModifierTag } from '@/components/ModifierTag'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H2, Paragraph, Text } from '@/components/Text'
+import { trackEvent } from '@/lib/analytics'
+import { screen } from '@/lib/analytics/posthog'
+import { ORDER_BUTTON_HEIGHT } from '@/lib/constants/ui'
+import { useProductDetails } from '@/lib/hooks/use-product-details'
+import { useRegisterForPushNotifications } from '@/lib/notifications'
+import { selfQueryOptions } from '@/lib/queries/auth'
 import {
 	createOrderMutationOptions,
 	orderQueryOptions,
 	transactionQueryOptions,
-} from '~/lib/queries/order'
-import { productQueryOptions } from '~/lib/queries/product'
-import { queryClient } from '~/lib/query-client'
-import { api } from '~/lib/services/api-service'
+} from '@/lib/queries/order'
+import { productQueryOptions } from '@/lib/queries/product'
+import { queryClient } from '@/lib/query-client'
+import { api } from '@/lib/services/api-service'
 import {
 	useClearOrder,
 	useOrderProducts,
 	useTransactionId,
 	useUpdateItem,
-} from '~/lib/stores/order-store'
-import type { OrderProduct } from '~/lib/stores/order-store'
-import { sortModifiers } from '~/lib/utils/modifier-tags'
-import { formatPrice, getProductTotalCost } from '~/lib/utils/price'
+} from '@/lib/stores/order-store'
+import type { OrderProduct } from '@/lib/stores/order-store'
+import { sortModifiers } from '@/lib/utils/modifier-tags'
+import { formatPrice, getProductTotalCost } from '@/lib/utils/price'
 
 const IGNORED_MODIFICATION_GROUP_ID = '4'
 

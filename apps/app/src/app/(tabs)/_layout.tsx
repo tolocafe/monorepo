@@ -1,5 +1,5 @@
 // Ensure unistyles is configured before any usage
-import '~/lib/styles/unistyles'
+import '@/lib/styles/unistyles'
 //
 import { useLingui } from '@lingui/react/macro'
 import {
@@ -10,13 +10,13 @@ import {
 import { Platform } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
-import { FloatingOrderCard } from '~/components/FloatingOrderCard'
-import { useIsTeamMember } from '~/lib/hooks/use-is-barista'
+import { FloatingOrderCard } from '@/components/FloatingOrderCard'
+import { useIsTeamMember } from '@/lib/hooks/use-is-barista'
 import {
 	useHasActiveOrder,
 	useOrderProducts,
 	useTransactionId,
-} from '~/lib/stores/order-store'
+} from '@/lib/stores/order-store'
 
 export const unstable_settings = {
 	initialRouteName: '(home)',

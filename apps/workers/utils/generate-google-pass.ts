@@ -5,7 +5,7 @@ import { JWT } from 'google-auth-library'
 import type { Context } from 'hono'
 import jwt from 'jsonwebtoken'
 
-import type { Bindings } from '~/types'
+import type { Bindings } from '@/types'
 
 import { posterApi } from './poster'
 import { getCustomerStamps } from './stamps'

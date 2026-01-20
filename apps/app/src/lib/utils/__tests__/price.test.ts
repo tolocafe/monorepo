@@ -4,11 +4,11 @@ import type { Product } from '@tolo/common/api'
 import { formatPrice, getProductBaseCost } from '../price'
 
 // Mock the productQueryOptions to avoid dependency issues
-jest.mock('~/lib/queries/product', () => ({
+jest.mock('@/lib/queries/product', () => ({
 	productQueryOptions: jest.fn(() => ({ queryKey: ['product'] })),
 }))
 
-jest.mock('~/lib/query-client', () => ({
+jest.mock('@/lib/query-client', () => ({
 	queryClient: {
 		getQueryData: jest.fn(),
 	},

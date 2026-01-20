@@ -5,10 +5,10 @@ import { useState } from 'react'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import Button from '~/components/Button'
-import { Text } from '~/components/Text'
-import { api } from '~/lib/services/api-service'
-import { useSetTransactionId } from '~/lib/stores/order-store'
+import Button from '@/components/Button'
+import { Text } from '@/components/Text'
+import { api } from '@/lib/services/api-service'
+import { useSetTransactionId } from '@/lib/stores/order-store'
 
 const GUEST_OPTIONS = [1, 2, 3, 4, 5, 6]
 

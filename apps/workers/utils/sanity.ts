@@ -2,7 +2,7 @@ import type { PortableTextBlock } from '@portabletext/types'
 import type { SanityImageReference } from '@tolo/common/api'
 import type { SupportedLocale } from '@tolo/common/locales'
 
-import type { Bindings } from '~/types'
+import type { Bindings } from '@/types'
 
 type SanityImage = {
 	_key: string

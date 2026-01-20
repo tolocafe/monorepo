@@ -2,9 +2,9 @@ import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import { useOutletContext } from 'react-router'
 
-import type { Locale } from '~/lib/locale'
-import { client, getLocalizedString } from '~/lib/sanity'
-import type { Page } from '~/lib/sanity'
+import type { Locale } from '@/lib/locale'
+import { client, getLocalizedString } from '@/lib/sanity'
+import type { Page } from '@/lib/sanity'
 
 import type { Route } from './+types/page'
 import * as styles from './page.css'

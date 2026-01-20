@@ -9,19 +9,19 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { Pressable, RefreshControl, ScrollView, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import Card from '~/components/Card'
-import { ModifierTag } from '~/components/ModifierTag'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H3, Paragraph, Text } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { isStaticWeb } from '~/lib/constants/is-static-web'
-import { baristaQueueQueryOptions } from '~/lib/queries/barista'
+import Card from '@/components/Card'
+import { ModifierTag } from '@/components/ModifierTag'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H3, Paragraph, Text } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { isStaticWeb } from '@/lib/constants/is-static-web'
+import { baristaQueueQueryOptions } from '@/lib/queries/barista'
 import {
 	categoriesQueryOptions,
 	productsQueryOptions,
-} from '~/lib/queries/menu'
-import { queryClient } from '~/lib/query-client'
-import { sortModifiers } from '~/lib/utils/modifier-tags'
+} from '@/lib/queries/menu'
+import { queryClient } from '@/lib/query-client'
+import { sortModifiers } from '@/lib/utils/modifier-tags'
 
 const POLLING_INTERVAL = 5000 // 5 seconds
 

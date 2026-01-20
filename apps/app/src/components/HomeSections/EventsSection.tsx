@@ -4,9 +4,9 @@ import type { Event } from '@tolo/common/api'
 import { FlatList, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import EventCard from '~/components/EventCard'
-import { H2, Paragraph } from '~/components/Text'
-import { eventsQueryOptions } from '~/lib/queries/events'
+import EventCard from '@/components/EventCard'
+import { H2, Paragraph } from '@/components/Text'
+import { eventsQueryOptions } from '@/lib/queries/events'
 
 const UniFlatList = withUnistyles(FlatList)
 

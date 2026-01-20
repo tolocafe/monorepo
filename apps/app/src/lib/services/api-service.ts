@@ -15,11 +15,11 @@ import type {
 	CreateStripeTransaction,
 } from '@tolo/common/schemas'
 
-import type { RequestOtpMutationOptions } from '~/lib/queries/auth'
+import type { RequestOtpMutationOptions } from '@/lib/queries/auth'
 import type {
 	CreateOrderResponse,
 	OrderDetailResponse,
-} from '~/lib/queries/order'
+} from '@/lib/queries/order'
 
 import { privateClient, publicClient } from './http-client'
 

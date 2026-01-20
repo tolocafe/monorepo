@@ -8,11 +8,11 @@ import {
 	useMatches,
 } from 'react-router'
 
-import { DEFAULT_LOCALE, isValidLocale, SUPPORTED_LOCALES } from '~/lib/locale'
-import type { Locale } from '~/lib/locale'
+import { DEFAULT_LOCALE, isValidLocale, SUPPORTED_LOCALES } from '@/lib/locale'
+import type { Locale } from '@/lib/locale'
 
 import './app.css'
-import '~/styles/global.css'
+import '@/styles/global.css'
 import type { Route } from './+types/root'
 import { PHProvider } from './provider'
 

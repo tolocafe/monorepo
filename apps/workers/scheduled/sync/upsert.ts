@@ -5,7 +5,7 @@ import {
 	orderLines,
 	productModifiers,
 	transactionProductModifiers,
-} from '~/db/schema'
+} from '@/db/schema'
 
 import { ensureCategory, ensureModifier, ensureProduct } from './ensure'
 import type { Cache } from './ensure'

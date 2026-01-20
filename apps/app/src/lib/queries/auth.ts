@@ -3,8 +3,8 @@ import type { ClientData } from '@tolo/common'
 import { deleteItemAsync } from 'expo-secure-store'
 import { Platform } from 'react-native'
 
-import { STORAGE_KEYS } from '~/lib/constants/storage'
-import { api } from '~/lib/services/api-service'
+import { STORAGE_KEYS } from '@/lib/constants/storage'
+import { api } from '@/lib/services/api-service'
 
 export type RequestOtpMutationOptions = {
 	birthdate?: string

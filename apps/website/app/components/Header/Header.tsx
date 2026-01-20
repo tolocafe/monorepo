@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 
-import toloLogo from '~/assets/tolo.png'
+import toloLogo from '@/assets/tolo.png'
 import {
 	SUPPORTED_LOCALES,
 	LOCALE_LABELS,
 	getPathWithoutLocale,
 	isValidLocale,
 	DEFAULT_LOCALE,
-} from '~/lib/locale'
-import type { Locale } from '~/lib/locale'
+} from '@/lib/locale'
+import type { Locale } from '@/lib/locale'
 
 import * as styles from './Header.css'
 

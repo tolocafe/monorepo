@@ -8,10 +8,10 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import Card from '~/components/Card'
-import { Text, H4 } from '~/components/Text'
-import { getImageUrl } from '~/lib/image'
-import type { BlogPost } from '~/lib/queries/blog'
+import Card from '@/components/Card'
+import { Text, H4 } from '@/components/Text'
+import { getImageUrl } from '@/lib/image'
+import type { BlogPost } from '@/lib/queries/blog'
 
 const MAX_IMAGE_HEIGHT = 150
 

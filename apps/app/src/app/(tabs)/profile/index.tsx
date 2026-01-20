@@ -12,21 +12,21 @@ import { Alert, Linking, Platform, RefreshControl, View } from 'react-native'
 import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import Button from '~/components/Button'
-import Card from '~/components/Card'
-import { List, ListItem } from '~/components/List'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H2, Paragraph } from '~/components/Text'
-import WalletButton, { addPass } from '~/components/WalletButton'
-import { trackEvent } from '~/lib/analytics'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { resetBadgeCount } from '~/lib/notifications'
-import { selfQueryOptions, signOutMutationOptions } from '~/lib/queries/auth'
-import { clearAllCache } from '~/lib/queries/cache-utils'
-import { orderQueryOptions } from '~/lib/queries/order'
-import { queryClient } from '~/lib/query-client'
-import { getAuthToken } from '~/lib/services/http-client'
-import { formatPrice } from '~/lib/utils/price'
+import Button from '@/components/Button'
+import Card from '@/components/Card'
+import { List, ListItem } from '@/components/List'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H2, Paragraph } from '@/components/Text'
+import WalletButton, { addPass } from '@/components/WalletButton'
+import { trackEvent } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { resetBadgeCount } from '@/lib/notifications'
+import { selfQueryOptions, signOutMutationOptions } from '@/lib/queries/auth'
+import { clearAllCache } from '@/lib/queries/cache-utils'
+import { orderQueryOptions } from '@/lib/queries/order'
+import { queryClient } from '@/lib/query-client'
+import { getAuthToken } from '@/lib/services/http-client'
+import { formatPrice } from '@/lib/utils/price'
 
 const handleSignIn = () => {
 	router.push('/sign-in')
@@ -140,7 +140,7 @@ export default function ProfileScreen() {
 						<UniImage
 							contentFit="contain"
 							source={
-								require('~/assets/images/surprise.png') as ImageSourcePropType
+								require('@/assets/images/surprise.png') as ImageSourcePropType
 							}
 							style={styles.image}
 						/>

@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 
-import { syncState } from '~/db/schema'
+import { syncState } from '@/db/schema'
 
 import type { Database } from './transactions'
 

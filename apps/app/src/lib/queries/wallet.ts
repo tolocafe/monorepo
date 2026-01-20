@@ -1,6 +1,6 @@
 import { mutationOptions } from '@tanstack/react-query'
 
-import { api } from '~/lib/services/api-service'
+import { api } from '@/lib/services/api-service'
 
 export type TopUpEWalletRequest = {
 	amount: number // Amount in cents

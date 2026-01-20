@@ -4,7 +4,7 @@ import type { PortableTextComponents } from '@portabletext/react'
 import type { CSSProperties, ReactNode } from 'react'
 import { useUnistyles } from 'react-native-unistyles'
 
-import { H1, H2, H3, H4, H5, H6, Paragraph, Text } from '~/components/Text'
+import { H1, H2, H3, H4, H5, H6, Paragraph, Text } from '@/components/Text'
 
 import type { BlockTextProps } from './types'
 

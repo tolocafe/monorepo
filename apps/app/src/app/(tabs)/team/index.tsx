@@ -5,11 +5,11 @@ import Head from 'expo-router/head'
 import { RefreshControl } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { List, ListItem } from '~/components/List'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H2 } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { queryClient } from '~/lib/query-client'
+import { List, ListItem } from '@/components/List'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H2 } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { queryClient } from '@/lib/query-client'
 
 export default function TeamScreen() {
 	useTrackScreenView({ screenName: 'team' }, [])

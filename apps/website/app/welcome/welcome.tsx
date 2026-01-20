@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 
-import type { Locale } from '~/lib/locale'
-import { vars } from '~/styles/tokens.css'
+import type { Locale } from '@/lib/locale'
+import { vars } from '@/styles/tokens.css'
 
 import * as styles from './welcome.css'
 

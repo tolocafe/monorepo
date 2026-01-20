@@ -1,8 +1,8 @@
 import { i18n } from '@lingui/core'
 import * as Sentry from '@sentry/react-native'
 
-import { messages as esMessages } from '~/lib/locales/es/messages.po'
-import { queryClient } from '~/lib/query-client'
+import { messages as esMessages } from '@/lib/locales/es/messages.po'
+import { queryClient } from '@/lib/query-client'
 
 import { Locale, LOCALE_KEY, languageStorage } from './utils'
 
@@ -19,27 +19,27 @@ export async function loadAndActivateLocale(locale: Locale): Promise<void> {
 	try {
 		switch (locale) {
 			case 'en': {
-				const { messages } = await import('~/lib/locales/en/messages.po')
+				const { messages } = await import('@/lib/locales/en/messages.po')
 				i18n.loadAndActivate({ locale, messages })
 				break
 			}
 			case 'fr': {
-				const { messages } = await import('~/lib/locales/fr/messages.po')
+				const { messages } = await import('@/lib/locales/fr/messages.po')
 				i18n.loadAndActivate({ locale, messages })
 				break
 			}
 			case 'ja': {
-				const { messages } = await import('~/lib/locales/ja/messages.po')
+				const { messages } = await import('@/lib/locales/ja/messages.po')
 				i18n.loadAndActivate({ locale, messages })
 				break
 			}
 			case 'pt': {
-				const { messages } = await import('~/lib/locales/pt/messages.po')
+				const { messages } = await import('@/lib/locales/pt/messages.po')
 				i18n.loadAndActivate({ locale, messages })
 				break
 			}
 			case 'de': {
-				const { messages } = await import('~/lib/locales/de/messages.po')
+				const { messages } = await import('@/lib/locales/de/messages.po')
 				i18n.loadAndActivate({ locale, messages })
 				break
 			}

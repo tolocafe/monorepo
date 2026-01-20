@@ -1,7 +1,7 @@
 import { i18n } from '@lingui/core'
 import { getLocales } from 'expo-localization'
 
-import { canUseDOM, isDevice } from '~/lib/utils/device'
+import { canUseDOM, isDevice } from '@/lib/utils/device'
 
 import { loadAndActivateLocale } from './load-and-activate-locale'
 import { AVAILABLE_LOCALES, languageStorage, Locale, LOCALE_KEY } from './utils'

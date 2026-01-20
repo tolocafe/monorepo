@@ -1,6 +1,6 @@
-import { SUPPORTED_LOCALES } from '~/lib/locale'
-import { client } from '~/lib/sanity'
-import type { Post, Page } from '~/lib/sanity'
+import { SUPPORTED_LOCALES } from '@/lib/locale'
+import { client } from '@/lib/sanity'
+import type { Post, Page } from '@/lib/sanity'
 
 const SITE_URL = 'https://tolo.cafe'
 

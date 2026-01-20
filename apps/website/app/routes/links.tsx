@@ -1,7 +1,7 @@
 import { useOutletContext } from 'react-router'
 import type { MetaArgs } from 'react-router'
 
-import type { Locale } from '~/lib/locale'
+import type { Locale } from '@/lib/locale'
 
 import * as styles from './links.css'
 

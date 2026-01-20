@@ -2,7 +2,7 @@
 	"extends": "@tolo/typescript-config/cloudflare-workers.json",
 	"compilerOptions": {
 		"paths": {
-			"~/*": ["./*"]
+			"@/*": ["./*"]
 		},
 		"types": ["node", "@cloudflare/workers-types"]
 	},

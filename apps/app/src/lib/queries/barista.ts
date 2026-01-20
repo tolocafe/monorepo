@@ -1,7 +1,7 @@
 import { queryOptions } from '@tanstack/react-query'
 import type { DashTransaction } from '@tolo/common/api'
 
-import { api } from '~/lib/services/api-service'
+import { api } from '@/lib/services/api-service'
 
 export const baristaQueueQueryOptions = queryOptions<DashTransaction[]>({
 	initialData: [],

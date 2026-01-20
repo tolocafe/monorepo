@@ -1,8 +1,8 @@
 import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
 
-import { defaultJsonHeaders } from '~/utils/headers'
-import sanity from '~/utils/sanity'
+import { defaultJsonHeaders } from '@/utils/headers'
+import sanity from '@/utils/sanity'
 
 import type { Bindings } from '../types'
 

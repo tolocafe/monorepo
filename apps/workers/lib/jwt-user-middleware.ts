@@ -4,8 +4,8 @@ import { createMiddleware } from 'hono/factory'
 import { HTTPException } from 'hono/http-exception'
 import type { JWTPayload } from 'jose'
 
-import type { Bindings } from '~/types'
-import { extractToken, verifyJwt } from '~/utils/jwt'
+import type { Bindings } from '@/types'
+import { extractToken, verifyJwt } from '@/utils/jwt'
 
 export type JwtUserVariables = {
 	jwt: {

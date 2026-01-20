@@ -2,11 +2,11 @@ import { captureException } from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { z } from 'zod'
 
-import type { Bindings } from '~/types'
-import { extractToken, verifyJwt } from '~/utils/jwt'
-import { posterApi } from '~/utils/poster'
-import { trackEvent } from '~/utils/posthog'
-import { getStripe } from '~/utils/stripe'
+import type { Bindings } from '@/types'
+import { extractToken, verifyJwt } from '@/utils/jwt'
+import { posterApi } from '@/utils/poster'
+import { trackEvent } from '@/utils/posthog'
+import { getStripe } from '@/utils/stripe'
 
 const PayTableSchema = z.object({
 	paymentIntentId: z.string(),

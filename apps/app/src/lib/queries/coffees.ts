@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query'
 
-import { api } from '~/lib/services/api-service'
+import { api } from '@/lib/services/api-service'
 
 export const coffeesQueryOptions = queryOptions({
 	placeholderData: [],

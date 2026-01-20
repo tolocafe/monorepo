@@ -11,7 +11,7 @@
 			["type-import", "ts-equals-import"],
 			["unknown"]
 		],
-		"internalPattern": ["~/"],
+		"internalPattern": ["@/"],
 		"newlinesBetween": true,
 		"order": "asc"
 	},

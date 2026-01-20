@@ -2,7 +2,7 @@ import { SUPPORTED_LOCALES } from '@tolo/common/locales'
 import type { SupportedLocale } from '@tolo/common/locales'
 import { createMMKV } from 'react-native-mmkv'
 
-import { STORAGE_KEYS } from '~/lib/constants/storage'
+import { STORAGE_KEYS } from '@/lib/constants/storage'
 
 export const languageStorage = createMMKV({
 	id: STORAGE_KEYS.SETTINGS,

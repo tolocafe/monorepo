@@ -9,8 +9,8 @@ import {
 	imagePlaceholder,
 	section,
 	container,
-} from '~/styles/global.css'
-import { vars } from '~/styles/tokens.css'
+} from '@/styles/global.css'
+import { vars } from '@/styles/tokens.css'
 
 /**
  * Welcome component styles

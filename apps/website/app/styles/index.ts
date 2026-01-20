@@ -5,7 +5,7 @@
  * Theme is automatically adaptive based on system preference (prefers-color-scheme).
  *
  * Usage:
- *   import { vars, buttonPrimary, card } from '~/styles';
+ *   import { vars, buttonPrimary, card } from '@/styles';
  */
 
 export { vars } from './tokens.css'

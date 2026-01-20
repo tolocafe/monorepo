@@ -4,11 +4,11 @@ import Head from 'expo-router/head'
 import { RefreshControl, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { List, ListItem } from '~/components/List'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H2, Paragraph } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { sessionsQueryOptions } from '~/lib/queries/auth'
+import { List, ListItem } from '@/components/List'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H2, Paragraph } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { sessionsQueryOptions } from '@/lib/queries/auth'
 
 const formatSessionDate = (timestamp: number) =>
 	new Date(timestamp).toLocaleDateString(undefined, {

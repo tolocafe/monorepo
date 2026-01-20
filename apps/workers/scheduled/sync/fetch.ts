@@ -1,6 +1,6 @@
 import type { DashTransaction } from '@tolo/common/api'
 
-import { posterApi } from '~/utils/poster'
+import { posterApi } from '@/utils/poster'
 
 import { formatApiDate } from './utils'
 

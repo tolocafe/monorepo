@@ -10,8 +10,8 @@ import type { ReactNode } from 'react'
 import { AppState, Platform } from 'react-native'
 import type { AppStateStatus } from 'react-native'
 
-import { isStaticWeb } from '~/lib/constants/is-static-web'
-import { persister, persistMaxAge, queryClient } from '~/lib/query-client'
+import { isStaticWeb } from '@/lib/constants/is-static-web'
+import { persister, persistMaxAge, queryClient } from '@/lib/query-client'
 
 // Set up focus manager for React Native
 if (Platform.OS !== 'web') {

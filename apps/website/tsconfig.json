@@ -4,7 +4,7 @@
 		"types": ["@cloudflare/workers-types", "vite/client"],
 		"rootDirs": [".", "./.react-router/types"],
 		"paths": {
-			"~/*": ["./app/*"]
+			"@/*": ["./app/*"]
 		}
 	},
 	"include": ["**/*.ts", "**/*.tsx", ".react-router/types/**/*"],

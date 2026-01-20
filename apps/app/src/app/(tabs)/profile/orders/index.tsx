@@ -10,15 +10,15 @@ import { Pressable, RefreshControl, View } from 'react-native'
 import type { ImageSourcePropType, ScrollView } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import Card from '~/components/Card'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H2, H3, Paragraph, Text } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { resetBadgeCount } from '~/lib/notifications'
-import { selfQueryOptions } from '~/lib/queries/auth'
-import { orderQueryOptions } from '~/lib/queries/order'
-import { queryClient } from '~/lib/query-client'
-import { formatPrice } from '~/lib/utils/price'
+import Card from '@/components/Card'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H2, H3, Paragraph, Text } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { resetBadgeCount } from '@/lib/notifications'
+import { selfQueryOptions } from '@/lib/queries/auth'
+import { orderQueryOptions } from '@/lib/queries/order'
+import { queryClient } from '@/lib/query-client'
+import { formatPrice } from '@/lib/utils/price'
 
 const handleOrderPress = (orderId: string) => {
 	router.push(`/(tabs)/profile/orders/${orderId}`)
@@ -61,7 +61,7 @@ export default function OrdersScreen() {
 						<UniImage
 							contentFit="contain"
 							source={
-								require('~/assets/images/beverages.png') as ImageSourcePropType
+								require('@/assets/images/beverages.png') as ImageSourcePropType
 							}
 							style={styles.image}
 						/>
@@ -147,7 +147,7 @@ export default function OrdersScreen() {
 						<Image
 							contentFit="contain"
 							source={
-								require('~/assets/images/beverages-empty.png') as ImageSourcePropType
+								require('@/assets/images/beverages-empty.png') as ImageSourcePropType
 							}
 							style={styles.emptyOrderImage}
 						/>

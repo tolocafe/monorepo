@@ -3,9 +3,9 @@ import type { BlogPost } from '@tolo/common/api'
 import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
 
-import type { Bindings } from '~/types'
-import { defaultJsonHeaders } from '~/utils/headers'
-import sanity from '~/utils/sanity'
+import type { Bindings } from '@/types'
+import { defaultJsonHeaders } from '@/utils/headers'
+import sanity from '@/utils/sanity'
 
 type Variables = {
 	language: SupportedLocale

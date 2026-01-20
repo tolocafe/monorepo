@@ -9,7 +9,7 @@ import { Platform } from 'react-native'
 import {
 	selfQueryOptions,
 	updateClientPushTokensMutationOptions,
-} from '~/lib/queries/auth'
+} from '@/lib/queries/auth'
 
 export async function registerForPushNotificationsAsync() {
 	if (Platform.OS === 'android') {

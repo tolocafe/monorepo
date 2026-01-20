@@ -2,7 +2,7 @@ import {
 	formatPhoneNumber,
 	isValidPhoneNumber,
 	normalizePhoneNumber,
-} from '~/lib/utils/phone'
+} from '@/lib/utils/phone'
 
 describe('phone utilities', () => {
 	describe('formatPhoneNumber', () => {

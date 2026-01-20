@@ -6,14 +6,14 @@ import Head from 'expo-router/head'
 import { ActivityIndicator, RefreshControl, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import BlockText from '~/components/BlockText'
-import type { BlockTextContent } from '~/components/BlockText/types'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H1, H2, Paragraph } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { eventQueryOptions } from '~/lib/queries/events'
-import { queryClient } from '~/lib/query-client'
-import { formatDate } from '~/lib/utils/format-date'
+import BlockText from '@/components/BlockText'
+import type { BlockTextContent } from '@/components/BlockText/types'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H1, H2, Paragraph } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { eventQueryOptions } from '@/lib/queries/events'
+import { queryClient } from '@/lib/query-client'
+import { formatDate } from '@/lib/utils/format-date'
 
 const handleClose = () => {
 	router.back()

@@ -1,15 +1,15 @@
 import { useEffect } from 'react'
 import { Outlet, redirect, useLocation } from 'react-router'
 
-import { Footer } from '~/components/Footer'
-import { Header } from '~/components/Header'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import {
 	isValidLocale,
 	detectLocaleFromHeader,
 	SUPPORTED_LOCALES,
-} from '~/lib/locale'
-import { client } from '~/lib/sanity'
-import type { Location } from '~/lib/sanity'
+} from '@/lib/locale'
+import { client } from '@/lib/sanity'
+import type { Location } from '@/lib/sanity'
 
 import type { Route } from './+types/locale-layout'
 

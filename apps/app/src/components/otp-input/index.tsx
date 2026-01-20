@@ -4,7 +4,7 @@ import { Pressable, TextInput, View } from 'react-native'
 import type { BlurEvent } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { Text } from '~/components/Text'
+import { Text } from '@/components/Text'
 
 type Props = Omit<
 	ComponentProps<typeof TextInput>,

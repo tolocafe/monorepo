@@ -5,12 +5,12 @@ import { getProductTotalCost } from '@tolo/common/utils'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
-import type { Bindings } from '~/types'
-import { TEAM_GROUP_IDS } from '~/utils/constants'
-import HttpStatusCode from '~/utils/http-codes'
-import { authenticate } from '~/utils/jwt'
-import { posterApi } from '~/utils/poster'
-import { trackEvent } from '~/utils/posthog'
+import type { Bindings } from '@/types'
+import { TEAM_GROUP_IDS } from '@/utils/constants'
+import HttpStatusCode from '@/utils/http-codes'
+import { authenticate } from '@/utils/jwt'
+import { posterApi } from '@/utils/poster'
+import { trackEvent } from '@/utils/posthog'
 
 // Modifiers to ignore (not displayed in barista queue)
 const IGNORED_MODIFIERS = new Set([

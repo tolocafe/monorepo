@@ -6,12 +6,12 @@ import type { ImageSourcePropType } from 'react-native'
 import Animated from 'react-native-reanimated'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { LinearGradient } from '~/components/LinearGradient'
-import { Text } from '~/components/Text'
+import { LinearGradient } from '@/components/LinearGradient'
+import { Text } from '@/components/Text'
 import {
 	COFFEE_GRADIENT_COLORS,
 	getCoffeeGradientIndex,
-} from '~/lib/constants/coffee-gradients'
+} from '@/lib/constants/coffee-gradients'
 
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable)
 
@@ -44,7 +44,7 @@ export default function CoffeeStoryBubble({ coffee }: Props) {
 							<View style={styles.storyBubbleContent}>
 								<Image
 									source={
-										require('~/assets/images/coffee-bean.png') as ImageSourcePropType
+										require('@/assets/images/coffee-bean.png') as ImageSourcePropType
 									}
 									style={styles.coffeeBeanImage}
 								/>

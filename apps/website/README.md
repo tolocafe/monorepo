@@ -188,7 +188,7 @@ Create `.css.ts` files colocated with components:
 
 ```typescript
 import { style } from '@vanilla-extract/css'
-import { vars } from '~/styles'
+import { vars } from '@/styles'
 
 export const card = style({
 	backgroundColor: vars.color.background,
@@ -207,7 +207,7 @@ PostHog is integrated for product analytics and event tracking.
 To track page views in a route component:
 
 ```typescript
-import { usePageTracking } from '~/lib/posthog'
+import { usePageTracking } from '@/lib/posthog'
 
 export default function MyRoute() {
   usePageTracking()

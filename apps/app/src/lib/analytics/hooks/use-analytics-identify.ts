@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { useEffect } from 'react'
 
-import { identify } from '~/lib/analytics'
-import { requestTrackingPermissionAsync } from '~/lib/notifications'
-import { selfQueryOptions } from '~/lib/queries/auth'
+import { identify } from '@/lib/analytics'
+import { requestTrackingPermissionAsync } from '@/lib/notifications'
+import { selfQueryOptions } from '@/lib/queries/auth'
 
 export function useAnalyticsIdentify() {
 	const { data: selfData } = useQuery({

@@ -1,7 +1,7 @@
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { Text } from '~/components/Text'
+import { Text } from '@/components/Text'
 
 const MAX_DOTS = 5
 const DOT_SIZE = 16

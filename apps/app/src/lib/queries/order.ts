@@ -5,8 +5,8 @@ import type {
 	CreateStripeTransaction,
 } from '@tolo/common/schemas'
 
-import { queryClient } from '~/lib/query-client'
-import { api } from '~/lib/services/api-service'
+import { queryClient } from '@/lib/query-client'
+import { api } from '@/lib/services/api-service'
 
 export type CreateOrderResponse = {
 	date_start: string

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { selfQueryOptions } from '~/lib/queries/auth'
+import { selfQueryOptions } from '@/lib/queries/auth'
 
 const BARISTA_GROUP_ID = '9'
 const OWNER_GROUP_ID = '8'

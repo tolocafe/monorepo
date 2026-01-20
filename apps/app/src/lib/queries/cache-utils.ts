@@ -1,5 +1,5 @@
-import { persister, queryClient, queryStore } from '~/lib/query-client'
-import { zustandStore } from '~/lib/stores'
+import { persister, queryClient, queryStore } from '@/lib/query-client'
+import { zustandStore } from '@/lib/stores'
 
 /**
  * Clears all cached data including in-memory queries, persisted cache, and app data storage.

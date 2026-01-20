@@ -12,10 +12,10 @@ import Animated, {
 } from 'react-native-reanimated'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import Card from '~/components/Card'
-import { Text, H4 } from '~/components/Text'
-import { getImageUrl } from '~/lib/image'
-import { getProductBaseCost } from '~/lib/utils/price'
+import Card from '@/components/Card'
+import { Text, H4 } from '@/components/Text'
+import { getImageUrl } from '@/lib/image'
+import { getProductBaseCost } from '@/lib/utils/price'
 
 const UniImage = withUnistyles(Image)
 

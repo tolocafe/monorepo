@@ -11,15 +11,15 @@ import {
 	withUnistyles,
 } from 'react-native-unistyles'
 
-import BlockText from '~/components/BlockText'
-import type { BlockTextContent } from '~/components/BlockText/types'
-import { LinearGradient } from '~/components/LinearGradient'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H1, Paragraph } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { getImageUrl } from '~/lib/image'
-import { promotionQueryOptions } from '~/lib/queries/promotion'
-import { queryClient } from '~/lib/query-client'
+import BlockText from '@/components/BlockText'
+import type { BlockTextContent } from '@/components/BlockText/types'
+import { LinearGradient } from '@/components/LinearGradient'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H1, Paragraph } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { getImageUrl } from '@/lib/image'
+import { promotionQueryOptions } from '@/lib/queries/promotion'
+import { queryClient } from '@/lib/query-client'
 
 const handleClose = () => {
 	router.back()

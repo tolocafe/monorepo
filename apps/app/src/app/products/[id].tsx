@@ -27,26 +27,26 @@ import {
 	withUnistyles,
 } from 'react-native-unistyles'
 
-import BlockText from '~/components/BlockText'
-import Button from '~/components/Button'
-import { CheckedButton } from '~/components/CheckedButton'
-import { LevelIndicator } from '~/components/LevelIndicator'
-import { LinearGradient } from '~/components/LinearGradient'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H1, H2, H3, Paragraph, Text } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { ORDER_BUTTON_HEIGHT } from '~/lib/constants/ui'
-import { useIsTeamMember } from '~/lib/hooks/use-is-barista'
-import { getImageUrl } from '~/lib/image'
-import { productQueryOptions } from '~/lib/queries/product'
-import { queryClient } from '~/lib/query-client'
-import { api } from '~/lib/services/api-service'
-import { useAddItemGuarded } from '~/lib/stores/order-store'
+import BlockText from '@/components/BlockText'
+import Button from '@/components/Button'
+import { CheckedButton } from '@/components/CheckedButton'
+import { LevelIndicator } from '@/components/LevelIndicator'
+import { LinearGradient } from '@/components/LinearGradient'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H1, H2, H3, Paragraph, Text } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { ORDER_BUTTON_HEIGHT } from '@/lib/constants/ui'
+import { useIsTeamMember } from '@/lib/hooks/use-is-barista'
+import { getImageUrl } from '@/lib/image'
+import { productQueryOptions } from '@/lib/queries/product'
+import { queryClient } from '@/lib/query-client'
+import { api } from '@/lib/services/api-service'
+import { useAddItemGuarded } from '@/lib/stores/order-store'
 import {
 	formatPrice,
 	getProductBaseCost,
 	getProductTotalCost,
-} from '~/lib/utils/price'
+} from '@/lib/utils/price'
 
 const handleClose = () => {
 	router.back()

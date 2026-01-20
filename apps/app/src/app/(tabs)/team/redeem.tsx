@@ -8,19 +8,19 @@ import { useCallback, useEffect, useState } from 'react'
 import { ActivityIndicator, Alert, Platform, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import Admonition from '~/components/Admonition'
-import Button from '~/components/Button'
-import { GreenColorIcon, RedColorIcon } from '~/components/Icons'
-import Input from '~/components/Input'
-import ScreenContainer from '~/components/ScreenContainer'
-import SegmentedControl from '~/components/SegmentedControl'
-import { H2, H3, Paragraph, Text } from '~/components/Text'
-import { useIsTeamMember } from '~/lib/hooks/use-is-barista'
+import Admonition from '@/components/Admonition'
+import Button from '@/components/Button'
+import { GreenColorIcon, RedColorIcon } from '@/components/Icons'
+import Input from '@/components/Input'
+import ScreenContainer from '@/components/ScreenContainer'
+import SegmentedControl from '@/components/SegmentedControl'
+import { H2, H3, Paragraph, Text } from '@/components/Text'
+import { useIsTeamMember } from '@/lib/hooks/use-is-barista'
 import {
 	redeemClientQueryOptions,
 	redeemDrinkMutationOptions,
-} from '~/lib/queries/client'
-import { formatDate } from '~/lib/utils/format-date'
+} from '@/lib/queries/client'
+import { formatDate } from '@/lib/utils/format-date'
 
 type DrinkType = 'birthday' | 'visits'
 

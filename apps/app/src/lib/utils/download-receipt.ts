@@ -2,7 +2,7 @@ import { File, Paths } from 'expo-file-system'
 import * as Sharing from 'expo-sharing'
 import { Platform } from 'react-native'
 
-import { api } from '~/lib/services/api-service'
+import { api } from '@/lib/services/api-service'
 
 /**
  * Downloads a receipt PDF for the given order ID

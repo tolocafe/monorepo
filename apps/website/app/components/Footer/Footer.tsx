@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router'
 
-import { isValidLocale, DEFAULT_LOCALE } from '~/lib/locale'
-import type { Locale } from '~/lib/locale'
-import { getLocalizedString, getLocalizedSlug } from '~/lib/sanity'
-import type { Location } from '~/lib/sanity'
+import { isValidLocale, DEFAULT_LOCALE } from '@/lib/locale'
+import type { Locale } from '@/lib/locale'
+import { getLocalizedString, getLocalizedSlug } from '@/lib/sanity'
+import type { Location } from '@/lib/sanity'
 
 import * as styles from './Footer.css'
 

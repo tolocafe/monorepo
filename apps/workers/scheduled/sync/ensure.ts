@@ -9,9 +9,9 @@ import {
 	locations,
 	menuCategories,
 	productModifiers,
-} from '~/db/schema'
-import { posterApi } from '~/utils/poster'
-import { trackEventsBatch } from '~/utils/posthog'
+} from '@/db/schema'
+import { posterApi } from '@/utils/poster'
+import { trackEventsBatch } from '@/utils/posthog'
 
 import { mapClient } from './maps'
 import type { Database } from './transactions'

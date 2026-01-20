@@ -4,12 +4,12 @@ import { useCallback, useState } from 'react'
 import { Alert, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import Button from '~/components/Button'
-import Input from '~/components/Input'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H2, Paragraph } from '~/components/Text'
-import { useIsBarista } from '~/lib/hooks/use-is-barista'
-import { downloadReceipt } from '~/lib/utils/download-receipt'
+import Button from '@/components/Button'
+import Input from '@/components/Input'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H2, Paragraph } from '@/components/Text'
+import { useIsBarista } from '@/lib/hooks/use-is-barista'
+import { downloadReceipt } from '@/lib/utils/download-receipt'
 
 export default function TeamTicketDownload() {
 	const { t } = useLingui()

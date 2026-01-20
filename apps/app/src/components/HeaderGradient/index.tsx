@@ -1,6 +1,6 @@
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import { LinearGradient } from '~/components/LinearGradient'
+import { LinearGradient } from '@/components/LinearGradient'
 
 const styles = StyleSheet.create({
 	gradient: {

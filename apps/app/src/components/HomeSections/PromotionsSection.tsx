@@ -4,9 +4,9 @@ import type { Promotion } from '@tolo/common'
 import { FlatList } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import PromotionCard from '~/components/PromotionCard'
-import { H2 } from '~/components/Text'
-import { promotionsQueryOptions } from '~/lib/queries/menu'
+import PromotionCard from '@/components/PromotionCard'
+import { H2 } from '@/components/Text'
+import { promotionsQueryOptions } from '@/lib/queries/menu'
 
 const UniFlatList = withUnistyles(FlatList)
 

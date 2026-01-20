@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query'
 import { FlatList, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import BlogCard from '~/components/BlogCard'
-import { H2, Paragraph } from '~/components/Text'
-import { blogPostsQueryOptions } from '~/lib/queries/blog'
-import type { BlogPost } from '~/lib/queries/blog'
+import BlogCard from '@/components/BlogCard'
+import { H2, Paragraph } from '@/components/Text'
+import { blogPostsQueryOptions } from '@/lib/queries/blog'
+import type { BlogPost } from '@/lib/queries/blog'
 
 const UniFlatList = withUnistyles(FlatList)
 

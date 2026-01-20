@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css'
 
-import { vars, containerWide } from '~/styles'
+import { vars, containerWide } from '@/styles'
 
 export const main = style({
 	backgroundColor: vars.color.background,

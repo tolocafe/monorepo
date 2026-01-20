@@ -6,13 +6,13 @@ import { Fragment, useMemo } from 'react'
 import { ActivityIndicator, FlatList, View } from 'react-native'
 import { StyleSheet, useUnistyles, withUnistyles } from 'react-native-unistyles'
 
-import Button from '~/components/Button'
-import MenuListItem, { getItemSize } from '~/components/MenuListItem'
-import { H2, H3, Paragraph } from '~/components/Text'
+import Button from '@/components/Button'
+import MenuListItem, { getItemSize } from '@/components/MenuListItem'
+import { H2, H3, Paragraph } from '@/components/Text'
 import {
 	categoriesQueryOptions,
 	productsQueryOptions,
-} from '~/lib/queries/menu'
+} from '@/lib/queries/menu'
 
 const UniActivityIndicator = withUnistyles(ActivityIndicator, (theme) => ({
 	color: theme.colors.gray.solid,

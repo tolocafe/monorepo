@@ -7,8 +7,8 @@ import {
 	jest,
 } from '@jest/globals'
 
-import { clearAllCache } from '~/lib/queries/cache-utils'
-import { persister, queryClient } from '~/lib/query-client'
+import { clearAllCache } from '@/lib/queries/cache-utils'
+import { persister, queryClient } from '@/lib/query-client'
 
 // Mock MMKV
 jest.mock('react-native-mmkv', () => {
@@ -28,7 +28,7 @@ jest.mock('react-native-mmkv', () => {
 })
 
 // Mock the query client and persister
-jest.mock('~/lib/query-client', () => ({
+jest.mock('@/lib/query-client', () => ({
 	persister: {
 		removeClient: jest.fn(),
 	},

@@ -1,4 +1,4 @@
-import '~/lib/styles/unistyles'
+import '@/lib/styles/unistyles'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { captureException } from '@sentry/react-native'
@@ -11,20 +11,20 @@ import { Platform, Pressable, View } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import { z } from 'zod/v4'
 
-import Button from '~/components/Button'
-import Input from '~/components/Input'
-import OtpInput from '~/components/otp-input'
-import PhoneNumberInput from '~/components/phone-number-input'
-import ScreenContainer from '~/components/ScreenContainer'
-import { H2, Label, Paragraph, Text } from '~/components/Text'
-import { identify } from '~/lib/analytics'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { requestTrackingPermissionAsync } from '~/lib/notifications'
+import Button from '@/components/Button'
+import Input from '@/components/Input'
+import OtpInput from '@/components/otp-input'
+import PhoneNumberInput from '@/components/phone-number-input'
+import ScreenContainer from '@/components/ScreenContainer'
+import { H2, Label, Paragraph, Text } from '@/components/Text'
+import { identify } from '@/lib/analytics'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { requestTrackingPermissionAsync } from '@/lib/notifications'
 import {
 	requestOtpMutationOptions,
 	verifyOtpMutationOptions,
-} from '~/lib/queries/auth'
-import { formatPhoneNumber } from '~/lib/utils/phone'
+} from '@/lib/queries/auth'
+import { formatPhoneNumber } from '@/lib/utils/phone'
 
 const SignInSchema = z.object({
 	birthdate: z.string().trim(),

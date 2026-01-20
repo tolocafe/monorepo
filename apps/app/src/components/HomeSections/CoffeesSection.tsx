@@ -4,9 +4,9 @@ import type { Coffee } from '@tolo/common/api'
 import { FlatList } from 'react-native'
 import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 
-import CoffeeStoryBubble, { BUBBLE_SIZE } from '~/components/CoffeeStoryBubble'
-import { H2 } from '~/components/Text'
-import { coffeesQueryOptions } from '~/lib/queries/coffees'
+import CoffeeStoryBubble, { BUBBLE_SIZE } from '@/components/CoffeeStoryBubble'
+import { H2 } from '@/components/Text'
+import { coffeesQueryOptions } from '@/lib/queries/coffees'
 
 const UniFlatList = withUnistyles(FlatList)
 

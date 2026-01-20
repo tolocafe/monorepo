@@ -7,7 +7,7 @@ import {
 	jest,
 } from '@jest/globals'
 
-import { useOrderStore } from '~/lib/stores/order-store'
+import { useOrderStore } from '@/lib/stores/order-store'
 
 jest.mock('expo-router', () => ({
 	router: {
@@ -28,7 +28,7 @@ jest.mock('react-native-mmkv', () => {
 		createMMKV: jest.fn(() => instance),
 	}
 })
-jest.mock('~/lib/queries/auth', () => ({
+jest.mock('@/lib/queries/auth', () => ({
 	selfQueryOptions: { queryFn: jest.fn(), queryKey: ['self'] },
 }))
 

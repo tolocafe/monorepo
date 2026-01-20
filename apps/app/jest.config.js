@@ -20,7 +20,7 @@ module.exports = {
 				__DEV__: true,
 			},
 			moduleNameMapper: {
-				'^~/(.*)$': '<rootDir>/src/$1',
+				'^@/(.*)$': '<rootDir>/src/$1',
 			},
 			rootDir: __dirname,
 			testEnvironment: 'node',
@@ -39,7 +39,7 @@ module.exports = {
 				__DEV__: true,
 			},
 			moduleNameMapper: {
-				'^~/(.*)$': '<rootDir>/src/$1',
+				'^@/(.*)$': '<rootDir>/src/$1',
 			},
 			preset: 'jest-expo',
 			rootDir: __dirname,

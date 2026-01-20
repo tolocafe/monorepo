@@ -4,7 +4,7 @@ import { Platform, Pressable, View } from 'react-native'
 import type { GestureResponderEvent, StyleProp, TextStyle } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { Text } from '~/components/Text'
+import { Text } from '@/components/Text'
 
 type Props = Omit<ComponentProps<typeof Pressable>, 'children'> & {
 	checked?: boolean

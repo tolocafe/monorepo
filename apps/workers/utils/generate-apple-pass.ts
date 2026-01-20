@@ -3,7 +3,7 @@ import type { ClientData } from '@tolo/common'
 import type { Context } from 'hono'
 import { PKPass } from 'passkit-generator'
 
-import type { Bindings } from '~/types'
+import type { Bindings } from '@/types'
 
 import { posterApi } from './poster'
 import { getCustomerStamps } from './stamps'

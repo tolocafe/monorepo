@@ -10,19 +10,19 @@ import {
 	EventsSection,
 	MenuSection,
 	PromotionsSection,
-} from '~/components/HomeSections'
+} from '@/components/HomeSections'
 import {
 	categoriesQueryOptions,
 	coffeesQueryOptions,
 	eventsQueryOptions,
 	productsQueryOptions,
 	promotionsQueryOptions,
-} from '~/components/HomeSections/queries'
-import ScreenContainer from '~/components/ScreenContainer'
-import { Paragraph } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { isIOS20 } from '~/lib/constants/ui'
-import { queryClient } from '~/lib/query-client'
+} from '@/components/HomeSections/queries'
+import ScreenContainer from '@/components/ScreenContainer'
+import { Paragraph } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { isIOS20 } from '@/lib/constants/ui'
+import { queryClient } from '@/lib/query-client'
 
 const PADDING_EDGES = isIOS20
 	? (['bottom'] as const)

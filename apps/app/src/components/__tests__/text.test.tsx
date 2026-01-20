@@ -1,7 +1,7 @@
 import { describe, expect, it } from '@jest/globals'
 import { screen } from '@testing-library/react-native'
 
-import { render } from '~/test-utils'
+import { render } from '@/test-utils'
 
 import { H1, H2, H3, H4, Label, Paragraph, Text } from '../Text'
 

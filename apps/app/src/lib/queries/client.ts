@@ -1,7 +1,7 @@
 import { mutationOptions, queryOptions } from '@tanstack/react-query'
 import type { RedeemClientData } from '@tolo/common/api'
 
-import { api } from '~/lib/services/api-service'
+import { api } from '@/lib/services/api-service'
 
 export const redeemClientQueryOptions = (clientId: null | string) =>
 	queryOptions<null | RedeemClientData>({

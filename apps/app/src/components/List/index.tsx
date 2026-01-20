@@ -3,9 +3,9 @@ import type { ReactElement, ReactNode } from 'react'
 import { Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import Card from '~/components/Card'
-import { GrayColorIcon } from '~/components/Icons'
-import { Label, Text } from '~/components/Text'
+import Card from '@/components/Card'
+import { GrayColorIcon } from '@/components/Icons'
+import { Label, Text } from '@/components/Text'
 
 export type ListItemAccessoryProps = {
 	children: ReactNode

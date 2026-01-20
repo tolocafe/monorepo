@@ -1,6 +1,6 @@
 import { useOutletContext } from 'react-router'
 
-import type { Locale } from '~/lib/locale'
+import type { Locale } from '@/lib/locale'
 
 import type { Route } from './+types/contact'
 import * as styles from './contact.css'

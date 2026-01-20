@@ -1,11 +1,11 @@
-import '~/lib/styles/unistyles'
+import '@/lib/styles/unistyles'
 import { Trans, useLingui } from '@lingui/react/macro'
 import { Link, Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { Text, H1 } from '~/components/Text'
+import { Text, H1 } from '@/components/Text'
 
 export default function NotFoundScreen() {
 	const { t } = useLingui()

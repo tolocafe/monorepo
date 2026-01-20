@@ -7,13 +7,13 @@ import { useState } from 'react'
 import { Alert, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import Button from '~/components/Button'
-import Card from '~/components/Card'
-import ScreenContainer from '~/components/ScreenContainer'
-import { Text, H2, Label, Paragraph } from '~/components/Text'
-import { useTrackScreenView } from '~/lib/analytics/hooks'
-import { useUpdates } from '~/lib/hooks/use-updates'
-import { clearAllCache } from '~/lib/queries/cache-utils'
+import Button from '@/components/Button'
+import Card from '@/components/Card'
+import ScreenContainer from '@/components/ScreenContainer'
+import { Text, H2, Label, Paragraph } from '@/components/Text'
+import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { useUpdates } from '@/lib/hooks/use-updates'
+import { clearAllCache } from '@/lib/queries/cache-utils'
 
 const getStringOrFallback = (value: unknown, fallback: string): string =>
 	typeof value === 'string' ? value : fallback

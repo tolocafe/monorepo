@@ -1,10 +1,10 @@
 import * as SecureStore from 'expo-secure-store'
 import ky from 'ky'
 
-import { BASE_URL } from '~/lib/api'
-import { STORAGE_KEYS } from '~/lib/constants/storage'
-import { getCurrentLocale } from '~/lib/locales/init'
-import { isWeb } from '~/lib/utils/device'
+import { BASE_URL } from '@/lib/api'
+import { STORAGE_KEYS } from '@/lib/constants/storage'
+import { getCurrentLocale } from '@/lib/locales/init'
+import { isWeb } from '@/lib/utils/device'
 
 /**
  * Gets the current auth token from platform-appropriate storage

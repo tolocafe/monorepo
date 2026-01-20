@@ -1,1 +1,1 @@
-export { default } from '~/containers/top-up-screen'
+export { default } from '@/containers/top-up-screen'

@@ -10,8 +10,8 @@ import type { ComponentProps, ReactElement, ReactNode } from 'react'
 import { Pressable, View } from 'react-native'
 import { StyleSheet } from 'react-native-unistyles'
 
-import { TextColorIcon } from '~/components/Icons'
-import { Text } from '~/components/Text'
+import { TextColorIcon } from '@/components/Icons'
+import { Text } from '@/components/Text'
 
 type IconName = ComponentProps<typeof Ionicons>['name']
 
