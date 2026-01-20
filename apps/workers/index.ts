@@ -58,11 +58,7 @@ app
 
 app
 	.get('/', (context) =>
-		context.json(
-			{ message: 'Hello Cloudflare Workers!' },
-			200,
-			defaultJsonHeaders,
-		),
+		context.json({ message: 'Buen Café' }, 200, defaultJsonHeaders),
 	)
 	.route('/menu', menu)
 	.route('/auth', auth)

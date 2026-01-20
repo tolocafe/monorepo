@@ -305,7 +305,6 @@ export default function TableBillScreenWeb() {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function loadStripe(): Promise<any> {
 	// Dynamically import Stripe.js for web
-
 	const { loadStripe: loadStripeJs } = await import('@stripe/stripe-js')
 	const publishableKey = process.env.EXPO_PUBLIC_STRIPE_PUBLISHABLE_KEY
 
