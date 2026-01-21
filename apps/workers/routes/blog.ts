@@ -1,4 +1,3 @@
-import { captureException } from '@sentry/cloudflare'
 import type { BlogPost } from '@tolo/common/api'
 import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
@@ -13,9 +12,9 @@ type Variables = {
 
 const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 	.get('/', async (context) => {
-		const language = context.get('language')
-
 		try {
+			const language = context.get('language')
+
 			const sanityPosts = await sanity.listBlogPosts(context.env, language)
 
 			const localized = sanityPosts.map((post): BlogPost => {
@@ -35,28 +34,25 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 			return context.json(localized, 200, defaultJsonHeaders)
 		} catch (error) {
-			captureException(error)
-
-			return context.json(
-				{ error: 'Failed to fetch blog posts' },
-				500,
-				defaultJsonHeaders,
-			)
+			throw new HTTPException(500, {
+				cause: error,
+				message: 'Could not fetch blog posts',
+			})
 		}
 	})
 	.get('/:id', async (context) => {
-		const language = context.get('language')
-		const id = context.req.param('id')
-
-		if (!id) {
-			return context.json(
-				{ error: 'Blog post ID is required' },
-				400,
-				defaultJsonHeaders,
-			)
-		}
-
 		try {
+			const language = context.get('language')
+			const id = context.req.param('id')
+
+			if (!id) {
+				return context.json(
+					{ error: 'Blog post ID is required' },
+					400,
+					defaultJsonHeaders,
+				)
+			}
+
 			const post = await sanity.getBlogPost(context.env, id, language)
 
 			if (!post) {
@@ -85,13 +81,10 @@ const blog = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				'Content-Language': language,
 			})
 		} catch (error) {
-			captureException(error)
-
-			return context.json(
-				{ error: 'Failed to fetch blog post details' },
-				500,
-				defaultJsonHeaders,
-			)
+			throw new HTTPException(500, {
+				cause: error,
+				message: 'Could not fetch blog post',
+			})
 		}
 	})
 
