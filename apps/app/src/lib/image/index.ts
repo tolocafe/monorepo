@@ -1,7 +1,7 @@
 import { createImageUrlBuilder } from '@sanity/image-url'
 import type { SanityImageReference } from '@tolo/common'
 
-import { POSTER_BASE_URL } from '@/lib/api'
+import { POSTER_BASE_URL } from '@/lib/constants/api'
 
 // Sanity project configuration
 const SANITY_PROJECT_ID = 'm1zo6pvi'

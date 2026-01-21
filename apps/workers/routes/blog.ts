@@ -1,6 +1,7 @@
 import type { BlogPost } from '@tolo/common/api'
 import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 
 import type { Bindings } from '@/types'
 import { defaultJsonHeaders } from '@/utils/headers'
