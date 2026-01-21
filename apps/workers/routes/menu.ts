@@ -1,6 +1,7 @@
 import type { Product, Promotion } from '@tolo/common/api'
 import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 
 import type { Bindings } from '@/types'
 import { defaultJsonHeaders } from '@/utils/headers'
@@ -150,12 +151,11 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				...defaultJsonHeaders,
 				'Content-Language': language,
 			})
-		} catch {
-			return context.json(
-				{ error: 'Failed to fetch product details' },
-				500,
-				defaultJsonHeaders,
-			)
+		} catch (error) {
+			throw new HTTPException(500, {
+				cause: error,
+				message: 'Could not fetch product',
+			})
 		}
 	})
 
@@ -210,12 +210,11 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				...defaultJsonHeaders,
 				'Content-Language': language,
 			})
-		} catch {
-			return context.json(
-				{ error: 'Failed to fetch promotion details' },
-				500,
-				defaultJsonHeaders,
-			)
+		} catch (error) {
+			throw new HTTPException(500, {
+				cause: error,
+				message: 'Could not fetch promotion',
+			})
 		}
 	})
 

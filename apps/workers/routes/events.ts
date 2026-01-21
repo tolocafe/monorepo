@@ -1,7 +1,7 @@
-import { captureException } from '@sentry/cloudflare'
 import type { Event } from '@tolo/common/api'
 import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 
 import type { Bindings } from '@/types'
 import { defaultJsonHeaders } from '@/utils/headers'
@@ -13,9 +13,9 @@ type Variables = {
 
 const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 	.get('/', async (context) => {
-		const language = context.get('language')
-
 		try {
+			const language = context.get('language')
+
 			const sanityEvents = await sanity.listEvents(context.env, language)
 
 			const localized = sanityEvents.map((event): Event => {
@@ -46,13 +46,10 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 			return context.json(localized, 200, defaultJsonHeaders)
 		} catch (error) {
-			captureException(error)
-
-			return context.json(
-				{ error: 'Failed to fetch events' },
-				500,
-				defaultJsonHeaders,
-			)
+			throw new HTTPException(500, {
+				cause: error,
+				message: 'Could not fetch events',
+			})
 		}
 	})
 	.get('/:id', async (context) => {
@@ -104,13 +101,10 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				'Content-Language': language,
 			})
 		} catch (error) {
-			captureException(error)
-
-			return context.json(
-				{ error: 'Failed to fetch event details' },
-				500,
-				defaultJsonHeaders,
-			)
+			throw new HTTPException(500, {
+				cause: error,
+				message: 'Could not fetch event',
+			})
 		}
 	})
 
