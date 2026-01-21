@@ -1,5 +1,6 @@
 import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 
 import { defaultJsonHeaders } from '@/utils/headers'
 import sanity from '@/utils/sanity'
@@ -12,9 +13,9 @@ type Variables = {
 
 const coffees = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 	.get('/', async (context) => {
-		const language = context.get('language')
-
 		try {
+			const language = context.get('language')
+
 			const beans = await sanity.listBeans(context.env, language)
 
 			const localized = beans.map((bean) => ({
@@ -27,32 +28,38 @@ const coffees = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 			}))
 
 			return context.json(localized, 200, defaultJsonHeaders)
-		} catch {
-			return context.json(
-				{ error: 'Failed to fetch coffees' },
-				500,
-				defaultJsonHeaders,
-			)
+		} catch (error) {
+			throw new HTTPException(500, {
+				cause: error,
+				message: 'Could not fetch coffees',
+			})
 		}
 	})
 	.get('/:id', async (context) => {
-		const language = context.get('language')
-		const bean = await sanity.getBean(
-			context.env,
-			context.req.param('id'),
-			language,
-		)
+		try {
+			const language = context.get('language')
+			const bean = await sanity.getBean(
+				context.env,
+				context.req.param('id'),
+				language,
+			)
 
-		const localized = {
-			name: bean.name || '',
-			origin: bean.origin || '',
-			process: bean.process || '',
-			region: bean.region || '',
-			slug: bean.slug?.current || '',
-			'tasting-notes': bean.tastingNotes,
+			const localized = {
+				name: bean.name || '',
+				origin: bean.origin || '',
+				process: bean.process || '',
+				region: bean.region || '',
+				slug: bean.slug?.current || '',
+				'tasting-notes': bean.tastingNotes,
+			}
+
+			return context.json(localized, 200, defaultJsonHeaders)
+		} catch (error) {
+			throw new HTTPException(500, {
+				cause: error,
+				message: 'Could not fetch coffee',
+			})
 		}
-
-		return context.json(localized, 200, defaultJsonHeaders)
 	})
 
 export default coffees

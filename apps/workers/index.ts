@@ -98,8 +98,9 @@ app
 	})
 
 app.onError((error, c) => {
-	// eslint-disable-next-line no-console
-	console.log(error)
+	Sentry.captureException(error, {
+		extra: { method: c.req.method, path: c.req.path },
+	})
 
 	if (error instanceof HTTPException) {
 		return error.getResponse()
