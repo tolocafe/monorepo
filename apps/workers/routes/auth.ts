@@ -263,17 +263,17 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		return context.json(sessions, 200)
 	})
-	.get('/self', async (c) => {
-		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+	.get('/self', async (context) => {
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
 		const client = await posterApi.clients.getClientById(
-			c.env.POSTER_TOKEN,
+			context.env.POSTER_TOKEN,
 			clientId,
 		)
 
 		if (!client) throw new HTTPException(404, { message: 'Client not found' })
 
-		return c.json(client, 200, defaultJsonHeaders)
+		return context.json(client, 200, defaultJsonHeaders)
 	})
 	.get('/self/sessions', async (context) => {
 		const [clientId] = await authenticate(context, context.env.JWT_SECRET)

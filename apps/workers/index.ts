@@ -97,19 +97,21 @@ app
 		return context.json({ message: 'Forbidden' }, 403)
 	})
 
-app.onError((error, c) => {
-	// oxlint-disable-next-line no-console
-	console.log(error)
-
-	Sentry.captureException(error, {
-		extra: { method: c.req.method, path: c.req.path },
-	})
+app.onError((error, context) => {
+	if (error.cause instanceof HTTPException) {
+		Sentry.captureException(error.cause, {
+			extra: {
+				method: context.req.method,
+				path: context.req.path,
+			},
+		})
+	}
 
 	if (error instanceof HTTPException) {
 		return error.getResponse()
 	}
 
-	return c.json({ error: 'Internal Server Error' }, 500)
+	return context.json({ error: 'Internal Server Error' }, 500)
 })
 
 // @ts-expect-error - scheduled handler is not typed

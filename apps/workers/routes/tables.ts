@@ -20,10 +20,10 @@ const tables = new Hono<{ Bindings: Bindings }>()
  * Fetch specific table bill data from Poster by location and table ID
  * Public endpoint - no authentication required
  */
-tables.get('/:locationId/:tableId', async (c) => {
-	const locationId = c.req.param('locationId')
-	const tableId = c.req.param('tableId')
-	const token = c.env.POSTER_TOKEN
+tables.get('/:locationId/:tableId', async (context) => {
+	const locationId = context.req.param('locationId')
+	const tableId = context.req.param('tableId')
+	const token = context.env.POSTER_TOKEN
 
 	try {
 		// Get open transactions for this specific table (spot)
@@ -36,7 +36,7 @@ tables.get('/:locationId/:tableId', async (c) => {
 		const currentTransaction = transactions.at(0)
 
 		if (!currentTransaction) {
-			return c.json({ error: 'No active bill found for this table' }, 404)
+			return context.json({ error: 'No active bill found for this table' }, 404)
 		}
 
 		// Calculate totals (tax is included in sum in Poster)
@@ -59,7 +59,7 @@ tables.get('/:locationId/:tableId', async (c) => {
 				}
 			}) ?? []
 
-		return c.json({
+		return context.json({
 			items,
 			locationId,
 			subtotal: Math.round(subtotal * 100), // Convert to cents
@@ -72,7 +72,7 @@ tables.get('/:locationId/:tableId', async (c) => {
 	} catch (error) {
 		captureException(error)
 
-		return c.json({ error: 'Failed to fetch table bill' }, 500)
+		return context.json({ error: 'Failed to fetch table bill' }, 500)
 	}
 })
 
@@ -81,10 +81,10 @@ tables.get('/:locationId/:tableId', async (c) => {
  * Create a Stripe payment intent for a table bill
  * Public endpoint - no authentication required
  */
-tables.post('/:locationId/:tableId/payment-intent', async (c) => {
-	const locationId = c.req.param('locationId')
-	const tableId = c.req.param('tableId')
-	const token = c.env.POSTER_TOKEN
+tables.post('/:locationId/:tableId/payment-intent', async (context) => {
+	const locationId = context.req.param('locationId')
+	const tableId = context.req.param('tableId')
+	const token = context.env.POSTER_TOKEN
 
 	try {
 		// Get the transaction for this table
@@ -99,14 +99,14 @@ tables.post('/:locationId/:tableId/payment-intent', async (c) => {
 		)
 
 		if (!tableTransaction) {
-			return c.json({ error: 'No active bill found for this table' }, 404)
+			return context.json({ error: 'No active bill found for this table' }, 404)
 		}
 
 		const total = Number(tableTransaction.payed_sum)
 		const amountInCents = Math.round(total * 100)
 
 		// Create Stripe payment intent
-		const stripe = getStripe(c.env.STRIPE_SECRET_KEY)
+		const stripe = getStripe(context.env.STRIPE_SECRET_KEY)
 
 		const paymentIntent = await stripe.paymentIntents.create({
 			amount: amountInCents,
@@ -118,13 +118,13 @@ tables.post('/:locationId/:tableId/payment-intent', async (c) => {
 			},
 		})
 
-		return c.json({
+		return context.json({
 			paymentIntent: {
 				client_secret: paymentIntent.client_secret,
 			},
 		})
 	} catch {
-		return c.json({ error: 'Failed to create payment intent' }, 500)
+		return context.json({ error: 'Failed to create payment intent' }, 500)
 	}
 })
 

@@ -171,14 +171,14 @@ const transactions: Hono<{ Bindings: Bindings }> = new Hono<{
 			})
 		}
 	})
-	.post('/payment-intent', async (c) => {
-		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+	.post('/payment-intent', async (context) => {
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
 		const body = CreateStripeTransactionSchema.parse(
-			(await c.req.json()) as unknown,
+			(await context.req.json()) as unknown,
 		)
 
-		const stripe = getStripe(c.env.STRIPE_SECRET_KEY)
+		const stripe = getStripe(context.env.STRIPE_SECRET_KEY)
 
 		let stripeCustomer = await stripe.customers
 			.search({
@@ -187,7 +187,7 @@ const transactions: Hono<{ Bindings: Bindings }> = new Hono<{
 			.then((response) => response.data.at(0))
 
 		const posterCustomer = await posterApi.clients.getClient(
-			c.env.POSTER_TOKEN,
+			context.env.POSTER_TOKEN,
 			clientId.toString(),
 		)
 
@@ -219,24 +219,24 @@ const transactions: Hono<{ Bindings: Bindings }> = new Hono<{
 			}),
 		])
 
-		return c.json({ ephemeralKey, paymentIntent })
+		return context.json({ ephemeralKey, paymentIntent })
 	})
-	.post('/e-wallet', async (c) => {
-		const [clientId] = await authenticate(c, c.env.JWT_SECRET)
+	.post('/e-wallet', async (context) => {
+		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
 
 		const body = CreateEWallettransactionSchema.parse(
-			(await c.req.json()) as unknown,
+			(await context.req.json()) as unknown,
 		)
 
 		const transactionId = await posterApi.clients.addEWalletTransaction(
-			c.env.POSTER_TOKEN,
+			context.env.POSTER_TOKEN,
 			{
 				amount: body.amount,
 				client_id: clientId,
 			},
 		)
 
-		return c.json({ id: transactionId })
+		return context.json({ id: transactionId })
 	})
 	.post('/table', async (context) => {
 		const [clientId] = await authenticate(context, context.env.JWT_SECRET)
