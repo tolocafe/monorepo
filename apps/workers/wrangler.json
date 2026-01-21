@@ -52,6 +52,6 @@
 		"crons": ["* * * * *"]
 	},
 	"vars": {
-		"SANITY_PROJECT_ID": "l8johqhcfiuc31rvwsuv83za"
+		"SANITY_PROJECT_ID": "m1zo6pvi"
 	}
 }
