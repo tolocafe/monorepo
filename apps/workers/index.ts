@@ -98,6 +98,9 @@ app
 	})
 
 app.onError((error, c) => {
+	// oxlint-disable-next-line no-console
+	console.log(error)
+
 	Sentry.captureException(error, {
 		extra: { method: c.req.method, path: c.req.path },
 	})
