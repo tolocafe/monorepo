@@ -56,7 +56,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
-    if: needs.changes.outputs.app == 'true' || inputs.deploy_all || true
+    if: needs.changes.outputs.app == 'true' || inputs.deploy_all
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
-    if: needs.changes.outputs.workers == 'true' || inputs.deploy_all || true
+    if: needs.changes.outputs.workers == 'true' || inputs.deploy_all
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
@@ -110,7 +110,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
-    if: needs.changes.outputs.website == 'true' || inputs.deploy_all || true
+    if: needs.changes.outputs.website == 'true' || inputs.deploy_all
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
@@ -135,7 +135,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
-    if: needs.changes.outputs.studio == 'true' || inputs.deploy_all || true
+    if: needs.changes.outputs.studio == 'true' || inputs.deploy_all
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
@@ -157,7 +157,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     needs: changes
-    if: needs.changes.outputs.poster-plugin == 'true' || inputs.deploy_all || true
+    if: needs.changes.outputs.poster-plugin == 'true' || inputs.deploy_all
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4

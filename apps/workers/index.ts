@@ -30,7 +30,9 @@ type Variables = JwtUserVariables & {
 	language: SupportedLocale
 }
 
-const app = new Hono<{ Bindings: Bindings; Variables: Variables }>()
+const app = new Hono<{ Bindings: Bindings; Variables: Variables }>().basePath(
+	'/v1',
+)
 
 const TOLO_DOMAIN = 'tolo.cafe'
 
