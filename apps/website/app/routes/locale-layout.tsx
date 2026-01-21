@@ -8,6 +8,7 @@ import {
 	detectLocaleFromHeader,
 	SUPPORTED_LOCALES,
 } from '@/lib/locale'
+import { loadAndActivateLocale } from '@/lib/locales/load-locale'
 import { client } from '@/lib/sanity'
 import type { Location } from '@/lib/sanity'
 
@@ -77,6 +78,11 @@ export function meta({ data }: Route.MetaArgs) {
 
 export default function LocaleLayout({ loaderData }: Route.ComponentProps) {
 	const location = useLocation()
+
+	// Activate the locale when it changes during client-side navigation
+	useEffect(() => {
+		loadAndActivateLocale(loaderData.locale)
+	}, [loaderData.locale])
 
 	// Enable hash navigation like "/es#visit" from anywhere in the app.
 	useEffect(() => {

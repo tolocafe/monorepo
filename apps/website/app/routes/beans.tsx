@@ -1,3 +1,5 @@
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
 import type { Locale } from '@/lib/locale'
@@ -12,63 +14,39 @@ import type { Bean } from '@/lib/sanity'
 import type { Route } from './+types/beans'
 import * as styles from './beans.css'
 
-const TRANSLATIONS = {
+// Meta translations for SEO (used in meta function which runs before React context)
+const META_TRANSLATIONS = {
 	de: {
-		altitudeLabel: 'Höhe',
 		description:
 			'Entdecken Sie unsere sorgfältig ausgewählten Kaffeebohnen aus aller Welt',
-		emptyMessage:
-			'Wir bereiten unseren Bohnenkatalog vor. Schauen Sie bald wieder vorbei, um unsere sorgfältig ausgewählten Kaffees zu entdecken.',
-		emptyTitle: 'Demnächst',
 		heading: 'Unsere Bohnen',
-		processLabel: 'Verarbeitung',
 		subtitle: 'Sorgfältig ausgewählte Single Origins und Blends',
 		title: 'Unsere Bohnen - TOLO',
 	},
 	en: {
-		altitudeLabel: 'Altitude',
 		description:
 			'Discover our carefully selected coffee beans from around the world',
-		emptyMessage:
-			'We are preparing our bean catalog. Check back soon to discover our carefully selected coffees.',
-		emptyTitle: 'Coming Soon',
 		heading: 'Our Beans',
-		processLabel: 'Process',
 		subtitle: 'Carefully selected single origins and blends',
 		title: 'Our Beans - TOLO',
 	},
 	es: {
-		altitudeLabel: 'Altitud',
 		description:
 			'Descubre nuestros granos de café cuidadosamente seleccionados de todo el mundo',
-		emptyMessage:
-			'Estamos preparando nuestro catálogo de granos. Vuelve pronto para descubrir nuestros cafés cuidadosamente seleccionados.',
-		emptyTitle: 'Próximamente',
 		heading: 'Nuestros Granos',
-		processLabel: 'Proceso',
 		subtitle: 'Orígenes únicos y mezclas cuidadosamente seleccionados',
 		title: 'Nuestros Granos - TOLO',
 	},
 	fr: {
-		altitudeLabel: 'Altitude',
 		description:
 			'Découvrez nos grains de café soigneusement sélectionnés du monde entier',
-		emptyMessage:
-			'Nous préparons notre catalogue de grains. Revenez bientôt pour découvrir nos cafés soigneusement sélectionnés.',
-		emptyTitle: 'Bientôt Disponible',
 		heading: 'Nos Grains',
-		processLabel: 'Procédé',
 		subtitle: 'Origines uniques et mélanges soigneusement sélectionnés',
 		title: 'Nos Grains - TOLO',
 	},
 	ja: {
-		altitudeLabel: '標高',
 		description: '世界中から厳選されたコーヒー豆をご紹介します',
-		emptyMessage:
-			'コーヒー豆カタログを準備中です。厳選されたコーヒーをお届けするため、もうしばらくお待ちください。',
-		emptyTitle: '近日公開',
 		heading: 'コーヒー豆',
-		processLabel: '精製方法',
 		subtitle: '厳選されたシングルオリジンとブレンド',
 		title: 'コーヒー豆 - TOLO',
 	},
@@ -87,7 +65,7 @@ export async function loader() {
 
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
-	const t = TRANSLATIONS[locale] || TRANSLATIONS.es
+	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
 
 	return [
 		{ title: t.title },
@@ -110,15 +88,18 @@ export function meta({ params }: Route.MetaArgs) {
 
 export default function Beans({ loaderData }: Route.ComponentProps) {
 	const { locale } = useOutletContext<{ locale: Locale }>()
-	const t = TRANSLATIONS[locale] || TRANSLATIONS.es
 	const { beans } = loaderData
 
 	return (
 		<main className={styles.main}>
 			<div className={styles.container}>
 				<header className={styles.header}>
-					<h1 className={styles.heading}>{t.heading}</h1>
-					<p className={styles.subtitle}>{t.subtitle}</p>
+					<h1 className={styles.heading}>
+						<Trans>Our Beans</Trans>
+					</h1>
+					<p className={styles.subtitle}>
+						<Trans>Carefully selected single origins and blends</Trans>
+					</p>
 				</header>
 
 				<div className={styles.content}>
@@ -167,12 +148,12 @@ export default function Beans({ loaderData }: Route.ComponentProps) {
 											<div className={styles.beanMeta}>
 												{bean.altitude && (
 													<span className={styles.beanDetail}>
-														{t.altitudeLabel}: {bean.altitude}m
+														{t`Altitude`}: {bean.altitude}m
 													</span>
 												)}
 												{process && (
 													<span className={styles.beanDetail}>
-														{t.processLabel}: {process}
+														{t`Process`}: {process}
 													</span>
 												)}
 											</div>
@@ -183,8 +164,15 @@ export default function Beans({ loaderData }: Route.ComponentProps) {
 						</div>
 					) : (
 						<div className={styles.emptyState}>
-							<h2 className={styles.emptyTitle}>{t.emptyTitle}</h2>
-							<p className={styles.emptyMessage}>{t.emptyMessage}</p>
+							<h2 className={styles.emptyTitle}>
+								<Trans>Coming Soon</Trans>
+							</h2>
+							<p className={styles.emptyMessage}>
+								<Trans>
+									We are preparing our bean catalog. Check back soon to discover
+									our carefully selected coffees.
+								</Trans>
+							</p>
 						</div>
 					)}
 				</div>

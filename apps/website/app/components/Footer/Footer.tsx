@@ -1,5 +1,6 @@
 /// <reference types="vite-plugin-svgr/client" />
 
+import { Trans } from '@lingui/react/macro'
 import { Link, useParams } from 'react-router'
 
 import AppStoreBadge from '@/assets/logos/app-store.svg'
@@ -16,110 +17,36 @@ import * as styles from './Footer.css'
 
 const currentYear = new Date().getFullYear()
 
-const TRANSLATIONS = {
+// Path segments for localized URLs (not display text)
+const LOCALE_PATHS = {
 	de: {
-		about: 'Über uns',
 		aboutPath: 'ueber-uns',
-		beans: 'Unsere Bohnen',
 		beansPath: 'beans',
-		blog: 'Blog',
-		brand: 'TOLO',
-		company: 'Unternehmen',
-		contact: 'Kontakt',
-		copyright: `© ${currentYear} TOLO. Alle Rechte vorbehalten.`,
-		explore: 'Erkunden',
-		getTheApp: 'App herunterladen',
-		home: 'Startseite',
-		legal: 'Rechtliches',
-		locations: 'Standorte',
-		privacy: 'Datenschutz',
 		privacyPath: 'datenschutz',
-		tagline: 'Guter Kaffee, nichts weiter.',
-		wholesale: 'Großhandel',
 		wholesalePath: 'grosshandel',
 	},
 	en: {
-		about: 'About Us',
 		aboutPath: 'about',
-		beans: 'Our Beans',
 		beansPath: 'beans',
-		blog: 'Blog',
-		brand: 'TOLO',
-		company: 'Company',
-		contact: 'Contact',
-		copyright: `© ${currentYear} TOLO. All rights reserved.`,
-		explore: 'Explore',
-		getTheApp: 'Get the App',
-		home: 'Home',
-		legal: 'Legal',
-		locations: 'Locations',
-		privacy: 'Privacy',
 		privacyPath: 'privacy',
-		tagline: 'Good coffee, nothing more.',
-		wholesale: 'Wholesale',
 		wholesalePath: 'wholesale',
 	},
 	es: {
-		about: 'Nosotros',
 		aboutPath: 'nosotros',
-		beans: 'Nuestros Granos',
 		beansPath: 'granos',
-		blog: 'Blog',
-		brand: 'TOLO',
-		company: 'Empresa',
-		contact: 'Contacto',
-		copyright: `© ${currentYear} TOLO. Todos los derechos reservados.`,
-		explore: 'Explorar',
-		getTheApp: 'Descarga la App',
-		home: 'Inicio',
-		legal: 'Legal',
-		locations: 'Ubicaciones',
-		privacy: 'Privacidad',
 		privacyPath: 'privacidad',
-		tagline: 'Buen café, así nomás.',
-		wholesale: 'Mayoreo',
 		wholesalePath: 'mayoreo',
 	},
 	fr: {
-		about: 'À propos',
 		aboutPath: 'a-propos',
-		beans: 'Nos Grains',
 		beansPath: 'beans',
-		blog: 'Blog',
-		brand: 'TOLO',
-		company: 'Entreprise',
-		contact: 'Contact',
-		copyright: `© ${currentYear} TOLO. Tous droits réservés.`,
-		explore: 'Explorer',
-		getTheApp: "Télécharger l'App",
-		home: 'Accueil',
-		legal: 'Légal',
-		locations: 'Emplacements',
-		privacy: 'Confidentialité',
 		privacyPath: 'confidentialite',
-		tagline: 'Du bon café, rien de plus.',
-		wholesale: 'Vente en gros',
 		wholesalePath: 'vente-en-gros',
 	},
 	ja: {
-		about: '私たちについて',
 		aboutPath: 'about',
-		beans: 'コーヒー豆',
 		beansPath: 'beans',
-		blog: 'ブログ',
-		brand: 'TOLO',
-		company: '会社情報',
-		contact: 'お問い合わせ',
-		copyright: `© ${currentYear} TOLO. 全著作権所有。`,
-		explore: '探索',
-		getTheApp: 'アプリをダウンロード',
-		home: 'ホーム',
-		legal: '法的情報',
-		locations: '店舗',
-		privacy: 'プライバシー',
 		privacyPath: 'privacy',
-		tagline: 'シンプルに、おいしいコーヒー。',
-		wholesale: '卸売',
 		wholesalePath: 'wholesale',
 	},
 } as const
@@ -133,55 +60,66 @@ export function Footer({ locations = [] }: FooterProps) {
 	const locale: Locale = isValidLocale(localeParam)
 		? localeParam
 		: DEFAULT_LOCALE
-	const t = TRANSLATIONS[locale]
+	const paths = LOCALE_PATHS[locale]
 
 	return (
 		<footer className={styles.footer}>
 			<div className={styles.container}>
 				<div className={styles.brandSection}>
-					<span className={styles.brand}>{t.brand}</span>
-					<p className={styles.tagline}>{t.tagline}</p>
+					<span className={styles.brand}>TOLO</span>
+					<p className={styles.tagline}>
+						<Trans>Good coffee, simple as that.</Trans>
+					</p>
 				</div>
 
 				<div className={styles.linksGrid}>
 					<div className={styles.section}>
-						<h3 className={styles.sectionTitle}>{t.explore}</h3>
+						<h3 className={styles.sectionTitle}>
+							<Trans>Explore</Trans>
+						</h3>
 						<Link to={`/${locale}`} className={styles.link}>
-							{t.home}
+							<Trans>Home</Trans>
 						</Link>
-						<Link to={`/${locale}/${t.beansPath}`} className={styles.link}>
-							{t.beans}
+						<Link to={`/${locale}/${paths.beansPath}`} className={styles.link}>
+							<Trans>Our Beans</Trans>
 						</Link>
 						<Link to={`/${locale}/blog`} className={styles.link}>
-							{t.blog}
+							<Trans>Blog</Trans>
 						</Link>
 					</div>
 
 					<div className={styles.section}>
-						<h3 className={styles.sectionTitle}>{t.company}</h3>
-						<Link to={`/${locale}/${t.aboutPath}`} className={styles.link}>
-							{t.about}
+						<h3 className={styles.sectionTitle}>
+							<Trans>Company</Trans>
+						</h3>
+						<Link to={`/${locale}/${paths.aboutPath}`} className={styles.link}>
+							<Trans>About</Trans>
 						</Link>
-						<Link to={`/${locale}/${t.wholesalePath}`} className={styles.link}>
-							{t.wholesale}
+						<Link
+							to={`/${locale}/${paths.wholesalePath}`}
+							className={styles.link}
+						>
+							<Trans>Wholesale</Trans>
 						</Link>
 						<Link to={`/${locale}/contact`} className={styles.link}>
-							{t.contact}
+							<Trans>Contact</Trans>
 						</Link>
 					</div>
 
 					{locations.length > 0 && (
 						<div className={styles.section}>
-							<h3 className={styles.sectionTitle}>{t.locations}</h3>
-							{locations.map((location) => {
-								const slug = getLocalizedSlug(location.slug, locale)
+							<h3 className={styles.sectionTitle}>
+								<Trans>Locations</Trans>
+							</h3>
+							{locations.map((loc) => {
+								const slug = getLocalizedSlug(loc.slug, locale)
 								return slug ? (
 									<Link
-										key={location._id}
+										key={loc._id}
 										to={`/${locale}/locations/${slug}`}
 										className={styles.link}
 									>
-										{getLocalizedString(location.name, locale)}
+										{getLocalizedString(loc.name, locale)}
 									</Link>
 								) : null
 							})}
@@ -189,7 +127,9 @@ export function Footer({ locations = [] }: FooterProps) {
 					)}
 
 					<div className={styles.section}>
-						<h3 className={styles.sectionTitle}>{t.getTheApp}</h3>
+						<h3 className={styles.sectionTitle}>
+							<Trans>Download the App</Trans>
+						</h3>
 						<div className={styles.storeLinks}>
 							<a
 								href="https://apps.apple.com/app/tolo-cafe/id6503702880"
@@ -221,7 +161,9 @@ export function Footer({ locations = [] }: FooterProps) {
 			</div>
 
 			<div className={styles.bottomBar}>
-				<p className={styles.copyright}>{t.copyright}</p>
+				<p className={styles.copyright}>
+					<Trans>© {currentYear} TOLO. All rights reserved.</Trans>
+				</p>
 
 				<div className={styles.socialLinks}>
 					<a
@@ -248,8 +190,11 @@ export function Footer({ locations = [] }: FooterProps) {
 					>
 						<TikTokLogo className={styles.socialIcon} title="TikTok" />
 					</a>
-					<Link to={`/${locale}/${t.privacyPath}`} className={styles.legalLink}>
-						{t.privacy}
+					<Link
+						to={`/${locale}/${paths.privacyPath}`}
+						className={styles.legalLink}
+					>
+						<Trans>Privacy</Trans>
 					</Link>
 				</div>
 			</div>

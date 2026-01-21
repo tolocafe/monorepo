@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react/macro'
 import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import { Link, useOutletContext } from 'react-router'
@@ -8,37 +9,6 @@ import type { Post } from '@/lib/sanity'
 
 import type { Route } from './+types/blog-post'
 import * as styles from './blog-post.css'
-
-const TRANSLATIONS = {
-	de: {
-		backToBlogs: '← Zurück zum Blog',
-		notFoundText:
-			'Der Beitrag, den Sie suchen, existiert nicht oder wurde entfernt.',
-		notFoundTitle: 'Beitrag Nicht Gefunden',
-	},
-	en: {
-		backToBlogs: '← Back to Blog',
-		notFoundText:
-			"The post you're looking for doesn't exist or has been removed.",
-		notFoundTitle: 'Post Not Found',
-	},
-	es: {
-		backToBlogs: '← Volver al Blog',
-		notFoundText: 'La publicación que buscas no existe o ha sido eliminada.',
-		notFoundTitle: 'Publicación No Encontrada',
-	},
-	fr: {
-		backToBlogs: '← Retour au Blog',
-		notFoundText:
-			"L'article que vous recherchez n'existe pas ou a été supprimé.",
-		notFoundTitle: 'Article Non Trouvé',
-	},
-	ja: {
-		backToBlogs: '← ブログに戻る',
-		notFoundText: 'お探しの記事は存在しないか、削除されました。',
-		notFoundTitle: '記事が見つかりません',
-	},
-} as const
 
 const POST_QUERY = `*[
   _type == "post"
@@ -126,7 +96,6 @@ const portableTextComponents: PortableTextComponents = {
 
 export default function BlogPost({ loaderData }: Route.ComponentProps) {
 	const { locale } = useOutletContext<{ locale: Locale }>()
-	const t = TRANSLATIONS[locale] || TRANSLATIONS.es
 	const { post } = loaderData
 
 	if (!post) {
@@ -134,11 +103,17 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
 			<main className={styles.main}>
 				<div className={styles.container}>
 					<Link to={`/${locale}/blog`} className={styles.backLink}>
-						{t.backToBlogs}
+						<Trans>← Back to Blog</Trans>
 					</Link>
 					<div className={styles.notFound}>
-						<h1 className={styles.notFoundTitle}>{t.notFoundTitle}</h1>
-						<p className={styles.notFoundText}>{t.notFoundText}</p>
+						<h1 className={styles.notFoundTitle}>
+							<Trans>Post Not Found</Trans>
+						</h1>
+						<p className={styles.notFoundText}>
+							<Trans>
+								The post you are looking for does not exist or has been removed.
+							</Trans>
+						</p>
 					</div>
 				</div>
 			</main>
@@ -155,7 +130,7 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
 		<main className={styles.main}>
 			<div className={styles.container}>
 				<Link to={`/${locale}/blog`} className={styles.backLink}>
-					{t.backToBlogs}
+					<Trans>← Back to Blog</Trans>
 				</Link>
 
 				<article className={styles.article}>

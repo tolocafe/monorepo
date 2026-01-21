@@ -1,3 +1,5 @@
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import { useOutletContext } from 'react-router'
@@ -8,57 +10,6 @@ import type { Location } from '@/lib/sanity'
 
 import type { Route } from './+types/location'
 import * as styles from './location.css'
-
-const TRANSLATIONS = {
-	de: {
-		addressLabel: 'Adresse',
-		backToLocations: '← Zurück zu Standorten',
-		emailLabel: 'E-Mail',
-		hoursLabel: 'Öffnungszeiten',
-		notFoundText:
-			'Der Standort, den Sie suchen, existiert nicht oder wurde entfernt.',
-		notFoundTitle: 'Standort Nicht Gefunden',
-		phoneLabel: 'Telefon',
-	},
-	en: {
-		addressLabel: 'Address',
-		backToLocations: '← Back to Locations',
-		emailLabel: 'Email',
-		hoursLabel: 'Hours',
-		notFoundText:
-			"The location you're looking for doesn't exist or has been removed.",
-		notFoundTitle: 'Location Not Found',
-		phoneLabel: 'Phone',
-	},
-	es: {
-		addressLabel: 'Dirección',
-		backToLocations: '← Volver a Ubicaciones',
-		emailLabel: 'Correo',
-		hoursLabel: 'Horario',
-		notFoundText: 'La ubicación que buscas no existe o ha sido eliminada.',
-		notFoundTitle: 'Ubicación No Encontrada',
-		phoneLabel: 'Teléfono',
-	},
-	fr: {
-		addressLabel: 'Adresse',
-		backToLocations: '← Retour aux Emplacements',
-		emailLabel: 'E-mail',
-		hoursLabel: 'Horaires',
-		notFoundText:
-			"L'emplacement que vous recherchez n'existe pas ou a été supprimé.",
-		notFoundTitle: 'Emplacement Non Trouvé',
-		phoneLabel: 'Téléphone',
-	},
-	ja: {
-		addressLabel: '住所',
-		backToLocations: '← 店舗一覧に戻る',
-		emailLabel: 'メール',
-		hoursLabel: '営業時間',
-		notFoundText: 'お探しの店舗は存在しないか、削除されました。',
-		notFoundTitle: '店舗が見つかりません',
-		phoneLabel: '電話',
-	},
-} as const
 
 const LOCATION_QUERY = `*[
   _type == "location"
@@ -138,7 +89,6 @@ const portableTextComponents: PortableTextComponents = {
 
 export default function LocationDetail({ loaderData }: Route.ComponentProps) {
 	const { locale } = useOutletContext<{ locale: Locale }>()
-	const t = TRANSLATIONS[locale] || TRANSLATIONS.es
 	const { location } = loaderData
 
 	if (!location) {
@@ -146,8 +96,15 @@ export default function LocationDetail({ loaderData }: Route.ComponentProps) {
 			<main className={styles.main}>
 				<div className={styles.container}>
 					<div className={styles.notFound}>
-						<h1 className={styles.notFoundTitle}>{t.notFoundTitle}</h1>
-						<p className={styles.notFoundText}>{t.notFoundText}</p>
+						<h1 className={styles.notFoundTitle}>
+							<Trans>Location Not Found</Trans>
+						</h1>
+						<p className={styles.notFoundText}>
+							<Trans>
+								The location you are looking for does not exist or has been
+								removed.
+							</Trans>
+						</p>
 					</div>
 				</div>
 			</main>
@@ -205,19 +162,19 @@ export default function LocationDetail({ loaderData }: Route.ComponentProps) {
 					<div className={styles.detailsGrid}>
 						{fullAddress && (
 							<div className={styles.detailItem}>
-								<span className={styles.detailLabel}>{t.addressLabel}</span>
+								<span className={styles.detailLabel}>{t`Address`}</span>
 								<span className={styles.detailValue}>{fullAddress}</span>
 							</div>
 						)}
 						{hours && (
 							<div className={styles.detailItem}>
-								<span className={styles.detailLabel}>{t.hoursLabel}</span>
+								<span className={styles.detailLabel}>{t`Hours`}</span>
 								<span className={styles.detailValue}>{hours}</span>
 							</div>
 						)}
 						{location.phone && (
 							<div className={styles.detailItem}>
-								<span className={styles.detailLabel}>{t.phoneLabel}</span>
+								<span className={styles.detailLabel}>{t`Phone`}</span>
 								<a href={`tel:${location.phone}`} className={styles.detailLink}>
 									{location.phone}
 								</a>
@@ -225,7 +182,7 @@ export default function LocationDetail({ loaderData }: Route.ComponentProps) {
 						)}
 						{location.email && (
 							<div className={styles.detailItem}>
-								<span className={styles.detailLabel}>{t.emailLabel}</span>
+								<span className={styles.detailLabel}>{t`Email`}</span>
 								<a
 									href={`mailto:${location.email}`}
 									className={styles.detailLink}

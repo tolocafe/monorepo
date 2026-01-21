@@ -15,9 +15,12 @@
 		"format": "oxfmt .",
 		"format:check": "oxfmt --check .",
 		"lint": "react-router typegen && oxlint --type-aware",
-		"clean": "rm -rf node_modules dist .wrangler .react-router tsconfig.tsbuildinfo"
+		"clean": "rm -rf node_modules dist .wrangler .react-router tsconfig.tsbuildinfo",
+		"lingui:extract": "lingui extract --clean"
 	},
 	"dependencies": {
+		"@lingui/core": "5.8.0",
+		"@lingui/react": "5.8.0",
 		"@portabletext/react": "6.0.0",
 		"@portabletext/types": "catalog:",
 		"@posthog/react": "1.5.2",
@@ -32,8 +35,14 @@
 		"react-router": "7.11.0"
 	},
 	"devDependencies": {
+		"@babel/preset-typescript": "^7.28.5",
 		"@cloudflare/vite-plugin": "~1.21.0",
 		"@cloudflare/workers-types": "~4.20251229.0",
+		"@lingui/babel-plugin-lingui-macro": "^5.8.0",
+		"@lingui/cli": "5.8.0",
+		"@lingui/macro": "5.8.0",
+		"@lingui/swc-plugin": "5.8.0",
+		"@lingui/vite-plugin": "5.8.0",
 		"@react-router/dev": "7.11.0",
 		"@tolo/oxfmt-config": "workspace:*",
 		"@tolo/oxlint-config": "workspace:*",
@@ -42,10 +51,14 @@
 		"@types/react": "catalog:",
 		"@types/react-dom": "catalog:",
 		"@typescript/native-preview": "catalog:",
+		"@vitejs/plugin-react": "^5.1.2",
+		"@vitejs/plugin-react-swc": "^3.10.0",
+		"babel-plugin-macros": "^3.1.0",
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
 		"oxlint-tsgolint": "catalog:",
 		"vite": "~7.3.0",
+		"vite-plugin-babel": "^1.4.1",
 		"vite-plugin-svgr": "^4.5.0",
 		"vite-tsconfig-paths": "~6.0.4",
 		"wrangler": "catalog:"

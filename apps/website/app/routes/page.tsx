@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react/macro'
 import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import { useOutletContext } from 'react-router'
@@ -8,29 +9,6 @@ import type { Page } from '@/lib/sanity'
 
 import type { Route } from './+types/page'
 import * as styles from './page.css'
-
-const TRANSLATIONS = {
-	de: {
-		notFoundText: 'Die Seite, die Sie suchen, existiert nicht.',
-		notFoundTitle: 'Seite Nicht Gefunden',
-	},
-	en: {
-		notFoundText: "The page you're looking for doesn't exist.",
-		notFoundTitle: 'Page Not Found',
-	},
-	es: {
-		notFoundText: 'La página que buscas no existe.',
-		notFoundTitle: 'Página No Encontrada',
-	},
-	fr: {
-		notFoundText: "La page que vous recherchez n'existe pas.",
-		notFoundTitle: 'Page Non Trouvée',
-	},
-	ja: {
-		notFoundText: 'お探しのページは存在しません。',
-		notFoundTitle: 'ページが見つかりません',
-	},
-} as const
 
 const PAGE_QUERY = `*[
   _type == "page"
@@ -111,7 +89,6 @@ const portableTextComponents: PortableTextComponents = {
 
 export default function PageRoute({ loaderData }: Route.ComponentProps) {
 	const { locale } = useOutletContext<{ locale: Locale }>()
-	const t = TRANSLATIONS[locale] || TRANSLATIONS.es
 	const { page } = loaderData
 
 	if (!page) {
@@ -119,8 +96,12 @@ export default function PageRoute({ loaderData }: Route.ComponentProps) {
 			<main className={styles.main}>
 				<div className={styles.container}>
 					<div className={styles.notFound}>
-						<h1 className={styles.notFoundTitle}>{t.notFoundTitle}</h1>
-						<p className={styles.notFoundText}>{t.notFoundText}</p>
+						<h1 className={styles.notFoundTitle}>
+							<Trans>Page Not Found</Trans>
+						</h1>
+						<p className={styles.notFoundText}>
+							<Trans>The page you are looking for does not exist.</Trans>
+						</p>
 					</div>
 				</div>
 			</main>

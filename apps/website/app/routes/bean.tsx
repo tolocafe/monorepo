@@ -1,3 +1,5 @@
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
 import type { Locale } from '@/lib/locale'
@@ -6,77 +8,6 @@ import type { Bean } from '@/lib/sanity'
 
 import type { Route } from './+types/bean'
 import * as styles from './bean.css'
-
-const TRANSLATIONS = {
-	de: {
-		agtronLabel: 'Agtron',
-		altitudeLabel: 'Höhe',
-		backToBeans: '← Zurück zu Unseren Bohnen',
-		notFoundText:
-			'Die Kaffeebohne, die Sie suchen, existiert nicht oder wurde entfernt.',
-		notFoundTitle: 'Bohne Nicht Gefunden',
-		originLabel: 'Herkunft',
-		processLabel: 'Verarbeitung',
-		producerLabel: 'Produzent',
-		regionLabel: 'Region',
-		tastingNotesLabel: 'Verkostungsnotizen',
-		varietalLabel: 'Sorte',
-	},
-	en: {
-		agtronLabel: 'Agtron',
-		altitudeLabel: 'Altitude',
-		backToBeans: '← Back to Our Beans',
-		notFoundText:
-			"The coffee bean you're looking for doesn't exist or has been removed.",
-		notFoundTitle: 'Bean Not Found',
-		originLabel: 'Origin',
-		processLabel: 'Process',
-		producerLabel: 'Producer',
-		regionLabel: 'Region',
-		tastingNotesLabel: 'Tasting Notes',
-		varietalLabel: 'Varietal',
-	},
-	es: {
-		agtronLabel: 'Agtron',
-		altitudeLabel: 'Altitud',
-		backToBeans: '← Volver a Nuestros Granos',
-		notFoundText: 'El grano de café que buscas no existe o ha sido eliminado.',
-		notFoundTitle: 'Grano No Encontrado',
-		originLabel: 'Origen',
-		processLabel: 'Proceso',
-		producerLabel: 'Productor',
-		regionLabel: 'Región',
-		tastingNotesLabel: 'Notas de Cata',
-		varietalLabel: 'Variedad',
-	},
-	fr: {
-		agtronLabel: 'Agtron',
-		altitudeLabel: 'Altitude',
-		backToBeans: '← Retour à Nos Grains',
-		notFoundText:
-			"Le grain de café que vous recherchez n'existe pas ou a été supprimé.",
-		notFoundTitle: 'Grain Non Trouvé',
-		originLabel: 'Origine',
-		processLabel: 'Procédé',
-		producerLabel: 'Producteur',
-		regionLabel: 'Région',
-		tastingNotesLabel: 'Notes de Dégustation',
-		varietalLabel: 'Variété',
-	},
-	ja: {
-		agtronLabel: 'アグトロン',
-		altitudeLabel: '標高',
-		backToBeans: '← コーヒー豆一覧に戻る',
-		notFoundText: 'お探しのコーヒー豆は存在しないか、削除されました。',
-		notFoundTitle: 'コーヒー豆が見つかりません',
-		originLabel: '産地',
-		processLabel: '精製方法',
-		producerLabel: '生産者',
-		regionLabel: '地域',
-		tastingNotesLabel: 'テイスティングノート',
-		varietalLabel: '品種',
-	},
-} as const
 
 const BEAN_QUERY = `*[
   _type == "bean"
@@ -147,7 +78,6 @@ export function meta({ data, params }: Route.MetaArgs) {
 
 export default function BeanDetail({ loaderData }: Route.ComponentProps) {
 	const { locale } = useOutletContext<{ locale: Locale }>()
-	const t = TRANSLATIONS[locale] || TRANSLATIONS.es
 	const { bean } = loaderData
 	const beansPath = locale === 'en' ? 'beans' : 'granos'
 
@@ -156,11 +86,18 @@ export default function BeanDetail({ loaderData }: Route.ComponentProps) {
 			<main className={styles.main}>
 				<div className={styles.container}>
 					<Link to={`/${locale}/${beansPath}`} className={styles.backLink}>
-						{t.backToBeans}
+						<Trans>← Back to Our Beans</Trans>
 					</Link>
 					<div className={styles.notFound}>
-						<h1 className={styles.notFoundTitle}>{t.notFoundTitle}</h1>
-						<p className={styles.notFoundText}>{t.notFoundText}</p>
+						<h1 className={styles.notFoundTitle}>
+							<Trans>Bean Not Found</Trans>
+						</h1>
+						<p className={styles.notFoundText}>
+							<Trans>
+								The coffee bean you are looking for does not exist or has been
+								removed.
+							</Trans>
+						</p>
 					</div>
 				</div>
 			</main>
@@ -184,23 +121,23 @@ export default function BeanDetail({ loaderData }: Route.ComponentProps) {
 		: null
 
 	const details = [
-		{ label: t.originLabel, value: origin },
-		{ label: t.regionLabel, value: region },
-		{ label: t.producerLabel, value: producer },
-		{ label: t.varietalLabel, value: varietal },
+		{ label: t`Origin`, value: origin },
+		{ label: t`Region`, value: region },
+		{ label: t`Producer`, value: producer },
+		{ label: t`Varietal`, value: varietal },
 		{
-			label: t.altitudeLabel,
+			label: t`Altitude`,
 			value: bean.altitude ? `${bean.altitude}m` : null,
 		},
-		{ label: t.processLabel, value: process },
-		{ label: t.agtronLabel, value: bean.agtron?.toString() },
+		{ label: t`Process`, value: process },
+		{ label: t`Agtron`, value: bean.agtron?.toString() },
 	].filter((d) => d.value)
 
 	return (
 		<main className={styles.main}>
 			<div className={styles.container}>
 				<Link to={`/${locale}/${beansPath}`} className={styles.backLink}>
-					{t.backToBeans}
+					<Trans>← Back to Our Beans</Trans>
 				</Link>
 
 				<article className={styles.article}>
@@ -235,7 +172,9 @@ export default function BeanDetail({ loaderData }: Route.ComponentProps) {
 
 					{tastingNotes && (
 						<section className={styles.tastingSection}>
-							<h2 className={styles.sectionTitle}>{t.tastingNotesLabel}</h2>
+							<h2 className={styles.sectionTitle}>
+								<Trans>Tasting Notes</Trans>
+							</h2>
 							<p className={styles.tastingNotes}>{tastingNotes}</p>
 						</section>
 					)}

@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import { Trans } from '@lingui/react/macro'
 import type { Product } from '@tolo/common/api'
 import { Image } from 'expo-image'
-import { Link } from 'expo-router'
+import { Link, LinkTrigger } from 'expo-router'
 import { Pressable, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
@@ -51,7 +51,7 @@ export default function MenuListItem(props: Props) {
 		<Animated.View style={[animatedStyle, styles.menuItemContainer]}>
 			<Link href={`/products/${item.product_id}`} asChild>
 				{/* TODO: maybe add a preview and menu */}
-				<Link.Trigger>
+				<LinkTrigger>
 					<Pressable
 						onPressIn={() => {
 							scaleValue.value = withSpring(1.07)
@@ -111,7 +111,7 @@ export default function MenuListItem(props: Props) {
 							</View>
 						</Card>
 					</Pressable>
-				</Link.Trigger>
+				</LinkTrigger>
 			</Link>
 		</Animated.View>
 	)

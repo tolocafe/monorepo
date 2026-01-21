@@ -108,7 +108,7 @@ export default function BlockText({ style, value }: BlockTextProps) {
 					href={value?.href}
 					rel="noopener noreferrer"
 					style={{
-						color: theme.colors.primary.solid,
+						color: String(theme.colors.primary.solid),
 						textDecoration: 'underline',
 					}}
 					target="_blank"

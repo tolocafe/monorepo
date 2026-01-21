@@ -1,8 +1,10 @@
 import { cloudflare } from '@cloudflare/vite-plugin'
+import { lingui } from '@lingui/vite-plugin'
 import { reactRouter } from '@react-router/dev/vite'
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin'
 import { defineConfig } from 'vite'
 import type { Plugin } from 'vite'
+import babel from 'vite-plugin-babel'
 import svgr from 'vite-plugin-svgr'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
@@ -69,10 +71,24 @@ function vanillaExtractCloudflare(): Plugin[] {
 }
 
 export default defineConfig({
+	optimizeDeps: {
+		include: ['@messageformat/parser'],
+	},
 	plugins: [
 		cloudflare({ viteEnvironment: { name: 'ssr' } }),
 		vanillaExtractCloudflare(),
+		// Babel must transform Lingui macros including React Router virtual modules
+		babel({
+			babelConfig: {
+				plugins: ['@lingui/babel-plugin-lingui-macro'],
+				presets: [
+					['@babel/preset-typescript', { allExtensions: true, isTSX: true }],
+				],
+			},
+			filter: /\.[jt]sx?(\?.*)?$/,
+		}),
 		reactRouter(),
+		lingui(),
 		svgr(),
 		tsconfigPaths({ projects: ['./tsconfig.json'] }),
 	],

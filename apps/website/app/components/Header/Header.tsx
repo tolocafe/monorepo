@@ -1,3 +1,5 @@
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useEffect, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 
@@ -13,72 +15,13 @@ import type { Locale } from '@/lib/locale'
 
 import * as styles from './Header.css'
 
-const TRANSLATIONS = {
-	de: {
-		about: 'Über uns',
-		aboutPath: 'ueber-uns',
-		beans: 'Bohnen',
-		beansPath: 'beans',
-		blog: 'Blog',
-		closeMenu: 'Menü schließen',
-		contact: 'Kontakt',
-		ctaApp: 'App herunterladen',
-		menuTitle: 'Menü',
-		openMenu: 'Menü öffnen',
-		visit: 'Besuchen',
-	},
-	en: {
-		about: 'About',
-		aboutPath: 'about',
-		beans: 'Beans',
-		beansPath: 'beans',
-		blog: 'Blog',
-		closeMenu: 'Close menu',
-		contact: 'Contact',
-		ctaApp: 'Get the app',
-		menuTitle: 'Menu',
-		openMenu: 'Open menu',
-		visit: 'Visit',
-	},
-	es: {
-		about: 'Nosotros',
-		aboutPath: 'nosotros',
-		beans: 'Granos',
-		beansPath: 'granos',
-		blog: 'Blog',
-		closeMenu: 'Cerrar menú',
-		contact: 'Contacto',
-		ctaApp: 'Descargar app',
-		menuTitle: 'Menú',
-		openMenu: 'Abrir menú',
-		visit: 'Visítanos',
-	},
-	fr: {
-		about: 'À propos',
-		aboutPath: 'a-propos',
-		beans: 'Grains',
-		beansPath: 'beans',
-		blog: 'Blog',
-		closeMenu: 'Fermer le menu',
-		contact: 'Contact',
-		ctaApp: 'Télécharger l’app',
-		menuTitle: 'Menu',
-		openMenu: 'Ouvrir le menu',
-		visit: 'Nous trouver',
-	},
-	ja: {
-		about: '私たちについて',
-		aboutPath: 'about',
-		beans: '豆',
-		beansPath: 'beans',
-		blog: 'ブログ',
-		closeMenu: 'メニューを閉じる',
-		contact: 'お問い合わせ',
-		ctaApp: 'アプリを入手',
-		menuTitle: 'メニュー',
-		openMenu: 'メニューを開く',
-		visit: '店舗情報',
-	},
+// Path segments for localized URLs (not display text)
+const LOCALE_PATHS = {
+	de: { aboutPath: 'ueber-uns', beansPath: 'beans' },
+	en: { aboutPath: 'about', beansPath: 'beans' },
+	es: { aboutPath: 'nosotros', beansPath: 'granos' },
+	fr: { aboutPath: 'a-propos', beansPath: 'beans' },
+	ja: { aboutPath: 'about', beansPath: 'beans' },
 } as const
 
 export function Header() {
@@ -91,27 +34,27 @@ export function Header() {
 		? localeParam
 		: DEFAULT_LOCALE
 	const pathWithoutLocale = getPathWithoutLocale(location.pathname)
-	const t = TRANSLATIONS[currentLocale] || TRANSLATIONS.es
+	const paths = LOCALE_PATHS[currentLocale] || LOCALE_PATHS.es
 
-	const beansTo = `/${currentLocale}/${t.beansPath}`
+	const beansTo = `/${currentLocale}/${paths.beansPath}`
 	const blogTo = `/${currentLocale}/blog`
-	const aboutTo = `/${currentLocale}/${t.aboutPath}`
+	const aboutTo = `/${currentLocale}/${paths.aboutPath}`
 	const visitTo = `/${currentLocale}#visit`
 	const contactTo = `/${currentLocale}/contact`
 	const appTo = `/${currentLocale}#app`
 
 	const navItems = [
-		{ label: t.beans, matchPath: beansTo, to: beansTo },
-		{ label: t.blog, matchPath: blogTo, to: blogTo },
-		{ label: t.about, matchPath: aboutTo, to: aboutTo },
+		{ label: t`Beans`, matchPath: beansTo, to: beansTo },
+		{ label: t`Blog`, matchPath: blogTo, to: blogTo },
+		{ label: t`About`, matchPath: aboutTo, to: aboutTo },
 		{
-			label: t.visit,
+			label: t`Visit`,
 			matchHash: '#visit',
 			matchPath: `/${currentLocale}`,
 			to: visitTo,
 		},
 		{
-			label: t.contact,
+			label: t`Contact`,
 			matchPath: contactTo,
 			to: contactTo,
 		},
@@ -174,7 +117,7 @@ export function Header() {
 
 				<div className={styles.right}>
 					<Link to={appTo} className={styles.cta}>
-						{t.ctaApp}
+						<Trans>Download app</Trans>
 					</Link>
 
 					<nav className={styles.localeNav} aria-label="Language selection">
@@ -196,7 +139,7 @@ export function Header() {
 						type="button"
 						className={styles.menuButton}
 						onClick={() => setIsMobileMenuOpen(true)}
-						aria-label={t.openMenu}
+						aria-label={t`Open menu`}
 						aria-expanded={isMobileMenuOpen}
 						aria-controls="mobile-menu"
 					>
@@ -216,7 +159,7 @@ export function Header() {
 						className={styles.mobilePanel}
 						role="dialog"
 						aria-modal="true"
-						aria-label={t.menuTitle}
+						aria-label={t`Menu`}
 					>
 						<div className={styles.mobileHeader}>
 							<span className={styles.mobileTitle}>TOLO</span>
@@ -224,7 +167,7 @@ export function Header() {
 								type="button"
 								className={styles.mobileClose}
 								onClick={() => setIsMobileMenuOpen(false)}
-								aria-label={t.closeMenu}
+								aria-label={t`Close menu`}
 							>
 								<CloseIcon />
 							</button>
@@ -239,7 +182,7 @@ export function Header() {
 						</nav>
 
 						<Link to={appTo} className={styles.mobileCta}>
-							{t.ctaApp}
+							<Trans>Download app</Trans>
 						</Link>
 					</div>
 				</>

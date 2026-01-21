@@ -74,7 +74,7 @@ export default function SignInScreen() {
 				})
 				.catch(captureException)
 
-			router.replace('/', { withAnchor: false })
+			router.replace('/')
 		},
 	})
 
