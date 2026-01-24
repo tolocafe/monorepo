@@ -52,6 +52,7 @@
 		"crons": ["* * * * *"]
 	},
 	"vars": {
-		"SANITY_PROJECT_ID": "m1zo6pvi"
+		"SANITY_PROJECT_ID": "m1zo6pvi",
+		"SHOPIFY_STORE_DOMAIN": ""
 	}
 }
