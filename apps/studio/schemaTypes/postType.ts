@@ -1,3 +1,4 @@
+import { ComposeIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
 import { baseLanguage } from './localeStringType'
@@ -56,6 +57,7 @@ export const postType = defineType({
 			type: 'localeBlockContent',
 		}),
 	],
+	icon: ComposeIcon,
 	name: 'post',
 	orderings: [
 		{

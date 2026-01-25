@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
-import { useOutletContext } from 'react-router'
+import { Link, useOutletContext } from 'react-router'
 
 import type { Locale } from '@/lib/locale'
 import { client, getLocalizedString } from '@/lib/sanity'
@@ -9,6 +9,16 @@ import type { Page } from '@/lib/sanity'
 
 import type { Route } from './+types/page'
 import * as styles from './page.css'
+
+const LOCALE_PATHS = {
+	de: { beansPath: 'beans' },
+	en: { beansPath: 'beans' },
+	es: { beansPath: 'granos' },
+	fr: { beansPath: 'beans' },
+	ja: { beansPath: 'beans' },
+} as const
+
+const ABOUT_SLUGS = ['about', 'nosotros', 'a-propos', 'ueber-uns'] as const
 
 const PAGE_QUERY = `*[
   _type == "page"
@@ -34,7 +44,17 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const isAboutPage =
 		slug.includes('about') || slug.includes('acerca') || slug.includes('sobre')
 
-	return [
+	// Pages that should be hidden from search engines
+	const noIndexSlugs = [
+		'investors',
+		'inversionistas',
+		'investisseurs',
+		'investoren',
+		'investidores',
+	]
+	const shouldNoIndex = noIndexSlugs.includes(slug)
+
+	const metaTags = [
 		{ title: `${title} - TOLO` },
 		{
 			content: excerpt,
@@ -54,6 +74,12 @@ export function meta({ data, params }: Route.MetaArgs) {
 			},
 		},
 	]
+
+	if (shouldNoIndex) {
+		metaTags.push({ content: 'noindex, nofollow', name: 'robots' })
+	}
+
+	return metaTags
 }
 
 const portableTextComponents: PortableTextComponents = {
@@ -87,9 +113,15 @@ const portableTextComponents: PortableTextComponents = {
 	},
 }
 
-export default function PageRoute({ loaderData }: Route.ComponentProps) {
+export default function PageRoute({
+	loaderData,
+	params,
+}: Route.ComponentProps) {
 	const { locale } = useOutletContext<{ locale: Locale }>()
 	const { page } = loaderData
+	const slug = params.slug || ''
+	const isAboutPage = ABOUT_SLUGS.some((aboutSlug) => slug === aboutSlug)
+	const paths = LOCALE_PATHS[locale] || LOCALE_PATHS.es
 
 	if (!page) {
 		return (
@@ -122,6 +154,20 @@ export default function PageRoute({ loaderData }: Route.ComponentProps) {
 					<div className={styles.body}>
 						<PortableText value={body} components={portableTextComponents} />
 					</div>
+				)}
+
+				{isAboutPage && (
+					<nav className={styles.aboutLinks}>
+						<Link
+							to={`/${locale}/${paths.beansPath}`}
+							className={styles.aboutLink}
+						>
+							<Trans>Our Beans</Trans>
+						</Link>
+						<Link to={`/${locale}/blog`} className={styles.aboutLink}>
+							<Trans>Blog</Trans>
+						</Link>
+					</nav>
 				)}
 			</div>
 		</main>

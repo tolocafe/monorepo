@@ -1,4 +1,4 @@
-import { TagIcon } from '@sanity/icons'
+import { LeaveIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
 import { baseLanguage } from './localeStringType'
@@ -122,7 +122,7 @@ export const beanType = defineType({
 			type: 'boolean',
 		}),
 	],
-	icon: TagIcon,
+	icon: LeaveIcon,
 	name: 'bean',
 	orderings: [
 		{

@@ -201,6 +201,26 @@ Follow Conventional Commits v1.0.0:
 - Max 50 characters for subject line
 - Example: `feat(app): add coffee item filtering`
 
+## Brand Guidelines
+
+### Image Atmosphere Prompt
+
+When generating images for Tolo (blog posts, marketing, social media), append this atmosphere prompt to ensure brand consistency:
+
+```
+Warm and cozy mood with an inviting café feeling. Bright and airy lighting with clean shadows and high-key exposure. Soft pastel color palette with muted, gentle tones. Authentic documentary style capturing real, candid moments with an unposed feeling. People should appear Mexican/Latino/Hispanic. Urban settings should reflect small-city Mexican streets and neighborhoods. Home interiors should reflect Mexican middle-class aesthetic with warm, lived-in character. Coffee equipment (grinders, scales, roasters, brewing tools) should appear modern and contemporary.
+```
+
+**Key attributes:**
+- **Mood**: Warm & cozy, inviting, comfortable, intimate
+- **Lighting**: Bright & airy, well-lit, clean shadows, natural window light
+- **Colors**: Soft pastels, muted tones, gentle understated colors
+- **Style**: Authentic/documentary, real moments, candid, unposed
+- **People**: Mexican/Latino/Hispanic appearance
+- **Urban settings**: Small-city Mexican streets and neighborhoods
+- **Home interiors**: Mexican middle-class aesthetic, warm and lived-in
+- **Coffee equipment**: Modern, contemporary grinders, scales, roasters, and brewing tools
+
 ## Security Notes
 
 ### Rate Limiting

@@ -1,13 +1,14 @@
-/// <reference types="vite-plugin-svgr/client" />
-
 import { Trans } from '@lingui/react/macro'
+import {
+	IconBrandFacebook,
+	IconBrandInstagram,
+	IconBrandTiktok,
+	IconBrandTripadvisor,
+} from '@tabler/icons-react'
 import { Link, useParams } from 'react-router'
 
 import AppStoreBadge from '@/assets/logos/app-store.svg'
-import FacebookLogo from '@/assets/logos/facebook.svg?react'
 import GooglePlayBadge from '@/assets/logos/google-play.svg'
-import InstagramLogo from '@/assets/logos/instagram.svg?react'
-import TikTokLogo from '@/assets/logos/tiktok.svg?react'
 import { isValidLocale, DEFAULT_LOCALE } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { getLocalizedString, getLocalizedSlug } from '@/lib/sanity'
@@ -128,7 +129,7 @@ export function Footer({ locations = [] }: FooterProps) {
 
 					<div className={styles.section}>
 						<h3 className={styles.sectionTitle}>
-							<Trans>Download the App</Trans>
+							<Trans>Download</Trans>
 						</h3>
 						<div className={styles.storeLinks}>
 							<a
@@ -171,24 +172,36 @@ export function Footer({ locations = [] }: FooterProps) {
 						target="_blank"
 						rel="noreferrer"
 						className={styles.socialLink}
+						aria-label="Instagram"
 					>
-						<InstagramLogo className={styles.socialIcon} title="Instagram" />
+						<IconBrandInstagram size={20} aria-hidden="true" />
 					</a>
 					<a
 						href="https://facebook.com/tolo.cafe"
 						target="_blank"
 						rel="noreferrer"
 						className={styles.socialLink}
+						aria-label="Facebook"
 					>
-						<FacebookLogo className={styles.socialIcon} title="Facebook" />
+						<IconBrandFacebook size={20} aria-hidden="true" />
 					</a>
 					<a
 						href="https://tiktok.com/@tolo.cafe"
 						target="_blank"
 						rel="noreferrer"
 						className={styles.socialLink}
+						aria-label="TikTok"
 					>
-						<TikTokLogo className={styles.socialIcon} title="TikTok" />
+						<IconBrandTiktok size={20} aria-hidden="true" />
+					</a>
+					<a
+						href="https://www.tripadvisor.com/Restaurant_Review-g644384-d33287081-Reviews-TOLO_Buen_Cafe-Toluca_Central_Mexico_and_Gulf_Coast.html"
+						target="_blank"
+						rel="noreferrer"
+						className={styles.socialLink}
+						aria-label="TripAdvisor"
+					>
+						<IconBrandTripadvisor size={20} aria-hidden="true" />
 					</a>
 					<Link
 						to={`/${locale}/${paths.privacyPath}`}

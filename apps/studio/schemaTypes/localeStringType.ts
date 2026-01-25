@@ -54,12 +54,59 @@ export const localeTextType = createLocaleType(
 	{ rows: 3 },
 )
 
-export const localeBlockContentType = createLocaleType(
-	'localeBlockContent',
-	'Localized block content',
-	'array',
-	{ of: [{ type: 'block' }] },
-)
+export const localeBlockContentType = defineType({
+	fields: supportedLanguages.map((lang) => ({
+		fieldset: lang.isDefault ? undefined : 'translations',
+		name: lang.id,
+		of: [
+			{
+				lists: [
+					{ title: 'Bullet', value: 'bullet' },
+					{ title: 'Numbered', value: 'number' },
+				],
+				marks: {
+					annotations: [
+						{
+							fields: [
+								{
+									name: 'href',
+									title: 'URL',
+									type: 'url',
+									validation: (rule) =>
+										rule.uri({
+											allowRelative: true,
+											scheme: ['http', 'https', 'mailto', 'tel'],
+										}),
+								},
+							],
+							name: 'link',
+							title: 'Link',
+							type: 'object',
+						},
+					],
+					decorators: [
+						{ title: 'Bold', value: 'strong' },
+						{ title: 'Italic', value: 'em' },
+						{ title: 'Underline', value: 'underline' },
+					],
+				},
+				styles: [
+					{ title: 'Normal', value: 'normal' },
+					{ title: 'H2', value: 'h2' },
+					{ title: 'H3', value: 'h3' },
+					{ title: 'Quote', value: 'blockquote' },
+				],
+				type: 'block',
+			},
+		],
+		title: lang.title,
+		type: 'array',
+	})),
+	fieldsets: [translationsFieldset],
+	name: 'localeBlockContent',
+	title: 'Localized block content',
+	type: 'object',
+})
 
 export const localeSlugType = defineType({
 	fields: supportedLanguages.map((lang) => ({

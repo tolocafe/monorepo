@@ -1,4 +1,4 @@
-import { BasketIcon } from '@sanity/icons'
+import { DropIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
 import { baseLanguage } from './localeStringType'
@@ -121,7 +121,7 @@ export const productType = defineType({
 			type: 'localeBlockContent',
 		}),
 	],
-	icon: BasketIcon,
+	icon: DropIcon,
 	name: 'product',
 	orderings: [
 		{

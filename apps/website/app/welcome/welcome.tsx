@@ -269,8 +269,8 @@ export function Welcome({ locale }: WelcomeProps) {
 								<Trans>
 									Order your favorite coffee ahead and pick it up when you
 									arrive, no waiting. Save your favorites, repeat previous
-									orders and receive exclusive offers. The app is free and
-									available for iOS and Android.
+									orders in one tap and receive exclusive offers just for app
+									users. The app is free and available for iOS and Android.
 								</Trans>
 							</p>
 							<div className={styles.storeButtons}>
@@ -329,7 +329,7 @@ export function Welcome({ locale }: WelcomeProps) {
 									target="_blank"
 									rel="noreferrer"
 									className={styles.directionsLink}
-									style={{ marginTop: vars.space[4] }}
+									style={{ marginTop: vars.space.base }}
 								>
 									<Trans>Open in Google Maps</Trans>
 								</a>

@@ -5,7 +5,7 @@ import { vars } from '@/styles'
 export const main = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space[12]} ${vars.space[6]}`,
+	padding: `${vars.space['4xl']} ${vars.space.xl}`,
 })
 
 export const container = style({
@@ -14,7 +14,7 @@ export const container = style({
 })
 
 export const header = style({
-	marginBottom: vars.space[8],
+	marginBottom: vars.space['2xl'],
 	textAlign: 'center',
 })
 
@@ -37,41 +37,41 @@ export const body = style({
 
 // Portable Text styles
 export const paragraph = style({
-	marginBottom: vars.space[6],
+	marginBottom: vars.space.xl,
 })
 
 export const heading2 = style({
 	fontSize: vars.fontSize['2xl'],
 	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space[4],
-	marginTop: vars.space[8],
+	marginBottom: vars.space.base,
+	marginTop: vars.space['2xl'],
 })
 
 export const heading3 = style({
 	fontSize: vars.fontSize.xl,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[3],
-	marginTop: vars.space[6],
+	marginBottom: vars.space.md,
+	marginTop: vars.space.xl,
 })
 
 export const blockquote = style({
 	borderLeft: `4px solid ${vars.color.secondary}`,
 	color: vars.color.text,
 	fontStyle: 'italic',
-	marginBottom: vars.space[6],
+	marginBottom: vars.space.xl,
 	marginLeft: 0,
 	marginRight: 0,
-	marginTop: vars.space[6],
-	paddingLeft: vars.space[6],
+	marginTop: vars.space.xl,
+	paddingLeft: vars.space.xl,
 })
 
 export const list = style({
-	marginBottom: vars.space[6],
-	paddingLeft: vars.space[6],
+	marginBottom: vars.space.xl,
+	paddingLeft: vars.space.xl,
 })
 
 export const listItem = style({
-	marginBottom: vars.space[2],
+	marginBottom: vars.space.sm,
 })
 
 export const link = style({
@@ -80,17 +80,36 @@ export const link = style({
 })
 
 export const notFound = style({
-	padding: vars.space[12],
+	padding: vars.space['4xl'],
 	textAlign: 'center',
 })
 
 export const notFoundTitle = style({
 	fontSize: vars.fontSize['3xl'],
 	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 })
 
 export const notFoundText = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.lg,
+})
+
+export const aboutLinks = style({
+	borderTop: `1px solid ${vars.color.surface}`,
+	display: 'flex',
+	gap: vars.space.lg,
+	justifyContent: 'center',
+	marginTop: vars.space['2xl'],
+	paddingTop: vars.space['2xl'],
+})
+
+export const aboutLink = style({
+	':hover': {
+		textDecoration: 'underline',
+	},
+	color: vars.color.secondary,
+	fontSize: vars.fontSize.lg,
+	fontWeight: vars.fontWeight.medium,
+	textDecoration: 'none',
 })

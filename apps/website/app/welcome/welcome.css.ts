@@ -63,13 +63,13 @@ export const heroOverlay = style({
 export const heroContent = style({
 	'@media': {
 		'(min-width: 768px)': {
-			padding: `${vars.space[16]} ${vars.space[6]}`,
+			padding: `${vars.space['5xl']} ${vars.space.xl}`,
 			textAlign: 'left',
 		},
 	},
 	margin: '0 auto',
 	maxWidth: '1100px',
-	padding: `${vars.space[10]} ${vars.space[6]}`,
+	padding: `${vars.space['3xl']} ${vars.space.xl}`,
 	position: 'relative',
 	textAlign: 'center',
 	zIndex: 10,
@@ -81,7 +81,7 @@ export const heroTitle = style({
 	fontWeight: vars.fontWeight.bold,
 	letterSpacing: '-0.02em',
 	lineHeight: vars.lineHeight.none,
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 	textTransform: 'none',
 })
 
@@ -106,9 +106,9 @@ export const heroActions = style({
 	},
 	display: 'flex',
 	flexWrap: 'wrap',
-	gap: vars.space[3],
+	gap: vars.space.md,
 	justifyContent: 'center',
-	marginTop: vars.space[8],
+	marginTop: vars.space['2xl'],
 })
 
 export const heroPrimaryButton = style([
@@ -127,26 +127,26 @@ export const heroTertiaryButton = buttonLight
 
 // Trust Bar
 export const quickLinksSection = style({
-	padding: `${vars.space[10]} ${vars.space[6]} ${vars.space[16]}`,
+	padding: `${vars.space['3xl']} ${vars.space.xl} ${vars.space['5xl']}`,
 })
 
 export const trustBar = style({
 	'@media': {
 		'(max-width: 640px)': {
-			gap: vars.space[3],
-			padding: vars.space[4],
+			gap: vars.space.md,
+			padding: vars.space.base,
 		},
 		'(min-width: 768px)': {
-			gap: vars.space[6],
+			gap: vars.space.xl,
 		},
 	},
 	backgroundColor: vars.color.surface,
 	borderRadius: vars.radius['2xl'],
 	display: 'grid',
-	gap: vars.space[4],
+	gap: vars.space.base,
 	gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-	marginBottom: vars.space[10],
-	padding: vars.space[5],
+	marginBottom: vars.space['3xl'],
+	padding: vars.space.lg,
 })
 
 export const trustItem = style({
@@ -164,7 +164,7 @@ export const trustLabel = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.sm,
 	lineHeight: vars.lineHeight.normal,
-	marginTop: vars.space[2],
+	marginTop: vars.space.sm,
 })
 
 // Quick Cards
@@ -175,7 +175,7 @@ export const quickLinksGrid = style({
 		},
 	},
 	display: 'grid',
-	gap: vars.space[6],
+	gap: vars.space.xl,
 	gridTemplateColumns: '1fr',
 })
 
@@ -188,7 +188,7 @@ export const quickCard = style([
 		},
 		display: 'flex',
 		flexDirection: 'column',
-		padding: vars.space[5],
+		padding: vars.space.lg,
 		textDecoration: 'none',
 	},
 ])
@@ -196,7 +196,7 @@ export const quickCard = style([
 export const quickCardImage = style({
 	aspectRatio: '16 / 10',
 	borderRadius: vars.radius.xl,
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 	objectFit: 'cover',
 	width: '100%',
 })
@@ -209,14 +209,14 @@ export const quickCardTitle = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.xl,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[2],
+	marginBottom: vars.space.sm,
 })
 
 export const quickCardText = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
-	marginBottom: vars.space[3],
+	marginBottom: vars.space.md,
 })
 
 export const quickCardCta = style({
@@ -253,7 +253,7 @@ export const sectionTitle = style({
 	},
 	fontSize: vars.fontSize['3xl'],
 	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space[6],
+	marginBottom: vars.space.xl,
 })
 
 export const sectionText = style({
@@ -276,7 +276,7 @@ export const aboutGrid = style({
 	},
 	alignItems: 'center',
 	display: 'grid',
-	gap: vars.space[10],
+	gap: vars.space['3xl'],
 	gridTemplateColumns: '1fr',
 })
 
@@ -317,9 +317,9 @@ export const highlightsGrid = style({
 		},
 	},
 	display: 'grid',
-	gap: vars.space[6],
+	gap: vars.space.xl,
 	gridTemplateColumns: '1fr',
-	marginTop: vars.space[10],
+	marginTop: vars.space['3xl'],
 })
 
 export const highlightCard = card
@@ -327,7 +327,7 @@ export const highlightCard = card
 export const highlightTitle = style({
 	fontSize: vars.fontSize.xl,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[3],
+	marginBottom: vars.space.md,
 })
 
 export const highlightText = style({
@@ -345,9 +345,9 @@ export const chipGrid = style({
 	},
 	display: 'flex',
 	flexWrap: 'wrap',
-	gap: vars.space[3],
+	gap: vars.space.md,
 	justifyContent: 'center',
-	marginBottom: vars.space[6],
+	marginBottom: vars.space.xl,
 })
 
 export const chip = style([
@@ -356,7 +356,7 @@ export const chip = style([
 		color: vars.color.text,
 		fontSize: vars.fontSize.sm,
 		fontWeight: vars.fontWeight.medium,
-		padding: `${vars.space[2]} ${vars.space[4]}`,
+		padding: `${vars.space.sm} ${vars.space.base}`,
 	},
 ])
 
@@ -370,14 +370,14 @@ export const splitSection = style({
 	},
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[10],
+	gap: vars.space['3xl'],
 })
 
 export const storeButtons = style({
 	display: 'flex',
 	flexWrap: 'wrap',
-	gap: vars.space[3],
-	marginTop: vars.space[6],
+	gap: vars.space.md,
+	marginTop: vars.space.xl,
 })
 
 export const storeButtonPrimary = style([
@@ -396,25 +396,25 @@ export const storeButtonSecondary = buttonLight
 export const infoCard = style({
 	backgroundColor: 'rgba(255, 255, 255, 0.35)',
 	borderRadius: vars.radius['2xl'],
-	padding: vars.space[6],
+	padding: vars.space.xl,
 })
 
 export const appInfoCard = style([
 	infoCard,
 	{
-		marginTop: vars.space[8],
+		marginTop: vars.space['2xl'],
 	},
 ])
 
 export const subTitle = style({
 	fontSize: vars.fontSize.lg,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 })
 
 export const bullets = style({
 	display: 'grid',
-	gap: vars.space[3],
+	gap: vars.space.md,
 	listStyle: 'none',
 	margin: 0,
 	padding: 0,
@@ -425,7 +425,7 @@ export const bullet = style({
 	color: vars.color.text,
 	display: 'flex',
 	fontSize: vars.fontSize.base,
-	gap: vars.space[3],
+	gap: vars.space.md,
 	lineHeight: vars.lineHeight.relaxed,
 	selectors: {
 		'&::before': {
@@ -455,7 +455,7 @@ export const appText = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.xl,
 	lineHeight: vars.lineHeight.relaxed,
-	marginBottom: vars.space[2],
+	marginBottom: vars.space.sm,
 })
 
 // Visit Section
@@ -467,7 +467,7 @@ export const visitGrid = style({
 	},
 	alignItems: 'start',
 	display: 'grid',
-	gap: vars.space[10],
+	gap: vars.space['3xl'],
 	gridTemplateColumns: '1fr',
 })
 
@@ -478,7 +478,7 @@ export const visitCard = style({
 export const visitImage = style({
 	aspectRatio: '21 / 9',
 	borderRadius: vars.radius['2xl'],
-	marginBottom: vars.space[8],
+	marginBottom: vars.space['2xl'],
 	objectFit: 'cover',
 	width: '100%',
 })
@@ -488,8 +488,8 @@ export const addressCard = style([
 	{
 		display: 'flex',
 		flexDirection: 'column',
-		gap: vars.space[4],
-		marginTop: vars.space[6],
+		gap: vars.space.base,
+		marginTop: vars.space.xl,
 	},
 ])
 
@@ -534,13 +534,13 @@ export const featuresSectionTitle = style({
 	color: vars.color.secondary,
 	fontSize: vars.fontSize['3xl'],
 	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space[12],
+	marginBottom: vars.space['4xl'],
 	textAlign: 'center',
 })
 
 export const featuresGrid = style({
 	display: 'grid',
-	gap: vars.space[8],
+	gap: vars.space['2xl'],
 	gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
 	margin: '0 auto',
 	maxWidth: '1200px',
@@ -549,7 +549,7 @@ export const featuresGrid = style({
 export const featureCard = style([
 	card,
 	{
-		padding: vars.space[8],
+		padding: vars.space['2xl'],
 		textAlign: 'center',
 	},
 ])
@@ -563,7 +563,7 @@ export const featureIcon = style({
 	height: '64px',
 	justifyContent: 'center',
 	margin: '0 auto',
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 	width: '64px',
 })
 
@@ -571,7 +571,7 @@ export const featureTitle = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.xl,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[3],
+	marginBottom: vars.space.md,
 })
 
 export const featureText = style({

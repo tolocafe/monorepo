@@ -11,6 +11,10 @@ export default [
 	// Locale-prefixed routes
 	route(':locale', 'routes/locale-layout.tsx', [
 		index('routes/home.tsx'),
+		// Shop routes
+		route('shop', 'routes/shop.tsx'),
+		route('shop/cart', 'routes/shop-cart.tsx'),
+		route('shop/:handle', 'routes/shop-product.tsx'),
 		// Beans routes (localized paths)
 		route('beans', 'routes/beans.tsx'),
 		route('beans/:slug', 'routes/bean.tsx'),
@@ -21,6 +25,7 @@ export default [
 		route('contact', 'routes/contact.tsx'),
 		route('links', 'routes/links.tsx'),
 		// Location routes
+		route('locations', 'routes/locations.tsx'),
 		route('locations/:slug', 'routes/location.tsx'),
 		// Dynamic pages from Sanity (must be last to catch remaining slugs)
 		route(':slug', 'routes/page.tsx'),

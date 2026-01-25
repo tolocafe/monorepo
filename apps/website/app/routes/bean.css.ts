@@ -5,7 +5,7 @@ import { vars } from '@/styles'
 export const main = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space[12]} ${vars.space[6]}`,
+	padding: `${vars.space['4xl']} ${vars.space.xl}`,
 })
 
 export const container = style({
@@ -19,19 +19,19 @@ export const backLink = style({
 	display: 'inline-flex',
 	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.medium,
-	gap: vars.space[2],
-	marginBottom: vars.space[8],
+	gap: vars.space.sm,
+	marginBottom: vars.space['2xl'],
 	textDecoration: 'none',
 })
 
 export const article = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[8],
+	gap: vars.space['2xl'],
 })
 
 export const header = style({
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 })
 
 export const title = style({
@@ -43,7 +43,7 @@ export const title = style({
 	fontSize: vars.fontSize['4xl'],
 	fontWeight: vars.fontWeight.bold,
 	lineHeight: vars.lineHeight.tight,
-	marginBottom: vars.space[2],
+	marginBottom: vars.space.sm,
 })
 
 export const origin = style({
@@ -56,7 +56,7 @@ export const excerpt = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
-	marginTop: vars.space[4],
+	marginTop: vars.space.base,
 })
 
 export const imageWrapper = style({
@@ -77,15 +77,15 @@ export const detailsGrid = style({
 	border: `1px solid ${vars.color.border}`,
 	borderRadius: vars.radius.xl,
 	display: 'grid',
-	gap: vars.space[4],
+	gap: vars.space.base,
 	gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
-	padding: vars.space[6],
+	padding: vars.space.xl,
 })
 
 export const detailItem = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[1],
+	gap: vars.space.xs,
 })
 
 export const detailLabel = style({
@@ -106,14 +106,14 @@ export const tastingSection = style({
 	backgroundColor: vars.color.background,
 	border: `1px solid ${vars.color.border}`,
 	borderRadius: vars.radius.xl,
-	padding: vars.space[6],
+	padding: vars.space.xl,
 })
 
 export const sectionTitle = style({
 	color: vars.color.secondary,
 	fontSize: vars.fontSize.lg,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[3],
+	marginBottom: vars.space.md,
 })
 
 export const tastingNotes = style({
@@ -123,18 +123,18 @@ export const tastingNotes = style({
 })
 
 export const notFound = style({
-	padding: vars.space[12],
+	padding: vars.space['4xl'],
 	textAlign: 'center',
 })
 
 export const notFoundTitle = style({
 	fontSize: vars.fontSize['3xl'],
 	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 })
 
 export const notFoundText = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.lg,
-	marginBottom: vars.space[8],
+	marginBottom: vars.space['2xl'],
 })

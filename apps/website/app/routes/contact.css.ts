@@ -5,7 +5,7 @@ import { vars } from '@/styles'
 export const main = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space[12]} ${vars.space[6]}`,
+	padding: `${vars.space['4xl']} ${vars.space.xl}`,
 })
 
 export const container = style({
@@ -14,14 +14,14 @@ export const container = style({
 })
 
 export const header = style({
-	marginBottom: vars.space[12],
+	marginBottom: vars.space['4xl'],
 	textAlign: 'center',
 })
 
 export const heading = style({
 	fontSize: vars.fontSize['4xl'],
 	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 })
 
 export const subtitle = style({
@@ -32,26 +32,26 @@ export const subtitle = style({
 export const content = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[8],
+	gap: vars.space['2xl'],
 })
 
 export const comingSoonCard = style({
 	backgroundColor: vars.color.secondary,
 	border: `1px solid ${vars.color.border}`,
 	borderRadius: vars.radius['2xl'],
-	padding: vars.space[8],
+	padding: vars.space['2xl'],
 	textAlign: 'center',
 })
 
 export const badge = style({
-	backgroundColor: '#c45a32',
+	backgroundColor: vars.color.primary,
 	borderRadius: vars.radius.full,
-	color: '#ffffff',
+	color: vars.color.white,
 	display: 'inline-block',
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[4],
-	padding: `${vars.space[2]} ${vars.space[4]}`,
+	marginBottom: vars.space.base,
+	padding: `${vars.space.sm} ${vars.space.base}`,
 })
 
 export const message = style({
@@ -64,7 +64,7 @@ export const message = style({
 
 export const infoGrid = style({
 	display: 'grid',
-	gap: vars.space[6],
+	gap: vars.space.xl,
 	gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
 })
 
@@ -72,15 +72,15 @@ export const infoCard = style({
 	backgroundColor: vars.color.background,
 	border: `1px solid ${vars.color.border}`,
 	borderRadius: vars.radius.xl,
-	padding: vars.space[6],
+	padding: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const infoTitle = style({
-	color: '#c45a32',
+	color: vars.color.primary,
 	fontSize: vars.fontSize.lg,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[2],
+	marginBottom: vars.space.sm,
 })
 
 export const infoText = style({

@@ -112,7 +112,7 @@ export const buttonBase = style({
 	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.semibold,
 	justifyContent: 'center',
-	padding: `${vars.space[3]} ${vars.space[5]}`,
+	padding: `${vars.space.md} ${vars.space.lg}`,
 	textDecoration: 'none',
 })
 
@@ -177,13 +177,13 @@ export const buttonLight = style([
 export const card = style({
 	backgroundColor: vars.color.surface,
 	borderRadius: vars.radius['2xl'],
-	padding: vars.space[6],
+	padding: vars.space.xl,
 })
 
 export const cardCompact = style([
 	card,
 	{
-		padding: vars.space[4],
+		padding: vars.space.base,
 	},
 ])
 
@@ -198,13 +198,13 @@ export const cardHover = style([
 
 // Sections
 export const section = style({
-	padding: `${vars.space[16]} ${vars.space[6]}`,
+	padding: `${vars.space['5xl']} ${vars.space.xl}`,
 })
 
 export const sectionCompact = style([
 	section,
 	{
-		padding: `${vars.space[10]} ${vars.space[6]}`,
+		padding: `${vars.space['3xl']} ${vars.space.xl}`,
 	},
 ])
 
@@ -250,7 +250,7 @@ export const grid2 = style({
 		},
 	},
 	display: 'grid',
-	gap: vars.space[6],
+	gap: vars.space.xl,
 	gridTemplateColumns: '1fr',
 })
 
@@ -261,20 +261,20 @@ export const grid3 = style({
 		},
 	},
 	display: 'grid',
-	gap: vars.space[6],
+	gap: vars.space.xl,
 	gridTemplateColumns: '1fr',
 })
 
 export const flexRow = style({
 	display: 'flex',
 	flexWrap: 'wrap',
-	gap: vars.space[3],
+	gap: vars.space.md,
 })
 
 export const flexColumn = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[4],
+	gap: vars.space.base,
 })
 
 // Image placeholder
@@ -282,4 +282,129 @@ export const imagePlaceholder = style({
 	backgroundColor: vars.color.border,
 	borderRadius: vars.radius['2xl'],
 	overflow: 'hidden',
+})
+
+// Page main wrapper
+export const pageMain = style({
+	backgroundColor: vars.color.background,
+	minHeight: 'calc(100vh - 200px)',
+	padding: `${vars.space['4xl']} ${vars.space.xl}`,
+})
+
+// Back link navigation
+export const backLink = style({
+	':hover': {
+		color: vars.color.secondary,
+	},
+	color: vars.color.primary,
+	display: 'inline-block',
+	fontSize: vars.fontSize.sm,
+	fontWeight: vars.fontWeight.medium,
+	marginBottom: vars.space['2xl'],
+	textDecoration: 'none',
+})
+
+// Quantity controls for cart/product
+export const quantityControls = style({
+	alignItems: 'center',
+	border: `1px solid ${vars.color.border}`,
+	borderRadius: vars.radius.md,
+	display: 'flex',
+	overflow: 'hidden',
+})
+
+export const quantityButton = style({
+	':disabled': {
+		cursor: 'not-allowed',
+		opacity: 0.5,
+	},
+	':hover': {
+		backgroundColor: vars.color.surface,
+	},
+	alignItems: 'center',
+	backgroundColor: 'transparent',
+	border: 'none',
+	cursor: 'pointer',
+	display: 'flex',
+	height: '40px',
+	justifyContent: 'center',
+	selectors: {
+		'&:disabled:hover': {
+			backgroundColor: 'transparent',
+		},
+	},
+	width: '40px',
+})
+
+export const quantityButtonSmall = style([
+	quantityButton,
+	{
+		height: '36px',
+		width: '36px',
+	},
+])
+
+export const quantityValue = style({
+	alignItems: 'center',
+	borderLeft: `1px solid ${vars.color.border}`,
+	borderRight: `1px solid ${vars.color.border}`,
+	display: 'flex',
+	fontSize: vars.fontSize.base,
+	fontWeight: vars.fontWeight.medium,
+	height: '40px',
+	justifyContent: 'center',
+	minWidth: '50px',
+})
+
+export const quantityValueSmall = style([
+	quantityValue,
+	{
+		fontSize: vars.fontSize.sm,
+		height: '36px',
+		minWidth: '40px',
+	},
+])
+
+// Empty state styles
+export const emptyState = style({
+	padding: vars.space['4xl'],
+	textAlign: 'center',
+})
+
+export const emptyStateCard = style([
+	emptyState,
+	{
+		backgroundColor: vars.color.surface,
+		border: `1px solid ${vars.color.border}`,
+		borderRadius: vars.radius['2xl'],
+	},
+])
+
+export const emptyTitle = style({
+	fontSize: vars.fontSize['2xl'],
+	fontWeight: vars.fontWeight.bold,
+	marginBottom: vars.space.base,
+})
+
+export const emptyMessage = style({
+	color: vars.color.text,
+	fontSize: vars.fontSize.lg,
+	lineHeight: vars.lineHeight.relaxed,
+})
+
+// Page header pattern (centered with title + subtitle)
+export const pageHeader = style({
+	marginBottom: vars.space['4xl'],
+	textAlign: 'center',
+})
+
+export const pageHeading = style({
+	fontSize: vars.fontSize['4xl'],
+	fontWeight: vars.fontWeight.bold,
+	marginBottom: vars.space.base,
+})
+
+export const pageSubtitle = style({
+	color: vars.color.text,
+	fontSize: vars.fontSize.xl,
 })

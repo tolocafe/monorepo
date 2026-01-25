@@ -5,7 +5,7 @@ import { vars } from '@/styles'
 export const main = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space[12]} ${vars.space[6]}`,
+	padding: `${vars.space['4xl']} ${vars.space.xl}`,
 })
 
 export const container = style({
@@ -14,14 +14,14 @@ export const container = style({
 })
 
 export const header = style({
-	marginBottom: vars.space[8],
+	marginBottom: vars.space['2xl'],
 	textAlign: 'center',
 })
 
 export const logo = style({
 	borderRadius: vars.radius.full,
 	height: '80px',
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 	objectFit: 'cover',
 	width: '80px',
 })
@@ -29,7 +29,7 @@ export const logo = style({
 export const heading = style({
 	fontSize: vars.fontSize['2xl'],
 	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space[2],
+	marginBottom: vars.space.sm,
 })
 
 export const subtitle = style({
@@ -41,7 +41,7 @@ export const subtitle = style({
 export const linksContainer = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[4],
+	gap: vars.space.base,
 })
 
 export const linkCard = style({
@@ -57,9 +57,9 @@ export const linkCard = style({
 	display: 'flex',
 	fontSize: vars.fontSize.lg,
 	fontWeight: vars.fontWeight.medium,
-	gap: vars.space[3],
+	gap: vars.space.md,
 	justifyContent: 'center',
-	padding: `${vars.space[4]} ${vars.space[6]}`,
+	padding: `${vars.space.base} ${vars.space.xl}`,
 	textDecoration: 'none',
 	transition: 'transform 0.2s ease, box-shadow 0.2s ease',
 })
@@ -74,8 +74,8 @@ export const sectionTitle = style({
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
 	letterSpacing: '0.05em',
-	marginBottom: vars.space[2],
-	marginTop: vars.space[6],
+	marginBottom: vars.space.sm,
+	marginTop: vars.space.xl,
 	opacity: 0.6,
 	textAlign: 'center',
 	textTransform: 'uppercase',
@@ -83,6 +83,6 @@ export const sectionTitle = style({
 
 export const appLinksGrid = style({
 	display: 'grid',
-	gap: vars.space[4],
+	gap: vars.space.base,
 	gridTemplateColumns: 'repeat(2, 1fr)',
 })

@@ -1,3 +1,4 @@
+import { DocumentIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
 import { baseLanguage } from './localeStringType'
@@ -48,6 +49,7 @@ export const pageType = defineType({
 			type: 'number',
 		}),
 	],
+	icon: DocumentIcon,
 	name: 'page',
 	orderings: [
 		{

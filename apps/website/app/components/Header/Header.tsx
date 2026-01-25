@@ -1,9 +1,10 @@
 import { t } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useEffect, useState } from 'react'
+import { IconMenu2, IconWorld, IconX } from '@tabler/icons-react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 
 import toloLogo from '@/assets/tolo.png'
+import { CartIcon } from '@/components/CartIcon'
 import {
 	SUPPORTED_LOCALES,
 	LOCALE_LABELS,
@@ -17,11 +18,11 @@ import * as styles from './Header.css'
 
 // Path segments for localized URLs (not display text)
 const LOCALE_PATHS = {
-	de: { aboutPath: 'ueber-uns', beansPath: 'beans' },
-	en: { aboutPath: 'about', beansPath: 'beans' },
-	es: { aboutPath: 'nosotros', beansPath: 'granos' },
-	fr: { aboutPath: 'a-propos', beansPath: 'beans' },
-	ja: { aboutPath: 'about', beansPath: 'beans' },
+	de: { aboutPath: 'ueber-uns' },
+	en: { aboutPath: 'about' },
+	es: { aboutPath: 'nosotros' },
+	fr: { aboutPath: 'a-propos' },
+	ja: { aboutPath: 'about' },
 } as const
 
 export function Header() {
@@ -29,6 +30,8 @@ export function Header() {
 	const location = useLocation()
 	const navigate = useNavigate()
 	const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+	const [isLocaleMenuOpen, setIsLocaleMenuOpen] = useState(false)
+	const localeMenuRef = useRef<HTMLDivElement>(null)
 
 	const currentLocale: Locale = isValidLocale(localeParam)
 		? localeParam
@@ -36,50 +39,54 @@ export function Header() {
 	const pathWithoutLocale = getPathWithoutLocale(location.pathname)
 	const paths = LOCALE_PATHS[currentLocale] || LOCALE_PATHS.es
 
-	const beansTo = `/${currentLocale}/${paths.beansPath}`
-	const blogTo = `/${currentLocale}/blog`
+	const shopTo = `/${currentLocale}/shop`
+	const locationsTo = `/${currentLocale}/locations`
 	const aboutTo = `/${currentLocale}/${paths.aboutPath}`
-	const visitTo = `/${currentLocale}#visit`
-	const contactTo = `/${currentLocale}/contact`
-	const appTo = `/${currentLocale}#app`
 
 	const navItems = [
-		{ label: t`Beans`, matchPath: beansTo, to: beansTo },
-		{ label: t`Blog`, matchPath: blogTo, to: blogTo },
+		{ label: t`Shop`, matchPath: shopTo, to: shopTo },
+		{ label: t`Visit`, matchPath: locationsTo, to: locationsTo },
 		{ label: t`About`, matchPath: aboutTo, to: aboutTo },
-		{
-			label: t`Visit`,
-			matchHash: '#visit',
-			matchPath: `/${currentLocale}`,
-			to: visitTo,
-		},
-		{
-			label: t`Contact`,
-			matchPath: contactTo,
-			to: contactTo,
-		},
 	] as const
 
 	function isActive(item: (typeof navItems)[number]) {
-		if (!location.pathname.startsWith(item.matchPath)) return false
-		if (
-			'matchHash' in item &&
-			item.matchHash &&
-			location.hash !== item.matchHash
-		)
-			return false
-		return true
+		return location.pathname.startsWith(item.matchPath)
 	}
 
-	function handleLocaleChange(event: React.ChangeEvent<HTMLSelectElement>) {
-		const newLocale = event.target.value as Locale
+	function handleLocaleSelect(newLocale: Locale) {
 		const newPath = `/${newLocale}${pathWithoutLocale === '/' ? '' : pathWithoutLocale}`
 		navigate(newPath)
+		setIsLocaleMenuOpen(false)
 	}
 
 	useEffect(() => {
 		setIsMobileMenuOpen(false)
-	}, [location.pathname, location.hash, currentLocale])
+		setIsLocaleMenuOpen(false)
+	}, [location.pathname, currentLocale])
+
+	useEffect(() => {
+		if (!isLocaleMenuOpen) return
+
+		function handleClickOutside(event: MouseEvent) {
+			if (
+				localeMenuRef.current &&
+				!localeMenuRef.current.contains(event.target as Node)
+			) {
+				setIsLocaleMenuOpen(false)
+			}
+		}
+
+		function handleEscape(event: KeyboardEvent) {
+			if (event.key === 'Escape') setIsLocaleMenuOpen(false)
+		}
+
+		globalThis.addEventListener('mousedown', handleClickOutside)
+		globalThis.addEventListener('keydown', handleEscape)
+		return () => {
+			globalThis.removeEventListener('mousedown', handleClickOutside)
+			globalThis.removeEventListener('keydown', handleEscape)
+		}
+	}, [isLocaleMenuOpen])
 
 	useEffect(() => {
 		if (!isMobileMenuOpen) return
@@ -116,24 +123,39 @@ export function Header() {
 				</div>
 
 				<div className={styles.right}>
-					<Link to={appTo} className={styles.cta}>
-						<Trans>Download app</Trans>
-					</Link>
+					<CartIcon />
 
-					<nav className={styles.localeNav} aria-label="Language selection">
-						<select
-							className={styles.localeSelect}
-							value={currentLocale}
-							onChange={handleLocaleChange}
-							aria-label="Select language"
+					<div
+						className={styles.localeNav}
+						ref={localeMenuRef}
+						aria-label="Language selection"
+					>
+						<button
+							type="button"
+							className={styles.localeButton}
+							onClick={() => setIsLocaleMenuOpen(!isLocaleMenuOpen)}
+							aria-expanded={isLocaleMenuOpen}
+							aria-haspopup="true"
+							aria-label={t`Select language, current: ${LOCALE_LABELS[currentLocale]}`}
 						>
-							{SUPPORTED_LOCALES.map((locale) => (
-								<option key={locale} value={locale}>
-									{LOCALE_LABELS[locale]}
-								</option>
-							))}
-						</select>
-					</nav>
+							<IconWorld size={20} aria-hidden="true" />
+						</button>
+						{isLocaleMenuOpen && (
+							<div className={styles.localeDropdown} role="menu">
+								{SUPPORTED_LOCALES.map((locale) => (
+									<button
+										key={locale}
+										type="button"
+										role="menuitem"
+										className={`${styles.localeOption} ${locale === currentLocale ? styles.localeOptionActive : ''}`}
+										onClick={() => handleLocaleSelect(locale)}
+									>
+										{LOCALE_LABELS[locale]}
+									</button>
+								))}
+							</div>
+						)}
+					</div>
 
 					<button
 						type="button"
@@ -143,7 +165,7 @@ export function Header() {
 						aria-expanded={isMobileMenuOpen}
 						aria-controls="mobile-menu"
 					>
-						<MenuIcon />
+						<IconMenu2 size={18} aria-hidden="true" />
 					</button>
 				</div>
 			</div>
@@ -169,7 +191,7 @@ export function Header() {
 								onClick={() => setIsMobileMenuOpen(false)}
 								aria-label={t`Close menu`}
 							>
-								<CloseIcon />
+								<IconX size={18} aria-hidden="true" />
 							</button>
 						</div>
 
@@ -180,54 +202,9 @@ export function Header() {
 								</Link>
 							))}
 						</nav>
-
-						<Link to={appTo} className={styles.mobileCta}>
-							<Trans>Download app</Trans>
-						</Link>
 					</div>
 				</>
 			)}
 		</header>
-	)
-}
-
-function MenuIcon() {
-	return (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="18"
-			height="18"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-			aria-hidden="true"
-		>
-			<line x1="4" x2="20" y1="6" y2="6" />
-			<line x1="4" x2="20" y1="12" y2="12" />
-			<line x1="4" x2="20" y1="18" y2="18" />
-		</svg>
-	)
-}
-
-function CloseIcon() {
-	return (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="18"
-			height="18"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-			aria-hidden="true"
-		>
-			<path d="M18 6 6 18" />
-			<path d="m6 6 12 12" />
-		</svg>
 	)
 }

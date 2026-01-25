@@ -55,6 +55,11 @@ export interface SanityImage {
 	alt?: string
 }
 
+export interface LocalizedSanityImage {
+	asset: { _ref: string }
+	alt?: LocaleString
+}
+
 export interface Post {
 	_id: string
 	_updatedAt?: string
@@ -112,6 +117,25 @@ export interface Location {
 	hours?: LocaleString
 	image?: SanityImage
 	isMainLocation?: boolean
+}
+
+export interface StoreProduct {
+	_id: string
+	_updatedAt?: string
+	shopifyHandle: string
+	name?: LocaleString
+	excerpt?: LocaleString
+	body?: LocaleBlockContent
+	images?: LocalizedSanityImage[]
+	category?:
+		| 'accessories'
+		| 'beans'
+		| 'equipment'
+		| 'gift-cards'
+		| 'merchandise'
+	badge?: 'bestseller' | 'limited' | 'new' | 'sale'
+	sortOrder?: number
+	isVisible?: boolean
 }
 
 /**

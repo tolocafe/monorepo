@@ -17,8 +17,20 @@ const POST_QUERY = `*[
   _id, name, slug, publishedAt, excerpt, body, image
 }`
 
+const SUGGESTED_POSTS_QUERY = `*[
+  _type == "post"
+  && _id != $currentId
+  && defined(publishedAt)
+] | order(publishedAt desc)[0...3]{
+  _id, name, slug, publishedAt, excerpt, image
+}`
+
 export async function loader({ params }: Route.LoaderArgs) {
-	return { post: await client.fetch<Post | null>(POST_QUERY, params) }
+	const post = await client.fetch<Post | null>(POST_QUERY, params)
+	const suggestedPosts = post
+		? await client.fetch<Post[]>(SUGGESTED_POSTS_QUERY, { currentId: post._id })
+		: []
+	return { post, suggestedPosts }
 }
 
 export function meta({ data, params }: Route.MetaArgs) {
@@ -81,6 +93,7 @@ const portableTextComponents: PortableTextComponents = {
 		number: ({ children }) => <li className={styles.listItem}>{children}</li>,
 	},
 	marks: {
+		em: ({ children }) => <em>{children}</em>,
 		link: ({ children, value }) => (
 			<a
 				href={value?.href}
@@ -91,12 +104,14 @@ const portableTextComponents: PortableTextComponents = {
 				{children}
 			</a>
 		),
+		strong: ({ children }) => <strong>{children}</strong>,
+		underline: ({ children }) => <u>{children}</u>,
 	},
 }
 
 export default function BlogPost({ loaderData }: Route.ComponentProps) {
 	const { locale } = useOutletContext<{ locale: Locale }>()
-	const { post } = loaderData
+	const { post, suggestedPosts } = loaderData
 
 	if (!post) {
 		return (
@@ -159,6 +174,64 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
 						</div>
 					)}
 				</article>
+
+				{suggestedPosts.length > 0 && (
+					<section className={styles.suggestedSection}>
+						<h2 className={styles.suggestedTitle}>
+							<Trans>Suggested Readings</Trans>
+						</h2>
+						<div className={styles.suggestedGrid}>
+							{suggestedPosts.map((suggestedPost) => {
+								const suggestedTitle = getLocalizedString(
+									suggestedPost.name,
+									locale,
+									'Untitled',
+								)
+								const suggestedExcerpt = getLocalizedString(
+									suggestedPost.excerpt,
+									locale,
+								)
+								const suggestedSlug =
+									suggestedPost.slug?.[locale]?.current ||
+									suggestedPost.slug?.es?.current
+								const suggestedImageUrl = suggestedPost.image
+									? urlFor(suggestedPost.image)?.width(400).height(225).url()
+									: null
+
+								return (
+									<Link
+										key={suggestedPost._id}
+										to={`/${locale}/blog/${suggestedSlug}`}
+										className={styles.suggestedCard}
+									>
+										{suggestedImageUrl && (
+											<div className={styles.suggestedImageWrapper}>
+												<img
+													src={suggestedImageUrl}
+													alt={suggestedPost.image?.alt || suggestedTitle}
+													className={styles.suggestedImage}
+												/>
+											</div>
+										)}
+										<div className={styles.suggestedContent}>
+											<h3 className={styles.suggestedCardTitle}>
+												{suggestedTitle}
+											</h3>
+											{suggestedExcerpt && (
+												<p className={styles.suggestedExcerpt}>
+													{suggestedExcerpt}
+												</p>
+											)}
+											<time className={styles.suggestedDate}>
+												{formatDate(suggestedPost.publishedAt, locale)}
+											</time>
+										</div>
+									</Link>
+								)
+							})}
+						</div>
+					</section>
+				)}
 			</div>
 		</main>
 	)

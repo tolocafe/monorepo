@@ -13,24 +13,24 @@ export const header = style({
 export const inner = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space[4],
+	gap: vars.space.base,
 	justifyContent: 'space-between',
 	margin: '0 auto',
 	maxWidth: '1200px',
-	padding: `${vars.space[3]} ${vars.space[6]}`,
+	padding: `${vars.space.md} ${vars.space.xl}`,
 })
 
 export const left = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space[6],
+	gap: vars.space.xl,
 	minWidth: 0,
 })
 
 export const nav = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space[4],
+	gap: vars.space.base,
 })
 
 export const logo = style({
@@ -52,7 +52,7 @@ export const links = style({
 	},
 	alignItems: 'center',
 	display: 'none',
-	gap: vars.space[2],
+	gap: vars.space.sm,
 })
 
 export const link = style({
@@ -71,7 +71,7 @@ export const link = style({
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.medium,
 	justifyContent: 'center',
-	padding: `${vars.space[2]} ${vars.space[3]}`,
+	padding: `${vars.space.sm} ${vars.space.md}`,
 	textDecoration: 'none',
 })
 
@@ -80,60 +80,70 @@ export const linkActive = style({
 	color: vars.color.white,
 })
 
-export const cta = style({
-	':focus-visible': {
-		outline: `2px solid ${vars.color.white}`,
-		outlineOffset: '2px',
-	},
-	':hover': {
-		filter: 'brightness(1.05)',
-	},
-	'@media': {
-		'(min-width: 768px)': {
-			display: 'inline-flex',
-		},
-	},
-	alignItems: 'center',
-	backgroundColor: vars.color.secondary,
-	borderRadius: vars.radius.full,
-	color: vars.color.white,
-	display: 'none',
-	fontSize: vars.fontSize.sm,
-	fontWeight: vars.fontWeight.semibold,
-	justifyContent: 'center',
-	padding: `${vars.space[2]} ${vars.space[4]}`,
-	textDecoration: 'none',
-})
-
 export const right = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space[3],
+	gap: vars.space.md,
 })
 
 export const localeNav = style({
 	alignItems: 'center',
 	display: 'flex',
+	position: 'relative',
 })
 
-export const localeSelect = style({
-	':focus': {
-		outline: `2px solid ${vars.color.background}`,
+export const localeButton = style({
+	':focus-visible': {
+		outline: `2px solid ${vars.color.white}`,
 		outlineOffset: '2px',
 	},
-	appearance: 'none',
-	backgroundColor: vars.color.background,
-	backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%233D6039' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")`,
-	backgroundPosition: `right ${vars.space[2]} center`,
-	backgroundRepeat: 'no-repeat',
+	':hover': {
+		backgroundColor: 'rgba(255, 255, 255, 0.12)',
+	},
+	alignItems: 'center',
+	backgroundColor: 'transparent',
 	border: 'none',
+	borderRadius: vars.radius.full,
+	color: vars.color.white,
+	cursor: 'pointer',
+	display: 'flex',
+	height: '40px',
+	justifyContent: 'center',
+	width: '40px',
+})
+
+export const localeDropdown = style({
+	backgroundColor: vars.color.white,
 	borderRadius: vars.radius.md,
-	color: vars.color.primary,
+	boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+	display: 'flex',
+	flexDirection: 'column',
+	minWidth: '140px',
+	overflow: 'hidden',
+	position: 'absolute',
+	right: 0,
+	top: 'calc(100% + 8px)',
+	zIndex: 100,
+})
+
+export const localeOption = style({
+	':hover': {
+		backgroundColor: vars.color.background,
+	},
+	backgroundColor: 'transparent',
+	border: 'none',
+	color: vars.color.text,
 	cursor: 'pointer',
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.medium,
-	padding: `${vars.space[2]} ${vars.space[4]}`,
-	paddingRight: vars.space[8],
+	padding: `${vars.space.md} ${vars.space.base}`,
+	textAlign: 'left',
+})
+
+export const localeOptionActive = style({
+	backgroundColor: vars.color.background,
+	color: vars.color.primary,
+	fontWeight: vars.fontWeight.semibold,
 })
 
 export const menuButton = style({
@@ -172,9 +182,9 @@ export const mobilePanel = style({
 	backgroundColor: vars.color.primary,
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[6],
+	gap: vars.space.xl,
 	height: '100%',
-	padding: vars.space[6],
+	padding: vars.space.xl,
 	position: 'fixed',
 	right: 0,
 	top: 0,
@@ -185,7 +195,7 @@ export const mobilePanel = style({
 export const mobileHeader = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space[4],
+	gap: vars.space.base,
 	justifyContent: 'space-between',
 })
 
@@ -215,7 +225,7 @@ export const mobileClose = style({
 export const mobileLinks = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[2],
+	gap: vars.space.sm,
 })
 
 export const mobileLink = style([
@@ -223,17 +233,6 @@ export const mobileLink = style([
 	{
 		fontSize: vars.fontSize.lg,
 		justifyContent: 'flex-start',
-		padding: `${vars.space[3]} ${vars.space[4]}`,
-	},
-])
-
-export const mobileCta = style([
-	cta,
-	{
-		display: 'inline-flex',
-		fontSize: vars.fontSize.base,
-		justifyContent: 'center',
-		padding: `${vars.space[3]} ${vars.space[4]}`,
-		width: '100%',
+		padding: `${vars.space.md} ${vars.space.base}`,
 	},
 ])

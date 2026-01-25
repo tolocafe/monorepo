@@ -1,4 +1,4 @@
-import { TagIcon } from '@sanity/icons'
+import { BoltIcon } from '@sanity/icons'
 import { defineField, defineType } from 'sanity'
 
 import { baseLanguage } from './localeStringType'
@@ -73,7 +73,7 @@ export const promotionType = defineType({
 			type: 'array',
 		}),
 	],
-	icon: TagIcon,
+	icon: BoltIcon,
 	name: 'promotion',
 	orderings: [
 		{

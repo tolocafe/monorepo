@@ -5,7 +5,7 @@ import { vars } from '@/styles'
 export const main = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space[12]} ${vars.space[6]}`,
+	padding: `${vars.space['4xl']} ${vars.space.xl}`,
 })
 
 export const container = style({
@@ -16,11 +16,11 @@ export const container = style({
 export const article = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[8],
+	gap: vars.space['2xl'],
 })
 
 export const header = style({
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 })
 
 export const title = style({
@@ -32,7 +32,7 @@ export const title = style({
 	fontSize: vars.fontSize['4xl'],
 	fontWeight: vars.fontWeight.bold,
 	lineHeight: vars.lineHeight.tight,
-	marginBottom: vars.space[2],
+	marginBottom: vars.space.sm,
 })
 
 export const location = style({
@@ -63,28 +63,28 @@ export const body = style({
 export const heading2 = style({
 	fontSize: vars.fontSize['2xl'],
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[4],
-	marginTop: vars.space[8],
+	marginBottom: vars.space.base,
+	marginTop: vars.space['2xl'],
 })
 
 export const heading3 = style({
 	fontSize: vars.fontSize.xl,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space[3],
-	marginTop: vars.space[6],
+	marginBottom: vars.space.md,
+	marginTop: vars.space.xl,
 })
 
 export const paragraph = style({
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 })
 
 export const list = style({
-	marginBottom: vars.space[4],
-	marginLeft: vars.space[6],
+	marginBottom: vars.space.base,
+	marginLeft: vars.space.xl,
 })
 
 export const listItem = style({
-	marginBottom: vars.space[2],
+	marginBottom: vars.space.sm,
 })
 
 export const detailsGrid = style({
@@ -92,15 +92,15 @@ export const detailsGrid = style({
 	border: `1px solid ${vars.color.border}`,
 	borderRadius: vars.radius.xl,
 	display: 'grid',
-	gap: vars.space[4],
+	gap: vars.space.base,
 	gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-	padding: vars.space[6],
+	padding: vars.space.xl,
 })
 
 export const detailItem = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space[1],
+	gap: vars.space.xs,
 })
 
 export const detailLabel = style({
@@ -144,18 +144,18 @@ export const map = style({
 })
 
 export const notFound = style({
-	padding: vars.space[12],
+	padding: vars.space['4xl'],
 	textAlign: 'center',
 })
 
 export const notFoundTitle = style({
 	fontSize: vars.fontSize['3xl'],
 	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space[4],
+	marginBottom: vars.space.base,
 })
 
 export const notFoundText = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.lg,
-	marginBottom: vars.space[8],
+	marginBottom: vars.space['2xl'],
 })

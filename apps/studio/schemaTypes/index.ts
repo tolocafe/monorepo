@@ -11,6 +11,7 @@ import { pageType } from './pageType'
 import { postType } from './postType'
 import { productType } from './productType'
 import { promotionType } from './promotionType'
+import { storeProductType } from './storeProductType'
 
 export const schemaTypes = [
 	// Locale types
@@ -26,4 +27,5 @@ export const schemaTypes = [
 	postType,
 	productType,
 	promotionType,
+	storeProductType,
 ]
