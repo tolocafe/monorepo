@@ -53,7 +53,6 @@ export type ShopifyProductVariant = {
 	compareAtPrice: null | ShopifyMoney
 	id: string
 	price: ShopifyMoney
-	quantityAvailable: null | number
 	selectedOptions: { name: string; value: string }[]
 	sku: null | string
 	title: string
@@ -267,7 +266,6 @@ const fragments = {
 						title
 						sku
 						availableForSale
-						quantityAvailable
 						selectedOptions { name value }
 						price { amount currencyCode }
 						compareAtPrice { amount currencyCode }
