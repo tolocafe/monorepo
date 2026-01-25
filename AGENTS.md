@@ -221,6 +221,52 @@ Warm and cozy mood with an inviting café feeling. Bright and airy lighting with
 - **Home interiors**: Mexican middle-class aesthetic, warm and lived-in
 - **Coffee equipment**: Modern, contemporary grinders, scales, roasters, and brewing tools
 
+## Sanity Content Guidelines
+
+### Blog Post Body Content Structure
+
+When creating or updating blog post content in Sanity, use rich text formatting with proper semantic structure:
+
+**Heading Hierarchy:**
+- **Never use h1 in body content** - The page title is rendered as h1, so body content should start at h2
+- Use **h2** for main section headings (e.g., "Coffee Regions", "Brewing Tips", "Equipment Needed")
+- Use **h3** for sub-sections within h2 sections
+- Each major topic or section should have its own h2 heading
+
+**Text Formatting:**
+- Use **bold** for key terms, important concepts, and emphasis (e.g., **washed process**, **92-96°C**, **Sidamo region**)
+- Use *italic* for foreign words, titles, or subtle emphasis
+- Use **blockquote** for quotes or callouts
+
+**Lists:**
+- Use **bullet lists** for unordered items (features, tips, equipment lists)
+- Use **numbered lists** for sequential steps or ranked items
+
+**Content Structure Pattern:**
+```
+[Introductory paragraph - no heading]
+
+## First Section Heading
+Paragraph with **bold key terms** and explanation.
+
+## Second Section Heading
+More content with proper formatting.
+
+- Bullet point one
+- Bullet point two
+
+## Conclusion or Final Section
+Closing thoughts.
+```
+
+**When using `patch_document_from_markdown`:**
+- Write content in standard Markdown format
+- Use `##` for h2 headings (never `#` for h1)
+- Use `**text**` for bold
+- Use `*text*` for italic
+- Use `-` or `*` for bullet lists
+- Use `1.` for numbered lists
+
 ## Security Notes
 
 ### Rate Limiting

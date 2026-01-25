@@ -36,6 +36,12 @@ export const storeProductType = defineType({
 			type: 'localeString',
 		}),
 		defineField({
+			description: 'URL-friendly identifier for each language',
+			name: 'slug',
+			title: 'Slug',
+			type: 'localeSlug',
+		}),
+		defineField({
 			description: 'A short summary for product cards and previews',
 			name: 'excerpt',
 			title: 'Short Description',

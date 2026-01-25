@@ -12,7 +12,7 @@ import {
 	setCookie,
 } from '@/lib/cart'
 import type { Locale } from '@/lib/locale'
-import { getProductByHandle } from '@/lib/shop-data'
+import { getProductBySlug } from '@/lib/shop-data'
 import { shopifyApi } from '@/lib/shopify'
 import type { ShopifyProduct, ShopifyProductVariant } from '@/lib/shopify'
 
@@ -58,15 +58,17 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 	const { handle, locale } = params
 	if (!handle) return { product: null, shopifyProduct: null }
 
-	// Fetch both merged data (for display) and raw Shopify data (for structured data)
-	const [product, shopifyProduct] = await Promise.all([
-		getProductByHandle(handle, (locale as Locale) || 'es'),
-		shopifyApi.products.getByHandle(handle),
-	])
+	// Fetch merged data using localized slug lookup
+	const product = await getProductBySlug(handle, (locale as Locale) || 'es')
 
-	// Build canonical URL for structured data
+	// Fetch raw Shopify data for structured data using the resolved handle
+	const shopifyProduct = product
+		? await shopifyApi.products.getByHandle(product.handle)
+		: null
+
+	// Build canonical URL using English slug for SEO
 	const url = new URL(request.url)
-	const canonicalUrl = `${url.origin}/en/shop/${handle}`
+	const canonicalUrl = `${url.origin}/en/shop/${product?.slug || product?.handle || handle}`
 
 	return { canonicalUrl, product, shopifyProduct }
 }
@@ -78,7 +80,7 @@ export function meta({ data }: Route.MetaArgs) {
 		return [{ title: 'Product Not Found - TOLO' }]
 	}
 
-	const imageUrl = product.featuredImage?.url
+	const imageUrl = product.featuredImage?.url || product.images[0]?.url
 
 	// Use Shopify data (English) for structured data, Sanity images preferred
 	const structuredData = buildProductStructuredData(

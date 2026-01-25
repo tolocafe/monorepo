@@ -123,6 +123,7 @@ export interface StoreProduct {
 	_id: string
 	_updatedAt?: string
 	shopifyHandle: string
+	slug?: LocaleSlug
 	name?: LocaleString
 	excerpt?: LocaleString
 	body?: LocaleBlockContent

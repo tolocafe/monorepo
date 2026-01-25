@@ -13,7 +13,7 @@ import type {
 	LocalizedSanityImage,
 	StoreProduct,
 } from './sanity'
-import { client, urlFor, getLocalizedString } from './sanity'
+import { client, urlFor, getLocalizedString, getLocalizedSlug } from './sanity'
 import { shopifyApi } from './shopify'
 import type { ShopifyProduct, ShopifyImage, ShopifyMoney } from './shopify'
 
@@ -22,6 +22,7 @@ export type MergedProduct = {
 	// Identifiers
 	id: string
 	handle: string
+	slug?: string
 	sanityId?: string
 
 	// Localized content (from Sanity, with Shopify fallback)
@@ -67,6 +68,7 @@ const STORE_PRODUCTS_QUERY = `*[
 ] | order(sortOrder asc) {
 	_id,
 	shopifyHandle,
+	slug,
 	name,
 	excerpt,
 	body,
@@ -85,6 +87,26 @@ const STORE_PRODUCT_BY_HANDLE_QUERY = `*[
 ][0] {
 	_id,
 	shopifyHandle,
+	slug,
+	name,
+	excerpt,
+	body,
+	images[] {
+		asset,
+		alt
+	},
+	category,
+	badge,
+	sortOrder
+}`
+
+const STORE_PRODUCT_BY_SLUG_QUERY = `*[
+	_type == "storeProduct"
+	&& (slug.es.current == $slug || slug.en.current == $slug || slug.de.current == $slug || slug.fr.current == $slug || slug.ja.current == $slug)
+][0] {
+	_id,
+	shopifyHandle,
+	slug,
 	name,
 	excerpt,
 	body,
@@ -177,6 +199,11 @@ function mergeProduct(
 
 	const body = sanityProduct?.body?.[locale] || sanityProduct?.body?.es
 
+	// Get localized slug from Sanity, fall back to Shopify handle
+	const slug = sanityProduct?.slug
+		? getLocalizedSlug(sanityProduct.slug, locale) || shopifyProduct.handle
+		: shopifyProduct.handle
+
 	return {
 		availableForSale: shopifyProduct.availableForSale,
 		badge: sanityProduct?.badge,
@@ -193,6 +220,7 @@ function mergeProduct(
 		priceRange: shopifyProduct.priceRange,
 		productType: shopifyProduct.productType,
 		sanityId: sanityProduct?._id,
+		slug,
 		sortOrder: sanityProduct?.sortOrder ?? 999,
 		tags: shopifyProduct.tags,
 		title,
@@ -245,6 +273,33 @@ export async function getProductByHandle(
 	if (!shopifyProduct) return null
 
 	return mergeProduct(shopifyProduct, sanityProduct, locale)
+}
+
+/**
+ * Fetch a single product by localized slug with merged data
+ * Falls back to handle lookup if no slug match found
+ */
+export async function getProductBySlug(
+	slug: string,
+	locale: Locale,
+): Promise<MergedProduct | null> {
+	// First try to find by localized slug
+	const sanityProduct = await client.fetch<StoreProduct | null>(
+		STORE_PRODUCT_BY_SLUG_QUERY,
+		{ slug },
+	)
+
+	if (sanityProduct?.shopifyHandle) {
+		const shopifyProduct = await shopifyApi.products.getByHandle(
+			sanityProduct.shopifyHandle,
+		)
+		if (shopifyProduct) {
+			return mergeProduct(shopifyProduct, sanityProduct, locale)
+		}
+	}
+
+	// Fall back to handle lookup (for backwards compatibility)
+	return getProductByHandle(slug, locale)
 }
 
 /**

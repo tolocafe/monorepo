@@ -111,7 +111,7 @@ export default function Shop({ loaderData }: Route.ComponentProps) {
 						{products.map((product: MergedProduct) => (
 							<Link
 								key={product.id}
-								to={`/${locale}/shop/${product.handle}`}
+								to={`/${locale}/shop/${product.slug || product.handle}`}
 								style={{ textDecoration: 'none' }}
 							>
 								<ProductCard product={product} />
