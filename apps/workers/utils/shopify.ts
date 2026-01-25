@@ -20,7 +20,7 @@ import { getCurrentScope } from '@sentry/cloudflare'
 import type { Bindings } from '@/types'
 
 /** Storefront API version */
-const API_VERSION = '2025-01'
+const API_VERSION = '2025-10'
 
 /**
  * Custom error class for Shopify API errors
@@ -162,6 +162,11 @@ async function shopifyFetch<TData>(
 		method: 'POST',
 	})
 
+	if (!response.ok) {
+		console.error('Shopify HTTP Error:', response.status, response.statusText)
+		throw new ShopifyError(`HTTP ${response.status}: ${response.statusText}`)
+	}
+
 	const data = (await response.json()) as GraphQLResponse<TData>
 
 	currentScope.setContext('Shopify Response', {
@@ -170,6 +175,7 @@ async function shopifyFetch<TData>(
 	})
 
 	if (data.errors?.length) {
+		console.error('Shopify API Error:', JSON.stringify(data.errors))
 		throw new ShopifyError(data.errors[0].message)
 	}
 
