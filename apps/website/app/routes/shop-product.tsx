@@ -5,7 +5,12 @@ import type { PortableTextComponents } from '@portabletext/react'
 import { useState } from 'react'
 import { Link, useOutletContext, useNavigate } from 'react-router'
 
-import { formatMoney, getCartIdFromCookies, createCartCookie } from '@/lib/cart'
+import {
+	formatMoney,
+	getCartIdFromCookies,
+	createCartCookie,
+	setCookie,
+} from '@/lib/cart'
 import type { Locale } from '@/lib/locale'
 import { getProductByHandle } from '@/lib/shop-data'
 import { shopifyApi } from '@/lib/shopify'
@@ -239,7 +244,7 @@ export default function ShopProduct({ loaderData }: Route.ComponentProps) {
 			}
 
 			if (cart) {
-				document.cookie = createCartCookie(cart.id)
+				setCookie(createCartCookie(cart.id))
 				navigate(`/${locale}/shop/cart`)
 			}
 		} catch {

@@ -162,7 +162,6 @@ async function shopifyFetch<TData>(
 	})
 
 	if (!response.ok) {
-		console.error('Shopify HTTP Error:', response.status, response.statusText)
 		throw new ShopifyError(`HTTP ${response.status}: ${response.statusText}`)
 	}
 
@@ -174,7 +173,6 @@ async function shopifyFetch<TData>(
 	})
 
 	if (data.errors?.length) {
-		console.error('Shopify API Error:', JSON.stringify(data.errors))
 		throw new ShopifyError(data.errors[0].message)
 	}
 

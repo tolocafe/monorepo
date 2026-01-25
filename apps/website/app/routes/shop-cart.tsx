@@ -8,6 +8,7 @@ import {
 	getCartIdFromCookies,
 	getCartLines,
 	clearCartCookie,
+	setCookie,
 } from '@/lib/cart'
 import type { Locale } from '@/lib/locale'
 import { shopifyApi } from '@/lib/shopify'
@@ -102,7 +103,7 @@ export default function ShopCart() {
 
 			// Clear cart cookie if empty
 			if (updatedCart && updatedCart.totalQuantity === 0) {
-				document.cookie = clearCartCookie()
+				setCookie(clearCartCookie())
 			}
 		} catch {
 			// Error handling

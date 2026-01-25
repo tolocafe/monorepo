@@ -50,6 +50,45 @@ export function clearCartCookie(): string {
 }
 
 /**
+ * Set a cookie value in the browser
+ */
+export function setCookie(value: string): void {
+	// Using cookieStore API when available, with fallback
+	if ('cookieStore' in globalThis) {
+		const [name, ...rest] = value.split('=')
+		const [cookieValue] = rest.join('=').split(';')
+		const maxAgeMatch = value.match(/Max-Age=(\d+)/)
+		const maxAge = maxAgeMatch ? Number.parseInt(maxAgeMatch[1], 10) : undefined
+
+		void (
+			globalThis as typeof globalThis & {
+				cookieStore: {
+					set: (opts: {
+						name: string
+						value: string
+						path: string
+						sameSite: string
+						secure: boolean
+						maxAge?: number
+					}) => Promise<void>
+				}
+			}
+		).cookieStore.set({
+			maxAge,
+			name,
+			path: '/',
+			sameSite: 'lax',
+			secure: true,
+			value: cookieValue,
+		})
+	} else {
+		// Fallback for browsers without Cookie Store API
+		// eslint-disable-next-line unicorn/no-document-cookie -- fallback for older browsers
+		document.cookie = value
+	}
+}
+
+/**
  * Get or create a cart, returning the cart and whether it was newly created
  */
 export async function getOrCreateCart(
