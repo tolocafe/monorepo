@@ -12,10 +12,10 @@ import type { Bindings } from '@/types'
 import { defaultJsonHeaders } from '@/utils/headers'
 import { shopifyApi } from '@/utils/shopify'
 
-const shopify = new Hono<{ Bindings: Bindings }>()
+const store = new Hono<{ Bindings: Bindings }>()
 	/**
 	 * List all products
-	 * GET /shopify/products
+	 * GET /store/products
 	 */
 	.get('/products', async (context) => {
 		try {
@@ -45,7 +45,7 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 
 	/**
 	 * Get a single product by handle
-	 * GET /shopify/products/:handle
+	 * GET /store/products/:handle
 	 */
 	.get('/products/:handle', async (context) => {
 		const handle = context.req.param('handle')
@@ -71,7 +71,7 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 
 	/**
 	 * Get product recommendations
-	 * GET /shopify/products/:id/recommendations
+	 * GET /store/products/:id/recommendations
 	 */
 	.get('/products/:id/recommendations', async (context) => {
 		const productId = context.req.param('id')
@@ -97,7 +97,7 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 
 	/**
 	 * List all collections
-	 * GET /shopify/collections
+	 * GET /store/collections
 	 */
 	.get('/collections', async (context) => {
 		try {
@@ -116,7 +116,7 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 
 	/**
 	 * Get a collection by handle with its products
-	 * GET /shopify/collections/:handle
+	 * GET /store/collections/:handle
 	 */
 	.get('/collections/:handle', async (context) => {
 		const handle = context.req.param('handle')
@@ -150,7 +150,7 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 
 	/**
 	 * Create a new cart
-	 * POST /shopify/cart
+	 * POST /store/cart
 	 * Body: { lines?: [{ merchandiseId: string, quantity: number }] }
 	 */
 	.post('/cart', async (context) => {
@@ -170,7 +170,7 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 
 	/**
 	 * Get an existing cart
-	 * GET /shopify/cart/:id
+	 * GET /store/cart/:id
 	 */
 	.get('/cart/:id', async (context) => {
 		const cartId = context.req.param('id')
@@ -196,7 +196,7 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 
 	/**
 	 * Add lines to a cart
-	 * POST /shopify/cart/:id/lines
+	 * POST /store/cart/:id/lines
 	 * Body: { lines: [{ merchandiseId: string, quantity: number }] }
 	 */
 	.post('/cart/:id/lines', async (context) => {
@@ -231,7 +231,7 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 
 	/**
 	 * Update cart lines
-	 * PATCH /shopify/cart/:id/lines
+	 * PATCH /store/cart/:id/lines
 	 * Body: { lines: [{ id: string, quantity: number }] }
 	 */
 	.patch('/cart/:id/lines', async (context) => {
@@ -266,7 +266,7 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 
 	/**
 	 * Remove lines from a cart
-	 * DELETE /shopify/cart/:id/lines
+	 * DELETE /store/cart/:id/lines
 	 * Body: { lineIds: string[] }
 	 */
 	.delete('/cart/:id/lines', async (context) => {
@@ -299,4 +299,4 @@ const shopify = new Hono<{ Bindings: Bindings }>()
 		}
 	})
 
-export default shopify
+export default store
