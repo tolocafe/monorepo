@@ -11,39 +11,43 @@ import * as styles from './shop.css'
 
 const META_TRANSLATIONS = {
 	de: {
-		description: 'Entdecken Sie unsere Auswahl an Kaffee und Merchandise',
+		description:
+			'Entdecken Sie unsere Auswahl an Spezialitätenkaffee, Zubehör und exklusivem Merchandise. Frisch gerösteter Kaffee direkt zu Ihnen nach Hause.',
 		heading: 'Shop',
-		subtitle: 'Kaffee, Zubeh\u00f6r und mehr',
+		subtitle: 'Kaffee, Zubehör und mehr',
 		title: 'Shop - TOLO',
 	},
 	en: {
-		description: 'Explore our selection of coffee and merchandise',
+		description:
+			'Discover our selection of specialty coffee, brewing accessories, and exclusive merchandise. Freshly roasted coffee delivered to your door.',
 		heading: 'Shop',
 		subtitle: 'Coffee, accessories, and more',
 		title: 'Shop - TOLO',
 	},
 	es: {
-		description: 'Explora nuestra selecci\u00f3n de caf\u00e9 y mercanc\u00eda',
+		description:
+			'Descubre nuestra selección de café de especialidad, accesorios de preparación y mercancía exclusiva. Café recién tostado directo a tu puerta.',
 		heading: 'Tienda',
-		subtitle: 'Caf\u00e9, accesorios y m\u00e1s',
+		subtitle: 'Café, accesorios y más',
 		title: 'Tienda - TOLO',
 	},
 	fr: {
 		description:
-			'D\u00e9couvrez notre s\u00e9lection de caf\u00e9 et de marchandises',
+			'Découvrez notre sélection de café de spécialité, accessoires et marchandises exclusives. Café fraîchement torréfié livré chez vous.',
 		heading: 'Boutique',
-		subtitle: 'Caf\u00e9, accessoires et plus',
+		subtitle: 'Café, accessoires et plus',
 		title: 'Boutique - TOLO',
 	},
 	ja: {
 		description:
-			'\u30b3\u30fc\u30d2\u30fc\u3068\u30b0\u30c3\u30ba\u306e\u30bb\u30ec\u30af\u30b7\u30e7\u30f3\u3092\u3054\u89a7\u304f\u3060\u3055\u3044',
-		heading: '\u30b7\u30e7\u30c3\u30d7',
-		subtitle:
-			'\u30b3\u30fc\u30d2\u30fc\u3001\u30a2\u30af\u30bb\u30b5\u30ea\u30fc\u306a\u3069',
-		title: '\u30b7\u30e7\u30c3\u30d7 - TOLO',
+			'スペシャルティコーヒー、抽出器具、限定グッズのセレクションをご覧ください。焙煎したてのコーヒーをご自宅にお届けします。',
+		heading: 'ショップ',
+		subtitle: 'コーヒー、アクセサリーなど',
+		title: 'ショップ - TOLO',
 	},
 } as const
+
+const OG_IMAGE_URL = 'https://tolo.cafe/og-shop.png'
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const locale = (params.locale as Locale) || 'es'
@@ -54,21 +58,33 @@ export async function loader({ params }: Route.LoaderArgs) {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
+	const canonicalUrl = `https://tolo.cafe/${locale}/shop`
 
 	return [
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
+		{ content: t.title, property: 'og:title' },
+		{ content: t.description, property: 'og:description' },
+		{ content: OG_IMAGE_URL, property: 'og:image' },
+		{ content: canonicalUrl, property: 'og:url' },
+		{ content: 'website', property: 'og:type' },
+		{ content: 'TOLO Coffee', property: 'og:site_name' },
+		{ content: 'summary_large_image', name: 'twitter:card' },
+		{ content: t.title, name: 'twitter:title' },
+		{ content: t.description, name: 'twitter:description' },
+		{ content: OG_IMAGE_URL, name: 'twitter:image' },
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',
 				'@type': 'CollectionPage',
-				description: t.subtitle,
+				description: t.description,
+				image: OG_IMAGE_URL,
 				name: t.heading,
 				publisher: {
 					'@type': 'Organization',
 					name: 'TOLO Coffee',
 				},
-				url: `https://tolo.cafe/${locale}/shop`,
+				url: canonicalUrl,
 			},
 		},
 	]
