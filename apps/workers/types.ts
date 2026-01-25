@@ -31,8 +31,11 @@ export type Bindings = Cloudflare.Env & {
 	POSTER_TOKEN: string
 	POSTHOG_API_KEY: string
 	SANITY_PROJECT_ID: string
-
 	SENTRY_DSN: string
+	/** Shopify Storefront API */
+	SHOPIFY_STORE_DOMAIN: string
+	/** Shopify Storefront API */
+	SHOPIFY_STOREFRONT_ACCESS_TOKEN: string
 	/** Passkit */
 	SIGNER_CERT: string
 	/** Passkit */

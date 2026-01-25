@@ -19,6 +19,7 @@ import orders from './routes/orders'
 import passes from './routes/passes'
 import pos from './routes/pos'
 import receipts from './routes/receipts'
+import store from './routes/store'
 import tables from './routes/tables'
 import transactionsRouter from './routes/transactions'
 import webhooks from './routes/webhooks'
@@ -76,6 +77,7 @@ app
 	.route('/passes', passes)
 	.route('/broadcast', broadcast)
 	.route('/tables', tables)
+	.route('/store', store)
 	.all('*', (context) => {
 		captureEvent({
 			extra: {
