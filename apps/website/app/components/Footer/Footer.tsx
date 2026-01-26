@@ -24,31 +24,26 @@ const LOCALE_PATHS = {
 		aboutPath: 'ueber-uns',
 		beansPath: 'beans',
 		privacyPath: 'datenschutz',
-		wholesalePath: 'grosshandel',
 	},
 	en: {
 		aboutPath: 'about',
 		beansPath: 'beans',
 		privacyPath: 'privacy',
-		wholesalePath: 'wholesale',
 	},
 	es: {
 		aboutPath: 'nosotros',
 		beansPath: 'granos',
 		privacyPath: 'privacidad',
-		wholesalePath: 'mayoreo',
 	},
 	fr: {
 		aboutPath: 'a-propos',
 		beansPath: 'beans',
 		privacyPath: 'confidentialite',
-		wholesalePath: 'vente-en-gros',
 	},
 	ja: {
 		aboutPath: 'about',
 		beansPath: 'beans',
 		privacyPath: 'privacy',
-		wholesalePath: 'wholesale',
 	},
 } as const
 
@@ -96,11 +91,8 @@ export function Footer({ locations = [] }: FooterProps) {
 						<Link to={`/${locale}/${paths.aboutPath}`} className={styles.link}>
 							<Trans>About</Trans>
 						</Link>
-						<Link
-							to={`/${locale}/${paths.wholesalePath}`}
-							className={styles.link}
-						>
-							<Trans>Wholesale</Trans>
+						<Link to={`/${locale}/shop`} className={styles.link}>
+							<Trans>Store</Trans>
 						</Link>
 						<Link to={`/${locale}/contact`} className={styles.link}>
 							<Trans>Contact</Trans>
