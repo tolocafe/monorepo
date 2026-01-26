@@ -1,5 +1,12 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
+import {
+	IconBrandApple,
+	IconBrandGooglePlay,
+	IconBrandTripadvisor,
+	IconMenu2,
+	IconStarFilled,
+} from '@tabler/icons-react'
 import { useOutletContext } from 'react-router'
 import type { MetaArgs } from 'react-router'
 
@@ -13,7 +20,7 @@ type LocaleContext = {
 
 type LinkItem = {
 	id: string
-	icon: string
+	icon: React.ReactNode
 	labelKey: 'menu' | 'googleReviews' | 'tripadvisor' | 'appStore' | 'googlePlay'
 	url: string
 	section: 'main' | 'apps'
@@ -21,35 +28,35 @@ type LinkItem = {
 
 const LINKS: LinkItem[] = [
 	{
-		icon: '📋',
+		icon: <IconMenu2 size={24} />,
 		id: 'menu',
 		labelKey: 'menu',
 		section: 'main',
 		url: 'https://app.tolo.cafe',
 	},
 	{
-		icon: '⭐',
+		icon: <IconStarFilled size={24} />,
 		id: 'google-reviews',
 		labelKey: 'googleReviews',
 		section: 'main',
 		url: 'https://g.page/r/Cfpoz19Mu8nWEBM/review',
 	},
 	{
-		icon: '🦉',
+		icon: <IconBrandTripadvisor size={24} />,
 		id: 'tripadvisor',
 		labelKey: 'tripadvisor',
 		section: 'main',
 		url: 'https://www.tripadvisor.com.mx/Restaurant_Review-g644384-d33287081-Reviews-TOLO_Buen_Cafe-Toluca_Central_Mexico_and_Gulf_Coast.html?m=69573',
 	},
 	{
-		icon: '🍎',
+		icon: <IconBrandApple size={24} />,
 		id: 'app-store',
 		labelKey: 'appStore',
 		section: 'apps',
 		url: 'https://apps.apple.com/app/id6749597635',
 	},
 	{
-		icon: '🤖',
+		icon: <IconBrandGooglePlay size={24} />,
 		id: 'google-play',
 		labelKey: 'googlePlay',
 		section: 'apps',
