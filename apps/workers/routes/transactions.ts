@@ -1,4 +1,4 @@
-import { captureException } from '@sentry/cloudflare'
+import * as Sentry from '@sentry/cloudflare'
 import type { Product } from '@tolo/common/api'
 import {
 	AddTransactionProductsSchema,
@@ -39,7 +39,7 @@ const transactions: Hono<{ Bindings: Bindings }> = new Hono<{
 
 			return context.json({ transaction: activeTransaction })
 		} catch (error) {
-			captureException(error)
+			Sentry.captureException(error)
 			throw new HTTPException(HttpStatusCode.INTERNAL_SERVER_ERROR, {
 				message: 'Failed to get active transaction',
 			})
@@ -75,7 +75,7 @@ const transactions: Hono<{ Bindings: Bindings }> = new Hono<{
 				throw error
 			}
 
-			captureException(error)
+			Sentry.captureException(error)
 			throw new HTTPException(HttpStatusCode.INTERNAL_SERVER_ERROR, {
 				message: 'Failed to get transaction',
 			})
@@ -148,7 +148,12 @@ const transactions: Hono<{ Bindings: Bindings }> = new Hono<{
 				}
 
 				// oxlint-disable-next-line no-console
-				console.log(data)
+				Sentry.captureMessage('Adding product to transaction', {
+				extra: {
+					data,
+				},
+				level: 'debug',
+			})
 
 				await posterApi.transactions.addTransactionProduct(
 					context.env.POSTER_TOKEN,
@@ -162,7 +167,7 @@ const transactions: Hono<{ Bindings: Bindings }> = new Hono<{
 				throw error
 			}
 
-			captureException(error)
+			Sentry.captureException(error)
 			throw new HTTPException(HttpStatusCode.INTERNAL_SERVER_ERROR, {
 				message:
 					error instanceof Error
@@ -275,7 +280,7 @@ const transactions: Hono<{ Bindings: Bindings }> = new Hono<{
 				transaction_id: transaction.transaction_id,
 			})
 		} catch (error) {
-			captureException(error)
+			Sentry.captureException(error)
 			throw new HTTPException(HttpStatusCode.INTERNAL_SERVER_ERROR, {
 				message:
 					error instanceof Error

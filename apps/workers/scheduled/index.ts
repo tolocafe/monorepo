@@ -53,7 +53,7 @@ async function syncData(
 				//   break
 				default: {
 					// eslint-disable-next-line no-console
-					console.log(`Should handle ${event.type} event`)
+					Sentry.captureMessage(`Unhandled lifecycle event: ${event.type}`, 'info')
 					break
 				}
 			}

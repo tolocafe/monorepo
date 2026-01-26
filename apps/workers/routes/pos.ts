@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/cloudflare'
 import type { PosClientData } from '@tolo/common/api'
 import { Hono } from 'hono'
 
@@ -172,7 +173,11 @@ Constraints:
 			).then((result) => result.response ?? '')
 		} catch (error) {
 			// eslint-disable-next-line no-console
-			console.error(error)
+			Sentry.captureException(error, {
+			extra: {
+				context: 'POS posthog tracking',
+			},
+		})
 		}
 
 		return context.json<PosClientData>(

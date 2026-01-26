@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/cloudflare'
 import { drizzle } from 'drizzle-orm/postgres-js'
 import postgres from 'postgres'
 
@@ -9,8 +10,7 @@ type HyperdriveBinding = {
 }
 
 export function getDatabase(hyperdrive: HyperdriveBinding) {
-	// eslint-disable-next-line no-console
-	console.log('[DB] Creating postgres connection...')
+	Sentry.captureMessage('[DB] Creating postgres connection', 'debug')
 
 	const sql = postgres(hyperdrive.connectionString, {
 		// Avoid extra round-trips for array types
@@ -19,8 +19,7 @@ export function getDatabase(hyperdrive: HyperdriveBinding) {
 		max: 5,
 	})
 
-	// eslint-disable-next-line no-console
-	console.log('[DB] Postgres connection created, initializing Drizzle...')
+	Sentry.captureMessage('[DB] Postgres connection created, initializing Drizzle', 'debug')
 
 	return drizzle({ client: sql, relations, schema })
 }

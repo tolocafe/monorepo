@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/cloudflare'
 import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
@@ -29,6 +30,16 @@ const coffees = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 			return context.json(localized, 200, defaultJsonHeaders)
 		} catch (error) {
+			if (error instanceof HTTPException) {
+				throw error
+			}
+
+			captureException(error, {
+				extra: {
+					language: context.get('language'),
+				},
+			})
+
 			throw new HTTPException(500, {
 				cause: error,
 				message: 'Could not fetch coffees',
@@ -55,6 +66,17 @@ const coffees = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 			return context.json(localized, 200, defaultJsonHeaders)
 		} catch (error) {
+			if (error instanceof HTTPException) {
+				throw error
+			}
+
+			captureException(error, {
+				extra: {
+					id: context.req.param('id'),
+					language: context.get('language'),
+				},
+			})
+
 			throw new HTTPException(500, {
 				cause: error,
 				message: 'Could not fetch coffee',

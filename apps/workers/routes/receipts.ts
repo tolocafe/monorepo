@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/cloudflare'
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 
@@ -101,7 +102,11 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 			})
 		} catch (error) {
 			// eslint-disable-next-line no-console
-			console.error('Error generating PDF:', error)
+			Sentry.captureException(error, {
+			extra: {
+				context: 'PDF generation',
+			},
+		})
 
 			// Handle HTTP exceptions (like 403 Access denied)
 			if (error instanceof HTTPException) {

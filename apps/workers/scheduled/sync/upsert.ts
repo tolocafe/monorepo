@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/cloudflare'
 import type { DashTransaction, PosterModification } from '@tolo/common/api'
 import { desc, eq } from 'drizzle-orm'
 
@@ -124,7 +125,7 @@ export async function upsertOrderLines(
 ) {
 	if (!tx.products) {
 		// eslint-disable-next-line no-console
-		console.log(`[upsertOrderLines] tx ${tx.transaction_id} has no products`)
+		Sentry.captureMessage(`[upsertOrderLines] tx ${tx.transaction_id} has no products`, 'debug')
 		return
 	}
 

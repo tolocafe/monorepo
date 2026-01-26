@@ -85,8 +85,9 @@ export async function processTransactionEvents(
 			', ',
 		)
 		// eslint-disable-next-line no-console
-		console.log(
+		Sentry.captureMessage(
 			`[events] ${orderEvents.length} events (${eventTypes}) → ${analyticsCount} analytics, ${notificationCount} notifications`,
+			'debug',
 		)
 	}
 }

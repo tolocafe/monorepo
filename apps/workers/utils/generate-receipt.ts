@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/cloudflare'
 import puppeteer from '@cloudflare/puppeteer'
 import type { BrowserWorker } from '@cloudflare/puppeteer'
 
@@ -367,7 +368,11 @@ export async function generateReceiptPDF(
 		return Buffer.from(pdf)
 	} catch (error) {
 		// eslint-disable-next-line no-console
-		console.error('Error generating PDF:', error)
+		Sentry.captureException(error, {
+			extra: {
+				context: 'Receipt PDF generation',
+			},
+		})
 		throw new Error('Failed to generate PDF', { cause: error })
 	}
 }

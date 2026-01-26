@@ -1,3 +1,4 @@
+import { captureException } from '@sentry/cloudflare'
 import type { Event } from '@tolo/common/api'
 import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
@@ -46,6 +47,16 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 
 			return context.json(localized, 200, defaultJsonHeaders)
 		} catch (error) {
+			if (error instanceof HTTPException) {
+				throw error
+			}
+
+			captureException(error, {
+				extra: {
+					language: context.get('language'),
+				},
+			})
+
 			throw new HTTPException(500, {
 				cause: error,
 				message: 'Could not fetch events',
@@ -101,6 +112,17 @@ const events = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				'Content-Language': language,
 			})
 		} catch (error) {
+			if (error instanceof HTTPException) {
+				throw error
+			}
+
+			captureException(error, {
+				extra: {
+					id,
+					language,
+				},
+			})
+
 			throw new HTTPException(500, {
 				cause: error,
 				message: 'Could not fetch event',

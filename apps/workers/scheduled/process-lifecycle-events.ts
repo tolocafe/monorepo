@@ -292,8 +292,9 @@ export default async function processCustomerLifecycleEvents(
 		})
 
 		// eslint-disable-next-line no-console
-		console.log(
+		Sentry.captureMessage(
 			`Lifecycle events processed: ${eventCounts.first_time_customer || 0} first-time customers, ${eventCounts.revival || 0} revivals, ${eventCounts.milestone_order || 0} milestones, ${eventCounts.product_discovery || 0} product discoveries, ${eventCounts.waiter_change || 0} waiter changes, ${eventCounts.payment_completion || 0} payments completed (${events.length} total)`,
+			'info',
 		)
 
 		return events
@@ -306,7 +307,7 @@ export default async function processCustomerLifecycleEvents(
 		})
 
 		// eslint-disable-next-line no-console
-		console.error('Error processing lifecycle events:', error)
+		// Error already captured to Sentry above
 
 		// Return empty events on error
 		return events
