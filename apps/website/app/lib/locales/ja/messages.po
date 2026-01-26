@@ -14,11 +14,11 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: app/routes/shop-cart.tsx:133
+#: app/routes/shop-cart.tsx:134
 msgid "\\u2190 Continue Shopping"
-msgstr ""
+msgstr "← ショッピングを続ける"
 
-#: app/components/Footer/Footer.tsx:166
+#: app/components/Footer/Footer.tsx:158
 msgid "© {currentYear} TOLO. All rights reserved."
 msgstr "© {currentYear} TOLO. 無断複写・転載を禁じます。"
 
@@ -32,10 +32,10 @@ msgstr "← ブログに戻る"
 msgid "← Back to Our Beans"
 msgstr "← コーヒー豆一覧に戻る"
 
-#: app/routes/shop-product.tsx:200
-#: app/routes/shop-product.tsx:267
+#: app/routes/shop-product.tsx:207
+#: app/routes/shop-product.tsx:274
 msgid "← Back to Shop"
-msgstr ""
+msgstr "← ショップに戻る"
 
 #: app/welcome/welcome.tsx:61
 msgid "100+ reviews"
@@ -61,18 +61,18 @@ msgstr "くつろいだり仕事をしたりできる場所：高速Wi-Fi、ペ�
 msgid "A place to hang out, work or grab something delicious — with fast service and good vibes."
 msgstr "くつろいだり、仕事をしたり、おいしいものを楽しむ場所 — 迅速なサービスと良い雰囲気。"
 
-#: app/components/Footer/Footer.tsx:97
+#: app/components/Footer/Footer.tsx:92
 #: app/components/Header/Header.tsx:49
 msgid "About"
 msgstr "私たちについて"
 
-#: app/routes/shop-product.tsx:382
+#: app/routes/shop-product.tsx:389
 msgid "Add to Cart"
-msgstr ""
+msgstr "カートに追加"
 
-#: app/routes/shop-product.tsx:380
+#: app/routes/shop-product.tsx:387
 msgid "Adding..."
-msgstr ""
+msgstr "追加中..."
 
 #: app/routes/location.tsx:165
 msgid "Address"
@@ -111,7 +111,11 @@ msgstr "TOLOでは美味しいコーヒーを作っています — それだけ
 msgid "Bean Not Found"
 msgstr "コーヒー豆が見つかりません"
 
-#: app/components/Footer/Footer.tsx:88
+#: app/components/ProductCard/ProductCard.tsx:19
+msgid "Bestseller"
+msgstr "ベストセラー"
+
+#: app/components/Footer/Footer.tsx:83
 #: app/routes/blog.tsx:97
 #: app/routes/page.tsx:168
 msgid "Blog"
@@ -133,9 +137,9 @@ msgstr "厳選されたシングルオリジンとブレンド"
 msgid "Chai"
 msgstr "チャイ"
 
-#: app/routes/shop-cart.tsx:198
+#: app/routes/shop-cart.tsx:199
 msgid "Checkout"
-msgstr ""
+msgstr "購入手続きへ"
 
 #: app/components/Header/Header.tsx:192
 msgid "Close menu"
@@ -149,9 +153,9 @@ msgstr "コーヒー豆"
 msgid "Coffee Origins"
 msgstr "コーヒーの産地"
 
-#: app/routes/shop.tsx:89
+#: app/routes/shop.tsx:105
 msgid "Coffee, accessories, and more"
-msgstr ""
+msgstr "コーヒー、アクセサリーなど"
 
 #: app/welcome/welcome.tsx:70
 msgid "Cold brew"
@@ -161,15 +165,15 @@ msgstr "コールドブリュー"
 #: app/routes/blog.tsx:150
 #: app/routes/contact.tsx:90
 #: app/routes/locations.tsx:165
-#: app/routes/shop.tsx:108
+#: app/routes/shop.tsx:124
 msgid "Coming Soon"
 msgstr "近日公開"
 
-#: app/components/Footer/Footer.tsx:94
+#: app/components/Footer/Footer.tsx:89
 msgid "Company"
 msgstr "会社情報"
 
-#: app/components/Footer/Footer.tsx:106
+#: app/components/Footer/Footer.tsx:98
 msgid "Contact"
 msgstr "お問い合わせ"
 
@@ -177,22 +181,22 @@ msgstr "お問い合わせ"
 msgid "Contact Us"
 msgstr "お問い合わせ"
 
-#: app/routes/shop-cart.tsx:205
+#: app/routes/shop-cart.tsx:206
 msgid "Continue Shopping"
-msgstr ""
+msgstr "ショッピングを続ける"
 
-#: app/routes/shop-cart.tsx:266
-#: app/routes/shop-product.tsx:357
+#: app/routes/shop-cart.tsx:267
+#: app/routes/shop-product.tsx:364
 msgid "Decrease quantity"
-msgstr ""
+msgstr "数量を減らす"
 
 #: app/welcome/welcome.tsx:56
 msgid "Direct from the farm"
 msgstr "農園から直接"
 
-#: app/components/Footer/Footer.tsx:132
+#: app/components/Footer/Footer.tsx:124
 msgid "Download"
-msgstr ""
+msgstr "ダウンロード"
 
 #: app/welcome/welcome.tsx:114
 #: app/welcome/welcome.tsx:192
@@ -208,7 +212,7 @@ msgstr "メール"
 msgid "Espresso drinks"
 msgstr "エスプレッソドリンク"
 
-#: app/components/Footer/Footer.tsx:79
+#: app/components/Footer/Footer.tsx:74
 msgid "Explore"
 msgstr "探索"
 
@@ -218,7 +222,7 @@ msgstr "コーヒー豆を探索して、袋を持ち帰ろう（店頭にて）
 
 #: app/routes/locations.tsx:101
 msgid "Find us and visit for freshly roasted coffee"
-msgstr ""
+msgstr "新鮮な焙煎コーヒーを求めてお越しください"
 
 #: app/welcome/welcome.tsx:122
 msgid "Get directions"
@@ -232,7 +236,7 @@ msgstr "美味しいコーヒー"
 msgid "Good coffee, just like that."
 msgstr "美味しいコーヒー、それだけ。"
 
-#: app/components/Footer/Footer.tsx:72
+#: app/components/Footer/Footer.tsx:67
 msgid "Good coffee, simple as that."
 msgstr "美味しいコーヒー、それだけ。"
 
@@ -248,7 +252,7 @@ msgstr "こんにちは、TOLOです"
 msgid "High-speed Wi-Fi"
 msgstr "高速Wi-Fi"
 
-#: app/components/Footer/Footer.tsx:82
+#: app/components/Footer/Footer.tsx:77
 msgid "Home"
 msgstr "ホーム"
 
@@ -262,34 +266,38 @@ msgstr "営業時間"
 msgid "In a hurry?"
 msgstr "お急ぎですか？"
 
-#: app/routes/shop-cart.tsx:276
-#: app/routes/shop-product.tsx:366
+#: app/routes/shop-cart.tsx:277
+#: app/routes/shop-product.tsx:373
 msgid "Increase quantity"
-msgstr ""
+msgstr "数量を増やす"
 
 #: app/routes/links.tsx:122
 msgid "Leave us a Google Review"
 msgstr "Googleレビューを書く"
 
-#: app/routes/shop-cart.tsx:122
+#: app/components/ProductCard/ProductCard.tsx:22
+msgid "Limited"
+msgstr "限定"
+
+#: app/routes/shop-cart.tsx:123
 msgid "Loading cart..."
-msgstr ""
+msgstr "カートを読み込み中..."
 
 #: app/routes/location.tsx:100
 msgid "Location Not Found"
 msgstr "場所が見つかりません"
 
-#: app/components/Footer/Footer.tsx:113
+#: app/components/Footer/Footer.tsx:105
 msgid "Locations"
 msgstr "店舗"
 
-#: app/routes/shop-cart.tsx:148
+#: app/routes/shop-cart.tsx:149
 msgid "Looks like you have not added any items to your cart yet."
-msgstr ""
+msgstr "まだカートに商品が追加されていないようです。"
 
 #: app/routes/locations.tsx:142
 msgid "Main"
-msgstr ""
+msgstr "メイン"
 
 #: app/welcome/welcome.tsx:69
 msgid "Matcha"
@@ -302,6 +310,10 @@ msgstr "メニュー"
 #: app/routes/contact.tsx:115
 msgid "Mon-Fri: 8am - 8pm"
 msgstr "月〜金：8時〜20時"
+
+#: app/components/ProductCard/ProductCard.tsx:25
+msgid "New"
+msgstr "新商品"
 
 #: app/routes/blog.tsx:192
 msgid "News about new offerings, events, and what is happening at TOLO."
@@ -333,7 +345,7 @@ msgstr "アプリで注文"
 
 #: app/welcome/welcome.tsx:269
 msgid "Order your favorite coffee ahead and pick it up when you arrive, no waiting. Save your favorites, repeat previous orders in one tap and receive exclusive offers just for app users. The app is free and available for iOS and Android."
-msgstr ""
+msgstr "お気に入りのコーヒーを事前注文して、到着時に受け取り、待ち時間なし。お気に入りを保存し、以前の注文をワンタップで繰り返し、アプリユーザー限定の特別オファーを受け取れます。アプリは無料でiOSとAndroidで利用可能です。"
 
 #: app/routes/bean.tsx:124
 msgid "Origin"
@@ -347,7 +359,7 @@ msgstr "私たちのアプリ"
 msgid "Our Apps"
 msgstr "アプリ"
 
-#: app/components/Footer/Footer.tsx:85
+#: app/components/Footer/Footer.tsx:80
 #: app/routes/beans.tsx:98
 #: app/routes/page.tsx:165
 msgid "Our Beans"
@@ -359,7 +371,7 @@ msgstr "お問い合わせフォームは準備中です。その間、トルー
 
 #: app/routes/locations.tsx:98
 msgid "Our Locations"
-msgstr ""
+msgstr "店舗一覧"
 
 #: app/welcome/welcome.tsx:55
 msgid "Our Mexican coffees come straight from farms we know. We also rotate origins from Colombia, Ethiopia, Panama and more."
@@ -397,7 +409,7 @@ msgstr "記事が見つかりません"
 msgid "Pour overs"
 msgstr "プアオーバー"
 
-#: app/components/Footer/Footer.tsx:210
+#: app/components/Footer/Footer.tsx:202
 msgid "Privacy"
 msgstr "プライバシー"
 
@@ -410,26 +422,30 @@ msgstr "精製方法"
 msgid "Producer"
 msgstr "生産者"
 
-#: app/routes/shop-product.tsx:204
+#: app/routes/shop-product.tsx:211
 msgid "Product Not Found"
-msgstr ""
+msgstr "商品が見つかりません"
 
-#: app/routes/shop-product.tsx:349
+#: app/routes/shop-product.tsx:356
 msgid "Quantity"
-msgstr ""
+msgstr "数量"
 
 #: app/routes/bean.tsx:125
 msgid "Region"
 msgstr "地域"
 
-#: app/routes/shop-cart.tsx:288
+#: app/routes/shop-cart.tsx:289
 msgid "Remove"
-msgstr ""
+msgstr "削除"
 
 #: app/welcome/welcome.tsx:62
 #: app/welcome/welcome.tsx:364
 msgid "Roasted weekly"
 msgstr "毎週焙煎"
+
+#: app/components/ProductCard/ProductCard.tsx:28
+msgid "Sale"
+msgstr "セール"
 
 #: app/routes/contact.tsx:117
 msgid "Sat-Sun: 9am - 6pm"
@@ -446,16 +462,16 @@ msgstr "場所を見る"
 #. placeholder {0}: LOCALE_LABELS[currentLocale]
 #: app/components/Header/Header.tsx:139
 msgid "Select language, current: {0}"
-msgstr ""
+msgstr "言語を選択、現在: {0}"
 
 #: app/components/Header/Header.tsx:47
-#: app/routes/shop.tsx:86
+#: app/routes/shop.tsx:102
 msgid "Shop"
 msgstr "ショップ"
 
-#: app/routes/shop-cart.tsx:153
+#: app/routes/shop-cart.tsx:154
 msgid "Shop Now"
-msgstr ""
+msgstr "今すぐ購入"
 
 #: app/routes/blog.tsx:189
 msgid "Shop Updates"
@@ -464,12 +480,15 @@ msgstr "ショップのお知らせ"
 #. placeholder {0}: itemCount > 0 ? `, ${itemCount} items` : ''
 #: app/components/CartIcon/CartIcon.tsx:54
 msgid "Shopping cart{0}"
-msgstr ""
+msgstr "カート{0}"
 
-#: app/components/ProductCard/ProductCard.tsx:40
-#: app/routes/shop-product.tsx:388
+#: app/components/ProductCard/ProductCard.tsx:57
+msgid "Sold out"
+msgstr "売り切れ"
+
+#: app/routes/shop-product.tsx:395
 msgid "Sold Out"
-msgstr ""
+msgstr "売り切れ"
 
 #: app/welcome/welcome.tsx:43
 msgid "Something bold or something smooth? Tell us what you like and we'll help you choose. No fuss."
@@ -480,13 +499,17 @@ msgid "Specialty coffee in Toluca, roasted weekly and made with care. Stop by fo
 msgstr "トルーカのスペシャルティコーヒー、毎週焙煎し、丁寧に淹れています。エスプレッソを飲みに、少し仕事をしに、または単におしゃべりしにお立ち寄りください。"
 
 #. placeholder {0}: formatMoney(product.priceRange.minVariantPrice)
-#: app/components/ProductCard/ProductCard.tsx:61
+#: app/components/ProductCard/ProductCard.tsx:78
 msgid "Starting from {0}"
-msgstr ""
+msgstr "{0}から"
 
 #: app/routes/blog.tsx:171
 msgid "Step-by-step instructions for the perfect cup at home."
 msgstr "自宅で完璧な一杯を淹れるためのステップバイステップガイド。"
+
+#: app/components/Footer/Footer.tsx:95
+msgid "Store"
+msgstr "ストア"
 
 #: app/routes/blog.tsx:181
 msgid "Stories about the farms and regions where our beans come from."
@@ -496,13 +519,13 @@ msgstr "私たちの豆が生産される農園や地域についてのストー
 msgid "Stories from the coffee world"
 msgstr "コーヒーの世界からのストーリー"
 
-#: app/routes/shop-cart.tsx:176
+#: app/routes/shop-cart.tsx:177
 msgid "Subtotal"
-msgstr ""
+msgstr "小計"
 
 #: app/routes/blog-post.tsx:181
 msgid "Suggested Readings"
-msgstr ""
+msgstr "おすすめ記事"
 
 #: app/welcome/welcome.tsx:72
 msgid "Sweet bread"
@@ -532,13 +555,13 @@ msgstr "お探しのページは存在しません。"
 msgid "The post you are looking for does not exist or has been removed."
 msgstr "お探しの記事は存在しないか、削除されました。"
 
-#: app/routes/shop-product.tsx:207
+#: app/routes/shop-product.tsx:214
 msgid "The product you are looking for does not exist or has been removed."
-msgstr ""
+msgstr "お探しの商品は存在しないか、削除されました。"
 
-#: app/routes/shop-cart.tsx:185
+#: app/routes/shop-cart.tsx:186
 msgid "Total"
-msgstr ""
+msgstr "合計"
 
 #: app/routes/bean.tsx:127
 msgid "Varietal"
@@ -582,11 +605,11 @@ msgstr "豆のカタログを準備中です。厳選されたコーヒーを発
 
 #: app/routes/locations.tsx:168
 msgid "We are preparing our location information. Check back soon."
-msgstr ""
+msgstr "店舗情報を準備中です。またお越しください。"
 
-#: app/routes/shop.tsx:111
+#: app/routes/shop.tsx:127
 msgid "We are preparing our store. Check back soon to discover our products."
-msgstr ""
+msgstr "ストアを準備中です。商品を発見するために、またお越しください。"
 
 #: app/welcome/welcome.tsx:51
 msgid "We roast every week, so there's always something fresh. Ask what's new or take a bag home."
@@ -616,17 +639,13 @@ msgstr "期待できること"
 msgid "What you will find"
 msgstr "見つかるもの"
 
-#: app/components/Footer/Footer.tsx:103
-msgid "Wholesale"
-msgstr "卸売"
-
-#: app/routes/shop-cart.tsx:138
+#: app/routes/shop-cart.tsx:139
 msgid "Your Cart"
-msgstr ""
+msgstr "カート"
 
-#: app/routes/shop-cart.tsx:145
+#: app/routes/shop-cart.tsx:146
 msgid "Your cart is empty"
-msgstr ""
+msgstr "カートは空です"
 
 #: app/welcome/welcome.tsx:44
 msgid "Your coffee, your way"

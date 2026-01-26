@@ -166,7 +166,7 @@ export function Footer({ locations = [] }: FooterProps) {
 						className={styles.socialLink}
 						aria-label="Instagram"
 					>
-						<IconBrandInstagram size={20} aria-hidden="true" />
+						<IconBrandInstagram size={24} aria-hidden="true" />
 					</a>
 					<a
 						href="https://facebook.com/tolo.cafe"
@@ -175,7 +175,7 @@ export function Footer({ locations = [] }: FooterProps) {
 						className={styles.socialLink}
 						aria-label="Facebook"
 					>
-						<IconBrandFacebook size={20} aria-hidden="true" />
+						<IconBrandFacebook size={24} aria-hidden="true" />
 					</a>
 					<a
 						href="https://tiktok.com/@tolo.cafe"
@@ -184,7 +184,7 @@ export function Footer({ locations = [] }: FooterProps) {
 						className={styles.socialLink}
 						aria-label="TikTok"
 					>
-						<IconBrandTiktok size={20} aria-hidden="true" />
+						<IconBrandTiktok size={24} aria-hidden="true" />
 					</a>
 					<a
 						href="https://www.tripadvisor.com/Restaurant_Review-g644384-d33287081-Reviews-TOLO_Buen_Cafe-Toluca_Central_Mexico_and_Gulf_Coast.html"
@@ -193,7 +193,7 @@ export function Footer({ locations = [] }: FooterProps) {
 						className={styles.socialLink}
 						aria-label="TripAdvisor"
 					>
-						<IconBrandTripadvisor size={20} aria-hidden="true" />
+						<IconBrandTripadvisor size={24} aria-hidden="true" />
 					</a>
 					<Link
 						to={`/${locale}/${paths.privacyPath}`}

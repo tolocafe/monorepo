@@ -14,11 +14,11 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: app/routes/shop-cart.tsx:133
+#: app/routes/shop-cart.tsx:134
 msgid "\\u2190 Continue Shopping"
 msgstr "\\u2190 Continue Shopping"
 
-#: app/components/Footer/Footer.tsx:166
+#: app/components/Footer/Footer.tsx:158
 msgid "© {currentYear} TOLO. All rights reserved."
 msgstr "© {currentYear} TOLO. All rights reserved."
 
@@ -32,8 +32,8 @@ msgstr "← Back to Blog"
 msgid "← Back to Our Beans"
 msgstr "← Back to Our Beans"
 
-#: app/routes/shop-product.tsx:200
-#: app/routes/shop-product.tsx:267
+#: app/routes/shop-product.tsx:207
+#: app/routes/shop-product.tsx:274
 msgid "← Back to Shop"
 msgstr "← Back to Shop"
 
@@ -61,16 +61,16 @@ msgstr "A place to hang out or work: fast Wi-Fi, pet-friendly and good vibes."
 msgid "A place to hang out, work or grab something delicious — with fast service and good vibes."
 msgstr "A place to hang out, work or grab something delicious — with fast service and good vibes."
 
-#: app/components/Footer/Footer.tsx:97
+#: app/components/Footer/Footer.tsx:92
 #: app/components/Header/Header.tsx:49
 msgid "About"
 msgstr "About"
 
-#: app/routes/shop-product.tsx:382
+#: app/routes/shop-product.tsx:389
 msgid "Add to Cart"
 msgstr "Add to Cart"
 
-#: app/routes/shop-product.tsx:380
+#: app/routes/shop-product.tsx:387
 msgid "Adding..."
 msgstr "Adding..."
 
@@ -111,7 +111,11 @@ msgstr "At TOLO we make good coffee — that is it. We roast every week and prep
 msgid "Bean Not Found"
 msgstr "Bean Not Found"
 
-#: app/components/Footer/Footer.tsx:88
+#: app/components/ProductCard/ProductCard.tsx:19
+msgid "Bestseller"
+msgstr "Bestseller"
+
+#: app/components/Footer/Footer.tsx:83
 #: app/routes/blog.tsx:97
 #: app/routes/page.tsx:168
 msgid "Blog"
@@ -133,7 +137,7 @@ msgstr "Carefully selected single origins and blends"
 msgid "Chai"
 msgstr "Chai"
 
-#: app/routes/shop-cart.tsx:198
+#: app/routes/shop-cart.tsx:199
 msgid "Checkout"
 msgstr "Checkout"
 
@@ -149,7 +153,7 @@ msgstr "Coffee beans"
 msgid "Coffee Origins"
 msgstr "Coffee Origins"
 
-#: app/routes/shop.tsx:89
+#: app/routes/shop.tsx:105
 msgid "Coffee, accessories, and more"
 msgstr "Coffee, accessories, and more"
 
@@ -161,15 +165,15 @@ msgstr "Cold brew"
 #: app/routes/blog.tsx:150
 #: app/routes/contact.tsx:90
 #: app/routes/locations.tsx:165
-#: app/routes/shop.tsx:108
+#: app/routes/shop.tsx:124
 msgid "Coming Soon"
 msgstr "Coming Soon"
 
-#: app/components/Footer/Footer.tsx:94
+#: app/components/Footer/Footer.tsx:89
 msgid "Company"
 msgstr "Company"
 
-#: app/components/Footer/Footer.tsx:106
+#: app/components/Footer/Footer.tsx:98
 msgid "Contact"
 msgstr "Contact"
 
@@ -177,12 +181,12 @@ msgstr "Contact"
 msgid "Contact Us"
 msgstr "Contact Us"
 
-#: app/routes/shop-cart.tsx:205
+#: app/routes/shop-cart.tsx:206
 msgid "Continue Shopping"
 msgstr "Continue Shopping"
 
-#: app/routes/shop-cart.tsx:266
-#: app/routes/shop-product.tsx:357
+#: app/routes/shop-cart.tsx:267
+#: app/routes/shop-product.tsx:364
 msgid "Decrease quantity"
 msgstr "Decrease quantity"
 
@@ -190,7 +194,7 @@ msgstr "Decrease quantity"
 msgid "Direct from the farm"
 msgstr "Direct from the farm"
 
-#: app/components/Footer/Footer.tsx:132
+#: app/components/Footer/Footer.tsx:124
 msgid "Download"
 msgstr "Download"
 
@@ -208,7 +212,7 @@ msgstr "Email"
 msgid "Espresso drinks"
 msgstr "Espresso drinks"
 
-#: app/components/Footer/Footer.tsx:79
+#: app/components/Footer/Footer.tsx:74
 msgid "Explore"
 msgstr "Explore"
 
@@ -232,7 +236,7 @@ msgstr "Good coffee"
 msgid "Good coffee, just like that."
 msgstr "Good coffee, just like that."
 
-#: app/components/Footer/Footer.tsx:72
+#: app/components/Footer/Footer.tsx:67
 msgid "Good coffee, simple as that."
 msgstr "Good coffee, simple as that."
 
@@ -248,7 +252,7 @@ msgstr "Hi, we are TOLO"
 msgid "High-speed Wi-Fi"
 msgstr "High-speed Wi-Fi"
 
-#: app/components/Footer/Footer.tsx:82
+#: app/components/Footer/Footer.tsx:77
 msgid "Home"
 msgstr "Home"
 
@@ -262,8 +266,8 @@ msgstr "Hours"
 msgid "In a hurry?"
 msgstr "In a hurry?"
 
-#: app/routes/shop-cart.tsx:276
-#: app/routes/shop-product.tsx:366
+#: app/routes/shop-cart.tsx:277
+#: app/routes/shop-product.tsx:373
 msgid "Increase quantity"
 msgstr "Increase quantity"
 
@@ -271,7 +275,11 @@ msgstr "Increase quantity"
 msgid "Leave us a Google Review"
 msgstr "Leave us a Google Review"
 
-#: app/routes/shop-cart.tsx:122
+#: app/components/ProductCard/ProductCard.tsx:22
+msgid "Limited"
+msgstr "Limited"
+
+#: app/routes/shop-cart.tsx:123
 msgid "Loading cart..."
 msgstr "Loading cart..."
 
@@ -279,11 +287,11 @@ msgstr "Loading cart..."
 msgid "Location Not Found"
 msgstr "Location Not Found"
 
-#: app/components/Footer/Footer.tsx:113
+#: app/components/Footer/Footer.tsx:105
 msgid "Locations"
 msgstr "Locations"
 
-#: app/routes/shop-cart.tsx:148
+#: app/routes/shop-cart.tsx:149
 msgid "Looks like you have not added any items to your cart yet."
 msgstr "Looks like you have not added any items to your cart yet."
 
@@ -302,6 +310,10 @@ msgstr "Menu"
 #: app/routes/contact.tsx:115
 msgid "Mon-Fri: 8am - 8pm"
 msgstr "Mon-Fri: 8am - 8pm"
+
+#: app/components/ProductCard/ProductCard.tsx:25
+msgid "New"
+msgstr "New"
 
 #: app/routes/blog.tsx:192
 msgid "News about new offerings, events, and what is happening at TOLO."
@@ -347,7 +359,7 @@ msgstr "Our app"
 msgid "Our Apps"
 msgstr "Our Apps"
 
-#: app/components/Footer/Footer.tsx:85
+#: app/components/Footer/Footer.tsx:80
 #: app/routes/beans.tsx:98
 #: app/routes/page.tsx:165
 msgid "Our Beans"
@@ -397,7 +409,7 @@ msgstr "Post Not Found"
 msgid "Pour overs"
 msgstr "Pour overs"
 
-#: app/components/Footer/Footer.tsx:210
+#: app/components/Footer/Footer.tsx:202
 msgid "Privacy"
 msgstr "Privacy"
 
@@ -410,11 +422,11 @@ msgstr "Process"
 msgid "Producer"
 msgstr "Producer"
 
-#: app/routes/shop-product.tsx:204
+#: app/routes/shop-product.tsx:211
 msgid "Product Not Found"
 msgstr "Product Not Found"
 
-#: app/routes/shop-product.tsx:349
+#: app/routes/shop-product.tsx:356
 msgid "Quantity"
 msgstr "Quantity"
 
@@ -422,7 +434,7 @@ msgstr "Quantity"
 msgid "Region"
 msgstr "Region"
 
-#: app/routes/shop-cart.tsx:288
+#: app/routes/shop-cart.tsx:289
 msgid "Remove"
 msgstr "Remove"
 
@@ -430,6 +442,10 @@ msgstr "Remove"
 #: app/welcome/welcome.tsx:364
 msgid "Roasted weekly"
 msgstr "Roasted weekly"
+
+#: app/components/ProductCard/ProductCard.tsx:28
+msgid "Sale"
+msgstr "Sale"
 
 #: app/routes/contact.tsx:117
 msgid "Sat-Sun: 9am - 6pm"
@@ -449,11 +465,11 @@ msgid "Select language, current: {0}"
 msgstr "Select language, current: {0}"
 
 #: app/components/Header/Header.tsx:47
-#: app/routes/shop.tsx:86
+#: app/routes/shop.tsx:102
 msgid "Shop"
 msgstr "Shop"
 
-#: app/routes/shop-cart.tsx:153
+#: app/routes/shop-cart.tsx:154
 msgid "Shop Now"
 msgstr "Shop Now"
 
@@ -466,8 +482,11 @@ msgstr "Shop Updates"
 msgid "Shopping cart{0}"
 msgstr "Shopping cart{0}"
 
-#: app/components/ProductCard/ProductCard.tsx:40
-#: app/routes/shop-product.tsx:388
+#: app/components/ProductCard/ProductCard.tsx:57
+msgid "Sold out"
+msgstr "Sold out"
+
+#: app/routes/shop-product.tsx:395
 msgid "Sold Out"
 msgstr "Sold Out"
 
@@ -480,13 +499,17 @@ msgid "Specialty coffee in Toluca, roasted weekly and made with care. Stop by fo
 msgstr "Specialty coffee in Toluca, roasted weekly and made with care. Stop by for an espresso, stay to work for a bit, or just come to chat."
 
 #. placeholder {0}: formatMoney(product.priceRange.minVariantPrice)
-#: app/components/ProductCard/ProductCard.tsx:61
+#: app/components/ProductCard/ProductCard.tsx:78
 msgid "Starting from {0}"
 msgstr "Starting from {0}"
 
 #: app/routes/blog.tsx:171
 msgid "Step-by-step instructions for the perfect cup at home."
 msgstr "Step-by-step instructions for the perfect cup at home."
+
+#: app/components/Footer/Footer.tsx:95
+msgid "Store"
+msgstr "Store"
 
 #: app/routes/blog.tsx:181
 msgid "Stories about the farms and regions where our beans come from."
@@ -496,7 +519,7 @@ msgstr "Stories about the farms and regions where our beans come from."
 msgid "Stories from the coffee world"
 msgstr "Stories from the coffee world"
 
-#: app/routes/shop-cart.tsx:176
+#: app/routes/shop-cart.tsx:177
 msgid "Subtotal"
 msgstr "Subtotal"
 
@@ -532,11 +555,11 @@ msgstr "The page you are looking for does not exist."
 msgid "The post you are looking for does not exist or has been removed."
 msgstr "The post you are looking for does not exist or has been removed."
 
-#: app/routes/shop-product.tsx:207
+#: app/routes/shop-product.tsx:214
 msgid "The product you are looking for does not exist or has been removed."
 msgstr "The product you are looking for does not exist or has been removed."
 
-#: app/routes/shop-cart.tsx:185
+#: app/routes/shop-cart.tsx:186
 msgid "Total"
 msgstr "Total"
 
@@ -584,7 +607,7 @@ msgstr "We are preparing our bean catalog. Check back soon to discover our caref
 msgid "We are preparing our location information. Check back soon."
 msgstr "We are preparing our location information. Check back soon."
 
-#: app/routes/shop.tsx:111
+#: app/routes/shop.tsx:127
 msgid "We are preparing our store. Check back soon to discover our products."
 msgstr "We are preparing our store. Check back soon to discover our products."
 
@@ -616,15 +639,11 @@ msgstr "What to Expect"
 msgid "What you will find"
 msgstr "What you will find"
 
-#: app/components/Footer/Footer.tsx:103
-msgid "Wholesale"
-msgstr "Wholesale"
-
-#: app/routes/shop-cart.tsx:138
+#: app/routes/shop-cart.tsx:139
 msgid "Your Cart"
 msgstr "Your Cart"
 
-#: app/routes/shop-cart.tsx:145
+#: app/routes/shop-cart.tsx:146
 msgid "Your cart is empty"
 msgstr "Your cart is empty"
 
