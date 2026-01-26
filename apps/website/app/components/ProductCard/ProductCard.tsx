@@ -9,12 +9,29 @@ type ProductCardProps = {
 	product: MergedProduct
 }
 
-const BADGE_LABELS = {
-	bestseller: 'Bestseller',
-	limited: 'Limited',
-	new: 'New',
-	sale: 'Sale',
-} as const
+function BadgeLabel({
+	badge,
+}: {
+	badge: 'bestseller' | 'limited' | 'new' | 'sale'
+}) {
+	switch (badge) {
+		case 'bestseller': {
+			return <Trans>Bestseller</Trans>
+		}
+		case 'limited': {
+			return <Trans>Limited</Trans>
+		}
+		case 'new': {
+			return <Trans>New</Trans>
+		}
+		case 'sale': {
+			return <Trans>Sale</Trans>
+		}
+		default: {
+			return badge satisfies never
+		}
+	}
+}
 
 export function ProductCard({ product }: ProductCardProps) {
 	const firstVariant = product.variants.edges[0]?.node
@@ -37,12 +54,12 @@ export function ProductCard({ product }: ProductCardProps) {
 				)}
 				{!product.availableForSale && (
 					<span className={styles.soldOutBadge}>
-						<Trans>Sold Out</Trans>
+						<Trans>Sold out</Trans>
 					</span>
 				)}
 				{product.badge && product.availableForSale && (
 					<span className={styles.productBadge}>
-						{BADGE_LABELS[product.badge]}
+						<BadgeLabel badge={product.badge} />
 					</span>
 				)}
 			</div>
