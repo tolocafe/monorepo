@@ -5,6 +5,7 @@ import type { PortableTextComponents } from '@portabletext/react'
 import { useState } from 'react'
 import { Link, useOutletContext, useNavigate } from 'react-router'
 
+import { ProductCard } from '@/components/ProductCard'
 import {
 	formatMoney,
 	getCartIdFromCookies,
@@ -13,7 +14,7 @@ import {
 } from '@/lib/cart'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
-import { getProductBySlug } from '@/lib/shop-data'
+import { getProductBySlug, getRelatedProducts } from '@/lib/shop-data'
 import { shopifyApi } from '@/lib/shopify'
 import type { ShopifyProduct, ShopifyProductVariant } from '@/lib/shopify'
 
@@ -57,21 +58,25 @@ const portableTextComponents: PortableTextComponents = {
 
 export async function loader({ params, request }: Route.LoaderArgs) {
 	const { handle, locale } = params
-	if (!handle) return { product: null, shopifyProduct: null }
+	if (!handle)
+		return { product: null, relatedProducts: [], shopifyProduct: null }
+
+	const currentLocale = (locale as Locale) || 'es'
 
 	// Fetch merged data using localized slug lookup
-	const product = await getProductBySlug(handle, (locale as Locale) || 'es')
+	const product = await getProductBySlug(handle, currentLocale)
 
-	// Fetch raw Shopify data for structured data using the resolved handle
-	const shopifyProduct = product
-		? await shopifyApi.products.getByHandle(product.handle)
-		: null
+	// Fetch raw Shopify data for structured data and related products in parallel
+	const [shopifyProduct, relatedProducts] = await Promise.all([
+		product ? shopifyApi.products.getByHandle(product.handle) : null,
+		product ? getRelatedProducts(product.handle, currentLocale) : [],
+	])
 
 	// Build canonical URL using English slug for SEO
 	const url = new URL(request.url)
 	const canonicalUrl = `${url.origin}/en/shop/${product?.slug || product?.handle || handle}`
 
-	return { canonicalUrl, product, shopifyProduct }
+	return { canonicalUrl, product, relatedProducts, shopifyProduct }
 }
 
 export function meta({ data, params }: Route.MetaArgs) {
@@ -269,7 +274,7 @@ function buildProductStructuredData(
 export default function ShopProduct({ loaderData }: Route.ComponentProps) {
 	const { locale } = useOutletContext<{ locale: Locale }>()
 	const navigate = useNavigate()
-	const { product } = loaderData
+	const { product, relatedProducts } = loaderData
 
 	const [selectedOptions, setSelectedOptions] = useState<
 		Record<string, string>
@@ -487,6 +492,25 @@ export default function ShopProduct({ loaderData }: Route.ComponentProps) {
 								value={product.body!}
 								components={portableTextComponents}
 							/>
+						</div>
+					</section>
+				)}
+
+				{relatedProducts.length > 0 && (
+					<section className={styles.relatedSection}>
+						<h2 className={styles.relatedTitle}>
+							<Trans>You may also like</Trans>
+						</h2>
+						<div className={styles.relatedGrid}>
+							{relatedProducts.map((relatedProduct) => (
+								<Link
+									key={relatedProduct.id}
+									to={`/${locale}/shop/${relatedProduct.slug || relatedProduct.handle}`}
+									style={{ textDecoration: 'none' }}
+								>
+									<ProductCard product={relatedProduct} />
+								</Link>
+							))}
 						</div>
 					</section>
 				)}

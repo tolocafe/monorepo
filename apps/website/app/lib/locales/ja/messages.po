@@ -32,8 +32,8 @@ msgstr "← ブログに戻る"
 msgid "← Back to Our Beans"
 msgstr "← コーヒー豆一覧に戻る"
 
-#: app/routes/shop-product.tsx:293
-#: app/routes/shop-product.tsx:360
+#: app/routes/shop-product.tsx:298
+#: app/routes/shop-product.tsx:365
 msgid "← Back to Shop"
 msgstr "← ショップに戻る"
 
@@ -66,15 +66,15 @@ msgstr "くつろいだり、仕事をしたり、おいしいものを楽しむ
 msgid "About"
 msgstr "私たちについて"
 
-#: app/routes/shop-product.tsx:483
+#: app/routes/shop-product.tsx:488
 msgid "About this product"
 msgstr "この商品について"
 
-#: app/routes/shop-product.tsx:468
+#: app/routes/shop-product.tsx:473
 msgid "Add to Cart"
 msgstr "カートに追加"
 
-#: app/routes/shop-product.tsx:466
+#: app/routes/shop-product.tsx:471
 msgid "Adding..."
 msgstr "追加中..."
 
@@ -190,7 +190,7 @@ msgid "Continue Shopping"
 msgstr "ショッピングを続ける"
 
 #: app/routes/shop-cart.tsx:267
-#: app/routes/shop-product.tsx:443
+#: app/routes/shop-product.tsx:448
 msgid "Decrease quantity"
 msgstr "数量を減らす"
 
@@ -275,7 +275,7 @@ msgid "In a hurry?"
 msgstr "お急ぎですか？"
 
 #: app/routes/shop-cart.tsx:277
-#: app/routes/shop-product.tsx:452
+#: app/routes/shop-product.tsx:457
 msgid "Increase quantity"
 msgstr "数量を増やす"
 
@@ -430,11 +430,11 @@ msgstr "精製方法"
 msgid "Producer"
 msgstr "生産者"
 
-#: app/routes/shop-product.tsx:297
+#: app/routes/shop-product.tsx:302
 msgid "Product Not Found"
 msgstr "商品が見つかりません"
 
-#: app/routes/shop-product.tsx:435
+#: app/routes/shop-product.tsx:440
 msgid "Quantity"
 msgstr "数量"
 
@@ -494,7 +494,7 @@ msgstr "カート{0}"
 msgid "Sold out"
 msgstr "売り切れ"
 
-#: app/routes/shop-product.tsx:474
+#: app/routes/shop-product.tsx:479
 msgid "Sold Out"
 msgstr "売り切れ"
 
@@ -563,7 +563,7 @@ msgstr "お探しのページは存在しません。"
 msgid "The post you are looking for does not exist or has been removed."
 msgstr "お探しの記事は存在しないか、削除されました。"
 
-#: app/routes/shop-product.tsx:300
+#: app/routes/shop-product.tsx:305
 msgid "The product you are looking for does not exist or has been removed."
 msgstr "お探しの商品は存在しないか、削除されました。"
 
@@ -646,6 +646,10 @@ msgstr "期待できること"
 #: app/welcome/welcome.tsx:318
 msgid "What you will find"
 msgstr "見つかるもの"
+
+#: app/routes/shop-product.tsx:502
+msgid "You may also like"
+msgstr "こちらもおすすめ"
 
 #: app/routes/shop-cart.tsx:139
 msgid "Your Cart"

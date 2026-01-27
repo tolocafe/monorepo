@@ -273,6 +273,33 @@ export const descriptionContent = style({
 	gap: vars.space.lg,
 })
 
+export const relatedSection = style({
+	borderTop: `1px solid ${vars.color.border}`,
+	marginTop: vars.space['3xl'],
+	paddingTop: vars.space['3xl'],
+})
+
+export const relatedTitle = style({
+	fontSize: vars.fontSize['2xl'],
+	fontWeight: vars.fontWeight.bold,
+	lineHeight: vars.lineHeight.tight,
+	marginBottom: vars.space.xl,
+})
+
+export const relatedGrid = style({
+	'@media': {
+		'(min-width: 1024px)': {
+			gridTemplateColumns: 'repeat(3, 1fr)',
+		},
+		'(min-width: 640px)': {
+			gridTemplateColumns: 'repeat(2, 1fr)',
+		},
+	},
+	display: 'grid',
+	gap: vars.space.xl,
+	gridTemplateColumns: '1fr',
+})
+
 export const notFound = emptyState
 
 export const notFoundTitle = sharedEmptyTitle

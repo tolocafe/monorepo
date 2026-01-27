@@ -311,3 +311,15 @@ export function getLocalizedBody(
 ): TypedObject[] | undefined {
 	return body?.[locale] || body?.es
 }
+
+/**
+ * Get related products (up to 3 other products, excluding the current one)
+ */
+export async function getRelatedProducts(
+	currentHandle: string,
+	locale: Locale,
+	limit = 3,
+): Promise<MergedProduct[]> {
+	const allProducts = await getProducts(locale)
+	return allProducts.filter((p) => p.handle !== currentHandle).slice(0, limit)
+}

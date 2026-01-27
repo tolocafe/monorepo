@@ -32,8 +32,8 @@ msgstr "← Volver al Blog"
 msgid "← Back to Our Beans"
 msgstr "← Volver a Nuestros Granos"
 
-#: app/routes/shop-product.tsx:293
-#: app/routes/shop-product.tsx:360
+#: app/routes/shop-product.tsx:298
+#: app/routes/shop-product.tsx:365
 msgid "← Back to Shop"
 msgstr "← Volver a la Tienda"
 
@@ -66,15 +66,15 @@ msgstr "Un lugar para convivir, trabajar o pasar por algo rico — con servicio 
 msgid "About"
 msgstr "Nosotros"
 
-#: app/routes/shop-product.tsx:483
+#: app/routes/shop-product.tsx:488
 msgid "About this product"
 msgstr "Sobre este producto"
 
-#: app/routes/shop-product.tsx:468
+#: app/routes/shop-product.tsx:473
 msgid "Add to Cart"
 msgstr "Agregar al carrito"
 
-#: app/routes/shop-product.tsx:466
+#: app/routes/shop-product.tsx:471
 msgid "Adding..."
 msgstr "Agregando..."
 
@@ -190,7 +190,7 @@ msgid "Continue Shopping"
 msgstr "Continuar comprando"
 
 #: app/routes/shop-cart.tsx:267
-#: app/routes/shop-product.tsx:443
+#: app/routes/shop-product.tsx:448
 msgid "Decrease quantity"
 msgstr "Disminuir cantidad"
 
@@ -275,7 +275,7 @@ msgid "In a hurry?"
 msgstr "¿Con prisa?"
 
 #: app/routes/shop-cart.tsx:277
-#: app/routes/shop-product.tsx:452
+#: app/routes/shop-product.tsx:457
 msgid "Increase quantity"
 msgstr "Aumentar cantidad"
 
@@ -430,11 +430,11 @@ msgstr "Proceso"
 msgid "Producer"
 msgstr "Productor"
 
-#: app/routes/shop-product.tsx:297
+#: app/routes/shop-product.tsx:302
 msgid "Product Not Found"
 msgstr "Producto No Encontrado"
 
-#: app/routes/shop-product.tsx:435
+#: app/routes/shop-product.tsx:440
 msgid "Quantity"
 msgstr "Cantidad"
 
@@ -494,7 +494,7 @@ msgstr "Carrito de compras{0}"
 msgid "Sold out"
 msgstr "Agotado"
 
-#: app/routes/shop-product.tsx:474
+#: app/routes/shop-product.tsx:479
 msgid "Sold Out"
 msgstr "Agotado"
 
@@ -563,7 +563,7 @@ msgstr "La página que buscas no existe."
 msgid "The post you are looking for does not exist or has been removed."
 msgstr "La publicación que buscas no existe o ha sido eliminada."
 
-#: app/routes/shop-product.tsx:300
+#: app/routes/shop-product.tsx:305
 msgid "The product you are looking for does not exist or has been removed."
 msgstr "El producto que buscas no existe o ha sido eliminado."
 
@@ -646,6 +646,10 @@ msgstr "Qué Esperar"
 #: app/welcome/welcome.tsx:318
 msgid "What you will find"
 msgstr "Lo que encontrarás"
+
+#: app/routes/shop-product.tsx:502
+msgid "You may also like"
+msgstr "También te puede interesar"
 
 #: app/routes/shop-cart.tsx:139
 msgid "Your Cart"
