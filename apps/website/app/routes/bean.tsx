@@ -28,6 +28,14 @@ const BEANS_BREADCRUMB_LABELS: Record<Locale, string> = {
 	ja: '豆',
 }
 
+const OG_LOCALES: Record<Locale, string> = {
+	de: 'de_DE',
+	en: 'en_US',
+	es: 'es_MX',
+	fr: 'fr_FR',
+	ja: 'ja_JP',
+}
+
 export function meta({ data, params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const bean = data?.bean
@@ -41,13 +49,20 @@ export function meta({ data, params }: Route.MetaArgs) {
 		: null
 	const baseUrl = 'https://tolo.cafe'
 	const beansPath = locale === 'es' ? 'granos' : 'beans'
+	const ogLocale = OG_LOCALES[locale] || 'es_MX'
+	const description = `${name} from ${origin}. ${tastingNotes}`
+	const canonicalUrl = `${baseUrl}/${locale}/${beansPath}/${params.slug}`
 
 	return [
 		{ title: `${name} - TOLO Beans` },
-		{
-			content: `${name} from ${origin}. ${tastingNotes}`,
-			name: 'description',
-		},
+		{ content: description, name: 'description' },
+		{ content: name, property: 'og:title' },
+		{ content: 'product', property: 'og:type' },
+		{ content: imageUrl || `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: canonicalUrl, property: 'og:url' },
+		{ content: description, property: 'og:description' },
+		{ content: 'TOLO', property: 'og:site_name' },
+		{ content: ogLocale, property: 'og:locale' },
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',

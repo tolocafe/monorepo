@@ -39,6 +39,14 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return { page: await client.fetch<Page | null>(PAGE_QUERY, params) }
 }
 
+const OG_LOCALES: Record<Locale, string> = {
+	de: 'de_DE',
+	en: 'en_US',
+	es: 'es_MX',
+	fr: 'fr_FR',
+	ja: 'ja_JP',
+}
+
 export function meta({ data, params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const page = data?.page
@@ -48,6 +56,8 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const excerpt = getLocalizedString(page.excerpt, locale)
 	const slug = params.slug || ''
 	const baseUrl = 'https://tolo.cafe'
+	const ogLocale = OG_LOCALES[locale] || 'es_MX'
+	const canonicalUrl = `${baseUrl}/${locale}/${slug}`
 
 	// Determine page type
 	const isAboutPage =
@@ -64,12 +74,21 @@ export function meta({ data, params }: Route.MetaArgs) {
 	]
 	const shouldNoIndex = noIndexSlugs.includes(slug)
 
+	// OG image: use app screenshot for app page, default otherwise
+	const ogImage = isAppPage
+		? `${baseUrl}/app/screenshot.png`
+		: `${baseUrl}/og-image.png`
+
 	const metaTags: ReturnType<typeof Array<Record<string, unknown>>> = [
 		{ title: `${title} - TOLO` },
-		{
-			content: excerpt,
-			name: 'description',
-		},
+		{ content: excerpt, name: 'description' },
+		{ content: title, property: 'og:title' },
+		{ content: 'website', property: 'og:type' },
+		{ content: ogImage, property: 'og:image' },
+		{ content: canonicalUrl, property: 'og:url' },
+		{ content: excerpt, property: 'og:description' },
+		{ content: 'TOLO', property: 'og:site_name' },
+		{ content: ogLocale, property: 'og:locale' },
 	]
 
 	// Add page-type specific structured data

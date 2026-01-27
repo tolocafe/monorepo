@@ -93,14 +93,30 @@ const META_TRANSLATIONS = {
 	},
 } as const
 
+const OG_LOCALES: Record<Locale, string> = {
+	de: 'de_DE',
+	en: 'en_US',
+	es: 'es_MX',
+	fr: 'fr_FR',
+	ja: 'ja_JP',
+}
+
 export function meta({ params }: MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
 	const baseUrl = 'https://tolo.cafe'
+	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
+		{ content: t.title, property: 'og:title' },
+		{ content: 'website', property: 'og:type' },
+		{ content: `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: `${baseUrl}/${locale}/links`, property: 'og:url' },
+		{ content: t.description, property: 'og:description' },
+		{ content: 'TOLO', property: 'og:site_name' },
+		{ content: ogLocale, property: 'og:locale' },
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',

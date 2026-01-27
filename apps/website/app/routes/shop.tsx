@@ -55,21 +55,31 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return { products }
 }
 
+const OG_LOCALES: Record<Locale, string> = {
+	de: 'de_DE',
+	en: 'en_US',
+	es: 'es_MX',
+	fr: 'fr_FR',
+	ja: 'ja_JP',
+}
+
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
 	const baseUrl = 'https://tolo.cafe'
 	const canonicalUrl = `${baseUrl}/${locale}/shop`
+	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },
-		{ content: t.description, property: 'og:description' },
+		{ content: 'website', property: 'og:type' },
 		{ content: OG_IMAGE_URL, property: 'og:image' },
 		{ content: canonicalUrl, property: 'og:url' },
-		{ content: 'website', property: 'og:type' },
+		{ content: t.description, property: 'og:description' },
 		{ content: 'TOLO', property: 'og:site_name' },
+		{ content: ogLocale, property: 'og:locale' },
 		{ content: 'summary_large_image', name: 'twitter:card' },
 		{ content: t.title, name: 'twitter:title' },
 		{ content: t.description, name: 'twitter:description' },

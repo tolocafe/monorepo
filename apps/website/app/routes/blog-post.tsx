@@ -33,6 +33,14 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return { post, suggestedPosts }
 }
 
+const OG_LOCALES: Record<Locale, string> = {
+	de: 'de_DE',
+	en: 'en_US',
+	es: 'es_MX',
+	fr: 'fr_FR',
+	ja: 'ja_JP',
+}
+
 export function meta({ data, params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const post = data?.post
@@ -41,6 +49,8 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const title = getLocalizedString(post.name, locale, 'Untitled')
 	const excerpt = getLocalizedString(post.excerpt, locale)
 	const baseUrl = 'https://tolo.cafe'
+	const ogLocale = OG_LOCALES[locale] || 'es_MX'
+	const canonicalUrl = `${baseUrl}/${locale}/blog/${params.slug}`
 
 	// Generate multiple image sizes for structured data (Google recommends 16:9, 4:3, 1:1)
 	const images = post.image
@@ -50,10 +60,26 @@ export function meta({ data, params }: Route.MetaArgs) {
 				urlFor(post.image)?.width(1200).height(1200).url(), // 1:1
 			].filter(Boolean)
 		: []
+	const ogImage = images[0] || `${baseUrl}/og-image.png`
 
 	return [
 		{ title: `${title} - TOLO Blog` },
 		{ content: excerpt, name: 'description' },
+		{ content: title, property: 'og:title' },
+		{ content: 'article', property: 'og:type' },
+		{ content: ogImage, property: 'og:image' },
+		{ content: '1200', property: 'og:image:width' },
+		{ content: '675', property: 'og:image:height' },
+		{ content: canonicalUrl, property: 'og:url' },
+		{ content: excerpt, property: 'og:description' },
+		{ content: 'TOLO', property: 'og:site_name' },
+		{ content: ogLocale, property: 'og:locale' },
+		{ content: post.publishedAt, property: 'article:published_time' },
+		...(post._updatedAt
+			? [{ content: post._updatedAt, property: 'article:modified_time' }]
+			: []),
+		{ content: 'TOLO', property: 'article:author' },
+		{ content: 'Coffee', property: 'article:section' },
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',

@@ -73,6 +73,14 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 	return { canonicalUrl, product, shopifyProduct }
 }
 
+const OG_LOCALES: Record<Locale, string> = {
+	de: 'de_DE',
+	en: 'en_US',
+	es: 'es_MX',
+	fr: 'fr_FR',
+	ja: 'ja_JP',
+}
+
 export function meta({ data, params }: Route.MetaArgs) {
 	const { product, shopifyProduct, canonicalUrl } = data ?? {}
 	const locale = (params.locale as Locale) || 'es'
@@ -83,6 +91,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 
 	const imageUrl = product.featuredImage?.url || product.images[0]?.url
 	const baseUrl = 'https://tolo.cafe'
+	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	// Use Shopify data (English) for structured data, Sanity images preferred
 	const structuredData = buildProductStructuredData(
@@ -118,14 +127,16 @@ export function meta({ data, params }: Route.MetaArgs) {
 	return [
 		{ title: `${product.title} - TOLO Shop` },
 		{ content: product.excerpt || product.description, name: 'description' },
-		{ content: imageUrl, property: 'og:image' },
-		{ content: canonicalUrl, property: 'og:url' },
-		{ content: 'product', property: 'og:type' },
 		{ content: product.title, property: 'og:title' },
+		{ content: 'product', property: 'og:type' },
+		{ content: imageUrl || `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: canonicalUrl, property: 'og:url' },
 		{
 			content: product.excerpt || product.description,
 			property: 'og:description',
 		},
+		{ content: 'TOLO', property: 'og:site_name' },
+		{ content: ogLocale, property: 'og:locale' },
 		...(structuredData ? [{ 'script:ld+json': structuredData }] : []),
 		{ 'script:ld+json': breadcrumbData },
 	]

@@ -38,13 +38,40 @@ const TRANSLATIONS = {
 	},
 } as const
 
+const OG_LOCALES: Record<Locale, string> = {
+	de: 'de_DE',
+	en: 'en_US',
+	es: 'es_MX',
+	fr: 'fr_FR',
+	ja: 'ja_JP',
+}
+
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = TRANSLATIONS[locale] || TRANSLATIONS.es
+	const baseUrl = 'https://tolo.cafe'
+	const ogLocale = OG_LOCALES[locale] || 'es_MX'
+	const alternateLocales = Object.entries(OG_LOCALES)
+		.filter(([loc]) => loc !== locale)
+		.map(([, ogLoc]) => ogLoc)
 
 	return [
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
+		{ content: t.title, property: 'og:title' },
+		{ content: 'website', property: 'og:type' },
+		{ content: `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: '1200', property: 'og:image:width' },
+		{ content: '630', property: 'og:image:height' },
+		{ content: 'TOLO - Good coffee, simple as that', property: 'og:image:alt' },
+		{ content: `${baseUrl}/${locale}`, property: 'og:url' },
+		{ content: t.description, property: 'og:description' },
+		{ content: 'TOLO', property: 'og:site_name' },
+		{ content: ogLocale, property: 'og:locale' },
+		...alternateLocales.map((loc) => ({
+			content: loc,
+			property: 'og:locale:alternate',
+		})),
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',

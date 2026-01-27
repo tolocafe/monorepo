@@ -32,6 +32,14 @@ const LOCATIONS_BREADCRUMB_LABELS: Record<Locale, string> = {
 	ja: '店舗',
 }
 
+const OG_LOCALES: Record<Locale, string> = {
+	de: 'de_DE',
+	en: 'en_US',
+	es: 'es_MX',
+	fr: 'fr_FR',
+	ja: 'ja_JP',
+}
+
 export function meta({ data, params }: Route.MetaArgs) {
 	const { slug } = params
 	const locale = (params.locale as Locale) || 'es'
@@ -44,13 +52,20 @@ export function meta({ data, params }: Route.MetaArgs) {
 		? urlFor(location.image)?.width(1200).url()
 		: null
 	const baseUrl = 'https://tolo.cafe'
+	const ogLocale = OG_LOCALES[locale] || 'es_MX'
+	const description = `${name} in ${location.city}, ${location.country}`
+	const canonicalUrl = `${baseUrl}/${locale}/locations/${slug}`
 
 	return [
 		{ title: `${name} - TOLO Locations` },
-		{
-			content: `${name} in ${location.city}, ${location.country}`,
-			name: 'description',
-		},
+		{ content: description, name: 'description' },
+		{ content: name, property: 'og:title' },
+		{ content: 'place', property: 'og:type' },
+		{ content: imageUrl || `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: canonicalUrl, property: 'og:url' },
+		{ content: description, property: 'og:description' },
+		{ content: 'TOLO', property: 'og:site_name' },
+		{ content: ogLocale, property: 'og:locale' },
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',
