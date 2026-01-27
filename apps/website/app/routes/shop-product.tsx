@@ -506,7 +506,7 @@ export default function ShopProduct({ loaderData }: Route.ComponentProps) {
 								<Link
 									key={relatedProduct.id}
 									to={`/${locale}/shop/${relatedProduct.slug || relatedProduct.handle}`}
-									style={{ textDecoration: 'none' }}
+									className={styles.relatedItem}
 								>
 									<ProductCard product={relatedProduct} />
 								</Link>

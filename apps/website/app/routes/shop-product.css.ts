@@ -287,17 +287,14 @@ export const relatedTitle = style({
 })
 
 export const relatedGrid = style({
-	'@media': {
-		'(min-width: 1024px)': {
-			gridTemplateColumns: 'repeat(3, 1fr)',
-		},
-		'(min-width: 640px)': {
-			gridTemplateColumns: 'repeat(2, 1fr)',
-		},
-	},
 	display: 'grid',
-	gap: vars.space.xl,
-	gridTemplateColumns: '1fr',
+	gap: vars.space.base,
+	gridTemplateColumns: 'repeat(3, 1fr)',
+	maxWidth: '600px',
+})
+
+export const relatedItem = style({
+	textDecoration: 'none',
 })
 
 export const notFound = emptyState
