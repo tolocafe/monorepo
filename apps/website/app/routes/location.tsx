@@ -4,6 +4,7 @@ import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import { useOutletContext } from 'react-router'
 
+import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { client, urlFor, getLocalizedString } from '@/lib/sanity'
 import type { Location } from '@/lib/sanity'
@@ -30,14 +31,6 @@ const LOCATIONS_BREADCRUMB_LABELS: Record<Locale, string> = {
 	es: 'Ubicaciones',
 	fr: 'Emplacements',
 	ja: '店舗',
-}
-
-const OG_LOCALES: Record<Locale, string> = {
-	de: 'de_DE',
-	en: 'en_US',
-	es: 'es_MX',
-	fr: 'fr_FR',
-	ja: 'ja_JP',
 }
 
 export function meta({ data, params }: Route.MetaArgs) {

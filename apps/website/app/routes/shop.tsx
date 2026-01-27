@@ -2,6 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
 import { ProductCard } from '@/components/ProductCard'
+import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { getProducts } from '@/lib/shop-data'
 import type { MergedProduct } from '@/lib/shop-data'
@@ -53,14 +54,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const products = await getProducts(locale)
 	return { products }
-}
-
-const OG_LOCALES: Record<Locale, string> = {
-	de: 'de_DE',
-	en: 'en_US',
-	es: 'es_MX',
-	fr: 'fr_FR',
-	ja: 'ja_JP',
 }
 
 export function meta({ params }: Route.MetaArgs) {

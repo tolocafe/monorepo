@@ -2,6 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
+import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { client, urlFor, getLocalizedString } from '@/lib/sanity'
 import type { Bean } from '@/lib/sanity'
@@ -26,14 +27,6 @@ const BEANS_BREADCRUMB_LABELS: Record<Locale, string> = {
 	es: 'Granos',
 	fr: 'Grains',
 	ja: '豆',
-}
-
-const OG_LOCALES: Record<Locale, string> = {
-	de: 'de_DE',
-	en: 'en_US',
-	es: 'es_MX',
-	fr: 'fr_FR',
-	ja: 'ja_JP',
 }
 
 export function meta({ data, params }: Route.MetaArgs) {

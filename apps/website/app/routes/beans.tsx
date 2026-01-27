@@ -2,6 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
+import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import {
 	client,
@@ -61,14 +62,6 @@ const BEANS_QUERY = `*[
 
 export async function loader() {
 	return { beans: await client.fetch<Bean[]>(BEANS_QUERY) }
-}
-
-const OG_LOCALES: Record<Locale, string> = {
-	de: 'de_DE',
-	en: 'en_US',
-	es: 'es_MX',
-	fr: 'fr_FR',
-	ja: 'ja_JP',
 }
 
 export function meta({ params }: Route.MetaArgs) {

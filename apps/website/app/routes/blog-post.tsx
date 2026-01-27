@@ -3,6 +3,7 @@ import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import { Link, useOutletContext } from 'react-router'
 
+import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { client, urlFor, getLocalizedString, formatDate } from '@/lib/sanity'
 import type { Post } from '@/lib/sanity'
@@ -31,14 +32,6 @@ export async function loader({ params }: Route.LoaderArgs) {
 		? await client.fetch<Post[]>(SUGGESTED_POSTS_QUERY, { currentId: post._id })
 		: []
 	return { post, suggestedPosts }
-}
-
-const OG_LOCALES: Record<Locale, string> = {
-	de: 'de_DE',
-	en: 'en_US',
-	es: 'es_MX',
-	fr: 'fr_FR',
-	ja: 'ja_JP',
 }
 
 export function meta({ data, params }: Route.MetaArgs) {

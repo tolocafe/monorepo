@@ -22,6 +22,15 @@ export const LOCALE_LABELS: Record<Locale, string> = {
 	ja: '日本語',
 }
 
+/** Open Graph locale format mapping */
+export const OG_LOCALES: Record<Locale, string> = {
+	de: 'de_DE',
+	en: 'en_US',
+	es: 'es_MX',
+	fr: 'fr_FR',
+	ja: 'ja_JP',
+}
+
 /**
  * Validates if a string is a supported locale
  */

@@ -11,6 +11,7 @@ import {
 	createCartCookie,
 	setCookie,
 } from '@/lib/cart'
+import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { getProductBySlug } from '@/lib/shop-data'
 import { shopifyApi } from '@/lib/shopify'
@@ -71,14 +72,6 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 	const canonicalUrl = `${url.origin}/en/shop/${product?.slug || product?.handle || handle}`
 
 	return { canonicalUrl, product, shopifyProduct }
-}
-
-const OG_LOCALES: Record<Locale, string> = {
-	de: 'de_DE',
-	en: 'en_US',
-	es: 'es_MX',
-	fr: 'fr_FR',
-	ja: 'ja_JP',
 }
 
 export function meta({ data, params }: Route.MetaArgs) {

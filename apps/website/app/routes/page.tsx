@@ -5,6 +5,7 @@ import { Link, useOutletContext } from 'react-router'
 
 import AppStoreBadge from '@/assets/logos/app-store.svg'
 import GooglePlayBadge from '@/assets/logos/google-play.svg'
+import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { client, getLocalizedString } from '@/lib/sanity'
 import type { Page } from '@/lib/sanity'
@@ -37,14 +38,6 @@ const PAGE_QUERY = `*[
 
 export async function loader({ params }: Route.LoaderArgs) {
 	return { page: await client.fetch<Page | null>(PAGE_QUERY, params) }
-}
-
-const OG_LOCALES: Record<Locale, string> = {
-	de: 'de_DE',
-	en: 'en_US',
-	es: 'es_MX',
-	fr: 'fr_FR',
-	ja: 'ja_JP',
 }
 
 export function meta({ data, params }: Route.MetaArgs) {

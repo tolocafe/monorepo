@@ -22,18 +22,18 @@ msgstr "← Weiter einkaufen"
 msgid "© {currentYear} TOLO. All rights reserved."
 msgstr "© {currentYear} TOLO. Alle Rechte vorbehalten."
 
-#: app/routes/blog-post.tsx:121
-#: app/routes/blog-post.tsx:148
+#: app/routes/blog-post.tsx:176
+#: app/routes/blog-post.tsx:203
 msgid "← Back to Blog"
 msgstr "← Zurück zum Blog"
 
-#: app/routes/bean.tsx:89
-#: app/routes/bean.tsx:140
+#: app/routes/bean.tsx:133
+#: app/routes/bean.tsx:184
 msgid "← Back to Our Beans"
 msgstr "← Zurück zu unseren Bohnen"
 
-#: app/routes/shop-product.tsx:207
-#: app/routes/shop-product.tsx:274
+#: app/routes/shop-product.tsx:293
+#: app/routes/shop-product.tsx:360
 msgid "← Back to Shop"
 msgstr "← Zurück zum Shop"
 
@@ -66,24 +66,24 @@ msgstr "Ein Ort zum Abhängen, Arbeiten oder für etwas Leckeres — mit schnell
 msgid "About"
 msgstr "Über uns"
 
-#: app/routes/shop-product.tsx:389
+#: app/routes/shop-product.tsx:475
 msgid "Add to Cart"
 msgstr "In den Warenkorb"
 
-#: app/routes/shop-product.tsx:387
+#: app/routes/shop-product.tsx:473
 msgid "Adding..."
 msgstr "Wird hinzugefügt..."
 
-#: app/routes/location.tsx:165
+#: app/routes/location.tsx:232
 msgid "Address"
 msgstr "Adresse"
 
-#: app/routes/bean.tsx:133
+#: app/routes/bean.tsx:177
 msgid "Agtron"
 msgstr "Agtron"
 
-#: app/routes/bean.tsx:129
-#: app/routes/beans.tsx:151
+#: app/routes/bean.tsx:173
+#: app/routes/beans.tsx:182
 msgid "Altitude"
 msgstr "Höhe"
 
@@ -99,7 +99,7 @@ msgstr "Immer frischer Kaffee. Wir verkaufen auch Bohnentüten im Laden."
 msgid "And if you want to take coffee home: beans available in store."
 msgstr "Und wenn du Kaffee mit nach Hause nehmen möchtest: Bohnen im Laden erhältlich."
 
-#: app/routes/links.tsx:120
+#: app/routes/links.tsx:156
 msgid "App Store"
 msgstr "App Store"
 
@@ -107,7 +107,7 @@ msgstr "App Store"
 msgid "At TOLO we make good coffee — that is it. We roast every week and prepare espresso, pour overs, matcha, cold brew, chai, cacao, tea and sweet bread. Want to take coffee home? We have bags of beans in store. For our Mexican coffees we work directly with farms we know, and we rotate origins like Colombia, Ethiopia and Panama."
 msgstr "Bei TOLO machen wir guten Kaffee — das ist alles. Wir rösten jede Woche und bereiten Espresso, Pour Over, Matcha, Cold Brew, Chai, Kakao, Tee und süßes Brot zu. Möchtest du Kaffee mit nach Hause nehmen? Wir haben Bohnentüten im Laden. Für unsere mexikanischen Kaffees arbeiten wir direkt mit Farmen zusammen, die wir kennen, und wir wechseln Herkunftsländer wie Kolumbien, Äthiopien und Panama."
 
-#: app/routes/bean.tsx:93
+#: app/routes/bean.tsx:137
 msgid "Bean Not Found"
 msgstr "Bohne nicht gefunden"
 
@@ -116,12 +116,12 @@ msgid "Bestseller"
 msgstr "Bestseller"
 
 #: app/components/Footer/Footer.tsx:83
-#: app/routes/blog.tsx:97
-#: app/routes/page.tsx:168
+#: app/routes/blog.tsx:128
+#: app/routes/page.tsx:255
 msgid "Blog"
 msgstr "Blog"
 
-#: app/routes/blog.tsx:168
+#: app/routes/blog.tsx:199
 msgid "Brewing Guides"
 msgstr "Zubereitungsanleitungen"
 
@@ -129,7 +129,7 @@ msgstr "Zubereitungsanleitungen"
 msgid "Cacao"
 msgstr "Kakao"
 
-#: app/routes/beans.tsx:101
+#: app/routes/beans.tsx:132
 msgid "Carefully selected single origins and blends"
 msgstr "Sorgfältig ausgewählte Single Origins und Blends"
 
@@ -149,11 +149,11 @@ msgstr "Menü schließen"
 msgid "Coffee beans"
 msgstr "Kaffeebohnen"
 
-#: app/routes/blog.tsx:178
+#: app/routes/blog.tsx:209
 msgid "Coffee Origins"
 msgstr "Kaffee-Herkunftsländer"
 
-#: app/routes/shop.tsx:105
+#: app/routes/shop.tsx:129
 msgid "Coffee, accessories, and more"
 msgstr "Kaffee, Zubehör und mehr"
 
@@ -161,11 +161,11 @@ msgstr "Kaffee, Zubehör und mehr"
 msgid "Cold brew"
 msgstr "Cold Brew"
 
-#: app/routes/beans.tsx:168
-#: app/routes/blog.tsx:150
-#: app/routes/contact.tsx:90
-#: app/routes/locations.tsx:165
-#: app/routes/shop.tsx:124
+#: app/routes/beans.tsx:199
+#: app/routes/blog.tsx:181
+#: app/routes/contact.tsx:114
+#: app/routes/locations.tsx:195
+#: app/routes/shop.tsx:148
 msgid "Coming Soon"
 msgstr "Demnächst"
 
@@ -177,7 +177,7 @@ msgstr "Unternehmen"
 msgid "Contact"
 msgstr "Kontakt"
 
-#: app/routes/contact.tsx:80
+#: app/routes/contact.tsx:104
 msgid "Contact Us"
 msgstr "Kontaktiere uns"
 
@@ -186,7 +186,7 @@ msgid "Continue Shopping"
 msgstr "Weiter einkaufen"
 
 #: app/routes/shop-cart.tsx:267
-#: app/routes/shop-product.tsx:364
+#: app/routes/shop-product.tsx:450
 msgid "Decrease quantity"
 msgstr "Menge verringern"
 
@@ -203,8 +203,12 @@ msgstr "Herunterladen"
 msgid "Download app"
 msgstr "App herunterladen"
 
-#: app/routes/contact.tsx:122
-#: app/routes/location.tsx:185
+#: app/routes/page.tsx:263
+msgid "Download the App"
+msgstr "Die App herunterladen"
+
+#: app/routes/contact.tsx:146
+#: app/routes/location.tsx:252
 msgid "Email"
 msgstr "E-Mail"
 
@@ -220,7 +224,7 @@ msgstr "Entdecken"
 msgid "Explore our coffee beans and take a bag home (in store)."
 msgstr "Entdecke unsere Kaffeebohnen und nimm eine Tüte mit nach Hause (im Laden)."
 
-#: app/routes/locations.tsx:101
+#: app/routes/locations.tsx:131
 msgid "Find us and visit for freshly roasted coffee"
 msgstr "Finde uns und besuche uns für frisch gerösteten Kaffee"
 
@@ -228,7 +232,7 @@ msgstr "Finde uns und besuche uns für frisch gerösteten Kaffee"
 msgid "Get directions"
 msgstr "Route anzeigen"
 
-#: app/routes/links.tsx:133
+#: app/routes/links.tsx:169
 msgid "Good coffee"
 msgstr "Guter Kaffee"
 
@@ -240,7 +244,7 @@ msgstr "Guter Kaffee, ganz einfach."
 msgid "Good coffee, simple as that."
 msgstr "Guter Kaffee, so einfach ist das."
 
-#: app/routes/links.tsx:121
+#: app/routes/links.tsx:157
 msgid "Google Play"
 msgstr "Google Play"
 
@@ -256,9 +260,9 @@ msgstr "Schnelles WLAN"
 msgid "Home"
 msgstr "Startseite"
 
-#: app/routes/contact.tsx:112
-#: app/routes/location.tsx:171
-#: app/routes/locations.tsx:153
+#: app/routes/contact.tsx:136
+#: app/routes/location.tsx:238
+#: app/routes/locations.tsx:183
 msgid "Hours"
 msgstr "Öffnungszeiten"
 
@@ -267,11 +271,11 @@ msgid "In a hurry?"
 msgstr "In Eile?"
 
 #: app/routes/shop-cart.tsx:277
-#: app/routes/shop-product.tsx:373
+#: app/routes/shop-product.tsx:459
 msgid "Increase quantity"
 msgstr "Menge erhöhen"
 
-#: app/routes/links.tsx:122
+#: app/routes/links.tsx:158
 msgid "Leave us a Google Review"
 msgstr "Hinterlasse uns eine Google-Bewertung"
 
@@ -283,7 +287,7 @@ msgstr "Limitiert"
 msgid "Loading cart..."
 msgstr "Warenkorb wird geladen..."
 
-#: app/routes/location.tsx:100
+#: app/routes/location.tsx:167
 msgid "Location Not Found"
 msgstr "Standort nicht gefunden"
 
@@ -295,7 +299,7 @@ msgstr "Standorte"
 msgid "Looks like you have not added any items to your cart yet."
 msgstr "Es sieht so aus, als hättest du noch keine Artikel in deinen Warenkorb gelegt."
 
-#: app/routes/locations.tsx:142
+#: app/routes/locations.tsx:172
 msgid "Main"
 msgstr "Hauptstandort"
 
@@ -307,7 +311,7 @@ msgstr "Matcha"
 msgid "Menu"
 msgstr "Menü"
 
-#: app/routes/contact.tsx:115
+#: app/routes/contact.tsx:139
 msgid "Mon-Fri: 8am - 8pm"
 msgstr "Mo-Fr: 8-20 Uhr"
 
@@ -315,7 +319,7 @@ msgstr "Mo-Fr: 8-20 Uhr"
 msgid "New"
 msgstr "Neu"
 
-#: app/routes/blog.tsx:192
+#: app/routes/blog.tsx:223
 msgid "News about new offerings, events, and what is happening at TOLO."
 msgstr "Neuigkeiten über neue Angebote, Veranstaltungen und was bei TOLO passiert."
 
@@ -347,7 +351,7 @@ msgstr "Mit der App bestellen"
 msgid "Order your favorite coffee ahead and pick it up when you arrive, no waiting. Save your favorites, repeat previous orders in one tap and receive exclusive offers just for app users. The app is free and available for iOS and Android."
 msgstr "Bestelle deinen Lieblingskaffee vor und hole ihn ab, wenn du ankommst, ohne zu warten. Speichere deine Favoriten, wiederhole frühere Bestellungen mit einem Tap und erhalte exklusive Angebote nur für App-Nutzer. Die App ist kostenlos und für iOS und Android verfügbar."
 
-#: app/routes/bean.tsx:124
+#: app/routes/bean.tsx:168
 msgid "Origin"
 msgstr "Herkunft"
 
@@ -355,21 +359,21 @@ msgstr "Herkunft"
 msgid "Our app"
 msgstr "Unsere App"
 
-#: app/routes/links.tsx:152
+#: app/routes/links.tsx:188
 msgid "Our Apps"
 msgstr "Unsere Apps"
 
 #: app/components/Footer/Footer.tsx:80
-#: app/routes/beans.tsx:98
-#: app/routes/page.tsx:165
+#: app/routes/beans.tsx:129
+#: app/routes/page.tsx:252
 msgid "Our Beans"
 msgstr "Unsere Bohnen"
 
-#: app/routes/contact.tsx:93
+#: app/routes/contact.tsx:117
 msgid "Our contact form is in preparation. In the meantime, you can find us at our café in Toluca or reach out through our social media."
 msgstr "Unser Kontaktformular wird vorbereitet. In der Zwischenzeit findest du uns in unserem Café in Toluca oder erreichst uns über unsere sozialen Medien."
 
-#: app/routes/locations.tsx:98
+#: app/routes/locations.tsx:128
 msgid "Our Locations"
 msgstr "Unsere Standorte"
 
@@ -381,7 +385,7 @@ msgstr "Unsere mexikanischen Kaffees kommen direkt von Farmen, die wir kennen. W
 msgid "Our team is SCA certified and always ready to help you find your coffee."
 msgstr "Unser Team ist SCA-zertifiziert und immer bereit, dir bei der Auswahl deines Kaffees zu helfen."
 
-#: app/routes/page.tsx:132
+#: app/routes/page.tsx:219
 msgid "Page Not Found"
 msgstr "Seite nicht gefunden"
 
@@ -397,11 +401,11 @@ msgstr "Menschen, die Kaffee kennen"
 msgid "Pet-friendly"
 msgstr "Haustierfreundlich"
 
-#: app/routes/location.tsx:177
+#: app/routes/location.tsx:244
 msgid "Phone"
 msgstr "Telefon"
 
-#: app/routes/blog-post.tsx:125
+#: app/routes/blog-post.tsx:180
 msgid "Post Not Found"
 msgstr "Beitrag nicht gefunden"
 
@@ -413,24 +417,24 @@ msgstr "Pour Over"
 msgid "Privacy"
 msgstr "Datenschutz"
 
-#: app/routes/bean.tsx:132
-#: app/routes/beans.tsx:156
+#: app/routes/bean.tsx:176
+#: app/routes/beans.tsx:187
 msgid "Process"
 msgstr "Verarbeitung"
 
-#: app/routes/bean.tsx:126
+#: app/routes/bean.tsx:170
 msgid "Producer"
 msgstr "Produzent"
 
-#: app/routes/shop-product.tsx:211
+#: app/routes/shop-product.tsx:297
 msgid "Product Not Found"
 msgstr "Produkt nicht gefunden"
 
-#: app/routes/shop-product.tsx:356
+#: app/routes/shop-product.tsx:442
 msgid "Quantity"
 msgstr "Menge"
 
-#: app/routes/bean.tsx:125
+#: app/routes/bean.tsx:169
 msgid "Region"
 msgstr "Region"
 
@@ -447,7 +451,7 @@ msgstr "Wöchentlich geröstet"
 msgid "Sale"
 msgstr "Angebot"
 
-#: app/routes/contact.tsx:117
+#: app/routes/contact.tsx:141
 msgid "Sat-Sun: 9am - 6pm"
 msgstr "Sa-So: 9-18 Uhr"
 
@@ -465,7 +469,7 @@ msgid "Select language, current: {0}"
 msgstr "Sprache wählen, aktuell: {0}"
 
 #: app/components/Header/Header.tsx:47
-#: app/routes/shop.tsx:102
+#: app/routes/shop.tsx:126
 msgid "Shop"
 msgstr "Shop"
 
@@ -473,7 +477,7 @@ msgstr "Shop"
 msgid "Shop Now"
 msgstr "Jetzt einkaufen"
 
-#: app/routes/blog.tsx:189
+#: app/routes/blog.tsx:220
 msgid "Shop Updates"
 msgstr "Shop-Neuigkeiten"
 
@@ -486,7 +490,7 @@ msgstr "Warenkorb{0}"
 msgid "Sold out"
 msgstr "Ausverkauft"
 
-#: app/routes/shop-product.tsx:395
+#: app/routes/shop-product.tsx:481
 msgid "Sold Out"
 msgstr "Ausverkauft"
 
@@ -503,7 +507,7 @@ msgstr "Spezialitätenkaffee in Toluca, wöchentlich geröstet und mit Sorgfalt 
 msgid "Starting from {0}"
 msgstr "Ab {0}"
 
-#: app/routes/blog.tsx:171
+#: app/routes/blog.tsx:202
 msgid "Step-by-step instructions for the perfect cup at home."
 msgstr "Schritt-für-Schritt-Anleitungen für die perfekte Tasse zu Hause."
 
@@ -511,11 +515,11 @@ msgstr "Schritt-für-Schritt-Anleitungen für die perfekte Tasse zu Hause."
 msgid "Store"
 msgstr "Shop"
 
-#: app/routes/blog.tsx:181
+#: app/routes/blog.tsx:212
 msgid "Stories about the farms and regions where our beans come from."
 msgstr "Geschichten über die Farmen und Regionen, aus denen unsere Bohnen stammen."
 
-#: app/routes/blog.tsx:100
+#: app/routes/blog.tsx:131
 msgid "Stories from the coffee world"
 msgstr "Geschichten aus der Kaffeewelt"
 
@@ -523,7 +527,7 @@ msgstr "Geschichten aus der Kaffeewelt"
 msgid "Subtotal"
 msgstr "Zwischensumme"
 
-#: app/routes/blog-post.tsx:181
+#: app/routes/blog-post.tsx:236
 msgid "Suggested Readings"
 msgstr "Empfohlene Lektüre"
 
@@ -531,7 +535,7 @@ msgstr "Empfohlene Lektüre"
 msgid "Sweet bread"
 msgstr "Süßes Brot"
 
-#: app/routes/bean.tsx:176
+#: app/routes/bean.tsx:220
 msgid "Tasting Notes"
 msgstr "Geschmacksnoten"
 
@@ -539,23 +543,23 @@ msgstr "Geschmacksnoten"
 msgid "Tea"
 msgstr "Tee"
 
-#: app/routes/bean.tsx:96
+#: app/routes/bean.tsx:140
 msgid "The coffee bean you are looking for does not exist or has been removed."
 msgstr "Die gesuchte Kaffeebohne existiert nicht oder wurde entfernt."
 
-#: app/routes/location.tsx:103
+#: app/routes/location.tsx:170
 msgid "The location you are looking for does not exist or has been removed."
 msgstr "Der gesuchte Standort existiert nicht oder wurde entfernt."
 
-#: app/routes/page.tsx:135
+#: app/routes/page.tsx:222
 msgid "The page you are looking for does not exist."
 msgstr "Die gesuchte Seite existiert nicht."
 
-#: app/routes/blog-post.tsx:128
+#: app/routes/blog-post.tsx:183
 msgid "The post you are looking for does not exist or has been removed."
 msgstr "Der gesuchte Beitrag existiert nicht oder wurde entfernt."
 
-#: app/routes/shop-product.tsx:214
+#: app/routes/shop-product.tsx:300
 msgid "The product you are looking for does not exist or has been removed."
 msgstr "Das gesuchte Produkt existiert nicht oder wurde entfernt."
 
@@ -563,7 +567,7 @@ msgstr "Das gesuchte Produkt existiert nicht oder wurde entfernt."
 msgid "Total"
 msgstr "Gesamt"
 
-#: app/routes/bean.tsx:127
+#: app/routes/bean.tsx:171
 msgid "Varietal"
 msgstr "Varietät"
 
@@ -571,7 +575,7 @@ msgstr "Varietät"
 msgid "View beans"
 msgstr "Bohnen ansehen"
 
-#: app/routes/links.tsx:123
+#: app/routes/links.tsx:159
 msgid "View Menu"
 msgstr "Menü ansehen"
 
@@ -583,7 +587,7 @@ msgstr "Besuchen"
 msgid "Visit us"
 msgstr "Besuche uns"
 
-#: app/routes/contact.tsx:104
+#: app/routes/contact.tsx:128
 msgid "Visit Us"
 msgstr "Besuche uns"
 
@@ -591,23 +595,23 @@ msgstr "Besuche uns"
 msgid "Visit us in Toluca"
 msgstr "Besuche uns in Toluca"
 
-#: app/routes/links.tsx:124
+#: app/routes/links.tsx:160
 msgid "Visit us on TripAdvisor"
 msgstr "Besuche uns auf TripAdvisor"
 
-#: app/routes/blog.tsx:153
+#: app/routes/blog.tsx:184
 msgid "We are preparing amazing content for you. Our blog will include coffee tips, brewing guides, origin stories, and news from our café in Toluca."
 msgstr "Wir bereiten tolle Inhalte für dich vor. Unser Blog wird Kaffeetipps, Zubereitungsanleitungen, Herkunftsgeschichten und Neuigkeiten aus unserem Café in Toluca enthalten."
 
-#: app/routes/beans.tsx:171
+#: app/routes/beans.tsx:202
 msgid "We are preparing our bean catalog. Check back soon to discover our carefully selected coffees."
 msgstr "Wir bereiten unseren Bohnenkatalog vor. Schau bald wieder vorbei, um unsere sorgfältig ausgewählten Kaffees zu entdecken."
 
-#: app/routes/locations.tsx:168
+#: app/routes/locations.tsx:198
 msgid "We are preparing our location information. Check back soon."
 msgstr "Wir bereiten unsere Standortinformationen vor. Schau bald wieder vorbei."
 
-#: app/routes/shop.tsx:127
+#: app/routes/shop.tsx:151
 msgid "We are preparing our store. Check back soon to discover our products."
 msgstr "Wir bereiten unseren Shop vor. Schau bald wieder vorbei, um unsere Produkte zu entdecken."
 
@@ -619,7 +623,7 @@ msgstr "Wir rösten jede Woche, also gibt es immer etwas Frisches. Frag, was neu
 msgid "We serve you quickly. Or order ahead on the app and just pick up."
 msgstr "Wir bedienen dich schnell. Oder bestelle über die App vor und hole es einfach ab."
 
-#: app/routes/contact.tsx:83
+#: app/routes/contact.tsx:107
 msgid "We would love to hear from you"
 msgstr "Wir würden gerne von dir hören"
 
@@ -631,7 +635,7 @@ msgstr "Wöchentlich"
 msgid "What is on the menu?"
 msgstr "Was gibt es auf der Karte?"
 
-#: app/routes/blog.tsx:163
+#: app/routes/blog.tsx:194
 msgid "What to Expect"
 msgstr "Was dich erwartet"
 

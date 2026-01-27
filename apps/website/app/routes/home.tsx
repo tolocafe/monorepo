@@ -1,5 +1,6 @@
 import { useOutletContext } from 'react-router'
 
+import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { Welcome } from '@/welcome/welcome'
 
@@ -37,14 +38,6 @@ const TRANSLATIONS = {
 			'TOLO｜トルーカのスペシャルティコーヒー｜おいしいコーヒー。シンプルに。',
 	},
 } as const
-
-const OG_LOCALES: Record<Locale, string> = {
-	de: 'de_DE',
-	en: 'en_US',
-	es: 'es_MX',
-	fr: 'fr_FR',
-	ja: 'ja_JP',
-}
 
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'

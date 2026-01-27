@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
+import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import {
 	client,
@@ -57,14 +58,6 @@ const POSTS_QUERY = `*[
 
 export async function loader() {
 	return { posts: await client.fetch<Post[]>(POSTS_QUERY) }
-}
-
-const OG_LOCALES: Record<Locale, string> = {
-	de: 'de_DE',
-	en: 'en_US',
-	es: 'es_MX',
-	fr: 'fr_FR',
-	ja: 'ja_JP',
 }
 
 export function meta({ params }: Route.MetaArgs) {
