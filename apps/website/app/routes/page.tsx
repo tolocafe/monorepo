@@ -3,12 +3,20 @@ import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import { Link, useOutletContext } from 'react-router'
 
+import AppStoreBadge from '@/assets/logos/app-store.svg'
+import GooglePlayBadge from '@/assets/logos/google-play.svg'
 import type { Locale } from '@/lib/locale'
 import { client, getLocalizedString } from '@/lib/sanity'
 import type { Page } from '@/lib/sanity'
 
 import type { Route } from './+types/page'
 import * as styles from './page.css'
+
+const APP_STORE_URL = 'https://apps.apple.com/app/tolo-buen-cafe/id6749597635'
+const GOOGLE_PLAY_URL =
+	'https://play.google.com/store/apps/details?id=cafe.tolo.app'
+
+const APP_SLUGS = ['app', 'aplicacion'] as const
 
 const LOCALE_PATHS = {
 	de: { beansPath: 'beans' },
@@ -39,10 +47,12 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const title = getLocalizedString(page.name, locale, 'Untitled')
 	const excerpt = getLocalizedString(page.excerpt, locale)
 	const slug = params.slug || ''
+	const baseUrl = 'https://tolo.cafe'
 
-	// Determine if this is an about page or generic page
+	// Determine page type
 	const isAboutPage =
 		slug.includes('about') || slug.includes('acerca') || slug.includes('sobre')
+	const isAppPage = APP_SLUGS.some((appSlug) => slug === appSlug)
 
 	// Pages that should be hidden from search engines
 	const noIndexSlugs = [
@@ -54,26 +64,90 @@ export function meta({ data, params }: Route.MetaArgs) {
 	]
 	const shouldNoIndex = noIndexSlugs.includes(slug)
 
-	const metaTags = [
+	const metaTags: ReturnType<typeof Array<Record<string, unknown>>> = [
 		{ title: `${title} - TOLO` },
 		{
 			content: excerpt,
 			name: 'description',
 		},
-		{
+	]
+
+	// Add page-type specific structured data
+	if (isAppPage) {
+		metaTags.push({
+			'script:ld+json': {
+				'@context': 'https://schema.org',
+				'@id': `${baseUrl}/#app`,
+				'@type': 'MobileApplication',
+				aggregateRating: {
+					'@type': 'AggregateRating',
+					ratingCount: 1,
+					ratingValue: 5,
+				},
+				applicationCategory: 'ShoppingApplication',
+				description: excerpt,
+				downloadUrl: [APP_STORE_URL, GOOGLE_PLAY_URL],
+				featureList: [
+					'View menu and prices',
+					'Order ahead for pickup',
+					'Earn loyalty rewards',
+					'Find nearby locations',
+				],
+				inLanguage: ['es', 'en', 'fr', 'de', 'ja'],
+				name: 'TOLO - Buen Café',
+				offers: {
+					'@type': 'Offer',
+					price: '0',
+					priceCurrency: 'USD',
+				},
+				operatingSystem: 'iOS 15.0+, Android 8.0+',
+				publisher: {
+					'@id': 'https://tolo.cafe/#organization',
+					'@type': 'Organization',
+					name: 'TOLO',
+				},
+				screenshot: `${baseUrl}/app/screenshot.png`,
+				softwareVersion: '1.0',
+				url: `${baseUrl}/${locale}/${slug}`,
+			},
+		})
+	} else {
+		metaTags.push({
 			'script:ld+json': {
 				'@context': 'https://schema.org',
 				'@type': isAboutPage ? 'AboutPage' : 'WebPage',
 				description: excerpt,
 				name: title,
 				publisher: {
+					'@id': 'https://tolo.cafe/#organization',
 					'@type': 'Organization',
-					name: 'TOLO Coffee',
+					name: 'TOLO',
 				},
-				url: `https://tolo.cafe/${locale}/${slug}`,
+				url: `${baseUrl}/${locale}/${slug}`,
 			},
+		})
+	}
+
+	// Add BreadcrumbList for all pages
+	metaTags.push({
+		'script:ld+json': {
+			'@context': 'https://schema.org',
+			'@type': 'BreadcrumbList',
+			itemListElement: [
+				{
+					'@type': 'ListItem',
+					item: `${baseUrl}/${locale}`,
+					name: 'TOLO',
+					position: 1,
+				},
+				{
+					'@type': 'ListItem',
+					name: title,
+					position: 2,
+				},
+			],
 		},
-	]
+	})
 
 	if (shouldNoIndex) {
 		metaTags.push({ content: 'noindex, nofollow', name: 'robots' })
@@ -121,6 +195,7 @@ export default function PageRoute({
 	const { page } = loaderData
 	const slug = params.slug || ''
 	const isAboutPage = ABOUT_SLUGS.some((aboutSlug) => slug === aboutSlug)
+	const isAppPage = APP_SLUGS.some((appSlug) => slug === appSlug)
 	const paths = LOCALE_PATHS[locale] || LOCALE_PATHS.es
 
 	if (!page) {
@@ -168,6 +243,40 @@ export default function PageRoute({
 							<Trans>Blog</Trans>
 						</Link>
 					</nav>
+				)}
+
+				{isAppPage && (
+					<section className={styles.downloadSection}>
+						<h2 className={styles.downloadTitle}>
+							<Trans>Download the App</Trans>
+						</h2>
+						<div className={styles.storeLinks}>
+							<a
+								href={APP_STORE_URL}
+								target="_blank"
+								rel="noreferrer"
+								className={styles.storeLink}
+							>
+								<img
+									src={AppStoreBadge}
+									alt="Download on the App Store"
+									className={styles.storeBadge}
+								/>
+							</a>
+							<a
+								href={GOOGLE_PLAY_URL}
+								target="_blank"
+								rel="noreferrer"
+								className={styles.storeLink}
+							>
+								<img
+									src={GooglePlayBadge}
+									alt="Get it on Google Play"
+									className={styles.storeBadge}
+								/>
+							</a>
+						</div>
+					</section>
 				)}
 			</div>
 		</main>

@@ -113,3 +113,42 @@ export const aboutLink = style({
 	fontWeight: vars.fontWeight.medium,
 	textDecoration: 'none',
 })
+
+// App download section styles
+export const downloadSection = style({
+	borderTop: `1px solid ${vars.color.surface}`,
+	marginTop: vars.space['3xl'],
+	paddingTop: vars.space['2xl'],
+	textAlign: 'center',
+})
+
+export const downloadTitle = style({
+	fontSize: vars.fontSize['2xl'],
+	fontWeight: vars.fontWeight.bold,
+	marginBottom: vars.space.xl,
+})
+
+export const storeLinks = style({
+	'@media': {
+		'(max-width: 480px)': {
+			flexDirection: 'column',
+		},
+	},
+	alignItems: 'center',
+	display: 'flex',
+	gap: vars.space.lg,
+	justifyContent: 'center',
+})
+
+export const storeLink = style({
+	':hover': {
+		opacity: 0.8,
+	},
+	display: 'block',
+	transition: 'opacity 0.2s ease',
+})
+
+export const storeBadge = style({
+	height: '48px',
+	width: 'auto',
+})

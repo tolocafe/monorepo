@@ -73,14 +73,16 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 	return { canonicalUrl, product, shopifyProduct }
 }
 
-export function meta({ data }: Route.MetaArgs) {
+export function meta({ data, params }: Route.MetaArgs) {
 	const { product, shopifyProduct, canonicalUrl } = data ?? {}
+	const locale = (params.locale as Locale) || 'es'
 
 	if (!product) {
 		return [{ title: 'Product Not Found - TOLO' }]
 	}
 
 	const imageUrl = product.featuredImage?.url || product.images[0]?.url
+	const baseUrl = 'https://tolo.cafe'
 
 	// Use Shopify data (English) for structured data, Sanity images preferred
 	const structuredData = buildProductStructuredData(
@@ -88,6 +90,30 @@ export function meta({ data }: Route.MetaArgs) {
 		canonicalUrl,
 		product?.images.map((img) => img.url),
 	)
+
+	const breadcrumbData = {
+		'@context': 'https://schema.org',
+		'@type': 'BreadcrumbList',
+		itemListElement: [
+			{
+				'@type': 'ListItem',
+				item: `${baseUrl}/${locale}`,
+				name: 'TOLO',
+				position: 1,
+			},
+			{
+				'@type': 'ListItem',
+				item: `${baseUrl}/${locale}/shop`,
+				name: 'Shop',
+				position: 2,
+			},
+			{
+				'@type': 'ListItem',
+				name: product.title,
+				position: 3,
+			},
+		],
+	}
 
 	return [
 		{ title: `${product.title} - TOLO Shop` },
@@ -101,6 +127,7 @@ export function meta({ data }: Route.MetaArgs) {
 			property: 'og:description',
 		},
 		...(structuredData ? [{ 'script:ld+json': structuredData }] : []),
+		{ 'script:ld+json': breadcrumbData },
 	]
 }
 
@@ -125,6 +152,55 @@ function buildProductStructuredData(
 	const maxPrice = shopifyProduct.priceRange.maxVariantPrice
 	const hasPriceRange = minPrice.amount !== maxPrice.amount
 
+	const returnPolicy = {
+		'@type': 'MerchantReturnPolicy',
+		applicableCountry: 'MX',
+		merchantReturnDays: 14,
+		refundType: 'https://schema.org/StoreCreditRefund',
+		returnFees: 'https://schema.org/FreeReturn',
+		returnMethod: 'https://schema.org/ReturnByMail',
+		returnPolicyCategory: 'https://schema.org/MerchantReturnFiniteReturnWindow',
+	}
+
+	const shippingDetails = {
+		'@type': 'OfferShippingDetails',
+		deliveryTime: {
+			'@type': 'ShippingDeliveryTime',
+			businessDays: {
+				'@type': 'OpeningHoursSpecification',
+				dayOfWeek: [
+					'https://schema.org/Monday',
+					'https://schema.org/Tuesday',
+					'https://schema.org/Wednesday',
+					'https://schema.org/Thursday',
+					'https://schema.org/Friday',
+				],
+			},
+			handlingTime: {
+				'@type': 'QuantitativeValue',
+				maxValue: 1,
+				minValue: 0,
+				unitCode: 'd',
+			},
+			transitTime: {
+				'@type': 'QuantitativeValue',
+				maxValue: 5,
+				minValue: 3,
+				unitCode: 'd',
+			},
+		},
+		shippingDestination: {
+			'@type': 'DefinedRegion',
+			addressCountry: 'MX',
+		},
+		shippingRate: {
+			'@type': 'MonetaryAmount',
+			currency: 'MXN',
+			value: 0,
+		},
+		shippingSettingsLink: 'https://tolo.cafe/en/shipping',
+	}
+
 	const offers =
 		hasMultipleVariants && hasPriceRange
 			? {
@@ -132,18 +208,24 @@ function buildProductStructuredData(
 					availability: shopifyProduct.availableForSale
 						? 'https://schema.org/InStock'
 						: 'https://schema.org/OutOfStock',
+					hasMerchantReturnPolicy: returnPolicy,
 					highPrice: maxPrice.amount,
+					itemCondition: 'https://schema.org/NewCondition',
 					lowPrice: minPrice.amount,
 					offerCount: variants.length,
 					priceCurrency: minPrice.currencyCode,
+					shippingDetails,
 				}
 			: {
 					'@type': 'Offer',
 					availability: shopifyProduct.availableForSale
 						? 'https://schema.org/InStock'
 						: 'https://schema.org/OutOfStock',
+					hasMerchantReturnPolicy: returnPolicy,
+					itemCondition: 'https://schema.org/NewCondition',
 					price: minPrice.amount,
 					priceCurrency: minPrice.currencyCode,
+					shippingDetails,
 					...(firstVariant?.sku && { sku: firstVariant.sku }),
 					...(canonicalUrl && { url: canonicalUrl }),
 				}

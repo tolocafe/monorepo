@@ -42,6 +42,7 @@ const META_TRANSLATIONS = {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
+	const baseUrl = 'https://tolo.cafe'
 
 	return [
 		{ title: t.title },
@@ -52,18 +53,32 @@ export function meta({ params }: Route.MetaArgs) {
 				'@type': 'ContactPage',
 				description: t.description,
 				mainEntity: {
+					'@id': `${baseUrl}/#organization`,
 					'@type': 'Organization',
-					address: {
-						'@type': 'PostalAddress',
-						addressCountry: 'MX',
-						addressLocality: 'Toluca',
-						addressRegion: 'Estado de México',
-					},
 					email: 'hola@tolo.cafe',
-					name: 'TOLO Coffee',
+					name: 'TOLO',
 				},
 				name: t.heading,
-				url: `https://tolo.cafe/${locale}/contact`,
+				url: `${baseUrl}/${locale}/contact`,
+			},
+		},
+		{
+			'script:ld+json': {
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}`,
+						name: 'TOLO',
+						position: 1,
+					},
+					{
+						'@type': 'ListItem',
+						name: t.heading,
+						position: 2,
+					},
+				],
 			},
 		},
 	]

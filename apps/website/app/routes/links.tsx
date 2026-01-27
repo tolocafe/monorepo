@@ -96,6 +96,7 @@ const META_TRANSLATIONS = {
 export function meta({ params }: MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
+	const baseUrl = 'https://tolo.cafe'
 
 	return [
 		{ title: t.title },
@@ -106,12 +107,31 @@ export function meta({ params }: MetaArgs) {
 				'@type': 'WebPage',
 				description: t.description,
 				mainEntity: {
+					'@id': `${baseUrl}/#organization`,
 					'@type': 'Organization',
-					name: 'TOLO Coffee',
-					url: 'https://tolo.cafe',
+					name: 'TOLO',
 				},
 				name: t.heading,
-				url: `https://tolo.cafe/${locale}/links`,
+				url: `${baseUrl}/${locale}/links`,
+			},
+		},
+		{
+			'script:ld+json': {
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}`,
+						name: 'TOLO',
+						position: 1,
+					},
+					{
+						'@type': 'ListItem',
+						name: t.heading,
+						position: 2,
+					},
+				],
 			},
 		},
 	]

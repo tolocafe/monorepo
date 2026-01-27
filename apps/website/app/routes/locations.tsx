@@ -66,6 +66,7 @@ export async function loader() {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
+	const baseUrl = 'https://tolo.cafe'
 
 	return [
 		{ title: t.title },
@@ -77,10 +78,30 @@ export function meta({ params }: Route.MetaArgs) {
 				description: t.subtitle,
 				name: t.heading,
 				publisher: {
+					'@id': `${baseUrl}/#organization`,
 					'@type': 'Organization',
-					name: 'TOLO Coffee',
+					name: 'TOLO',
 				},
-				url: `https://tolo.cafe/${locale}/locations`,
+				url: `${baseUrl}/${locale}/locations`,
+			},
+		},
+		{
+			'script:ld+json': {
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}`,
+						name: 'TOLO',
+						position: 1,
+					},
+					{
+						'@type': 'ListItem',
+						name: t.heading,
+						position: 2,
+					},
+				],
 			},
 		},
 	]

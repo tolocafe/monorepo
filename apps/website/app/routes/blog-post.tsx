@@ -14,7 +14,7 @@ const POST_QUERY = `*[
   _type == "post"
   && (slug.es.current == $slug || slug.en.current == $slug)
 ][0]{
-  _id, name, slug, publishedAt, excerpt, body, image
+  _id, _updatedAt, name, slug, publishedAt, excerpt, body, image
 }`
 
 const SUGGESTED_POSTS_QUERY = `*[
@@ -40,7 +40,16 @@ export function meta({ data, params }: Route.MetaArgs) {
 
 	const title = getLocalizedString(post.name, locale, 'Untitled')
 	const excerpt = getLocalizedString(post.excerpt, locale)
-	const imageUrl = post.image ? urlFor(post.image)?.width(1200).url() : null
+	const baseUrl = 'https://tolo.cafe'
+
+	// Generate multiple image sizes for structured data (Google recommends 16:9, 4:3, 1:1)
+	const images = post.image
+		? [
+				urlFor(post.image)?.width(1200).height(675).url(), // 16:9
+				urlFor(post.image)?.width(1200).height(900).url(), // 4:3
+				urlFor(post.image)?.width(1200).height(1200).url(), // 1:1
+			].filter(Boolean)
+		: []
 
 	return [
 		{ title: `${title} - TOLO Blog` },
@@ -48,28 +57,55 @@ export function meta({ data, params }: Route.MetaArgs) {
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',
-				'@type': 'BlogPosting',
+				'@type': 'Article',
 				author: {
+					'@id': 'https://tolo.cafe/#organization',
 					'@type': 'Organization',
-					name: 'TOLO Coffee',
+					name: 'TOLO',
 				},
 				dateModified: post._updatedAt || post.publishedAt,
 				datePublished: post.publishedAt,
 				description: excerpt,
 				headline: title,
-				image: imageUrl,
+				image: images,
 				mainEntityOfPage: {
-					'@id': `https://tolo.cafe/${locale}/blog/${params.slug}`,
+					'@id': `${baseUrl}/${locale}/blog/${params.slug}`,
 					'@type': 'WebPage',
 				},
 				publisher: {
+					'@id': 'https://tolo.cafe/#organization',
 					'@type': 'Organization',
 					logo: {
 						'@type': 'ImageObject',
-						url: 'https://tolo.cafe/favicon.png',
+						url: `${baseUrl}/favicon.png`,
 					},
-					name: 'TOLO Coffee',
+					name: 'TOLO',
 				},
+			},
+		},
+		{
+			'script:ld+json': {
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}`,
+						name: 'TOLO',
+						position: 1,
+					},
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}/blog`,
+						name: 'Blog',
+						position: 2,
+					},
+					{
+						'@type': 'ListItem',
+						name: title,
+						position: 3,
+					},
+				],
 			},
 		},
 	]

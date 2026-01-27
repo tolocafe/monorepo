@@ -48,46 +48,39 @@ export function meta({ params }: Route.MetaArgs) {
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',
-				'@type': ['Organization', 'CafeOrRestaurant'],
-				address: {
-					'@type': 'PostalAddress',
-					addressCountry: 'MX',
-					addressLocality: 'Toluca',
-					addressRegion: 'Estado de México',
-					postalCode: '50130',
-					streetAddress:
-						'Blvr. José María Pino Suárez 800, Cuauhtémoc, 50130 Toluca de Lerdo, Méx.',
+				'@id': 'https://tolo.cafe/#organization',
+				'@type': 'Organization',
+				areaServed: {
+					'@type': 'City',
+					containedInPlace: {
+						'@type': 'AdministrativeArea',
+						name: 'Estado de México',
+					},
+					name: 'Toluca',
 				},
 				contactPoint: {
 					'@type': 'ContactPoint',
+					availableLanguage: ['Spanish', 'English'],
 					contactType: 'customer service',
 					email: 'hola@tolo.cafe',
 				},
 				description: t.description,
-				logo: 'https://tolo.cafe/favicon.png',
-				mobileApplication: {
-					'@type': 'MobileApplication',
-					applicationCategory: 'LifestyleApplication',
-					downloadUrl: [
-						'https://apps.apple.com/app/tolo-buen-café/id6749597635',
-						'https://play.google.com/store/apps/details?id=cafe.tolo.app',
-					],
-					name: 'TOLO - Buen Café',
-					offers: {
-						'@type': 'Offer',
-						price: '0',
-						priceCurrency: 'USD',
-					},
-					operatingSystem: 'iOS, Android',
+				email: 'hola@tolo.cafe',
+				foundingDate: '2024',
+				legalName: 'TOLO - Buen Café',
+				logo: {
+					'@type': 'ImageObject',
+					height: 512,
+					url: 'https://tolo.cafe/favicon.png',
+					width: 512,
 				},
-				name: 'TOLO Coffee',
-				priceRange: '$$',
+				name: 'TOLO',
 				sameAs: [
 					'https://instagram.com/tolo.cafe',
 					'https://facebook.com/tolo.cafe',
 					'https://tiktok.com/@tolo.cafe',
+					'https://www.tripadvisor.com/Restaurant_Review-g644384-d33287081-Reviews-TOLO_Buen_Cafe-Toluca_Central_Mexico_and_Gulf_Coast.html',
 				],
-				servesCuisine: 'Coffee',
 				url: 'https://tolo.cafe',
 			},
 		},

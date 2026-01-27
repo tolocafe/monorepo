@@ -24,17 +24,26 @@ export async function loader({ params }: Route.LoaderArgs) {
 	}
 }
 
+const LOCATIONS_BREADCRUMB_LABELS: Record<Locale, string> = {
+	de: 'Standorte',
+	en: 'Locations',
+	es: 'Ubicaciones',
+	fr: 'Emplacements',
+	ja: '店舗',
+}
+
 export function meta({ data, params }: Route.MetaArgs) {
+	const { slug } = params
 	const locale = (params.locale as Locale) || 'es'
 	const location = data?.location
 	if (!location) return [{ title: 'Location Not Found - TOLO' }]
 
 	const name = getLocalizedString(location.name, locale, 'Untitled')
 	const address = getLocalizedString(location.address, locale)
-	const hours = getLocalizedString(location.hours, locale)
 	const imageUrl = location.image
 		? urlFor(location.image)?.width(1200).url()
 		: null
+	const baseUrl = 'https://tolo.cafe'
 
 	return [
 		{ title: `${name} - TOLO Locations` },
@@ -45,7 +54,9 @@ export function meta({ data, params }: Route.MetaArgs) {
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',
-				'@type': 'CoffeeShop',
+				'@id': `${baseUrl}/${locale}/locations/${slug}#location`,
+				'@type': 'CafeOrCoffeeShop',
+				acceptsReservations: false,
 				address: {
 					'@type': 'PostalAddress',
 					addressCountry: location.country,
@@ -54,18 +65,66 @@ export function meta({ data, params }: Route.MetaArgs) {
 					postalCode: location.postalCode,
 					streetAddress: address,
 				},
+				currenciesAccepted: 'MXN',
+				description: `${name} - TOLO specialty coffee in ${location.city}, ${location.country}`,
 				email: location.email,
 				geo: location.coordinates && {
 					'@type': 'GeoCoordinates',
 					latitude: location.coordinates.lat,
 					longitude: location.coordinates.lng,
 				},
+				hasMenu: `${baseUrl}/${locale}#menu`,
 				image: imageUrl,
 				name,
-				openingHours: hours,
+				openingHoursSpecification: [
+					{
+						'@type': 'OpeningHoursSpecification',
+						closes: '19:30',
+						dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+						opens: '07:30',
+					},
+					{
+						'@type': 'OpeningHoursSpecification',
+						closes: '17:00',
+						dayOfWeek: 'Saturday',
+						opens: '09:00',
+					},
+				],
+				parentOrganization: {
+					'@id': 'https://tolo.cafe/#organization',
+					'@type': 'Organization',
+					name: 'TOLO',
+				},
+				paymentAccepted: 'Cash, Credit Card',
 				priceRange: '$$',
-				servesCuisine: 'Coffee',
+				servesCuisine: ['Coffee', 'Tea', 'Pastries'],
 				telephone: location.phone,
+				url: `${baseUrl}/${locale}/locations/${slug}`,
+			},
+		},
+		{
+			'script:ld+json': {
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}`,
+						name: 'TOLO',
+						position: 1,
+					},
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}/locations`,
+						name: LOCATIONS_BREADCRUMB_LABELS[locale] || 'Locations',
+						position: 2,
+					},
+					{
+						'@type': 'ListItem',
+						name,
+						position: 3,
+					},
+				],
 			},
 		},
 	]

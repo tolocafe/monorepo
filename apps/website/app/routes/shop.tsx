@@ -58,7 +58,8 @@ export async function loader({ params }: Route.LoaderArgs) {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
-	const canonicalUrl = `https://tolo.cafe/${locale}/shop`
+	const baseUrl = 'https://tolo.cafe'
+	const canonicalUrl = `${baseUrl}/${locale}/shop`
 
 	return [
 		{ title: t.title },
@@ -68,7 +69,7 @@ export function meta({ params }: Route.MetaArgs) {
 		{ content: OG_IMAGE_URL, property: 'og:image' },
 		{ content: canonicalUrl, property: 'og:url' },
 		{ content: 'website', property: 'og:type' },
-		{ content: 'TOLO Coffee', property: 'og:site_name' },
+		{ content: 'TOLO', property: 'og:site_name' },
 		{ content: 'summary_large_image', name: 'twitter:card' },
 		{ content: t.title, name: 'twitter:title' },
 		{ content: t.description, name: 'twitter:description' },
@@ -81,10 +82,30 @@ export function meta({ params }: Route.MetaArgs) {
 				image: OG_IMAGE_URL,
 				name: t.heading,
 				publisher: {
+					'@id': `${baseUrl}/#organization`,
 					'@type': 'Organization',
-					name: 'TOLO Coffee',
+					name: 'TOLO',
 				},
 				url: canonicalUrl,
+			},
+		},
+		{
+			'script:ld+json': {
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}`,
+						name: 'TOLO',
+						position: 1,
+					},
+					{
+						'@type': 'ListItem',
+						name: t.heading,
+						position: 2,
+					},
+				],
 			},
 		},
 	]

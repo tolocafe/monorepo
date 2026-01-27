@@ -20,6 +20,14 @@ export async function loader({ params }: Route.LoaderArgs) {
 	return { bean: await client.fetch<Bean | null>(BEAN_QUERY, params) }
 }
 
+const BEANS_BREADCRUMB_LABELS: Record<Locale, string> = {
+	de: 'Bohnen',
+	en: 'Beans',
+	es: 'Granos',
+	fr: 'Grains',
+	ja: '豆',
+}
+
 export function meta({ data, params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const bean = data?.bean
@@ -31,6 +39,8 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const imageUrl = bean.regionImage
 		? urlFor(bean.regionImage)?.width(800).url()
 		: null
+	const baseUrl = 'https://tolo.cafe'
+	const beansPath = locale === 'es' ? 'granos' : 'beans'
 
 	return [
 		{ title: `${name} - TOLO Beans` },
@@ -60,8 +70,9 @@ export function meta({ data, params }: Route.MetaArgs) {
 					},
 				].filter(Boolean),
 				brand: {
-					'@type': 'Brand',
-					name: 'TOLO Coffee',
+					'@id': 'https://tolo.cafe/#organization',
+					'@type': 'Organization',
+					name: 'TOLO',
 				},
 				description: tastingNotes || getLocalizedString(bean.excerpt, locale),
 				image: imageUrl,
@@ -71,6 +82,31 @@ export function meta({ data, params }: Route.MetaArgs) {
 					availability: 'https://schema.org/InStock',
 					priceCurrency: 'MXN',
 				},
+			},
+		},
+		{
+			'script:ld+json': {
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: [
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}`,
+						name: 'TOLO',
+						position: 1,
+					},
+					{
+						'@type': 'ListItem',
+						item: `${baseUrl}/${locale}/${beansPath}`,
+						name: BEANS_BREADCRUMB_LABELS[locale] || 'Beans',
+						position: 2,
+					},
+					{
+						'@type': 'ListItem',
+						name,
+						position: 3,
+					},
+				],
 			},
 		},
 	]
