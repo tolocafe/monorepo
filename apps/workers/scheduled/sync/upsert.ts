@@ -125,7 +125,10 @@ export async function upsertOrderLines(
 ) {
 	if (!tx.products) {
 		// eslint-disable-next-line no-console
-		Sentry.captureMessage(`[upsertOrderLines] tx ${tx.transaction_id} has no products`, 'debug')
+		Sentry.captureMessage(
+			`[upsertOrderLines] tx ${tx.transaction_id} has no products`,
+			'debug',
+		)
 		return
 	}
 

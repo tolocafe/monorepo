@@ -131,12 +131,14 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		const code = generateOtp()
 
+		const formattedCode = `${code.slice(0, 3)} ${code.slice(3)}`
+
 		await Promise.all([
 			storeOtp(context.env.KV_OTP, phone, code),
 			sendSms(
 				context.env.POSTER_TOKEN,
 				phone,
-				`[TOLO] Tu código de verificación es ${code}`,
+				`[TOLO] Tu código de verificación es ${formattedCode}`,
 			),
 		])
 

@@ -103,10 +103,8 @@ const receipts = new Hono<{ Bindings: Bindings }>().get(
 		} catch (error) {
 			// eslint-disable-next-line no-console
 			Sentry.captureException(error, {
-			extra: {
-				context: 'PDF generation',
-			},
-		})
+				extra: { context: 'PDF generation' },
+			})
 
 			// Handle HTTP exceptions (like 403 Access denied)
 			if (error instanceof HTTPException) {

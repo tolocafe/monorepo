@@ -21,7 +21,7 @@
 	"devDependencies": {
 		"@babel/core": "~7.24.7",
 		"@babel/preset-env": "~7.24.7",
-		"@rollup/plugin-babel": "~6.0.4",
+		"@rollup/plugin-babel": "~6.1.0",
 		"@tolo/common": "workspace:*",
 		"@tolo/oxfmt-config": "workspace:*",
 		"@tolo/oxlint-config": "workspace:*",
@@ -35,7 +35,7 @@
 		"oxfmt": "catalog:",
 		"oxlint": "catalog:",
 		"vite": "~7.3.0",
-		"vite-plugin-css-injected-by-js": "3.5.0",
+		"vite-plugin-css-injected-by-js": "3.5.2",
 		"vite-plugin-mkcert": "~1.17.5"
 	}
 }

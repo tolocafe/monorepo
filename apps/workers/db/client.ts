@@ -19,7 +19,10 @@ export function getDatabase(hyperdrive: HyperdriveBinding) {
 		max: 5,
 	})
 
-	Sentry.captureMessage('[DB] Postgres connection created, initializing Drizzle', 'debug')
+	Sentry.captureMessage(
+		'[DB] Postgres connection created, initializing Drizzle',
+		'debug',
+	)
 
 	return drizzle({ client: sql, relations, schema })
 }

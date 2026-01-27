@@ -174,10 +174,10 @@ Constraints:
 		} catch (error) {
 			// eslint-disable-next-line no-console
 			Sentry.captureException(error, {
-			extra: {
-				context: 'POS posthog tracking',
-			},
-		})
+				extra: {
+					context: 'POS posthog tracking',
+				},
+			})
 		}
 
 		return context.json<PosClientData>(

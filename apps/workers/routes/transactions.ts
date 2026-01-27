@@ -149,11 +149,9 @@ const transactions: Hono<{ Bindings: Bindings }> = new Hono<{
 
 				// oxlint-disable-next-line no-console
 				Sentry.captureMessage('Adding product to transaction', {
-				extra: {
-					data,
-				},
-				level: 'debug',
-			})
+					extra: { data },
+					level: 'debug',
+				})
 
 				await posterApi.transactions.addTransactionProduct(
 					context.env.POSTER_TOKEN,

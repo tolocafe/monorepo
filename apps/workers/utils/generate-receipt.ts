@@ -1,6 +1,6 @@
-import * as Sentry from '@sentry/cloudflare'
 import puppeteer from '@cloudflare/puppeteer'
 import type { BrowserWorker } from '@cloudflare/puppeteer'
+import * as Sentry from '@sentry/cloudflare'
 
 type ReceiptData = {
 	clientName?: string
