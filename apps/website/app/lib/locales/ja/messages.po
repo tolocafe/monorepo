@@ -66,11 +66,15 @@ msgstr "くつろいだり、仕事をしたり、おいしいものを楽しむ
 msgid "About"
 msgstr "私たちについて"
 
-#: app/routes/shop-product.tsx:475
+#: app/routes/shop-product.tsx:483
+msgid "About this product"
+msgstr "この商品について"
+
+#: app/routes/shop-product.tsx:468
 msgid "Add to Cart"
 msgstr "カートに追加"
 
-#: app/routes/shop-product.tsx:473
+#: app/routes/shop-product.tsx:466
 msgid "Adding..."
 msgstr "追加中..."
 
@@ -186,7 +190,7 @@ msgid "Continue Shopping"
 msgstr "ショッピングを続ける"
 
 #: app/routes/shop-cart.tsx:267
-#: app/routes/shop-product.tsx:450
+#: app/routes/shop-product.tsx:443
 msgid "Decrease quantity"
 msgstr "数量を減らす"
 
@@ -271,7 +275,7 @@ msgid "In a hurry?"
 msgstr "お急ぎですか？"
 
 #: app/routes/shop-cart.tsx:277
-#: app/routes/shop-product.tsx:459
+#: app/routes/shop-product.tsx:452
 msgid "Increase quantity"
 msgstr "数量を増やす"
 
@@ -430,7 +434,7 @@ msgstr "生産者"
 msgid "Product Not Found"
 msgstr "商品が見つかりません"
 
-#: app/routes/shop-product.tsx:442
+#: app/routes/shop-product.tsx:435
 msgid "Quantity"
 msgstr "数量"
 
@@ -490,7 +494,7 @@ msgstr "カート{0}"
 msgid "Sold out"
 msgstr "売り切れ"
 
-#: app/routes/shop-product.tsx:481
+#: app/routes/shop-product.tsx:474
 msgid "Sold Out"
 msgstr "売り切れ"
 

@@ -387,6 +387,12 @@ export default function ShopProduct({ loaderData }: Route.ComponentProps) {
 					<div className={styles.detailsSection}>
 						<h1 className={styles.title}>{product.title}</h1>
 
+						{(product.excerpt || product.description) && (
+							<p className={styles.excerpt}>
+								{product.excerpt || product.description}
+							</p>
+						)}
+
 						<div>
 							<span className={styles.price}>
 								{selectedVariant
@@ -399,19 +405,6 @@ export default function ShopProduct({ loaderData }: Route.ComponentProps) {
 								</span>
 							)}
 						</div>
-
-						{hasRichDescription ? (
-							<div className={styles.bodyContent}>
-								<PortableText
-									value={product.body!}
-									components={portableTextComponents}
-								/>
-							</div>
-						) : (
-							product.description && (
-								<p className={styles.description}>{product.description}</p>
-							)
-						)}
 
 						{hasMultipleOptions &&
 							product.options.map((option) => (
@@ -483,6 +476,20 @@ export default function ShopProduct({ loaderData }: Route.ComponentProps) {
 						)}
 					</div>
 				</div>
+
+				{hasRichDescription && (
+					<section className={styles.descriptionSection}>
+						<h2 className={styles.descriptionTitle}>
+							<Trans>About this product</Trans>
+						</h2>
+						<div className={styles.descriptionContent}>
+							<PortableText
+								value={product.body!}
+								components={portableTextComponents}
+							/>
+						</div>
+					</section>
+				)}
 			</div>
 		</main>
 	)

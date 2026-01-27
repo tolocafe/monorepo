@@ -79,6 +79,13 @@ export const title = style({
 	lineHeight: vars.lineHeight.tight,
 })
 
+export const excerpt = style({
+	color: vars.color.text,
+	fontSize: vars.fontSize.lg,
+	lineHeight: vars.lineHeight.relaxed,
+	opacity: 0.8,
+})
+
 export const price = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize['2xl'],
@@ -240,6 +247,30 @@ export const soldOut = style({
 	fontWeight: vars.fontWeight.semibold,
 	padding: `${vars.space.base} ${vars.space.xl}`,
 	textAlign: 'center',
+})
+
+export const descriptionSection = style({
+	borderTop: `1px solid ${vars.color.border}`,
+	marginTop: vars.space['3xl'],
+	paddingTop: vars.space['3xl'],
+})
+
+export const descriptionTitle = style({
+	fontSize: vars.fontSize['2xl'],
+	fontWeight: vars.fontWeight.bold,
+	lineHeight: vars.lineHeight.tight,
+	marginBottom: vars.space.xl,
+})
+
+export const descriptionContent = style({
+	'@media': {
+		'(min-width: 768px)': {
+			maxWidth: '65ch',
+		},
+	},
+	display: 'flex',
+	flexDirection: 'column',
+	gap: vars.space.lg,
 })
 
 export const notFound = emptyState

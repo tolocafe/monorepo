@@ -66,11 +66,15 @@ msgstr "A place to hang out, work or grab something delicious — with fast serv
 msgid "About"
 msgstr "About"
 
-#: app/routes/shop-product.tsx:475
+#: app/routes/shop-product.tsx:483
+msgid "About this product"
+msgstr "About this product"
+
+#: app/routes/shop-product.tsx:468
 msgid "Add to Cart"
 msgstr "Add to Cart"
 
-#: app/routes/shop-product.tsx:473
+#: app/routes/shop-product.tsx:466
 msgid "Adding..."
 msgstr "Adding..."
 
@@ -186,7 +190,7 @@ msgid "Continue Shopping"
 msgstr "Continue Shopping"
 
 #: app/routes/shop-cart.tsx:267
-#: app/routes/shop-product.tsx:450
+#: app/routes/shop-product.tsx:443
 msgid "Decrease quantity"
 msgstr "Decrease quantity"
 
@@ -271,7 +275,7 @@ msgid "In a hurry?"
 msgstr "In a hurry?"
 
 #: app/routes/shop-cart.tsx:277
-#: app/routes/shop-product.tsx:459
+#: app/routes/shop-product.tsx:452
 msgid "Increase quantity"
 msgstr "Increase quantity"
 
@@ -430,7 +434,7 @@ msgstr "Producer"
 msgid "Product Not Found"
 msgstr "Product Not Found"
 
-#: app/routes/shop-product.tsx:442
+#: app/routes/shop-product.tsx:435
 msgid "Quantity"
 msgstr "Quantity"
 
@@ -490,7 +494,7 @@ msgstr "Shopping cart{0}"
 msgid "Sold out"
 msgstr "Sold out"
 
-#: app/routes/shop-product.tsx:481
+#: app/routes/shop-product.tsx:474
 msgid "Sold Out"
 msgstr "Sold Out"
 

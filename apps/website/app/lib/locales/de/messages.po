@@ -66,11 +66,15 @@ msgstr "Ein Ort zum Abhängen, Arbeiten oder für etwas Leckeres — mit schnell
 msgid "About"
 msgstr "Über uns"
 
-#: app/routes/shop-product.tsx:475
+#: app/routes/shop-product.tsx:483
+msgid "About this product"
+msgstr "Über dieses Produkt"
+
+#: app/routes/shop-product.tsx:468
 msgid "Add to Cart"
 msgstr "In den Warenkorb"
 
-#: app/routes/shop-product.tsx:473
+#: app/routes/shop-product.tsx:466
 msgid "Adding..."
 msgstr "Wird hinzugefügt..."
 
@@ -186,7 +190,7 @@ msgid "Continue Shopping"
 msgstr "Weiter einkaufen"
 
 #: app/routes/shop-cart.tsx:267
-#: app/routes/shop-product.tsx:450
+#: app/routes/shop-product.tsx:443
 msgid "Decrease quantity"
 msgstr "Menge verringern"
 
@@ -271,7 +275,7 @@ msgid "In a hurry?"
 msgstr "In Eile?"
 
 #: app/routes/shop-cart.tsx:277
-#: app/routes/shop-product.tsx:459
+#: app/routes/shop-product.tsx:452
 msgid "Increase quantity"
 msgstr "Menge erhöhen"
 
@@ -430,7 +434,7 @@ msgstr "Produzent"
 msgid "Product Not Found"
 msgstr "Produkt nicht gefunden"
 
-#: app/routes/shop-product.tsx:442
+#: app/routes/shop-product.tsx:435
 msgid "Quantity"
 msgstr "Menge"
 
@@ -490,7 +494,7 @@ msgstr "Warenkorb{0}"
 msgid "Sold out"
 msgstr "Ausverkauft"
 
-#: app/routes/shop-product.tsx:481
+#: app/routes/shop-product.tsx:474
 msgid "Sold Out"
 msgstr "Ausverkauft"
 
