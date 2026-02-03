@@ -2,6 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
+import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import {
@@ -67,16 +68,17 @@ export async function loader() {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
-	const baseUrl = 'https://tolo.cafe'
+	const canonicalUrl = `${BASE_URL}/${locale}/locations`
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
+		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },
 		{ content: 'website', property: 'og:type' },
-		{ content: `${baseUrl}/og-image.png`, property: 'og:image' },
-		{ content: `${baseUrl}/${locale}/locations`, property: 'og:url' },
+		{ content: `${BASE_URL}/og-image.png`, property: 'og:image' },
+		{ content: canonicalUrl, property: 'og:url' },
 		{ content: t.description, property: 'og:description' },
 		{ content: 'TOLO', property: 'og:site_name' },
 		{ content: ogLocale, property: 'og:locale' },
@@ -87,11 +89,11 @@ export function meta({ params }: Route.MetaArgs) {
 				description: t.subtitle,
 				name: t.heading,
 				publisher: {
-					'@id': `${baseUrl}/#organization`,
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					name: 'TOLO',
 				},
-				url: `${baseUrl}/${locale}/locations`,
+				url: canonicalUrl,
 			},
 		},
 		{
@@ -101,7 +103,7 @@ export function meta({ params }: Route.MetaArgs) {
 				itemListElement: [
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}`,
+						item: `${BASE_URL}/${locale}`,
 						name: 'TOLO',
 						position: 1,
 					},

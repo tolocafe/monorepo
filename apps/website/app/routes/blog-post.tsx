@@ -3,6 +3,7 @@ import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import { Link, useOutletContext } from 'react-router'
 
+import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { client, urlFor, getLocalizedString, formatDate } from '@/lib/sanity'
@@ -41,9 +42,8 @@ export function meta({ data, params }: Route.MetaArgs) {
 
 	const title = getLocalizedString(post.name, locale, 'Untitled')
 	const excerpt = getLocalizedString(post.excerpt, locale)
-	const baseUrl = 'https://tolo.cafe'
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
-	const canonicalUrl = `${baseUrl}/${locale}/blog/${params.slug}`
+	const canonicalUrl = `${BASE_URL}/${locale}/blog/${params.slug}`
 
 	// Generate multiple image sizes for structured data (Google recommends 16:9, 4:3, 1:1)
 	const images = post.image
@@ -53,9 +53,10 @@ export function meta({ data, params }: Route.MetaArgs) {
 				urlFor(post.image)?.width(1200).height(1200).url(), // 1:1
 			].filter(Boolean)
 		: []
-	const ogImage = images[0] || `${baseUrl}/og-image.png`
+	const ogImage = images[0] || `${BASE_URL}/og-image.png`
 
 	return [
+		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
 		{ title: `${title} - TOLO Blog` },
 		{ content: excerpt, name: 'description' },
 		{ content: title, property: 'og:title' },
@@ -78,7 +79,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 				'@context': 'https://schema.org',
 				'@type': 'Article',
 				author: {
-					'@id': 'https://tolo.cafe/#organization',
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					name: 'TOLO',
 				},
@@ -88,15 +89,15 @@ export function meta({ data, params }: Route.MetaArgs) {
 				headline: title,
 				image: images,
 				mainEntityOfPage: {
-					'@id': `${baseUrl}/${locale}/blog/${params.slug}`,
+					'@id': canonicalUrl,
 					'@type': 'WebPage',
 				},
 				publisher: {
-					'@id': 'https://tolo.cafe/#organization',
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					logo: {
 						'@type': 'ImageObject',
-						url: `${baseUrl}/favicon.png`,
+						url: `${BASE_URL}/favicon.png`,
 					},
 					name: 'TOLO',
 				},
@@ -109,13 +110,13 @@ export function meta({ data, params }: Route.MetaArgs) {
 				itemListElement: [
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}`,
+						item: `${BASE_URL}/${locale}`,
 						name: 'TOLO',
 						position: 1,
 					},
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}/blog`,
+						item: `${BASE_URL}/${locale}/blog`,
 						name: 'Blog',
 						position: 2,
 					},

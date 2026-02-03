@@ -4,6 +4,7 @@ import { PortableText } from '@portabletext/react'
 import type { PortableTextComponents } from '@portabletext/react'
 import { useOutletContext } from 'react-router'
 
+import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { client, urlFor, getLocalizedString } from '@/lib/sanity'
@@ -44,17 +45,17 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const imageUrl = location.image
 		? urlFor(location.image)?.width(1200).url()
 		: null
-	const baseUrl = 'https://tolo.cafe'
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 	const description = `${name} in ${location.city}, ${location.country}`
-	const canonicalUrl = `${baseUrl}/${locale}/locations/${slug}`
+	const canonicalUrl = `${BASE_URL}/${locale}/locations/${slug}`
 
 	return [
+		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
 		{ title: `${name} - TOLO Locations` },
 		{ content: description, name: 'description' },
 		{ content: name, property: 'og:title' },
 		{ content: 'place', property: 'og:type' },
-		{ content: imageUrl || `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: imageUrl || `${BASE_URL}/og-image.png`, property: 'og:image' },
 		{ content: canonicalUrl, property: 'og:url' },
 		{ content: description, property: 'og:description' },
 		{ content: 'TOLO', property: 'og:site_name' },
@@ -62,7 +63,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',
-				'@id': `${baseUrl}/${locale}/locations/${slug}#location`,
+				'@id': `${canonicalUrl}#location`,
 				'@type': 'CafeOrCoffeeShop',
 				acceptsReservations: false,
 				address: {
@@ -81,7 +82,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 					latitude: location.coordinates.lat,
 					longitude: location.coordinates.lng,
 				},
-				hasMenu: `${baseUrl}/${locale}#menu`,
+				hasMenu: `${BASE_URL}/${locale}#menu`,
 				image: imageUrl,
 				name,
 				openingHoursSpecification: [
@@ -99,7 +100,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 					},
 				],
 				parentOrganization: {
-					'@id': 'https://tolo.cafe/#organization',
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					name: 'TOLO',
 				},
@@ -107,7 +108,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 				priceRange: '$$',
 				servesCuisine: ['Coffee', 'Tea', 'Pastries'],
 				telephone: location.phone,
-				url: `${baseUrl}/${locale}/locations/${slug}`,
+				url: canonicalUrl,
 			},
 		},
 		{
@@ -117,13 +118,13 @@ export function meta({ data, params }: Route.MetaArgs) {
 				itemListElement: [
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}`,
+						item: `${BASE_URL}/${locale}`,
 						name: 'TOLO',
 						position: 1,
 					},
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}/locations`,
+						item: `${BASE_URL}/${locale}/locations`,
 						name: LOCATIONS_BREADCRUMB_LABELS[locale] || 'Locations',
 						position: 2,
 					},

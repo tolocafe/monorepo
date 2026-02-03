@@ -12,6 +12,7 @@ import {
 	createCartCookie,
 	setCookie,
 } from '@/lib/cart'
+import { BASE_URL } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { getProductBySlug, getRelatedProducts } from '@/lib/shop-data'
@@ -73,8 +74,7 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 	])
 
 	// Build canonical URL using English slug for SEO
-	const url = new URL(request.url)
-	const canonicalUrl = `${url.origin}/en/shop/${product?.slug || product?.handle || handle}`
+	const canonicalUrl = `${BASE_URL}/en/shop/${product?.slug || product?.handle || handle}`
 
 	return { canonicalUrl, product, relatedProducts, shopifyProduct }
 }
@@ -88,7 +88,6 @@ export function meta({ data, params }: Route.MetaArgs) {
 	}
 
 	const imageUrl = product.featuredImage?.url || product.images[0]?.url
-	const baseUrl = 'https://tolo.cafe'
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	// Use Shopify data (English) for structured data, Sanity images preferred
@@ -104,13 +103,13 @@ export function meta({ data, params }: Route.MetaArgs) {
 		itemListElement: [
 			{
 				'@type': 'ListItem',
-				item: `${baseUrl}/${locale}`,
+				item: `${BASE_URL}/${locale}`,
 				name: 'TOLO',
 				position: 1,
 			},
 			{
 				'@type': 'ListItem',
-				item: `${baseUrl}/${locale}/shop`,
+				item: `${BASE_URL}/${locale}/shop`,
 				name: 'Shop',
 				position: 2,
 			},
@@ -123,11 +122,12 @@ export function meta({ data, params }: Route.MetaArgs) {
 	}
 
 	return [
+		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
 		{ title: `${product.title} - TOLO Shop` },
 		{ content: product.excerpt || product.description, name: 'description' },
 		{ content: product.title, property: 'og:title' },
 		{ content: 'product', property: 'og:type' },
-		{ content: imageUrl || `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: imageUrl || `${BASE_URL}/og-image.png`, property: 'og:image' },
 		{ content: canonicalUrl, property: 'og:url' },
 		{
 			content: product.excerpt || product.description,
@@ -207,7 +207,7 @@ function buildProductStructuredData(
 			currency: 'MXN',
 			value: 0,
 		},
-		shippingSettingsLink: 'https://tolo.cafe/en/shipping',
+		shippingSettingsLink: `${BASE_URL}/en/shipping`,
 	}
 
 	const offers =
