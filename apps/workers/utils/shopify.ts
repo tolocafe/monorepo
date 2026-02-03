@@ -19,18 +19,10 @@ import { getCurrentScope } from '@sentry/cloudflare'
 
 import type { Bindings } from '@/types'
 
+import { ShopifyError } from './api-error'
+
 /** Storefront API version */
 const API_VERSION = '2025-10'
-
-/**
- * Custom error class for Shopify API errors
- */
-class ShopifyError extends Error {
-	constructor(message: string) {
-		super(message)
-		this.name = 'ShopifyError'
-	}
-}
 
 /** Shopify Money type */
 type ShopifyMoney = {

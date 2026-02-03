@@ -2,7 +2,6 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { useForm } from '@tanstack/react-form'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { ClientData } from '@tolo/common'
-import * as Burnt from 'burnt'
 import { Stack } from 'expo-router'
 import Head from 'expo-router/head'
 import { RefreshControl, View } from 'react-native'
@@ -19,6 +18,8 @@ import {
 	selfQueryOptions,
 	updateClientMutationOptions,
 } from '@/lib/queries/auth'
+import { getFullName } from '@/lib/utils/client'
+import { showSuccessToast } from '@/lib/utils/toast'
 
 export default function EditProfileScreen() {
 	const { t } = useLingui()
@@ -44,12 +45,8 @@ export default function EditProfileScreen() {
 		...updateClientMutationOptions(user?.client_id as string),
 		onSuccess(updated: ClientData) {
 			queryClient.setQueryData(selfQueryOptions.queryKey, updated)
-
-			Burnt.toast({
-				duration: 2,
-				haptic: 'success',
+			showSuccessToast({
 				message: t`Your profile has been updated.`,
-				preset: 'done',
 				title: t`Saved`,
 			})
 		},
@@ -203,13 +200,6 @@ export default function EditProfileScreen() {
 			</ScreenContainer>
 		</>
 	)
-}
-
-function getFullName(
-	firstname: string | undefined,
-	lastname: string | undefined,
-) {
-	return `${firstname}${lastname ? ` ${lastname}` : ''}`
 }
 
 const styles = StyleSheet.create((theme) => ({

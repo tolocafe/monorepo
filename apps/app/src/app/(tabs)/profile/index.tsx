@@ -3,7 +3,6 @@ import { Trans } from '@lingui/react/macro'
 import { useScrollToTop } from '@react-navigation/native'
 import { captureException } from '@sentry/react-native'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import * as Burnt from 'burnt'
 import { Image } from 'expo-image'
 import { router, Stack, useFocusEffect } from 'expo-router'
 import Head from 'expo-router/head'
@@ -26,7 +25,9 @@ import { clearAllCache } from '@/lib/queries/cache-utils'
 import { orderQueryOptions } from '@/lib/queries/order'
 import { queryClient } from '@/lib/query-client'
 import { getAuthToken } from '@/lib/services/http-client'
+import { getFullName, getGroupName } from '@/lib/utils/client'
 import { formatPrice } from '@/lib/utils/price'
+import { showErrorToast } from '@/lib/utils/toast'
 
 const handleSignIn = () => {
 	router.push('/sign-in')
@@ -96,12 +97,8 @@ export default function ProfileScreen() {
 		async function signOutPress() {
 			await signOut().catch((error: unknown) => {
 				captureException(error)
-
-				Burnt.toast({
-					duration: 3,
-					haptic: 'error',
+				showErrorToast({
 					message: t`Error signing out. Please try again.`,
-					preset: 'error',
 					title: t`Error`,
 				})
 			})
@@ -323,22 +320,6 @@ export default function ProfileScreen() {
 			</ScreenContainer>
 		</>
 	)
-}
-
-function getFullName(
-	firstname: string | undefined,
-	lastname: string | undefined,
-): string {
-	return `${firstname ?? ''}${lastname ? ` ${lastname}` : ''}`.trim()
-}
-
-function getGroupName(groupName: string | undefined) {
-	if (/^clientes?$/i.test(groupName ?? '')) return 'CUSTOMER' as const
-	if (/^amigos y familiares$/i.test(groupName ?? ''))
-		return 'FRIEND_AND_FAMILY' as const
-	if (/^súper clientes?$/i.test(groupName ?? ''))
-		return 'SUPER_CUSTOMER' as const
-	if (/^vecinos?$/i.test(groupName ?? '')) return 'NEIGHBOR' as const
 }
 
 const styles = StyleSheet.create((theme) => ({

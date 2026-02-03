@@ -31,6 +31,8 @@ import type {
 } from '@tolo/common/api'
 import type { CreateOrder } from '@tolo/common/schemas'
 
+import { PosterError } from './api-error'
+
 const snsClient = new SNS({
 	credentials: {
 		accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -43,16 +45,6 @@ const snsClient = new SNS({
 const BASE_URL = 'https://joinposter.com/api'
 
 const defaultGetMenuProductsOptions = { type: 'products' } as const
-
-/**
- * Custom error class for Poster API errors
- */
-class PosterError extends Error {
-	constructor(message: string) {
-		super(message)
-		this.name = 'PosterError'
-	}
-}
 
 /**
  * Filters out null/undefined values and converts all values to strings

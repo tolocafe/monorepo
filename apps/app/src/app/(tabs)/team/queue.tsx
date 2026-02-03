@@ -21,6 +21,7 @@ import {
 	productsQueryOptions,
 } from '@/lib/queries/menu'
 import { queryClient } from '@/lib/query-client'
+import { buildIndexMap, buildLookupMap } from '@/lib/utils/collections'
 import { sortModifiers } from '@/lib/utils/modifier-tags'
 
 const POLLING_INTERVAL = 5000 // 5 seconds
@@ -98,28 +99,16 @@ export default function OrdersQueue() {
 		}, [refetch]),
 	)
 
-	// Create a map for quick product lookup
-	const productMap = useMemo(() => {
-		const map = new Map<string, Product>()
-		if (!products) return map
+	// Create maps for quick lookups
+	const productMap = useMemo(
+		() => buildIndexMap(products, (p) => p.product_id),
+		[products],
+	)
 
-		for (const product of products) {
-			map.set(product.product_id, product)
-		}
-		return map
-	}, [products])
-
-	// Create a map for category ID → category name
-	const categoryMap = useMemo(() => {
-		const map = new Map<string, string>()
-
-		if (!categories) return map
-
-		for (const category of categories) {
-			map.set(category.category_id, category.category_name)
-		}
-		return map
-	}, [categories])
+	const categoryMap = useMemo(
+		() => buildLookupMap(categories, (c) => c.category_id, (c) => c.category_name),
+		[categories],
+	)
 
 	// Create a map for modification ID → modification name
 	const modificationMap = useMemo(() => {
