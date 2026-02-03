@@ -5,6 +5,7 @@ import { Link, useOutletContext } from 'react-router'
 
 import AppStoreBadge from '@/assets/logos/app-store.svg'
 import GooglePlayBadge from '@/assets/logos/google-play.svg'
+import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { client, getLocalizedString } from '@/lib/sanity'
@@ -48,9 +49,8 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const title = getLocalizedString(page.name, locale, 'Untitled')
 	const excerpt = getLocalizedString(page.excerpt, locale)
 	const slug = params.slug || ''
-	const baseUrl = 'https://www.tolo.cafe'
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
-	const canonicalUrl = `${baseUrl}/${locale}/${slug}`
+	const canonicalUrl = `${BASE_URL}/${locale}/${slug}`
 
 	// Determine page type
 	const isAboutPage =
@@ -69,8 +69,8 @@ export function meta({ data, params }: Route.MetaArgs) {
 
 	// OG image: use app screenshot for app page, default otherwise
 	const ogImage = isAppPage
-		? `${baseUrl}/app/screenshot.png`
-		: `${baseUrl}/og-image.png`
+		? `${BASE_URL}/app/screenshot.png`
+		: `${BASE_URL}/og-image.png`
 
 	const metaTags: ReturnType<typeof Array<Record<string, unknown>>> = [
 		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
@@ -90,7 +90,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 		metaTags.push({
 			'script:ld+json': {
 				'@context': 'https://schema.org',
-				'@id': `${baseUrl}/#app`,
+				'@id': `${BASE_URL}/#app`,
 				'@type': 'MobileApplication',
 				aggregateRating: {
 					'@type': 'AggregateRating',
@@ -115,13 +115,13 @@ export function meta({ data, params }: Route.MetaArgs) {
 				},
 				operatingSystem: 'iOS 15.0+, Android 8.0+',
 				publisher: {
-					'@id': 'https://www.tolo.cafe/#organization',
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					name: 'TOLO',
 				},
-				screenshot: `${baseUrl}/app/screenshot.png`,
+				screenshot: `${BASE_URL}/app/screenshot.png`,
 				softwareVersion: '1.0',
-				url: `${baseUrl}/${locale}/${slug}`,
+				url: canonicalUrl,
 			},
 		})
 	} else {
@@ -132,11 +132,11 @@ export function meta({ data, params }: Route.MetaArgs) {
 				description: excerpt,
 				name: title,
 				publisher: {
-					'@id': 'https://www.tolo.cafe/#organization',
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					name: 'TOLO',
 				},
-				url: `${baseUrl}/${locale}/${slug}`,
+				url: canonicalUrl,
 			},
 		})
 	}
@@ -149,7 +149,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 			itemListElement: [
 				{
 					'@type': 'ListItem',
-					item: `${baseUrl}/${locale}`,
+					item: `${BASE_URL}/${locale}`,
 					name: 'TOLO',
 					position: 1,
 				},

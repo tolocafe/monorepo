@@ -10,6 +10,7 @@ import {
 import { useOutletContext } from 'react-router'
 import type { MetaArgs } from 'react-router'
 
+import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 
@@ -97,8 +98,7 @@ const META_TRANSLATIONS = {
 export function meta({ params }: MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
-	const baseUrl = 'https://www.tolo.cafe'
-	const canonicalUrl = `${baseUrl}/${locale}/links`
+	const canonicalUrl = `${BASE_URL}/${locale}/links`
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
@@ -107,7 +107,7 @@ export function meta({ params }: MetaArgs) {
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },
 		{ content: 'website', property: 'og:type' },
-		{ content: `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: `${BASE_URL}/og-image.png`, property: 'og:image' },
 		{ content: canonicalUrl, property: 'og:url' },
 		{ content: t.description, property: 'og:description' },
 		{ content: 'TOLO', property: 'og:site_name' },
@@ -118,12 +118,12 @@ export function meta({ params }: MetaArgs) {
 				'@type': 'WebPage',
 				description: t.description,
 				mainEntity: {
-					'@id': `${baseUrl}/#organization`,
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					name: 'TOLO',
 				},
 				name: t.heading,
-				url: `${baseUrl}/${locale}/links`,
+				url: canonicalUrl,
 			},
 		},
 		{
@@ -133,7 +133,7 @@ export function meta({ params }: MetaArgs) {
 				itemListElement: [
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}`,
+						item: `${BASE_URL}/${locale}`,
 						name: 'TOLO',
 						position: 1,
 					},

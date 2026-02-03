@@ -1,8 +1,7 @@
+import { BASE_URL } from '@/lib/constants'
 import { SUPPORTED_LOCALES } from '@/lib/locale'
 import { client } from '@/lib/sanity'
 import type { Post, Page } from '@/lib/sanity'
-
-const SITE_URL = 'https://www.tolo.cafe'
 
 const POSTS_QUERY = `*[_type == "post" && (defined(slug.es.current) || defined(slug.en.current))]{
   slug, publishedAt, _updatedAt
@@ -50,21 +49,21 @@ export async function loader() {
 		// Home
 		entries.push({
 			changefreq: 'daily',
-			loc: `${SITE_URL}/${locale}`,
+			loc: `${BASE_URL}/${locale}`,
 			priority: '1.0',
 		})
 
 		// Blog index
 		entries.push({
 			changefreq: 'daily',
-			loc: `${SITE_URL}/${locale}/blog`,
+			loc: `${BASE_URL}/${locale}/blog`,
 			priority: '0.8',
 		})
 
 		// Contact
 		entries.push({
 			changefreq: 'monthly',
-			loc: `${SITE_URL}/${locale}/contact`,
+			loc: `${BASE_URL}/${locale}/contact`,
 			priority: '0.6',
 		})
 	}
@@ -78,7 +77,7 @@ export async function loader() {
 					changefreq: 'weekly',
 					lastmod:
 						post._updatedAt?.split('T')[0] || post.publishedAt?.split('T')[0],
-					loc: `${SITE_URL}/${locale}/blog/${slug}`,
+					loc: `${BASE_URL}/${locale}/blog/${slug}`,
 					priority: '0.7',
 				})
 			}
@@ -93,7 +92,7 @@ export async function loader() {
 				entries.push({
 					changefreq: 'monthly',
 					lastmod: page._updatedAt?.split('T')[0],
-					loc: `${SITE_URL}/${locale}/${slug}`,
+					loc: `${BASE_URL}/${locale}/${slug}`,
 					priority: '0.6',
 				})
 			}

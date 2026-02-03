@@ -1,5 +1,6 @@
 import { useOutletContext } from 'react-router'
 
+import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { Welcome } from '@/welcome/welcome'
@@ -42,8 +43,7 @@ const TRANSLATIONS = {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = TRANSLATIONS[locale] || TRANSLATIONS.es
-	const baseUrl = 'https://www.tolo.cafe'
-	const canonicalUrl = `${baseUrl}/${locale}`
+	const canonicalUrl = `${BASE_URL}/${locale}`
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 	const alternateLocales = Object.entries(OG_LOCALES)
 		.filter(([loc]) => loc !== locale)
@@ -55,7 +55,7 @@ export function meta({ params }: Route.MetaArgs) {
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },
 		{ content: 'website', property: 'og:type' },
-		{ content: `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: `${BASE_URL}/og-image.png`, property: 'og:image' },
 		{ content: '1200', property: 'og:image:width' },
 		{ content: '630', property: 'og:image:height' },
 		{ content: 'TOLO - Good coffee, simple as that', property: 'og:image:alt' },
@@ -70,7 +70,7 @@ export function meta({ params }: Route.MetaArgs) {
 		{
 			'script:ld+json': {
 				'@context': 'https://schema.org',
-				'@id': 'https://www.tolo.cafe/#organization',
+				'@id': ORGANIZATION_ID,
 				'@type': 'Organization',
 				areaServed: {
 					'@type': 'City',
@@ -93,7 +93,7 @@ export function meta({ params }: Route.MetaArgs) {
 				logo: {
 					'@type': 'ImageObject',
 					height: 512,
-					url: 'https://www.tolo.cafe/favicon.png',
+					url: `${BASE_URL}/favicon.png`,
 					width: 512,
 				},
 				name: 'TOLO',
@@ -103,7 +103,7 @@ export function meta({ params }: Route.MetaArgs) {
 					'https://tiktok.com/@tolo.cafe',
 					'https://www.tripadvisor.com/Restaurant_Review-g644384-d33287081-Reviews-TOLO_Buen_Cafe-Toluca_Central_Mexico_and_Gulf_Coast.html',
 				],
-				url: 'https://www.tolo.cafe',
+				url: BASE_URL,
 			},
 		},
 	]

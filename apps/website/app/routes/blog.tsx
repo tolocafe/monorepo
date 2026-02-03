@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
+import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import {
@@ -63,8 +64,7 @@ export async function loader() {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
-	const baseUrl = 'https://www.tolo.cafe'
-	const canonicalUrl = `${baseUrl}/${locale}/blog`
+	const canonicalUrl = `${BASE_URL}/${locale}/blog`
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
@@ -73,7 +73,7 @@ export function meta({ params }: Route.MetaArgs) {
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },
 		{ content: 'website', property: 'og:type' },
-		{ content: `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: `${BASE_URL}/og-image.png`, property: 'og:image' },
 		{ content: canonicalUrl, property: 'og:url' },
 		{ content: t.description, property: 'og:description' },
 		{ content: 'TOLO', property: 'og:site_name' },
@@ -85,15 +85,15 @@ export function meta({ params }: Route.MetaArgs) {
 				description: t.subtitle,
 				name: t.heading,
 				publisher: {
-					'@id': `${baseUrl}/#organization`,
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					logo: {
 						'@type': 'ImageObject',
-						url: `${baseUrl}/favicon.png`,
+						url: `${BASE_URL}/favicon.png`,
 					},
 					name: 'TOLO',
 				},
-				url: `${baseUrl}/${locale}/blog`,
+				url: canonicalUrl,
 			},
 		},
 		{
@@ -103,7 +103,7 @@ export function meta({ params }: Route.MetaArgs) {
 				itemListElement: [
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}`,
+						item: `${BASE_URL}/${locale}`,
 						name: 'TOLO',
 						position: 1,
 					},

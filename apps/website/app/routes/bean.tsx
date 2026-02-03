@@ -2,6 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
+import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { client, urlFor, getLocalizedString } from '@/lib/sanity'
@@ -40,11 +41,10 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const imageUrl = bean.regionImage
 		? urlFor(bean.regionImage)?.width(800).url()
 		: null
-	const baseUrl = 'https://www.tolo.cafe'
 	const beansPath = locale === 'es' ? 'granos' : 'beans'
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 	const description = `${name} from ${origin}. ${tastingNotes}`
-	const canonicalUrl = `${baseUrl}/${locale}/${beansPath}/${params.slug}`
+	const canonicalUrl = `${BASE_URL}/${locale}/${beansPath}/${params.slug}`
 
 	return [
 		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
@@ -52,7 +52,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 		{ content: description, name: 'description' },
 		{ content: name, property: 'og:title' },
 		{ content: 'product', property: 'og:type' },
-		{ content: imageUrl || `${baseUrl}/og-image.png`, property: 'og:image' },
+		{ content: imageUrl || `${BASE_URL}/og-image.png`, property: 'og:image' },
 		{ content: canonicalUrl, property: 'og:url' },
 		{ content: description, property: 'og:description' },
 		{ content: 'TOLO', property: 'og:site_name' },
@@ -79,7 +79,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 					},
 				].filter(Boolean),
 				brand: {
-					'@id': 'https://www.tolo.cafe/#organization',
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					name: 'TOLO',
 				},
@@ -100,13 +100,13 @@ export function meta({ data, params }: Route.MetaArgs) {
 				itemListElement: [
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}`,
+						item: `${BASE_URL}/${locale}`,
 						name: 'TOLO',
 						position: 1,
 					},
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}/${beansPath}`,
+						item: `${BASE_URL}/${locale}/${beansPath}`,
 						name: BEANS_BREADCRUMB_LABELS[locale] || 'Beans',
 						position: 2,
 					},

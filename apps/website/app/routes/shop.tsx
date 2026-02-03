@@ -2,6 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
 import { ProductCard } from '@/components/ProductCard'
+import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { getProducts } from '@/lib/shop-data'
@@ -48,7 +49,7 @@ const META_TRANSLATIONS = {
 	},
 } as const
 
-const OG_IMAGE_URL = 'https://www.tolo.cafe/og-shop.png'
+const OG_IMAGE_URL = `${BASE_URL}/og-shop.png`
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const locale = (params.locale as Locale) || 'es'
@@ -59,8 +60,7 @@ export async function loader({ params }: Route.LoaderArgs) {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
-	const baseUrl = 'https://www.tolo.cafe'
-	const canonicalUrl = `${baseUrl}/${locale}/shop`
+	const canonicalUrl = `${BASE_URL}/${locale}/shop`
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
@@ -86,7 +86,7 @@ export function meta({ params }: Route.MetaArgs) {
 				image: OG_IMAGE_URL,
 				name: t.heading,
 				publisher: {
-					'@id': `${baseUrl}/#organization`,
+					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',
 					name: 'TOLO',
 				},
@@ -100,7 +100,7 @@ export function meta({ params }: Route.MetaArgs) {
 				itemListElement: [
 					{
 						'@type': 'ListItem',
-						item: `${baseUrl}/${locale}`,
+						item: `${BASE_URL}/${locale}`,
 						name: 'TOLO',
 						position: 1,
 					},
