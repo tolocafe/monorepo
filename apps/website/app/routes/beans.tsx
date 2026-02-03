@@ -67,17 +67,19 @@ export async function loader() {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
-	const baseUrl = 'https://tolo.cafe'
+	const baseUrl = 'https://www.tolo.cafe'
 	const beansPath = locale === 'es' ? 'granos' : 'beans'
+	const canonicalUrl = `${baseUrl}/${locale}/${beansPath}`
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
+		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },
 		{ content: 'website', property: 'og:type' },
 		{ content: `${baseUrl}/og-image.png`, property: 'og:image' },
-		{ content: `${baseUrl}/${locale}/${beansPath}`, property: 'og:url' },
+		{ content: canonicalUrl, property: 'og:url' },
 		{ content: t.description, property: 'og:description' },
 		{ content: 'TOLO', property: 'og:site_name' },
 		{ content: ogLocale, property: 'og:locale' },

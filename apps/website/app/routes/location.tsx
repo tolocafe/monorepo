@@ -44,12 +44,13 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const imageUrl = location.image
 		? urlFor(location.image)?.width(1200).url()
 		: null
-	const baseUrl = 'https://tolo.cafe'
+	const baseUrl = 'https://www.tolo.cafe'
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 	const description = `${name} in ${location.city}, ${location.country}`
 	const canonicalUrl = `${baseUrl}/${locale}/locations/${slug}`
 
 	return [
+		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
 		{ title: `${name} - TOLO Locations` },
 		{ content: description, name: 'description' },
 		{ content: name, property: 'og:title' },
@@ -99,7 +100,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 					},
 				],
 				parentOrganization: {
-					'@id': 'https://tolo.cafe/#organization',
+					'@id': 'https://www.tolo.cafe/#organization',
 					'@type': 'Organization',
 					name: 'TOLO',
 				},

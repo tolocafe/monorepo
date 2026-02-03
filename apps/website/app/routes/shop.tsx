@@ -48,7 +48,7 @@ const META_TRANSLATIONS = {
 	},
 } as const
 
-const OG_IMAGE_URL = 'https://tolo.cafe/og-shop.png'
+const OG_IMAGE_URL = 'https://www.tolo.cafe/og-shop.png'
 
 export async function loader({ params }: Route.LoaderArgs) {
 	const locale = (params.locale as Locale) || 'es'
@@ -59,11 +59,12 @@ export async function loader({ params }: Route.LoaderArgs) {
 export function meta({ params }: Route.MetaArgs) {
 	const locale = (params.locale as Locale) || 'es'
 	const t = META_TRANSLATIONS[locale] || META_TRANSLATIONS.es
-	const baseUrl = 'https://tolo.cafe'
+	const baseUrl = 'https://www.tolo.cafe'
 	const canonicalUrl = `${baseUrl}/${locale}/shop`
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
+		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },

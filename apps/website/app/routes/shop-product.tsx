@@ -72,9 +72,8 @@ export async function loader({ params, request }: Route.LoaderArgs) {
 		product ? getRelatedProducts(product.handle, currentLocale) : [],
 	])
 
-	// Build canonical URL using English slug for SEO
-	const url = new URL(request.url)
-	const canonicalUrl = `${url.origin}/en/shop/${product?.slug || product?.handle || handle}`
+	// Build canonical URL using English slug for SEO (always use www.tolo.cafe for consistency)
+	const canonicalUrl = `https://www.tolo.cafe/en/shop/${product?.slug || product?.handle || handle}`
 
 	return { canonicalUrl, product, relatedProducts, shopifyProduct }
 }
@@ -88,7 +87,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 	}
 
 	const imageUrl = product.featuredImage?.url || product.images[0]?.url
-	const baseUrl = 'https://tolo.cafe'
+	const baseUrl = 'https://www.tolo.cafe'
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	// Use Shopify data (English) for structured data, Sanity images preferred
@@ -123,6 +122,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 	}
 
 	return [
+		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
 		{ title: `${product.title} - TOLO Shop` },
 		{ content: product.excerpt || product.description, name: 'description' },
 		{ content: product.title, property: 'og:title' },
@@ -207,7 +207,7 @@ function buildProductStructuredData(
 			currency: 'MXN',
 			value: 0,
 		},
-		shippingSettingsLink: 'https://tolo.cafe/en/shipping',
+		shippingSettingsLink: 'https://www.tolo.cafe/en/shipping',
 	}
 
 	const offers =

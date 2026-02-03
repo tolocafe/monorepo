@@ -2,7 +2,7 @@ import { SUPPORTED_LOCALES } from '@/lib/locale'
 import { client } from '@/lib/sanity'
 import type { Post, Page } from '@/lib/sanity'
 
-const SITE_URL = 'https://tolo.cafe'
+const SITE_URL = 'https://www.tolo.cafe'
 
 const POSTS_QUERY = `*[_type == "post" && (defined(slug.es.current) || defined(slug.en.current))]{
   slug, publishedAt, _updatedAt

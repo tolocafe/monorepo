@@ -41,7 +41,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 
 	const title = getLocalizedString(post.name, locale, 'Untitled')
 	const excerpt = getLocalizedString(post.excerpt, locale)
-	const baseUrl = 'https://tolo.cafe'
+	const baseUrl = 'https://www.tolo.cafe'
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 	const canonicalUrl = `${baseUrl}/${locale}/blog/${params.slug}`
 
@@ -56,6 +56,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const ogImage = images[0] || `${baseUrl}/og-image.png`
 
 	return [
+		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
 		{ title: `${title} - TOLO Blog` },
 		{ content: excerpt, name: 'description' },
 		{ content: title, property: 'og:title' },
@@ -78,7 +79,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 				'@context': 'https://schema.org',
 				'@type': 'Article',
 				author: {
-					'@id': 'https://tolo.cafe/#organization',
+					'@id': 'https://www.tolo.cafe/#organization',
 					'@type': 'Organization',
 					name: 'TOLO',
 				},
@@ -92,7 +93,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 					'@type': 'WebPage',
 				},
 				publisher: {
-					'@id': 'https://tolo.cafe/#organization',
+					'@id': 'https://www.tolo.cafe/#organization',
 					'@type': 'Organization',
 					logo: {
 						'@type': 'ImageObject',
