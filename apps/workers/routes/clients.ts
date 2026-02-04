@@ -5,13 +5,14 @@ import { z } from 'zod/v4'
 
 import type { Bindings } from '@/types'
 import { notifyApplePassUpdate } from '@/utils/apns'
-import { TEAM_GROUP_IDS } from '@/utils/constants'
+import { STAMPS_PROGRAM_START_DATE, TEAM_GROUP_IDS } from '@/utils/constants'
 import { notifyGooglePassUpdate } from '@/utils/generate-google-pass'
 import { authenticate } from '@/utils/jwt'
 import { posterApi } from '@/utils/poster'
 import { notifyRedemption } from '@/utils/push-notifications'
 import {
 	canRedeemBirthdayDrink,
+	countStampEligibleTransactions,
 	createRedemption,
 	getCustomerStamps,
 	STAMPS_PER_REDEMPTION,
@@ -65,7 +66,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 		const clientTransactions = await posterApi.dash.getTransactions(
 			context.env.POSTER_TOKEN,
 			{
-				date_from: '2025-01-01',
+				date_from: STAMPS_PROGRAM_START_DATE,
 				id,
 				status: '2',
 				type: 'clients',
@@ -75,7 +76,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 		const pointsData = await getCustomerStamps(
 			context.env.D1_TOLO,
 			Number(id),
-			clientTransactions.length,
+			countStampEligibleTransactions(clientTransactions),
 		)
 
 		// Check if customer can redeem birthday drink
@@ -148,7 +149,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			const clientTransactions = await posterApi.dash.getTransactions(
 				context.env.POSTER_TOKEN,
 				{
-					date_from: '2025-01-01',
+					date_from: STAMPS_PROGRAM_START_DATE,
 					id,
 					status: '2',
 					type: 'clients',
@@ -157,7 +158,7 @@ const clients = new Hono<{ Bindings: Bindings }>()
 			const pointsData = await getCustomerStamps(
 				context.env.D1_TOLO,
 				clientId,
-				clientTransactions.length,
+				countStampEligibleTransactions(clientTransactions),
 			)
 			if (pointsData.stamps < STAMPS_PER_REDEMPTION) {
 				throw new HTTPException(400, {

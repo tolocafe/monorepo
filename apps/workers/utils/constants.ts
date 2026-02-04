@@ -8,3 +8,8 @@ export const testPhoneNumbers: string[] = (TEST_PHONE_NUMBERS ?? '').split(',')
  * - 9 = Team members (baristas)
  */
 export const TEAM_GROUP_IDS = new Set(['8', '9'])
+
+/**
+ * Loyalty stamps program start date (YYYY-MM-DD)
+ */
+export const STAMPS_PROGRAM_START_DATE = '2025-01-01'

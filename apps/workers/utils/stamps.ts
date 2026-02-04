@@ -1,3 +1,5 @@
+import type { DashTransaction } from '@tolo/common/api'
+
 /**
  * Stamps System Utility
  *
@@ -10,6 +12,28 @@
 
 /** Number of stamps required for one free drink redemption */
 export const STAMPS_PER_REDEMPTION = 10
+
+/**
+ * Check if a transaction should count toward stamp accrual
+ * - Closed transactions only (status: 2)
+ * - Sales only (type: 0). Returns (type: 1) are excluded.
+ */
+export function isStampEligibleTransaction(
+	transaction: DashTransaction,
+): boolean {
+	const status = Number(transaction.status)
+	const type = Number(transaction.type ?? 0)
+	return status === 2 && type === 0
+}
+
+/**
+ * Count stamp-eligible transactions from a list
+ */
+export function countStampEligibleTransactions(
+	transactions: DashTransaction[],
+): number {
+	return transactions.filter(isStampEligibleTransaction).length
+}
 
 /**
  * Calculate how many free drinks are available to redeem

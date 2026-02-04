@@ -3,9 +3,14 @@ import type { PosClientData } from '@tolo/common/api'
 import { Hono } from 'hono'
 
 import type { Bindings } from '@/types'
+import { STAMPS_PROGRAM_START_DATE } from '@/utils/constants'
 import { defaultJsonHeaders } from '@/utils/headers'
 import { posterApi } from '@/utils/poster'
-import { canRedeemBirthdayDrink, getCustomerStamps } from '@/utils/stamps'
+import {
+	canRedeemBirthdayDrink,
+	countStampEligibleTransactions,
+	getCustomerStamps,
+} from '@/utils/stamps'
 
 function formatAmount(amount: number | string | undefined) {
 	if (!amount) return '$0 MXN'
@@ -60,20 +65,19 @@ const pos = new Hono<{ Bindings: Bindings }>().get(
 		])
 
 		// Get closed transactions for 2025 to calculate stamps
-		const closedTransactions2025 = await posterApi.dash.getTransactions(
-			context.env.POSTER_TOKEN,
-			{
-				date_from: '2025-01-01',
+		const transactionsCount = await posterApi.dash
+			.getTransactions(context.env.POSTER_TOKEN, {
+				date_from: STAMPS_PROGRAM_START_DATE,
 				id: customerId,
 				status: '2',
 				type: 'clients',
-			},
-		)
+			})
+			.then((transactions) => countStampEligibleTransactions(transactions))
 
 		const stampsData = await getCustomerStamps(
 			context.env.D1_TOLO,
 			Number(customerId),
-			closedTransactions2025.length,
+			transactionsCount,
 		)
 
 		const canRedeemBirthday = await canRedeemBirthdayDrink(

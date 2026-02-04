@@ -8,6 +8,7 @@ import * as Sentry from '@sentry/cloudflare'
 
 import type { Bindings } from '@/types'
 import { notifyApplePassUpdate } from '@/utils/apns'
+import { notifyGooglePassUpdate } from '@/utils/generate-google-pass'
 import { detectOrderEvents, processOrderEvents } from '@/utils/order-events'
 import type { TransactionChange } from '@/utils/order-events'
 
@@ -24,7 +25,7 @@ export type { OrderEvent, TransactionChange } from '@/utils/order-events'
  * It handles:
  * - Detecting order events from transaction changes
  * - Processing analytics and notifications via shared utility
- * - Updating Apple Passes for customers with new orders
+ * - Updating wallet passes when stamp counts can change (order closed/reopened)
  */
 export async function processTransactionEvents(
 	changes: TransactionChange[],
@@ -32,13 +33,30 @@ export async function processTransactionEvents(
 	environment: Bindings,
 	database: Database,
 ): Promise<void> {
-	// Track new customers for pass updates
+	// Track customers for pass updates when stamps can change
 	const customerIdsForPassUpdate = new Set<number>()
 	// Collect detected order events for analytics
 	const orderEvents: ReturnType<typeof detectOrderEvents> = []
 
+	const shouldUpdatePassForChange = (
+		change: TransactionChange,
+	): change is TransactionChange & { customerId: number } => {
+		if (!change.customerId) return false
+
+		// Only update when the transaction becomes closed or reopens (affects stamp count)
+		// We consider status "2" as closed, consistent with stamps calculation.
+		if (change.status === 2 && change.action === 'created') return true
+
+		if (change.oldStatus === null || change.oldStatus === undefined) {
+			return change.status === 2
+		}
+
+		if (change.oldStatus === change.status) return false
+		return change.oldStatus === 2 || change.status === 2
+	}
+
 	for (const change of changes) {
-		if (change.customerId && change.action === 'created') {
+		if (shouldUpdatePassForChange(change)) {
 			customerIdsForPassUpdate.add(change.customerId)
 		}
 
@@ -57,14 +75,17 @@ export async function processTransactionEvents(
 		orderEvents.push(...detectedEvents)
 	}
 
-	// Process Apple Pass updates for new customers
+	// Process wallet pass updates for customers whose stamps can change
 	const passUpdatePromises: Promise<void>[] = []
 
 	for (const customerId of customerIdsForPassUpdate) {
 		passUpdatePromises.push(
 			(async () => {
 				try {
-					await notifyApplePassUpdate(customerId, passDatabase, environment)
+					await Promise.allSettled([
+						notifyApplePassUpdate(customerId, passDatabase, environment),
+						notifyGooglePassUpdate(customerId, passDatabase, environment),
+					])
 				} catch (error) {
 					Sentry.captureException(error)
 				}

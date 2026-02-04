@@ -57,7 +57,7 @@ const portableTextComponents: PortableTextComponents = {
 	},
 }
 
-export async function loader({ params, request }: Route.LoaderArgs) {
+export async function loader({ params }: Route.LoaderArgs) {
 	const { handle, locale } = params
 	if (!handle)
 		return { product: null, relatedProducts: [], shopifyProduct: null }
@@ -122,7 +122,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 	}
 
 	return [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: `${product.title} - TOLO Shop` },
 		{ content: product.excerpt || product.description, name: 'description' },
 		{ content: product.title, property: 'og:title' },

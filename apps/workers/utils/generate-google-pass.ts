@@ -7,8 +7,9 @@ import jwt from 'jsonwebtoken'
 
 import type { Bindings } from '@/types'
 
+import { STAMPS_PROGRAM_START_DATE } from './constants'
 import { posterApi } from './poster'
-import { getCustomerStamps } from './stamps'
+import { countStampEligibleTransactions, getCustomerStamps } from './stamps'
 
 const GOOGLE_WALLET_BASE_URL =
 	'https://walletobjects.googleapis.com/walletobjects/v1' as const
@@ -65,12 +66,12 @@ export async function notifyGooglePassUpdate(
 
 		const transactionsCount = await posterApi.dash
 			.getTransactions(environment.POSTER_TOKEN, {
-				date_from: '2025-01-01',
+				date_from: STAMPS_PROGRAM_START_DATE,
 				id: clientId.toString(),
 				status: '2',
 				type: 'clients',
 			})
-			.then((transactions) => transactions.length)
+			.then((transactions) => countStampEligibleTransactions(transactions))
 			.catch(() => 0)
 
 		const stampsData = await getCustomerStamps(
@@ -133,12 +134,12 @@ async function createLoyaltyObject({
 	// Count only closed transactions (status: '2') from all time
 	const transactionsCount = await posterApi.dash
 		.getTransactions(context.env.POSTER_TOKEN, {
-			date_from: '2025-01-01',
+			date_from: STAMPS_PROGRAM_START_DATE,
 			id: client.client_id,
 			status: '2',
 			type: 'clients',
 		})
-		.then((transactions) => transactions.length)
+		.then((transactions) => countStampEligibleTransactions(transactions))
 		.catch(() => 0)
 
 	// Calculate stamps based on transactions and redemptions
