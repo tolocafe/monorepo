@@ -100,18 +100,16 @@ app
 	})
 
 app.onError((error, context) => {
-	if (error.cause instanceof HTTPException) {
-		Sentry.captureException(error.cause, {
-			extra: {
-				method: context.req.method,
-				path: context.req.path,
-			},
-		})
-	}
-
 	if (error instanceof HTTPException) {
 		return error.getResponse()
 	}
+
+	Sentry.captureException(error.cause, {
+		extra: {
+			method: context.req.method,
+			path: context.req.path,
+		},
+	})
 
 	return context.json({ error: 'Internal Server Error' }, 500)
 })
