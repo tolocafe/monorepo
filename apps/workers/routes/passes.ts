@@ -94,6 +94,8 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 				},
 			})
 		} catch (error) {
+			console.log(error)
+
 			captureException(error)
 
 			return context.json({ message: 'Error generating pass' }, 500)
