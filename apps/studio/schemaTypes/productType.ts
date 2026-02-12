@@ -101,11 +101,24 @@ export const productType = defineType({
 			validation: (rule) => rule.min(1).max(5).integer(),
 		}),
 		defineField({
-			description: 'Volume in milliliters (ml)',
-			name: 'volume',
-			title: 'Volume',
+			description: 'Size amount (e.g. 240 ml, 100 g)',
+			name: 'size',
+			title: 'Size',
 			type: 'number',
 			validation: (rule) => rule.min(0),
+		}),
+		defineField({
+			description: 'Unit for size measurement',
+			initialValue: 'ml',
+			name: 'sizeUnit',
+			options: {
+				list: [
+					{ title: 'Milliliters (ml)', value: 'ml' },
+					{ title: 'Grams (g)', value: 'g' },
+				],
+			},
+			title: 'Size Unit',
+			type: 'string',
 		}),
 		defineField({
 			description: 'Calories per serving',

@@ -93,6 +93,7 @@ type SanityLocalizedProduct = {
 	/** In Sanity: `body.{lang}`, maps to API `description` */
 	body?: PortableTextBlock[]
 	caffeine?: number
+	calories?: number
 	excerpt?: string
 	images?: SanityImageReference[]
 	intensity?: number
@@ -102,6 +103,8 @@ type SanityLocalizedProduct = {
 	/** In Sanity: `recipe.{lang}`, barista recipe instructions */
 	recipe?: PortableTextBlock[]
 	tag?: 'FAVORITE' | 'NEW' | 'SEASONAL' | 'SPECIAL'
+	size?: number
+	sizeUnit?: 'g' | 'ml'
 }
 
 /**
@@ -286,13 +289,16 @@ const sanity = {
 			query: `*[_type == "product" && posterId == "${itemId}"][0]{
 				"body": body.${language},
 				caffeine,
+				calories,
 				"excerpt": excerpt.${language},
 				"images": images[].asset->_id,
 				intensity,
 				"name": name.${language},
 				posterId,
 				"recipe": recipe.${language},
-				tag
+				tag,
+				size,
+				sizeUnit
 			}`,
 		}).then((product): null | SanityLocalizedProduct => {
 			if (!product) return null
@@ -391,13 +397,16 @@ const sanity = {
 			query: `*[_type == "product"]{
 				"body": body.${language},
 				caffeine,
+				calories,
 				"excerpt": excerpt.${language},
 				"images": images[].asset->_id,
 				intensity,
 				"name": name.${language},
 				posterId,
 				"recipe": recipe.${language},
-				tag
+				tag,
+				size,
+				sizeUnit
 			}`,
 		}).then((products) =>
 			products.map((product) => ({

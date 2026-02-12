@@ -48,6 +48,7 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 					...product,
 					blockContent: sanityProduct?.body,
 					caffeine: sanityProduct?.caffeine,
+					calories: sanityProduct?.calories,
 					description: sanityProduct?.body,
 					excerpt: sanityProduct?.excerpt,
 					images: sanityProduct?.images,
@@ -57,6 +58,8 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 					product_name: name,
 					recipe: sanityProduct?.recipe,
 					tag: sanityProduct?.tag,
+					size: sanityProduct?.size,
+					sizeUnit: sanityProduct?.sizeUnit,
 				} satisfies Product
 
 				return productData
@@ -136,6 +139,7 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				// Map Sanity 'body' to API 'blockContent' and 'description'
 				blockContent: sanityProduct?.body,
 				caffeine: sanityProduct?.caffeine,
+				calories: sanityProduct?.calories,
 				description: sanityProduct?.body,
 				excerpt: sanityProduct?.excerpt,
 				images: sanityProduct?.images,
@@ -145,6 +149,8 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				product_name: name,
 				recipe: sanityProduct?.recipe,
 				tag: sanityProduct?.tag,
+				size: sanityProduct?.size,
+				sizeUnit: sanityProduct?.sizeUnit,
 			} satisfies Product
 
 			return context.json(body, 200, {
