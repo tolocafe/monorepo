@@ -35,8 +35,8 @@
 	},
 	"devDependencies": {
 		"@cloudflare/puppeteer": "~1.0.6",
-		"@cloudflare/vitest-pool-workers": "0.12.11",
-		"@cloudflare/workers-types": "~4.20260210.0",
+		"@cloudflare/vitest-pool-workers": "0.12.12",
+		"@cloudflare/workers-types": "~4.20260212.0",
 		"@sentry/cli": "~2.58.2",
 		"@tolo/common": "workspace:*",
 		"@tolo/oxfmt-config": "workspace:*",
