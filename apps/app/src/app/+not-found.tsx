@@ -20,9 +20,7 @@ export default function NotFoundScreen() {
 				/>
 				<meta content="noindex, nofollow" name="robots" />
 			</Head>
-			<Stack.Header>
-				<Stack.Header.Title>{t`Oops!`}</Stack.Header.Title>
-			</Stack.Header>
+			<Stack.Screen.Title>{t`Oops!`}</Stack.Screen.Title>
 			<View style={styles.container}>
 				<H1 style={styles.title}>
 					<Trans>This screen does not exist.</Trans>

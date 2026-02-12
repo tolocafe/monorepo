@@ -98,11 +98,7 @@ export default function OrderScreen() {
 			<Head>
 				<title>{t`Order ${id}`}</title>
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`Order ${id}`}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`Order ${id}`}</Stack.Screen.Title>
 			<ScreenContainer contentContainerStyle={styles.container}>
 				<Card style={styles.orderHeaderCard}>
 					<View style={styles.orderHeader}>

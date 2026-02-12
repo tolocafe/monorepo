@@ -194,14 +194,10 @@ export default function ProductScreen() {
 			<Head>
 				<title>{t`${product.product_name} - TOLO Good Coffee`}</title>
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{product.product_name}</Stack.Header.Title>
-					<Stack.Header.Left>
-						<Stack.Header.Button onPress={handleClose} icon="xmark" />
-					</Stack.Header.Left>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{product.product_name}</Stack.Screen.Title>
+			<Stack.Toolbar placement="left">
+				<Stack.Toolbar.Button onPress={handleClose} icon="xmark" />
+			</Stack.Toolbar>
 			<ScreenContainer
 				refreshControl={
 					<RefreshControl

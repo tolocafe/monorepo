@@ -65,17 +65,15 @@ export default function MenuScreen() {
 				<meta content="/" property="og:url" />
 			</Head>
 
-			<Stack.Header>
-				<Stack.Header.Title>{t`Home`}</Stack.Header.Title>
-				<Stack.Header.Right>
-					{Platform.OS === 'ios' ? (
-						<Stack.Header.Button
-							onPress={() => router.navigate('/orders/current')}
-							icon="storefront"
-						/>
-					) : null}
-				</Stack.Header.Right>
-			</Stack.Header>
+			<Stack.Screen.Title>{t`Home`}</Stack.Screen.Title>
+			<Stack.Toolbar placement="right">
+				{Platform.OS === 'ios' ? (
+					<Stack.Toolbar.Button
+						onPress={() => router.navigate('/orders/current')}
+						icon="storefront"
+					/>
+				) : null}
+			</Stack.Toolbar>
 
 			<ScreenContainer
 				withPaddingEdges={PADDING_EDGES}

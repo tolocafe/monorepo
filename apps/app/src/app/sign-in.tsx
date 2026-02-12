@@ -38,6 +38,10 @@ const SignInSchema = z.object({
 		.or(z.literal('')),
 })
 
+const handleClose = () => {
+	router.back()
+}
+
 const TextIonicons = withUnistyles(Ionicons, (theme) => ({
 	color: theme.colors.gray.text,
 }))
@@ -295,14 +299,10 @@ export default function SignInScreen() {
 					}),
 				}}
 			/> */}
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`Sign in`}</Stack.Header.Title>
-					<Stack.Header.Left>
-						<Stack.Header.Button icon="xmark" onPress={() => router.back()} />
-					</Stack.Header.Left>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`Sign in`}</Stack.Screen.Title>
+			<Stack.Toolbar placement="left">
+				<Stack.Toolbar.Button icon="xmark" onPress={handleClose} />
+			</Stack.Toolbar>
 			<ScreenContainer
 				bounces={false}
 				contentContainerStyle={styles.contentContainer}

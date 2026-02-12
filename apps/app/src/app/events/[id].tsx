@@ -77,14 +77,11 @@ export default function EventScreen() {
 			<Head>
 				<title>{t`${event.name} - TOLO Good Coffee`}</title>
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{''}</Stack.Header.Title>
-					<Stack.Header.Left>
-						<Stack.Header.Button icon="xmark" onPress={handleClose} />
-					</Stack.Header.Left>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{''}</Stack.Screen.Title>
+			<Stack.Toolbar placement="left">
+				<Stack.Toolbar.Button icon="xmark" onPress={handleClose} />
+			</Stack.Toolbar>
+
 			<ScreenContainer
 				refreshControl={
 					<RefreshControl

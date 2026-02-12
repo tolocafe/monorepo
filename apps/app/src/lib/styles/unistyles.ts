@@ -21,8 +21,8 @@ const lightTheme = {
 	// oxlint-disable-next-line sort-keys
 	borderRadius: {
 		full: 9999,
-		xl: Platform.select({ android: 16, default: 24 }),
-		lg: Platform.select({ android: 10, default: 16 }),
+		xl: Platform.select({ android: 20, default: 28 }),
+		lg: Platform.select({ android: 14, default: 20 }),
 		md: Platform.select({ android: 8, default: 12 }),
 		sm: Platform.select({ android: 5, default: 8 }),
 		xs: Platform.select({ android: 2, default: 4 }),

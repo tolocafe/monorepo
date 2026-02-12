@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react'
 import { Trans } from '@lingui/react/macro'
 import type { Product } from '@tolo/common/api'
 import { Image } from 'expo-image'
-import { Link, LinkTrigger } from 'expo-router'
+import { Link } from 'expo-router'
 import { Pressable, View } from 'react-native'
 import Animated, {
 	useAnimatedStyle,
@@ -51,67 +51,66 @@ export default function MenuListItem(props: Props) {
 		<Animated.View style={[animatedStyle, styles.menuItemContainer]}>
 			<Link href={`/products/${item.product_id}`} asChild>
 				{/* TODO: maybe add a preview and menu */}
-				<LinkTrigger>
-					<Pressable
-						onPressIn={() => {
-							scaleValue.value = withSpring(1.07)
-						}}
-						onPressOut={() => {
-							scaleValue.value = withSpring(1)
-						}}
-						style={styles.link}
-					>
-						<Card padded={false} style={styles.menuItem}>
-							<View style={styles.menuItemImageContainer}>
-								{item.photo ? (
-									<UniImage
-										contentFit="cover"
-										placeholder={{
-											cacheKey: `${item.photo}-placeholder`,
-											uri: getImageUrl(item.photo, {
-												blur: 100,
-												quality: 20,
-												source: 'sanity',
-												width: 300,
-											}),
-										}}
-										placeholderContentFit="cover"
-										source={{
-											cacheKey: `${item.photo}-image`,
-											uri: getImageUrl(item.photo, {
-												quality: 90,
-												source: 'sanity',
-												width: 300,
-											}),
-										}}
-										style={styles.image}
-										transition={200}
-									/>
-								) : (
-									<View aria-hidden />
-								)}
-								{item.tag && item.tag in tagLabels ? (
-									<View style={styles.tag}>
-										<Text style={styles.tagText}>{_(tagLabels[item.tag])}</Text>
-									</View>
-								) : null}
-							</View>
-							<View style={styles.menuItemContent}>
-								<H4 numberOfLines={2}>{item.name}</H4>
-								{item.excerpt ? (
-									<Text numberOfLines={2} style={styles.excerpt}>
-										{item.excerpt}
-									</Text>
-								) : null}
-								<View style={styles.menuItemFooter}>
-									<Text>
-										{hasModifications ? <Trans>From {cost}</Trans> : cost}
-									</Text>
+
+				<Pressable
+					onPressIn={() => {
+						scaleValue.value = withSpring(1.07)
+					}}
+					onPressOut={() => {
+						scaleValue.value = withSpring(1)
+					}}
+					style={styles.link}
+				>
+					<Card padded={false} style={styles.menuItem}>
+						<View style={styles.menuItemImageContainer}>
+							{item.photo ? (
+								<UniImage
+									contentFit="cover"
+									placeholder={{
+										cacheKey: `${item.photo}-placeholder`,
+										uri: getImageUrl(item.photo, {
+											blur: 100,
+											quality: 20,
+											source: 'sanity',
+											width: 300,
+										}),
+									}}
+									placeholderContentFit="cover"
+									source={{
+										cacheKey: `${item.photo}-image`,
+										uri: getImageUrl(item.photo, {
+											quality: 90,
+											source: 'sanity',
+											width: 300,
+										}),
+									}}
+									style={styles.image}
+									transition={200}
+								/>
+							) : (
+								<View aria-hidden />
+							)}
+							{item.tag && item.tag in tagLabels ? (
+								<View style={styles.tag}>
+									<Text style={styles.tagText}>{_(tagLabels[item.tag])}</Text>
 								</View>
+							) : null}
+						</View>
+						<View style={styles.menuItemContent}>
+							<H4 numberOfLines={2}>{item.name}</H4>
+							{item.excerpt ? (
+								<Text numberOfLines={2} style={styles.excerpt}>
+									{item.excerpt}
+								</Text>
+							) : null}
+							<View style={styles.menuItemFooter}>
+								<Text>
+									{hasModifications ? <Trans>From {cost}</Trans> : cost}
+								</Text>
 							</View>
-						</Card>
-					</Pressable>
-				</LinkTrigger>
+						</View>
+					</Card>
+				</Pressable>
 			</Link>
 		</Animated.View>
 	)

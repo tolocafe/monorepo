@@ -2,11 +2,7 @@
 import '@/lib/styles/unistyles'
 //
 import { useLingui } from '@lingui/react/macro'
-import {
-	NativeTabs,
-	NativeTabsTriggerIcon,
-	NativeTabsTriggerLabel,
-} from 'expo-router/unstable-native-tabs'
+import { NativeTabs } from 'expo-router/unstable-native-tabs'
 import { Platform } from 'react-native'
 import { useUnistyles } from 'react-native-unistyles'
 
@@ -53,8 +49,8 @@ export default function TabsLayout() {
 					</NativeTabs.BottomAccessory>
 				)}
 				<NativeTabs.Trigger name="(home)">
-					<NativeTabsTriggerLabel>{t`Home`}</NativeTabsTriggerLabel>
-					<NativeTabsTriggerIcon
+					<NativeTabs.Trigger.Label>{t`Home`}</NativeTabs.Trigger.Label>
+					<NativeTabs.Trigger.Icon
 						drawable="home"
 						sf={{
 							default: 'house',
@@ -64,8 +60,8 @@ export default function TabsLayout() {
 				</NativeTabs.Trigger>
 				{isTeamMember && (
 					<NativeTabs.Trigger name="team">
-						<NativeTabsTriggerLabel>{t`Team`}</NativeTabsTriggerLabel>
-						<NativeTabsTriggerIcon
+						<NativeTabs.Trigger.Label>{t`Team`}</NativeTabs.Trigger.Label>
+						<NativeTabs.Trigger.Icon
 							drawable="user"
 							sf={{
 								default: 'person.3.sequence',
@@ -75,8 +71,8 @@ export default function TabsLayout() {
 					</NativeTabs.Trigger>
 				)}
 				<NativeTabs.Trigger name="profile">
-					<NativeTabsTriggerLabel>{t`Profile`}</NativeTabsTriggerLabel>
-					<NativeTabsTriggerIcon
+					<NativeTabs.Trigger.Label>{t`Profile`}</NativeTabs.Trigger.Label>
+					<NativeTabs.Trigger.Icon
 						drawable="user"
 						sf={{
 							default: 'person',
@@ -85,8 +81,8 @@ export default function TabsLayout() {
 					/>
 				</NativeTabs.Trigger>
 				<NativeTabs.Trigger role="more" name="more">
-					<NativeTabsTriggerLabel>{t`More`}</NativeTabsTriggerLabel>
-					<NativeTabsTriggerIcon drawable="photos" />
+					<NativeTabs.Trigger.Label>{t`More`}</NativeTabs.Trigger.Label>
+					<NativeTabs.Trigger.Icon drawable="photos" />
 				</NativeTabs.Trigger>
 			</NativeTabs>
 		</>

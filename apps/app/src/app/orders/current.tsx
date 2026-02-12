@@ -50,6 +50,10 @@ type ModificationTag = {
 	name: string
 }
 
+const handleClose = () => {
+	router.back()
+}
+
 export default function OrderDetail() {
 	const { t } = useLingui()
 	const products = useOrderProducts()
@@ -368,10 +372,6 @@ export default function OrderDetail() {
 		)
 	}
 
-	const handleClose = () => {
-		router.back()
-	}
-
 	return (
 		<>
 			<Head>
@@ -389,17 +389,19 @@ export default function OrderDetail() {
 					}}
 				/>
 			)}
-			<Stack.Header>
-				<Stack.Header.Title>{t`Current Order`}</Stack.Header.Title>
-				<Stack.Header.Left>
-					<Stack.Header.Button icon="xmark" onPress={handleClose} />
-				</Stack.Header.Left>
-				<Stack.Header.Right>
-					<Stack.Header.Button icon="trash" onPress={handleClearOrder}>
-						<Trans>Clear</Trans>
-					</Stack.Header.Button>
-				</Stack.Header.Right>
-			</Stack.Header>
+			<Stack.Screen.Title>{t`Current Order`}</Stack.Screen.Title>
+			<Stack.Toolbar placement="left">
+				<Stack.Toolbar.Button
+					icon="xmark"
+					onPress={handleClose}
+					accessibilityLabel={t`Go back`}
+				/>
+			</Stack.Toolbar>
+			<Stack.Toolbar placement="right">
+				<Stack.Toolbar.Button icon="trash" onPress={handleClearOrder}>
+					<Trans>Clear</Trans>
+				</Stack.Toolbar.Button>
+			</Stack.Toolbar>
 
 			<ScreenContainer contentContainerStyle={styles.container} keyboardAware>
 				{user && (

@@ -167,11 +167,7 @@ export default function ProfileScreen() {
 				<meta content={t`Profile - TOLO`} property="og:title" />
 				<meta content="/profile" property="og:url" />
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`Profile`}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`Profile`}</Stack.Screen.Title>
 			<ScreenContainer
 				refreshControl={
 					<RefreshControl

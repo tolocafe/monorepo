@@ -77,11 +77,7 @@ export default function EditProfileScreen() {
 			<Head>
 				<title>{t`Edit Profile`}</title>
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`Edit Profile`}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`Edit Profile`}</Stack.Screen.Title>
 			<ScreenContainer
 				keyboardAware
 				contentContainerStyle={styles.contentContainer}

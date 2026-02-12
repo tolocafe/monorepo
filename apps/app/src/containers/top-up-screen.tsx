@@ -214,11 +214,7 @@ export default function TopUpScreen() {
 				<meta content={t`Top Up - TOLO`} property="og:title" />
 				<meta content="/more/top-up" property="og:url" />
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`Top Up`}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`Top Up`}</Stack.Screen.Title>
 			<ScreenContainer contentContainerStyle={styles.contentContainer}>
 				<H2>
 					<Trans>Current Balance</Trans>

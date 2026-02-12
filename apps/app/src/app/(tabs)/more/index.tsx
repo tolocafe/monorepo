@@ -89,11 +89,7 @@ export default function MoreScreen() {
 				<meta content={t`More - TOLO`} property="og:title" />
 				<meta content="/more" property="og:url" />
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`More`}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`More`}</Stack.Screen.Title>
 			<ScreenContainer withPaddingEdges={PADDING_EDGES}>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>

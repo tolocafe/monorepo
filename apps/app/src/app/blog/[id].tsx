@@ -22,10 +22,6 @@ import { blogPostQueryOptions } from '@/lib/queries/blog'
 import { queryClient } from '@/lib/query-client'
 import { formatDate } from '@/lib/utils/format-date'
 
-const handleClose = () => {
-	router.back()
-}
-
 const linearGradientColors = [
 	'transparent',
 	'rgba(0,0,0,0.4)',
@@ -40,6 +36,10 @@ const gradient = {
 }
 
 const PADDING_EDGES = ['bottom'] as const
+
+const handleClose = () => {
+	router.back()
+}
 
 function parseDescription(description: string | undefined | null) {
 	if (!description) return null
@@ -101,14 +101,14 @@ export default function BlogPostScreen() {
 			<Head>
 				<title>{t`${post.name} - TOLO Good Coffee`}</title>
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{''}</Stack.Header.Title>
-					<Stack.Header.Left>
-						<Stack.Header.Button icon="xmark" onPress={handleClose} />
-					</Stack.Header.Left>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{''}</Stack.Screen.Title>
+			<Stack.Toolbar placement="left">
+				<Stack.Toolbar.Button
+					icon="xmark"
+					onPress={handleClose}
+					accessibilityLabel={t`Go back`}
+				/>
+			</Stack.Toolbar>
 			<ScreenContainer
 				refreshControl={
 					<RefreshControl

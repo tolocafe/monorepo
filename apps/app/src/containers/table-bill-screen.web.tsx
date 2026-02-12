@@ -129,11 +129,7 @@ export default function TableBillScreenWeb() {
 				<Head>
 					<title>{t`Loading Table Bill`}</title>
 				</Head>
-				<Stack.Screen>
-					<Stack.Header>
-						<Stack.Header.Title>{t`Table Bill`}</Stack.Header.Title>
-					</Stack.Header>
-				</Stack.Screen>
+				<Stack.Screen.Title>{t`Table Bill`}</Stack.Screen.Title>
 				<ScreenContainer>
 					<View style={styles.loadingContainer}>
 						<ActivityIndicator size="large" />
@@ -153,11 +149,7 @@ export default function TableBillScreenWeb() {
 				<Head>
 					<title>{t`Table Not Found`}</title>
 				</Head>
-				<Stack.Screen>
-					<Stack.Header>
-						<Stack.Header.Title>{t`Table Bill`}</Stack.Header.Title>
-					</Stack.Header>
-				</Stack.Screen>
+				<Stack.Screen.Title>{t`Table Bill`}</Stack.Screen.Title>
 				<ScreenContainer>
 					<View style={styles.errorContainer}>
 						<H2>
@@ -185,11 +177,7 @@ export default function TableBillScreenWeb() {
 				<Head>
 					<title>{t`Payment Successful`}</title>
 				</Head>
-				<Stack.Screen>
-					<Stack.Header>
-						<Stack.Header.Title>{t`Payment Successful`}</Stack.Header.Title>
-					</Stack.Header>
-				</Stack.Screen>
+				<Stack.Screen.Title>{t`Payment Successful`}</Stack.Screen.Title>
 				<ScreenContainer>
 					<View style={styles.successContainer}>
 						<H2>
@@ -212,11 +200,7 @@ export default function TableBillScreenWeb() {
 			<Head>
 				<title>{t`${tableBill.tableName} - Bill`}</title>
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{tableBill.tableName}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{tableBill.tableName}</Stack.Screen.Title>
 			<ScreenContainer contentContainerStyle={styles.container}>
 				{/* Table Header */}
 				<Card>

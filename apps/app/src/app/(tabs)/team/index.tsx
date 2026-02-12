@@ -25,11 +25,7 @@ export default function TeamScreen() {
 				<meta content={t`Team - TOLO`} property="og:title" />
 				<meta content="/team" property="og:url" />
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`Team`}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`Team`}</Stack.Screen.Title>
 			<ScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				refreshControl={

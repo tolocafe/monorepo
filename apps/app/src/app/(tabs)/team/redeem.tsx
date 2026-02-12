@@ -148,9 +148,7 @@ export default function RedeemDrink() {
 
 	return (
 		<>
-			<Stack.Header>
-				<Stack.Header.Title>{clientName || t`Redeem`}</Stack.Header.Title>
-			</Stack.Header>
+			<Stack.Screen.Title>{clientName || t`Redeem`}</Stack.Screen.Title>
 			<Head>
 				<title>{clientName || t`Redeem`}</title>
 			</Head>

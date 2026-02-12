@@ -53,6 +53,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 	plugins: [
 		'expo-font',
 		'expo-image',
+		'expo-sharing',
 		'expo-updates',
 		'expo-notifications',
 		'expo-color-space-plugin',
@@ -60,6 +61,12 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		'./plugins/withAppBuildGradlePlugin',
 		['expo-router', { headOrigin: 'https://app.tolo.cafe' }],
 		['@sentry/react-native', { organization: 'tolo-cafe', project: 'app' }],
+		[
+			'expo-calendar',
+			{
+				calendarPermission: 'This will allow us to add events to your calendar',
+			},
+		],
 		[
 			'expo-localization',
 			{

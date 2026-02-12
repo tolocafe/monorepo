@@ -51,11 +51,7 @@ export default function OrdersScreen() {
 				<Head>
 					<title>{t`Orders`}</title>
 				</Head>
-				<Stack.Screen>
-					<Stack.Header>
-						<Stack.Header.Title>{t`Orders`}</Stack.Header.Title>
-					</Stack.Header>
-				</Stack.Screen>
+				<Stack.Screen.Title>{t`Orders`}</Stack.Screen.Title>
 				<ScreenContainer noScroll>
 					<View style={styles.signInContainer}>
 						<UniImage
@@ -82,11 +78,7 @@ export default function OrdersScreen() {
 			<Head>
 				<title>{t`Orders`}</title>
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`Orders`}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`Orders`}</Stack.Screen.Title>
 			<ScreenContainer
 				contentContainerStyle={styles.contentContainer}
 				noScroll={!orders?.length}

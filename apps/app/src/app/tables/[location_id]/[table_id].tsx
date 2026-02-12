@@ -40,9 +40,7 @@ export default function TableScreen() {
 
 	return (
 		<>
-			<Stack.Header>
-				<Stack.Header.Title>{t`Table ${table_id}`}</Stack.Header.Title>
-			</Stack.Header>
+			<Stack.Screen.Title>{t`Table ${table_id}`}</Stack.Screen.Title>
 			<View style={styles.container}>
 				<View style={styles.content}>
 					<Text style={styles.subtitle}>

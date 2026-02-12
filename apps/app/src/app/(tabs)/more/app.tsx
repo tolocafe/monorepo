@@ -87,11 +87,7 @@ export default function AppInfoScreen() {
 				<meta content={t`App - TOLO`} property="og:title" />
 				<meta content="/more/app" property="og:url" />
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`App`}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`App`}</Stack.Screen.Title>
 			<ScreenContainer contentContainerStyle={styles.contentContainer}>
 				<View style={styles.section}>
 					<H2 style={styles.sectionTitle}>

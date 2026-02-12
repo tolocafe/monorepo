@@ -32,11 +32,7 @@ export default function VisitUsScreen() {
 				<meta content={t`Visit Us - TOLO Good Coffee`} property="og:title" />
 				<meta content="/more/visit-us" property="og:url" />
 			</Head>
-			<Stack.Screen>
-				<Stack.Header>
-					<Stack.Header.Title>{t`Visit Us`}</Stack.Header.Title>
-				</Stack.Header>
-			</Stack.Screen>
+			<Stack.Screen.Title>{t`Visit Us`}</Stack.Screen.Title>
 			<ScreenContainer>
 				<View style={styles.section}>
 					<Card>
