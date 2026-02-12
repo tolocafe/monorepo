@@ -21,10 +21,10 @@
 	},
 	"dependencies": {
 		"@sanity/icons": "3.7.4",
-		"@sanity/vision": "5.5.0",
+		"@sanity/vision": "5.9.0",
 		"react": "catalog:",
 		"react-dom": "catalog:",
-		"sanity": "5.7.0",
+		"sanity": "5.9.0",
 		"styled-components": "6.3.8"
 	},
 	"devDependencies": {
