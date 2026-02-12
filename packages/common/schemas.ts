@@ -20,7 +20,7 @@ export const RequestOtpSchema = z.strictObject({
 export type RequestOtp = z.infer<typeof RequestOtpSchema>
 
 export const VerifyOtpSchema = z.strictObject({
-	code: z.string().length(6, 'errors.max-length'),
+	code: z.string().length(6, 'errors.length'),
 	phone: PhoneSchema,
 	sessionName: z.string().min(1),
 })

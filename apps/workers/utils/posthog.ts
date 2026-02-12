@@ -80,9 +80,9 @@ export async function trackEvent(
 	context: Context<{ Bindings: Bindings }>,
 	{ distinctId, event, properties = {}, userProperties }: TrackEventOptions,
 ) {
-	const posthog = createPostHogClient(context.env.POSTHOG_API_KEY)
-
 	try {
+		const posthog = createPostHogClient(context.env.POSTHOG_API_KEY)
+
 		posthog.capture({
 			distinctId,
 			event,
@@ -131,9 +131,9 @@ export async function trackEventsBatch(
 ) {
 	if (events.length === 0) return
 
-	const posthog = createPostHogClient(env.POSTHOG_API_KEY)
-
 	try {
+		const posthog = createPostHogClient(env.POSTHOG_API_KEY)
+
 		// Capture all events (PostHog client batches internally)
 		for (const event of events) {
 			posthog.capture({
