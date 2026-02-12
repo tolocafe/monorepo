@@ -109,6 +109,9 @@ app.onError((error, context) => {
 		return context.json({ error: 'Bad Request', issues: error.issues }, 400)
 	}
 
+	console.log(error)
+	console.log(error.cause)
+
 	Sentry.captureException(error.cause, {
 		extra: {
 			method: context.req.method,
