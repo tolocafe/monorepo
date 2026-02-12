@@ -1,0 +1,16 @@
+{
+	"hooks": {
+		"PostToolUse": [
+			{
+				"matcher": "Write|Edit",
+				"hooks": [
+					{
+						"type": "command",
+						"command": "bun run lint && bun run format && bun run typecheck",
+						"statusMessage": "Running quality checks..."
+					}
+				]
+			}
+		]
+	}
+}
