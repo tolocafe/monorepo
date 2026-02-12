@@ -13,7 +13,6 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 			backgroundColor: '#3D6039',
 			foregroundImage: './src/assets/images/adaptive-icon.png',
 		},
-		edgeToEdgeEnabled: true,
 		googleServicesFile: './google-services.json',
 		package: 'cafe.tolo.app',
 	},
