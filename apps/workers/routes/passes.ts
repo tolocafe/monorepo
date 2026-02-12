@@ -1,3 +1,4 @@
+// oxlint-disable-next-line import/no-nodejs-modules
 import { randomUUID } from 'node:crypto'
 
 import { captureException } from '@sentry/cloudflare'
@@ -94,8 +95,6 @@ const pass = new Hono<{ Bindings: Bindings }>().get(
 				},
 			})
 		} catch (error) {
-			console.log(error)
-
 			captureException(error)
 
 			return context.json({ message: 'Error generating pass' }, 500)

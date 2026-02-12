@@ -4,6 +4,10 @@
 	"ai": {
 		"binding": "AI"
 	},
+	"assets": {
+		"binding": "ASSETS",
+		"directory": "./public"
+	},
 	"compatibility_date": "2026-01-25",
 	"compatibility_flags": ["nodejs_compat"],
 	"d1_databases": [
@@ -35,7 +39,6 @@
 	],
 	"main": "index.ts",
 	"name": "tolo-workers",
-	"workers_dev": false,
 	"observability": {
 		"enabled": true
 	},
@@ -44,8 +47,8 @@
 	},
 	"routes": [
 		{
-			"pattern": "workers.tolo.cafe",
-			"custom_domain": true
+			"custom_domain": true,
+			"pattern": "workers.tolo.cafe"
 		}
 	],
 	"triggers": {
@@ -54,5 +57,6 @@
 	"vars": {
 		"SANITY_PROJECT_ID": "m1zo6pvi",
 		"SHOPIFY_STORE_DOMAIN": "tolo-cafe.myshopify.com"
-	}
+	},
+	"workers_dev": false
 }
