@@ -52,6 +52,29 @@ jest.mock('react-native-unistyles', () => ({
 	},
 }))
 
+// Mock expo-router (native modules unavailable in Jest)
+jest.mock('expo-router', () => {
+	const dynamicColor = '#000000'
+	return {
+		Color: {
+			android: {
+				dynamic: {
+					error: dynamicColor,
+					primary: dynamicColor,
+					primaryContainer: dynamicColor,
+					primaryFixed: dynamicColor,
+				},
+			},
+		},
+		Link: ({ children }) => children,
+		useRouter: jest.fn(() => ({
+			back: jest.fn(),
+			push: jest.fn(),
+			replace: jest.fn(),
+		})),
+	}
+})
+
 // Mock Lingui
 jest.mock('@lingui/core', () => ({
 	i18n: {
