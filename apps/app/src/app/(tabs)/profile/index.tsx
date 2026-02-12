@@ -20,6 +20,7 @@ import { H2, Paragraph } from '@/components/Text'
 import WalletButton, { addPass } from '@/components/WalletButton'
 import { trackEvent } from '@/lib/analytics'
 import { useTrackScreenView } from '@/lib/analytics/hooks'
+import { API_BASE_URL } from '@/lib/constants/api'
 import { resetBadgeCount } from '@/lib/notifications'
 import { selfQueryOptions, signOutMutationOptions } from '@/lib/queries/auth'
 import { clearAllCache } from '@/lib/queries/cache-utils'
@@ -68,7 +69,7 @@ export default function ProfileScreen() {
 
 			const token = await getAuthToken()
 
-			const url = `https://app.tolo.cafe/api/passes/${user.client_id}?authenticationToken=${token}&platform=${Platform.OS}`
+			const url = `${API_BASE_URL}/v1/passes/${user.client_id}?authenticationToken=${token}&platform=${Platform.OS}`
 
 			if (Platform.OS === 'android') {
 				const data = (await fetch(url).then((response) => response.json())) as {
