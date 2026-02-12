@@ -4,6 +4,7 @@ import type { SupportedLocale } from '@tolo/common/locales'
 import { Hono } from 'hono'
 import { cors } from 'hono/cors'
 import { HTTPException } from 'hono/http-exception'
+import { ZodError } from 'zod/v4'
 
 import { jwtUserMiddleware } from './lib/jwt-user-middleware'
 import type { JwtUserVariables } from './lib/jwt-user-middleware'
@@ -102,6 +103,10 @@ app
 app.onError((error, context) => {
 	if (error instanceof HTTPException) {
 		return error.getResponse()
+	}
+
+	if (error instanceof ZodError) {
+		return context.json({ error: 'Bad Request', issues: error.issues }, 400)
 	}
 
 	Sentry.captureException(error.cause, {
