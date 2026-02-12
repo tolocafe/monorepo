@@ -27,7 +27,6 @@ export const eventType = defineType({
 			name: 'excerpt',
 			title: 'Excerpt',
 			type: 'localeText',
-			validation: (rule) => rule.max(200),
 		}),
 		defineField({
 			description: 'Full event description with details',
