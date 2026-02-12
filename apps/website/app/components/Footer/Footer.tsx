@@ -7,8 +7,11 @@ import {
 } from '@tabler/icons-react'
 import { Link, useParams } from 'react-router'
 
+import AmexLogo from '@/assets/logos/amex.svg'
 import AppStoreBadge from '@/assets/logos/app-store.svg'
 import GooglePlayBadge from '@/assets/logos/google-play.svg'
+import MasterCardLogo from '@/assets/logos/master-card.svg'
+import VisaLogo from '@/assets/logos/visa.svg'
 import { isValidLocale, DEFAULT_LOCALE } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
 import { getLocalizedString, getLocalizedSlug } from '@/lib/sanity'
@@ -157,6 +160,12 @@ export function Footer({ locations = [] }: FooterProps) {
 				<p className={styles.copyright}>
 					<Trans>© {currentYear} TOLO. All rights reserved.</Trans>
 				</p>
+
+				<div className={styles.paymentIcons}>
+					<img src={VisaLogo} alt="Visa" width={38} height={24} />
+					<img src={MasterCardLogo} alt="Mastercard" width={38} height={24} />
+					<img src={AmexLogo} alt="American Express" width={38} height={24} />
+				</div>
 
 				<div className={styles.socialLinks}>
 					<a

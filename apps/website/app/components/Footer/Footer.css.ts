@@ -92,6 +92,13 @@ export const legalLink = style({
 	textDecoration: 'none',
 })
 
+export const paymentIcons = style({
+	alignItems: 'center',
+	display: 'flex',
+	gap: vars.space.sm,
+	opacity: 0.7,
+})
+
 export const socialLinks = style({
 	alignItems: 'center',
 	display: 'flex',
