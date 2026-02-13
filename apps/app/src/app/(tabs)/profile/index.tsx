@@ -109,11 +109,7 @@ export default function ProfileScreen() {
 
 			await clearAllCache()
 
-			if (router.canGoBack()) {
-				router.back()
-			} else {
-				router.navigate('/(tabs)/profile', { withAnchor: false })
-			}
+			router.navigate('/')
 		}
 
 		if (Platform.OS === 'web') {

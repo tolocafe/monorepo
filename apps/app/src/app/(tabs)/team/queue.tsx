@@ -279,7 +279,7 @@ export default function OrdersQueue() {
 														size={12}
 													/>
 													<Text style={styles.toGoText}>
-														<Trans>To Go</Trans>
+														<Trans>To-Go</Trans>
 													</Text>
 												</View>
 											)}

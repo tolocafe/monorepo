@@ -33,6 +33,7 @@ export default function TabsLayout() {
 				<FloatingOrderCard products={products} transactionId={transactionId} />
 			)}
 			<NativeTabs
+				key={String(isTeamMember)}
 				tintColor={theme.colors.primary.solid}
 				minimizeBehavior={hasActiveOrder ? 'onScrollDown' : 'automatic'}
 				backgroundColor={theme.colors.gray.background}

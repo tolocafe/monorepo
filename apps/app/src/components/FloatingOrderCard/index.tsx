@@ -58,7 +58,7 @@ export function FloatingOrderCard({
 					</View>
 					<View style={styles.textContainer}>
 						<Text style={styles.title} weight="bold">
-							<Trans>Current Order</Trans>
+							<Trans>Complete Order</Trans>
 						</Text>
 						<Text style={styles.subtitle}>
 							{tableId ? (

@@ -51,7 +51,7 @@ export default function PhoneNumberInput({
 	const handleTextChange = (text: string) => {
 		const [nextIntPrefix, nextNsn] = getPhoneParts(text, intPrefix)
 
-		onChange(nextIntPrefix + nextNsn)
+		onChange(nextIntPrefix + nextNsn.slice(0, MAX_NSN_LENGTH))
 	}
 
 	return (
@@ -96,13 +96,13 @@ export default function PhoneNumberInput({
 				value={nsn}
 				// oxlint-disable-next-line jsx-props-no-spreading
 				{...props}
-				maxLength={PHONE_NUMBER_MAX_LENGTH - 3}
 			/>
 		</View>
 	)
 }
 
 const PHONE_NUMBER_MAX_LENGTH = 13
+const MAX_NSN_LENGTH = PHONE_NUMBER_MAX_LENGTH - 3
 
 /**
  * Return international prefix and nsn (national subscriber number)

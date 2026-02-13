@@ -155,7 +155,6 @@ const styles = StyleSheet.create((theme, runtime) => ({
 	},
 	loadingContainer: {
 		alignItems: 'center',
-		backgroundColor: theme.colors.gray.background,
 		flex: 1,
 		gap: theme.spacing.md,
 		justifyContent: 'center',
