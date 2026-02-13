@@ -12,6 +12,7 @@ import { StyleSheet, withUnistyles } from 'react-native-unistyles'
 import Card from '@/components/Card'
 import { H4, Text } from '@/components/Text'
 import { getImageUrl } from '@/lib/image'
+import { formatDate } from '@/lib/utils/format-date'
 
 const MAX_IMAGE_HEIGHT = 150
 
@@ -86,7 +87,7 @@ export default function EventCard({ event }: Props) {
 						) : null}
 						{event.dates?.[0] ? (
 							<Text numberOfLines={1} style={styles.meta}>
-								{event.dates[0]}
+								{formatDate(event.dates[0])}
 							</Text>
 						) : null}
 					</View>

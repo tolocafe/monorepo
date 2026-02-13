@@ -516,8 +516,10 @@ export type Product = {
 	tax_id: string
 	type: string
 	unit: string
-	/* Volume in milliliters  */
-	volume?: number
+	/* Size amount (e.g. 240 ml, 100 g) */
+	size?: number
+	/* Unit for size measurement: 'ml' or 'g' */
+	sizeUnit?: 'g' | 'ml'
 	weight_flag: string
 	workshop: string
 }

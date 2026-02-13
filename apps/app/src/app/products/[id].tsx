@@ -260,11 +260,13 @@ export default function ProductScreen() {
 							<Paragraph>{product['small-description']}</Paragraph>
 						) : null}
 
-						{Boolean(product.volume || product.calories) && (
+						{Boolean(product.size || product.calories) && (
 							<View style={styles.badges}>
-								{product.volume ? (
+								{product.size ? (
 									<View style={styles.badge}>
-										<Text style={styles.badgeText}>{product.volume} ml</Text>
+										<Text style={styles.badgeText}>
+											{product.size} {product.sizeUnit ?? 'ml'}
+										</Text>
 									</View>
 								) : null}
 								{product.calories ? (
