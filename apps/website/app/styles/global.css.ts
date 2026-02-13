@@ -361,7 +361,3 @@ export const pageHeader = style({
 export const pageHeading = style({
 	marginBottom: vars.space.md,
 })
-
-export const pageSubtitle = style({
-	fontSize: vars.fontSize.lg,
-})

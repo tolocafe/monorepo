@@ -133,9 +133,6 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
 					<h1 className={styles.heading}>
 						<Trans>Blog</Trans>
 					</h1>
-					<p className={styles.subtitle}>
-						<Trans>Stories from the coffee world</Trans>
-					</p>
 				</header>
 
 				<div className={styles.content}>

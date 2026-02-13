@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css'
 
-import { vars } from '@/styles'
+import { vars } from '@/styles/tokens.css'
 
 export const header = style({
 	backdropFilter: 'blur(12px)',
@@ -52,7 +52,6 @@ export const links = style({
 	},
 	alignItems: 'center',
 	display: 'none',
-	gap: vars.space.sm,
 })
 
 export const link = style({
@@ -81,7 +80,7 @@ export const linkActive = style({
 export const right = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space.md,
+	gap: vars.space.sm,
 })
 
 export const headerCta = style({
@@ -125,6 +124,7 @@ export const localeButton = style({
 	display: 'flex',
 	height: '40px',
 	justifyContent: 'center',
+	padding: 0,
 	width: '40px',
 })
 
@@ -177,6 +177,7 @@ export const menuButton = style({
 	display: 'inline-flex',
 	height: '40px',
 	justifyContent: 'center',
+	padding: 0,
 	width: '40px',
 })
 
@@ -192,12 +193,11 @@ export const mobilePanel = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space.xl,
-	height: '100%',
-	padding: vars.space.xl,
+	left: 0,
+	padding: `${vars.space.md} ${vars.space.xl}`,
 	position: 'fixed',
 	right: 0,
 	top: 0,
-	width: 'min(380px, 92vw)',
 	zIndex: 61,
 })
 
@@ -224,6 +224,7 @@ export const mobileClose = style({
 	color: vars.color.white,
 	cursor: 'pointer',
 	height: '40px',
+	padding: 0,
 	width: '40px',
 })
 
@@ -237,7 +238,6 @@ export const mobileLink = style([
 	link,
 	{
 		fontSize: vars.fontSize.lg,
-		justifyContent: 'flex-start',
 		padding: `${vars.space.md} ${vars.space.md}`,
 	},
 ])

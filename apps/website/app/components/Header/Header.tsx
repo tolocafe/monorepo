@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
 
 import toloLogo from '@/assets/tolo.png'
-import { CartIcon } from '@/components/CartIcon'
+import { CartIcon } from '@/components/CartIcon/CartIcon'
 import {
 	SUPPORTED_LOCALES,
 	LOCALE_LABELS,
@@ -101,83 +101,94 @@ export function Header() {
 	}, [isMobileMenuOpen])
 
 	return (
-		<header className={styles.header}>
-			<div className={styles.inner}>
-				<div className={styles.left}>
-					<nav className={styles.nav} aria-label="Primary">
-						<Link to={`/${currentLocale}`} className={styles.logo}>
-							<img src={toloLogo} alt="TOLO" className={styles.logoImg} />
-						</Link>
-					</nav>
-
-					<nav className={styles.links} aria-label="Site">
-						{navItems.map((item) => (
-							<Link
-								key={item.to}
-								to={item.to}
-								className={`${styles.link} ${isActive(item) ? styles.linkActive : ''}`}
-							>
-								{item.label}
+		<>
+			<header className={styles.header}>
+				<div className={styles.inner}>
+					<div className={styles.left}>
+						<nav className={styles.nav} aria-label="Primary">
+							<Link to={`/${currentLocale}`} className={styles.logo}>
+								<img src={toloLogo} alt="TOLO" className={styles.logoImg} />
 							</Link>
-						))}
-					</nav>
-				</div>
+						</nav>
 
-				<div className={styles.right}>
-					<a
-						href="https://app.tolo.cafe"
-						className={styles.headerCta}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<Trans>Order</Trans>
-					</a>
-					<CartIcon />
-
-					<div
-						className={styles.localeNav}
-						ref={localeMenuRef}
-						aria-label="Language selection"
-					>
-						<button
-							type="button"
-							className={styles.localeButton}
-							onClick={() => setIsLocaleMenuOpen(!isLocaleMenuOpen)}
-							aria-expanded={isLocaleMenuOpen}
-							aria-haspopup="true"
-							aria-label={t`Select language, current: ${LOCALE_LABELS[currentLocale]}`}
-						>
-							<IconWorld size={20} aria-hidden="true" />
-						</button>
-						{isLocaleMenuOpen && (
-							<div className={styles.localeDropdown} role="menu">
-								{SUPPORTED_LOCALES.map((locale) => (
-									<button
-										key={locale}
-										type="button"
-										role="menuitem"
-										className={`${styles.localeOption} ${locale === currentLocale ? styles.localeOptionActive : ''}`}
-										onClick={() => handleLocaleSelect(locale)}
-									>
-										{LOCALE_LABELS[locale]}
-									</button>
-								))}
-							</div>
-						)}
+						<nav className={styles.links} aria-label="Site">
+							{navItems.map((item) => (
+								<Link
+									key={item.to}
+									to={item.to}
+									className={`${styles.link} ${isActive(item) ? styles.linkActive : ''}`}
+								>
+									{item.label}
+								</Link>
+							))}
+							<a
+								href="https://app.tolo.cafe"
+								className={styles.link}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<Trans>Menu</Trans>
+							</a>
+						</nav>
 					</div>
 
-					<button
-						type="button"
-						className={styles.menuButton}
-						onClick={() => setIsMobileMenuOpen(true)}
-						aria-label={t`Open menu`}
-						aria-expanded={isMobileMenuOpen}
-						aria-controls="mobile-menu"
-					>
-						<IconMenu2 size={18} aria-hidden="true" />
-					</button>
+					<div className={styles.right}>
+						<a
+							href="https://app.tolo.cafe"
+							className={styles.headerCta}
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							<Trans>Order</Trans>
+						</a>
+
+						<CartIcon />
+
+						<div
+							className={styles.localeNav}
+							ref={localeMenuRef}
+							aria-label="Language selection"
+						>
+							<button
+								type="button"
+								className={styles.localeButton}
+								onClick={() => setIsLocaleMenuOpen(!isLocaleMenuOpen)}
+								aria-expanded={isLocaleMenuOpen}
+								aria-haspopup="true"
+								aria-label={t`Select language, current: ${LOCALE_LABELS[currentLocale]}`}
+							>
+								<IconWorld size={26} aria-hidden="true" />
+							</button>
+							{isLocaleMenuOpen && (
+								<div className={styles.localeDropdown} role="menu">
+									{SUPPORTED_LOCALES.map((locale) => (
+										<button
+											key={locale}
+											type="button"
+											role="menuitem"
+											className={`${styles.localeOption} ${locale === currentLocale ? styles.localeOptionActive : ''}`}
+											onClick={() => handleLocaleSelect(locale)}
+										>
+											{LOCALE_LABELS[locale]}
+										</button>
+									))}
+								</div>
+							)}
+						</div>
+
+						<button
+							type="button"
+							className={styles.menuButton}
+							onClick={() => setIsMobileMenuOpen(true)}
+							aria-label={t`Open menu`}
+							aria-expanded={isMobileMenuOpen}
+							aria-controls="mobile-menu"
+						>
+							<IconMenu2 size={26} aria-hidden="true" />
+						</button>
+					</div>
 				</div>
-			</div>
+			</header>
 
 			{isMobileMenuOpen && (
 				<>
@@ -193,14 +204,16 @@ export function Header() {
 						aria-label={t`Menu`}
 					>
 						<div className={styles.mobileHeader}>
-							<span className={styles.mobileTitle}>TOLO</span>
+							<Link to={`/${currentLocale}`} className={styles.logo}>
+								<img src={toloLogo} alt="TOLO" className={styles.logoImg} />
+							</Link>
 							<button
 								type="button"
 								className={styles.mobileClose}
 								onClick={() => setIsMobileMenuOpen(false)}
 								aria-label={t`Close menu`}
 							>
-								<IconX size={18} aria-hidden="true" />
+								<IconX size={26} aria-hidden="true" />
 							</button>
 						</div>
 
@@ -210,10 +223,18 @@ export function Header() {
 									{item.label}
 								</Link>
 							))}
+							<a
+								href="https://app.tolo.cafe"
+								className={styles.mobileLink}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<Trans>Menu</Trans>
+							</a>
 						</nav>
 					</div>
 				</>
 			)}
-		</header>
+		</>
 	)
 }

@@ -1,13 +1,13 @@
 import { style } from '@vanilla-extract/css'
 
 import {
-	vars,
 	containerWide,
 	pageMain,
 	emptyStateCard,
 	emptyTitle as sharedEmptyTitle,
 	emptyMessage as sharedEmptyMessage,
-} from '@/styles'
+} from '@/styles/global.css'
+import { vars } from '@/styles/tokens.css'
 
 export const main = pageMain
 

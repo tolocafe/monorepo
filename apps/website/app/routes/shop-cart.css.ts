@@ -1,7 +1,6 @@
 import { style } from '@vanilla-extract/css'
 
 import {
-	vars,
 	containerNarrow,
 	pageMain,
 	backLink as sharedBackLink,
@@ -9,7 +8,8 @@ import {
 	emptyTitle as sharedEmptyTitle,
 	emptyMessage as sharedEmptyMessage,
 	buttonPrimary,
-} from '@/styles'
+} from '@/styles/global.css'
+import { vars } from '@/styles/tokens.css'
 
 export const main = pageMain
 

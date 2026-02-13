@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 import { Outlet, redirect, useLocation } from 'react-router'
 
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
+import { Footer } from '@/components/Footer/Footer'
+import { Header } from '@/components/Header/Header'
 import {
 	isValidLocale,
 	detectLocaleFromHeader,

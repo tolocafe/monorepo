@@ -129,9 +129,6 @@ export default function Locations({ loaderData }: Route.ComponentProps) {
 					<h1 className={styles.heading}>
 						<Trans>Our Locations</Trans>
 					</h1>
-					<p className={styles.subtitle}>
-						<Trans>Find us and visit for freshly roasted coffee</Trans>
-					</p>
 				</header>
 
 				<div className={styles.content}>

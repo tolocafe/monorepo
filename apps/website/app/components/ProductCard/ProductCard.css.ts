@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css'
 
-import { vars } from '@/styles'
+import { vars } from '@/styles/tokens.css'
 
 export const card = style({
 	backgroundColor: vars.color.surface,

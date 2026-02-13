@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { useState, useEffect } from 'react'
 import { Link, useOutletContext } from 'react-router'
 
-import { CartItem } from '@/components/CartItem'
+import { CartItem } from '@/components/CartItem/CartItem'
 import {
 	formatMoney,
 	getCartIdFromCookies,

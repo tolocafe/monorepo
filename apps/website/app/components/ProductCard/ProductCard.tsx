@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 
-import { BadgeLabel } from '@/components/BadgeLabel'
-import { ImagePlaceholderIcon } from '@/components/ImagePlaceholderIcon'
+import { BadgeLabel } from '@/components/BadgeLabel/BadgeLabel'
+import { ImagePlaceholderIcon } from '@/components/ImagePlaceholderIcon/ImagePlaceholderIcon'
 import { formatMoney } from '@/lib/cart'
 import type { MergedProduct } from '@/lib/shop-data'
 

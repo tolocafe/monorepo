@@ -53,7 +53,7 @@ export function CartIcon() {
 			className={styles.cartLink}
 			aria-label={t`Shopping cart${itemCount > 0 ? `, ${itemCount} items` : ''}`}
 		>
-			<IconShoppingCart size={20} aria-hidden="true" />
+			<IconShoppingCart size={26} aria-hidden="true" />
 			{itemCount > 0 && (
 				<span className={styles.badge} aria-hidden="true">
 					{itemCount > 99 ? '99+' : itemCount}

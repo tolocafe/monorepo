@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css'
 
-import { vars } from '@/styles'
+import { vars } from '@/styles/tokens.css'
 
 export const footer = style({
 	backgroundColor: vars.color.primary,
@@ -54,14 +54,13 @@ export const link = style({
 export const bottomBar = style({
 	'@media': {
 		'(max-width: 640px)': {
-			alignItems: 'flex-start',
 			flexDirection: 'column',
 		},
 	},
 	alignItems: 'center',
 	display: 'flex',
 	flexDirection: 'row',
-	gap: vars.space.md,
+	gap: vars.space.lg,
 	justifyContent: 'space-between',
 	margin: `${vars.space.xl} auto`,
 	maxWidth: '1200px',

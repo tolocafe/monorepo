@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Link, useOutletContext } from 'react-router'
 
-import { ProductCard } from '@/components/ProductCard'
+import { ProductCard } from '@/components/ProductCard/ProductCard'
 import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'

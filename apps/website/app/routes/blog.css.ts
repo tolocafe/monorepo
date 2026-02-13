@@ -1,13 +1,12 @@
 import { style } from '@vanilla-extract/css'
 
 import {
-	vars,
 	containerNarrow,
 	pageMain,
 	pageHeader,
 	pageHeading,
-	pageSubtitle,
-} from '@/styles'
+} from '@/styles/global.css'
+import { vars } from '@/styles/tokens.css'
 
 export const main = pageMain
 
@@ -16,8 +15,6 @@ export const container = containerNarrow
 export const header = pageHeader
 
 export const heading = pageHeading
-
-export const subtitle = pageSubtitle
 
 export const content = style({
 	display: 'flex',

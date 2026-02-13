@@ -1,11 +1,11 @@
 import { style } from '@vanilla-extract/css'
 
 import {
-	vars,
 	quantityControls as sharedQuantityControls,
 	quantityButtonSmall,
 	quantityValueSmall,
-} from '@/styles'
+} from '@/styles/global.css'
+import { vars } from '@/styles/tokens.css'
 
 export const cartItem = style({
 	'@media': {

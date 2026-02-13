@@ -130,9 +130,6 @@ export default function Beans({ loaderData }: Route.ComponentProps) {
 					<h1 className={styles.heading}>
 						<Trans>Our Beans</Trans>
 					</h1>
-					<p className={styles.subtitle}>
-						<Trans>Carefully selected single origins and blends</Trans>
-					</p>
 				</header>
 
 				<div className={styles.content}>

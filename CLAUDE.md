@@ -143,6 +143,7 @@ The codebase prioritizes these qualities in order:
 - **File naming**: kebab-case for utilities/hooks, PascalCase allowed for React component files/directories
 - **Avoid classes**: Prefer simple objects and functions over classes
 - **React Compiler**: Enabled for automatic memoization; less manual React.memo/useMemo/useCallback needed
+- **No barrel `index.ts` files**: Do not create `index.ts` files that only re-export from sibling modules. Import directly from the source file instead (e.g., `import { Header } from '@/components/Header/Header'` not `from '@/components/Header'`)
 
 ### Import Patterns
 

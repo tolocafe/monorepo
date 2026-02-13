@@ -5,7 +5,7 @@ import type { PortableTextComponents } from '@portabletext/react'
 import { useState } from 'react'
 import { Link, useOutletContext, useNavigate } from 'react-router'
 
-import { ProductCard } from '@/components/ProductCard'
+import { ProductCard } from '@/components/ProductCard/ProductCard'
 import {
 	formatMoney,
 	getCartIdFromCookies,

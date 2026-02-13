@@ -9,7 +9,7 @@ import drinksImg from '@/assets/images/drinks.png'
 import orderWithApp from '@/assets/images/order-app.jpg'
 import appStoreBadge from '@/assets/logos/app-store.svg'
 import googlePlayBadge from '@/assets/logos/google-play.svg'
-import { ProductCard } from '@/components/ProductCard'
+import { ProductCard } from '@/components/ProductCard/ProductCard'
 import type { Locale } from '@/lib/locale'
 import {
 	urlFor,
