@@ -7,6 +7,7 @@ import {
 } from '@tabler/icons-react'
 import { Link, useParams } from 'react-router'
 
+import Isotype from '@/assets/isotype.svg'
 import AmexLogo from '@/assets/logos/amex.svg'
 import AppStoreBadge from '@/assets/logos/app-store.svg'
 import GooglePlayBadge from '@/assets/logos/google-play.svg'
@@ -65,7 +66,7 @@ export function Footer({ locations = [] }: FooterProps) {
 		<footer className={styles.footer}>
 			<div className={styles.container}>
 				<div className={styles.brandSection}>
-					<span className={styles.brand}>TOLO</span>
+					<img src={Isotype} alt="TOLO" className={styles.brand} />
 					<p className={styles.tagline}>
 						<Trans>Good coffee, simple as that.</Trans>
 					</p>

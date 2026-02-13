@@ -49,7 +49,7 @@ export function meta({ params }: Route.MetaArgs) {
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: tr.title },
 		{ content: tr.description, name: 'description' },
 		{ content: tr.title, property: 'og:title' },

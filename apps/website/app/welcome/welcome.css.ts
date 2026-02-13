@@ -2,7 +2,6 @@ import { style } from '@vanilla-extract/css'
 
 import {
 	buttonBase,
-	buttonSecondary,
 	buttonLight,
 	buttonGhost,
 	card,
@@ -10,12 +9,6 @@ import {
 	container,
 } from '@/styles/global.css'
 import { vars } from '@/styles/tokens.css'
-
-/**
- * Welcome component styles
- *
- * Specific styles for the homepage that extend global patterns.
- */
 
 export const main = style({
 	display: 'flex',
@@ -267,6 +260,25 @@ export const sectionText = style({
 	lineHeight: vars.lineHeight.relaxed,
 })
 
+// Section Header with title + "View all" link
+export const sectionHeader = style({
+	alignItems: 'baseline',
+	display: 'flex',
+	justifyContent: 'space-between',
+	marginBottom: vars.space.xl,
+})
+
+export const sectionLink = style({
+	':hover': {
+		color: vars.color.secondary,
+	},
+	color: vars.color.primary,
+	fontSize: vars.fontSize.base,
+	fontWeight: vars.fontWeight.semibold,
+	textDecoration: 'none',
+	whiteSpace: 'nowrap',
+})
+
 // About Section
 export const aboutGrid = style({
 	'@media': {
@@ -360,6 +372,22 @@ export const chip = style([
 	},
 ])
 
+// Shop Section
+export const shopGrid = style({
+	'@media': {
+		'(min-width: 768px)': {
+			gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+		},
+	},
+	display: 'grid',
+	gap: vars.space.xl,
+	gridTemplateColumns: '1fr',
+})
+
+export const shopCardLink = style({
+	textDecoration: 'none',
+})
+
 // App Section
 export const splitSection = style({
 	'@media': {
@@ -393,50 +421,6 @@ export const storeButtonPrimary = style([
 
 export const storeButtonSecondary = buttonLight
 
-export const infoCard = style({
-	backgroundColor: 'rgba(255, 255, 255, 0.35)',
-	borderRadius: vars.radius['2xl'],
-	padding: vars.space.xl,
-})
-
-export const appInfoCard = style([
-	infoCard,
-	{
-		marginTop: vars.space['2xl'],
-	},
-])
-
-export const subTitle = style({
-	fontSize: vars.fontSize.lg,
-	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space.base,
-})
-
-export const bullets = style({
-	display: 'grid',
-	gap: vars.space.md,
-	listStyle: 'none',
-	margin: 0,
-	padding: 0,
-})
-
-export const bullet = style({
-	alignItems: 'flex-start',
-	color: vars.color.text,
-	display: 'flex',
-	fontSize: vars.fontSize.base,
-	gap: vars.space.md,
-	lineHeight: vars.lineHeight.relaxed,
-	selectors: {
-		'&::before': {
-			color: vars.color.secondary,
-			content: '"•"',
-			fontWeight: vars.fontWeight.bold,
-			lineHeight: vars.lineHeight.none,
-		},
-	},
-})
-
 export const appImage = style({
 	aspectRatio: '9 / 16',
 	borderRadius: vars.radius['2xl'],
@@ -458,63 +442,154 @@ export const appText = style({
 	marginBottom: vars.space.sm,
 })
 
-// Visit Section
-export const visitGrid = style({
-	'@media': {
-		'(min-width: 900px)': {
-			gridTemplateColumns: '0.9fr 1.1fr',
+// Carousel (Stores near you)
+export const carousel = style({
+	display: 'flex',
+	gap: vars.space.xl,
+	overflowX: 'auto',
+	paddingBottom: vars.space.base,
+	scrollSnapType: 'x mandatory',
+	selectors: {
+		'&::-webkit-scrollbar': {
+			display: 'none',
 		},
 	},
-	alignItems: 'start',
-	display: 'grid',
-	gap: vars.space['3xl'],
-	gridTemplateColumns: '1fr',
 })
 
-export const visitCard = style({
-	backgroundColor: vars.color.background,
-})
+export const carouselCard = style([
+	card,
+	{
+		':focus-visible': {
+			outline: `2px solid ${vars.color.primary}`,
+			outlineOffset: '3px',
+		},
+		'@media': {
+			'(min-width: 768px)': {
+				minWidth: '340px',
+			},
+		},
+		display: 'flex',
+		flex: '0 0 auto',
+		flexDirection: 'column',
+		minWidth: '280px',
+		overflow: 'hidden',
+		padding: 0,
+		scrollSnapAlign: 'start',
+		textDecoration: 'none',
+	},
+])
 
-export const visitImage = style({
-	aspectRatio: '21 / 9',
-	borderRadius: vars.radius['2xl'],
-	marginBottom: vars.space['2xl'],
+export const carouselCardImage = style({
+	aspectRatio: '3 / 2',
 	objectFit: 'cover',
 	width: '100%',
 })
 
-export const addressCard = style([
-	card,
-	{
-		display: 'flex',
-		flexDirection: 'column',
-		gap: vars.space.base,
-		marginTop: vars.space.xl,
-	},
-])
+export const carouselCardBody = style({
+	display: 'flex',
+	flexDirection: 'column',
+	gap: vars.space.xs,
+	padding: vars.space.base,
+})
 
-export const address = style({
+export const carouselCardHeader = style({
+	alignItems: 'center',
+	display: 'flex',
+	gap: vars.space.sm,
+})
+
+export const carouselCardTitle = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.base,
-	fontWeight: vars.fontWeight.medium,
+	fontSize: vars.fontSize.lg,
+	fontWeight: vars.fontWeight.semibold,
+})
+
+export const upcomingBadge = style({
+	backgroundColor: vars.color.primary,
+	borderRadius: vars.radius.md,
+	color: vars.color.white,
+	fontSize: vars.fontSize.xs,
+	fontWeight: vars.fontWeight.semibold,
+	padding: `${vars.space.xs} ${vars.space.sm}`,
+	textTransform: 'uppercase',
+})
+
+export const carouselCardCity = style({
+	color: vars.color.text,
+	fontSize: vars.fontSize.sm,
+	opacity: 0.7,
+})
+
+export const carouselCardDetail = style({
+	color: vars.color.text,
+	fontSize: vars.fontSize.sm,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
-export const directionsLink = buttonSecondary
+// Blog Section
+export const blogGrid = style({
+	'@media': {
+		'(min-width: 768px)': {
+			gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+		},
+	},
+	display: 'grid',
+	gap: vars.space.xl,
+	gridTemplateColumns: '1fr',
+})
 
-export const mapWrapper = style({
-	backgroundColor: vars.color.surface,
-	borderRadius: vars.radius['2xl'],
-	minHeight: '360px',
+export const blogCard = style([
+	card,
+	{
+		':focus-visible': {
+			outline: `2px solid ${vars.color.primary}`,
+			outlineOffset: '3px',
+		},
+		display: 'flex',
+		flexDirection: 'column',
+		overflow: 'hidden',
+		padding: 0,
+		textDecoration: 'none',
+	},
+])
+
+export const blogCardImage = style({
+	aspectRatio: '16 / 10',
+	objectFit: 'cover',
+	width: '100%',
+})
+
+export const blogCardBody = style({
+	display: 'flex',
+	flex: 1,
+	flexDirection: 'column',
+	gap: vars.space.sm,
+	padding: vars.space.base,
+})
+
+export const blogCardTitle = style({
+	color: vars.color.text,
+	fontSize: vars.fontSize.lg,
+	fontWeight: vars.fontWeight.semibold,
+	lineHeight: vars.lineHeight.tight,
+})
+
+export const blogCardExcerpt = style({
+	WebkitBoxOrient: 'vertical',
+	WebkitLineClamp: 2,
+	color: vars.color.text,
+	display: '-webkit-box',
+	fontSize: vars.fontSize.sm,
+	lineHeight: vars.lineHeight.relaxed,
+	opacity: 0.8,
 	overflow: 'hidden',
 })
 
-export const map = style({
-	border: 'none',
-	display: 'block',
-	height: '100%',
-	minHeight: '360px',
-	width: '100%',
+export const blogCardDate = style({
+	color: vars.color.text,
+	fontSize: vars.fontSize.xs,
+	marginTop: 'auto',
+	opacity: 0.6,
 })
 
 // Features Section

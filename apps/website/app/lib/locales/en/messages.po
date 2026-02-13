@@ -18,7 +18,7 @@ msgstr ""
 msgid "\\u2190 Continue Shopping"
 msgstr "\\u2190 Continue Shopping"
 
-#: app/components/Footer/Footer.tsx:167
+#: app/components/Footer/Footer.tsx:168
 msgid "© {currentYear} TOLO. All rights reserved."
 msgstr "© {currentYear} TOLO. All rights reserved."
 
@@ -37,32 +37,28 @@ msgstr "← Back to Our Beans"
 msgid "← Back to Shop"
 msgstr "← Back to Shop"
 
-#: app/routes/sourcing.tsx:163
-#: app/welcome/welcome.tsx:61
+#: app/routes/sourcing.tsx:162
+#: app/welcome/welcome.tsx:62
 msgid "100+ reviews"
 msgstr "100+ reviews"
 
-#: app/welcome/welcome.tsx:393
+#: app/welcome/welcome.tsx:480
 msgid "4.9★ with 100+ reviews (thank you!). Finalists in local competitions. A space to hang out or work."
 msgstr "4.9★ with 100+ reviews (thank you!). Finalists in local competitions. A space to hang out or work."
 
-#: app/welcome/welcome.tsx:355
+#: app/welcome/welcome.tsx:442
 msgid "A bit more about us"
 msgstr "A bit more about us"
 
-#: app/welcome/welcome.tsx:390
+#: app/welcome/welcome.tsx:477
 msgid "A great community"
 msgstr "A great community"
 
-#: app/welcome/welcome.tsx:167
+#: app/welcome/welcome.tsx:158
 msgid "A place to hang out or work: fast Wi-Fi, pet-friendly and good vibes."
 msgstr "A place to hang out or work: fast Wi-Fi, pet-friendly and good vibes."
 
-#: app/welcome/welcome.tsx:309
-msgid "A place to hang out, work or grab something delicious — with fast service and good vibes."
-msgstr "A place to hang out, work or grab something delicious — with fast service and good vibes."
-
-#: app/components/Footer/Footer.tsx:98
+#: app/components/Footer/Footer.tsx:99
 #: app/components/Header/Header.tsx:49
 msgid "About"
 msgstr "About"
@@ -87,20 +83,24 @@ msgstr "Address"
 msgid "Agtron"
 msgstr "Agtron"
 
+#: app/welcome/welcome.tsx:326
+msgid "All locations"
+msgstr "All locations"
+
 #: app/routes/bean.tsx:174
 #: app/routes/beans.tsx:184
 msgid "Altitude"
 msgstr "Altitude"
 
-#: app/welcome/welcome.tsx:52
+#: app/welcome/welcome.tsx:53
 msgid "Always fresh"
 msgstr "Always fresh"
 
-#: app/welcome/welcome.tsx:366
+#: app/welcome/welcome.tsx:453
 msgid "Always fresh coffee. We also sell bags of beans in store."
 msgstr "Always fresh coffee. We also sell bags of beans in store."
 
-#: app/welcome/welcome.tsx:252
+#: app/welcome/welcome.tsx:243
 msgid "And if you want to take coffee home: beans available in store."
 msgstr "And if you want to take coffee home: beans available in store."
 
@@ -108,7 +108,7 @@ msgstr "And if you want to take coffee home: beans available in store."
 msgid "App Store"
 msgstr "App Store"
 
-#: app/welcome/welcome.tsx:208
+#: app/welcome/welcome.tsx:199
 msgid "At TOLO we make good coffee — that is it. We roast every week and prepare espresso, pour overs, matcha, cold brew, chai, cacao, tea and sweet bread. Want to take coffee home? We have bags of beans in store. For our Mexican coffees we work directly with farms we know, and we rotate origins like Colombia, Ethiopia and Panama."
 msgstr "At TOLO we make good coffee — that is it. We roast every week and prepare espresso, pour overs, matcha, cold brew, chai, cacao, tea and sweet bread. Want to take coffee home? We have bags of beans in store. For our Mexican coffees we work directly with farms we know, and we rotate origins like Colombia, Ethiopia and Panama."
 
@@ -120,7 +120,7 @@ msgstr "Bean Not Found"
 msgid "Bestseller"
 msgstr "Bestseller"
 
-#: app/components/Footer/Footer.tsx:89
+#: app/components/Footer/Footer.tsx:90
 #: app/routes/blog.tsx:134
 #: app/routes/page.tsx:256
 msgid "Blog"
@@ -130,11 +130,11 @@ msgstr "Blog"
 msgid "Brewing Guides"
 msgstr "Brewing Guides"
 
-#: app/routes/sourcing.tsx:126
+#: app/routes/sourcing.tsx:125
 msgid "Bright, complex, and fruity. Zapotec and Mixtec producers."
 msgstr "Bright, complex, and fruity. Zapotec and Mixtec producers."
 
-#: app/welcome/welcome.tsx:73
+#: app/welcome/welcome.tsx:74
 msgid "Cacao"
 msgstr "Cacao"
 
@@ -142,7 +142,7 @@ msgstr "Cacao"
 msgid "Carefully selected single origins and blends"
 msgstr "Carefully selected single origins and blends"
 
-#: app/welcome/welcome.tsx:71
+#: app/welcome/welcome.tsx:72
 msgid "Chai"
 msgstr "Chai"
 
@@ -154,7 +154,7 @@ msgstr "Checkout"
 msgid "Close menu"
 msgstr "Close menu"
 
-#: app/welcome/welcome.tsx:148
+#: app/welcome/welcome.tsx:139
 msgid "Coffee beans"
 msgstr "Coffee beans"
 
@@ -162,7 +162,7 @@ msgstr "Coffee beans"
 msgid "Coffee Origins"
 msgstr "Coffee Origins"
 
-#: app/components/Footer/Footer.tsx:83
+#: app/components/Footer/Footer.tsx:84
 msgid "Coffee sourcing"
 msgstr "Coffee sourcing"
 
@@ -170,7 +170,7 @@ msgstr "Coffee sourcing"
 msgid "Coffee, accessories, and more"
 msgstr "Coffee, accessories, and more"
 
-#: app/welcome/welcome.tsx:70
+#: app/welcome/welcome.tsx:71
 msgid "Cold brew"
 msgstr "Cold brew"
 
@@ -182,11 +182,11 @@ msgstr "Cold brew"
 msgid "Coming Soon"
 msgstr "Coming Soon"
 
-#: app/components/Footer/Footer.tsx:95
+#: app/components/Footer/Footer.tsx:96
 msgid "Company"
 msgstr "Company"
 
-#: app/components/Footer/Footer.tsx:104
+#: app/components/Footer/Footer.tsx:105
 msgid "Contact"
 msgstr "Contact"
 
@@ -203,24 +203,24 @@ msgstr "Continue Shopping"
 msgid "Decrease quantity"
 msgstr "Decrease quantity"
 
-#: app/routes/sourcing.tsx:158
+#: app/routes/sourcing.tsx:157
 msgid "Delivery"
 msgstr "Delivery"
 
-#: app/welcome/welcome.tsx:56
+#: app/welcome/welcome.tsx:57
 msgid "Direct from the farm"
 msgstr "Direct from the farm"
 
-#: app/routes/sourcing.tsx:206
+#: app/routes/sourcing.tsx:205
 msgid "Direct trade relationships with Mexican coffee farms"
 msgstr "Direct trade relationships with Mexican coffee farms"
 
-#: app/components/Footer/Footer.tsx:133
+#: app/components/Footer/Footer.tsx:134
 msgid "Download"
 msgstr "Download"
 
-#: app/welcome/welcome.tsx:113
-#: app/welcome/welcome.tsx:191
+#: app/welcome/welcome.tsx:106
+#: app/welcome/welcome.tsx:182
 msgid "Download app"
 msgstr "Download app"
 
@@ -233,51 +233,59 @@ msgstr "Download the App"
 msgid "Email"
 msgstr "Email"
 
-#: app/welcome/welcome.tsx:67
+#: app/welcome/welcome.tsx:68
 msgid "Espresso drinks"
 msgstr "Espresso drinks"
 
-#: app/routes/sourcing.tsx:166
+#: app/routes/sourcing.tsx:165
 msgid "Est. 2024"
 msgstr "Est. 2024"
 
-#: app/components/Footer/Footer.tsx:77
+#: app/components/Footer/Footer.tsx:78
 msgid "Explore"
 msgstr "Explore"
 
-#: app/welcome/welcome.tsx:151
+#: app/welcome/welcome.tsx:142
 msgid "Explore our coffee beans and take a bag home (in store)."
 msgstr "Explore our coffee beans and take a bag home (in store)."
+
+#: app/welcome/welcome.tsx:112
+msgid "Find a store"
+msgstr "Find a store"
 
 #: app/routes/locations.tsx:133
 msgid "Find us and visit for freshly roasted coffee"
 msgstr "Find us and visit for freshly roasted coffee"
 
-#: app/routes/sourcing.tsx:216
+#: app/routes/sourcing.tsx:215
 msgid "Flexible volumes for cafés, restaurants, hotels, and offices"
 msgstr "Flexible volumes for cafés, restaurants, hotels, and offices"
 
-#: app/routes/sourcing.tsx:164
+#: app/routes/sourcing.tsx:163
 msgid "Fresh roasts every week"
 msgstr "Fresh roasts every week"
 
-#: app/routes/sourcing.tsx:269
+#: app/routes/sourcing.tsx:262
 msgid "From first contact to regular delivery in four simple steps."
 msgstr "From first contact to regular delivery in four simple steps."
 
-#: app/routes/sourcing.tsx:221
+#: app/welcome/welcome.tsx:256
+msgid "From our shop"
+msgstr "From our shop"
+
+#: app/welcome/welcome.tsx:391
+msgid "From the blog"
+msgstr "From the blog"
+
+#: app/routes/sourcing.tsx:220
 msgid "Full traceability from farm to cup on every bag"
 msgstr "Full traceability from farm to cup on every bag"
 
-#: app/routes/sourcing.tsx:130
+#: app/routes/sourcing.tsx:129
 msgid "Full-bodied with chocolate notes. Altitude-grown in the Sierra Madre."
 msgstr "Full-bodied with chocolate notes. Altitude-grown in the Sierra Madre."
 
-#: app/welcome/welcome.tsx:121
-msgid "Get directions"
-msgstr "Get directions"
-
-#: app/routes/sourcing.tsx:184
+#: app/routes/sourcing.tsx:183
 msgid "Get in touch"
 msgstr "Get in touch"
 
@@ -285,11 +293,11 @@ msgstr "Get in touch"
 msgid "Good coffee"
 msgstr "Good coffee"
 
-#: app/welcome/welcome.tsx:102
+#: app/welcome/welcome.tsx:95
 msgid "Good coffee, just like that."
 msgstr "Good coffee, just like that."
 
-#: app/components/Footer/Footer.tsx:70
+#: app/components/Footer/Footer.tsx:71
 msgid "Good coffee, simple as that."
 msgstr "Good coffee, simple as that."
 
@@ -297,15 +305,11 @@ msgstr "Good coffee, simple as that."
 msgid "Google Play"
 msgstr "Google Play"
 
-#: app/welcome/welcome.tsx:205
+#: app/welcome/welcome.tsx:196
 msgid "Hi, we are TOLO"
 msgstr "Hi, we are TOLO"
 
-#: app/welcome/welcome.tsx:78
-msgid "High-speed Wi-Fi"
-msgstr "High-speed Wi-Fi"
-
-#: app/components/Footer/Footer.tsx:80
+#: app/components/Footer/Footer.tsx:81
 msgid "Home"
 msgstr "Home"
 
@@ -315,11 +319,11 @@ msgstr "Home"
 msgid "Hours"
 msgstr "Hours"
 
-#: app/routes/sourcing.tsx:266
+#: app/routes/sourcing.tsx:259
 msgid "How Wholesale Sourcing Works"
 msgstr "How Wholesale Sourcing Works"
 
-#: app/welcome/welcome.tsx:48
+#: app/welcome/welcome.tsx:49
 msgid "In a hurry?"
 msgstr "In a hurry?"
 
@@ -328,7 +332,7 @@ msgstr "In a hurry?"
 msgid "Increase quantity"
 msgstr "Increase quantity"
 
-#: app/routes/sourcing.tsx:146
+#: app/routes/sourcing.tsx:145
 msgid "Inquiry"
 msgstr "Inquiry"
 
@@ -348,8 +352,8 @@ msgstr "Loading cart..."
 msgid "Location Not Found"
 msgstr "Location Not Found"
 
-#: app/components/Footer/Footer.tsx:86
-#: app/components/Footer/Footer.tsx:114
+#: app/components/Footer/Footer.tsx:87
+#: app/components/Footer/Footer.tsx:115
 msgid "Locations"
 msgstr "Locations"
 
@@ -361,7 +365,7 @@ msgstr "Looks like you have not added any items to your cart yet."
 msgid "Main"
 msgstr "Main"
 
-#: app/welcome/welcome.tsx:69
+#: app/welcome/welcome.tsx:70
 msgid "Matcha"
 msgstr "Matcha"
 
@@ -369,7 +373,7 @@ msgstr "Matcha"
 msgid "Menu"
 msgstr "Menu"
 
-#: app/routes/sourcing.tsx:175
+#: app/routes/sourcing.tsx:174
 msgid "Mexican Specialty Coffee, Direct from the Farm"
 msgstr "Mexican Specialty Coffee, Direct from the Farm"
 
@@ -385,31 +389,23 @@ msgstr "New"
 msgid "News about new offerings, events, and what is happening at TOLO."
 msgstr "News about new offerings, events, and what is happening at TOLO."
 
-#: app/welcome/welcome.tsx:333
-msgid "Open in Google Maps"
-msgstr "Open in Google Maps"
-
 #: app/components/Header/Header.tsx:164
 msgid "Open menu"
 msgstr "Open menu"
 
-#: app/welcome/welcome.tsx:63
+#: app/welcome/welcome.tsx:64
 msgid "Order ahead"
 msgstr "Order ahead"
 
-#: app/welcome/welcome.tsx:188
+#: app/welcome/welcome.tsx:179
 msgid "Order ahead and pick up, no lines."
 msgstr "Order ahead and pick up, no lines."
 
-#: app/welcome/welcome.tsx:82
-msgid "Order ahead on the app"
-msgstr "Order ahead on the app"
-
-#: app/welcome/welcome.tsx:185
+#: app/welcome/welcome.tsx:176
 msgid "Order with the app"
 msgstr "Order with the app"
 
-#: app/welcome/welcome.tsx:268
+#: app/welcome/welcome.tsx:286
 msgid "Order your favorite coffee ahead and pick it up when you arrive, no waiting. Save your favorites, repeat previous orders in one tap and receive exclusive offers just for app users. The app is free and available for iOS and Android."
 msgstr "Order your favorite coffee ahead and pick it up when you arrive, no waiting. Save your favorites, repeat previous orders in one tap and receive exclusive offers just for app users. The app is free and available for iOS and Android."
 
@@ -417,7 +413,7 @@ msgstr "Order your favorite coffee ahead and pick it up when you arrive, no wait
 msgid "Origin"
 msgstr "Origin"
 
-#: app/welcome/welcome.tsx:263
+#: app/welcome/welcome.tsx:281
 msgid "Our app"
 msgstr "Our app"
 
@@ -434,23 +430,19 @@ msgstr "Our Beans"
 msgid "Our contact form is in preparation. In the meantime, you can find us at any of our locations or reach out through our social media."
 msgstr "Our contact form is in preparation. In the meantime, you can find us at any of our locations or reach out through our social media."
 
-#: app/routes/contact.tsx:119
-#~ msgid "Our contact form is in preparation. In the meantime, you can find us at our café in Toluca or reach out through our social media."
-#~ msgstr "Our contact form is in preparation. In the meantime, you can find us at our café in Toluca or reach out through our social media."
-
 #: app/routes/locations.tsx:130
 msgid "Our Locations"
 msgstr "Our Locations"
 
-#: app/routes/sourcing.tsx:244
+#: app/routes/sourcing.tsx:237
 msgid "Our Mexican Coffee Origins"
 msgstr "Our Mexican Coffee Origins"
 
-#: app/welcome/welcome.tsx:55
+#: app/welcome/welcome.tsx:56
 msgid "Our Mexican coffees come straight from farms we know. We also rotate origins from Colombia, Ethiopia, Panama and more."
 msgstr "Our Mexican coffees come straight from farms we know. We also rotate origins from Colombia, Ethiopia, Panama and more."
 
-#: app/welcome/welcome.tsx:379
+#: app/welcome/welcome.tsx:466
 msgid "Our team is SCA certified and always ready to help you find your coffee."
 msgstr "Our team is SCA certified and always ready to help you find your coffee."
 
@@ -458,17 +450,9 @@ msgstr "Our team is SCA certified and always ready to help you find your coffee.
 msgid "Page Not Found"
 msgstr "Page Not Found"
 
-#: app/welcome/welcome.tsx:81
-msgid "Parking available"
-msgstr "Parking available"
-
-#: app/welcome/welcome.tsx:376
+#: app/welcome/welcome.tsx:463
 msgid "People who know coffee"
 msgstr "People who know coffee"
-
-#: app/welcome/welcome.tsx:80
-msgid "Pet-friendly"
-msgstr "Pet-friendly"
 
 #: app/routes/location.tsx:234
 msgid "Phone"
@@ -478,19 +462,19 @@ msgstr "Phone"
 msgid "Post Not Found"
 msgstr "Post Not Found"
 
-#: app/welcome/welcome.tsx:68
+#: app/welcome/welcome.tsx:69
 msgid "Pour overs"
 msgstr "Pour overs"
 
-#: app/routes/sourcing.tsx:178
+#: app/routes/sourcing.tsx:177
 msgid "Premium single-origin beans sourced directly from Mexican farms. Roasted weekly and delivered to your café, restaurant, or office."
 msgstr "Premium single-origin beans sourced directly from Mexican farms. Roasted weekly and delivered to your café, restaurant, or office."
 
-#: app/routes/sourcing.tsx:154
+#: app/routes/sourcing.tsx:153
 msgid "Pricing"
 msgstr "Pricing"
 
-#: app/components/Footer/Footer.tsx:217
+#: app/components/Footer/Footer.tsx:218
 msgid "Privacy"
 msgstr "Privacy"
 
@@ -511,7 +495,11 @@ msgstr "Product Not Found"
 msgid "Quantity"
 msgstr "Quantity"
 
-#: app/routes/sourcing.tsx:302
+#: app/welcome/welcome.tsx:394
+msgid "Read more"
+msgstr "Read more"
+
+#: app/routes/sourcing.tsx:295
 msgid "Ready to Source Mexican Specialty Coffee?"
 msgstr "Ready to Source Mexican Specialty Coffee?"
 
@@ -523,16 +511,16 @@ msgstr "Region"
 msgid "Remove"
 msgstr "Remove"
 
-#: app/welcome/welcome.tsx:62
-#: app/welcome/welcome.tsx:363
+#: app/welcome/welcome.tsx:63
+#: app/welcome/welcome.tsx:450
 msgid "Roasted weekly"
 msgstr "Roasted weekly"
 
-#: app/routes/sourcing.tsx:157
+#: app/routes/sourcing.tsx:156
 msgid "Roasted weekly and shipped on your schedule. Consistent quality, every time."
 msgstr "Roasted weekly and shipped on your schedule. Consistent quality, every time."
 
-#: app/routes/sourcing.tsx:211
+#: app/routes/sourcing.tsx:210
 msgid "Roasted weekly for peak freshness — never sitting on a shelf"
 msgstr "Roasted weekly for peak freshness — never sitting on a shelf"
 
@@ -540,7 +528,7 @@ msgstr "Roasted weekly for peak freshness — never sitting on a shelf"
 msgid "Sale"
 msgstr "Sale"
 
-#: app/routes/sourcing.tsx:150
+#: app/routes/sourcing.tsx:149
 msgid "Sample"
 msgstr "Sample"
 
@@ -548,21 +536,17 @@ msgstr "Sample"
 msgid "Sat-Sun: 9am - 6pm"
 msgstr "Sat-Sun: 9am - 6pm"
 
-#: app/routes/sourcing.tsx:165
+#: app/routes/sourcing.tsx:164
 msgid "SCA certified"
 msgstr "SCA certified"
 
-#: app/routes/sourcing.tsx:226
+#: app/routes/sourcing.tsx:223
 msgid "SCA-certified team for brewing support and training"
 msgstr "SCA-certified team for brewing support and training"
 
-#: app/welcome/welcome.tsx:79
-msgid "Seating and workspace"
-msgstr "Seating and workspace"
-
-#: app/welcome/welcome.tsx:173
-msgid "See location"
-msgstr "See location"
+#: app/welcome/welcome.tsx:164
+msgid "See locations"
+msgstr "See locations"
 
 #: app/routes/contact.tsx:134
 msgid "See our locations"
@@ -591,7 +575,7 @@ msgstr "Shop Updates"
 msgid "Shopping cart{0}"
 msgstr "Shopping cart{0}"
 
-#: app/routes/sourcing.tsx:134
+#: app/routes/sourcing.tsx:133
 msgid "Smooth, nutty, and balanced. One of Mexico's oldest coffee regions."
 msgstr "Smooth, nutty, and balanced. One of Mexico's oldest coffee regions."
 
@@ -603,15 +587,15 @@ msgstr "Sold out"
 msgid "Sold Out"
 msgstr "Sold Out"
 
-#: app/welcome/welcome.tsx:43
+#: app/welcome/welcome.tsx:44
 msgid "Something bold or something smooth? Tell us what you like and we'll help you choose. No fuss."
 msgstr "Something bold or something smooth? Tell us what you like and we'll help you choose. No fuss."
 
-#: app/routes/sourcing.tsx:166
+#: app/routes/sourcing.tsx:165
 msgid "Specialty coffee since day one"
 msgstr "Specialty coffee since day one"
 
-#: app/welcome/welcome.tsx:105
+#: app/welcome/welcome.tsx:98
 msgid "Specialty coffee, roasted weekly and made with care. Stop by for an espresso, stay to work for a bit, or just come to chat."
 msgstr "Specialty coffee, roasted weekly and made with care. Stop by for an espresso, stay to work for a bit, or just come to chat."
 
@@ -624,9 +608,13 @@ msgstr "Starting from {0}"
 msgid "Step-by-step instructions for the perfect cup at home."
 msgstr "Step-by-step instructions for the perfect cup at home."
 
-#: app/components/Footer/Footer.tsx:101
+#: app/components/Footer/Footer.tsx:102
 msgid "Store"
 msgstr "Store"
+
+#: app/welcome/welcome.tsx:323
+msgid "Stores near you"
+msgstr "Stores near you"
 
 #: app/routes/blog.tsx:218
 msgid "Stories about the farms and regions where our beans come from."
@@ -644,11 +632,11 @@ msgstr "Subtotal"
 msgid "Suggested Readings"
 msgstr "Suggested Readings"
 
-#: app/routes/sourcing.tsx:138
+#: app/routes/sourcing.tsx:137
 msgid "Sweet and well-rounded. Emerging specialty region in central Mexico."
 msgstr "Sweet and well-rounded. Emerging specialty region in central Mexico."
 
-#: app/welcome/welcome.tsx:72
+#: app/welcome/welcome.tsx:73
 msgid "Sweet bread"
 msgstr "Sweet bread"
 
@@ -656,11 +644,11 @@ msgstr "Sweet bread"
 msgid "Tasting Notes"
 msgstr "Tasting Notes"
 
-#: app/welcome/welcome.tsx:74
+#: app/welcome/welcome.tsx:75
 msgid "Tea"
 msgstr "Tea"
 
-#: app/routes/sourcing.tsx:145
+#: app/routes/sourcing.tsx:144
 msgid "Tell us about your business, volume needs, and flavor preferences."
 msgstr "Tell us about your business, volume needs, and flavor preferences."
 
@@ -688,16 +676,17 @@ msgstr "The product you are looking for does not exist or has been removed."
 msgid "Total"
 msgstr "Total"
 
-#: app/routes/sourcing.tsx:165
+#: app/routes/sourcing.tsx:164
 msgid "Trained baristas on staff"
 msgstr "Trained baristas on staff"
 
-#: app/routes/sourcing.tsx:153
+#: app/routes/sourcing.tsx:152
 msgid "Transparent pricing based on volume with no hidden fees."
 msgstr "Transparent pricing based on volume with no hidden fees."
 
 #: app/routes/location.tsx:195
 #: app/routes/locations.tsx:178
+#: app/welcome/welcome.tsx:363
 msgid "Upcoming"
 msgstr "Upcoming"
 
@@ -705,7 +694,11 @@ msgstr "Upcoming"
 msgid "Varietal"
 msgstr "Varietal"
 
-#: app/welcome/welcome.tsx:156
+#: app/welcome/welcome.tsx:259
+msgid "View all"
+msgstr "View all"
+
+#: app/welcome/welcome.tsx:147
 msgid "View beans"
 msgstr "View beans"
 
@@ -717,8 +710,7 @@ msgstr "View Menu"
 msgid "Visit"
 msgstr "Visit"
 
-#: app/welcome/welcome.tsx:164
-#: app/welcome/welcome.tsx:306
+#: app/welcome/welcome.tsx:155
 msgid "Visit us"
 msgstr "Visit us"
 
@@ -729,10 +721,6 @@ msgstr "Visit Us"
 #: app/routes/links.tsx:162
 msgid "Visit us on TripAdvisor"
 msgstr "Visit us on TripAdvisor"
-
-#: app/routes/blog.tsx:186
-#~ msgid "We are preparing amazing content for you. Our blog will include coffee tips, brewing guides, origin stories, and news from our café in Toluca."
-#~ msgstr "We are preparing amazing content for you. Our blog will include coffee tips, brewing guides, origin stories, and news from our café in Toluca."
 
 #: app/routes/blog.tsx:190
 msgid "We are preparing amazing content for you. Our blog will include coffee tips, brewing guides, origin stories, and news from our cafés."
@@ -750,23 +738,23 @@ msgstr "We are preparing our location information. Check back soon."
 msgid "We are preparing our store. Check back soon to discover our products."
 msgstr "We are preparing our store. Check back soon to discover our products."
 
-#: app/welcome/welcome.tsx:51
+#: app/welcome/welcome.tsx:52
 msgid "We roast every week, so there's always something fresh. Ask what's new or take a bag home."
 msgstr "We roast every week, so there's always something fresh. Ask what's new or take a bag home."
 
-#: app/routes/sourcing.tsx:149
+#: app/routes/sourcing.tsx:148
 msgid "We send you curated samples so you can taste before committing."
 msgstr "We send you curated samples so you can taste before committing."
 
-#: app/welcome/welcome.tsx:47
+#: app/welcome/welcome.tsx:48
 msgid "We serve you quickly. Or order ahead on the app and just pick up."
 msgstr "We serve you quickly. Or order ahead on the app and just pick up."
 
-#: app/routes/sourcing.tsx:247
+#: app/routes/sourcing.tsx:240
 msgid "We source from four key regions in Mexico, plus rotating international origins from Colombia, Ethiopia, Panama, and more."
 msgstr "We source from four key regions in Mexico, plus rotating international origins from Colombia, Ethiopia, Panama, and more."
 
-#: app/routes/sourcing.tsx:197
+#: app/routes/sourcing.tsx:196
 msgid "We work directly with farmers across Mexico to bring you specialty-grade coffee with full traceability. As your wholesale specialty coffee supplier, we handle sourcing, roasting, and delivery so you can focus on your business."
 msgstr "We work directly with farmers across Mexico to bring you specialty-grade coffee with full traceability. As your wholesale specialty coffee supplier, we handle sourcing, roasting, and delivery so you can focus on your business."
 
@@ -774,15 +762,15 @@ msgstr "We work directly with farmers across Mexico to bring you specialty-grade
 msgid "We would love to hear from you"
 msgstr "We would love to hear from you"
 
-#: app/welcome/welcome.tsx:62
+#: app/welcome/welcome.tsx:63
 msgid "Weekly"
 msgstr "Weekly"
 
-#: app/routes/sourcing.tsx:164
+#: app/routes/sourcing.tsx:163
 msgid "Weekly roasting"
 msgstr "Weekly roasting"
 
-#: app/welcome/welcome.tsx:242
+#: app/welcome/welcome.tsx:233
 msgid "What is on the menu?"
 msgstr "What is on the menu?"
 
@@ -790,19 +778,15 @@ msgstr "What is on the menu?"
 msgid "What to Expect"
 msgstr "What to Expect"
 
-#: app/welcome/welcome.tsx:317
-msgid "What you will find"
-msgstr "What you will find"
-
-#: app/routes/sourcing.tsx:305
+#: app/routes/sourcing.tsx:298
 msgid "Whether you run a café, restaurant, hotel, or office — we would love to be your coffee partner. Reach out and let's talk."
 msgstr "Whether you run a café, restaurant, hotel, or office — we would love to be your coffee partner. Reach out and let's talk."
 
-#: app/components/Footer/Footer.tsx:107
+#: app/components/Footer/Footer.tsx:108
 msgid "Wholesale"
 msgstr "Wholesale"
 
-#: app/routes/sourcing.tsx:194
+#: app/routes/sourcing.tsx:193
 msgid "Why Source with TOLO"
 msgstr "Why Source with TOLO"
 
@@ -818,6 +802,6 @@ msgstr "Your Cart"
 msgid "Your cart is empty"
 msgstr "Your cart is empty"
 
-#: app/welcome/welcome.tsx:44
+#: app/welcome/welcome.tsx:45
 msgid "Your coffee, your way"
 msgstr "Your coffee, your way"

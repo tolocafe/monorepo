@@ -3,6 +3,9 @@ import { useOutletContext } from 'react-router'
 import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
+import { client } from '@/lib/sanity'
+import type { Location, Post } from '@/lib/sanity'
+import { getProducts } from '@/lib/shop-data'
 import { Welcome } from '@/welcome/welcome'
 
 import type { Route } from './+types/home'
@@ -104,12 +107,46 @@ export function meta({ params }: Route.MetaArgs) {
 	]
 }
 
-export function loader({ context }: Route.LoaderArgs) {
-	return { message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE }
+const LOCATIONS_QUERY = `*[
+  _type == "location"
+  && (defined(slug.es.current) || defined(slug.en.current))
+]|order(isMainLocation desc, name.es asc){
+  _id, name, slug, address, city, country, hours, image, isMainLocation, isUpcoming
+}`
+
+const POSTS_QUERY = `*[
+  _type == "post"
+  && (defined(slug.es.current) || defined(slug.en.current))
+]|order(publishedAt desc)[0...3]{
+  _id, name, slug, publishedAt, excerpt, image
+}`
+
+export async function loader({ context, params }: Route.LoaderArgs) {
+	const locale = (params.locale as Locale) || 'es'
+	const [locations, posts, products] = await Promise.all([
+		client.fetch<Location[]>(LOCATIONS_QUERY),
+		client.fetch<Post[]>(POSTS_QUERY),
+		getProducts(locale).then((all) => all.slice(0, 3)),
+	])
+
+	return {
+		locations,
+		message: context.cloudflare.env.VALUE_FROM_CLOUDFLARE,
+		posts,
+		products,
+	}
 }
 
 export default function Home({ loaderData }: Route.ComponentProps) {
 	const { locale } = useOutletContext<LocaleContext>()
 
-	return <Welcome message={loaderData.message} locale={locale} />
+	return (
+		<Welcome
+			locale={locale}
+			locations={loaderData.locations}
+			message={loaderData.message}
+			posts={loaderData.posts}
+			products={loaderData.products}
+		/>
+	)
 }

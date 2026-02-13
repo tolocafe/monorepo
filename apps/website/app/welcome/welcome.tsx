@@ -7,9 +7,16 @@ import coffeeGroundsImg from '@/assets/images/coffee-grounds.png'
 import drinksImg from '@/assets/images/drinks.png'
 import icedLatteImg from '@/assets/images/iced-latte.png'
 import insideImg from '@/assets/images/inside.png'
-import outsideImg from '@/assets/images/outside.png'
+import { ProductCard } from '@/components/ProductCard'
 import type { Locale } from '@/lib/locale'
-import { vars } from '@/styles/tokens.css'
+import {
+	urlFor,
+	getLocalizedString,
+	getLocalizedSlug,
+	formatDate,
+} from '@/lib/sanity'
+import type { Location, Post } from '@/lib/sanity'
+import type { MergedProduct } from '@/lib/shop-data'
 
 import * as styles from './welcome.css'
 
@@ -18,25 +25,19 @@ const APP_STORE_URL =
 const GOOGLE_PLAY_URL =
 	'https://play.google.com/store/apps/details?id=cafe.tolo.app' as const
 
-const ADDRESS =
-	'Blvr. José María Pino Suárez 800, Cuauhtémoc, 50130 Toluca de Lerdo, Méx.' as const
-const MAPS_QUERY = encodeURIComponent(ADDRESS)
-const MAPS_URL =
-	`https://www.google.com/maps/search/?api=1&query=${MAPS_QUERY}` as const
-const MAPS_EMBED_URL =
-	`https://www.google.com/maps?q=${MAPS_QUERY}&output=embed` as const
-
 interface WelcomeProps {
-	message: string
 	locale: Locale
+	locations: Location[]
+	message: string
+	posts: Post[]
+	products: MergedProduct[]
 }
 
-export function Welcome({ locale }: WelcomeProps) {
+export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 	const basePath = `/${locale}`
 	const beansPath = locale === 'es' ? 'granos' : 'beans'
 	const beansTo = `/${locale}/${beansPath}`
 	const appTo = `${basePath}#app`
-	const visitTo = `${basePath}#visit`
 
 	const highlights = [
 		{
@@ -74,14 +75,6 @@ export function Welcome({ locale }: WelcomeProps) {
 		t`Tea`,
 	]
 
-	const visitAmenities = [
-		t`High-speed Wi-Fi`,
-		t`Seating and workspace`,
-		t`Pet-friendly`,
-		t`Parking available`,
-		t`Order ahead on the app`,
-	]
-
 	return (
 		<main className={styles.main}>
 			{/* Hero Section */}
@@ -112,14 +105,12 @@ export function Welcome({ locale }: WelcomeProps) {
 						<Link to={appTo} className={styles.heroPrimaryButton}>
 							<Trans>Download app</Trans>
 						</Link>
-						<a
-							href={MAPS_URL}
-							target="_blank"
-							rel="noreferrer"
+						<Link
+							to={`${basePath}/locations`}
 							className={styles.heroSecondaryButton}
 						>
-							<Trans>Get directions</Trans>
-						</a>
+							<Trans>Find a store</Trans>
+						</Link>
 					</div>
 				</div>
 			</section>
@@ -157,7 +148,7 @@ export function Welcome({ locale }: WelcomeProps) {
 								</span>
 							</div>
 						</Link>
-						<Link to={visitTo} className={styles.quickCard}>
+						<Link to={`${basePath}/locations`} className={styles.quickCard}>
 							<img src={drinksImg} alt="" className={styles.quickCardImage} />
 							<div className={styles.quickCardBody}>
 								<h3 className={styles.quickCardTitle}>
@@ -170,7 +161,7 @@ export function Welcome({ locale }: WelcomeProps) {
 									</Trans>
 								</p>
 								<span className={styles.quickCardCta}>
-									<Trans>See location</Trans> →
+									<Trans>See locations</Trans> →
 								</span>
 							</div>
 						</Link>
@@ -256,6 +247,33 @@ export function Welcome({ locale }: WelcomeProps) {
 				</div>
 			</section>
 
+			{/* Shop Section */}
+			{products.length > 0 && (
+				<section className={styles.sectionAnchor}>
+					<div className={styles.container}>
+						<div className={styles.sectionHeader}>
+							<h2 className={styles.sectionTitle}>
+								<Trans>From our shop</Trans>
+							</h2>
+							<Link to={`${basePath}/shop`} className={styles.sectionLink}>
+								<Trans>View all</Trans> →
+							</Link>
+						</div>
+						<div className={styles.shopGrid}>
+							{products.map((product) => (
+								<Link
+									key={product.id}
+									to={`${basePath}/shop/${product.slug || product.handle}`}
+									className={styles.shopCardLink}
+								>
+									<ProductCard product={product} />
+								</Link>
+							))}
+						</div>
+					</div>
+				</section>
+			)}
+
 			{/* App Section */}
 			<section id="app" className={styles.sectionAnchor}>
 				<div className={styles.container}>
@@ -296,58 +314,127 @@ export function Welcome({ locale }: WelcomeProps) {
 				</div>
 			</section>
 
-			{/* Visit Section */}
-			<section id="visit" className={styles.sectionAnchor}>
-				<div className={styles.container}>
-					<img src={outsideImg} alt="" className={styles.visitImage} />
-					<div className={styles.visitGrid}>
-						<div className={styles.visitCard}>
+			{/* Stores Near You */}
+			{locations.length > 0 && (
+				<section id="visit" className={styles.sectionAnchor}>
+					<div className={styles.container}>
+						<div className={styles.sectionHeader}>
 							<h2 className={styles.sectionTitle}>
-								<Trans>Visit us</Trans>
+								<Trans>Stores near you</Trans>
 							</h2>
-							<p className={styles.sectionText}>
-								<Trans>
-									A place to hang out, work or grab something delicious — with
-									fast service and good vibes.
-								</Trans>
-							</p>
-
-							<div className={styles.infoCard}>
-								<h3 className={styles.subTitle}>
-									<Trans>What you will find</Trans>
-								</h3>
-								<ul className={styles.bullets}>
-									{visitAmenities.map((amenity) => (
-										<li key={amenity} className={styles.bullet}>
-											{amenity}
-										</li>
-									))}
-								</ul>
-								<a
-									href={MAPS_URL}
-									target="_blank"
-									rel="noreferrer"
-									className={styles.directionsLink}
-									style={{ marginTop: vars.space.base }}
-								>
-									<Trans>Open in Google Maps</Trans>
-								</a>
-							</div>
+							<Link to={`${basePath}/locations`} className={styles.sectionLink}>
+								<Trans>All locations</Trans> →
+							</Link>
 						</div>
+						<div className={styles.carousel}>
+							{locations.map((location) => {
+								const slug = getLocalizedSlug(location.slug, locale)
+								if (!slug) return null
 
-						<div className={styles.mapWrapper}>
-							<iframe
-								title="TOLO Coffee map"
-								src={MAPS_EMBED_URL}
-								className={styles.map}
-								loading="lazy"
-								sandbox="allow-scripts"
-								referrerPolicy="no-referrer-when-downgrade"
-							/>
+								const name = getLocalizedString(
+									location.name,
+									locale,
+									'Untitled',
+								)
+								const address = getLocalizedString(location.address, locale)
+								const hours = getLocalizedString(location.hours, locale)
+								const imageUrl = location.image
+									? urlFor(location.image)?.width(600).height(400).url()
+									: null
+
+								return (
+									<Link
+										key={location._id}
+										to={`${basePath}/locations/${slug}`}
+										className={styles.carouselCard}
+									>
+										{imageUrl && (
+											<img
+												src={imageUrl}
+												alt={location.image?.alt || name}
+												className={styles.carouselCardImage}
+											/>
+										)}
+										<div className={styles.carouselCardBody}>
+											<div className={styles.carouselCardHeader}>
+												<h3 className={styles.carouselCardTitle}>{name}</h3>
+												{location.isUpcoming && (
+													<span className={styles.upcomingBadge}>
+														{t`Upcoming`}
+													</span>
+												)}
+											</div>
+											<p className={styles.carouselCardCity}>
+												{location.city}, {location.country}
+											</p>
+											{address && (
+												<p className={styles.carouselCardDetail}>{address}</p>
+											)}
+											{hours && (
+												<p className={styles.carouselCardDetail}>{hours}</p>
+											)}
+										</div>
+									</Link>
+								)
+							})}
 						</div>
 					</div>
-				</div>
-			</section>
+				</section>
+			)}
+
+			{/* Blog Section */}
+			{posts.length > 0 && (
+				<section className={styles.sectionAnchor}>
+					<div className={styles.container}>
+						<div className={styles.sectionHeader}>
+							<h2 className={styles.sectionTitle}>
+								<Trans>From the blog</Trans>
+							</h2>
+							<Link to={`${basePath}/blog`} className={styles.sectionLink}>
+								<Trans>Read more</Trans> →
+							</Link>
+						</div>
+						<div className={styles.blogGrid}>
+							{posts.map((post) => {
+								const slug = getLocalizedSlug(post.slug, locale)
+								if (!slug) return null
+
+								const title = getLocalizedString(post.name, locale, 'Untitled')
+								const imageUrl = post.image
+									? urlFor(post.image)?.width(400).height(280).url()
+									: null
+
+								return (
+									<Link
+										key={post._id}
+										to={`${basePath}/blog/${slug}`}
+										className={styles.blogCard}
+									>
+										{imageUrl && (
+											<img
+												src={imageUrl}
+												alt={post.image?.alt || title}
+												className={styles.blogCardImage}
+											/>
+										)}
+										<div className={styles.blogCardBody}>
+											<h3 className={styles.blogCardTitle}>{title}</h3>
+											{post.excerpt && (
+												<p className={styles.blogCardExcerpt}>
+													{getLocalizedString(post.excerpt, locale)}
+												</p>
+											)}
+											<time className={styles.blogCardDate}>
+												{formatDate(post.publishedAt, locale)}
+											</time>
+										</div>
+									</Link>
+								)
+							})}
+						</div>
+					</div>
+				</section>
+			)}
 
 			{/* Features Section */}
 			<section className={styles.featuresSection}>

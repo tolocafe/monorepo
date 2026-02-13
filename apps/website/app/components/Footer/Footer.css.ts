@@ -137,10 +137,9 @@ export const storeBadge = style({
 })
 
 export const brand = style({
-	color: vars.color.white,
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.bold,
+	height: 32,
 	marginBottom: vars.space.sm,
+	width: 'auto',
 })
 
 export const tagline = style({
