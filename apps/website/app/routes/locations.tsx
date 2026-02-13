@@ -58,7 +58,7 @@ const LOCATIONS_QUERY = `*[
   _type == "location"
   && (defined(slug.es.current) || defined(slug.en.current))
 ]|order(isMainLocation desc, name.es asc)[0...50]{
-  _id, name, slug, address, city, state, country, hours, image, isMainLocation
+  _id, name, slug, address, city, state, country, hours, image, isMainLocation, isUpcoming
 }`
 
 export async function loader() {
@@ -172,6 +172,11 @@ export default function Locations({ loaderData }: Route.ComponentProps) {
 												<h2 className={styles.locationName}>{name}</h2>
 												{location.isMainLocation && (
 													<span className={styles.mainBadge}>{t`Main`}</span>
+												)}
+												{location.isUpcoming && (
+													<span className={styles.upcomingBadge}>
+														{t`Upcoming`}
+													</span>
 												)}
 											</div>
 											<p className={styles.locationCity}>

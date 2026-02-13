@@ -103,6 +103,13 @@ export const locationType = defineType({
 			title: 'Main Location',
 			type: 'boolean',
 		}),
+		defineField({
+			description: 'Mark this location as upcoming/not yet open',
+			initialValue: false,
+			name: 'isUpcoming',
+			title: 'Upcoming',
+			type: 'boolean',
+		}),
 	],
 	icon: PinIcon,
 	name: 'location',

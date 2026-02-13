@@ -117,6 +117,7 @@ export interface Location {
 	hours?: LocaleString
 	image?: SanityImage
 	isMainLocation?: boolean
+	isUpcoming?: boolean
 }
 
 export interface StoreProduct {

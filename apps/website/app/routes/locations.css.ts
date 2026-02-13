@@ -90,6 +90,16 @@ export const mainBadge = style({
 	textTransform: 'uppercase',
 })
 
+export const upcomingBadge = style({
+	backgroundColor: vars.color.secondary,
+	borderRadius: vars.radius.full,
+	color: vars.color.white,
+	fontSize: vars.fontSize.xs,
+	fontWeight: vars.fontWeight.semibold,
+	padding: `${vars.space.xs} ${vars.space.sm}`,
+	textTransform: 'uppercase',
+})
+
 export const locationCity = style({
 	color: vars.color.secondary,
 	fontSize: vars.fontSize.base,

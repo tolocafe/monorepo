@@ -17,7 +17,7 @@ const LOCATION_QUERY = `*[
   _type == "location"
   && (slug.es.current == $slug || slug.en.current == $slug || slug.de.current == $slug || slug.fr.current == $slug || slug.ja.current == $slug)
 ][0]{
-  _id, name, slug, description, address, city, state, country, postalCode, coordinates, phone, email, hours, image, isMainLocation
+  _id, name, slug, description, address, city, state, country, postalCode, coordinates, phone, email, hours, image, isMainLocation, isUpcoming
 }`
 
 export async function loader({ params }: Route.LoaderArgs) {
@@ -206,6 +206,11 @@ export default function LocationDetail({ loaderData }: Route.ComponentProps) {
 						<p className={styles.location}>
 							{location.city}, {location.country}
 						</p>
+						{location.isUpcoming && (
+							<span className={styles.upcomingBadge}>
+								<Trans>Upcoming</Trans>
+							</span>
+						)}
 					</header>
 
 					{imageUrl && (

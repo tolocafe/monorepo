@@ -41,6 +41,18 @@ export const location = style({
 	fontWeight: vars.fontWeight.medium,
 })
 
+export const upcomingBadge = style({
+	backgroundColor: vars.color.secondary,
+	borderRadius: vars.radius.full,
+	color: vars.color.white,
+	display: 'inline-block',
+	fontSize: vars.fontSize.sm,
+	fontWeight: vars.fontWeight.semibold,
+	marginTop: vars.space.sm,
+	padding: `${vars.space.xs} ${vars.space.base}`,
+	textTransform: 'uppercase',
+})
+
 export const imageWrapper = style({
 	aspectRatio: '16 / 9',
 	borderRadius: vars.radius['2xl'],
