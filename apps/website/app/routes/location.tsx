@@ -187,15 +187,11 @@ export default function LocationDetail({ loaderData }: Route.ComponentProps) {
 		? urlFor(location.image)?.width(1200).height(675).url()
 		: null
 
-	const fullAddress = [
-		address,
-		location.city,
-		location.state,
-		location.country,
-		location.postalCode,
-	]
-		.filter(Boolean)
-		.join(', ')
+	const fullAddress =
+		address ||
+		[location.city, location.state, location.country, location.postalCode]
+			.filter(Boolean)
+			.join(', ')
 
 	return (
 		<main className={styles.main}>

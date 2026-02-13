@@ -100,7 +100,7 @@ export const listItem = style({
 })
 
 export const detailsGrid = style({
-	backgroundColor: vars.color.secondary,
+	backgroundColor: vars.color.surface,
 	border: `1px solid ${vars.color.border}`,
 	borderRadius: vars.radius.xl,
 	display: 'grid',
