@@ -23,6 +23,7 @@ export default [
 		route('blog', 'routes/blog.tsx'),
 		route('blog/:slug', 'routes/blog-post.tsx'),
 		route('contact', 'routes/contact.tsx'),
+		route('sourcing', 'routes/sourcing.tsx'),
 		route('links', 'routes/links.tsx'),
 		// Location routes
 		route('locations', 'routes/locations.tsx'),

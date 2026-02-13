@@ -19,31 +19,35 @@ import * as styles from './blog.css'
 // Meta translations for SEO (used in meta function which runs before React context)
 const META_TRANSLATIONS = {
 	de: {
-		description: 'Kaffeegeschichten, Tipps und Neuigkeiten von TOLO in Toluca',
+		description:
+			'Kaffeegeschichten, Tipps und Neuigkeiten von TOLO Spezialitätenkaffee',
 		heading: 'Blog',
 		subtitle: 'Geschichten aus der Kaffeewelt',
 		title: 'Blog - TOLO',
 	},
 	en: {
-		description: 'Coffee stories, tips, and news from TOLO in Toluca',
+		description: 'Coffee stories, tips, and news from TOLO specialty coffee',
 		heading: 'Blog',
 		subtitle: 'Stories from the coffee world',
 		title: 'Blog - TOLO',
 	},
 	es: {
-		description: 'Historias de café, consejos y noticias de TOLO en Toluca',
+		description:
+			'Historias de café, consejos y noticias de TOLO café de especialidad',
 		heading: 'Blog',
 		subtitle: 'Historias del mundo del café',
 		title: 'Blog - TOLO',
 	},
 	fr: {
-		description: 'Histoires de café, conseils et actualités de TOLO à Toluca',
+		description:
+			'Histoires de café, conseils et actualités de TOLO café de spécialité',
 		heading: 'Blog',
 		subtitle: 'Histoires du monde du café',
 		title: 'Blog - TOLO',
 	},
 	ja: {
-		description: 'トルーカのTOLOからのコーヒーストーリー、ヒント、ニュース',
+		description:
+			'TOLOスペシャルティコーヒーからのコーヒーストーリー、ヒント、ニュース',
 		heading: 'ブログ',
 		subtitle: 'コーヒーの世界からのストーリー',
 		title: 'ブログ - TOLO',
@@ -186,7 +190,7 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
 									<Trans>
 										We are preparing amazing content for you. Our blog will
 										include coffee tips, brewing guides, origin stories, and
-										news from our café in Toluca.
+										news from our cafés.
 									</Trans>
 								</p>
 							</div>

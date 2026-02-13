@@ -18,7 +18,7 @@ msgstr ""
 msgid "\\u2190 Continue Shopping"
 msgstr "← ショッピングを続ける"
 
-#: app/components/Footer/Footer.tsx:161
+#: app/components/Footer/Footer.tsx:167
 msgid "© {currentYear} TOLO. All rights reserved."
 msgstr "© {currentYear} TOLO. 無断複写・転載を禁じます。"
 
@@ -37,6 +37,7 @@ msgstr "← コーヒー豆一覧に戻る"
 msgid "← Back to Shop"
 msgstr "← ショップに戻る"
 
+#: app/routes/sourcing.tsx:163
 #: app/welcome/welcome.tsx:61
 msgid "100+ reviews"
 msgstr "100件以上のレビュー"
@@ -61,7 +62,7 @@ msgstr "くつろいだり仕事をしたりできる場所：高速Wi-Fi、ペ�
 msgid "A place to hang out, work or grab something delicious — with fast service and good vibes."
 msgstr "くつろいだり、仕事をしたり、おいしいものを楽しむ場所 — 迅速なサービスと良い雰囲気。"
 
-#: app/components/Footer/Footer.tsx:95
+#: app/components/Footer/Footer.tsx:98
 #: app/components/Header/Header.tsx:49
 msgid "About"
 msgstr "私たちについて"
@@ -119,15 +120,19 @@ msgstr "コーヒー豆が見つかりません"
 msgid "Bestseller"
 msgstr "ベストセラー"
 
-#: app/components/Footer/Footer.tsx:86
-#: app/routes/blog.tsx:130
+#: app/components/Footer/Footer.tsx:89
+#: app/routes/blog.tsx:134
 #: app/routes/page.tsx:256
 msgid "Blog"
 msgstr "ブログ"
 
-#: app/routes/blog.tsx:201
+#: app/routes/blog.tsx:205
 msgid "Brewing Guides"
 msgstr "淹れ方ガイド"
+
+#: app/routes/sourcing.tsx:126
+msgid "Bright, complex, and fruity. Zapotec and Mixtec producers."
+msgstr ""
 
 #: app/welcome/welcome.tsx:73
 msgid "Cacao"
@@ -153,9 +158,13 @@ msgstr "メニューを閉じる"
 msgid "Coffee beans"
 msgstr "コーヒー豆"
 
-#: app/routes/blog.tsx:211
+#: app/routes/blog.tsx:215
 msgid "Coffee Origins"
 msgstr "コーヒーの産地"
+
+#: app/components/Footer/Footer.tsx:83
+msgid "Coffee sourcing"
+msgstr "コーヒー豆"
 
 #: app/routes/shop.tsx:130
 msgid "Coffee, accessories, and more"
@@ -166,18 +175,18 @@ msgid "Cold brew"
 msgstr "コールドブリュー"
 
 #: app/routes/beans.tsx:201
-#: app/routes/blog.tsx:183
+#: app/routes/blog.tsx:187
 #: app/routes/contact.tsx:116
 #: app/routes/locations.tsx:202
 #: app/routes/shop.tsx:149
 msgid "Coming Soon"
 msgstr "近日公開"
 
-#: app/components/Footer/Footer.tsx:92
+#: app/components/Footer/Footer.tsx:95
 msgid "Company"
 msgstr "会社情報"
 
-#: app/components/Footer/Footer.tsx:101
+#: app/components/Footer/Footer.tsx:104
 msgid "Contact"
 msgstr "お問い合わせ"
 
@@ -194,11 +203,19 @@ msgstr "ショッピングを続ける"
 msgid "Decrease quantity"
 msgstr "数量を減らす"
 
+#: app/routes/sourcing.tsx:158
+msgid "Delivery"
+msgstr ""
+
 #: app/welcome/welcome.tsx:56
 msgid "Direct from the farm"
 msgstr "農園から直接"
 
-#: app/components/Footer/Footer.tsx:127
+#: app/routes/sourcing.tsx:206
+msgid "Direct trade relationships with Mexican coffee farms"
+msgstr ""
+
+#: app/components/Footer/Footer.tsx:133
 msgid "Download"
 msgstr "ダウンロード"
 
@@ -211,7 +228,7 @@ msgstr "アプリをダウンロード"
 msgid "Download the App"
 msgstr "アプリをダウンロードする"
 
-#: app/routes/contact.tsx:148
+#: app/routes/contact.tsx:150
 #: app/routes/location.tsx:242
 msgid "Email"
 msgstr "メール"
@@ -219,6 +236,10 @@ msgstr "メール"
 #: app/welcome/welcome.tsx:67
 msgid "Espresso drinks"
 msgstr "エスプレッソドリンク"
+
+#: app/routes/sourcing.tsx:166
+msgid "Est. 2024"
+msgstr ""
 
 #: app/components/Footer/Footer.tsx:77
 msgid "Explore"
@@ -232,9 +253,33 @@ msgstr "コーヒー豆を探索して、袋を持ち帰ろう（店頭にて）
 msgid "Find us and visit for freshly roasted coffee"
 msgstr "新鮮な焙煎コーヒーを求めてお越しください"
 
+#: app/routes/sourcing.tsx:216
+msgid "Flexible volumes for cafés, restaurants, hotels, and offices"
+msgstr ""
+
+#: app/routes/sourcing.tsx:164
+msgid "Fresh roasts every week"
+msgstr ""
+
+#: app/routes/sourcing.tsx:269
+msgid "From first contact to regular delivery in four simple steps."
+msgstr ""
+
+#: app/routes/sourcing.tsx:221
+msgid "Full traceability from farm to cup on every bag"
+msgstr ""
+
+#: app/routes/sourcing.tsx:130
+msgid "Full-bodied with chocolate notes. Altitude-grown in the Sierra Madre."
+msgstr ""
+
 #: app/welcome/welcome.tsx:121
 msgid "Get directions"
 msgstr "道順を見る"
+
+#: app/routes/sourcing.tsx:184
+msgid "Get in touch"
+msgstr ""
 
 #: app/routes/links.tsx:171
 msgid "Good coffee"
@@ -264,11 +309,15 @@ msgstr "高速Wi-Fi"
 msgid "Home"
 msgstr "ホーム"
 
-#: app/routes/contact.tsx:138
+#: app/routes/contact.tsx:140
 #: app/routes/location.tsx:228
 #: app/routes/locations.tsx:190
 msgid "Hours"
 msgstr "営業時間"
+
+#: app/routes/sourcing.tsx:266
+msgid "How Wholesale Sourcing Works"
+msgstr ""
 
 #: app/welcome/welcome.tsx:48
 msgid "In a hurry?"
@@ -278,6 +327,10 @@ msgstr "お急ぎですか？"
 #: app/routes/shop-product.tsx:457
 msgid "Increase quantity"
 msgstr "数量を増やす"
+
+#: app/routes/sourcing.tsx:146
+msgid "Inquiry"
+msgstr ""
 
 #: app/routes/links.tsx:160
 msgid "Leave us a Google Review"
@@ -295,7 +348,8 @@ msgstr "カートを読み込み中..."
 msgid "Location Not Found"
 msgstr "場所が見つかりません"
 
-#: app/components/Footer/Footer.tsx:108
+#: app/components/Footer/Footer.tsx:86
+#: app/components/Footer/Footer.tsx:114
 msgid "Locations"
 msgstr "店舗"
 
@@ -315,7 +369,11 @@ msgstr "抹茶"
 msgid "Menu"
 msgstr "メニュー"
 
-#: app/routes/contact.tsx:141
+#: app/routes/sourcing.tsx:175
+msgid "Mexican Specialty Coffee, Direct from the Farm"
+msgstr ""
+
+#: app/routes/contact.tsx:143
 msgid "Mon-Fri: 8am - 8pm"
 msgstr "月〜金：8時〜20時"
 
@@ -323,7 +381,7 @@ msgstr "月〜金：8時〜20時"
 msgid "New"
 msgstr "新商品"
 
-#: app/routes/blog.tsx:225
+#: app/routes/blog.tsx:229
 msgid "News about new offerings, events, and what is happening at TOLO."
 msgstr "新商品、イベント、TOLOの最新情報をお届けします。"
 
@@ -367,19 +425,26 @@ msgstr "私たちのアプリ"
 msgid "Our Apps"
 msgstr "アプリ"
 
-#: app/components/Footer/Footer.tsx:83
 #: app/routes/beans.tsx:131
 #: app/routes/page.tsx:253
 msgid "Our Beans"
 msgstr "コーヒー豆"
 
 #: app/routes/contact.tsx:119
-msgid "Our contact form is in preparation. In the meantime, you can find us at our café in Toluca or reach out through our social media."
-msgstr "お問い合わせフォームは準備中です。その間、トルーカのカフェにお越しいただくか、SNSでご連絡ください。"
+msgid "Our contact form is in preparation. In the meantime, you can find us at any of our locations or reach out through our social media."
+msgstr "お問い合わせフォームは準備中です。その間、いずれかの店舗にお越しいただくか、SNSでご連絡ください。"
+
+#: app/routes/contact.tsx:119
+#~ msgid "Our contact form is in preparation. In the meantime, you can find us at our café in Toluca or reach out through our social media."
+#~ msgstr "お問い合わせフォームは準備中です。その間、トルーカのカフェにお越しいただくか、SNSでご連絡ください。"
 
 #: app/routes/locations.tsx:130
 msgid "Our Locations"
 msgstr "店舗一覧"
+
+#: app/routes/sourcing.tsx:244
+msgid "Our Mexican Coffee Origins"
+msgstr ""
 
 #: app/welcome/welcome.tsx:55
 msgid "Our Mexican coffees come straight from farms we know. We also rotate origins from Colombia, Ethiopia, Panama and more."
@@ -417,7 +482,15 @@ msgstr "記事が見つかりません"
 msgid "Pour overs"
 msgstr "プアオーバー"
 
-#: app/components/Footer/Footer.tsx:211
+#: app/routes/sourcing.tsx:178
+msgid "Premium single-origin beans sourced directly from Mexican farms. Roasted weekly and delivered to your café, restaurant, or office."
+msgstr ""
+
+#: app/routes/sourcing.tsx:154
+msgid "Pricing"
+msgstr ""
+
+#: app/components/Footer/Footer.tsx:217
 msgid "Privacy"
 msgstr "プライバシー"
 
@@ -438,6 +511,10 @@ msgstr "商品が見つかりません"
 msgid "Quantity"
 msgstr "数量"
 
+#: app/routes/sourcing.tsx:302
+msgid "Ready to Source Mexican Specialty Coffee?"
+msgstr ""
+
 #: app/routes/bean.tsx:170
 msgid "Region"
 msgstr "地域"
@@ -451,13 +528,33 @@ msgstr "削除"
 msgid "Roasted weekly"
 msgstr "毎週焙煎"
 
+#: app/routes/sourcing.tsx:157
+msgid "Roasted weekly and shipped on your schedule. Consistent quality, every time."
+msgstr ""
+
+#: app/routes/sourcing.tsx:211
+msgid "Roasted weekly for peak freshness — never sitting on a shelf"
+msgstr ""
+
 #: app/components/ProductCard/ProductCard.tsx:28
 msgid "Sale"
 msgstr "セール"
 
-#: app/routes/contact.tsx:143
+#: app/routes/sourcing.tsx:150
+msgid "Sample"
+msgstr ""
+
+#: app/routes/contact.tsx:145
 msgid "Sat-Sun: 9am - 6pm"
 msgstr "土〜日：9時〜18時"
+
+#: app/routes/sourcing.tsx:165
+msgid "SCA certified"
+msgstr ""
+
+#: app/routes/sourcing.tsx:226
+msgid "SCA-certified team for brewing support and training"
+msgstr ""
 
 #: app/welcome/welcome.tsx:79
 msgid "Seating and workspace"
@@ -466,6 +563,10 @@ msgstr "座席とワークスペース"
 #: app/welcome/welcome.tsx:173
 msgid "See location"
 msgstr "場所を見る"
+
+#: app/routes/contact.tsx:134
+msgid "See our locations"
+msgstr "店舗一覧を見る"
 
 #. placeholder {0}: LOCALE_LABELS[currentLocale]
 #: app/components/Header/Header.tsx:139
@@ -481,7 +582,7 @@ msgstr "ショップ"
 msgid "Shop Now"
 msgstr "今すぐ購入"
 
-#: app/routes/blog.tsx:222
+#: app/routes/blog.tsx:226
 msgid "Shop Updates"
 msgstr "ショップのお知らせ"
 
@@ -489,6 +590,10 @@ msgstr "ショップのお知らせ"
 #: app/components/CartIcon/CartIcon.tsx:54
 msgid "Shopping cart{0}"
 msgstr "カート{0}"
+
+#: app/routes/sourcing.tsx:134
+msgid "Smooth, nutty, and balanced. One of Mexico's oldest coffee regions."
+msgstr ""
 
 #: app/components/ProductCard/ProductCard.tsx:57
 msgid "Sold out"
@@ -502,9 +607,9 @@ msgstr "売り切れ"
 msgid "Something bold or something smooth? Tell us what you like and we'll help you choose. No fuss."
 msgstr "しっかりした味がお好み？それともまろやかな味？お好みを教えてください、選ぶお手伝いをします。気軽にどうぞ。"
 
-#: app/welcome/welcome.tsx:105
-#~ msgid "Specialty coffee in Toluca, roasted weekly and made with care. Stop by for an espresso, stay to work for a bit, or just come to chat."
-#~ msgstr "トルーカのスペシャルティコーヒー、毎週焙煎し、丁寧に淹れています。エスプレッソを飲みに、少し仕事をしに、または単におしゃべりしにお立ち寄りください。"
+#: app/routes/sourcing.tsx:166
+msgid "Specialty coffee since day one"
+msgstr ""
 
 #: app/welcome/welcome.tsx:105
 msgid "Specialty coffee, roasted weekly and made with care. Stop by for an espresso, stay to work for a bit, or just come to chat."
@@ -515,19 +620,19 @@ msgstr "スペシャルティコーヒー、毎週焙煎し、丁寧に淹れて
 msgid "Starting from {0}"
 msgstr "{0}から"
 
-#: app/routes/blog.tsx:204
+#: app/routes/blog.tsx:208
 msgid "Step-by-step instructions for the perfect cup at home."
 msgstr "自宅で完璧な一杯を淹れるためのステップバイステップガイド。"
 
-#: app/components/Footer/Footer.tsx:98
+#: app/components/Footer/Footer.tsx:101
 msgid "Store"
 msgstr "ストア"
 
-#: app/routes/blog.tsx:214
+#: app/routes/blog.tsx:218
 msgid "Stories about the farms and regions where our beans come from."
 msgstr "私たちの豆が生産される農園や地域についてのストーリー。"
 
-#: app/routes/blog.tsx:133
+#: app/routes/blog.tsx:137
 msgid "Stories from the coffee world"
 msgstr "コーヒーの世界からのストーリー"
 
@@ -538,6 +643,10 @@ msgstr "小計"
 #: app/routes/blog-post.tsx:237
 msgid "Suggested Readings"
 msgstr "おすすめ記事"
+
+#: app/routes/sourcing.tsx:138
+msgid "Sweet and well-rounded. Emerging specialty region in central Mexico."
+msgstr ""
 
 #: app/welcome/welcome.tsx:72
 msgid "Sweet bread"
@@ -550,6 +659,10 @@ msgstr "テイスティングノート"
 #: app/welcome/welcome.tsx:74
 msgid "Tea"
 msgstr "紅茶"
+
+#: app/routes/sourcing.tsx:145
+msgid "Tell us about your business, volume needs, and flavor preferences."
+msgstr ""
 
 #: app/routes/bean.tsx:141
 msgid "The coffee bean you are looking for does not exist or has been removed."
@@ -574,6 +687,14 @@ msgstr "お探しの商品は存在しないか、削除されました。"
 #: app/routes/shop-cart.tsx:186
 msgid "Total"
 msgstr "合計"
+
+#: app/routes/sourcing.tsx:165
+msgid "Trained baristas on staff"
+msgstr ""
+
+#: app/routes/sourcing.tsx:153
+msgid "Transparent pricing based on volume with no hidden fees."
+msgstr ""
 
 #: app/routes/location.tsx:195
 #: app/routes/locations.tsx:178
@@ -605,17 +726,17 @@ msgstr "お越しください"
 msgid "Visit Us"
 msgstr "お越しください"
 
-#: app/welcome/welcome.tsx:307
-#~ msgid "Visit us in Toluca"
-#~ msgstr "トルーカでお待ちしています"
-
 #: app/routes/links.tsx:162
 msgid "Visit us on TripAdvisor"
 msgstr "TripAdvisorでご覧ください"
 
 #: app/routes/blog.tsx:186
-msgid "We are preparing amazing content for you. Our blog will include coffee tips, brewing guides, origin stories, and news from our café in Toluca."
-msgstr "素晴らしいコンテンツを準備中です。ブログでは、コーヒーのヒント、淹れ方ガイド、産地のストーリー、トルーカのカフェからのニュースをお届けします。"
+#~ msgid "We are preparing amazing content for you. Our blog will include coffee tips, brewing guides, origin stories, and news from our café in Toluca."
+#~ msgstr "素晴らしいコンテンツを準備中です。ブログでは、コーヒーのヒント、淹れ方ガイド、産地のストーリー、トルーカのカフェからのニュースをお届けします。"
+
+#: app/routes/blog.tsx:190
+msgid "We are preparing amazing content for you. Our blog will include coffee tips, brewing guides, origin stories, and news from our cafés."
+msgstr "素晴らしいコンテンツを準備中です。ブログでは、コーヒーのヒント、淹れ方ガイド、産地のストーリー、カフェからのニュースをお届けします。"
 
 #: app/routes/beans.tsx:204
 msgid "We are preparing our bean catalog. Check back soon to discover our carefully selected coffees."
@@ -633,9 +754,21 @@ msgstr "ストアを準備中です。商品を発見するために、またお
 msgid "We roast every week, so there's always something fresh. Ask what's new or take a bag home."
 msgstr "毎週焙煎しているので、いつも新鮮なものがあります。新しいものを聞いてみるか、袋を持ち帰ってください。"
 
+#: app/routes/sourcing.tsx:149
+msgid "We send you curated samples so you can taste before committing."
+msgstr ""
+
 #: app/welcome/welcome.tsx:47
 msgid "We serve you quickly. Or order ahead on the app and just pick up."
 msgstr "素早くお届けします。アプリで事前注文して、受け取るだけ。"
+
+#: app/routes/sourcing.tsx:247
+msgid "We source from four key regions in Mexico, plus rotating international origins from Colombia, Ethiopia, Panama, and more."
+msgstr ""
+
+#: app/routes/sourcing.tsx:197
+msgid "We work directly with farmers across Mexico to bring you specialty-grade coffee with full traceability. As your wholesale specialty coffee supplier, we handle sourcing, roasting, and delivery so you can focus on your business."
+msgstr ""
 
 #: app/routes/contact.tsx:109
 msgid "We would love to hear from you"
@@ -645,17 +778,33 @@ msgstr "ご連絡をお待ちしております"
 msgid "Weekly"
 msgstr "毎週"
 
+#: app/routes/sourcing.tsx:164
+msgid "Weekly roasting"
+msgstr ""
+
 #: app/welcome/welcome.tsx:242
 msgid "What is on the menu?"
 msgstr "メニューは何がありますか？"
 
-#: app/routes/blog.tsx:196
+#: app/routes/blog.tsx:200
 msgid "What to Expect"
 msgstr "期待できること"
 
 #: app/welcome/welcome.tsx:317
 msgid "What you will find"
 msgstr "見つかるもの"
+
+#: app/routes/sourcing.tsx:305
+msgid "Whether you run a café, restaurant, hotel, or office — we would love to be your coffee partner. Reach out and let's talk."
+msgstr ""
+
+#: app/components/Footer/Footer.tsx:107
+msgid "Wholesale"
+msgstr ""
+
+#: app/routes/sourcing.tsx:194
+msgid "Why Source with TOLO"
+msgstr ""
 
 #: app/routes/shop-product.tsx:502
 msgid "You may also like"

@@ -80,7 +80,10 @@ export function Footer({ locations = [] }: FooterProps) {
 							<Trans>Home</Trans>
 						</Link>
 						<Link to={`/${locale}/${paths.beansPath}`} className={styles.link}>
-							<Trans>Our Beans</Trans>
+							<Trans>Coffee sourcing</Trans>
+						</Link>
+						<Link to={`/${locale}/locations`} className={styles.link}>
+							<Trans>Locations</Trans>
 						</Link>
 						<Link to={`/${locale}/blog`} className={styles.link}>
 							<Trans>Blog</Trans>
@@ -99,6 +102,9 @@ export function Footer({ locations = [] }: FooterProps) {
 						</Link>
 						<Link to={`/${locale}/contact`} className={styles.link}>
 							<Trans>Contact</Trans>
+						</Link>
+						<Link to={`/${locale}/sourcing`} className={styles.link}>
+							<Trans>Wholesale</Trans>
 						</Link>
 					</div>
 

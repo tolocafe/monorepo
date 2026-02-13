@@ -106,6 +106,13 @@ export async function loader() {
 			loc: `${BASE_URL}/${locale}/contact`,
 			priority: '0.6',
 		})
+
+		// Sourcing
+		entries.push({
+			changefreq: 'monthly',
+			loc: `${BASE_URL}/${locale}/sourcing`,
+			priority: '0.8',
+		})
 	}
 
 	// Dynamic shop products

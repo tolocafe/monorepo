@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro'
-import { useOutletContext } from 'react-router'
+import { Link, useOutletContext } from 'react-router'
 
 import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
@@ -15,27 +15,27 @@ interface LocaleContext {
 // Meta translations for SEO (used in meta function which runs before React context)
 const META_TRANSLATIONS = {
 	de: {
-		description: 'Kontaktieren Sie das TOLO Café in Toluca',
+		description: 'Kontaktieren Sie TOLO Spezialitätenkaffee',
 		heading: 'Kontakt',
 		title: 'Kontakt - TOLO',
 	},
 	en: {
-		description: 'Get in touch with TOLO coffee shop in Toluca',
+		description: 'Get in touch with TOLO specialty coffee',
 		heading: 'Contact Us',
 		title: 'Contact Us - TOLO',
 	},
 	es: {
-		description: 'Ponte en contacto con la cafetería TOLO en Toluca',
+		description: 'Ponte en contacto con TOLO café de especialidad',
 		heading: 'Contacto',
 		title: 'Contacto - TOLO',
 	},
 	fr: {
-		description: 'Contactez le café TOLO à Toluca',
+		description: 'Contactez TOLO café de spécialité',
 		heading: 'Contact',
 		title: 'Contact - TOLO',
 	},
 	ja: {
-		description: 'トルーカのTOLOコーヒーショップへのお問い合わせ',
+		description: 'TOLOスペシャルティコーヒーへのお問い合わせ',
 		heading: 'お問い合わせ',
 		title: 'お問い合わせ - TOLO',
 	},
@@ -96,7 +96,7 @@ export function meta({ params }: Route.MetaArgs) {
 }
 
 export default function Contact() {
-	useOutletContext<LocaleContext>()
+	const { locale } = useOutletContext<LocaleContext>()
 
 	return (
 		<main className={styles.main}>
@@ -118,7 +118,7 @@ export default function Contact() {
 						<p className={styles.message}>
 							<Trans>
 								Our contact form is in preparation. In the meantime, you can
-								find us at our café in Toluca or reach out through our social
+								find us at any of our locations or reach out through our social
 								media.
 							</Trans>
 						</p>
@@ -130,7 +130,9 @@ export default function Contact() {
 								<Trans>Visit Us</Trans>
 							</h3>
 							<p className={styles.infoText}>
-								Toluca, Estado de México, México
+								<Link to={`/${locale}/locations`}>
+									<Trans>See our locations</Trans>
+								</Link>
 							</p>
 						</div>
 						<div className={styles.infoCard}>
