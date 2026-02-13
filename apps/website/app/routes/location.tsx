@@ -46,7 +46,9 @@ export function meta({ data, params }: Route.MetaArgs) {
 		? urlFor(location.image)?.width(1200).url()
 		: null
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
-	const description = `${name} in ${location.city}, ${location.country}`
+	const description = address
+		? `${name} — ${address}. TOLO specialty coffee.`
+		: `${name} in ${location.city}, ${location.country}. TOLO specialty coffee.`
 	const canonicalUrl = `${BASE_URL}/${locale}/locations/${slug}`
 
 	return [
@@ -85,20 +87,6 @@ export function meta({ data, params }: Route.MetaArgs) {
 				hasMenu: `${BASE_URL}/${locale}#menu`,
 				image: imageUrl,
 				name,
-				openingHoursSpecification: [
-					{
-						'@type': 'OpeningHoursSpecification',
-						closes: '19:30',
-						dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-						opens: '07:30',
-					},
-					{
-						'@type': 'OpeningHoursSpecification',
-						closes: '17:00',
-						dayOfWeek: 'Saturday',
-						opens: '09:00',
-					},
-				],
 				parentOrganization: {
 					'@id': ORGANIZATION_ID,
 					'@type': 'Organization',

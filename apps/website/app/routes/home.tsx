@@ -14,29 +14,28 @@ interface LocaleContext {
 const TRANSLATIONS = {
 	de: {
 		description:
-			'TOLO ist ein Spezialitätencafé in Toluca: Espresso-Getränke, Pour Overs, Matcha, Cold Brew, Chai, Gebäck, Kakao und Tee. Wir rösten wöchentlich und verkaufen ganze Bohnen im Laden. Schnell, gemütlich, mit schnellem WLAN, hundefreundlich und mit Vorbestellung in unserer App.',
-		title: 'TOLO | Spezialitätenkaffee in Toluca | Guter Kaffee. Ganz einfach.',
+			'TOLO ist ein Spezialitätencafé in Estado de México: Espresso-Getränke, Pour Overs, Matcha, Cold Brew, Chai, Gebäck, Kakao und Tee. Wir rösten wöchentlich und verkaufen ganze Bohnen im Laden. Schnell, gemütlich, mit schnellem WLAN, hundefreundlich und mit Vorbestellung in unserer App.',
+		title: 'TOLO | Spezialitätenkaffee | Guter Kaffee. Ganz einfach.',
 	},
 	en: {
 		description:
-			'TOLO is a specialty coffee shop in Toluca: espresso drinks, pour overs, matcha, cold brew, chai, pastries, cacao and tea. We roast weekly and sell whole bean coffee in-store. Fast service, high-speed Wi‑Fi, pet-friendly, and order ahead in our app.',
-		title: 'TOLO | Specialty Coffee in Toluca | Good Coffee, Simple as That',
+			'TOLO is a specialty coffee shop in Estado de México: espresso drinks, pour overs, matcha, cold brew, chai, pastries, cacao and tea. We roast weekly and sell whole bean coffee in-store. Fast service, high-speed Wi‑Fi, pet-friendly, and order ahead in our app.',
+		title: 'TOLO | Specialty Coffee | Good Coffee, Simple as That',
 	},
 	es: {
 		description:
-			'TOLO es un café de especialidad en Toluca: espresso, pour overs, matcha, cold brew, chai, cacao, té y pan dulce. Tostamos café cada semana y vendemos café en grano (en tienda). Wi‑Fi rápido, pet‑friendly y pide por la app.',
-		title: 'TOLO | Café en Toluca | Buen café, así de simple',
+			'TOLO es un café de especialidad en Estado de México: espresso, pour overs, matcha, cold brew, chai, cacao, té y pan dulce. Tostamos café cada semana y vendemos café en grano (en tienda). Wi‑Fi rápido, pet‑friendly y pide por la app.',
+		title: 'TOLO | Café de especialidad | Buen café, así de simple',
 	},
 	fr: {
 		description:
-			'TOLO est un café de spécialité à Toluca : espresso, pour overs, matcha, cold brew, chai, pâtisseries, cacao et thé. Torréfaction chaque semaine et café en grains en boutique. Service rapide, Wi‑Fi haut débit, animaux bienvenus et commande à l’avance via notre app.',
-		title: 'TOLO | Café de spécialité à Toluca | Du bon café, tout simplement',
+			"TOLO est un café de spécialité dans l'Estado de México : espresso, pour overs, matcha, cold brew, chai, pâtisseries, cacao et thé. Torréfaction chaque semaine et café en grains en boutique. Service rapide, Wi\u2011Fi haut débit, animaux bienvenus et commande à l'avance via notre app.",
+		title: 'TOLO | Café de spécialité | Du bon café, tout simplement',
 	},
 	ja: {
 		description:
-			'TOLOはトルーカのスペシャルティコーヒーショップ。エスプレッソ、プアオーバー、抹茶、コールドブリュー、チャイ、焼き菓子、カカオ、紅茶をご用意。毎週焙煎し、店頭でコーヒー豆も販売しています。高速Wi‑Fi、ペットOK、アプリで事前注文も。',
-		title:
-			'TOLO｜トルーカのスペシャルティコーヒー｜おいしいコーヒー。シンプルに。',
+			'TOLOはメヒコ州のスペシャルティコーヒーショップ。エスプレッソ、プアオーバー、抹茶、コールドブリュー、チャイ、焼き菓子、カカオ、紅茶をご用意。毎週焙煎し、店頭でコーヒー豆も販売しています。高速Wi‑Fi、ペットOK、アプリで事前注文も。',
+		title: 'TOLO｜スペシャルティコーヒー｜おいしいコーヒー。シンプルに。',
 	},
 } as const
 
@@ -73,12 +72,12 @@ export function meta({ params }: Route.MetaArgs) {
 				'@id': ORGANIZATION_ID,
 				'@type': 'Organization',
 				areaServed: {
-					'@type': 'City',
+					'@type': 'AdministrativeArea',
 					containedInPlace: {
-						'@type': 'AdministrativeArea',
-						name: 'Estado de México',
+						'@type': 'Country',
+						name: 'Mexico',
 					},
-					name: 'Toluca',
+					name: 'Estado de México',
 				},
 				contactPoint: {
 					'@type': 'ContactPoint',

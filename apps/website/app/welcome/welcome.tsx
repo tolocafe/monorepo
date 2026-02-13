@@ -103,9 +103,8 @@ export function Welcome({ locale }: WelcomeProps) {
 					</h1>
 					<p className={styles.heroSubtitle}>
 						<Trans>
-							Specialty coffee in Toluca, roasted weekly and made with care.
-							Stop by for an espresso, stay to work for a bit, or just come to
-							chat.
+							Specialty coffee, roasted weekly and made with care. Stop by for
+							an espresso, stay to work for a bit, or just come to chat.
 						</Trans>
 					</p>
 
@@ -304,7 +303,7 @@ export function Welcome({ locale }: WelcomeProps) {
 					<div className={styles.visitGrid}>
 						<div className={styles.visitCard}>
 							<h2 className={styles.sectionTitle}>
-								<Trans>Visit us in Toluca</Trans>
+								<Trans>Visit us</Trans>
 							</h2>
 							<p className={styles.sectionText}>
 								<Trans>
