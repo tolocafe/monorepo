@@ -74,7 +74,6 @@ export const title = style({
 })
 
 export const excerpt = style({
-	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
 	opacity: 0.8,
 })
