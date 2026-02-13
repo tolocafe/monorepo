@@ -1,13 +1,6 @@
 import { style } from '@vanilla-extract/css'
 
-import {
-	buttonBase,
-	buttonLight,
-	buttonGhost,
-	card,
-	section,
-	container,
-} from '@/styles/global.css'
+import { card, section, container } from '@/styles/global.css'
 import { vars } from '@/styles/tokens.css'
 
 export const main = style({
@@ -21,7 +14,7 @@ export const hero = style({
 	alignItems: 'center',
 	display: 'flex',
 	justifyContent: 'center',
-	minHeight: '70vh',
+	minHeight: '100svh',
 	overflow: 'hidden',
 	position: 'relative',
 })
@@ -48,7 +41,7 @@ export const heroVideoIframe = style({
 
 export const heroOverlay = style({
 	background:
-		'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.65) 70%, rgba(0,0,0,0.75) 100%)',
+		'linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.75) 70%, rgba(0,0,0,0.85) 100%)',
 	inset: 0,
 	position: 'absolute',
 })
@@ -56,13 +49,18 @@ export const heroOverlay = style({
 export const heroContent = style({
 	'@media': {
 		'(min-width: 768px)': {
-			padding: `${vars.space['5xl']} ${vars.space.xl}`,
+			padding: `${vars.space.xl} ${vars.space.xl}`,
 			textAlign: 'left',
 		},
 	},
+	alignItems: 'flex-start',
+	display: 'flex',
+	flexDirection: 'column',
+	height: '100%',
+	justifyContent: 'space-between',
 	margin: '0 auto',
 	maxWidth: '1100px',
-	padding: `${vars.space['3xl']} ${vars.space.xl}`,
+	padding: `${vars.space.xl} ${vars.space.xl}`,
 	position: 'relative',
 	textAlign: 'center',
 	zIndex: 10,
@@ -70,11 +68,9 @@ export const heroContent = style({
 
 export const heroTitle = style({
 	color: vars.color.white,
-	fontSize: 'clamp(2.5rem, 8vw, 4.5rem)',
-	fontWeight: vars.fontWeight.bold,
+	fontSize: 'clamp(3rem, 8vw, 6rem)',
 	letterSpacing: '-0.02em',
-	lineHeight: vars.lineHeight.none,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 	textTransform: 'none',
 })
 
@@ -85,7 +81,7 @@ export const heroSubtitle = style({
 		},
 	},
 	color: 'rgba(255, 255, 255, 0.9)',
-	fontSize: vars.fontSize.xl,
+	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
 	margin: 0,
 	maxWidth: '600px',
@@ -101,69 +97,59 @@ export const heroActions = style({
 	flexWrap: 'wrap',
 	gap: vars.space.md,
 	justifyContent: 'center',
-	marginTop: vars.space['2xl'],
+	marginBottom: 'auto',
+	marginTop: vars.space.xl,
 })
 
-export const heroPrimaryButton = style([
-	buttonBase,
-	{
-		':hover': {
-			filter: 'brightness(1.05)',
-		},
-		backgroundColor: vars.color.secondary,
-		color: vars.color.white,
-	},
-])
-
-export const heroSecondaryButton = buttonGhost
-export const heroTertiaryButton = buttonLight
-
-// Trust Bar
-export const quickLinksSection = style({
-	padding: `${vars.space['3xl']} ${vars.space.xl} ${vars.space['5xl']}`,
-})
-
-export const trustBar = style({
+export const heroTrustBar = style({
 	'@media': {
 		'(max-width: 640px)': {
-			gap: vars.space.md,
-			padding: vars.space.base,
+			gap: vars.space.lg,
+			justifyContent: 'center',
 		},
 		'(min-width: 768px)': {
 			gap: vars.space.xl,
+			justifyContent: 'flex-start',
 		},
 	},
-	backgroundColor: vars.color.surface,
-	borderRadius: vars.radius['2xl'],
-	display: 'grid',
-	gap: vars.space.base,
-	gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
-	marginBottom: vars.space['3xl'],
-	padding: vars.space.lg,
+	display: 'flex',
+	gap: vars.space.xl,
+	justifyContent: 'center',
+	paddingTop: vars.space.xl,
+	width: '100%',
 })
 
-export const trustItem = style({
+export const heroTrustItem = style({
 	textAlign: 'center',
 })
 
-export const trustValue = style({
-	color: vars.color.secondary,
+export const heroTrustValue = style({
+	color: vars.color.white,
 	fontSize: vars.fontSize.xl,
 	fontWeight: vars.fontWeight.bold,
 	lineHeight: vars.lineHeight.none,
 })
 
-export const trustLabel = style({
-	color: vars.color.text,
+export const heroTrustLabel = style({
+	color: 'rgba(255, 255, 255, 0.8)',
 	fontSize: vars.fontSize.sm,
 	lineHeight: vars.lineHeight.normal,
 	marginTop: vars.space.sm,
 })
 
-// Quick Cards
+// Quick Links Section
+export const quickLinksSection = style({
+	'@media': {
+		'(min-width: 768px)': {
+			padding: `${vars.space.xl} ${vars.space.xl}`,
+		},
+	},
+	padding: `${vars.space.xl} ${vars.space.xl}`,
+})
 export const quickLinksGrid = style({
 	'@media': {
 		'(min-width: 768px)': {
+			gap: vars.space.xl,
 			gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
 		},
 	},
@@ -179,35 +165,33 @@ export const quickCard = style([
 			outline: `2px solid ${vars.color.primary}`,
 			outlineOffset: '3px',
 		},
+		borderRadius: vars.radius.lg,
 		display: 'flex',
 		flexDirection: 'column',
-		padding: vars.space.lg,
+		overflow: 'hidden',
+		padding: 0,
 		textDecoration: 'none',
 	},
 ])
 
 export const quickCardImage = style({
 	aspectRatio: '16 / 10',
-	borderRadius: vars.radius.xl,
-	marginBottom: vars.space.base,
 	objectFit: 'cover',
 	width: '100%',
 })
 
 export const quickCardBody = style({
 	minWidth: 0,
+	padding: vars.space.md,
 })
 
 export const quickCardTitle = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.semibold,
 	marginBottom: vars.space.sm,
 })
 
 export const quickCardText = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
 	marginBottom: vars.space.md,
 })
@@ -223,6 +207,12 @@ export const quickCardCta = style({
 export const sectionAnchor = style([
 	section,
 	{
+		'@media': {
+			'(min-width: 768px)': {
+				padding: `${vars.space.xl} ${vars.space.xl}`,
+			},
+		},
+		padding: `${vars.space.xl} ${vars.space.xl}`,
 		scrollMarginTop: '96px',
 	},
 ])
@@ -239,41 +229,32 @@ export const sectionContent = style({
 })
 
 export const sectionTitle = style({
-	'@media': {
-		'(max-width: 640px)': {
-			fontSize: vars.fontSize['2xl'],
-		},
-	},
-	fontSize: vars.fontSize['3xl'],
-	fontWeight: vars.fontWeight.bold,
 	marginBottom: vars.space.xl,
 })
 
-export const sectionText = style({
-	'@media': {
-		'(max-width: 640px)': {
-			fontSize: vars.fontSize.lg,
-		},
-	},
-	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
-	lineHeight: vars.lineHeight.relaxed,
-})
-
-// Section Header with title + "View all" link
+// Section Header with title + description on left, link on right
 export const sectionHeader = style({
-	alignItems: 'baseline',
+	alignItems: 'center',
 	display: 'flex',
+	gap: vars.space.xl,
 	justifyContent: 'space-between',
 	marginBottom: vars.space.xl,
 })
 
+export const sectionHeaderText = style({
+	display: 'flex',
+	flexDirection: 'column',
+	gap: vars.space.sm,
+})
+
+export const sectionDescription = style({
+	color: vars.color.text,
+	lineHeight: vars.lineHeight.relaxed,
+	opacity: 0.8,
+})
+
 export const sectionLink = style({
-	':hover': {
-		color: vars.color.secondary,
-	},
 	color: vars.color.primary,
-	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.semibold,
 	textDecoration: 'none',
 	whiteSpace: 'nowrap',
@@ -288,7 +269,7 @@ export const aboutGrid = style({
 	},
 	alignItems: 'center',
 	display: 'grid',
-	gap: vars.space['3xl'],
+	gap: vars.space.xl,
 	gridTemplateColumns: '1fr',
 })
 
@@ -317,65 +298,49 @@ export const aboutImage = style({
 		},
 	},
 	aspectRatio: '4 / 3',
-	borderRadius: vars.radius['2xl'],
+	borderRadius: vars.radius.lg,
 	objectFit: 'cover',
 	width: '100%',
 })
 
-export const highlightsGrid = style({
+export const featuresGrid = style({
 	'@media': {
 		'(min-width: 768px)': {
-			gridTemplateColumns: 'repeat(2, minmax(0, 1fr))',
+			gap: vars.space.xl,
+			gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
 		},
 	},
 	display: 'grid',
 	gap: vars.space.xl,
 	gridTemplateColumns: '1fr',
-	marginTop: vars.space['3xl'],
+	marginTop: vars.space.xl,
 })
 
-export const highlightCard = card
+export const featureCard = style([
+	card,
+	{
+		'@media': {
+			'(min-width: 768px)': {
+				padding: vars.space.xl,
+			},
+		},
+		padding: vars.space.lg,
+	},
+])
 
-export const highlightTitle = style({
-	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.semibold,
+export const featureTitle = style({
 	marginBottom: vars.space.md,
 })
 
-export const highlightText = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
+export const featureText = style({
 	lineHeight: vars.lineHeight.relaxed,
 })
-
-// Menu Section
-export const chipGrid = style({
-	'@media': {
-		'(min-width: 768px)': {
-			justifyContent: 'flex-start',
-		},
-	},
-	display: 'flex',
-	flexWrap: 'wrap',
-	gap: vars.space.md,
-	justifyContent: 'center',
-	marginBottom: vars.space.xl,
-})
-
-export const chip = style([
-	card,
-	{
-		color: vars.color.text,
-		fontSize: vars.fontSize.sm,
-		fontWeight: vars.fontWeight.medium,
-		padding: `${vars.space.sm} ${vars.space.base}`,
-	},
-])
 
 // Shop Section
 export const shopGrid = style({
 	'@media': {
 		'(min-width: 768px)': {
+			gap: vars.space.xl,
 			gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
 		},
 	},
@@ -392,13 +357,13 @@ export const shopCardLink = style({
 export const splitSection = style({
 	'@media': {
 		'(min-width: 900px)': {
-			alignItems: 'center',
-			flexDirection: 'row',
+			gridTemplateColumns: '1fr 1fr',
 		},
 	},
-	display: 'flex',
-	flexDirection: 'column',
-	gap: vars.space['3xl'],
+	alignItems: 'center',
+	display: 'grid',
+	gap: vars.space.xl,
+	gridTemplateColumns: '1fr',
 })
 
 export const storeButtons = style({
@@ -408,36 +373,20 @@ export const storeButtons = style({
 	marginTop: vars.space.xl,
 })
 
-export const storeButtonPrimary = style([
-	buttonBase,
-	{
-		':hover': {
-			filter: 'brightness(1.05)',
-		},
-		backgroundColor: vars.color.primary,
-		color: vars.color.white,
-	},
-])
-
-export const storeButtonSecondary = buttonLight
+export const storeBadge = style({
+	display: 'block',
+	height: 50,
+	width: 'auto',
+})
 
 export const appImage = style({
-	aspectRatio: '9 / 16',
-	borderRadius: vars.radius['2xl'],
-	margin: '0 auto',
-	maxWidth: '280px',
-	objectFit: 'cover',
+	aspectRatio: '3 / 4',
+	borderRadius: vars.radius.lg,
+	objectFit: 'contain',
 	width: '100%',
 })
 
 export const appText = style({
-	'@media': {
-		'(max-width: 640px)': {
-			fontSize: vars.fontSize.lg,
-		},
-	},
-	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
 	lineHeight: vars.lineHeight.relaxed,
 	marginBottom: vars.space.sm,
 })
@@ -447,7 +396,7 @@ export const carousel = style({
 	display: 'flex',
 	gap: vars.space.xl,
 	overflowX: 'auto',
-	paddingBottom: vars.space.base,
+	paddingBottom: vars.space.md,
 	scrollSnapType: 'x mandatory',
 	selectors: {
 		'&::-webkit-scrollbar': {
@@ -489,7 +438,7 @@ export const carouselCardBody = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space.xs,
-	padding: vars.space.base,
+	padding: vars.space.md,
 })
 
 export const carouselCardHeader = style({
@@ -500,15 +449,13 @@ export const carouselCardHeader = style({
 
 export const carouselCardTitle = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.lg,
-	fontWeight: vars.fontWeight.semibold,
 })
 
 export const upcomingBadge = style({
 	backgroundColor: vars.color.primary,
 	borderRadius: vars.radius.md,
 	color: vars.color.white,
-	fontSize: vars.fontSize.xs,
+	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
 	padding: `${vars.space.xs} ${vars.space.sm}`,
 	textTransform: 'uppercase',
@@ -522,20 +469,21 @@ export const carouselCardCity = style({
 
 export const carouselCardDetail = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.sm,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
 // Blog Section
 export const blogGrid = style({
-	'@media': {
-		'(min-width: 768px)': {
-			gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+	display: 'flex',
+	gap: vars.space.xl,
+	overflowX: 'auto',
+	paddingBottom: vars.space.md,
+	scrollSnapType: 'x mandatory',
+	selectors: {
+		'&::-webkit-scrollbar': {
+			display: 'none',
 		},
 	},
-	display: 'grid',
-	gap: vars.space.xl,
-	gridTemplateColumns: '1fr',
 })
 
 export const blogCard = style([
@@ -545,16 +493,24 @@ export const blogCard = style([
 			outline: `2px solid ${vars.color.primary}`,
 			outlineOffset: '3px',
 		},
+		'@media': {
+			'(min-width: 768px)': {
+				width: '340px',
+			},
+		},
 		display: 'flex',
+		flex: 'none',
 		flexDirection: 'column',
 		overflow: 'hidden',
 		padding: 0,
+		scrollSnapAlign: 'start',
 		textDecoration: 'none',
+		width: '280px',
 	},
 ])
 
 export const blogCardImage = style({
-	aspectRatio: '16 / 10',
+	aspectRatio: '16 / 9',
 	objectFit: 'cover',
 	width: '100%',
 })
@@ -564,14 +520,11 @@ export const blogCardBody = style({
 	flex: 1,
 	flexDirection: 'column',
 	gap: vars.space.sm,
-	padding: vars.space.base,
+	padding: vars.space.md,
 })
 
 export const blogCardTitle = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.lg,
-	fontWeight: vars.fontWeight.semibold,
-	lineHeight: vars.lineHeight.tight,
 })
 
 export const blogCardExcerpt = style({
@@ -579,7 +532,6 @@ export const blogCardExcerpt = style({
 	WebkitLineClamp: 2,
 	color: vars.color.text,
 	display: '-webkit-box',
-	fontSize: vars.fontSize.sm,
 	lineHeight: vars.lineHeight.relaxed,
 	opacity: 0.8,
 	overflow: 'hidden',
@@ -587,72 +539,9 @@ export const blogCardExcerpt = style({
 
 export const blogCardDate = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.xs,
+	fontSize: vars.fontSize.sm,
 	marginTop: 'auto',
 	opacity: 0.6,
-})
-
-// Features Section
-export const featuresSection = style([
-	section,
-	{
-		backgroundColor: vars.color.background,
-	},
-])
-
-export const featuresSectionTitle = style({
-	'@media': {
-		'(max-width: 640px)': {
-			fontSize: vars.fontSize['2xl'],
-		},
-	},
-	color: vars.color.secondary,
-	fontSize: vars.fontSize['3xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space['4xl'],
-	textAlign: 'center',
-})
-
-export const featuresGrid = style({
-	display: 'grid',
-	gap: vars.space['2xl'],
-	gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-	margin: '0 auto',
-	maxWidth: '1200px',
-})
-
-export const featureCard = style([
-	card,
-	{
-		padding: vars.space['2xl'],
-		textAlign: 'center',
-	},
-])
-
-export const featureIcon = style({
-	alignItems: 'center',
-	backgroundColor: vars.color.primary,
-	borderRadius: vars.radius.full,
-	color: vars.color.white,
-	display: 'flex',
-	height: '64px',
-	justifyContent: 'center',
-	margin: '0 auto',
-	marginBottom: vars.space.base,
-	width: '64px',
-})
-
-export const featureTitle = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space.md,
-})
-
-export const featureText = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
-	lineHeight: vars.lineHeight.relaxed,
 })
 
 // Re-export container for convenience

@@ -3,16 +3,12 @@ import { style } from '@vanilla-extract/css'
 import { vars } from '@/styles'
 
 export const card = style({
-	':hover': {
-		borderColor: vars.color.primary,
-	},
 	backgroundColor: vars.color.surface,
-	border: `1px solid ${vars.color.border}`,
-	borderRadius: vars.radius['2xl'],
+	borderRadius: vars.radius.lg,
 	display: 'flex',
 	flexDirection: 'column',
+	height: '100%',
 	overflow: 'hidden',
-	transition: 'border-color 0.2s ease',
 })
 
 export const imageWrapper = style({
@@ -42,7 +38,7 @@ export const soldOutBadge = style({
 	backgroundColor: vars.color.text,
 	borderRadius: vars.radius.md,
 	color: vars.color.background,
-	fontSize: vars.fontSize.xs,
+	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
 	padding: `${vars.space.xs} ${vars.space.sm}`,
 	position: 'absolute',
@@ -55,7 +51,7 @@ export const productBadge = style({
 	backgroundColor: vars.color.secondary,
 	borderRadius: vars.radius.md,
 	color: vars.color.white,
-	fontSize: vars.fontSize.xs,
+	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
 	padding: `${vars.space.xs} ${vars.space.sm}`,
 	position: 'absolute',
@@ -69,14 +65,11 @@ export const content = style({
 	flex: 1,
 	flexDirection: 'column',
 	gap: vars.space.sm,
-	padding: vars.space.base,
+	padding: vars.space.md,
 })
 
 export const title = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.base,
-	fontWeight: vars.fontWeight.semibold,
-	lineHeight: vars.lineHeight.tight,
 })
 
 export const excerpt = style({
@@ -99,7 +92,6 @@ export const priceWrapper = style({
 
 export const price = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.lg,
 	fontWeight: vars.fontWeight.bold,
 })
 
@@ -112,7 +104,7 @@ export const comparePrice = style({
 
 export const productType = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.xs,
+	fontSize: vars.fontSize.sm,
 	opacity: 0.6,
 	textTransform: 'uppercase',
 })

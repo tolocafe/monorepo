@@ -52,7 +52,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const canonicalUrl = `${BASE_URL}/${locale}/locations/${slug}`
 
 	return [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: `${name} - TOLO Locations` },
 		{ content: description, name: 'description' },
 		{ content: name, property: 'og:title' },
@@ -201,7 +201,7 @@ export default function LocationDetail({ loaderData }: Route.ComponentProps) {
 						<div className={styles.imageWrapper}>
 							<img
 								src={imageUrl}
-								alt={location.image?.alt || name}
+								alt={getLocalizedString(location.image?.alt, locale, name)}
 								className={styles.image}
 							/>
 						</div>

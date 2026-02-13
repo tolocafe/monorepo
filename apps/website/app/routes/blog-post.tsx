@@ -56,7 +56,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const ogImage = images[0] || `${BASE_URL}/og-image.png`
 
 	return [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: `${title} - TOLO Blog` },
 		{ content: excerpt, name: 'description' },
 		{ content: title, property: 'og:title' },
@@ -218,7 +218,7 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
 						<div className={styles.imageWrapper}>
 							<img
 								src={imageUrl}
-								alt={post.image?.alt || title}
+								alt={getLocalizedString(post.image?.alt, locale, title)}
 								className={styles.image}
 							/>
 						</div>
@@ -264,7 +264,11 @@ export default function BlogPost({ loaderData }: Route.ComponentProps) {
 											<div className={styles.suggestedImageWrapper}>
 												<img
 													src={suggestedImageUrl}
-													alt={suggestedPost.image?.alt || suggestedTitle}
+													alt={getLocalizedString(
+														suggestedPost.image?.alt,
+														locale,
+														suggestedTitle,
+													)}
 													className={styles.suggestedImage}
 												/>
 											</div>

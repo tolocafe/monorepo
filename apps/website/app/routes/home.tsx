@@ -52,7 +52,7 @@ export function meta({ params }: Route.MetaArgs) {
 		.map(([, ogLoc]) => ogLoc)
 
 	return [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },

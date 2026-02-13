@@ -25,7 +25,7 @@ export const subtitle = pageSubtitle
 export const content = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space['4xl'],
+	gap: vars.space.xl,
 })
 
 export const locationsGrid = style({
@@ -35,17 +35,12 @@ export const locationsGrid = style({
 })
 
 export const locationCard = style({
-	':hover': {
-		borderColor: vars.color.primary,
-	},
 	backgroundColor: vars.color.background,
-	border: `1px solid ${vars.color.border}`,
-	borderRadius: vars.radius['2xl'],
+	borderRadius: vars.radius.lg,
 	display: 'flex',
 	flexDirection: 'column',
 	overflow: 'hidden',
 	textDecoration: 'none',
-	transition: 'border-color 0.2s ease',
 })
 
 export const locationImageWrapper = style({
@@ -76,15 +71,13 @@ export const locationHeader = style({
 export const locationName = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.semibold,
-	lineHeight: vars.lineHeight.tight,
 })
 
 export const mainBadge = style({
 	backgroundColor: vars.color.primary,
 	borderRadius: vars.radius.full,
 	color: vars.color.white,
-	fontSize: vars.fontSize.xs,
+	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
 	padding: `${vars.space.xs} ${vars.space.sm}`,
 	textTransform: 'uppercase',
@@ -94,7 +87,7 @@ export const upcomingBadge = style({
 	backgroundColor: vars.color.secondary,
 	borderRadius: vars.radius.full,
 	color: vars.color.white,
-	fontSize: vars.fontSize.xs,
+	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
 	padding: `${vars.space.xs} ${vars.space.sm}`,
 	textTransform: 'uppercase',
@@ -102,7 +95,6 @@ export const upcomingBadge = style({
 
 export const locationCity = style({
 	color: vars.color.secondary,
-	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.medium,
 })
 

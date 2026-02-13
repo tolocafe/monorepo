@@ -34,7 +34,7 @@ globalStyle('body', {
 	backgroundColor: vars.color.background,
 	color: vars.color.text,
 	fontFamily: vars.font.body,
-	fontSize: vars.fontSize.base,
+	fontSize: vars.fontSize.md,
 	lineHeight: 1.5,
 })
 
@@ -68,13 +68,23 @@ globalStyle('h1, h2, h3, h4, h5, h6', {
 
 // H1 needs a tighter leading than the rest for cleaner hero + page titles.
 globalStyle('h1', {
+	fontSize: vars.fontSize.xl,
 	lineHeight: vars.lineHeight.none,
 })
 
 globalStyle('h1, h2, h3', {
 	color: vars.color.secondary,
 	fontWeight: vars.fontWeight.bold,
-	textTransform: 'uppercase',
+})
+
+globalStyle('h2', {
+	fontSize: vars.fontSize.lg,
+	fontWeight: vars.fontWeight.semibold,
+})
+
+globalStyle('h3', {
+	fontSize: vars.fontSize.lg,
+	fontWeight: vars.fontWeight.semibold,
 })
 
 /* 10. Create a root stacking context */
@@ -98,113 +108,83 @@ globalStyle('code, pre', {
  * Common patterns for buttons, cards, and sections that can be composed throughout the app.
  */
 
-// Base button style - can be extended with specific variants
-export const buttonBase = style({
-	':focus-visible': {
-		outline: `2px solid ${vars.color.primary}`,
-		outlineOffset: '2px',
-	},
+globalStyle('button', {
 	alignItems: 'center',
 	border: 'none',
 	borderRadius: vars.radius.full,
 	cursor: 'pointer',
 	display: 'inline-flex',
-	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.semibold,
 	justifyContent: 'center',
 	padding: `${vars.space.md} ${vars.space.lg}`,
 	textDecoration: 'none',
 })
 
-export const buttonPrimary = style([
-	buttonBase,
-	{
-		':hover': {
-			filter: 'brightness(1.05)',
-		},
-		backgroundColor: vars.color.primary,
-		color: vars.color.white,
-	},
-])
+globalStyle('button:focus-visible', {
+	outline: `2px solid ${vars.color.primary}`,
+	outlineOffset: '2px',
+})
 
-export const buttonSecondary = style([
-	buttonBase,
-	{
-		':hover': {
-			filter: 'brightness(1.05)',
-		},
-		backgroundColor: vars.color.secondary,
-		color: vars.color.white,
-	},
-])
+export const buttonPrimary = style({
+	backgroundColor: vars.color.primary,
+	color: vars.color.white,
+})
 
-export const buttonOutline = style([
-	buttonBase,
-	{
-		':hover': {
-			backgroundColor: vars.color.surface,
-		},
-		backgroundColor: 'transparent',
-		border: `1px solid ${vars.color.border}`,
-		color: vars.color.text,
-	},
-])
+export const buttonSecondary = style({
+	backgroundColor: vars.color.secondary,
+	color: vars.color.white,
+})
 
-export const buttonGhost = style([
-	buttonBase,
-	{
-		':hover': {
-			backgroundColor: 'rgba(255, 255, 255, 0.16)',
-		},
-		backgroundColor: 'rgba(255, 255, 255, 0.1)',
-		border: '1px solid rgba(255, 255, 255, 0.35)',
-		color: vars.color.white,
-	},
-])
+export const buttonOutline = style({
+	backgroundColor: 'transparent',
+	color: vars.color.text,
+})
 
-export const buttonLight = style([
-	buttonBase,
-	{
-		':hover': {
-			filter: 'brightness(0.98)',
-		},
-		backgroundColor: vars.color.white,
-		color: vars.color.primary,
-	},
-])
+export const buttonGhost = style({
+	backgroundColor: 'rgba(255, 255, 255, 0.1)',
+	color: vars.color.white,
+})
+
+export const buttonLight = style({
+	backgroundColor: vars.color.white,
+	color: vars.color.primary,
+})
 
 // Cards
 export const card = style({
 	backgroundColor: vars.color.surface,
-	borderRadius: vars.radius['2xl'],
+	borderRadius: vars.radius.lg,
 	padding: vars.space.xl,
 })
 
 export const cardCompact = style([
 	card,
 	{
-		padding: vars.space.base,
+		padding: vars.space.md,
 	},
 ])
 
-export const cardHover = style([
-	card,
-	{
-		':hover': {
-			filter: 'brightness(0.98)',
-		},
-	},
-])
+export const cardHover = style([card])
 
 // Sections
 export const section = style({
-	padding: `${vars.space['5xl']} ${vars.space.xl}`,
+	'@media': {
+		'(min-width: 768px)': {
+			padding: `${vars.space.xl} ${vars.space.xl}`,
+		},
+	},
+	padding: `${vars.space.xl} ${vars.space.xl}`,
 })
 
 export const sectionCompact = style([
 	section,
 	{
-		padding: `${vars.space['3xl']} ${vars.space.xl}`,
+		'@media': {
+			'(min-width: 768px)': {
+				padding: `${vars.space.lg} ${vars.space.xl}`,
+			},
+		},
+		padding: `${vars.space.lg} ${vars.space.xl}`,
 	},
 ])
 
@@ -274,13 +254,13 @@ export const flexRow = style({
 export const flexColumn = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space.base,
+	gap: vars.space.md,
 })
 
 // Image placeholder
 export const imagePlaceholder = style({
 	backgroundColor: vars.color.border,
-	borderRadius: vars.radius['2xl'],
+	borderRadius: vars.radius.lg,
 	overflow: 'hidden',
 })
 
@@ -288,26 +268,22 @@ export const imagePlaceholder = style({
 export const pageMain = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space['4xl']} ${vars.space.xl}`,
+	padding: `${vars.space.xl} ${vars.space.xl}`,
 })
 
 // Back link navigation
 export const backLink = style({
-	':hover': {
-		color: vars.color.secondary,
-	},
 	color: vars.color.primary,
 	display: 'inline-block',
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.medium,
-	marginBottom: vars.space['2xl'],
+	marginBottom: vars.space.lg,
 	textDecoration: 'none',
 })
 
 // Quantity controls for cart/product
 export const quantityControls = style({
 	alignItems: 'center',
-	border: `1px solid ${vars.color.border}`,
 	borderRadius: vars.radius.md,
 	display: 'flex',
 	overflow: 'hidden',
@@ -318,9 +294,6 @@ export const quantityButton = style({
 		cursor: 'not-allowed',
 		opacity: 0.5,
 	},
-	':hover': {
-		backgroundColor: vars.color.surface,
-	},
 	alignItems: 'center',
 	backgroundColor: 'transparent',
 	border: 'none',
@@ -328,11 +301,6 @@ export const quantityButton = style({
 	display: 'flex',
 	height: '40px',
 	justifyContent: 'center',
-	selectors: {
-		'&:disabled:hover': {
-			backgroundColor: 'transparent',
-		},
-	},
 	width: '40px',
 })
 
@@ -346,10 +314,7 @@ export const quantityButtonSmall = style([
 
 export const quantityValue = style({
 	alignItems: 'center',
-	borderLeft: `1px solid ${vars.color.border}`,
-	borderRight: `1px solid ${vars.color.border}`,
 	display: 'flex',
-	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.medium,
 	height: '40px',
 	justifyContent: 'center',
@@ -367,7 +332,7 @@ export const quantityValueSmall = style([
 
 // Empty state styles
 export const emptyState = style({
-	padding: vars.space['4xl'],
+	padding: vars.space.xl,
 	textAlign: 'center',
 })
 
@@ -375,36 +340,28 @@ export const emptyStateCard = style([
 	emptyState,
 	{
 		backgroundColor: vars.color.surface,
-		border: `1px solid ${vars.color.border}`,
-		borderRadius: vars.radius['2xl'],
+		borderRadius: vars.radius.lg,
 	},
 ])
 
 export const emptyTitle = style({
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const emptyMessage = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
 // Page header pattern (centered with title + subtitle)
 export const pageHeader = style({
-	marginBottom: vars.space['4xl'],
+	marginBottom: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const pageHeading = style({
-	fontSize: vars.fontSize['4xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const pageSubtitle = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
+	fontSize: vars.fontSize.lg,
 })

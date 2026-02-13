@@ -3,8 +3,8 @@ import { style } from '@vanilla-extract/css'
 import { vars } from '@/styles'
 
 export const header = style({
+	backdropFilter: 'blur(12px)',
 	backgroundColor: vars.color.primary,
-	borderBottom: '1px solid rgba(255, 255, 255, 0.12)',
 	position: 'sticky',
 	top: 0,
 	zIndex: 50,
@@ -13,7 +13,7 @@ export const header = style({
 export const inner = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space.base,
+	gap: vars.space.md,
 	justifyContent: 'space-between',
 	margin: '0 auto',
 	maxWidth: '1200px',
@@ -30,7 +30,7 @@ export const left = style({
 export const nav = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space.base,
+	gap: vars.space.md,
 })
 
 export const logo = style({
@@ -60,19 +60,17 @@ export const link = style({
 		outline: `2px solid ${vars.color.white}`,
 		outlineOffset: '2px',
 	},
-	':hover': {
-		backgroundColor: 'rgba(255, 255, 255, 0.12)',
-		color: vars.color.white,
-	},
 	alignItems: 'center',
 	borderRadius: vars.radius.full,
 	color: 'rgba(255, 255, 255, 0.92)',
 	display: 'inline-flex',
 	fontSize: vars.fontSize.sm,
-	fontWeight: vars.fontWeight.medium,
+	fontWeight: vars.fontWeight.semibold,
 	justifyContent: 'center',
+	letterSpacing: '0.05em',
 	padding: `${vars.space.sm} ${vars.space.md}`,
 	textDecoration: 'none',
+	textTransform: 'uppercase',
 })
 
 export const linkActive = style({
@@ -86,6 +84,27 @@ export const right = style({
 	gap: vars.space.md,
 })
 
+export const headerCta = style({
+	':focus-visible': {
+		outline: `2px solid ${vars.color.white}`,
+		outlineOffset: '2px',
+	},
+	'@media': {
+		'(max-width: 767px)': {
+			display: 'none',
+		},
+	},
+	backgroundColor: vars.color.secondary,
+	borderRadius: vars.radius.full,
+	color: vars.color.white,
+	fontSize: vars.fontSize.sm,
+	fontWeight: vars.fontWeight.semibold,
+	letterSpacing: '0.05em',
+	padding: `${vars.space.sm} ${vars.space.lg}`,
+	textDecoration: 'none',
+	textTransform: 'uppercase',
+})
+
 export const localeNav = style({
 	alignItems: 'center',
 	display: 'flex',
@@ -96,9 +115,6 @@ export const localeButton = style({
 	':focus-visible': {
 		outline: `2px solid ${vars.color.white}`,
 		outlineOffset: '2px',
-	},
-	':hover': {
-		backgroundColor: 'rgba(255, 255, 255, 0.12)',
 	},
 	alignItems: 'center',
 	backgroundColor: 'transparent',
@@ -127,16 +143,13 @@ export const localeDropdown = style({
 })
 
 export const localeOption = style({
-	':hover': {
-		backgroundColor: vars.color.background,
-	},
 	backgroundColor: 'transparent',
 	border: 'none',
 	color: vars.color.text,
 	cursor: 'pointer',
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.medium,
-	padding: `${vars.space.md} ${vars.space.base}`,
+	padding: `${vars.space.md} ${vars.space.md}`,
 	textAlign: 'left',
 })
 
@@ -151,9 +164,6 @@ export const menuButton = style({
 		outline: `2px solid ${vars.color.white}`,
 		outlineOffset: '2px',
 	},
-	':hover': {
-		backgroundColor: 'rgba(255, 255, 255, 0.12)',
-	},
 	'@media': {
 		'(min-width: 768px)': {
 			display: 'none',
@@ -161,7 +171,6 @@ export const menuButton = style({
 	},
 	alignItems: 'center',
 	backgroundColor: 'transparent',
-	border: '1px solid rgba(255, 255, 255, 0.25)',
 	borderRadius: vars.radius.full,
 	color: vars.color.white,
 	cursor: 'pointer',
@@ -195,7 +204,7 @@ export const mobilePanel = style({
 export const mobileHeader = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space.base,
+	gap: vars.space.md,
 	justifyContent: 'space-between',
 })
 
@@ -210,11 +219,7 @@ export const mobileClose = style({
 		outline: `2px solid ${vars.color.white}`,
 		outlineOffset: '2px',
 	},
-	':hover': {
-		backgroundColor: 'rgba(255, 255, 255, 0.12)',
-	},
 	backgroundColor: 'transparent',
-	border: '1px solid rgba(255, 255, 255, 0.25)',
 	borderRadius: vars.radius.full,
 	color: vars.color.white,
 	cursor: 'pointer',
@@ -233,6 +238,6 @@ export const mobileLink = style([
 	{
 		fontSize: vars.fontSize.lg,
 		justifyContent: 'flex-start',
-		padding: `${vars.space.md} ${vars.space.base}`,
+		padding: `${vars.space.md} ${vars.space.md}`,
 	},
 ])

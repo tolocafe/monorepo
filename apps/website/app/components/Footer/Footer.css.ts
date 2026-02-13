@@ -4,20 +4,20 @@ import { vars } from '@/styles'
 
 export const footer = style({
 	backgroundColor: vars.color.primary,
-	borderTop: 'none',
 	marginTop: 'auto',
-	padding: `${vars.space['4xl']} ${vars.space.xl} ${vars.space.xl}`,
 })
 
 export const container = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space['4xl'],
+	gap: vars.space.xl,
 	margin: '0 auto',
 	maxWidth: '1200px',
+	padding: `${vars.space.xl} ${vars.space.xl} ${vars.space.xl}`,
 })
 
 export const brandSection = style({
+	alignItems: 'flex-start',
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space.sm,
@@ -31,7 +31,7 @@ export const linksGrid = style({
 		},
 	},
 	display: 'grid',
-	gap: vars.space['2xl'],
+	gap: vars.space.xl,
 	gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
 })
 
@@ -43,17 +43,11 @@ export const section = style({
 
 export const sectionTitle = style({
 	color: vars.color.white,
-	fontSize: vars.fontSize.lg,
-	fontWeight: vars.fontWeight.semibold,
 	marginBottom: vars.space.sm,
 })
 
 export const link = style({
-	':hover': {
-		color: vars.color.white,
-	},
 	color: 'rgba(255, 255, 255, 0.7)',
-	fontSize: vars.fontSize.base,
 	textDecoration: 'none',
 })
 
@@ -65,13 +59,11 @@ export const bottomBar = style({
 		},
 	},
 	alignItems: 'center',
-	borderTop: `1px solid rgba(255, 255, 255, 0.2)`,
 	display: 'flex',
 	flexDirection: 'row',
-	gap: vars.space.base,
+	gap: vars.space.md,
 	justifyContent: 'space-between',
-	margin: '0 auto',
-	marginTop: vars.space['2xl'],
+	margin: `${vars.space.xl} auto`,
 	maxWidth: '1200px',
 	paddingTop: vars.space.xl,
 })
@@ -83,12 +75,9 @@ export const copyright = style({
 })
 
 export const legalLink = style({
-	':hover': {
-		color: vars.color.white,
-	},
 	color: 'rgba(255, 255, 255, 0.7)',
 	fontSize: vars.fontSize.sm,
-	marginLeft: vars.space.base,
+	marginLeft: vars.space.md,
 	textDecoration: 'none',
 })
 
@@ -96,23 +85,18 @@ export const paymentIcons = style({
 	alignItems: 'center',
 	display: 'flex',
 	gap: vars.space.sm,
-	opacity: 0.7,
 })
 
 export const socialLinks = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space.base,
+	gap: vars.space.md,
 })
 
 export const socialLink = style({
-	':hover': {
-		color: vars.color.white,
-	},
 	alignItems: 'center',
 	color: 'rgba(255, 255, 255, 0.7)',
 	display: 'flex',
-	transition: 'color 0.2s',
 })
 
 export const storeLinks = style({
@@ -122,18 +106,13 @@ export const storeLinks = style({
 })
 
 export const storeLink = style({
-	':hover': {
-		opacity: 1,
-	},
 	display: 'block',
-	opacity: 0.85,
-	transition: 'opacity 0.2s',
 })
 
 export const storeBadge = style({
 	display: 'block',
-	height: 40,
-	width: 'auto',
+	height: 'auto',
+	width: '150px',
 })
 
 export const brand = style({

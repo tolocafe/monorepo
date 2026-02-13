@@ -5,7 +5,7 @@ import { vars } from '@/styles'
 export const main = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space['4xl']} ${vars.space.xl}`,
+	padding: `${vars.space.xl} ${vars.space.xl}`,
 })
 
 export const container = style({
@@ -14,32 +14,28 @@ export const container = style({
 })
 
 export const header = style({
-	marginBottom: vars.space['4xl'],
+	marginBottom: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const heading = style({
-	fontSize: vars.fontSize['4xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const subtitle = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
+	fontSize: vars.fontSize.lg,
 })
 
 export const content = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space['2xl'],
+	gap: vars.space.xl,
 })
 
 export const comingSoonCard = style({
 	backgroundColor: vars.color.secondary,
-	border: `1px solid ${vars.color.border}`,
-	borderRadius: vars.radius['2xl'],
-	padding: vars.space['2xl'],
+	borderRadius: vars.radius.lg,
+	padding: vars.space.xl,
 	textAlign: 'center',
 })
 
@@ -50,12 +46,11 @@ export const badge = style({
 	display: 'inline-block',
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space.base,
-	padding: `${vars.space.sm} ${vars.space.base}`,
+	marginBottom: vars.space.md,
+	padding: `${vars.space.sm} ${vars.space.md}`,
 })
 
 export const message = style({
-	color: vars.color.text,
 	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
 	margin: '0 auto',
@@ -70,22 +65,17 @@ export const infoGrid = style({
 
 export const infoCard = style({
 	backgroundColor: vars.color.background,
-	border: `1px solid ${vars.color.border}`,
-	borderRadius: vars.radius.xl,
+	borderRadius: vars.radius.lg,
 	padding: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const infoTitle = style({
 	color: vars.color.primary,
-	fontSize: vars.fontSize.lg,
-	fontWeight: vars.fontWeight.semibold,
 	marginBottom: vars.space.sm,
 })
 
 export const infoText = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
 	whiteSpace: 'pre-line',
 })

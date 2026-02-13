@@ -102,7 +102,7 @@ export function meta({ params }: MetaArgs) {
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },

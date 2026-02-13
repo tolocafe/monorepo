@@ -5,7 +5,7 @@ import { vars } from '@/styles'
 export const main = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space['4xl']} ${vars.space.xl}`,
+	padding: `${vars.space.xl} ${vars.space.xl}`,
 })
 
 export const container = style({
@@ -14,24 +14,15 @@ export const container = style({
 })
 
 export const header = style({
-	marginBottom: vars.space['2xl'],
+	marginBottom: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const title = style({
-	'@media': {
-		'(max-width: 640px)': {
-			fontSize: vars.fontSize['3xl'],
-		},
-	},
-	fontSize: vars.fontSize['4xl'],
-	fontWeight: vars.fontWeight.bold,
 	lineHeight: vars.lineHeight.tight,
 })
 
 export const body = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
@@ -41,22 +32,16 @@ export const paragraph = style({
 })
 
 export const heading2 = style({
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space.base,
-	marginTop: vars.space['2xl'],
+	marginBottom: vars.space.md,
+	marginTop: vars.space.xl,
 })
 
 export const heading3 = style({
-	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.semibold,
 	marginBottom: vars.space.md,
 	marginTop: vars.space.xl,
 })
 
 export const blockquote = style({
-	borderLeft: `4px solid ${vars.color.secondary}`,
-	color: vars.color.text,
 	fontStyle: 'italic',
 	marginBottom: vars.space.xl,
 	marginLeft: 0,
@@ -80,34 +65,27 @@ export const link = style({
 })
 
 export const notFound = style({
-	padding: vars.space['4xl'],
+	padding: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const notFoundTitle = style({
-	fontSize: vars.fontSize['3xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const notFoundText = style({
-	color: vars.color.text,
 	fontSize: vars.fontSize.lg,
 })
 
 export const aboutLinks = style({
-	borderTop: `1px solid ${vars.color.surface}`,
 	display: 'flex',
 	gap: vars.space.lg,
 	justifyContent: 'center',
-	marginTop: vars.space['2xl'],
-	paddingTop: vars.space['2xl'],
+	marginTop: vars.space.xl,
+	paddingTop: vars.space.xl,
 })
 
 export const aboutLink = style({
-	':hover': {
-		textDecoration: 'underline',
-	},
 	color: vars.color.secondary,
 	fontSize: vars.fontSize.lg,
 	fontWeight: vars.fontWeight.medium,
@@ -116,15 +94,12 @@ export const aboutLink = style({
 
 // App download section styles
 export const downloadSection = style({
-	borderTop: `1px solid ${vars.color.surface}`,
-	marginTop: vars.space['3xl'],
-	paddingTop: vars.space['2xl'],
+	marginTop: vars.space.xl,
+	paddingTop: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const downloadTitle = style({
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.bold,
 	marginBottom: vars.space.xl,
 })
 
@@ -141,11 +116,7 @@ export const storeLinks = style({
 })
 
 export const storeLink = style({
-	':hover': {
-		opacity: 0.8,
-	},
 	display: 'block',
-	transition: 'opacity 0.2s ease',
 })
 
 export const storeBadge = style({

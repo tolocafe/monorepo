@@ -73,7 +73,7 @@ export function meta({ params }: Route.MetaArgs) {
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },
@@ -163,7 +163,11 @@ export default function Beans({ loaderData }: Route.ComponentProps) {
 											<div className={styles.beanImageWrapper}>
 												<img
 													src={imageUrl}
-													alt={bean.regionImage?.alt || name}
+													alt={getLocalizedString(
+														bean.regionImage?.alt,
+														locale,
+														name,
+													)}
 													className={styles.beanImage}
 												/>
 											</div>

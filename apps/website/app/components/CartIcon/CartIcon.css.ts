@@ -7,9 +7,6 @@ export const cartLink = style({
 		outline: `2px solid ${vars.color.white}`,
 		outlineOffset: '2px',
 	},
-	':hover': {
-		backgroundColor: 'rgba(255, 255, 255, 0.12)',
-	},
 	alignItems: 'center',
 	borderRadius: vars.radius.full,
 	color: vars.color.white,

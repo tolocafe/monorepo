@@ -1,7 +1,7 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 
-import coffeeExtractionImg from '@/assets/images/coffee-extraction.png'
+import coffeeBeans from '@/assets/images/coffee-beans.jpg'
 import { BASE_URL, ORGANIZATION_ID } from '@/lib/constants'
 import { OG_LOCALES } from '@/lib/locale'
 import type { Locale } from '@/lib/locale'
@@ -159,10 +159,10 @@ export default function Sourcing() {
 	]
 
 	const trustItems = [
-		{ label: t`100+ reviews`, value: '4.9★' },
+		{ label: t`150+ reviews`, value: '4.9★' },
 		{ label: t`Fresh roasts every week`, value: t`Weekly roasting` },
 		{ label: t`Trained baristas on staff`, value: t`SCA certified` },
-		{ label: t`Specialty coffee since day one`, value: t`Est. 2024` },
+		{ label: t`Specialty coffee since day one`, value: t`Est. 2025` },
 	]
 
 	return (
@@ -179,7 +179,7 @@ export default function Sourcing() {
 							Roasted weekly and delivered to your café, restaurant, or office.
 						</Trans>
 					</p>
-					<a href="mailto:hola@tolo.cafe" className={styles.heroButton}>
+					<a href="mailto:wholesale@tolo.cafe" className={styles.heroButton}>
 						<Trans>Get in touch</Trans>
 					</a>
 				</div>
@@ -226,7 +226,7 @@ export default function Sourcing() {
 							</li>
 						</ul>
 					</div>
-					<img src={coffeeExtractionImg} alt="" className={styles.valueImage} />
+					<img src={coffeeBeans} alt="" className={styles.valueImage} />
 				</div>
 			</section>
 

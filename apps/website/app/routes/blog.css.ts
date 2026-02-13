@@ -22,14 +22,13 @@ export const subtitle = pageSubtitle
 export const content = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space['4xl'],
+	gap: vars.space.xl,
 })
 
 export const comingSoonCard = style({
 	backgroundColor: vars.color.surface,
-	border: `1px solid ${vars.color.border}`,
-	borderRadius: vars.radius['2xl'],
-	padding: vars.space['2xl'],
+	borderRadius: vars.radius.lg,
+	padding: vars.space.xl,
 	textAlign: 'center',
 })
 
@@ -40,12 +39,11 @@ export const badge = style({
 	display: 'inline-block',
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space.base,
-	padding: `${vars.space.sm} ${vars.space.base}`,
+	marginBottom: vars.space.md,
+	padding: `${vars.space.sm} ${vars.space.md}`,
 })
 
 export const message = style({
-	color: vars.color.text,
 	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
 	margin: '0 auto',
@@ -57,9 +55,8 @@ export const previewSection = style({
 })
 
 export const previewTitle = style({
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.semibold,
-	marginBottom: vars.space['2xl'],
+	fontSize: vars.fontSize.xl,
+	marginBottom: vars.space.xl,
 })
 
 export const topicsGrid = style({
@@ -70,22 +67,16 @@ export const topicsGrid = style({
 
 export const topicCard = style({
 	backgroundColor: vars.color.background,
-	border: `1px solid ${vars.color.border}`,
-	borderRadius: vars.radius.xl,
+	borderRadius: vars.radius.lg,
 	padding: vars.space.xl,
 	textAlign: 'left',
 })
 
 export const topicTitle = style({
-	color: vars.color.secondary,
-	fontSize: vars.fontSize.lg,
-	fontWeight: vars.fontWeight.semibold,
 	marginBottom: vars.space.sm,
 })
 
 export const topicDescription = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
@@ -103,8 +94,7 @@ export const postCard = style({
 		},
 	},
 	backgroundColor: vars.color.background,
-	border: `1px solid ${vars.color.border}`,
-	borderRadius: vars.radius['2xl'],
+	borderRadius: vars.radius.lg,
 	display: 'flex',
 	gap: vars.space.xl,
 	padding: vars.space.xl,
@@ -118,7 +108,7 @@ export const postImageWrapper = style({
 			width: '100%',
 		},
 	},
-	borderRadius: vars.radius.xl,
+	borderRadius: vars.radius.lg,
 	flexShrink: 0,
 	height: '140px',
 	overflow: 'hidden',
@@ -141,8 +131,6 @@ export const postContent = style({
 export const postTitle = style({
 	color: vars.color.text,
 	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.semibold,
-	lineHeight: vars.lineHeight.tight,
 })
 
 export const postExcerpt = style({
@@ -150,7 +138,6 @@ export const postExcerpt = style({
 	WebkitLineClamp: 2,
 	color: vars.color.text,
 	display: '-webkit-box',
-	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
 	overflow: 'hidden',
 })

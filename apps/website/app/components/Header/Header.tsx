@@ -1,4 +1,5 @@
 import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { IconMenu2, IconWorld, IconX } from '@tabler/icons-react'
 import { useEffect, useRef, useState } from 'react'
 import { Link, useLocation, useNavigate, useParams } from 'react-router'
@@ -123,6 +124,14 @@ export function Header() {
 				</div>
 
 				<div className={styles.right}>
+					<a
+						href="https://app.tolo.cafe"
+						className={styles.headerCta}
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<Trans>Order</Trans>
+					</a>
 					<CartIcon />
 
 					<div

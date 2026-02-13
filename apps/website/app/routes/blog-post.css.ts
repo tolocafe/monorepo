@@ -5,7 +5,7 @@ import { vars } from '@/styles'
 export const main = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space['4xl']} ${vars.space.xl}`,
+	padding: `${vars.space.xl} ${vars.space.xl}`,
 })
 
 export const container = style({
@@ -17,10 +17,9 @@ export const backLink = style({
 	alignItems: 'center',
 	color: vars.color.secondary,
 	display: 'inline-flex',
-	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.medium,
 	gap: vars.space.sm,
-	marginBottom: vars.space['2xl'],
+	marginBottom: vars.space.lg,
 	textDecoration: 'none',
 })
 
@@ -31,34 +30,24 @@ export const article = style({
 })
 
 export const header = style({
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const title = style({
-	'@media': {
-		'(max-width: 640px)': {
-			fontSize: vars.fontSize['3xl'],
-		},
-	},
-	fontSize: vars.fontSize['4xl'],
-	fontWeight: vars.fontWeight.bold,
 	lineHeight: vars.lineHeight.tight,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const subtitle = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
+	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const meta = style({
 	alignItems: 'center',
-	color: vars.color.text,
 	display: 'flex',
-	fontSize: vars.fontSize.base,
-	gap: vars.space.base,
+	gap: vars.space.md,
 })
 
 export const date = style({
@@ -69,8 +58,8 @@ export const date = style({
 
 export const imageWrapper = style({
 	aspectRatio: '16 / 9',
-	borderRadius: vars.radius['2xl'],
-	marginBottom: vars.space.base,
+	borderRadius: vars.radius.lg,
+	marginBottom: vars.space.md,
 	overflow: 'hidden',
 	width: '100%',
 })
@@ -82,8 +71,6 @@ export const image = style({
 })
 
 export const body = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
@@ -93,22 +80,16 @@ export const paragraph = style({
 })
 
 export const heading2 = style({
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space.base,
-	marginTop: vars.space['2xl'],
+	marginBottom: vars.space.md,
+	marginTop: vars.space.lg,
 })
 
 export const heading3 = style({
-	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.semibold,
 	marginBottom: vars.space.md,
 	marginTop: vars.space.xl,
 })
 
 export const blockquote = style({
-	borderLeft: `4px solid ${vars.color.secondary}`,
-	color: vars.color.text,
 	fontStyle: 'italic',
 	marginBottom: vars.space.xl,
 	marginLeft: 0,
@@ -132,32 +113,25 @@ export const link = style({
 })
 
 export const notFound = style({
-	padding: vars.space['4xl'],
+	padding: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const notFoundTitle = style({
-	fontSize: vars.fontSize['3xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const notFoundText = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.lg,
-	marginBottom: vars.space['2xl'],
+	marginBottom: vars.space.lg,
 })
 
 // Suggested Readings section styles
 export const suggestedSection = style({
-	borderTop: `1px solid ${vars.color.border}`,
-	marginTop: vars.space['4xl'],
-	paddingTop: vars.space['3xl'],
+	marginTop: vars.space.xl,
+	paddingTop: vars.space.lg,
 })
 
 export const suggestedTitle = style({
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.bold,
 	marginBottom: vars.space.xl,
 })
 
@@ -173,16 +147,12 @@ export const suggestedGrid = style({
 })
 
 export const suggestedCard = style({
-	':hover': {
-		transform: 'translateY(-2px)',
-	},
 	backgroundColor: vars.color.surface,
-	borderRadius: vars.radius.xl,
+	borderRadius: vars.radius.lg,
 	display: 'flex',
 	flexDirection: 'column',
 	overflow: 'hidden',
 	textDecoration: 'none',
-	transition: 'transform 0.2s ease',
 })
 
 export const suggestedImageWrapper = style({
@@ -201,14 +171,11 @@ export const suggestedContent = style({
 	display: 'flex',
 	flexDirection: 'column',
 	gap: vars.space.sm,
-	padding: vars.space.base,
+	padding: vars.space.md,
 })
 
 export const suggestedCardTitle = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.base,
-	fontWeight: vars.fontWeight.semibold,
-	lineHeight: vars.lineHeight.tight,
 })
 
 export const suggestedExcerpt = style({

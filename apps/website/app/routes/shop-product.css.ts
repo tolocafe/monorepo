@@ -22,25 +22,25 @@ export const backLink = sharedBackLink
 export const productLayout = style({
 	'@media': {
 		'(min-width: 768px)': {
-			gap: vars.space['4xl'],
+			gap: vars.space.xl,
 			gridTemplateColumns: '1fr 1fr',
 		},
 	},
 	display: 'grid',
-	gap: vars.space['2xl'],
+	gap: vars.space.xl,
 	gridTemplateColumns: '1fr',
 })
 
 export const imageSection = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space.base,
+	gap: vars.space.md,
 })
 
 export const mainImage = style({
 	aspectRatio: '1',
 	backgroundColor: vars.color.surface,
-	borderRadius: vars.radius['2xl'],
+	borderRadius: vars.radius.lg,
 	objectFit: 'cover',
 	width: '100%',
 })
@@ -52,11 +52,7 @@ export const thumbnailGrid = style({
 })
 
 export const thumbnail = style({
-	':hover': {
-		borderColor: vars.color.primary,
-	},
 	aspectRatio: '1',
-	border: `2px solid transparent`,
 	borderRadius: vars.radius.lg,
 	cursor: 'pointer',
 	objectFit: 'cover',
@@ -64,7 +60,7 @@ export const thumbnail = style({
 })
 
 export const thumbnailActive = style({
-	borderColor: vars.color.primary,
+	opacity: 0.6,
 })
 
 export const detailsSection = style({
@@ -74,26 +70,21 @@ export const detailsSection = style({
 })
 
 export const title = style({
-	fontSize: vars.fontSize['3xl'],
-	fontWeight: vars.fontWeight.bold,
 	lineHeight: vars.lineHeight.tight,
 })
 
 export const excerpt = style({
-	color: vars.color.text,
 	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
 	opacity: 0.8,
 })
 
 export const price = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize['2xl'],
+	fontSize: vars.fontSize.xl,
 	fontWeight: vars.fontWeight.semibold,
 })
 
 export const comparePrice = style({
-	color: vars.color.text,
 	fontSize: vars.fontSize.lg,
 	marginLeft: vars.space.sm,
 	opacity: 0.6,
@@ -101,55 +92,38 @@ export const comparePrice = style({
 })
 
 export const description = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
 export const bodyContent = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space.base,
+	gap: vars.space.md,
 })
 
 export const bodyHeading = style({
-	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.bold,
-	lineHeight: vars.lineHeight.tight,
 	marginTop: vars.space.sm,
 })
 
 export const bodySubheading = style({
-	fontSize: vars.fontSize.lg,
-	fontWeight: vars.fontWeight.semibold,
-	lineHeight: vars.lineHeight.tight,
 	marginTop: vars.space.xs,
 })
 
 export const bodyParagraph = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
 export const bodyList = style({
-	color: vars.color.text,
 	display: 'flex',
 	flexDirection: 'column',
-	fontSize: vars.fontSize.base,
 	gap: vars.space.sm,
 	lineHeight: vars.lineHeight.relaxed,
 	paddingLeft: vars.space.xl,
 })
 
-export const bodyListItem = style({
-	color: vars.color.text,
-})
+export const bodyListItem = style({})
 
 export const bodyLink = style({
-	':hover': {
-		textDecoration: 'underline',
-	},
 	color: vars.color.primary,
 	textDecoration: 'none',
 })
@@ -161,7 +135,6 @@ export const variantSection = style({
 })
 
 export const variantLabel = style({
-	color: vars.color.text,
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
 	textTransform: 'uppercase',
@@ -174,32 +147,26 @@ export const variantOptions = style({
 })
 
 export const variantOption = style({
-	':hover': {
-		borderColor: vars.color.primary,
-	},
 	backgroundColor: vars.color.surface,
-	border: `1px solid ${vars.color.border}`,
 	borderRadius: vars.radius.md,
 	cursor: 'pointer',
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.medium,
-	padding: `${vars.space.sm} ${vars.space.base}`,
+	padding: `${vars.space.sm} ${vars.space.md}`,
 })
 
 export const variantOptionSelected = style({
 	backgroundColor: vars.color.primary,
-	borderColor: vars.color.primary,
 	color: vars.color.white,
 })
 
 export const quantitySection = style({
 	alignItems: 'center',
 	display: 'flex',
-	gap: vars.space.base,
+	gap: vars.space.md,
 })
 
 export const quantityLabel = style({
-	color: vars.color.text,
 	fontSize: vars.fontSize.sm,
 	fontWeight: vars.fontWeight.semibold,
 	textTransform: 'uppercase',
@@ -216,9 +183,6 @@ export const addToCartButton = style({
 		cursor: 'not-allowed',
 		opacity: 0.6,
 	},
-	':hover': {
-		filter: 'brightness(1.05)',
-	},
 	alignItems: 'center',
 	backgroundColor: vars.color.secondary,
 	border: 'none',
@@ -226,39 +190,27 @@ export const addToCartButton = style({
 	color: vars.color.white,
 	cursor: 'pointer',
 	display: 'flex',
-	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.semibold,
 	gap: vars.space.sm,
 	justifyContent: 'center',
-	padding: `${vars.space.base} ${vars.space.xl}`,
-	selectors: {
-		'&:disabled:hover': {
-			filter: 'none',
-		},
-	},
+	padding: `${vars.space.md} ${vars.space.xl}`,
 	width: '100%',
 })
 
 export const soldOut = style({
 	backgroundColor: vars.color.border,
 	borderRadius: vars.radius.full,
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.semibold,
-	padding: `${vars.space.base} ${vars.space.xl}`,
+	padding: `${vars.space.md} ${vars.space.xl}`,
 	textAlign: 'center',
 })
 
 export const descriptionSection = style({
-	borderTop: `1px solid ${vars.color.border}`,
-	marginTop: vars.space['3xl'],
-	paddingTop: vars.space['3xl'],
+	marginTop: vars.space.xl,
+	paddingTop: vars.space.xl,
 })
 
 export const descriptionTitle = style({
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.bold,
-	lineHeight: vars.lineHeight.tight,
 	marginBottom: vars.space.xl,
 })
 
@@ -274,21 +226,17 @@ export const descriptionContent = style({
 })
 
 export const relatedSection = style({
-	borderTop: `1px solid ${vars.color.border}`,
-	marginTop: vars.space['3xl'],
-	paddingTop: vars.space['3xl'],
+	marginTop: vars.space.xl,
+	paddingTop: vars.space.xl,
 })
 
 export const relatedTitle = style({
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.bold,
-	lineHeight: vars.lineHeight.tight,
 	marginBottom: vars.space.xl,
 })
 
 export const relatedGrid = style({
 	display: 'grid',
-	gap: vars.space.base,
+	gap: vars.space.md,
 	gridTemplateColumns: 'repeat(3, 1fr)',
 	maxWidth: '600px',
 })

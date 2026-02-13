@@ -47,7 +47,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 	const canonicalUrl = `${BASE_URL}/${locale}/${beansPath}/${params.slug}`
 
 	return [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: `${name} - TOLO Beans` },
 		{ content: description, name: 'description' },
 		{ content: name, property: 'og:title' },
@@ -200,7 +200,11 @@ export default function BeanDetail({ loaderData }: Route.ComponentProps) {
 						<div className={styles.imageWrapper}>
 							<img
 								src={regionImageUrl}
-								alt={bean.regionImage?.alt || `${name} region`}
+								alt={getLocalizedString(
+									bean.regionImage?.alt,
+									locale,
+									`${name} region`,
+								)}
 								className={styles.image}
 							/>
 						</div>
@@ -228,7 +232,11 @@ export default function BeanDetail({ loaderData }: Route.ComponentProps) {
 						<div className={styles.imageWrapper}>
 							<img
 								src={varietalImageUrl}
-								alt={bean.varietalImage?.alt || `${name} varietal`}
+								alt={getLocalizedString(
+									bean.varietalImage?.alt,
+									locale,
+									`${name} varietal`,
+								)}
 								className={styles.image}
 							/>
 						</div>

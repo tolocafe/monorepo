@@ -36,7 +36,6 @@ export function Layout({ children }: { children: React.ReactNode }) {
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
-				{/* Add hreflang tags for SEO */}
 				{SUPPORTED_LOCALES.map((loc) => (
 					<link key={loc} rel="alternate" hrefLang={loc} href={`/${loc}`} />
 				))}
@@ -54,10 +53,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 	)
 }
 
+// oxlint-disable-next-line react/no-multi-comp
 export default function App() {
 	return <Outlet />
 }
 
+// oxlint-disable-next-line react/no-multi-comp
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
 	let message = 'Oops!'
 	let details = 'An unexpected error occurred.'

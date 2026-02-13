@@ -14,19 +14,16 @@ export const main = pageMain
 export const container = containerWide
 
 export const header = style({
-	marginBottom: vars.space['4xl'],
+	marginBottom: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const heading = style({
-	fontSize: vars.fontSize['4xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const subtitle = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
+	fontSize: vars.fontSize.lg,
 })
 
 export const productsGrid = style({

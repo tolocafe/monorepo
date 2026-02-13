@@ -2,11 +2,13 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Link } from 'react-router'
 
+import appImg from '@/assets/images/app.png'
+import coffeeGroundsImg from '@/assets/images/coffee-beans.jpg'
 import coffeeExtractionImg from '@/assets/images/coffee-extraction.png'
-import coffeeGroundsImg from '@/assets/images/coffee-grounds.png'
 import drinksImg from '@/assets/images/drinks.png'
-import icedLatteImg from '@/assets/images/iced-latte.png'
-import insideImg from '@/assets/images/inside.png'
+import orderWithApp from '@/assets/images/order-app.jpg'
+import appStoreBadge from '@/assets/logos/app-store.svg'
+import googlePlayBadge from '@/assets/logos/google-play.svg'
 import { ProductCard } from '@/components/ProductCard'
 import type { Locale } from '@/lib/locale'
 import {
@@ -39,40 +41,25 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 	const beansTo = `/${locale}/${beansPath}`
 	const appTo = `${basePath}#app`
 
-	const highlights = [
+	const features = [
 		{
-			text: t`Something bold or something smooth? Tell us what you like and we'll help you choose. No fuss.`,
-			title: t`Your coffee, your way`,
+			text: t`We roast in small batches every week. Your coffee is never more than a few days old.`,
+			title: t`Roasted weekly`,
 		},
 		{
-			text: t`We serve you quickly. Or order ahead on the app and just pick up.`,
-			title: t`In a hurry?`,
+			text: t`Our team is SCA certified and always ready to help you find your coffee.`,
+			title: t`People who know coffee`,
 		},
 		{
-			text: t`We roast every week, so there's always something fresh. Ask what's new or take a bag home.`,
-			title: t`Always fresh`,
-		},
-		{
-			text: t`Our Mexican coffees come straight from farms we know. We also rotate origins from Colombia, Ethiopia, Panama and more.`,
-			title: t`Direct from the farm`,
+			text: t`4.9★ with 150+ reviews — thank you! A place to hang out, work, or just enjoy your morning coffee.`,
+			title: t`A great community`,
 		},
 	] as const
 
 	const trustItems = [
-		{ label: t`100+ reviews`, value: '4.9★' },
+		{ label: t`150+ reviews`, value: '4.9★' },
 		{ label: t`Roasted weekly`, value: t`Weekly` },
 		{ label: t`Order ahead`, value: 'App' },
-	]
-
-	const menuItems = [
-		t`Espresso drinks`,
-		t`Pour overs`,
-		t`Matcha`,
-		t`Cold brew`,
-		t`Chai`,
-		t`Sweet bread`,
-		t`Cacao`,
-		t`Tea`,
 	]
 
 	return (
@@ -101,32 +88,20 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 						</Trans>
 					</p>
 
-					<div className={styles.heroActions}>
-						<Link to={appTo} className={styles.heroPrimaryButton}>
-							<Trans>Download app</Trans>
-						</Link>
-						<Link
-							to={`${basePath}/locations`}
-							className={styles.heroSecondaryButton}
-						>
-							<Trans>Find a store</Trans>
-						</Link>
-					</div>
+					<dl className={styles.heroTrustBar}>
+						{trustItems.map((item) => (
+							<div key={item.label} className={styles.heroTrustItem}>
+								<dt className={styles.heroTrustValue}>{item.value}</dt>
+								<dd className={styles.heroTrustLabel}>{item.label}</dd>
+							</div>
+						))}
+					</dl>
 				</div>
 			</section>
 
 			{/* Quick Links */}
 			<section className={styles.quickLinksSection}>
 				<div className={styles.container}>
-					<dl className={styles.trustBar}>
-						{trustItems.map((item) => (
-							<div key={item.label} className={styles.trustItem}>
-								<dt className={styles.trustValue}>{item.value}</dt>
-								<dd className={styles.trustLabel}>{item.label}</dd>
-							</div>
-						))}
-					</dl>
-
 					<div className={styles.quickLinksGrid}>
 						<Link to={beansTo} className={styles.quickCard}>
 							<img
@@ -140,7 +115,7 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 								</h3>
 								<p className={styles.quickCardText}>
 									<Trans>
-										Explore our coffee beans and take a bag home (in store).
+										Fresh roasted beans to brew at home. Available at our cafés.
 									</Trans>
 								</p>
 								<span className={styles.quickCardCta}>
@@ -167,7 +142,7 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 						</Link>
 						<Link to={appTo} className={styles.quickCard}>
 							<img
-								src={icedLatteImg}
+								src={orderWithApp}
 								alt=""
 								className={styles.quickCardImage}
 							/>
@@ -195,14 +170,13 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 							<h2 className={styles.sectionTitle}>
 								<Trans>Hi, we are TOLO</Trans>
 							</h2>
-							<p className={styles.sectionText}>
+							<p>
 								<Trans>
-									At TOLO we make good coffee — that is it. We roast every week
-									and prepare espresso, pour overs, matcha, cold brew, chai,
-									cacao, tea and sweet bread. Want to take coffee home? We have
-									bags of beans in store. For our Mexican coffees we work
-									directly with farms we know, and we rotate origins like
-									Colombia, Ethiopia and Panama.
+									At TOLO we make good coffee — that is it. We roast every week,
+									work directly with farms we know in Mexico, and rotate origins
+									like Colombia, Ethiopia and Panama. Espresso, pour overs,
+									matcha, cold brew, chai and sweet bread — grab a bag of beans
+									on your way out.
 								</Trans>
 							</p>
 						</div>
@@ -215,35 +189,14 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 						</div>
 					</div>
 
-					<div className={styles.highlightsGrid}>
-						{highlights.map((item) => (
-							<div key={item.title} className={styles.highlightCard}>
-								<h3 className={styles.highlightTitle}>{item.title}</h3>
-								<p className={styles.highlightText}>{item.text}</p>
+					<div className={styles.featuresGrid}>
+						{features.map((item) => (
+							<div key={item.title} className={styles.featureCard}>
+								<h3 className={styles.featureTitle}>{item.title}</h3>
+								<p className={styles.featureText}>{item.text}</p>
 							</div>
 						))}
 					</div>
-				</div>
-			</section>
-
-			{/* Menu Section */}
-			<section id="menu" className={styles.sectionAnchor}>
-				<div className={styles.sectionContent}>
-					<h2 className={styles.sectionTitle}>
-						<Trans>What is on the menu?</Trans>
-					</h2>
-					<div className={styles.chipGrid}>
-						{menuItems.map((item) => (
-							<span key={item} className={styles.chip}>
-								{item}
-							</span>
-						))}
-					</div>
-					<p className={styles.sectionText}>
-						<Trans>
-							And if you want to take coffee home: beans available in store.
-						</Trans>
-					</p>
 				</div>
 			</section>
 
@@ -252,9 +205,17 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 				<section className={styles.sectionAnchor}>
 					<div className={styles.container}>
 						<div className={styles.sectionHeader}>
-							<h2 className={styles.sectionTitle}>
-								<Trans>From our shop</Trans>
-							</h2>
+							<div className={styles.sectionHeaderText}>
+								<h2>
+									<Trans>From our shop</Trans>
+								</h2>
+								<p className={styles.sectionDescription}>
+									<Trans>
+										Brewing gear, merch and more — everything you need to make
+										great coffee at home.
+									</Trans>
+								</p>
+							</div>
 							<Link to={`${basePath}/shop`} className={styles.sectionLink}>
 								<Trans>View all</Trans> →
 							</Link>
@@ -277,39 +238,36 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 			{/* App Section */}
 			<section id="app" className={styles.sectionAnchor}>
 				<div className={styles.container}>
-					<h2 className={styles.sectionTitle}>
-						<Trans>Our app</Trans>
-					</h2>
 					<div className={styles.splitSection}>
 						<div>
+							<h2 className={styles.sectionTitle}>
+								<Trans>Your coffee, ready when you are</Trans>
+							</h2>
 							<p className={styles.appText}>
 								<Trans>
-									Order your favorite coffee ahead and pick it up when you
-									arrive, no waiting. Save your favorites, repeat previous
-									orders in one tap and receive exclusive offers just for app
-									users. The app is free and available for iOS and Android.
+									Skip the line — order ahead and pick up when you arrive. Save
+									your favorites, reorder in one tap and get exclusive offers.
+									Free on iOS and Android.
 								</Trans>
 							</p>
 							<div className={styles.storeButtons}>
-								<a
-									href={APP_STORE_URL}
-									target="_blank"
-									rel="noreferrer"
-									className={styles.storeButtonPrimary}
-								>
-									App Store
+								<a href={APP_STORE_URL} target="_blank" rel="noreferrer">
+									<img
+										src={appStoreBadge}
+										alt="Download on the App Store"
+										className={styles.storeBadge}
+									/>
 								</a>
-								<a
-									href={GOOGLE_PLAY_URL}
-									target="_blank"
-									rel="noreferrer"
-									className={styles.storeButtonSecondary}
-								>
-									Google Play
+								<a href={GOOGLE_PLAY_URL} target="_blank" rel="noreferrer">
+									<img
+										src={googlePlayBadge}
+										alt="Get it on Google Play"
+										className={styles.storeBadge}
+									/>
 								</a>
 							</div>
 						</div>
-						<img src={insideImg} alt="" className={styles.appImage} />
+						<img src={appImg} alt="" className={styles.appImage} />
 					</div>
 				</div>
 			</section>
@@ -319,9 +277,17 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 				<section id="visit" className={styles.sectionAnchor}>
 					<div className={styles.container}>
 						<div className={styles.sectionHeader}>
-							<h2 className={styles.sectionTitle}>
-								<Trans>Stores near you</Trans>
-							</h2>
+							<div className={styles.sectionHeaderText}>
+								<h2>
+									<Trans>Stores near you</Trans>
+								</h2>
+								<p className={styles.sectionDescription}>
+									<Trans>
+										Fast Wi-Fi, pet-friendly and good vibes. Drop by any of our
+										locations.
+									</Trans>
+								</p>
+							</div>
 							<Link to={`${basePath}/locations`} className={styles.sectionLink}>
 								<Trans>All locations</Trans> →
 							</Link>
@@ -351,7 +317,11 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 										{imageUrl && (
 											<img
 												src={imageUrl}
-												alt={location.image?.alt || name}
+												alt={getLocalizedString(
+													location.image?.alt,
+													locale,
+													name,
+												)}
 												className={styles.carouselCardImage}
 											/>
 										)}
@@ -387,9 +357,17 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 				<section className={styles.sectionAnchor}>
 					<div className={styles.container}>
 						<div className={styles.sectionHeader}>
-							<h2 className={styles.sectionTitle}>
-								<Trans>From the blog</Trans>
-							</h2>
+							<div className={styles.sectionHeaderText}>
+								<h2>
+									<Trans>From the blog</Trans>
+								</h2>
+								<p className={styles.sectionDescription}>
+									<Trans>
+										Stories about coffee, origins and what we have been up to
+										lately.
+									</Trans>
+								</p>
+							</div>
 							<Link to={`${basePath}/blog`} className={styles.sectionLink}>
 								<Trans>Read more</Trans> →
 							</Link>
@@ -401,7 +379,7 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 
 								const title = getLocalizedString(post.name, locale, 'Untitled')
 								const imageUrl = post.image
-									? urlFor(post.image)?.width(400).height(280).url()
+									? urlFor(post.image)?.width(600).height(340).url()
 									: null
 
 								return (
@@ -413,7 +391,7 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 										{imageUrl && (
 											<img
 												src={imageUrl}
-												alt={post.image?.alt || title}
+												alt={getLocalizedString(post.image?.alt, locale, title)}
 												className={styles.blogCardImage}
 											/>
 										)}
@@ -435,116 +413,6 @@ export function Welcome({ locale, locations, posts, products }: WelcomeProps) {
 					</div>
 				</section>
 			)}
-
-			{/* Features Section */}
-			<section className={styles.featuresSection}>
-				<h2 className={styles.featuresSectionTitle}>
-					<Trans>A bit more about us</Trans>
-				</h2>
-				<div className={styles.featuresGrid}>
-					<div className={styles.featureCard}>
-						<div className={styles.featureIcon}>
-							<CoffeeIcon />
-						</div>
-						<h3 className={styles.featureTitle}>
-							<Trans>Roasted weekly</Trans>
-						</h3>
-						<p className={styles.featureText}>
-							<Trans>
-								Always fresh coffee. We also sell bags of beans in store.
-							</Trans>
-						</p>
-					</div>
-					<div className={styles.featureCard}>
-						<div className={styles.featureIcon}>
-							<PrecisionIcon />
-						</div>
-						<h3 className={styles.featureTitle}>
-							<Trans>People who know coffee</Trans>
-						</h3>
-						<p className={styles.featureText}>
-							<Trans>
-								Our team is SCA certified and always ready to help you find your
-								coffee.
-							</Trans>
-						</p>
-					</div>
-					<div className={styles.featureCard}>
-						<div className={styles.featureIcon}>
-							<HeartIcon />
-						</div>
-						<h3 className={styles.featureTitle}>
-							<Trans>A great community</Trans>
-						</h3>
-						<p className={styles.featureText}>
-							<Trans>
-								4.9★ with 100+ reviews (thank you!). Finalists in local
-								competitions. A space to hang out or work.
-							</Trans>
-						</p>
-					</div>
-				</div>
-			</section>
 		</main>
-	)
-}
-
-function CoffeeIcon() {
-	return (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="32"
-			height="32"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-		>
-			<path d="M17 8h1a4 4 0 1 1 0 8h-1" />
-			<path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z" />
-			<line x1="6" x2="6" y1="2" y2="4" />
-			<line x1="10" x2="10" y1="2" y2="4" />
-			<line x1="14" x2="14" y1="2" y2="4" />
-		</svg>
-	)
-}
-
-function PrecisionIcon() {
-	return (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="32"
-			height="32"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-		>
-			<circle cx="12" cy="12" r="10" />
-			<circle cx="12" cy="12" r="6" />
-			<circle cx="12" cy="12" r="2" />
-		</svg>
-	)
-}
-
-function HeartIcon() {
-	return (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="32"
-			height="32"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="2"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-		>
-			<path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
-		</svg>
 	)
 }

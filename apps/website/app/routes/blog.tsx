@@ -72,7 +72,7 @@ export function meta({ params }: Route.MetaArgs) {
 	const ogLocale = OG_LOCALES[locale] || 'es_MX'
 
 	return [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: t.title },
 		{ content: t.description, name: 'description' },
 		{ content: t.title, property: 'og:title' },
@@ -160,7 +160,11 @@ export default function Blog({ loaderData }: Route.ComponentProps) {
 											<div className={styles.postImageWrapper}>
 												<img
 													src={imageUrl}
-													alt={post.image?.alt || title}
+													alt={getLocalizedString(
+														post.image?.alt,
+														locale,
+														title,
+													)}
 													className={styles.postImage}
 												/>
 											</div>

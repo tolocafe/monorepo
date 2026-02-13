@@ -25,7 +25,7 @@ export const subtitle = pageSubtitle
 export const content = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space['4xl'],
+	gap: vars.space.xl,
 })
 
 export const beansGrid = style({
@@ -35,17 +35,12 @@ export const beansGrid = style({
 })
 
 export const beanCard = style({
-	':hover': {
-		borderColor: vars.color.primary,
-	},
 	backgroundColor: vars.color.background,
-	border: `1px solid ${vars.color.border}`,
-	borderRadius: vars.radius['2xl'],
+	borderRadius: vars.radius.lg,
 	display: 'flex',
 	flexDirection: 'column',
 	overflow: 'hidden',
 	textDecoration: 'none',
-	transition: 'border-color 0.2s ease',
 })
 
 export const beanImageWrapper = style({
@@ -69,14 +64,10 @@ export const beanContent = style({
 
 export const beanName = style({
 	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.semibold,
-	lineHeight: vars.lineHeight.tight,
 })
 
 export const beanOrigin = style({
 	color: vars.color.secondary,
-	fontSize: vars.fontSize.base,
 	fontWeight: vars.fontWeight.medium,
 })
 
@@ -99,7 +90,6 @@ export const beanMeta = style({
 
 export const beanDetail = style({
 	backgroundColor: vars.color.background,
-	border: `1px solid ${vars.color.border}`,
 	borderRadius: vars.radius.full,
 	color: vars.color.text,
 	fontSize: vars.fontSize.sm,

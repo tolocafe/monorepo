@@ -73,7 +73,7 @@ export function meta({ data, params }: Route.MetaArgs) {
 		: `${BASE_URL}/og-image.png`
 
 	const metaTags: ReturnType<typeof Array<Record<string, unknown>>> = [
-		{ tagName: 'link', rel: 'canonical', href: canonicalUrl },
+		{ href: canonicalUrl, rel: 'canonical', tagName: 'link' },
 		{ title: `${title} - TOLO` },
 		{ content: excerpt, name: 'description' },
 		{ content: title, property: 'og:title' },

@@ -1,39 +1,17 @@
 import { Trans } from '@lingui/react/macro'
 
+import { BadgeLabel } from '@/components/BadgeLabel'
+import { ImagePlaceholderIcon } from '@/components/ImagePlaceholderIcon'
 import { formatMoney } from '@/lib/cart'
 import type { MergedProduct } from '@/lib/shop-data'
 
 import * as styles from './ProductCard.css'
 
-type ProductCardProps = {
+type Props = {
 	product: MergedProduct
 }
 
-function BadgeLabel({
-	badge,
-}: {
-	badge: 'bestseller' | 'limited' | 'new' | 'sale'
-}) {
-	switch (badge) {
-		case 'bestseller': {
-			return <Trans>Bestseller</Trans>
-		}
-		case 'limited': {
-			return <Trans>Limited</Trans>
-		}
-		case 'new': {
-			return <Trans>New</Trans>
-		}
-		case 'sale': {
-			return <Trans>Sale</Trans>
-		}
-		default: {
-			return badge satisfies never
-		}
-	}
-}
-
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product }: Props) {
 	const firstVariant = product.variants.edges[0]?.node
 	const compareAtPrice = firstVariant?.compareAtPrice
 
@@ -87,27 +65,5 @@ export function ProductCard({ product }: ProductCardProps) {
 				</div>
 			</div>
 		</article>
-	)
-}
-
-function ImagePlaceholderIcon() {
-	return (
-		<svg
-			xmlns="http://www.w3.org/2000/svg"
-			width="48"
-			height="48"
-			viewBox="0 0 24 24"
-			fill="none"
-			stroke="currentColor"
-			strokeWidth="1"
-			strokeLinecap="round"
-			strokeLinejoin="round"
-			aria-hidden="true"
-			style={{ opacity: 0.3 }}
-		>
-			<rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
-			<circle cx="9" cy="9" r="2" />
-			<path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
-		</svg>
 	)
 }

@@ -10,7 +10,6 @@
 
 export { vars } from './tokens.css'
 export {
-	buttonBase,
 	buttonPrimary,
 	buttonSecondary,
 	buttonOutline,

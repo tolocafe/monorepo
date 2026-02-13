@@ -1,6 +1,6 @@
 import { style } from '@vanilla-extract/css'
 
-import { buttonBase, card, section } from '@/styles/global.css'
+import { card, section } from '@/styles/global.css'
 import { vars } from '@/styles/tokens.css'
 
 // Hero
@@ -25,32 +25,25 @@ export const heroInner = style({
 export const heroTitle = style({
 	color: vars.color.white,
 	fontSize: 'clamp(2rem, 6vw, 3.5rem)',
-	fontWeight: vars.fontWeight.bold,
 	letterSpacing: '-0.02em',
-	lineHeight: vars.lineHeight.none,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 	textTransform: 'none',
 })
 
 export const heroSubtitle = style({
 	color: 'rgba(255, 255, 255, 0.9)',
-	fontSize: vars.fontSize.xl,
+	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
-	marginBottom: vars.space['2xl'],
+	marginBottom: vars.space.xl,
 })
 
-export const heroButton = style([
-	buttonBase,
-	{
-		':hover': {
-			filter: 'brightness(0.98)',
-		},
-		backgroundColor: vars.color.white,
-		color: vars.color.primary,
-		fontSize: vars.fontSize.lg,
-		padding: `${vars.space.base} ${vars.space['2xl']}`,
-	},
-])
+export const heroButton = style({
+	backgroundColor: vars.color.white,
+	borderRadius: vars.radius.lg,
+	color: vars.color.primary,
+	fontSize: vars.fontSize.lg,
+	padding: `${vars.space.md} ${vars.space.xl}`,
+})
 
 // Value section (Why TOLO)
 export const valueSection = style([
@@ -69,13 +62,11 @@ export const valueGrid = style({
 	},
 	alignItems: 'center',
 	display: 'grid',
-	gap: vars.space['3xl'],
+	gap: vars.space.xl,
 	gridTemplateColumns: '1fr',
 })
 
 export const valueText = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
 	lineHeight: vars.lineHeight.relaxed,
 	marginBottom: vars.space.xl,
 })
@@ -90,9 +81,7 @@ export const benefitsList = style({
 
 export const benefitItem = style({
 	alignItems: 'flex-start',
-	color: vars.color.text,
 	display: 'flex',
-	fontSize: vars.fontSize.base,
 	gap: vars.space.md,
 	lineHeight: vars.lineHeight.relaxed,
 	selectors: {
@@ -112,7 +101,7 @@ export const valueImage = style({
 		},
 	},
 	aspectRatio: '4 / 3',
-	borderRadius: vars.radius['2xl'],
+	borderRadius: vars.radius.lg,
 	objectFit: 'cover',
 	width: '100%',
 })
@@ -131,21 +120,13 @@ export const originsInner = style({
 })
 
 export const sectionTitle = style({
-	'@media': {
-		'(max-width: 640px)': {
-			fontSize: vars.fontSize['2xl'],
-		},
-	},
-	fontSize: vars.fontSize['3xl'],
-	fontWeight: vars.fontWeight.bold,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 })
 
 export const sectionSubtitle = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.xl,
+	fontSize: vars.fontSize.lg,
 	lineHeight: vars.lineHeight.relaxed,
-	marginBottom: vars.space['3xl'],
+	marginBottom: vars.space.xl,
 })
 
 export const originsGrid = style({
@@ -162,15 +143,11 @@ export const originCard = style([
 ])
 
 export const originName = style({
-	color: vars.color.text,
 	fontSize: vars.fontSize.xl,
-	fontWeight: vars.fontWeight.semibold,
 	marginBottom: vars.space.sm,
 })
 
 export const originDetail = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
@@ -212,20 +189,15 @@ export const stepNumber = style({
 	height: '48px',
 	justifyContent: 'center',
 	margin: '0 auto',
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 	width: '48px',
 })
 
 export const stepTitle = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.lg,
-	fontWeight: vars.fontWeight.semibold,
 	marginBottom: vars.space.sm,
 })
 
 export const stepText = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
@@ -256,15 +228,13 @@ export const trustGrid = style({
 
 export const trustValue = style({
 	color: vars.color.secondary,
-	fontSize: vars.fontSize['2xl'],
+	fontSize: vars.fontSize.xl,
 	fontWeight: vars.fontWeight.bold,
 	lineHeight: vars.lineHeight.none,
 	marginBottom: vars.space.sm,
 })
 
 export const trustLabel = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	lineHeight: vars.lineHeight.relaxed,
 })
 
@@ -285,9 +255,7 @@ export const ctaInner = style({
 export const ctaTitle = style({
 	color: vars.color.white,
 	fontSize: 'clamp(1.75rem, 5vw, 2.5rem)',
-	fontWeight: vars.fontWeight.bold,
-	lineHeight: vars.lineHeight.tight,
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 	textTransform: 'none',
 })
 
@@ -295,18 +263,13 @@ export const ctaText = style({
 	color: 'rgba(255, 255, 255, 0.9)',
 	fontSize: vars.fontSize.xl,
 	lineHeight: vars.lineHeight.relaxed,
-	marginBottom: vars.space['2xl'],
+	marginBottom: vars.space.xl,
 })
 
-export const ctaButton = style([
-	buttonBase,
-	{
-		':hover': {
-			filter: 'brightness(0.98)',
-		},
-		backgroundColor: vars.color.white,
-		color: vars.color.primary,
-		fontSize: vars.fontSize.lg,
-		padding: `${vars.space.base} ${vars.space['2xl']}`,
-	},
-])
+export const ctaButton = style({
+	backgroundColor: vars.color.white,
+	borderRadius: vars.radius.lg,
+	color: vars.color.primary,
+	fontSize: vars.fontSize.lg,
+	padding: `${vars.space.md} ${vars.space.xl}`,
+})

@@ -5,7 +5,7 @@ import { vars } from '@/styles'
 export const main = style({
 	backgroundColor: vars.color.background,
 	minHeight: 'calc(100vh - 200px)',
-	padding: `${vars.space['4xl']} ${vars.space.xl}`,
+	padding: `${vars.space.xl} ${vars.space.xl}`,
 })
 
 export const container = style({
@@ -14,65 +14,53 @@ export const container = style({
 })
 
 export const header = style({
-	marginBottom: vars.space['2xl'],
+	marginBottom: vars.space.xl,
 	textAlign: 'center',
 })
 
 export const logo = style({
 	borderRadius: vars.radius.full,
 	height: '80px',
-	marginBottom: vars.space.base,
+	marginBottom: vars.space.md,
 	objectFit: 'cover',
 	width: '80px',
 })
 
 export const heading = style({
-	fontSize: vars.fontSize['2xl'],
-	fontWeight: vars.fontWeight.bold,
 	marginBottom: vars.space.sm,
 })
 
 export const subtitle = style({
-	color: vars.color.text,
-	fontSize: vars.fontSize.base,
 	opacity: 0.8,
 })
 
 export const linksContainer = style({
 	display: 'flex',
 	flexDirection: 'column',
-	gap: vars.space.base,
+	gap: vars.space.md,
 })
 
 export const linkCard = style({
-	':hover': {
-		boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-		transform: 'translateY(-2px)',
-	},
 	alignItems: 'center',
 	backgroundColor: vars.color.surface,
-	border: `1px solid ${vars.color.border}`,
-	borderRadius: vars.radius.xl,
+	borderRadius: vars.radius.lg,
 	color: vars.color.text,
 	display: 'flex',
 	fontSize: vars.fontSize.lg,
 	fontWeight: vars.fontWeight.medium,
 	gap: vars.space.md,
 	justifyContent: 'center',
-	padding: `${vars.space.base} ${vars.space.xl}`,
+	padding: `${vars.space.md} ${vars.space.xl}`,
 	textDecoration: 'none',
-	transition: 'transform 0.2s ease, box-shadow 0.2s ease',
 })
 
 export const linkIcon = style({
 	flexShrink: 0,
-	fontSize: vars.fontSize['2xl'],
+	fontSize: vars.fontSize.xl,
 })
 
 export const sectionTitle = style({
-	color: vars.color.text,
 	fontSize: vars.fontSize.sm,
-	fontWeight: vars.fontWeight.semibold,
 	letterSpacing: '0.05em',
 	marginBottom: vars.space.sm,
 	marginTop: vars.space.xl,
@@ -83,6 +71,6 @@ export const sectionTitle = style({
 
 export const appLinksGrid = style({
 	display: 'grid',
-	gap: vars.space.base,
+	gap: vars.space.md,
 	gridTemplateColumns: 'repeat(2, 1fr)',
 })

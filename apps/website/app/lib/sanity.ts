@@ -52,7 +52,7 @@ export interface LocaleBlockContent {
 
 export interface SanityImage {
 	asset: { _ref: string }
-	alt?: string
+	alt?: LocaleString
 }
 
 export interface LocalizedSanityImage {
