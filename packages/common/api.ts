@@ -516,6 +516,8 @@ export type Product = {
 	tax_id: string
 	type: string
 	unit: string
+	/* Volume of the product in integer units */
+	volume?: number
 	/* Size amount (e.g. 240 ml, 100 g) */
 	size?: number
 	/* Unit for size measurement: 'ml' or 'g' */

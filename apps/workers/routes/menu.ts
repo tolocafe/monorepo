@@ -57,9 +57,9 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 					photo,
 					product_name: name,
 					recipe: sanityProduct?.recipe,
-					tag: sanityProduct?.tag,
 					size: sanityProduct?.size,
 					sizeUnit: sanityProduct?.sizeUnit,
+					tag: sanityProduct?.tag,
 				} satisfies Product
 
 				return productData
@@ -148,9 +148,9 @@ const menu = new Hono<{ Bindings: Bindings; Variables: Variables }>()
 				photo,
 				product_name: name,
 				recipe: sanityProduct?.recipe,
-				tag: sanityProduct?.tag,
 				size: sanityProduct?.size,
 				sizeUnit: sanityProduct?.sizeUnit,
+				tag: sanityProduct?.tag,
 			} satisfies Product
 
 			return context.json(body, 200, {

@@ -234,18 +234,18 @@ export const sectionTitle = style({
 
 // Section Header with title + description on left, link on right
 export const sectionHeader = style({
-	alignItems: 'flex-end',
-	display: 'flex',
-	gap: vars.space.xl,
-	justifyContent: 'space-between',
-	flexDirection: 'column',
-	marginBottom: vars.space.xl,
 	'@media': {
 		'(min-width: 640px)': {
-			flexDirection: 'row',
 			alignItems: 'center',
+			flexDirection: 'row',
 		},
 	},
+	alignItems: 'flex-end',
+	display: 'flex',
+	flexDirection: 'column',
+	gap: vars.space.xl,
+	justifyContent: 'space-between',
+	marginBottom: vars.space.xl,
 })
 
 export const sectionHeaderText = style({

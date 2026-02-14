@@ -85,7 +85,7 @@ export type CreateEWalletTransaction = z.infer<
 const PROMO_CODE_REGEX = /^[A-NP-Z1-9]{3}-[A-NP-Z1-9]{3}$/
 
 export const CreatePromoCodeSchema = z.strictObject({
-	amount: z.int().positive().min(10000).max(200000),
+	amount: z.int().positive().min(10_000).max(200_000),
 })
 
 export type CreatePromoCode = z.infer<typeof CreatePromoCodeSchema>
