@@ -16,7 +16,6 @@
 		"clean": "rm -rf node_modules .wrangler coverage"
 	},
 	"dependencies": {
-		"@aws-sdk/client-sns": "3.887.0",
 		"@hono/zod-validator": "0.7.6",
 		"@portabletext/types": "catalog:",
 		"@sanity/client": "7.14.1",

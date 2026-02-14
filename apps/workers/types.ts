@@ -46,6 +46,9 @@ export type Bindings = Cloudflare.Env & {
 	STRIPE_WEBHOOK_SECRET: string
 	TEST_OTP_CODE: string
 	TEST_PHONE_NUMBERS: string
+	TWILIO_ACCOUNT_SID: string
+	TWILIO_AUTH_TOKEN: string
+	TWILIO_FROM_NUMBER: string
 	/** Passkit */
 	WWDR: string
 }

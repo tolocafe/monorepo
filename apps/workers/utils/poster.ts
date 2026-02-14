@@ -17,7 +17,6 @@
  *
  * @module poster
  */
-import { PublishCommand, SNS } from '@aws-sdk/client-sns'
 import { getCurrentScope } from '@sentry/cloudflare'
 import type {
 	Category,
@@ -30,14 +29,6 @@ import type {
 	UpdateClientBody,
 } from '@tolo/common/api'
 import type { CreateOrder } from '@tolo/common/schemas'
-
-const snsClient = new SNS({
-	credentials: {
-		accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-		secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-	},
-	region: 'us-east-1',
-})
 
 /** Poster API base URL */
 const BASE_URL = 'https://joinposter.com/api'
@@ -965,25 +956,5 @@ export function closePosterOrder(
 			headers: { 'Content-Type': 'application/json' },
 			method: 'POST',
 		},
-	)
-}
-
-/**
- * Send an SMS message via AWS SNS
- *
- * Sends a text message to the specified phone number using AWS Simple
- * Notification Service. Used for OTP verification and notifications.
- *
- * Note: This is NOT the Poster API sendSms endpoint, but uses AWS SNS directly.
- */
-export function sendSms(
-	/** Unused (kept for API consistency) */
-	_token: string,
-	/** International format, e.g. "+1234567890" */
-	phone: string,
-	message: string,
-) {
-	return snsClient.send(
-		new PublishCommand({ Message: message, PhoneNumber: phone }),
 	)
 }
