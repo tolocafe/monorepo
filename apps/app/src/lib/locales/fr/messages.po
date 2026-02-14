@@ -71,6 +71,11 @@ msgstr ""
 "💳 Paiements sécurisés par Stripe\n"
 "🔒 Vos informations de paiement sont chiffrées et sécurisées"
 
+#. placeholder {0}: (redeemedAmount / 100).toLocaleString()
+#: src/app/redeem.tsx:119
+msgid "${0} MXN has been added to your wallet."
+msgstr ""
+
 #: src/app/sign-in.tsx:349
 msgid "0000000000"
 msgstr "0000000000"
@@ -115,11 +120,17 @@ msgstr "Tous"
 msgid "All cached data has been cleared successfully."
 msgstr "Toutes les données en cache ont été effacées avec succès."
 
+#: src/app/redeem.tsx:184
+msgid "Already Redeemed"
+msgstr ""
+
+#: src/app/redeem.tsx:194
 #: src/containers/top-up-screen.tsx:235
 msgid "Amount"
 msgstr "Montant"
 
 #: src/app/(tabs)/team/redeem.tsx:53
+#: src/app/redeem.tsx:64
 msgid "An error occurred"
 msgstr "Une erreur s'est produite"
 
@@ -240,6 +251,14 @@ msgstr "Fermer"
 msgid "Closed"
 msgstr "Fermé"
 
+#: src/app/redeem.tsx:173
+msgid "Code Not Found"
+msgstr ""
+
+#: src/app/redeem.tsx:116
+msgid "Code Redeemed!"
+msgstr ""
+
 #: src/app/sign-in.tsx:112
 #: src/app/sign-in.tsx:133
 msgid "Code sent"
@@ -277,6 +296,14 @@ msgstr "Client avec cet ID introuvable. Veuillez réessayer."
 #: src/app/sign-in.tsx:371
 msgid "Create account"
 msgstr "Créer un compte"
+
+#: src/app/(tabs)/team/promo-codes.tsx:96
+msgid "Create Another"
+msgstr ""
+
+#: src/app/(tabs)/team/promo-codes.tsx:147
+msgid "Create Promo Code"
+msgstr ""
 
 #: src/containers/top-up-screen.tsx:220
 msgid "Current Balance"
@@ -324,6 +351,10 @@ msgstr "Découvrez notre menu de café maison avec espresso, lattes, cappuccinos
 msgid "Discover our homemade coffee menu with espresso, lattes, cappuccinos and delicious sides. TOLO - where good coffee meets you."
 msgstr "Découvrez notre menu de café maison avec espresso, lattes, cappuccinos et délicieux accompagnements. TOLO - où le bon café vous rencontre."
 
+#: src/app/redeem.tsx:125
+msgid "Done"
+msgstr ""
+
 #: src/app/(tabs)/team/ticket.tsx:86
 msgid "Download PDF"
 msgstr "Télécharger PDF"
@@ -359,6 +390,10 @@ msgstr "Entrez une date valide (AAAA-MM-JJ)"
 msgid "Enter a valid email"
 msgstr "Entrez un e-mail valide"
 
+#: src/app/redeem.tsx:142
+msgid "Enter Promo Code"
+msgstr ""
+
 #: src/app/sign-in.tsx:334
 msgid "Enter to your account or create a new one using your phone number"
 msgstr "Connectez-vous à votre compte ou créez-en un nouveau avec votre numéro de téléphone"
@@ -378,6 +413,7 @@ msgstr "Entrez votre nom complet"
 #: src/app/(tabs)/more/app.tsx:66
 #: src/app/(tabs)/profile/index.tsx:106
 #: src/app/(tabs)/profile/orders/[id].tsx:48
+#: src/app/(tabs)/team/promo-codes.tsx:35
 #: src/app/(tabs)/team/ticket.tsx:28
 #: src/app/orders/current.tsx:106
 #: src/app/sign-in.tsx:229
@@ -419,6 +455,10 @@ msgstr "Événements"
 #: src/app/(tabs)/more/app.tsx:64
 msgid "Failed to clear cache. Please try again."
 msgstr "Échec du vidage du cache. Veuillez réessayer."
+
+#: src/app/(tabs)/team/promo-codes.tsx:36
+msgid "Failed to create promo code"
+msgstr ""
 
 #: src/app/(tabs)/profile/orders/[id].tsx:48
 #: src/app/(tabs)/team/ticket.tsx:28
@@ -575,6 +615,10 @@ msgstr "Chargement..."
 msgid "Location: {0}"
 msgstr "Lieu : {0}"
 
+#: src/app/redeem.tsx:159
+msgid "Look Up"
+msgstr ""
+
 #: src/app/(tabs)/more/app.tsx:148
 msgid "Maintenance"
 msgstr "Maintenance"
@@ -669,6 +713,8 @@ msgstr "Aucune commande pour le moment"
 msgid "No recipe available"
 msgstr "Aucune recette disponible"
 
+#: src/app/(tabs)/team/promo-codes.tsx:58
+#: src/app/(tabs)/team/promo-codes.tsx:63
 #: src/app/(tabs)/team/redeem.tsx:133
 #: src/app/(tabs)/team/redeem.tsx:138
 #: src/app/(tabs)/team/ticket.tsx:40
@@ -829,6 +875,25 @@ msgstr "Profil"
 msgid "Profile - TOLO"
 msgstr "Profil - TOLO"
 
+#: src/app/(tabs)/team/promo-codes.tsx:77
+#: src/app/(tabs)/team/promo-codes.tsx:84
+msgid "Promo Code"
+msgstr ""
+
+#: src/app/(tabs)/team/promo-codes.tsx:79
+msgid "Promo Code Created"
+msgstr ""
+
+#: src/app/redeem.tsx:110
+msgid "Promo Code Redeemed"
+msgstr ""
+
+#: src/app/(tabs)/team/index.tsx:82
+#: src/app/(tabs)/team/promo-codes.tsx:106
+#: src/app/(tabs)/team/promo-codes.tsx:108
+msgid "Promo Codes"
+msgstr ""
+
 #: src/app/promotions/[id].tsx:85
 msgid "Promotion not found"
 msgstr "Promotion introuvable"
@@ -857,10 +922,24 @@ msgstr "Recette"
 #: src/app/(tabs)/team/index.tsx:64
 #: src/app/(tabs)/team/redeem.tsx:151
 #: src/app/(tabs)/team/redeem.tsx:153
+#: src/app/redeem.tsx:135
 msgid "Redeem"
 msgstr "Échanger"
 
+#: src/app/redeem.tsx:137
+msgid "Redeem Promo Code"
+msgstr ""
+
+#: src/app/redeem.tsx:207
+msgid "Redeem to Wallet"
+msgstr ""
+
+#: src/app/redeem.tsx:108
+msgid "Redeemed"
+msgstr ""
+
 #: src/app/(tabs)/team/redeem.tsx:52
+#: src/app/redeem.tsx:63
 msgid "Redemption Failed"
 msgstr "Échange échoué"
 
@@ -899,6 +978,10 @@ msgstr "Scanner la carte"
 #: src/components/MenuListItem/index.tsx:25
 msgid "Seasonal"
 msgstr "Saisonnier"
+
+#: src/app/(tabs)/team/promo-codes.tsx:112
+msgid "Select Amount"
+msgstr ""
 
 #: src/app/(tabs)/team/redeem.tsx:220
 msgid "Select Redemption"
@@ -1067,6 +1150,14 @@ msgstr "La promotion demandée n'a pas pu être chargée."
 msgid "These are the devices and browsers currently signed in to your account."
 msgstr "Ce sont les appareils et navigateurs actuellement connectés à votre compte."
 
+#: src/app/redeem.tsx:176
+msgid "This promo code does not exist. Please check and try again."
+msgstr ""
+
+#: src/app/redeem.tsx:187
+msgid "This promo code has already been used."
+msgstr ""
+
 #: src/app/+not-found.tsx:26
 msgid "This screen does not exist."
 msgstr "Cet écran n'existe pas."
@@ -1232,6 +1323,7 @@ msgstr "Bienvenue"
 msgid "You don't have enough balance in your wallet. Please top up your wallet first."
 msgstr "Vous n'avez pas assez de solde dans votre portefeuille. Veuillez d'abord recharger votre portefeuille."
 
+#: src/app/(tabs)/team/promo-codes.tsx:66
 #: src/app/(tabs)/team/redeem.tsx:141
 #: src/app/(tabs)/team/ticket.tsx:48
 msgid "You need barista or owner access to use this tool."

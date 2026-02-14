@@ -73,6 +73,15 @@ export default function TeamScreen() {
 							<Trans>Tickets</Trans>
 						</ListItem.Label>
 					</ListItem>
+					<ListItem
+						accessibilityRole="link"
+						chevron
+						onPress={() => router.push('/team/promo-codes')}
+					>
+						<ListItem.Label>
+							<Trans>Promo Codes</Trans>
+						</ListItem.Label>
+					</ListItem>
 				</List>
 			</ScreenContainer>
 		</>

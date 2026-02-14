@@ -603,6 +603,21 @@ export type TableBill = {
 	transactionId: string
 }
 
+export type PromoCode = {
+	amount: number
+	code: string
+	createdAt: string
+	createdBy: number
+	redeemedAt: string | null
+	redeemedBy: number | null
+}
+
+export type PromoCodePreview = {
+	amount: number
+	code: string
+	isRedeemed: boolean
+}
+
 export type UpdateClientBody = Partial<{
 	birthday: string
 	bonus: number

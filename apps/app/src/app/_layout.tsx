@@ -136,6 +136,7 @@ function RootLayout() {
 								<Stack.Screen name="promotions/[id]" options={modalOptions} />
 								<Stack.Screen name="events/[id]" options={modalOptions} />
 								<Stack.Screen name="blog/[id]" options={modalOptions} />
+								<Stack.Screen name="redeem" options={modalOptions} />
 								<Stack.Screen
 									name="coffees/[id]"
 									options={{

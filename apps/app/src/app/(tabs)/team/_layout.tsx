@@ -13,6 +13,7 @@ export default function Layout() {
 			<Stack.Screen name="queue" />
 			<Stack.Screen name="ticket" />
 			<Stack.Screen name="redeem" />
+			<Stack.Screen name="promo-codes" />
 		</Stack>
 	)
 }

@@ -7,6 +7,7 @@ import type {
 	Event,
 	Product,
 	Promotion,
+	PromoCodePreview,
 	TableBill,
 } from '@tolo/common'
 import type {
@@ -127,6 +128,27 @@ export const api = {
 
 	post: (endpoint: string, data: unknown) =>
 		privateClient.post(endpoint, { json: data }).json(),
+
+	promoCodes: {
+		create: (data: { amount: number }) =>
+			privateClient
+				.post<{ amount: number; code: string; createdAt: string }>(
+					'promo-codes',
+					{ json: data },
+				)
+				.json(),
+		preview: (code: string) =>
+			privateClient
+				.get<PromoCodePreview>(`promo-codes/${encodeURIComponent(code)}`)
+				.json(),
+		redeem: (code: string) =>
+			privateClient
+				.post<{ amount: number; code: string; message: string }>(
+					'promo-codes/redeem',
+					{ json: { code } },
+				)
+				.json(),
+	},
 
 	tables: {
 		createPaymentIntent: (locationId: string, tableId: string) =>

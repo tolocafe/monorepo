@@ -19,6 +19,7 @@ import menu from './routes/menu'
 import orders from './routes/orders'
 import passes from './routes/passes'
 import pos from './routes/pos'
+import promoCodes from './routes/promo-codes'
 import receipts from './routes/receipts'
 import store from './routes/store'
 import tables from './routes/tables'
@@ -76,6 +77,7 @@ app
 	.route('/events', events)
 	.route('/pos', pos)
 	.route('/passes', passes)
+	.route('/promo-codes', promoCodes)
 	.route('/broadcast', broadcast)
 	.route('/tables', tables)
 	.route('/store', store)
