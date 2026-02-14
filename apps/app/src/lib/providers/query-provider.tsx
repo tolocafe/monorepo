@@ -1,16 +1,11 @@
 import NetInfo from '@react-native-community/netinfo'
-import {
-	focusManager,
-	onlineManager,
-	QueryClientProvider,
-} from '@tanstack/react-query'
+import { focusManager, onlineManager } from '@tanstack/react-query'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { useEffect } from 'react'
 import type { ReactNode } from 'react'
 import { AppState, Platform } from 'react-native'
 import type { AppStateStatus } from 'react-native'
 
-import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { persister, persistMaxAge, queryClient } from '@/lib/query-client'
 
 // Set up focus manager for React Native
@@ -54,13 +49,6 @@ export function QueryProvider({ children }: Props) {
 			)
 		}
 	}, [])
-
-	// For static web builds, use regular QueryClientProvider to avoid persistence issues
-	if (isStaticWeb) {
-		return (
-			<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-		)
-	}
 
 	return (
 		<PersistQueryClientProvider

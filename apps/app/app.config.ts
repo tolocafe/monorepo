@@ -142,7 +142,7 @@ export default ({ config }: { config: ExpoConfig }): ExpoConfig => ({
 		lang: 'es',
 		name: 'TOLO - Buen Café',
 		orientation: 'portrait',
-		output: 'static',
+		output: 'single',
 		shortName: 'TOLO',
 		startUrl: '/',
 		themeColor: '#ffffff',

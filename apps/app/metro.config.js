@@ -6,8 +6,6 @@ const {
 
 const config = wrapWithReanimatedMetroConfig(getSentryExpoConfig(__dirname))
 
-const { resolver, transformer } = config
-
 // Required for zustand
 config.resolver.unstable_conditionNames = ['browser', 'require', 'react-native']
 
@@ -17,12 +15,12 @@ config.resolver.sourceExts.push('mjs', 'cjs')
 
 // --- Lingui Metro Transformer ---
 config.transformer = {
-	...transformer,
+	...config.transformer,
 	babelTransformerPath: require.resolve('@lingui/metro-transformer/expo'),
 }
 config.resolver = {
-	...resolver,
-	sourceExts: [...resolver.sourceExts, 'po', 'pot'],
+	...config.resolver,
+	sourceExts: [...config.resolver.sourceExts, 'po', 'pot'],
 }
 // --- end Lingui ---
 

@@ -17,7 +17,6 @@ import { KeyboardProvider } from 'react-native-keyboard-controller'
 import { AnalyticsIdentifier } from '@/lib/analytics/components/analytics-identifier'
 import '@/lib/locales/init'
 import { PostHogProvider } from '@/lib/analytics/posthog'
-import { isStaticWeb } from '@/lib/constants/is-static-web'
 import { useColorScheme } from '@/lib/hooks/use-color-scheme'
 import { useUpdates } from '@/lib/hooks/use-updates'
 import { QueryProvider } from '@/lib/providers/query-provider'
@@ -70,18 +69,11 @@ function RootLayout() {
 	const updates = useUpdates()
 
 	useEffect(() => {
-		if (isStaticWeb) {
-			return
-		}
 		navigationIntegration.registerNavigationContainer(ref)
 	}, [ref])
 
 	// Prefetch critical data at app mount
 	useEffect(() => {
-		if (isStaticWeb) {
-			return
-		}
-
 		void Promise.allSettled([
 			queryClient.prefetchQuery(selfQueryOptions),
 			queryClient.prefetchQuery(orderQueryOptions),
