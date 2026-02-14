@@ -15,8 +15,9 @@ import {
 	signJwt,
 } from '@/utils/jwt'
 import { generateOtp, storeOtp, verifyOtp } from '@/utils/otp'
-import { posterApi, sendSms } from '@/utils/poster'
+import { posterApi } from '@/utils/poster'
 import { trackEvent } from '@/utils/posthog'
+import { sendSms } from '@/utils/sms'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
 
@@ -136,7 +137,7 @@ const auth = new Hono<{ Bindings: Bindings }>()
 		await Promise.all([
 			storeOtp(context.env.KV_OTP, phone, code),
 			sendSms(
-				context.env.POSTER_TOKEN,
+				context.env,
 				phone,
 				`[TOLO] Tu código de verificación es ${formattedCode}`,
 			),

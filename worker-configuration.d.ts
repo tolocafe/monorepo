@@ -17,8 +17,9 @@ declare namespace Cloudflare {
 		SENTRY_AUTH_TOKEN: string;
 		JWT_SECRET: string;
 		POSTER_TOKEN: string;
-		AWS_ACCESS_KEY_ID: string;
-		AWS_SECRET_ACCESS_KEY: string;
+		TWILIO_ACCOUNT_SID: string;
+		TWILIO_AUTH_TOKEN: string;
+		TWILIO_FROM_NUMBER: string;
 		SENTRY_DSN: string;
 		TEST_OTP_CODE: string;
 		TEST_PHONE_NUMBERS: string;
@@ -64,8 +65,9 @@ declare namespace NodeJS {
 			| "SENTRY_AUTH_TOKEN"
 			| "JWT_SECRET"
 			| "POSTER_TOKEN"
-			| "AWS_ACCESS_KEY_ID"
-			| "AWS_SECRET_ACCESS_KEY"
+			| "TWILIO_ACCOUNT_SID"
+			| "TWILIO_AUTH_TOKEN"
+			| "TWILIO_FROM_NUMBER"
 			| "SENTRY_DSN"
 			| "TEST_OTP_CODE"
 			| "TEST_PHONE_NUMBERS"
