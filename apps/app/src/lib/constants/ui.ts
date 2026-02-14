@@ -9,4 +9,5 @@ export const ORDER_BUTTON_HEIGHT = Platform.select({
 	web: 80,
 })
 
-export const isIOS20 = Platform.OS === 'ios' && Number(Platform.Version) >= 20
+export const isIOS20 =
+	Platform.OS === 'ios' && Number.parseInt(Platform.Version, 10) >= 20
