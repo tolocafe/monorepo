@@ -1,8 +1,11 @@
 {
 	"build": {
 		"common": {
-			"bun": "1.3.6",
-			"node": "22.20.0"
+			"bun": "1.3.9",
+			"node": "22.22.0",
+			"env": {
+				"NODE_OPTIONS": "--max-old-space-size=4096"
+			}
 		},
 		"development": {
 			"channel": "development",
