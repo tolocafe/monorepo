@@ -12,6 +12,8 @@ export const defaultStackScreenOptions = Platform.select({
 	} satisfies Parameters<typeof Stack.Screen>[0]['options'],
 	ios: {
 		headerLargeTitle: false,
+		headerShadowVisible: !isIOS20,
+		headerStyle: isIOS20 ? { backgroundColor: 'transparent' } : undefined,
 		headerTransparent: isIOS20,
 	} satisfies Parameters<typeof Stack.Screen>[0]['options'],
 })

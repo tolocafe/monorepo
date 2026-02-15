@@ -3,7 +3,7 @@ name: Publish update
 on:
   push:
     branches:
-      - "*"
+      - '*'
 
 jobs:
   publish_update:
