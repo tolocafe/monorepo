@@ -1,6 +1,7 @@
 import { captureException } from '@sentry/cloudflare'
 
 import { sendPushNotificationToClient } from './push-notifications'
+import { sendMessage as sendTwilioMessage } from './twilio'
 
 /**
  * Supported message types for order lifecycle events
@@ -48,7 +49,6 @@ export const messageTemplates: Record<
 
 /**
  * Channel used for sending the message
- * Note: 'sms' and 'whatsapp' are placeholders for future Twilio integration
  */
 export type MessageChannel = 'push' | 'sms' | 'whatsapp'
 
@@ -73,8 +73,14 @@ export type SendMessageOptions = {
 	database: D1Database
 	/** Message type to send */
 	messageType: MessageType
-	/** Phone number for WhatsApp/SMS fallback (optional, not yet implemented) */
+	/** Phone number for WhatsApp/SMS (E.164 format) */
 	phone?: null | string
+	/** Twilio credentials for SMS/WhatsApp channels */
+	twilioConfig?: {
+		accountSid: string
+		authToken: string
+		messagingServiceSid: string
+	}
 	/** Preferred channels in order of priority */
 	preferredChannels?: MessageChannel[]
 }
@@ -82,10 +88,8 @@ export type SendMessageOptions = {
 /**
  * Send a message to a customer using the best available channel
  *
- * Currently only push notifications are implemented.
- * WhatsApp and SMS channels are reserved for future Twilio integration.
- *
-
+ * Tries channels in order of preference, stopping on first success.
+ * Push notifications, SMS, and WhatsApp are supported via Twilio.
  */
 export async function sendMessage(
 	options: SendMessageOptions,
@@ -95,7 +99,9 @@ export async function sendMessage(
 		data,
 		database,
 		messageType,
+		phone,
 		preferredChannels = ['push'],
+		twilioConfig,
 	} = options
 
 	const template = messageTemplates[messageType]
@@ -128,15 +134,49 @@ export async function sendMessage(
 					break
 				}
 
-				case 'whatsapp':
-				case 'sms': {
-					// TODO: Implement Twilio integration
-					results.push({
-						channel,
-						error: 'Channel not yet implemented',
-						success: false,
+				case 'whatsapp': {
+					if (!twilioConfig || !phone) {
+						results.push({
+							channel,
+							error: !twilioConfig
+								? 'Twilio not configured'
+								: 'No phone number provided',
+							success: false,
+						})
+						break
+					}
+
+					await sendTwilioMessage({
+						channel: 'whatsapp',
+						config: twilioConfig,
+						phone,
+						template: messageType,
 					})
-					break
+
+					results.push({ channel, success: true })
+					return results
+				}
+
+				case 'sms': {
+					if (!twilioConfig || !phone) {
+						results.push({
+							channel,
+							error: !twilioConfig
+								? 'Twilio not configured'
+								: 'No phone number provided',
+							success: false,
+						})
+						break
+					}
+
+					await sendTwilioMessage({
+						body: template.body,
+						config: twilioConfig,
+						phone,
+					})
+
+					results.push({ channel, success: true })
+					return results
 				}
 				default: {
 					void 0

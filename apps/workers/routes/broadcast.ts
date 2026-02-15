@@ -2,7 +2,8 @@ import { Hono } from 'hono'
 import { z } from 'zod'
 
 import type { Bindings } from '@/types'
-import { posterApi, sendSms } from '@/utils/poster'
+import { posterApi } from '@/utils/poster'
+import { sendMessage as sendTwilioMessage } from '@/utils/twilio'
 
 const broadcastBodySchema = z.strictObject({
 	message: z.string().max(255).min(1),
@@ -28,8 +29,18 @@ const broadcast = new Hono<{ Bindings: Bindings }>().post(
 				Boolean(client.phone),
 			)
 
+			const twilioConfig = {
+				accountSid: context.env.TWILIO_ACCOUNT_SID,
+				authToken: context.env.TWILIO_AUTH_TOKEN,
+				messagingServiceSid: context.env.TWILIO_MESSAGING_SERVICE_SID,
+			}
+
 			for (const client of clientsWithPhoneNumbers) {
-				await sendSms(context.env.POSTER_TOKEN, client.phone, message)
+				await sendTwilioMessage({
+					body: message,
+					config: twilioConfig,
+					phone: client.phone,
+				})
 			}
 		}
 		if (type === 'push') {

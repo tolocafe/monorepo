@@ -15,8 +15,9 @@ import {
 	signJwt,
 } from '@/utils/jwt'
 import { generateOtp, storeOtp, verifyOtp } from '@/utils/otp'
-import { posterApi, sendSms } from '@/utils/poster'
+import { posterApi } from '@/utils/poster'
 import { trackEvent } from '@/utils/posthog'
+import { sendMessage as sendTwilioMessage } from '@/utils/twilio'
 
 type SessionRecord = { createdAt: number; name: string; token: string }
 
@@ -135,11 +136,17 @@ const auth = new Hono<{ Bindings: Bindings }>()
 
 		await Promise.all([
 			storeOtp(context.env.KV_OTP, phone, code),
-			sendSms(
-				context.env.POSTER_TOKEN,
+			sendTwilioMessage({
+				channel: 'whatsapp',
+				config: {
+					accountSid: context.env.TWILIO_ACCOUNT_SID,
+					authToken: context.env.TWILIO_AUTH_TOKEN,
+					messagingServiceSid: context.env.TWILIO_MESSAGING_SERVICE_SID,
+				},
 				phone,
-				`[TOLO] Tu código de verificación es ${formattedCode}`,
-			),
+				template: 'auth:otp_verification',
+				variables: { '1': formattedCode },
+			}),
 		])
 
 		return context.json({ success: true })
